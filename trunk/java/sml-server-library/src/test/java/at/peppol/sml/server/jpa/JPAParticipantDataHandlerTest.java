@@ -35,7 +35,7 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package eu.peppol.registry.sml.jpa;
+package at.peppol.sml.server.jpa;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -50,7 +50,6 @@ import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.internal.AssumptionViolatedException;
 
 import at.peppol.commons.identifier.CIdentifier;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
@@ -61,9 +60,6 @@ import at.peppol.sml.server.exceptions.NotFoundException;
 import at.peppol.sml.server.exceptions.UnauthorizedException;
 import at.peppol.sml.server.jpa.JPAParticipantDataHandler;
 import at.peppol.sml.server.jpa.JPASMPDataHandler;
-import at.peppol.sml.server.jpa.SMLJPAWrapper;
-
-import com.phloc.commons.annotations.DevelopersNote;
 
 
 /**
@@ -72,8 +68,7 @@ import com.phloc.commons.annotations.DevelopersNote;
  *
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-@DevelopersNote ("You need to adjust your local META-INF/persistence.xml file to run this test")
-public final class JPADataHandlerTest {
+public final class JPAParticipantDataHandlerTest {
   private static final String PARTICIPANT_IDENTIFIER_SCHEME = CIdentifier.DEFAULT_PARTICIPANT_IDENTIFIER_SCHEME;
   private static final String PARTICIPANT_IDENTIFIER_DEFAULT = "0010:5999000000001";
 
@@ -100,13 +95,6 @@ public final class JPADataHandlerTest {
 
   @BeforeClass
   public static void initDataHandler () {
-    try {
-      SMLJPAWrapper.getInstance ();
-    }
-    catch (final ExceptionInInitializerError ex) {
-      // No database present
-      throw new AssumptionViolatedException ("No database connection could be established");
-    }
     s_aParticipantHandler = new JPAParticipantDataHandler ();
     s_aSMPHandler = new JPASMPDataHandler ();
   }
