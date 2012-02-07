@@ -6,9 +6,9 @@
     <artifactId>parent-pom</artifactId>
     <version>13</version>
   </parent>
-  <artifactId>smp-client-console</artifactId>
+  <artifactId>peppol-smp-client-console</artifactId>
   <version>1.2.1-SNAPSHOT</version>
-  <name>smp-client-console</name>
+  <name>peppol-smp-client-console</name>
 
   <scm>
     <developerConnection>scm:svn:https://joinup.ec.europa.eu/svn/peppol/devinprogress/java/smp/smp-client-console</developerConnection>
@@ -17,7 +17,7 @@
   <dependencies>
     <dependency>
       <groupId>at.peppol</groupId>
-      <artifactId>smp-client-library</artifactId>
+      <artifactId>peppol-smp-client-library</artifactId>
       <version>1.2.2-SNAPSHOT</version>
     </dependency>
     <dependency>

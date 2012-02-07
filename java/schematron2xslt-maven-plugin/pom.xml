@@ -25,7 +25,7 @@
     </dependency>
     <dependency>
       <groupId>at.peppol</groupId>
-      <artifactId>validation-schematron</artifactId>
+      <artifactId>peppol-validation-schematron</artifactId>
       <version>1.4.4-SNAPSHOT</version>
     </dependency>
     <dependency>

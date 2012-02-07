@@ -6,9 +6,9 @@
     <version>13</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>visualization-peppol</artifactId>
+  <artifactId>peppol-visualization</artifactId>
   <version>1.0.0-SNAPSHOT</version>
-  <name>visualization-peppol</name>
+  <name>peppol-visualization</name>
   
   <scm>
     <developerConnection>scm:svn:https://joinup.ec.europa.eu/svn/peppol/devinprogress/java/visualization/visualization-peppol</developerConnection>
@@ -16,14 +16,14 @@
 
   <dependencies>
     <dependency>
+      <groupId>at.peppol</groupId>
+      <artifactId>peppol-commons-cenbii</artifactId>
+      <version>1.0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-commons</artifactId>
       <version>3.4.2</version>
-    </dependency>
-    <dependency>
-      <groupId>at.peppol</groupId>
-      <artifactId>commons-cenbii</artifactId>
-      <version>1.0.1-SNAPSHOT</version>
     </dependency>
 
     <dependency>

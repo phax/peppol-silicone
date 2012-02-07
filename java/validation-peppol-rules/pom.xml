@@ -6,9 +6,9 @@
     <version>13</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>validation-peppol-rules</artifactId>
+  <artifactId>peppol-validation-rules</artifactId>
   <version>1.1.12-SNAPSHOT</version>
-  <name>validation-peppol-rules</name>
+  <name>peppol-validation-rules</name>
   
   <scm>
     <developerConnection>scm:svn:https://joinup.ec.europa.eu/svn/peppol/devinprogress/java/validation/validation-peppol-rules</developerConnection>
@@ -16,19 +16,19 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.phloc</groupId>
-      <artifactId>phloc-commons</artifactId>
-      <version>3.4.2</version>
-    </dependency>
-    <dependency>
       <groupId>at.peppol</groupId>
-      <artifactId>commons-cenbii</artifactId>
+      <artifactId>peppol-commons-cenbii</artifactId>
       <version>1.0.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>at.peppol</groupId>
-      <artifactId>validation-schematron</artifactId>
+      <artifactId>peppol-validation-schematron</artifactId>
       <version>1.4.4-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.phloc</groupId>
+      <artifactId>phloc-commons</artifactId>
+      <version>3.4.2</version>
     </dependency>
     <dependency>
       <groupId>com.phloc</groupId>
