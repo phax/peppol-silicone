@@ -81,6 +81,7 @@ import at.peppol.commons.security.KeyStoreUtils;
 import at.peppol.commons.sml.ESML;
 import at.peppol.commons.sml.ISMLInfo;
 import at.peppol.commons.utils.ExceptionUtils;
+import at.peppol.smp.client.SMPServiceCaller;
 
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.GlobalDebug;
@@ -91,7 +92,6 @@ import com.phloc.commons.io.misc.SizeHelper;
 import com.sun.xml.ws.api.message.HeaderList;
 import com.sun.xml.ws.developer.JAXWSProperties;
 
-import eu.peppol.registry.smp.client.SMPServiceCaller;
 import eu.peppol.start.IMessageMetadata;
 import eu.peppol.start.MessageMetadataHelper;
 import eu.peppol.start.PingMessageHelper;

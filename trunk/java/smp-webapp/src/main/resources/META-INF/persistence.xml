@@ -44,13 +44,13 @@
              version="2.0">
   <persistence-unit name="peppol-smp" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-    <class>eu.peppol.registry.smp.data.dbms.model.DBEndpoint</class>
-    <class>eu.peppol.registry.smp.data.dbms.model.DBOwnership</class>
-    <class>eu.peppol.registry.smp.data.dbms.model.DBProcess</class>
-    <class>eu.peppol.registry.smp.data.dbms.model.DBServiceGroup</class>
-    <class>eu.peppol.registry.smp.data.dbms.model.DBServiceMetadata</class>
-    <class>eu.peppol.registry.smp.data.dbms.model.DBUser</class>
-    <class>eu.peppol.registry.smp.data.dbms.model.DBServiceMetadataRedirection</class>
+    <class>at.peppol.smp.server.data.dbms.model.DBEndpoint</class>
+    <class>at.peppol.smp.server.data.dbms.model.DBOwnership</class>
+    <class>at.peppol.smp.server.data.dbms.model.DBProcess</class>
+    <class>at.peppol.smp.server.data.dbms.model.DBServiceGroup</class>
+    <class>at.peppol.smp.server.data.dbms.model.DBServiceMetadata</class>
+    <class>at.peppol.smp.server.data.dbms.model.DBUser</class>
+    <class>at.peppol.smp.server.data.dbms.model.DBServiceMetadataRedirection</class>
     <properties>
       <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost/smp"/>
