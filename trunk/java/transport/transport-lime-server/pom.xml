@@ -6,11 +6,11 @@
     <version>12</version>
     <relativePath>../../parent-pom/pom.xml</relativePath>
   </parent>
-  <groupId>eu.peppol.transport</groupId>
-  <artifactId>transport-lime-server</artifactId>
+  <groupId>at.peppol</groupId>
+  <artifactId>peppol-transport-lime-server</artifactId>
   <version>1.1.1-SNAPSHOT</version>
   <packaging>war</packaging>
-  <name>transport-lime-server</name>
+  <name>peppol-transport-lime-server</name>
 
   <scm>
     <developerConnection>scm:svn:https://joinup.ec.europa.eu/svn/peppol/devinprogress/java/transport/transport-lime-server</developerConnection>
@@ -18,31 +18,31 @@
 
   <dependencies>
     <dependency>
+      <groupId>at.peppol</groupId>
+      <artifactId>peppol-transport-lime-library</artifactId>
+      <version>1.1.1-SNAPSHOT</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.glassfish.metro</groupId>
+          <artifactId>webservices-rt</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>at.peppol</groupId>
+      <artifactId>peppol-transport-start-client</artifactId>
+      <version>2.0.0-SNAPSHOT</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.glassfish.metro</groupId>
+          <artifactId>webservices-rt</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
       <groupId>com.sun.xml.ws</groupId>
       <artifactId>jaxws-rt</artifactId>
       <version>2.2.5</version>
-    </dependency>
-    <dependency>
-      <groupId>eu.peppol.transport</groupId>
-      <artifactId>transport-lime-library</artifactId>
-      <version>1.1.1-SNAPSHOT</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.glassfish.metro</groupId>
-          <artifactId>webservices-rt</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>eu.peppol.transport</groupId>
-      <artifactId>transport-start-library</artifactId>
-      <version>1.1.1-SNAPSHOT</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.glassfish.metro</groupId>
-          <artifactId>webservices-rt</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>

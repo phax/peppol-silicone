@@ -64,6 +64,8 @@ import com.sun.xml.ws.developer.JAXWSProperties;
 import eu.peppol.busdox.identifier.SimpleDocumentIdentifier;
 import eu.peppol.busdox.identifier.SimpleParticipantIdentifier;
 import eu.peppol.busdox.identifier.SimpleProcessIdentifier;
+import eu.peppol.start.IMessageMetadata;
+import eu.peppol.start.MessageMetadata;
 
 /**
  * @author Ravnholt<br>
@@ -74,13 +76,13 @@ public final class SoapHeaderReader {
   private SoapHeaderReader () {}
 
   @Nonnull
-  public static MessageMetaData getSoapHeader (final HeaderList hl) throws Exception {
-    return new MessageMetaData (_getSender (hl),
+  public static MessageMetadata getSoapHeader (final HeaderList hl) throws Exception {
+    return new MessageMetadata (getMessageID (hl),
+                                getChannelID (hl),
+                                _getSender (hl),
                                 _getRecipient (hl),
                                 _getDocumentInfoType (hl),
-                                _getProcessType (hl),
-                                getMessageID (hl),
-                                getChannelID (hl));
+                                _getProcessType (hl));
   }
 
   @Nullable
@@ -89,7 +91,7 @@ public final class SoapHeaderReader {
   }
 
   @Nonnull
-  public static MessageMetaData getSoapHeader (@Nonnull final WebServiceContext wsc) throws Exception {
+  public static IMessageMetadata getSoapHeader (@Nonnull final WebServiceContext wsc) throws Exception {
     return getSoapHeader (_getHeaderList (wsc));
   }
 
@@ -234,7 +236,7 @@ public final class SoapHeaderReader {
     return textNodes;
   }
 
-  public static Document createSoapHeaderDocument (final MessageMetaData soapHdr) throws JAXBException {
+  public static Document createSoapHeaderDocument (final IMessageMetadata soapHdr) throws JAXBException {
     final ObjectFactory objFactory = new ObjectFactory ();
 
     final Document document = XMLFactory.newDocument ();
@@ -244,14 +246,14 @@ public final class SoapHeaderReader {
     Marshaller marshaller = JAXBContextCache.getInstance ()
                                             .getFromCache (ParticipantIdentifierType.class)
                                             .createMarshaller ();
-    marshaller.marshal (objFactory.createSenderIdentifier (soapHdr.getSender ()), top);
-    marshaller.marshal (objFactory.createRecipientIdentifier (soapHdr.getRecipient ()), top);
+    marshaller.marshal (objFactory.createSenderIdentifier (soapHdr.getSenderID ()), top);
+    marshaller.marshal (objFactory.createRecipientIdentifier (soapHdr.getRecipientID ()), top);
 
     marshaller = JAXBContextCache.getInstance ().getFromCache (DocumentIdentifierType.class).createMarshaller ();
-    marshaller.marshal (objFactory.createDocumentIdentifier (soapHdr.getDocumentInfoType ()), top);
+    marshaller.marshal (objFactory.createDocumentIdentifier (soapHdr.getDocumentTypeID ()), top);
 
     marshaller = JAXBContextCache.getInstance ().getFromCache (ProcessIdentifierType.class).createMarshaller ();
-    marshaller.marshal (objFactory.createProcessIdentifier (soapHdr.getProcessType ()), top);
+    marshaller.marshal (objFactory.createProcessIdentifier (soapHdr.getProcessID ()), top);
     return document;
   }
 }

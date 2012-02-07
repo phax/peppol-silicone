@@ -108,7 +108,7 @@ public final class MessageMetadataHelper {
            "\n\tRecipientID\t:" +
            IdentifierUtils.getIdentifierURIEncoded (aMetadata.getRecipientID ()) +
            "\n\tDocumentID\t:" +
-           IdentifierUtils.getIdentifierURIEncoded (aMetadata.getDocumentID ()) +
+           IdentifierUtils.getIdentifierURIEncoded (aMetadata.getDocumentTypeID ()) +
            "\n\tProcessID\t:" +
            IdentifierUtils.getIdentifierURIEncoded (aMetadata.getProcessID ());
   }
@@ -136,7 +136,7 @@ public final class MessageMetadataHelper {
 
     // Write document type
     aMarshaller = JAXBContextCache.getInstance ().getFromCache (DocumentIdentifierType.class).createMarshaller ();
-    aMarshaller.marshal (aObjFactory.createDocumentIdentifier (aMetadata.getDocumentID ()), eRoot);
+    aMarshaller.marshal (aObjFactory.createDocumentIdentifier (aMetadata.getDocumentTypeID ()), eRoot);
 
     // Write process type
     aMarshaller = JAXBContextCache.getInstance ().getFromCache (ProcessIdentifierType.class).createMarshaller ();

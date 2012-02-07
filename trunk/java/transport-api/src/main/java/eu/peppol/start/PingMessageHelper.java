@@ -78,8 +78,8 @@ public final class PingMessageHelper {
            IdentifierUtils.areIdentifiersEqual (aMetadata.getSenderID (), PING_SENDER) &&
            aMetadata.getRecipientID () != null &&
            IdentifierUtils.areIdentifiersEqual (aMetadata.getRecipientID (), PING_RECIPIENT) &&
-           aMetadata.getDocumentID () != null &&
-           IdentifierUtils.areIdentifiersEqual (aMetadata.getDocumentID (), PING_DOCUMENT) &&
+           aMetadata.getDocumentTypeID () != null &&
+           IdentifierUtils.areIdentifiersEqual (aMetadata.getDocumentTypeID (), PING_DOCUMENT) &&
            aMetadata.getProcessID () != null &&
            IdentifierUtils.areIdentifiersEqual (aMetadata.getProcessID (), PING_PROCESS);
   }

@@ -82,7 +82,7 @@ public class MainPingAccessPoint {
     final SMPServiceCaller aServiceCaller = new SMPServiceCaller (aSOAPHeaderObject.getRecipientID (), SML_INFO);
     // get service info
     return aServiceCaller.getEndpointAddress (aSOAPHeaderObject.getRecipientID (),
-                                              aSOAPHeaderObject.getDocumentID (),
+                                              aSOAPHeaderObject.getDocumentTypeID (),
                                               aSOAPHeaderObject.getProcessID ());
   }
 

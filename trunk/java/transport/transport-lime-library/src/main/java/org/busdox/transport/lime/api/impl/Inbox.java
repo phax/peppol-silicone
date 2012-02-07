@@ -46,7 +46,6 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.wsaddressing.W3CEndpointReference;
 
-import org.busdox.transport.base.Identifiers;
 import org.busdox.transport.lime._1.Entry;
 import org.busdox.transport.lime._1.PageListType;
 import org.busdox.transport.lime.api.interfaces.EndpointReferenceInterface;
@@ -54,7 +53,6 @@ import org.busdox.transport.lime.api.interfaces.InboxInterface;
 import org.busdox.transport.lime.api.interfaces.MessageException;
 import org.busdox.transport.lime.api.interfaces.MessageInterface;
 import org.busdox.transport.lime.api.interfaces.MessageReferenceInterface;
-import org.busdox.transport.soapheader.MessageMetaData;
 import org.busdox.transport.soapheader.SoapHeaderReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,6 +65,7 @@ import org.w3c.dom.Node;
 
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.jaxb.JAXBContextCache;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.xml.XMLFactory;
 import com.sun.xml.ws.api.message.HeaderList;
 import com.sun.xml.ws.developer.JAXWSProperties;
@@ -76,6 +75,8 @@ import eu.peppol.busdox.identifier.SimpleParticipantIdentifier;
 import eu.peppol.busdox.identifier.SimpleProcessIdentifier;
 import eu.peppol.busdox.wsaddr.W3CEndpointReferenceUtils;
 import eu.peppol.common.IReadonlyUsernamePWCredentials;
+import eu.peppol.start.Identifiers;
+import eu.peppol.start.MessageMetadata;
 
 /**
  * @author Ravnholt<br>
@@ -187,10 +188,8 @@ public class Inbox implements InboxInterface {
     if (credentials == null) {
       throw new MessageException ("Credentials can not be a null value");
     }
-    if (credentials.getUsername () == null ||
-        credentials.getPassword () == null ||
-        credentials.getUsername ().trim ().length () == 0 ||
-        credentials.getPassword ().trim ().length () == 0) {
+    if (StringHelper.hasNoTextAfterTrim (credentials.getUsername ()) ||
+        StringHelper.hasNoTextAfterTrim (credentials.getPassword ())) {
       throw new MessageException ("Credentials are invalid, username=" +
                                   credentials.getUsername () +
                                   " password=" +
@@ -249,11 +248,11 @@ public class Inbox implements InboxInterface {
                                           final Message message) throws Exception {
     final HeaderList hl = (HeaderList) ((BindingProvider) port).getResponseContext ()
                                                                .get (JAXWSProperties.INBOUND_HEADER_LIST_PROPERTY);
-    final MessageMetaData soapHeader = SoapHeaderReader.getSoapHeader (hl);
-    soapHeader.setMessageID (messageReferenceInterface.getMessageID ());
-    message.setSender (new SimpleParticipantIdentifier (soapHeader.getSender ()));
-    message.setReciever (new SimpleParticipantIdentifier (soapHeader.getRecipient ()));
-    message.setDocumentType (new SimpleDocumentIdentifier (soapHeader.getDocumentInfoType ()));
-    message.setProcessType (new SimpleProcessIdentifier (soapHeader.getProcessType ()));
+    MessageMetadata soapHeader = SoapHeaderReader.getSoapHeader (hl);
+    soapHeader = soapHeader.withMessageID (messageReferenceInterface.getMessageID ());
+    message.setSender (new SimpleParticipantIdentifier (soapHeader.getSenderID ()));
+    message.setReciever (new SimpleParticipantIdentifier (soapHeader.getRecipientID ()));
+    message.setDocumentType (new SimpleDocumentIdentifier (soapHeader.getDocumentTypeID ()));
+    message.setProcessType (new SimpleProcessIdentifier (soapHeader.getProcessID ()));
   }
 }

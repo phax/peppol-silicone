@@ -6,10 +6,10 @@
     <version>12</version>
     <relativePath>../../parent-pom/pom.xml</relativePath>
   </parent>
-  <groupId>eu.peppol.transport</groupId>
-  <artifactId>transport-lime-library</artifactId>
+  <groupId>at.peppol</groupId>
+  <artifactId>peppol-transport-lime-library</artifactId>
   <version>1.1.1-SNAPSHOT</version>
-  <name>transport-lime-library</name>
+  <name>peppol-transport-lime-library</name>
 
   <scm>
     <developerConnection>scm:svn:https://joinup.ec.europa.eu/svn/peppol/devinprogress/java/transport/transport-lime-library</developerConnection>
@@ -17,8 +17,8 @@
 
   <dependencies>
     <dependency>
-      <groupId>eu.peppol.transport</groupId>
-      <artifactId>transport-commons</artifactId>
+      <groupId>at.peppol</groupId>
+      <artifactId>peppol-transport-commons</artifactId>
       <version>1.1.1-SNAPSHOT</version>
     </dependency>
     <dependency>
