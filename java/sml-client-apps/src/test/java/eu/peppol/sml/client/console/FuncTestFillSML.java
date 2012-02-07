@@ -47,11 +47,11 @@ import org.slf4j.LoggerFactory;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 import at.peppol.commons.sml.ESML;
 import at.peppol.commons.sml.ISMLInfo;
+import at.peppol.sml.client.ManageParticipantIdentifierServiceCaller;
+import at.peppol.sml.client.ManageServiceMetadataServiceCaller;
 
 import com.phloc.commons.annotations.DevelopersNote;
 
-import eu.peppol.registry.sml.management.client.ManageParticipantIdentifierServiceCaller;
-import eu.peppol.registry.sml.management.client.ManageServiceMetadataServiceCaller;
 
 /**
  * This class if for BRZ internal use only!

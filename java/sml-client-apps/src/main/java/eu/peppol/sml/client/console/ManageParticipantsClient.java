@@ -51,8 +51,8 @@ import org.busdox.servicemetadata.managebusinessidentifierservice._1.Unauthorize
 import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+import at.peppol.sml.client.ManageParticipantIdentifierServiceCaller;
 
-import eu.peppol.registry.sml.management.client.ManageParticipantIdentifierServiceCaller;
 
 public final class ManageParticipantsClient {
   private final ManageParticipantIdentifierServiceCaller m_aCaller;
