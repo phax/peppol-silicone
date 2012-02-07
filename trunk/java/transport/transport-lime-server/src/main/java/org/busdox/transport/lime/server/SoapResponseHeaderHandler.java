@@ -51,8 +51,8 @@ import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
 
-import org.busdox.transport.base.Identifiers;
-import org.busdox.transport.soapheader.SOAPHelper;
+import org.busdox.transport.lime.Identifiers;
+import org.busdox.transport.lime.soapheader.SOAPHelper;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;

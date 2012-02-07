@@ -35,7 +35,7 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package org.busdox.transport.base;
+package org.busdox.transport.lime;
 
 import javax.annotation.concurrent.Immutable;
 import javax.xml.bind.annotation.XmlSchema;

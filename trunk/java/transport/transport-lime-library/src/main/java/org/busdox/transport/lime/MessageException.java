@@ -35,48 +35,19 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package org.busdox.transport.soapheader;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
+package org.busdox.transport.lime;
 
 /**
  * @author Ravnholt<br>
  *         PEPPOL.AT, BRZ, Philip Helger
  */
-public final class HeaderParser {
-  private HeaderParser () {}
+public class MessageException extends Exception {
 
-  public static String [] getTextNodes (final XMLStreamReader xmlr) {
-    final XMLInputFactory xmlif = XMLInputFactory.newInstance ();
-    xmlif.setProperty (XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, Boolean.TRUE);
-    xmlif.setProperty (XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, Boolean.FALSE);
-    xmlif.setProperty (XMLInputFactory.IS_COALESCING, Boolean.FALSE);
-
-    final List <String> textNodes = new ArrayList <String> ();
-
-    try {
-      while (xmlr.hasNext ()) {
-        final String textNode = getText (xmlr);
-        if (textNode != null) {
-          textNodes.add (textNode);
-        }
-        xmlr.next ();
-      }
-    }
-    catch (final XMLStreamException ex) {
-      if (ex.getNestedException () != null) {
-        ex.getNestedException ().printStackTrace ();
-      }
-    }
-    return textNodes.toArray (new String [] {});
+  public MessageException (final String message) {
+    super (message);
   }
 
-  private static String getText (final XMLStreamReader xmlr) {
-    return xmlr.hasText () ? xmlr.getText () : null;
+  public MessageException (final Throwable t) {
+    super (t);
   }
 }

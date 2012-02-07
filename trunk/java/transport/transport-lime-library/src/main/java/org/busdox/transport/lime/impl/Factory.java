@@ -35,32 +35,63 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package org.busdox.transport.lime.api.impl;
+package org.busdox.transport.lime.impl;
 
-import org.busdox.transport.lime.api.interfaces.EndpointReferenceInterface;
+import org.busdox.identifier.IDocumentIdentifier;
+import org.busdox.identifier.IParticipantIdentifier;
+import org.busdox.identifier.IProcessIdentifier;
+import org.busdox.transport.identifiers._1.DocumentIdentifierType;
+import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
+import org.busdox.transport.identifiers._1.ProcessIdentifierType;
+import org.busdox.transport.lime.EndpointReferenceInterface;
+import org.busdox.transport.lime.InboxInterface;
+import org.busdox.transport.lime.MessageInterface;
+import org.busdox.transport.lime.MessageReferenceInterface;
+import org.busdox.transport.lime.OutboxInterface;
+
+import eu.peppol.common.IReadonlyUsernamePWCredentials;
+import eu.peppol.common.UsernamePWCredentials;
 
 /**
  * @author Ravnholt<br>
  *         PEPPOL.AT, BRZ, Philip Helger
  */
-public class EndpointReference implements EndpointReferenceInterface {
+public final class Factory {
+  private Factory () {}
 
-  private String m_sAddress;
-  private String m_sChannelID;
-
-  public String getAddress () {
-    return m_sAddress;
+  public static IParticipantIdentifier createBusinessIdentifier () {
+    return new ParticipantIdentifierType ();
   }
 
-  public void setAddress (final String address) {
-    m_sAddress = address;
+  public static IDocumentIdentifier createDocumentType () {
+    return new DocumentIdentifierType ();
   }
 
-  public String getChannelID () {
-    return m_sChannelID;
+  public static EndpointReferenceInterface createEndpointReference () {
+    return new EndpointReference ();
   }
 
-  public void setChannelID (final String channelID) {
-    m_sChannelID = channelID;
+  public static MessageInterface createMessage () {
+    return new Message ();
+  }
+
+  public static MessageReferenceInterface createMessageReference () {
+    return new MessageReference ();
+  }
+
+  public static IProcessIdentifier createProcessType () {
+    return new ProcessIdentifierType ();
+  }
+
+  public static InboxInterface createInbox () {
+    return new Inbox ();
+  }
+
+  public static OutboxInterface createOutbox () {
+    return new Outbox ();
+  }
+
+  public static IReadonlyUsernamePWCredentials createCredentials (final String sUsername, final String sPassword) {
+    return new UsernamePWCredentials (sUsername, sPassword);
   }
 }

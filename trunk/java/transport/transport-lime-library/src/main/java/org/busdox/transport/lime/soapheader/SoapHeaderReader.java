@@ -35,7 +35,7 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package org.busdox.transport.soapheader;
+package org.busdox.transport.lime.soapheader;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -47,11 +47,11 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.ws.WebServiceContext;
 
-import org.busdox.transport.base.Identifiers;
 import org.busdox.transport.identifiers._1.DocumentIdentifierType;
 import org.busdox.transport.identifiers._1.ObjectFactory;
 import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 import org.busdox.transport.identifiers._1.ProcessIdentifierType;
+import org.busdox.transport.lime.Identifiers;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 

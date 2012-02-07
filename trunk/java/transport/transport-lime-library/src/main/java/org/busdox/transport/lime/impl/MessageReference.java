@@ -35,18 +35,33 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package org.busdox.transport.lime.api.interfaces;
+package org.busdox.transport.lime.impl;
+
+import org.busdox.transport.lime.EndpointReferenceInterface;
+import org.busdox.transport.lime.MessageReferenceInterface;
 
 /**
  * @author Ravnholt<br>
  *         PEPPOL.AT, BRZ, Philip Helger
  */
-public interface MessageReferenceInterface {
-  EndpointReferenceInterface getEndpointReference ();
+public class MessageReference implements MessageReferenceInterface {
 
-  String getMessageID ();
+  private EndpointReferenceInterface m_aEndpointReference;
+  private String m_sMessageId;
 
-  void setEndpointReference (EndpointReferenceInterface endpointReference);
+  public void setEndpointReference (final EndpointReferenceInterface endpointReference) {
+    m_aEndpointReference = endpointReference;
+  }
 
-  void setMessageId (String messageId);
+  public void setMessageId (final String messageId) {
+    m_sMessageId = messageId;
+  }
+
+  public EndpointReferenceInterface getEndpointReference () {
+    return m_aEndpointReference;
+  }
+
+  public String getMessageID () {
+    return m_sMessageId;
+  }
 }

@@ -35,19 +35,17 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package org.busdox.transport.lime.api.interfaces;
+package org.busdox.transport.lime;
+
+import eu.peppol.common.IReadonlyUsernamePWCredentials;
 
 /**
  * @author Ravnholt<br>
  *         PEPPOL.AT, BRZ, Philip Helger
  */
-public class MessageException extends Exception {
-
-  public MessageException (final String message) {
-    super (message);
-  }
-
-  public MessageException (final Throwable t) {
-    super (t);
-  }
+public interface OutboxInterface {
+  // Sends a message. A new unique message ID is created and returned.
+  String sendMessage (IReadonlyUsernamePWCredentials credentials,
+                      MessageInterface message,
+                      EndpointReferenceInterface endpointReferenceInterface) throws MessageException;
 }
