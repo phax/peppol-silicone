@@ -6,9 +6,9 @@
     <version>13</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>commons-jpa</artifactId>
+  <artifactId>peppol-commons-jpa</artifactId>
   <version>1.1.1-SNAPSHOT</version>
-  <name>commons-jpa</name>
+  <name>peppol-commons-jpa</name>
 
   <scm>
     <developerConnection>scm:svn:https://joinup.ec.europa.eu/svn/peppol/devinprogress/java/commons/peppol-jpa</developerConnection>

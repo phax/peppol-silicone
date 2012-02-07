@@ -6,10 +6,10 @@
     <artifactId>parent-pom</artifactId>
     <version>13</version>
   </parent>
-  <artifactId>sml-webapp</artifactId>
+  <artifactId>peppol-sml-webapp</artifactId>
   <version>1.1.3-SNAPSHOT</version>
   <packaging>war</packaging>
-  <name>sml-webapp</name>
+  <name>peppol-sml-webapp</name>
 
   <scm>
     <developerConnection>scm:svn:https://joinup.ec.europa.eu/svn/peppol/devinprogress/java/sml/sml-webapp</developerConnection>
@@ -18,7 +18,7 @@
   <dependencies>
     <dependency>
       <groupId>at.peppol</groupId>
-      <artifactId>sml-server-library</artifactId>
+      <artifactId>peppol-sml-server-library</artifactId>
       <version>1.1.3-SNAPSHOT</version>
     </dependency>
     <dependency>

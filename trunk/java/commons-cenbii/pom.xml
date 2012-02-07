@@ -6,9 +6,9 @@
     <version>13</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>commons-cenbii</artifactId>
+  <artifactId>peppol-commons-cenbii</artifactId>
   <version>1.0.1-SNAPSHOT</version>
-  <name>commons-cenbii</name>
+  <name>peppol-commons-cenbii</name>
 
   <scm>
     <developerConnection>scm:svn:https://joinup.ec.europa.eu/svn/peppol/devinprogress/java/commons/bii-peppol</developerConnection>

@@ -6,9 +6,9 @@
     <version>13</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>commons-busdox</artifactId>
+  <artifactId>peppol-commons-busdox</artifactId>
   <version>2.1.2-SNAPSHOT</version>
-  <name>commons-busdox</name>
+  <name>peppol-commons-busdox</name>
 
   <scm>
     <developerConnection>scm:svn:https://joinup.ec.europa.eu/svn/peppol/devinprogress/java/commons/busdox-types</developerConnection>

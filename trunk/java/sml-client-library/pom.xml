@@ -6,9 +6,9 @@
     <artifactId>parent-pom</artifactId>
     <version>13</version>
   </parent>
-  <artifactId>sml-client-library</artifactId>
+  <artifactId>peppol-sml-client-library</artifactId>
   <version>1.2.1-SNAPSHOT</version>
-  <name>sml-client-library</name>
+  <name>peppol-sml-client-library</name>
 
   <scm>
     <developerConnection>scm:svn:https://joinup.ec.europa.eu/svn/peppol/devinprogress/java/sml/client-library</developerConnection>
@@ -17,7 +17,7 @@
   <dependencies>
     <dependency>
       <groupId>at.peppol</groupId>
-      <artifactId>commons-peppol</artifactId>
+      <artifactId>peppol-commons-peppol</artifactId>
       <version>2.0.3-SNAPSHOT</version>
     </dependency>
     <dependency>
