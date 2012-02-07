@@ -51,9 +51,10 @@ import org.busdox.servicemetadata.locator._1.ServiceMetadataPublisherServiceType
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.peppol.commons.jpa.AbstractJPAEnabledManager;
+
 import com.phloc.commons.annotations.UsedViaReflection;
 
-import eu.peppol.jpa.AbstractJPAEnabledManager;
 import eu.peppol.registry.sml.IGenericDataHandler;
 import eu.peppol.registry.sml.datamodel.DBParticipantIdentifier;
 import eu.peppol.registry.sml.datamodel.DBParticipantIdentifierID;

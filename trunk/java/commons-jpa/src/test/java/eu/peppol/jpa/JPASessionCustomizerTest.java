@@ -44,6 +44,8 @@ import static org.junit.Assert.assertTrue;
 import org.eclipse.persistence.logging.SessionLog;
 import org.junit.Test;
 
+import at.peppol.commons.jpa.JPASessionCustomizer;
+
 import com.phloc.commons.CGlobal;
 
 /**

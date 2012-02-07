@@ -51,10 +51,11 @@ import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.peppol.commons.jpa.AbstractJPAEnabledManager;
+
 import com.phloc.commons.collections.ContainerHelper;
 
 import eu.peppol.busdox.identifier.IdentifierUtils;
-import eu.peppol.jpa.AbstractJPAEnabledManager;
 import eu.peppol.registry.sml.IParticipantDataHandler;
 import eu.peppol.registry.sml.IParticipantDataHandlerCallback;
 import eu.peppol.registry.sml.datamodel.DBAllowedWildcardSchemes;

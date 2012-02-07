@@ -43,11 +43,12 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import at.peppol.commons.cenbii.profiles.ETransaction;
+
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.io.IReadableResource;
 
-import eu.cen.bii.profiles.ETransaction;
 
 /**
  * Interface for a single validation artefact.

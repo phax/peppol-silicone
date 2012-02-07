@@ -43,12 +43,13 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import at.peppol.commons.cenbii.profiles.ETransaction;
+
 import com.phloc.commons.error.IResourceError;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.commons.locale.country.CountryCache;
 
-import eu.cen.bii.profiles.ETransaction;
 import eu.peppol.validation.CValidattionTestFiles;
 import eu.peppol.validation.rules.EValidationDocumentType;
 import eu.peppol.validation.rules.EValidationLevel;

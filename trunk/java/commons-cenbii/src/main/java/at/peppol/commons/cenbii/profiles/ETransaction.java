@@ -35,7 +35,7 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package eu.cen.bii.profiles;
+package at.peppol.commons.cenbii.profiles;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;

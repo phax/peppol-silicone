@@ -39,10 +39,11 @@ package eu.peppol.validation.rules;
 
 import javax.annotation.Nonnull;
 
+import at.peppol.commons.cenbii.profiles.ETransaction;
+
 import com.phloc.commons.IHasStringRepresentation;
 import com.phloc.commons.annotations.MustImplementEqualsAndHashcode;
 
-import eu.cen.bii.profiles.ETransaction;
 
 /**
  * Represents a single transaction used for validation. It consists of a syntax

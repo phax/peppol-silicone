@@ -47,6 +47,8 @@ import org.junit.Test;
 import org.oclc.purl.dsdl.svrl.SchematronOutputType;
 import org.xml.sax.SAXException;
 
+import at.peppol.commons.cenbii.profiles.ETransaction;
+
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.error.EErrorLevel;
 import com.phloc.commons.io.IReadableResource;
@@ -56,7 +58,6 @@ import com.phloc.commons.xml.serialize.XMLReader;
 import com.phloc.commons.xml.serialize.XMLWriter;
 import com.phloc.ubl.UBL20DocumentMarshaller;
 
-import eu.cen.bii.profiles.ETransaction;
 import eu.peppol.validation.CValidattionTestFiles;
 import eu.peppol.validation.commons.schematron.SchematronHelper;
 import eu.peppol.validation.commons.schematron.svrl.SVRLFailedAssert;
