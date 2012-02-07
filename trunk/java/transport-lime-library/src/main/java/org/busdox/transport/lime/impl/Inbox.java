@@ -249,7 +249,12 @@ public class Inbox implements InboxInterface {
     final HeaderList hl = (HeaderList) ((BindingProvider) port).getResponseContext ()
                                                                .get (JAXWSProperties.INBOUND_HEADER_LIST_PROPERTY);
     MessageMetadata soapHeader = SoapHeaderReader.getSoapHeader (hl);
-    soapHeader = soapHeader.withMessageID (messageReferenceInterface.getMessageID ());
+    soapHeader = new MessageMetadata (messageReferenceInterface.getMessageID (),
+                                      soapHeader.getChannelID (),
+                                      soapHeader.getSenderID (),
+                                      soapHeader.getRecipientID (),
+                                      soapHeader.getDocumentTypeID (),
+                                      soapHeader.getProcessID ());
     message.setSender (new SimpleParticipantIdentifier (soapHeader.getSenderID ()));
     message.setReciever (new SimpleParticipantIdentifier (soapHeader.getRecipientID ()));
     message.setDocumentType (new SimpleDocumentIdentifier (soapHeader.getDocumentTypeID ()));
