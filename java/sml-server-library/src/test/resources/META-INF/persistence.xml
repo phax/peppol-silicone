@@ -44,11 +44,11 @@
              version="2.0">
   <persistence-unit name="peppol-sml" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-    <class>eu.peppol.registry.sml.datamodel.DBAllowedWildcardSchemes</class>
-    <class>eu.peppol.registry.sml.datamodel.DBMigrate</class>
-    <class>eu.peppol.registry.sml.datamodel.DBParticipantIdentifier</class>
-    <class>eu.peppol.registry.sml.datamodel.DBServiceMetadataPublisher</class>
-    <class>eu.peppol.registry.sml.datamodel.DBUser</class>
+    <class>at.peppol.sml.server.datamodel.DBAllowedWildcardSchemes</class>
+    <class>at.peppol.sml.server.datamodel.DBMigrate</class>
+    <class>at.peppol.sml.server.datamodel.DBParticipantIdentifier</class>
+    <class>at.peppol.sml.server.datamodel.DBServiceMetadataPublisher</class>
+    <class>at.peppol.sml.server.datamodel.DBUser</class>
     <properties>
       <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:target/sml"/>

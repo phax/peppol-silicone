@@ -35,7 +35,7 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package eu.peppol.registry.sml.jetty;
+package at.peppol.sml.server.jetty;
 
 import java.io.IOException;
 import java.io.OutputStream;
