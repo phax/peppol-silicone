@@ -8,9 +8,9 @@
   <version>1.0</version>
 
   <modules>
-    <module>bii-peppol</module>
-    <module>busdox-types</module>
-    <module>busdox-peppol</module>
-    <module>peppol-jpa</module>
+    <module>commons-cenbii</module>
+    <module>commons-busdox</module>
+    <module>commons-peppol</module>
+    <module>commons-jpa</module>
   </modules>
 </project>
