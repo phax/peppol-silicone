@@ -40,10 +40,11 @@ package eu.peppol.validation.rules;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
+import at.peppol.commons.cenbii.profiles.ETransaction;
+
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
 
-import eu.cen.bii.profiles.ETransaction;
 
 /**
  * This is the default implementation of the {@link IValidationTransaction}

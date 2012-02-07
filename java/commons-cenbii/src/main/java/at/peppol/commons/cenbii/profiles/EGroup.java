@@ -35,30 +35,17 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package eu.cen.bii.profiles;
-
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
-
-import com.phloc.commons.string.StringHelper;
+package at.peppol.commons.cenbii.profiles;
 
 /**
- * Test class for class {@link ETransaction}.
+ * Defines the groups (= categories) available for profiles ({@link EProfile}).
  *
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public final class ETransactionTest {
-  @Test
-  public void testBasic () {
-    for (final ETransaction eTransaction : ETransaction.values ()) {
-      assertTrue (StringHelper.hasText (eTransaction.getID ()));
-      assertTrue (StringHelper.hasText (eTransaction.getName ()));
-      assertTrue (eTransaction.getNumber () > 0);
-
-      assertSame (eTransaction, ETransaction.valueOf (eTransaction.name ()));
-      assertSame (eTransaction, ETransaction.getFromIDOrNull (eTransaction.getID ()));
-    }
-  }
+public enum EGroup {
+  PUBLICATION,
+  TENDERING,
+  SOURCING,
+  ORDERING_AND_BILLING,
+  SUPPORT;
 }

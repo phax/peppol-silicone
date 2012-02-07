@@ -42,10 +42,11 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
+import at.peppol.commons.cenbii.profiles.ETransaction;
+
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.resource.ClassPathResource;
 
-import eu.cen.bii.profiles.ETransaction;
 
 /**
  * Test class for class {@link VisualizationManager}.

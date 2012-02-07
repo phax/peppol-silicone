@@ -35,56 +35,24 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package eu.cen.bii.profiles;
+package at.peppol.commons.cenbii.profiles;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
-import java.util.List;
-
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.phloc.commons.GlobalDebug;
-import com.phloc.commons.string.StringHelper;
+import at.peppol.commons.cenbii.profiles.EGroup;
 
 /**
- * Test class for class {@link ECollaboration}.
+ * Test class for class {@link EGroup}.
  *
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public final class ECollaborationTest {
-  @BeforeClass
-  public static void before () {
-    GlobalDebug.setDebugModeDirect (true);
-  }
-
+public final class EGroupTest {
   @Test
   public void testBasic () {
-    for (final ECollaboration eCollaboration : ECollaboration.values ()) {
-      assertTrue (StringHelper.hasText (eCollaboration.getName ()));
-      assertNotNull (eCollaboration.getAllTransactions ());
-      assertFalse (eCollaboration.getAllTransactions ().isEmpty ());
-
-      assertSame (eCollaboration, ECollaboration.valueOf (eCollaboration.name ()));
+    for (final EGroup eGroup : EGroup.values ()) {
+      assertSame (eGroup, EGroup.valueOf (eGroup.name ()));
     }
-  }
-
-  @Test
-  public void testGetAllCollaborationsWithTransaction () {
-    for (final ETransaction eTransaction : ETransaction.values ()) {
-      final List <ECollaboration> aList = ECollaboration.getAllCollaborationsWithTransaction (eTransaction);
-      assertNotNull (aList);
-      assertTrue (aList.size () > 0);
-    }
-
-    try {
-      ECollaboration.getAllCollaborationsWithTransaction (null);
-      fail ();
-    }
-    catch (final NullPointerException ex) {}
   }
 }

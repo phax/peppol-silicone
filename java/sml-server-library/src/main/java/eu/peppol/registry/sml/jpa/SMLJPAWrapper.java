@@ -39,7 +39,8 @@ package eu.peppol.registry.sml.jpa;
 
 import javax.annotation.Nonnull;
 
-import eu.peppol.jpa.AbstractJPAWrapper;
+import at.peppol.commons.jpa.AbstractJPAWrapper;
+
 
 /**
  * Specific SML JPA entity manager

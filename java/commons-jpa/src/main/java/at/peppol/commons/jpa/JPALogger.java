@@ -35,17 +35,41 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package eu.cen.bii.profiles;
+package at.peppol.commons.jpa;
+
+import org.eclipse.persistence.logging.AbstractSessionLog;
+import org.eclipse.persistence.logging.SessionLog;
+import org.eclipse.persistence.logging.SessionLogEntry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.phloc.commons.CGlobal;
+import com.phloc.commons.regex.RegExHelper;
 
 /**
- * Defines the groups (= categories) available for profiles ({@link EProfile}).
+ * A logging adapter that can be hooked into JPA and forwards all logging
+ * requests to phloc logging.
  *
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public enum EGroup {
-  PUBLICATION,
-  TENDERING,
-  SOURCING,
-  ORDERING_AND_BILLING,
-  SUPPORT;
+public final class JPALogger extends AbstractSessionLog {
+  private static final Logger s_aLogger = LoggerFactory.getLogger (JPALogger.class);
+
+  @Override
+  public void log (final SessionLogEntry aSessionLogEntry) {
+    final int nLogLevel = aSessionLogEntry.getLevel ();
+    // JPA uses the System property for adding line breaks
+    final String [] aMsgLines = RegExHelper.split (aSessionLogEntry.getMessage (), CGlobal.LINE_SEPARATOR);
+    for (int i = 0; i < aMsgLines.length; ++i) {
+      final String sMsg = aMsgLines[i];
+      final Throwable t = i == aMsgLines.length - 1 ? aSessionLogEntry.getException () : null;
+      if (nLogLevel >= SessionLog.SEVERE)
+        s_aLogger.error (sMsg, t);
+      else
+        if (nLogLevel >= SessionLog.WARNING)
+          s_aLogger.warn (sMsg, t);
+        else
+          s_aLogger.info (sMsg, t);
+    }
+  }
 }

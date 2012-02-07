@@ -48,11 +48,12 @@ import java.util.Set;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import at.peppol.commons.cenbii.profiles.ETransaction;
+
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.io.IReadableResource;
 
-import eu.cen.bii.profiles.ETransaction;
 
 /**
  * Test class for class {@link EVisualizationArtefact}.

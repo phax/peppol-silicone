@@ -49,6 +49,8 @@ import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.peppol.commons.cenbii.profiles.ETransaction;
+
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsImmutableObject;
@@ -60,7 +62,6 @@ import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.commons.locale.country.CountryCache;
 import com.phloc.commons.string.StringHelper;
 
-import eu.cen.bii.profiles.ETransaction;
 
 /**
  * Contains all available invoice validation artefacts.

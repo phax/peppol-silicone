@@ -50,7 +50,8 @@ import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.peppol.jpa.AbstractJPAEnabledManager;
+import at.peppol.commons.jpa.AbstractJPAEnabledManager;
+
 import eu.peppol.registry.sml.ISMPDataHandler;
 import eu.peppol.registry.sml.ISMPDataHandlerCallback;
 import eu.peppol.registry.sml.datamodel.DBParticipantIdentifier;

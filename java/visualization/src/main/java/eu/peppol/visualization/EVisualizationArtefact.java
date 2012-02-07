@@ -43,6 +43,8 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import at.peppol.commons.cenbii.profiles.ETransaction;
+
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
@@ -50,7 +52,6 @@ import com.phloc.commons.id.IHasID;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.resource.ClassPathResource;
 
-import eu.cen.bii.profiles.ETransaction;
 import eu.peppol.visualization.index.ArtefactIndex;
 import eu.peppol.visualization.index.ArtefactResource;
 

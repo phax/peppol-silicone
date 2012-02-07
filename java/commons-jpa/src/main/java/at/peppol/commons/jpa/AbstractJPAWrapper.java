@@ -35,7 +35,7 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package eu.peppol.jpa;
+package at.peppol.commons.jpa;
 
 import java.io.Closeable;
 import java.util.HashMap;

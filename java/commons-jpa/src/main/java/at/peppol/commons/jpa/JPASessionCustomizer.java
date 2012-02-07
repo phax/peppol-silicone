@@ -35,50 +35,52 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package eu.cen.bii.profiles;
+package at.peppol.commons.jpa;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import java.util.concurrent.atomic.AtomicInteger;
 
-import java.util.List;
-import java.util.Locale;
+import javax.annotation.Nonnull;
 
-import org.junit.Test;
+import org.eclipse.persistence.config.SessionCustomizer;
+import org.eclipse.persistence.logging.SessionLog;
+import org.eclipse.persistence.sessions.Session;
+
+import com.phloc.commons.CGlobal;
+import com.phloc.commons.state.EChange;
 
 /**
- * Test class for class {@link EProfile}.
- *
+ * Class for customizing JPA sessions.<br>
+ * Set the class name in the property
+ * <code>eclipselink.session.customizer</code><br>
+ * Should have a public no-argument ctor
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public final class EProfileTest {
-  @Test
-  public void testBasic () {
-    for (final EProfile eProfile : EProfile.values ()) {
-      assertNotNull (eProfile.getGroup ());
-      assertNotNull (eProfile.getDisplayText (Locale.ENGLISH));
-      assertTrue (eProfile.getNumber () > 0);
-      assertNotNull (eProfile.getAllCollaborations ());
-      assertFalse (eProfile.getAllCollaborations ().isEmpty ());
-      assertSame (eProfile, EProfile.valueOf (eProfile.name ()));
-      eProfile.isInCoreSupported ();
+public final class JPASessionCustomizer implements SessionCustomizer {
+  private static final AtomicInteger s_aLogLevel = new AtomicInteger (CGlobal.ILLEGAL_UINT);
+
+  public JPASessionCustomizer () {}
+
+  @Nonnull
+  public static EChange setGlobalLogLevel (final int nLogLevel) {
+    if (nLogLevel >= SessionLog.ALL && nLogLevel <= SessionLog.OFF) {
+      if (s_aLogLevel.getAndSet (nLogLevel) != nLogLevel)
+        return EChange.CHANGED;
     }
+    return EChange.UNCHANGED;
   }
 
-  @Test
-  public void testGetAllProfilesWithCollaboration () {
-    for (final ECollaboration eCollaboration : ECollaboration.values ()) {
-      final List <EProfile> aList = EProfile.getAllProfilesWithCollaboration (eCollaboration);
-      assertNotNull (aList);
-      assertTrue (aList.size () > 0);
-    }
+  public static int getGlobalLogLevel () {
+    return s_aLogLevel.get ();
+  }
 
-    try {
-      EProfile.getAllProfilesWithCollaboration (null);
-      fail ();
+  public void customize (final Session aSession) throws Exception {
+    final int nLogLevel = getGlobalLogLevel ();
+    if (nLogLevel != CGlobal.ILLEGAL_UINT) {
+      // create a custom logger and assign it to the session
+      final SessionLog aCustomLogger = new JPALogger ();
+      aCustomLogger.setLevel (nLogLevel);
+      aSession.setSessionLog (aCustomLogger);
     }
-    catch (final NullPointerException ex) {}
   }
 }

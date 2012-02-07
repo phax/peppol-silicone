@@ -35,41 +35,53 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package eu.peppol.jpa;
+package at.peppol.commons.cenbii.profiles;
 
-import org.eclipse.persistence.logging.AbstractSessionLog;
-import org.eclipse.persistence.logging.SessionLog;
-import org.eclipse.persistence.logging.SessionLogEntry;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
-import com.phloc.commons.CGlobal;
-import com.phloc.commons.regex.RegExHelper;
+import java.util.List;
+import java.util.Locale;
+
+import org.junit.Test;
+
+import at.peppol.commons.cenbii.profiles.ECollaboration;
+import at.peppol.commons.cenbii.profiles.EProfile;
 
 /**
- * A logging adapter that can be hooked into JPA and forwards all logging
- * requests to phloc logging.
+ * Test class for class {@link EProfile}.
  *
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public final class JPALogger extends AbstractSessionLog {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (JPALogger.class);
-
-  @Override
-  public void log (final SessionLogEntry aSessionLogEntry) {
-    final int nLogLevel = aSessionLogEntry.getLevel ();
-    // JPA uses the System property for adding line breaks
-    final String [] aMsgLines = RegExHelper.split (aSessionLogEntry.getMessage (), CGlobal.LINE_SEPARATOR);
-    for (int i = 0; i < aMsgLines.length; ++i) {
-      final String sMsg = aMsgLines[i];
-      final Throwable t = i == aMsgLines.length - 1 ? aSessionLogEntry.getException () : null;
-      if (nLogLevel >= SessionLog.SEVERE)
-        s_aLogger.error (sMsg, t);
-      else
-        if (nLogLevel >= SessionLog.WARNING)
-          s_aLogger.warn (sMsg, t);
-        else
-          s_aLogger.info (sMsg, t);
+public final class EProfileTest {
+  @Test
+  public void testBasic () {
+    for (final EProfile eProfile : EProfile.values ()) {
+      assertNotNull (eProfile.getGroup ());
+      assertNotNull (eProfile.getDisplayText (Locale.ENGLISH));
+      assertTrue (eProfile.getNumber () > 0);
+      assertNotNull (eProfile.getAllCollaborations ());
+      assertFalse (eProfile.getAllCollaborations ().isEmpty ());
+      assertSame (eProfile, EProfile.valueOf (eProfile.name ()));
+      eProfile.isInCoreSupported ();
     }
+  }
+
+  @Test
+  public void testGetAllProfilesWithCollaboration () {
+    for (final ECollaboration eCollaboration : ECollaboration.values ()) {
+      final List <EProfile> aList = EProfile.getAllProfilesWithCollaboration (eCollaboration);
+      assertNotNull (aList);
+      assertTrue (aList.size () > 0);
+    }
+
+    try {
+      EProfile.getAllProfilesWithCollaboration (null);
+      fail ();
+    }
+    catch (final NullPointerException ex) {}
   }
 }
