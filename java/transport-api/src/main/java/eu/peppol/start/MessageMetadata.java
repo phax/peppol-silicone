@@ -39,7 +39,7 @@ package eu.peppol.start;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.concurrent.NotThreadSafe;
+import javax.annotation.concurrent.Immutable;
 
 import org.busdox.identifier.IReadonlyDocumentIdentifier;
 import org.busdox.identifier.IReadonlyParticipantIdentifier;
@@ -48,6 +48,7 @@ import org.busdox.transport.identifiers._1.DocumentIdentifierType;
 import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 import org.busdox.transport.identifiers._1.ProcessIdentifierType;
 
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.compare.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
@@ -59,11 +60,11 @@ import eu.peppol.busdox.identifier.SimpleProcessIdentifier;
 /**
  * A MessageMetadata object is used to storage the message addressing data
  * incoming in the SOAP header through a SOAPHeaderObject object.
- *
+ * 
  * @author Jose Gorvenia Narvaez(jose@alfa1lab.com)<br>
  *         PEPPOL.AT, BRZ, Philip Helger
  */
-@NotThreadSafe
+@Immutable
 public final class MessageMetadata implements IMessageMetadata {
   /** The message identifier. */
   private final String m_sMessageID;
@@ -78,7 +79,7 @@ public final class MessageMetadata implements IMessageMetadata {
   private final SimpleParticipantIdentifier m_aRecipientID;
 
   /** Document identifier value. */
-  private final SimpleDocumentIdentifier m_aDocumentID;
+  private final SimpleDocumentIdentifier m_aDocumentTypeID;
 
   /** Process identifier value. */
   private final SimpleProcessIdentifier m_aProcessID;
@@ -86,37 +87,37 @@ public final class MessageMetadata implements IMessageMetadata {
   /**
    * Set the values of the MessageMetadata object received in a SOAPHeaderObject
    * object.
-   *
+   * 
    * @param sMessageID
    *        message ID
    * @param sChannelID
    *        channel ID
-   * @param aSender
+   * @param aSenderID
    *        sender ID
-   * @param aRecipient
+   * @param aRecipientID
    *        recipient ID
-   * @param aDocumentID
+   * @param aDocumentTypeID
    *        document type ID
    * @param aProcessID
    *        process ID
    */
   public MessageMetadata (@Nullable final String sMessageID,
                           @Nullable final String sChannelID,
-                          @Nonnull final IReadonlyParticipantIdentifier aSender,
-                          @Nonnull final IReadonlyParticipantIdentifier aRecipient,
-                          @Nonnull final IReadonlyDocumentIdentifier aDocumentID,
+                          @Nonnull final IReadonlyParticipantIdentifier aSenderID,
+                          @Nonnull final IReadonlyParticipantIdentifier aRecipientID,
+                          @Nonnull final IReadonlyDocumentIdentifier aDocumentTypeID,
                           @Nonnull final IReadonlyProcessIdentifier aProcessID) {
     m_sMessageID = sMessageID;
     m_sChannelID = sChannelID;
-    m_aSenderID = new SimpleParticipantIdentifier (aSender);
-    m_aRecipientID = new SimpleParticipantIdentifier (aRecipient);
-    m_aDocumentID = new SimpleDocumentIdentifier (aDocumentID);
+    m_aSenderID = new SimpleParticipantIdentifier (aSenderID);
+    m_aRecipientID = new SimpleParticipantIdentifier (aRecipientID);
+    m_aDocumentTypeID = new SimpleDocumentIdentifier (aDocumentTypeID);
     m_aProcessID = new SimpleProcessIdentifier (aProcessID);
   }
 
   /**
    * Get message identifier value.
-   *
+   * 
    * @return the messageId the value of the message identifier.
    */
   @Nullable
@@ -152,8 +153,8 @@ public final class MessageMetadata implements IMessageMetadata {
    * @return the documentIdValue
    */
   @Nonnull
-  public final DocumentIdentifierType getDocumentID () {
-    return m_aDocumentID;
+  public final DocumentIdentifierType getDocumentTypeID () {
+    return m_aDocumentTypeID;
   }
 
   /**
@@ -162,6 +163,12 @@ public final class MessageMetadata implements IMessageMetadata {
   @Nonnull
   public final ProcessIdentifierType getProcessID () {
     return m_aProcessID;
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public MessageMetadata withMessageID (final String sMessageID) {
+    return new MessageMetadata (sMessageID, m_sChannelID, m_aSenderID, m_aRecipientID, m_aDocumentTypeID, m_aProcessID);
   }
 
   @Override
@@ -175,7 +182,7 @@ public final class MessageMetadata implements IMessageMetadata {
            EqualsUtils.nullSafeEquals (m_sChannelID, rhs.m_sChannelID) &&
            m_aSenderID.equals (rhs.m_aSenderID) &&
            m_aRecipientID.equals (rhs.m_aRecipientID) &&
-           m_aDocumentID.equals (rhs.m_aDocumentID) &&
+           m_aDocumentTypeID.equals (rhs.m_aDocumentTypeID) &&
            m_aProcessID.equals (rhs.m_aProcessID);
   }
 
@@ -185,7 +192,7 @@ public final class MessageMetadata implements IMessageMetadata {
                                        .append (m_sChannelID)
                                        .append (m_aSenderID)
                                        .append (m_aRecipientID)
-                                       .append (m_aDocumentID)
+                                       .append (m_aDocumentTypeID)
                                        .append (m_aProcessID)
                                        .getHashCode ();
   }
@@ -196,7 +203,7 @@ public final class MessageMetadata implements IMessageMetadata {
                                        .append ("channelID", m_sChannelID)
                                        .append ("senderID", m_aSenderID)
                                        .append ("recipientID", m_aRecipientID)
-                                       .append ("documentID", m_aDocumentID)
+                                       .append ("documentID", m_aDocumentTypeID)
                                        .append ("processID", m_aProcessID)
                                        .toString ();
   }

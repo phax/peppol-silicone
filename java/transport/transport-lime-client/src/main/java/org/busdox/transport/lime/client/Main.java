@@ -91,7 +91,6 @@ public final class Main {
    * + "##urn:www.cenbii.eu:transaction:biicoretrdm002:ver1.0:" +
    * "#urn:www.peppol.eu:bis:peppol6a:ver1.0::2.0");
    */
-
   private static final IReadonlyProcessIdentifier PROCESS = EPredefinedProcessIdentifier.urn_www_cenbii_eu_profile_bii06_ver1_0;
 
   // ("cenbii-procid-ubl", "urn:www.cenbii.eu:profile:bii06:ver1.0");
@@ -275,7 +274,6 @@ public final class Main {
                                                        final IReadonlyParticipantIdentifier receiverID,
                                                        final IReadonlyDocumentIdentifier documentID,
                                                        final IReadonlyProcessIdentifier processID) throws SAXException {
-
     final MessageInterface message = Factory.createMessage ();
     message.setDocument (loadXMLFromFile (xmlFilename));
     message.setDocumentType (new SimpleDocumentIdentifier (documentID));

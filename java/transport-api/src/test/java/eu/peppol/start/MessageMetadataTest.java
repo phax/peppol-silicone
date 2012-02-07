@@ -65,7 +65,7 @@ public final class MessageMetadataTest {
     assertEquals ("chid", m.getChannelID ());
     assertEquals ("sender", m.getSenderID ().getValue ());
     assertEquals ("receiver", m.getRecipientID ().getValue ());
-    assertEquals ("doc", m.getDocumentID ().getValue ());
+    assertEquals ("doc", m.getDocumentTypeID ().getValue ());
     assertEquals ("proc", m.getProcessID ().getValue ());
 
     PhlocTestUtils.testDefaultImplementationWithEqualContentObject (m,

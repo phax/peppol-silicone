@@ -80,7 +80,7 @@ public interface IMessageMetadata {
    * @return the documentIdValue
    */
   @Nonnull
-  DocumentIdentifierType getDocumentID ();
+  DocumentIdentifierType getDocumentTypeID ();
 
   /**
    * @return the processIdValue

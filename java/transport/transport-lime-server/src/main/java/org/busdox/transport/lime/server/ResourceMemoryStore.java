@@ -42,7 +42,7 @@ import java.util.Map;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import org.busdox.transport.soapheader.MessageMetaData;
+import eu.peppol.start.MessageMetadata;
 
 /**
  * @author Ravnholt<br>
@@ -54,7 +54,7 @@ public final class ResourceMemoryStore {
   }
 
   private final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
-  private final Map <String, MessageMetaData> resourceMap = new HashMap <String, MessageMetaData> ();
+  private final Map <String, MessageMetadata> resourceMap = new HashMap <String, MessageMetadata> ();
 
   private ResourceMemoryStore () {}
 
@@ -73,7 +73,7 @@ public final class ResourceMemoryStore {
     }
   }
 
-  public boolean createResource (final String messageID, final String urlStr, final MessageMetaData soapHeader) {
+  public boolean createResource (final String messageID, final String urlStr, final MessageMetadata soapHeader) {
     m_aRWLock.writeLock ().lock ();
     try {
       final String key = getKey (messageID, urlStr);
@@ -87,7 +87,7 @@ public final class ResourceMemoryStore {
     }
   }
 
-  public MessageMetaData getMessage (final String messageID, final String urlStr) {
+  public MessageMetadata getMessage (final String messageID, final String urlStr) {
     m_aRWLock.readLock ().lock ();
     try {
       final String key = getKey (messageID, urlStr);

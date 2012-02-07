@@ -177,7 +177,7 @@ public class AccessPointService {
     try {
       // Query the SMP
       return new SMPServiceCaller (aRecipientID, SML_INFO).getEndpointAddress (aRecipientID,
-                                                                               aMetadata.getDocumentID (),
+                                                                               aMetadata.getDocumentTypeID (),
                                                                                aMetadata.getProcessID ());
     }
     catch (final Throwable t) {
@@ -201,7 +201,7 @@ public class AccessPointService {
     final IParticipantIdentifier aRecipientID = aMetadata.getRecipientID ();
     try {
       return new SMPServiceCaller (aRecipientID, SML_INFO).getEndpointCertificate (aRecipientID,
-                                                                                   aMetadata.getDocumentID (),
+                                                                                   aMetadata.getDocumentTypeID (),
                                                                                    aMetadata.getProcessID ());
     }
     catch (final Throwable t) {
