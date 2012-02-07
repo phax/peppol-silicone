@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>eu.peppol</groupId>
+    <artifactId>parent-pom</artifactId>
+    <version>12</version>
+    <relativePath>../../parent-pom/pom.xml</relativePath>
+  </parent>
+  <groupId>eu.peppol.smp</groupId>
+  <artifactId>smp-client-library</artifactId>
+  <version>1.2.2-SNAPSHOT</version>
+  <name>smp-client-library</name>
+  <description>PEPPOL SMP REST Client Library</description>
+
+  <scm>
+    <developerConnection>scm:svn:https://joinup.ec.europa.eu/svn/peppol/devinprogress/java/smp/smp-client-library</developerConnection>
+  </scm>
+
+  <dependencies>
+    <dependency>
+      <groupId>eu.peppol.commons</groupId>
+      <artifactId>busdox-peppol</artifactId>
+      <version>2.0.2</version>
+    </dependency>
+    <dependency>
+      <groupId>com.phloc</groupId>
+      <artifactId>phloc-commons</artifactId>
+      <version>3.3.11</version>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.jersey</groupId>
+      <artifactId>jersey-client</artifactId>
+      <version>1.11</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.metro</groupId>
+      <artifactId>webservices-rt</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+</project>

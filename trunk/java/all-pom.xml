@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>eu.peppol.builder</groupId>
+  <artifactId>main-overall-builder</artifactId>
+  <packaging>pom</packaging>
+  <name>Main overall build POM</name>
+  <version>1.0</version>
+
+  <modules>
+    <module>parent-pom</module>
+    <module>commons</module>
+    <module>validation</module>
+    <module>visualization</module>
+    <module>transport</module>
+    <module>sml</module>
+    <module>smp</module>
+  </modules>
+</project>

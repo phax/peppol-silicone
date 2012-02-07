@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>eu.peppol.builder</groupId>
+  <artifactId>transport-builder</artifactId>
+  <packaging>pom</packaging>
+  <name>BusDox Transport build POM</name>
+  <version>1.0</version>
+
+  <modules>
+    <module>peppol-start-api</module>
+    <module>peppol-start-client</module>
+    <module>peppol-start-filereceiver</module>
+    <module>peppol-start-server</module>
+    <module>transport-commons</module>
+    <module>transport-start-library</module>
+    <module>transport-lime-library</module>
+    <module>transport-lime-client</module>
+    <module>transport-lime-server</module>
+  </modules>
+</project>
