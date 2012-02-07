@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
-    <groupId>eu.peppol</groupId>
+    <groupId>at.peppol</groupId>
     <artifactId>parent-pom</artifactId>
-    <version>12</version>
-    <relativePath>../../parent-pom/pom.xml</relativePath>
+    <version>13</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>eu.peppol.validation</groupId>
-  <artifactId>validation-commons-schematron</artifactId>
+  <artifactId>validation-schematron</artifactId>
   <version>1.4.4-SNAPSHOT</version>
-  <name>validation-commons-schematron</name>
-  <description>Generic Schematron validator</description>
+  <name>validation-schematron</name>
   
   <scm>
     <developerConnection>scm:svn:https://joinup.ec.europa.eu/svn/peppol/devinprogress/java/validation/validation-commons-schematron</developerConnection>
@@ -21,7 +18,7 @@
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-commons</artifactId>
-      <version>3.3.11</version>
+      <version>3.4.2</version>
     </dependency>
     <!-- Saxon is required! - does not work with integrated JAXP! -->
     <dependency>

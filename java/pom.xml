@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>eu.peppol</groupId>
+  <groupId>at.peppol</groupId>
   <artifactId>parent-pom</artifactId>
-  <version>13-SNAPSHOT</version>
+  <version>13</version>
   <packaging>pom</packaging>
-  <name>peppol-parent-pom</name>
+  <name>parent-pom</name>
 
   <!-- Minimum Maven version -->
   <prerequisites>
@@ -211,16 +211,6 @@
   <!-- Where are we looking for JARs? -->
   <repositories>
     <repository>
-      <id>java.net</id>
-      <url>http://download.java.net/maven/2/</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-    <repository>
       <id>phloc</id>
       <url>http://repo.phloc.com/maven2/</url>
       <releases>
@@ -244,16 +234,6 @@
   
   <!-- Where are we looking for Maven plugins? -->
   <pluginRepositories>
-    <pluginRepository>
-      <id>java.net</id>
-      <url>http://download.java.net/maven/2/</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </pluginRepository>
     <pluginRepository>
       <id>phloc</id>
       <url>http://repo.phloc.com/maven2/</url>
