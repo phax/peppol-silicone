@@ -14,7 +14,9 @@
   
   <!-- SVN location -->
   <scm>
-    <developerConnection>scm:svn:https://joinup.ec.europa.eu/svn/peppol/devinprogress/java/parent-pom/trunk</developerConnection>
+    <url>http://code.google.com/p/peppol-silicone/source/browse/</url>
+    <connection>scm:svn:http://peppol-silicone.googlecode.com/svn/trunk</connection>
+    <developerConnection>scm:svn:https://peppol-silicone.googlecode.com/svn/trunk</developerConnection>
   </scm>
   
   <!-- Used licenses -->

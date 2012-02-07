@@ -51,6 +51,7 @@ import org.busdox.transport.identifiers._1.ProcessIdentifierType;
 import org.w3c.dom.Document;
 
 import com.phloc.commons.SystemProperties;
+import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.commons.io.streams.StringInputStream;
@@ -135,7 +136,8 @@ public class MainPingAccessPoint {
       SystemProperties.setPropertyValue ("com.sun.xml.ws.rx.rm.runtime.ClientTube.dump", Boolean.toString (true));
       LogManager.getLogManager ()
                 .readConfiguration (new StringInputStream ("handlers=java.util.logging.ConsoleHandler\r\n"
-                                                           + "java.util.logging.ConsoleHandler.level=FINEST"));
+                                                               + "java.util.logging.ConsoleHandler.level=FINEST",
+                                                           CCharset.CHARSET_ISO_8859_1));
       java.util.logging.Logger.getLogger ("com.sun.metro.rx").setLevel (Level.FINER);
     }
     if (true) {
