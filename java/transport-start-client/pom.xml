@@ -1,24 +1,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>eu.peppol</groupId>
+    <groupId>at.peppol</groupId>
     <artifactId>parent-pom</artifactId>
-    <version>12</version>
-    <relativePath>../../parent-pom/pom.xml</relativePath>
+    <version>13</version>
   </parent>
-  <groupId>eu.peppol.transport</groupId>
-  <artifactId>peppol-start-client</artifactId>
+  <artifactId>peppol-transport-start-client</artifactId>
   <version>2.0.0-SNAPSHOT</version>
-  <name>transport-start-library</name>
-
-  <scm>
-    <developerConnection>scm:svn:https://joinup.ec.europa.eu/svn/peppol/devinprogress/java/transport2/peppol-start-client</developerConnection>
-  </scm>
+  <name>peppol-transport-start-client</name>
   
   <dependencies>
     <dependency>
-      <groupId>eu.peppol.transport</groupId>
-      <artifactId>peppol-start-api</artifactId>
+      <groupId>at.peppol</groupId>
+      <artifactId>peppol-transport-api</artifactId>
       <version>2.0.0-SNAPSHOT</version>
     </dependency>
     <dependency>
@@ -28,9 +22,9 @@
     </dependency>
     
     <dependency>
-      <groupId>eu.peppol.smp</groupId>
-      <artifactId>smp-client-library</artifactId>
-      <version>1.2.1</version>
+      <groupId>at.peppol</groupId>
+      <artifactId>peppol-smp-client-library</artifactId>
+      <version>1.2.2-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
     <dependency>
