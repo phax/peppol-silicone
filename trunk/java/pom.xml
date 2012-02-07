@@ -68,6 +68,22 @@
     </developer>
   </developers>
 
+  <modules>
+    <!-- Commons -->
+    <module>commons-cenbii</module>
+    <module>commons-jpa</module>
+    <module>commons-busdox</module>
+    <module>commons-peppol</module>
+
+    <!-- Validation -->
+    <module>validation-schematron</module>
+    <module>validation-rules</module>
+    <module>schematron2xslt-maven-plugin</module>
+
+    <!-- Visualization -->
+    <module>visualization</module>
+  </modules>
+
   <!-- Specific build configurations (=profiles) -->
   <profiles>
     <profile>
