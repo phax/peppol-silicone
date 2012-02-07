@@ -2,16 +2,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>eu.peppol</groupId>
+    <groupId>at.peppol</groupId>
     <artifactId>parent-pom</artifactId>
-    <version>12</version>
-    <relativePath>../../parent-pom/pom.xml</relativePath>
+    <version>13</version>
   </parent>
-  <groupId>eu.peppol.sml</groupId>
   <artifactId>sml-client-library</artifactId>
   <version>1.2.1-SNAPSHOT</version>
   <name>sml-client-library</name>
-  <description>PEPPOL SML Client Library</description>
 
   <scm>
     <developerConnection>scm:svn:https://joinup.ec.europa.eu/svn/peppol/devinprogress/java/sml/client-library</developerConnection>
@@ -19,14 +16,14 @@
 
   <dependencies>
     <dependency>
-      <groupId>eu.peppol.commons</groupId>
-      <artifactId>busdox-peppol</artifactId>
-      <version>2.0.2</version>
+      <groupId>at.peppol</groupId>
+      <artifactId>commons-peppol</artifactId>
+      <version>2.0.3-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-commons</artifactId>
-      <version>3.3.11</version>
+      <version>3.4.2</version>
     </dependency>
     <dependency>
       <groupId>org.glassfish.metro</groupId>

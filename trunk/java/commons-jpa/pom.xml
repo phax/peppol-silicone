@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
-    <groupId>eu.peppol</groupId>
+    <groupId>at.peppol</groupId>
     <artifactId>parent-pom</artifactId>
-    <version>12</version>
-    <relativePath>../../parent-pom/pom.xml</relativePath>
+    <version>13</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>eu.peppol.commons</groupId>
-  <artifactId>peppol-jpa</artifactId>
+  <artifactId>commons-jpa</artifactId>
   <version>1.1.1-SNAPSHOT</version>
-  <name>peppol-jpa</name>
+  <name>commons-jpa</name>
 
   <scm>
     <developerConnection>scm:svn:https://joinup.ec.europa.eu/svn/peppol/devinprogress/java/commons/peppol-jpa</developerConnection>
