@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <parent>
+    <groupId>eu.peppol</groupId>
+    <artifactId>parent-pom</artifactId>
+    <version>12</version>
+    <relativePath>../../parent-pom/pom.xml</relativePath>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>eu.peppol.validation</groupId>
+  <artifactId>validation-commons-schematron</artifactId>
+  <version>1.4.4-SNAPSHOT</version>
+  <name>validation-commons-schematron</name>
+  <description>Generic Schematron validator</description>
+  
+  <scm>
+    <developerConnection>scm:svn:https://joinup.ec.europa.eu/svn/peppol/devinprogress/java/validation/validation-commons-schematron</developerConnection>
+  </scm>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.phloc</groupId>
+      <artifactId>phloc-commons</artifactId>
+      <version>3.3.11</version>
+    </dependency>
+    <!-- Saxon is required! - does not work with integrated JAXP! -->
+    <dependency>
+      <groupId>net.sf.saxon</groupId>
+      <artifactId>saxonhe</artifactId>
+      <version>9.3.0_4j</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.jvnet.jaxb2.maven2</groupId>
+        <artifactId>maven-jaxb22-plugin</artifactId>
+        <version>0.8.0</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <bindingDirectory>src/main/resources/schemas</bindingDirectory>
+          <schemaDirectory>src/main/resources/schemas</schemaDirectory>
+          <schemaIncludes>
+            <schemaInclude>svrl-20100126.xsd</schemaInclude>
+          </schemaIncludes>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-xjc</artifactId>
+            <version>2.2.4-1</version>
+          </dependency>
+          <!-- Required for correct entity resolving in paths with blanks! -->
+          <dependency>
+            <groupId>xerces</groupId>
+            <artifactId>xercesImpl</artifactId>
+            <version>2.10.0</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+      <plugin>
+        <groupId>com.mycila.maven-license-plugin</groupId>
+        <artifactId>maven-license-plugin</artifactId>
+        <configuration>
+          <excludes>
+            <exclude>src/main/resources/schematron/**</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

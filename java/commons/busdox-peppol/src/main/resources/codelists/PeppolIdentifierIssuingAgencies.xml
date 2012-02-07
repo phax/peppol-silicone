@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+
+    Version: MPL 1.1/EUPL 1.1
+
+    The contents of this file are subject to the Mozilla Public License Version
+    1.1 (the "License"); you may not use this file except in compliance with
+    the License. You may obtain a copy of the License at:
+    http://www.mozilla.org/MPL/
+
+    Software distributed under the License is distributed on an "AS IS" basis,
+    WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+    for the specific language governing rights and limitations under the
+    License.
+
+    The Original Code is Copyright The PEPPOL project (http://www.peppol.eu)
+
+    Alternatively, the contents of this file may be used under the
+    terms of the EUPL, Version 1.1 or - as soon they will be approved
+    by the European Commission - subsequent versions of the EUPL
+    (the "Licence"); You may not use this work except in compliance
+    with the Licence.
+    You may obtain a copy of the Licence at:
+    http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the Licence is distributed on an "AS IS" basis,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the Licence for the specific language governing permissions and
+    limitations under the Licence.
+
+    If you wish to allow use of your version of this file only
+    under the terms of the EUPL License and not to allow others to use
+    your version of this file under the MPL, indicate your decision by
+    deleting the provisions above and replace them with the notice and
+    other provisions required by the EUPL License. If you do not delete
+    the provisions above, a recipient may use your version of this file
+    under either the MPL or the EUPL License.
+
+-->
+<!--This file was automatically generated. Do NOT edit!-->
+<root version="1.0.2">
+  <issuingAgency schemeid="FR:SIRET" agencyname="Institut National de la Statistique et des Etudes Economiques, (I.N.S.E.E.)" iso6523="0002" />
+  <issuingAgency schemeid="SE:ORGNR" agencyname="The National Tax Board" iso6523="0007" />
+  <issuingAgency schemeid="FI:OVT" agencyname="National Board of Taxes, (Verohallitus)" iso6523="0037" />
+  <issuingAgency schemeid="DUNS" agencyname="Dun and Bradstreet Ltd" iso6523="0060" />
+  <issuingAgency schemeid="GLN" agencyname="EAN International" iso6523="0088" />
+  <issuingAgency schemeid="DK:P" agencyname="Danish Chamber of Commerce" iso6523="0096" />
+  <issuingAgency schemeid="IT:FTI" agencyname="FTI - Ediforum Italia" iso6523="0097" />
+  <issuingAgency schemeid="IT:SIA" agencyname="SIA-Società Interbancaria per l&#39;Automazione S.p.A." iso6523="0135" />
+  <issuingAgency schemeid="IT:SECETI" agencyname="Servizi Centralizzati SECETI S.p.A." iso6523="0142" />
+  <issuingAgency schemeid="DK:CPR" agencyname="Danish Ministry of the Interior and Health" iso6523="9901" />
+  <issuingAgency schemeid="DK:CVR" agencyname="The Danish Commerce and Companies Agency" iso6523="9902" />
+  <issuingAgency schemeid="DK:SE" agencyname="Danish Ministry of Taxation, Central Customs and Tax Administration" iso6523="9904" />
+  <issuingAgency schemeid="DK:VANS" agencyname="Danish VANS providers" iso6523="9905" />
+  <issuingAgency schemeid="IT:VAT" agencyname="Ufficio responsabile gestione partite IVA" iso6523="9906" />
+  <issuingAgency schemeid="IT:CF" agencyname="TAX Authority" iso6523="9907" />
+  <issuingAgency schemeid="NO:ORGNR" agencyname="Enhetsregisteret ved Bronnoysundregisterne" iso6523="9908" />
+  <issuingAgency schemeid="NO:VAT" agencyname="Enhetsregisteret ved Bronnoysundregisterne" iso6523="9909" />
+  <issuingAgency schemeid="HU:VAT" iso6523="9910" />
+  <issuingAgency schemeid="EU:VAT" agencyname="National ministries of Economy" iso6523="9912" />
+  <issuingAgency schemeid="EU:REID" agencyname="Business Registers Network" iso6523="9913" />
+  <issuingAgency schemeid="AT:VAT" agencyname="Österreichische Umsatzsteuer-Identifikationsnummer" iso6523="9914" />
+  <issuingAgency schemeid="AT:GOV" agencyname="Österreichisches Verwaltungs bzw. Organisationskennzeichen" iso6523="9915" />
+  <issuingAgency schemeid="AT:CID" agencyname="Firmenidentifikationsnummer der Statistik Austria" iso6523="9916" deprecated="true" />
+  <issuingAgency schemeid="IS:KT" agencyname="Icelandic National Registry" iso6523="9917" />
+  <issuingAgency schemeid="IBAN" agencyname="SOCIETY FOR WORLDWIDE INTERBANK FINANCIAL, TELECOMMUNICATION S.W.I.F.T" iso6523="9918" />
+  <issuingAgency schemeid="AT:KUR" agencyname="Kennziffer des Unternehmensregisters" iso6523="9919" />
+  <issuingAgency schemeid="ES:VAT" agencyname="Agencia Española de Administración Tributaria" iso6523="9920" />
+</root>

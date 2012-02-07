@@ -1,0 +1,167 @@
+/**
+ * Version: MPL 1.1/EUPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at:
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Original Code is Copyright The PEPPOL project (http://www.peppol.eu)
+ *
+ * Alternatively, the contents of this file may be used under the
+ * terms of the EUPL, Version 1.1 or - as soon they will be approved
+ * by the European Commission - subsequent versions of the EUPL
+ * (the "Licence"); You may not use this work except in compliance
+ * with the Licence.
+ * You may obtain a copy of the Licence at:
+ * http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the Licence is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the Licence for the specific language governing permissions and
+ * limitations under the Licence.
+ *
+ * If you wish to allow use of your version of this file only
+ * under the terms of the EUPL License and not to allow others to use
+ * your version of this file under the MPL, indicate your decision by
+ * deleting the provisions above and replace them with the notice and
+ * other provisions required by the EUPL License. If you do not delete
+ * the provisions above, a recipient may use your version of this file
+ * under either the MPL or the EUPL License.
+ */
+package eu.peppol.busdox.security;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.KeyStore;
+import java.security.KeyStore.PasswordProtection;
+import java.security.KeyStore.ProtectionParameter;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableEntryException;
+import java.security.cert.CertificateException;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
+
+import com.phloc.commons.annotations.PresentForCodeCoverage;
+import com.phloc.commons.io.IReadableResource;
+import com.phloc.commons.io.resource.ClassPathResource;
+import com.phloc.commons.io.resource.FileSystemResource;
+import com.phloc.commons.io.streams.StreamUtils;
+
+/**
+ * Helper methods to access Java key stores of type JKS (Java KeyStore).
+ *
+ * @author PEPPOL.AT, BRZ, Philip Helger
+ */
+@Immutable
+public final class KeyStoreUtils {
+  public static final String KEYSTORE_TYPE_JKS = "JKS";
+
+  @PresentForCodeCoverage
+  @SuppressWarnings ("unused")
+  private static final KeyStoreUtils s_aInstance = new KeyStoreUtils ();
+
+  private KeyStoreUtils () {}
+
+  /**
+   * Load a key store from a resource.
+   *
+   * @param aKeyStoreRes
+   *        The resource pointing to the key store. May not be <code>null</code>
+   *        .
+   * @param sKeyStorePassword
+   *        The key store password. May be <code>null</code> to indicate that no
+   *        password is required.
+   * @return The Java key-store object.
+   * @see KeyStore#load(InputStream, char[])
+   */
+  @Nonnull
+  public static KeyStore loadKeyStoreFromResource (@Nonnull final IReadableResource aKeyStoreRes,
+                                                   @Nullable final String sKeyStorePassword) throws NoSuchAlgorithmException,
+                                                                                            CertificateException,
+                                                                                            IOException {
+    if (aKeyStoreRes == null)
+      throw new NullPointerException ("keyStoreResource");
+
+    // Open the resource stream
+    final InputStream aIS = aKeyStoreRes.getInputStream ();
+    if (aIS == null)
+      throw new IllegalArgumentException ("Failed to open key store " + aKeyStoreRes);
+
+    try {
+      final KeyStore aKeyStore = KeyStore.getInstance (KEYSTORE_TYPE_JKS);
+      aKeyStore.load (aIS, sKeyStorePassword == null ? null : sKeyStorePassword.toCharArray ());
+      return aKeyStore;
+    }
+    catch (final KeyStoreException ex) {
+      throw new IllegalStateException ("No provider can handle JKS key stores! Very weird!", ex);
+    }
+    finally {
+      StreamUtils.close (aIS);
+    }
+  }
+
+  /**
+   * Load a key store from the class path.
+   *
+   * @param sKeyStorePath
+   *        The path to the key store in the class path. May not be
+   *        <code>null</code>.
+   * @param sKeyStorePassword
+   *        The key store password. May be <code>null</code> to indicate that no
+   *        password is required.
+   * @return The Java key-store object.
+   */
+  @Nonnull
+  public static KeyStore loadKeyStoreFromClassPath (@Nonnull final String sKeyStorePath,
+                                                    @Nullable final String sKeyStorePassword) throws NoSuchAlgorithmException,
+                                                                                             CertificateException,
+                                                                                             IOException {
+    return loadKeyStoreFromResource (new ClassPathResource (sKeyStorePath), sKeyStorePassword);
+  }
+
+  /**
+   * Load a key store from the file system.
+   *
+   * @param sKeyStoreFile
+   *        The path to the key store in the file system. May not be
+   *        <code>null</code>.
+   * @param sKeyStorePassword
+   *        The key store password. May be <code>null</code> to indicate that no
+   *        password is required.
+   * @return The Java key-store object.
+   */
+  @Nonnull
+  public static KeyStore loadKeyStoreFromFile (@Nonnull final String sKeyStoreFile,
+                                               @Nullable final String sKeyStorePassword) throws NoSuchAlgorithmException,
+                                                                                        CertificateException,
+                                                                                        IOException {
+    return loadKeyStoreFromResource (new FileSystemResource (sKeyStoreFile), sKeyStorePassword);
+  }
+
+  @Nonnull
+  public static KeyStore createKeyStoreWithOnlyOneItem (@Nonnull final KeyStore aBaseKeyStore,
+                                                        @Nonnull final String sAliasToCopy,
+                                                        @Nullable final char [] aAliasPassword) throws KeyStoreException,
+                                                                                               NoSuchAlgorithmException,
+                                                                                               UnrecoverableEntryException,
+                                                                                               CertificateException,
+                                                                                               IOException {
+    final KeyStore aKeyStore = KeyStore.getInstance (aBaseKeyStore.getType (), aBaseKeyStore.getProvider ());
+    aKeyStore.load (null, null);
+    ProtectionParameter aPP = null;
+    if (aAliasPassword != null)
+      aPP = new PasswordProtection (aAliasPassword);
+    aKeyStore.setEntry (sAliasToCopy, aBaseKeyStore.getEntry (sAliasToCopy, aPP), aPP);
+    return aKeyStore;
+  }
+}

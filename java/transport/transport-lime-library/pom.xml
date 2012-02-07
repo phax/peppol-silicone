@@ -1,0 +1,50 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>eu.peppol</groupId>
+    <artifactId>parent-pom</artifactId>
+    <version>12</version>
+    <relativePath>../../parent-pom/pom.xml</relativePath>
+  </parent>
+  <groupId>eu.peppol.transport</groupId>
+  <artifactId>transport-lime-library</artifactId>
+  <version>1.1.1-SNAPSHOT</version>
+  <name>transport-lime-library</name>
+
+  <scm>
+    <developerConnection>scm:svn:https://joinup.ec.europa.eu/svn/peppol/devinprogress/java/transport/transport-lime-library</developerConnection>
+  </scm>
+
+  <dependencies>
+    <dependency>
+      <groupId>eu.peppol.transport</groupId>
+      <artifactId>transport-commons</artifactId>
+      <version>1.1.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.metro</groupId>
+      <artifactId>webservices-rt</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.mycila.maven-license-plugin</groupId>
+        <artifactId>maven-license-plugin</artifactId>
+        <configuration>
+          <excludes>
+            <exclude>src/main/resources/wsdl/**</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
