@@ -41,8 +41,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
-import org.busdox.identifier.IReadonlyIdentifier;
 import org.busdox.transport.identifiers._1.DocumentIdentifierType;
+
+import at.peppol.busdox.identifier.IReadonlyIdentifier;
 
 import com.phloc.commons.annotations.UnsupportedOperation;
 import com.phloc.commons.compare.EqualsUtils;

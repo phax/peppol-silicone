@@ -60,8 +60,6 @@ import javax.xml.ws.WebServiceContext;
 import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.soap.Addressing;
 
-import org.busdox.CBusDox;
-import org.busdox.identifier.IParticipantIdentifier;
 import org.busdox.transport.start.cert.ServerConfigFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,6 +74,8 @@ import org.w3._2009._02.ws_tra.GetResponse;
 import org.w3._2009._02.ws_tra.Put;
 import org.w3._2009._02.ws_tra.PutResponse;
 
+import at.peppol.busdox.CBusDox;
+import at.peppol.busdox.identifier.IParticipantIdentifier;
 import at.peppol.commons.identifier.IdentifierUtils;
 import at.peppol.commons.security.KeyStoreUtils;
 import at.peppol.commons.sml.ESML;

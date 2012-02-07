@@ -41,11 +41,11 @@ import static org.junit.Assert.assertEquals;
 
 import java.security.cert.X509Certificate;
 
-import org.busdox.identifier.IReadonlyDocumentIdentifier;
-import org.busdox.identifier.IReadonlyParticipantIdentifier;
-import org.busdox.identifier.IReadonlyProcessIdentifier;
 import org.junit.Test;
 
+import at.peppol.busdox.identifier.IReadonlyDocumentIdentifier;
+import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
+import at.peppol.busdox.identifier.IReadonlyProcessIdentifier;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 import at.peppol.commons.identifier.docid.EPredefinedDocumentIdentifier;
 import at.peppol.commons.identifier.procid.EPredefinedProcessIdentifier;

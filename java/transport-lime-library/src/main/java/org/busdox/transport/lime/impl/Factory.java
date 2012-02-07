@@ -37,9 +37,6 @@
  */
 package org.busdox.transport.lime.impl;
 
-import org.busdox.identifier.IDocumentIdentifier;
-import org.busdox.identifier.IParticipantIdentifier;
-import org.busdox.identifier.IProcessIdentifier;
 import org.busdox.transport.identifiers._1.DocumentIdentifierType;
 import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 import org.busdox.transport.identifiers._1.ProcessIdentifierType;
@@ -49,6 +46,9 @@ import org.busdox.transport.lime.MessageInterface;
 import org.busdox.transport.lime.MessageReferenceInterface;
 import org.busdox.transport.lime.OutboxInterface;
 
+import at.peppol.busdox.identifier.IDocumentIdentifier;
+import at.peppol.busdox.identifier.IParticipantIdentifier;
+import at.peppol.busdox.identifier.IProcessIdentifier;
 import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
 import at.peppol.commons.utils.UsernamePWCredentials;
 

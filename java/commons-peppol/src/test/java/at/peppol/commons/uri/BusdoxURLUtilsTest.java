@@ -46,9 +46,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import org.busdox.identifier.IReadonlyParticipantIdentifier;
 import org.junit.Test;
 
+import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 import at.peppol.commons.sml.ESML;
 import at.peppol.commons.uri.BusdoxURLUtils;

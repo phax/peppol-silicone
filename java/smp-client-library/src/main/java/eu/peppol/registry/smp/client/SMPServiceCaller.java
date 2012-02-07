@@ -50,9 +50,6 @@ import javax.annotation.Nullable;
 import javax.ws.rs.core.HttpHeaders;
 import javax.xml.bind.JAXBElement;
 
-import org.busdox.identifier.IReadonlyDocumentIdentifier;
-import org.busdox.identifier.IReadonlyParticipantIdentifier;
-import org.busdox.identifier.IReadonlyProcessIdentifier;
 import org.busdox.servicemetadata.publishing._1.CompleteServiceGroupType;
 import org.busdox.servicemetadata.publishing._1.EndpointType;
 import org.busdox.servicemetadata.publishing._1.ObjectFactory;
@@ -67,6 +64,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3._2000._09.xmldsig.X509DataType;
 
+import at.peppol.busdox.identifier.IReadonlyDocumentIdentifier;
+import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
+import at.peppol.busdox.identifier.IReadonlyProcessIdentifier;
 import at.peppol.commons.identifier.IdentifierUtils;
 import at.peppol.commons.sml.ISMLInfo;
 import at.peppol.commons.uri.BusdoxURLUtils;

@@ -41,10 +41,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
-import org.busdox.identifier.IReadonlyIdentifier;
 import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import at.peppol.busdox.identifier.IReadonlyIdentifier;
 
 import com.phloc.commons.annotations.UnsupportedOperation;
 import com.phloc.commons.compare.EqualsUtils;
@@ -108,8 +109,8 @@ public final class ReadonlyParticipantIdentifier extends ParticipantIdentifierTy
    * Note: this method does compare case sensitive!!!! Otherwise the required
    * semantics of #equals would not be fulfilled!
    *
-   * @see IdentifierUtils#areIdentifiersEqual(org.busdox.identifier.IReadonlyParticipantIdentifier,
-   *      org.busdox.identifier.IReadonlyParticipantIdentifier)
+   * @see IdentifierUtils#areIdentifiersEqual(at.peppol.busdox.identifier.IReadonlyParticipantIdentifier,
+   *      at.peppol.busdox.identifier.IReadonlyParticipantIdentifier)
    */
   @Override
   public boolean equals (final Object o) {

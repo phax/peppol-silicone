@@ -41,13 +41,13 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
-import org.busdox.identifier.IReadonlyDocumentIdentifier;
-import org.busdox.identifier.IReadonlyParticipantIdentifier;
-import org.busdox.identifier.IReadonlyProcessIdentifier;
 import org.busdox.transport.identifiers._1.DocumentIdentifierType;
 import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 import org.busdox.transport.identifiers._1.ProcessIdentifierType;
 
+import at.peppol.busdox.identifier.IReadonlyDocumentIdentifier;
+import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
+import at.peppol.busdox.identifier.IReadonlyProcessIdentifier;
 import at.peppol.commons.identifier.SimpleDocumentIdentifier;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 import at.peppol.commons.identifier.SimpleProcessIdentifier;

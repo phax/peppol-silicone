@@ -43,7 +43,6 @@ import java.util.List;
 import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
 
-import org.busdox.identifier.IReadonlyParticipantIdentifier;
 import org.busdox.servicemetadata.locator._1.ObjectFactory;
 import org.busdox.servicemetadata.locator._1.ParticipantIdentifierPageType;
 import org.busdox.servicemetadata.locator._1.PublisherEndpointType;
@@ -51,6 +50,7 @@ import org.busdox.servicemetadata.locator._1.ServiceMetadataPublisherServiceType
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
 import at.peppol.commons.jpa.AbstractJPAEnabledManager;
 import at.peppol.sml.server.IGenericDataHandler;
 import at.peppol.sml.server.datamodel.DBParticipantIdentifier;

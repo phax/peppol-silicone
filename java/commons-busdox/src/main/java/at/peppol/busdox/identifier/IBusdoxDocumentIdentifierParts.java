@@ -35,15 +35,44 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package org.busdox.identifier;
+package at.peppol.busdox.identifier;
 
 /**
- * Marker-interface that is specific for process identifiers.<br>
- * This can be used as the read-only/immutable counterpart of the implementation
- * class.
+ * Contains all the different fields of a document identifier for BusDox. Note:
+ * it is important to note, that the PEPPOL specification separates the sub type
+ * identifier more clearly!
  *
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public interface IReadonlyProcessIdentifier extends IReadonlyIdentifier {
-  /* empty */
+public interface IBusdoxDocumentIdentifierParts {
+  /**
+   * Separator between namespace and local name
+   */
+  String NAMESPACE_SEPARATOR = "::";
+
+  /**
+   * Separator between namespace elements and the optional subtype
+   */
+  String SUBTYPE_SEPARATOR = "##";
+
+  /**
+   * @return The root namespace. Never <code>null</code> nor empty.
+   */
+  String getRootNS ();
+
+  /**
+   * @return The document element local name. Never <code>null</code> nor empty.
+   */
+  String getLocalName ();
+
+  /**
+   * @return The optional sub type identifier. May be <code>null</code>.
+   */
+  String getSubTypeIdentifier ();
+
+  /**
+   * @return The parts assembled into a complete document identifier value.
+   *         Never <code>null</code> nor empty.
+   */
+  String getAsDocumentIdentifierValue ();
 }

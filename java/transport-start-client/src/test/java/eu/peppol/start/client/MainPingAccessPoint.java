@@ -44,12 +44,12 @@ import java.util.logging.LogManager;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.busdox.CBusDox;
 import org.busdox.transport.identifiers._1.DocumentIdentifierType;
 import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 import org.busdox.transport.identifiers._1.ProcessIdentifierType;
 import org.w3c.dom.Document;
 
+import at.peppol.busdox.CBusDox;
 import at.peppol.commons.identifier.ReadonlyParticipantIdentifier;
 import at.peppol.commons.identifier.SimpleDocumentIdentifier;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;

@@ -51,9 +51,6 @@ import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
 
-import org.busdox.identifier.IReadonlyDocumentIdentifier;
-import org.busdox.identifier.IReadonlyParticipantIdentifier;
-import org.busdox.identifier.IReadonlyProcessIdentifier;
 import org.busdox.transport.identifiers._1.DocumentIdentifierType;
 import org.busdox.transport.identifiers._1.ObjectFactory;
 import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
@@ -62,6 +59,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 
+import at.peppol.busdox.identifier.IReadonlyDocumentIdentifier;
+import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
+import at.peppol.busdox.identifier.IReadonlyProcessIdentifier;
 import at.peppol.commons.identifier.SimpleDocumentIdentifier;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 import at.peppol.commons.identifier.SimpleProcessIdentifier;

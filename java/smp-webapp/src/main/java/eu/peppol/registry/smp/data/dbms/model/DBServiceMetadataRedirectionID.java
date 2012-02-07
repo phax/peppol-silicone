@@ -43,9 +43,9 @@ import javax.annotation.Nonnull;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
-import org.busdox.identifier.IReadonlyDocumentIdentifier;
-import org.busdox.identifier.IReadonlyParticipantIdentifier;
 
+import at.peppol.busdox.identifier.IReadonlyDocumentIdentifier;
+import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
 import at.peppol.commons.identifier.IdentifierUtils;
 
 import com.phloc.commons.compare.EqualsUtils;

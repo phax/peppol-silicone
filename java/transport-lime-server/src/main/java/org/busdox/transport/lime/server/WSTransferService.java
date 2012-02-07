@@ -64,7 +64,6 @@ import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.soap.SOAPFaultException;
 import javax.xml.ws.wsaddressing.W3CEndpointReference;
 
-import org.busdox.CBusDox;
 import org.busdox.transport.identifiers._1.DocumentIdentifierType;
 import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 import org.busdox.transport.identifiers._1.ProcessIdentifierType;
@@ -91,6 +90,7 @@ import org.w3._2009._02.ws_tra.ResourceCreated;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import at.peppol.busdox.CBusDox;
 import at.peppol.commons.sml.ESML;
 
 import com.phloc.commons.CGlobal;

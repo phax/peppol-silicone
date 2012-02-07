@@ -35,13 +35,28 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package org.busdox.identifier;
+package at.peppol.busdox;
+
+import static org.junit.Assert.assertNotNull;
+
+import java.io.IOException;
+import java.io.InputStream;
+
+import org.junit.Test;
+
+import at.peppol.busdox.CBusDox;
 
 /**
- * Marker-interface that is specific for participant identifiers.
+ * Test class for class {@link CBusDox}.
  *
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public interface IParticipantIdentifier extends IIdentifier, IReadonlyParticipantIdentifier {
-  /* empty */
+public final class CBusDoxTest {
+  @Test
+  public void testConstants () throws IOException {
+    // Ensure that the WSDL path is correct
+    final InputStream aIS = CBusDoxTest.class.getResourceAsStream (CBusDox.START_WSDL_RESOURCE);
+    assertNotNull ("WSDL file " + CBusDox.START_WSDL_RESOURCE + " does not exist!", aIS);
+    aIS.close ();
+  }
 }
