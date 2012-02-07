@@ -92,11 +92,11 @@ import org.w3c.dom.Element;
 
 import at.peppol.busdox.CBusDox;
 import at.peppol.commons.sml.ESML;
+import at.peppol.smp.client.SMPServiceCaller;
 
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.string.StringHelper;
 
-import eu.peppol.registry.smp.client.SMPServiceCaller;
 import eu.peppol.start.IMessageMetadata;
 import eu.peppol.start.MessageMetadata;
 import eu.peppol.start.client.AccessPointClient;

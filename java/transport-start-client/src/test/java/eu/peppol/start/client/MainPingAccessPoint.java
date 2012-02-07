@@ -56,6 +56,7 @@ import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 import at.peppol.commons.identifier.SimpleProcessIdentifier;
 import at.peppol.commons.sml.ESML;
 import at.peppol.commons.sml.ISMLInfo;
+import at.peppol.smp.client.SMPServiceCaller;
 
 import com.phloc.commons.SystemProperties;
 import com.phloc.commons.charset.CCharset;
@@ -64,7 +65,6 @@ import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.commons.io.streams.StringInputStream;
 import com.phloc.commons.xml.serialize.XMLReader;
 
-import eu.peppol.registry.smp.client.SMPServiceCaller;
 import eu.peppol.start.IMessageMetadata;
 import eu.peppol.start.MessageMetadata;
 import eu.peppol.start.PingMessageHelper;
