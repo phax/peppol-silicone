@@ -35,41 +35,42 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package eu.peppol.common;
+package at.peppol.commons.tools;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 
-import org.junit.Test;
-
-import at.peppol.commons.utils.ConfigFile;
-
+import org.oasis_open.docs.codelist.ns.genericode._1.Column;
+import org.oasis_open.docs.codelist.ns.genericode._1.ColumnRef;
+import org.oasis_open.docs.codelist.ns.genericode._1.Row;
+import org.oasis_open.docs.codelist.ns.genericode._1.SimpleValue;
+import org.oasis_open.docs.codelist.ns.genericode._1.Value;
 
 /**
- * Test class for class {@link ConfigFile}.
+ * Helper class for Genericode reading
  *
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public final class ConfigFileTest {
-  @Test
-  public void testAll () {
-    final ConfigFile cf = ConfigFile.getInstance ();
-    // Existing elements
-    assertEquals ("string", cf.getString ("element1"));
-    assertEquals (6, cf.getCharArray ("element1").length);
-    assertEquals (2, cf.getInt ("element2", 5));
-    assertFalse (cf.getBoolean ("element3", true));
-    assertEquals ("abc", cf.getString ("element4"));
+@Immutable
+public final class GenericodeUtils {
+  private GenericodeUtils () {}
 
-    // Non-existing elements
-    assertNull (cf.getString ("element1a"));
-    assertNull (cf.getCharArray ("element1a"));
-    assertEquals (5, cf.getInt ("element2a", 5));
-    assertTrue (cf.getBoolean ("element3a", true));
+  @Nonnull
+  private static String _getColumnElementID (final Object aColumnElement) {
+    return aColumnElement instanceof ColumnRef ? ((ColumnRef) aColumnElement).getId ()
+                                              : ((Column) aColumnElement).getId ();
+  }
 
-    // All keys
-    assertEquals (5, cf.getAllKeys ().size ());
+  @Nullable
+  public static String getRowValue (final Row aRow, final String sColumnID) {
+    for (final Value aValue : aRow.getValue ()) {
+      final String sID = _getColumnElementID (aValue.getColumnRef ());
+      if (sID.equals (sColumnID)) {
+        final SimpleValue aSimpleValue = aValue.getSimpleValue ();
+        return aSimpleValue != null ? aSimpleValue.getValue () : null;
+      }
+    }
+    return null;
   }
 }
