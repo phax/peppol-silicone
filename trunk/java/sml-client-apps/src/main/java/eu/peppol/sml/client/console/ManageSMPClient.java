@@ -45,7 +45,8 @@ import org.busdox.servicemetadata.manageservicemetadataservice._1.InternalErrorF
 import org.busdox.servicemetadata.manageservicemetadataservice._1.NotFoundFault;
 import org.busdox.servicemetadata.manageservicemetadataservice._1.UnauthorizedFault;
 
-import eu.peppol.registry.sml.management.client.ManageServiceMetadataServiceCaller;
+import at.peppol.sml.client.ManageServiceMetadataServiceCaller;
+
 
 public final class ManageSMPClient {
   private final ManageServiceMetadataServiceCaller m_aCaller;

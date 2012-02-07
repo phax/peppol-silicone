@@ -35,7 +35,7 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package eu.peppol.registry.sml.management.client;
+package at.peppol.sml.client;
 
 import java.net.URL;
 import java.security.cert.Certificate;
@@ -48,10 +48,11 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.peppol.sml.AbstractSMLClientTest;
+
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.io.streams.StreamUtils;
 
-import eu.peppol.registry.sml.AbstractSMLClientTest;
 
 /**
  * This class tests the URL connection to the SML that is secured with client

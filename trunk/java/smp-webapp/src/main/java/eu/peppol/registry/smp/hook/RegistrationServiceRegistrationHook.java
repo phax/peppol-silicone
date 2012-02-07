@@ -56,11 +56,11 @@ import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 import at.peppol.commons.security.DoNothingTrustManager;
 import at.peppol.commons.security.KeyStoreUtils;
 import at.peppol.commons.utils.ConfigFile;
+import at.peppol.sml.client.ManageParticipantIdentifierServiceCaller;
 
 import com.phloc.commons.random.VerySecureRandom;
 import com.phloc.commons.state.ESuccess;
 
-import eu.peppol.registry.sml.management.client.ManageParticipantIdentifierServiceCaller;
 
 /**
  * An implementation of the RegistrationHook that informs the SML of updates to

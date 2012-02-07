@@ -35,15 +35,17 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package eu.peppol.registry.sml.management.client;
+package at.peppol.sml.client;
 
 import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 import at.peppol.commons.sml.ESML;
 import at.peppol.commons.sml.ISMLInfo;
+import at.peppol.sml.AbstractSMLClientTest;
+import at.peppol.sml.client.ManageParticipantIdentifierServiceCaller;
+import at.peppol.sml.client.ManageServiceMetadataServiceCaller;
 
-import eu.peppol.registry.sml.AbstractSMLClientTest;
 
 /**
  * This class ensures the SML contains the necessary data for performing the SMP
