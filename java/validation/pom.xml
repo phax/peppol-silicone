@@ -8,9 +8,8 @@
   <name>Validation build POM</name>
 
   <modules>
-    <module>validation-commons-schematron</module>
+    <module>validation-schematron</module>
     <module>schematron2xslt-maven-plugin</module>
-    <module>validation-engine</module>
     <module>validation-peppol-rules</module>
   </modules>
 </project>
