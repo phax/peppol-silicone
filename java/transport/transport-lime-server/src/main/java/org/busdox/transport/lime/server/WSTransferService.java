@@ -75,8 +75,6 @@ import org.busdox.transport.lime._1.ReasonCodeType;
 import org.busdox.transport.lime.server.exception.MessageIdReusedException;
 import org.busdox.transport.lime.server.exception.MessageMetadataException;
 import org.busdox.transport.lime.server.exception.RecipientUnreachableException;
-import org.busdox.transport.smp.MetadataLookupException;
-import org.busdox.transport.smp.MetadataPublisherClient;
 import org.busdox.transport.soapheader.SoapHeaderHandler;
 import org.busdox.transport.soapheader.SoapHeaderReader;
 import org.slf4j.Logger;
@@ -96,8 +94,8 @@ import org.w3c.dom.Element;
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.string.StringHelper;
 
-import eu.peppol.busdox.ipmapper.ConfiguredDNSMapper;
-import eu.peppol.common.ConfigFile;
+import eu.peppol.busdox.sml.ESML;
+import eu.peppol.registry.smp.client.SMPServiceCaller;
 import eu.peppol.start.IMessageMetadata;
 import eu.peppol.start.MessageMetadata;
 import eu.peppol.start.client.AccessPointClient;
@@ -242,10 +240,6 @@ public class WSTransferService {
     }
     catch (final RecipientUnreachableException ex) {
       sendMessageUndeliverable (ex, messageID, ReasonCodeType.TRANSPORT_ERROR, soapHdr);
-      throwSoapFault (FAULT_UNKNOWN_ENDPOINT, ex);
-    }
-    catch (final MetadataLookupException ex) {
-      sendMessageUndeliverable (ex, messageID, ReasonCodeType.METADATA_ERROR, soapHdr);
       throwSoapFault (FAULT_UNKNOWN_ENDPOINT, ex);
     }
     catch (final Exception ex) {
@@ -499,13 +493,7 @@ public class WSTransferService {
 
   private static String getAccessPointUrl (final ParticipantIdentifierType recipientId,
                                            final DocumentIdentifierType documentId,
-                                           final ProcessIdentifierType processId) throws MetadataLookupException {
-    final String smlEndpointAddress = ConfigFile.getInstance ()
-                                                .getString ("org.busdox.transport.metadatapublisher.url");
-    final MetadataPublisherClient aSMPClient = new MetadataPublisherClient (smlEndpointAddress,
-                                                                            recipientId,
-                                                                            documentId,
-                                                                            new ConfiguredDNSMapper ());
-    return aSMPClient.getEndpointAddress (processId);
+                                           final ProcessIdentifierType processId) throws Exception {
+    return new SMPServiceCaller (recipientId, ESML.PRODUCTION).getEndpointAddress (recipientId, documentId, processId);
   }
 }
