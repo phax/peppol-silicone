@@ -35,15 +35,13 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package org.busdox.identifier;
+package at.peppol.busdox.identifier;
 
 /**
- * Marker-interface that is specific for participant identifiers.<br>
- * This can be used as the read-only/immutable counterpart of the implementation
- * class.
+ * Marker-interface that is specific for process identifiers.
  *
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public interface IReadonlyParticipantIdentifier extends IReadonlyIdentifier {
+public interface IProcessIdentifier extends IIdentifier, IReadonlyProcessIdentifier {
   /* empty */
 }

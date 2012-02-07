@@ -42,7 +42,6 @@ import java.net.URL;
 
 import javax.annotation.concurrent.Immutable;
 
-import org.busdox.identifier.IReadonlyParticipantIdentifier;
 import org.busdox.servicemetadata.locator._1.MigrationRecordType;
 import org.busdox.servicemetadata.locator._1.PageRequestType;
 import org.busdox.servicemetadata.locator._1.ParticipantIdentifierPageType;
@@ -51,6 +50,7 @@ import org.busdox.servicemetadata.locator._1.ServiceMetadataPublisherServiceForP
 import org.busdox.servicemetadata.locator._1.ServiceMetadataPublisherServiceType;
 import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 
+import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
 import at.peppol.commons.identifier.CIdentifier;
 import at.peppol.commons.identifier.IdentifierUtils;
 import at.peppol.commons.identifier.actorid.IdentifierIssuingAgencyManager;

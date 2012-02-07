@@ -39,7 +39,8 @@ package eu.peppol.registry.smp.hook;
 
 import javax.annotation.concurrent.Immutable;
 
-import org.busdox.identifier.IParticipantIdentifier;
+
+import at.peppol.busdox.identifier.IParticipantIdentifier;
 
 import com.phloc.commons.state.ESuccess;
 

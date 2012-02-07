@@ -47,11 +47,11 @@ import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 
-import org.busdox.identifier.IParticipantIdentifier;
 import org.busdox.servicemetadata.managebusinessidentifierservice._1.NotFoundFault;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.peppol.busdox.identifier.IParticipantIdentifier;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 import at.peppol.commons.security.DoNothingTrustManager;
 import at.peppol.commons.security.KeyStoreUtils;

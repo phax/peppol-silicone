@@ -35,23 +35,15 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package org.busdox.identifier;
+package at.peppol.busdox.identifier;
 
 /**
- * Base interface for a single read-only identifier independent of its usage
- * (participant, document or process).
+ * Marker-interface that is specific for document identifiers.<br>
+ * This can be used as the read-only/immutable counterpart of the implementation
+ * class.
  *
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public interface IReadonlyIdentifier {
-  /**
-   * @return The scheme used. Never <code>null</code>.
-   */
-  String getScheme ();
-
-  /**
-   * @return The identifier value, dependent on the scheme. Never
-   *         <code>null</code>.
-   */
-  String getValue ();
+public interface IReadonlyDocumentIdentifier extends IReadonlyIdentifier {
+  /* empty */
 }

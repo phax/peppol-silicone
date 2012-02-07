@@ -35,13 +35,16 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package org.busdox.identifier;
+package at.peppol.busdox.identifier;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
 import org.junit.Test;
+
+import at.peppol.busdox.identifier.BusdoxDocumentIdentifierParts;
+import at.peppol.busdox.identifier.IBusdoxDocumentIdentifierParts;
 
 /**
  * Test class for class {@link BusdoxDocumentIdentifierParts}.

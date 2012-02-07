@@ -43,8 +43,8 @@ import javax.annotation.Nonnull;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
-import org.busdox.identifier.IReadonlyParticipantIdentifier;
 
+import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
 import at.peppol.commons.identifier.IdentifierUtils;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 

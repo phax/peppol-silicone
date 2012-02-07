@@ -55,10 +55,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
-import org.busdox.identifier.IReadonlyParticipantIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
 import at.peppol.commons.identifier.CIdentifier;
 import at.peppol.commons.identifier.IdentifierUtils;
 import at.peppol.commons.sml.ISMLInfo;

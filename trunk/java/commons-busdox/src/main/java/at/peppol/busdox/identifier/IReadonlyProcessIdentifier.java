@@ -35,26 +35,15 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package org.busdox;
-
-import static org.junit.Assert.assertNotNull;
-
-import java.io.IOException;
-import java.io.InputStream;
-
-import org.junit.Test;
+package at.peppol.busdox.identifier;
 
 /**
- * Test class for class {@link CBusDox}.
+ * Marker-interface that is specific for process identifiers.<br>
+ * This can be used as the read-only/immutable counterpart of the implementation
+ * class.
  *
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public final class CBusDoxTest {
-  @Test
-  public void testConstants () throws IOException {
-    // Ensure that the WSDL path is correct
-    final InputStream aIS = CBusDoxTest.class.getResourceAsStream (CBusDox.START_WSDL_RESOURCE);
-    assertNotNull ("WSDL file " + CBusDox.START_WSDL_RESOURCE + " does not exist!", aIS);
-    aIS.close ();
-  }
+public interface IReadonlyProcessIdentifier extends IReadonlyIdentifier {
+  /* empty */
 }

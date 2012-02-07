@@ -39,11 +39,11 @@ package at.peppol.sml.server;
 
 import java.util.List;
 
-import org.busdox.identifier.IReadonlyParticipantIdentifier;
 import org.busdox.servicemetadata.locator._1.ParticipantIdentifierPageType;
 import org.busdox.servicemetadata.locator._1.PublisherEndpointType;
 import org.busdox.servicemetadata.locator._1.ServiceMetadataPublisherServiceType;
 
+import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
 import at.peppol.sml.server.exceptions.InternalErrorException;
 import at.peppol.sml.server.exceptions.NotFoundException;
 import at.peppol.sml.server.exceptions.UnauthorizedException;

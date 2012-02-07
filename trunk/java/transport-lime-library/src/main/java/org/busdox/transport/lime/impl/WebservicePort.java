@@ -53,9 +53,10 @@ import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.WebServiceClient;
 
-import org.busdox.CBusDox;
 import org.w3._2009._02.ws_tra.Resource;
 import org.w3._2009._02.ws_tra.WstransferService;
+
+import at.peppol.busdox.CBusDox;
 
 import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.commons.string.StringHelper;

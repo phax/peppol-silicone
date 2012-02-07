@@ -40,8 +40,9 @@ package at.peppol.commons.identifier;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.busdox.identifier.IReadonlyIdentifier;
 import org.busdox.transport.identifiers._1.ProcessIdentifierType;
+
+import at.peppol.busdox.identifier.IReadonlyIdentifier;
 
 import com.phloc.commons.compare.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;

@@ -35,13 +35,27 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package org.busdox.identifier;
+package at.peppol.busdox.identifier;
 
 /**
- * Marker-interface that is specific for process identifiers.
+ * The writable version of an identifier interface.
  *
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public interface IProcessIdentifier extends IIdentifier, IReadonlyProcessIdentifier {
-  /* empty */
+public interface IIdentifier extends IReadonlyIdentifier {
+  /**
+   * Set the identifier scheme.
+   *
+   * @param sScheme
+   *        The scheme to be set. May not be <code>null</code>.
+   */
+  void setScheme (String sScheme);
+
+  /**
+   * Set the identifier value.
+   *
+   * @param sValue
+   *        The value to be set. May not be <code>null</code>.
+   */
+  void setValue (String sValue);
 }

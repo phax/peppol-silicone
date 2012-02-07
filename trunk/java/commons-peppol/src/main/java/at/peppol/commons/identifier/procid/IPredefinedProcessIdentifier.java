@@ -41,8 +41,8 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import org.busdox.identifier.IReadonlyProcessIdentifier;
 
+import at.peppol.busdox.identifier.IReadonlyProcessIdentifier;
 import at.peppol.commons.identifier.docid.IPredefinedDocumentIdentifier;
 
 

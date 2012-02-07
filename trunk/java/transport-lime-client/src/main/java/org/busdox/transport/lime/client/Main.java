@@ -49,11 +49,6 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.busdox.CBusDox;
-import org.busdox.identifier.IReadonlyDocumentIdentifier;
-import org.busdox.identifier.IReadonlyIdentifier;
-import org.busdox.identifier.IReadonlyParticipantIdentifier;
-import org.busdox.identifier.IReadonlyProcessIdentifier;
 import org.busdox.transport.lime.EndpointReferenceInterface;
 import org.busdox.transport.lime.InboxInterface;
 import org.busdox.transport.lime.MessageException;
@@ -63,6 +58,11 @@ import org.busdox.transport.lime.impl.Factory;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
+import at.peppol.busdox.CBusDox;
+import at.peppol.busdox.identifier.IReadonlyDocumentIdentifier;
+import at.peppol.busdox.identifier.IReadonlyIdentifier;
+import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
+import at.peppol.busdox.identifier.IReadonlyProcessIdentifier;
 import at.peppol.commons.identifier.ReadonlyParticipantIdentifier;
 import at.peppol.commons.identifier.SimpleDocumentIdentifier;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;

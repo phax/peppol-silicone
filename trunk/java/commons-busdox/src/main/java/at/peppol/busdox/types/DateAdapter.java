@@ -35,7 +35,7 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package org.busdox.types.adapter;
+package at.peppol.busdox.types;
 
 import java.util.Calendar;
 import java.util.Date;

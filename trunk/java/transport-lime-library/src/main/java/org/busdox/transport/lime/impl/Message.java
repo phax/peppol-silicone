@@ -40,11 +40,12 @@ package org.busdox.transport.lime.impl;
 import java.util.Date;
 import java.util.UUID;
 
-import org.busdox.identifier.IDocumentIdentifier;
-import org.busdox.identifier.IParticipantIdentifier;
-import org.busdox.identifier.IProcessIdentifier;
 import org.busdox.transport.lime.MessageInterface;
 import org.w3c.dom.Document;
+
+import at.peppol.busdox.identifier.IDocumentIdentifier;
+import at.peppol.busdox.identifier.IParticipantIdentifier;
+import at.peppol.busdox.identifier.IProcessIdentifier;
 
 /**
  * @author Ravnholt<br>

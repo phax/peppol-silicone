@@ -39,7 +39,7 @@ package at.peppol.commons.identifier.docid;
 
 import javax.annotation.Nullable;
 
-import org.busdox.identifier.IReadonlyDocumentIdentifier;
+import at.peppol.busdox.identifier.IReadonlyDocumentIdentifier;
 
 /**
  * Base interface for predefined document identifiers.

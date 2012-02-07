@@ -42,8 +42,9 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
-import org.busdox.identifier.BusdoxDocumentIdentifierParts;
-import org.busdox.identifier.IBusdoxDocumentIdentifierParts;
+
+import at.peppol.busdox.identifier.BusdoxDocumentIdentifierParts;
+import at.peppol.busdox.identifier.IBusdoxDocumentIdentifierParts;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.collections.ContainerHelper;
