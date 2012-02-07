@@ -48,7 +48,6 @@ import org.busdox.transport.identifiers._1.DocumentIdentifierType;
 import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 import org.busdox.transport.identifiers._1.ProcessIdentifierType;
 
-import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.compare.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
@@ -61,8 +60,7 @@ import eu.peppol.busdox.identifier.SimpleProcessIdentifier;
  * A MessageMetadata object is used to storage the message addressing data
  * incoming in the SOAP header through a SOAPHeaderObject object.
  * 
- * @author Jose Gorvenia Narvaez(jose@alfa1lab.com)<br>
- *         PEPPOL.AT, BRZ, Philip Helger
+ * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable
 public final class MessageMetadata implements IMessageMetadata {
@@ -163,12 +161,6 @@ public final class MessageMetadata implements IMessageMetadata {
   @Nonnull
   public final ProcessIdentifierType getProcessID () {
     return m_aProcessID;
-  }
-
-  @Nonnull
-  @ReturnsMutableCopy
-  public MessageMetadata withMessageID (final String sMessageID) {
-    return new MessageMetadata (sMessageID, m_sChannelID, m_aSenderID, m_aRecipientID, m_aDocumentTypeID, m_aProcessID);
   }
 
   @Override
