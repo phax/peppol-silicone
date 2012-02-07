@@ -55,6 +55,11 @@ import org.busdox.transport.identifiers._1.ProcessIdentifierType;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import at.peppol.commons.identifier.IdentifierUtils;
+import at.peppol.commons.identifier.SimpleDocumentIdentifier;
+import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+import at.peppol.commons.identifier.SimpleProcessIdentifier;
+
 import com.phloc.commons.jaxb.JAXBContextCache;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.xml.ChildElementIterator;
@@ -63,10 +68,6 @@ import com.sun.xml.ws.api.message.Header;
 import com.sun.xml.ws.api.message.HeaderList;
 import com.sun.xml.ws.api.message.Headers;
 
-import eu.peppol.busdox.identifier.IdentifierUtils;
-import eu.peppol.busdox.identifier.SimpleDocumentIdentifier;
-import eu.peppol.busdox.identifier.SimpleParticipantIdentifier;
-import eu.peppol.busdox.identifier.SimpleProcessIdentifier;
 
 /**
  * Utility class for handling {@link IMessageMetadata} objects.

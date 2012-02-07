@@ -52,13 +52,14 @@ import org.busdox.servicemetadata.managebusinessidentifierservice._1.NotFoundFau
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+import at.peppol.commons.security.DoNothingTrustManager;
+import at.peppol.commons.security.KeyStoreUtils;
+import at.peppol.commons.utils.ConfigFile;
+
 import com.phloc.commons.random.VerySecureRandom;
 import com.phloc.commons.state.ESuccess;
 
-import eu.peppol.busdox.identifier.SimpleParticipantIdentifier;
-import eu.peppol.busdox.security.DoNothingTrustManager;
-import eu.peppol.busdox.security.KeyStoreUtils;
-import eu.peppol.common.ConfigFile;
 import eu.peppol.registry.sml.management.client.ManageParticipantIdentifierServiceCaller;
 
 /**

@@ -59,6 +59,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
+import at.peppol.commons.identifier.CIdentifier;
+import at.peppol.commons.identifier.SimpleDocumentIdentifier;
+import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+import at.peppol.commons.identifier.SimpleProcessIdentifier;
+import at.peppol.commons.identifier.actorid.IIdentifierIssuingAgency;
+import at.peppol.commons.identifier.docid.IPEPPOLDocumentIdentifierParts;
+import at.peppol.commons.identifier.docid.IPredefinedDocumentIdentifier;
+import at.peppol.commons.identifier.docid.PEPPOLDocumentIdentifierParts;
+import at.peppol.commons.identifier.procid.IPredefinedProcessIdentifier;
+
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.charset.CCharset;
@@ -89,15 +99,6 @@ import com.sun.codemodel.JMethod;
 import com.sun.codemodel.JMod;
 import com.sun.codemodel.JVar;
 
-import eu.peppol.busdox.identifier.CIdentifier;
-import eu.peppol.busdox.identifier.SimpleDocumentIdentifier;
-import eu.peppol.busdox.identifier.SimpleParticipantIdentifier;
-import eu.peppol.busdox.identifier.SimpleProcessIdentifier;
-import eu.peppol.busdox.identifier.actorid.IIdentifierIssuingAgency;
-import eu.peppol.busdox.identifier.docid.IPEPPOLDocumentIdentifierParts;
-import eu.peppol.busdox.identifier.docid.IPredefinedDocumentIdentifier;
-import eu.peppol.busdox.identifier.docid.PEPPOLDocumentIdentifierParts;
-import eu.peppol.busdox.identifier.procid.IPredefinedProcessIdentifier;
 
 /**
  * Utility class to create the Genericode files from the Excel code list. Also

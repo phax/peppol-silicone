@@ -57,12 +57,13 @@ import org.w3._2009._02.ws_tra.FaultMessage;
 import org.w3._2009._02.ws_tra.Resource;
 import org.w3c.dom.Document;
 
+import at.peppol.commons.utils.HostnameVerifierAlwaysTrue;
+
 import com.phloc.commons.random.VerySecureRandom;
 import com.phloc.commons.state.ESuccess;
 import com.sun.xml.ws.api.message.Header;
 import com.sun.xml.ws.developer.WSBindingProvider;
 
-import eu.peppol.common.HostnameVerifierAlwaysTrue;
 import eu.peppol.start.IMessageMetadata;
 import eu.peppol.start.MessageMetadataHelper;
 

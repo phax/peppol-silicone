@@ -75,6 +75,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import at.peppol.commons.security.KeyStoreUtils;
+import at.peppol.commons.utils.ConfigFile;
+
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.annotations.DevelopersNote;
 import com.phloc.commons.collections.ContainerHelper;
@@ -92,8 +95,6 @@ import com.sun.xml.wss.saml.SAMLException;
 import com.sun.xml.wss.saml.Subject;
 import com.sun.xml.wss.saml.SubjectConfirmation;
 
-import eu.peppol.busdox.security.KeyStoreUtils;
-import eu.peppol.common.ConfigFile;
 
 /**
  * The SAMLCallbackHandler is the CallbackHandler implementation used for deal

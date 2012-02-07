@@ -50,6 +50,13 @@ import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 import org.busdox.transport.identifiers._1.ProcessIdentifierType;
 import org.w3c.dom.Document;
 
+import at.peppol.commons.identifier.ReadonlyParticipantIdentifier;
+import at.peppol.commons.identifier.SimpleDocumentIdentifier;
+import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+import at.peppol.commons.identifier.SimpleProcessIdentifier;
+import at.peppol.commons.sml.ESML;
+import at.peppol.commons.sml.ISMLInfo;
+
 import com.phloc.commons.SystemProperties;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.io.IReadableResource;
@@ -57,12 +64,6 @@ import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.commons.io.streams.StringInputStream;
 import com.phloc.commons.xml.serialize.XMLReader;
 
-import eu.peppol.busdox.identifier.ReadonlyParticipantIdentifier;
-import eu.peppol.busdox.identifier.SimpleDocumentIdentifier;
-import eu.peppol.busdox.identifier.SimpleParticipantIdentifier;
-import eu.peppol.busdox.identifier.SimpleProcessIdentifier;
-import eu.peppol.busdox.sml.ESML;
-import eu.peppol.busdox.sml.ISMLInfo;
 import eu.peppol.registry.smp.client.SMPServiceCaller;
 import eu.peppol.start.IMessageMetadata;
 import eu.peppol.start.MessageMetadata;

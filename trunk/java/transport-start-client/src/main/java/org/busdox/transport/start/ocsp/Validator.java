@@ -45,12 +45,13 @@ import javax.annotation.Nonnull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.peppol.commons.security.KeyStoreUtils;
+import at.peppol.commons.utils.ConfigFile;
+
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.state.EValidity;
 import com.sun.xml.wss.impl.callback.CertificateValidationCallback.CertificateValidator;
 
-import eu.peppol.busdox.security.KeyStoreUtils;
-import eu.peppol.common.ConfigFile;
 
 /**
  * The main OCSP validator callback.<br>

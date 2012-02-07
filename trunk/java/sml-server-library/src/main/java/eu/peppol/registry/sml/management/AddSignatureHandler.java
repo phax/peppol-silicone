@@ -73,10 +73,11 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import at.peppol.commons.security.KeyStoreUtils;
+import at.peppol.commons.utils.ConfigFile;
+
 import com.phloc.commons.xml.transform.XMLTransformerFactory;
 
-import eu.peppol.busdox.security.KeyStoreUtils;
-import eu.peppol.common.ConfigFile;
 
 /**
  * Adds an XMLDSIG to every response.<br>

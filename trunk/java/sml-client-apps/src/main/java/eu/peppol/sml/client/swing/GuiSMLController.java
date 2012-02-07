@@ -46,7 +46,8 @@ import org.busdox.servicemetadata.managebusinessidentifierservice._1.InternalErr
 import org.busdox.servicemetadata.managebusinessidentifierservice._1.NotFoundFault;
 import org.busdox.servicemetadata.managebusinessidentifierservice._1.UnauthorizedFault;
 
-import eu.peppol.busdox.sml.ISMLInfo;
+import at.peppol.commons.sml.ISMLInfo;
+
 import eu.peppol.sml.client.ESMLAction;
 import eu.peppol.sml.client.ESMLObjectType;
 import eu.peppol.sml.client.console.ManageParticipantsClient;

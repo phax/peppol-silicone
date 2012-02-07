@@ -39,7 +39,8 @@ package eu.peppol.registry.sml.dns;
 
 import javax.annotation.concurrent.Immutable;
 
-import eu.peppol.common.ConfigFile;
+import at.peppol.commons.utils.ConfigFile;
+
 
 /**
  * Get configuration for DNSClient.<br>

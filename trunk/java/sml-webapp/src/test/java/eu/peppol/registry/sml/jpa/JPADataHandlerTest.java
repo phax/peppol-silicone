@@ -52,10 +52,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.internal.AssumptionViolatedException;
 
+import at.peppol.commons.identifier.CIdentifier;
+import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+
 import com.phloc.commons.annotations.DevelopersNote;
 
-import eu.peppol.busdox.identifier.CIdentifier;
-import eu.peppol.busdox.identifier.SimpleParticipantIdentifier;
 import eu.peppol.registry.sml.IParticipantDataHandler;
 import eu.peppol.registry.sml.ISMPDataHandler;
 import eu.peppol.registry.sml.exceptions.BadRequestException;

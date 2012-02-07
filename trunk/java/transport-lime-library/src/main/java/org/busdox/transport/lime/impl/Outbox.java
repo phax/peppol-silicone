@@ -73,9 +73,10 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
+
 import com.phloc.commons.string.StringHelper;
 
-import eu.peppol.common.IReadonlyUsernamePWCredentials;
 
 /**
  * @author Ravnholt<br>

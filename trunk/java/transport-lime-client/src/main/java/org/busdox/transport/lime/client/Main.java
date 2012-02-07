@@ -63,16 +63,17 @@ import org.busdox.transport.lime.impl.Factory;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
+import at.peppol.commons.identifier.ReadonlyParticipantIdentifier;
+import at.peppol.commons.identifier.SimpleDocumentIdentifier;
+import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+import at.peppol.commons.identifier.SimpleProcessIdentifier;
+import at.peppol.commons.identifier.docid.EPredefinedDocumentIdentifier;
+import at.peppol.commons.identifier.procid.EPredefinedProcessIdentifier;
+import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
+
 import com.phloc.commons.io.resource.FileSystemResource;
 import com.phloc.commons.xml.serialize.XMLReader;
 
-import eu.peppol.busdox.identifier.ReadonlyParticipantIdentifier;
-import eu.peppol.busdox.identifier.SimpleDocumentIdentifier;
-import eu.peppol.busdox.identifier.SimpleParticipantIdentifier;
-import eu.peppol.busdox.identifier.SimpleProcessIdentifier;
-import eu.peppol.busdox.identifier.docid.EPredefinedDocumentIdentifier;
-import eu.peppol.busdox.identifier.procid.EPredefinedProcessIdentifier;
-import eu.peppol.common.IReadonlyUsernamePWCredentials;
 
 /**
  * @author Ravnholt<br>

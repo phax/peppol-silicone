@@ -62,10 +62,11 @@ import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.peppol.commons.identifier.IdentifierUtils;
+import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+
 import com.sun.jersey.api.NotFoundException;
 
-import eu.peppol.busdox.identifier.IdentifierUtils;
-import eu.peppol.busdox.identifier.SimpleParticipantIdentifier;
 import eu.peppol.registry.smp.data.DataManagerFactory;
 import eu.peppol.registry.smp.data.IDataManager;
 import eu.peppol.registry.smp.util.RequestHelper;

@@ -49,8 +49,9 @@ import org.busdox.transport.lime.MessageInterface;
 import org.busdox.transport.lime.MessageReferenceInterface;
 import org.busdox.transport.lime.OutboxInterface;
 
-import eu.peppol.common.IReadonlyUsernamePWCredentials;
-import eu.peppol.common.UsernamePWCredentials;
+import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
+import at.peppol.commons.utils.UsernamePWCredentials;
+
 
 /**
  * @author Ravnholt<br>

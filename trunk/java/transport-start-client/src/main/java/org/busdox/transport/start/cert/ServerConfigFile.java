@@ -40,7 +40,8 @@ package org.busdox.transport.start.cert;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
-import eu.peppol.common.ConfigFile;
+import at.peppol.commons.utils.ConfigFile;
+
 
 /**
  * Wrapper around the server/client AP configuration file.

@@ -18,13 +18,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
+import at.peppol.commons.identifier.SimpleDocumentIdentifier;
+import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+import at.peppol.commons.identifier.SimpleProcessIdentifier;
+
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.commons.xml.serialize.XMLReader;
 
-import eu.peppol.busdox.identifier.SimpleDocumentIdentifier;
-import eu.peppol.busdox.identifier.SimpleParticipantIdentifier;
-import eu.peppol.busdox.identifier.SimpleProcessIdentifier;
 import eu.peppol.start.IMessageMetadata;
 import eu.peppol.start.MessageMetadata;
 

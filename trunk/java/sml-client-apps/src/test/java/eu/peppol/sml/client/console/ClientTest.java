@@ -48,12 +48,13 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import at.peppol.commons.identifier.CIdentifier;
+import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+import at.peppol.commons.sml.ESML;
+import at.peppol.commons.sml.ISMLInfo;
+
 import com.phloc.commons.annotations.DevelopersNote;
 
-import eu.peppol.busdox.identifier.CIdentifier;
-import eu.peppol.busdox.identifier.SimpleParticipantIdentifier;
-import eu.peppol.busdox.sml.ESML;
-import eu.peppol.busdox.sml.ISMLInfo;
 
 /**
  * @author PEPPOL.AT, BRZ, Philip Helger

@@ -68,11 +68,12 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import at.peppol.commons.wsaddr.W3CEndpointReferenceUtils;
+
 import com.phloc.commons.jaxb.JAXBContextCache;
 import com.phloc.commons.xml.XMLFactory;
 import com.sun.xml.bind.marshaller.NamespacePrefixMapper;
 
-import eu.peppol.busdox.wsaddr.W3CEndpointReferenceUtils;
 
 /**
  * @author Ravnholt<br>

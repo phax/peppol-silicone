@@ -43,13 +43,14 @@ import javax.xml.bind.JAXBException;
 
 import org.junit.Test;
 
+import at.peppol.commons.identifier.SimpleDocumentIdentifier;
+import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+import at.peppol.commons.identifier.SimpleProcessIdentifier;
+
 import com.phloc.commons.mock.PhlocTestUtils;
 import com.sun.xml.ws.api.message.Header;
 import com.sun.xml.ws.api.message.HeaderList;
 
-import eu.peppol.busdox.identifier.SimpleDocumentIdentifier;
-import eu.peppol.busdox.identifier.SimpleParticipantIdentifier;
-import eu.peppol.busdox.identifier.SimpleProcessIdentifier;
 
 /**
  * Test class for class {@link MessageMetadataHelper}.

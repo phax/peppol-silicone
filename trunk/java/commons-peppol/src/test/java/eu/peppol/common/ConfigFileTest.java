@@ -44,6 +44,9 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import at.peppol.commons.utils.ConfigFile;
+
+
 /**
  * Test class for class {@link ConfigFile}.
  *

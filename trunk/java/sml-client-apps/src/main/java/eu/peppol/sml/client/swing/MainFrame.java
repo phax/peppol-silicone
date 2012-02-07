@@ -54,13 +54,14 @@ import javax.swing.JPanel;
 
 import net.miginfocom.swing.MigLayout;
 
+import at.peppol.commons.security.DoNothingTrustManager;
+import at.peppol.commons.security.KeyStoreUtils;
+import at.peppol.commons.sml.ESML;
+import at.peppol.commons.sml.ISMLInfo;
+
 import com.phloc.commons.random.VerySecureRandom;
 import com.phloc.commons.string.StringHelper;
 
-import eu.peppol.busdox.security.DoNothingTrustManager;
-import eu.peppol.busdox.security.KeyStoreUtils;
-import eu.peppol.busdox.sml.ESML;
-import eu.peppol.busdox.sml.ISMLInfo;
 import eu.peppol.sml.client.ESMLAction;
 
 /**

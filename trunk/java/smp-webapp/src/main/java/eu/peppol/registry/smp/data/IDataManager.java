@@ -47,7 +47,8 @@ import org.busdox.servicemetadata.publishing._1.ServiceMetadataType;
 import org.busdox.transport.identifiers._1.DocumentIdentifierType;
 import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 
-import eu.peppol.common.IReadonlyUsernamePWCredentials;
+import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
+
 
 /**
  * This interface is used by the REST interface for accessing the underlying SMP

@@ -63,6 +63,12 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import at.peppol.commons.identifier.SimpleDocumentIdentifier;
+import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+import at.peppol.commons.identifier.SimpleProcessIdentifier;
+import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
+import at.peppol.commons.wsaddr.W3CEndpointReferenceUtils;
+
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.jaxb.JAXBContextCache;
 import com.phloc.commons.string.StringHelper;
@@ -70,11 +76,6 @@ import com.phloc.commons.xml.XMLFactory;
 import com.sun.xml.ws.api.message.HeaderList;
 import com.sun.xml.ws.developer.JAXWSProperties;
 
-import eu.peppol.busdox.identifier.SimpleDocumentIdentifier;
-import eu.peppol.busdox.identifier.SimpleParticipantIdentifier;
-import eu.peppol.busdox.identifier.SimpleProcessIdentifier;
-import eu.peppol.busdox.wsaddr.W3CEndpointReferenceUtils;
-import eu.peppol.common.IReadonlyUsernamePWCredentials;
 import eu.peppol.start.Identifiers;
 import eu.peppol.start.MessageMetadata;
 

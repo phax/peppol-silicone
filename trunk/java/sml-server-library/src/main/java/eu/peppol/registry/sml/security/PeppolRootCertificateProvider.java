@@ -45,10 +45,11 @@ import javax.annotation.concurrent.Immutable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.peppol.commons.security.KeyStoreUtils;
+import at.peppol.commons.utils.ConfigFile;
+
 import com.phloc.commons.exceptions.InitializationException;
 
-import eu.peppol.busdox.security.KeyStoreUtils;
-import eu.peppol.common.ConfigFile;
 
 /**
  * This class has the sole purpose of delivering the PEPPOL root certificate in

@@ -37,8 +37,8 @@
  */
 package eu.peppol.sml.client.console;
 
-import eu.peppol.busdox.sml.ESML;
-import eu.peppol.busdox.sml.ISMLInfo;
+import at.peppol.commons.sml.ESML;
+import at.peppol.commons.sml.ISMLInfo;
 import eu.peppol.sml.client.AbstractSMLClientTest;
 
 /**

@@ -39,10 +39,11 @@ package eu.peppol.sml.client.swing;
 
 import java.net.URL;
 
+import at.peppol.commons.sml.ESML;
+import at.peppol.commons.sml.ISMLInfo;
+
 import com.phloc.commons.hash.HashCodeGenerator;
 
-import eu.peppol.busdox.sml.ESML;
-import eu.peppol.busdox.sml.ISMLInfo;
 
 /**
  * Wrapper around an {@link ESML} for a nicer toString :(

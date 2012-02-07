@@ -46,10 +46,11 @@ import org.busdox.identifier.IReadonlyParticipantIdentifier;
 import org.busdox.identifier.IReadonlyProcessIdentifier;
 import org.junit.Test;
 
-import eu.peppol.busdox.identifier.SimpleParticipantIdentifier;
-import eu.peppol.busdox.identifier.docid.EPredefinedDocumentIdentifier;
-import eu.peppol.busdox.identifier.procid.EPredefinedProcessIdentifier;
-import eu.peppol.busdox.sml.ESML;
+import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+import at.peppol.commons.identifier.docid.EPredefinedDocumentIdentifier;
+import at.peppol.commons.identifier.procid.EPredefinedProcessIdentifier;
+import at.peppol.commons.sml.ESML;
+
 
 /**
  * Test class for class {@link SMPServiceCaller}.

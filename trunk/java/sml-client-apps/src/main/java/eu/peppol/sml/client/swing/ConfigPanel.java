@@ -47,11 +47,12 @@ import javax.swing.JTextField;
 
 import net.miginfocom.swing.MigLayout;
 
+import at.peppol.commons.sml.ESML;
+import at.peppol.commons.sml.ISMLInfo;
+
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.compare.AbstractComparator;
 
-import eu.peppol.busdox.sml.ESML;
-import eu.peppol.busdox.sml.ISMLInfo;
 
 /**
  * Configuration Panel

@@ -45,11 +45,12 @@ import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.peppol.commons.identifier.CIdentifier;
+import at.peppol.commons.identifier.IdentifierUtils;
+import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+
 import com.phloc.commons.regex.RegExHelper;
 
-import eu.peppol.busdox.identifier.CIdentifier;
-import eu.peppol.busdox.identifier.IdentifierUtils;
-import eu.peppol.busdox.identifier.SimpleParticipantIdentifier;
 import eu.peppol.registry.sml.exceptions.IllegalHostnameException;
 
 /**

@@ -67,15 +67,16 @@ import org.busdox.transport.identifiers._1.ProcessIdentifierType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.peppol.commons.identifier.SimpleDocumentIdentifier;
+import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+import at.peppol.commons.identifier.SimpleProcessIdentifier;
+import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
+import at.peppol.commons.utils.ReadonlyUsernamePWCredentials;
+
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.io.file.SimpleFileIO;
 import com.phloc.commons.lang.CGStringHelper;
 
-import eu.peppol.busdox.identifier.SimpleDocumentIdentifier;
-import eu.peppol.busdox.identifier.SimpleParticipantIdentifier;
-import eu.peppol.busdox.identifier.SimpleProcessIdentifier;
-import eu.peppol.common.IReadonlyUsernamePWCredentials;
-import eu.peppol.common.ReadonlyUsernamePWCredentials;
 import eu.peppol.registry.smp.client.SMPServiceCaller;
 import eu.peppol.registry.smp.client.UserId;
 

@@ -40,10 +40,11 @@ package org.busdox.transport.lime;
 import javax.annotation.concurrent.Immutable;
 import javax.xml.bind.annotation.XmlSchema;
 
-import eu.peppol.busdox.identifier.CIdentifier;
-import eu.peppol.busdox.identifier.ReadonlyDocumentIdentifier;
-import eu.peppol.busdox.identifier.ReadonlyParticipantIdentifier;
-import eu.peppol.busdox.identifier.ReadonlyProcessIdentifier;
+import at.peppol.commons.identifier.CIdentifier;
+import at.peppol.commons.identifier.ReadonlyDocumentIdentifier;
+import at.peppol.commons.identifier.ReadonlyParticipantIdentifier;
+import at.peppol.commons.identifier.ReadonlyProcessIdentifier;
+
 
 /**
  * @author Ravnholt<br>
