@@ -35,52 +35,41 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package eu.peppol.common;
+package at.peppol.commons.utils;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
-import org.busdox.servicemetadata.publishing._1.ExtensionType;
-import org.busdox.servicemetadata.publishing._1.ObjectFactory;
 import org.junit.Test;
-import org.w3c.dom.Element;
 
-import at.peppol.commons.utils.ExtensionConverter;
+import at.peppol.commons.utils.ConfigFile;
 
 
 /**
- * Test class for class {@link ExtensionConverter}.
+ * Test class for class {@link ConfigFile}.
  *
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public final class ExtensionConverterTest {
+public final class ConfigFileTest {
   @Test
-  public void testConvertFromXML () {
-    // Use elements
-    final String sXML = "<any xmlns=\"urn:foo\"><child>text1</child><child2 /></any>";
-    final ExtensionType aExtension = ExtensionConverter.convert (sXML);
-    assertNotNull (aExtension);
-    assertNotNull (aExtension.getAny ());
-    assertTrue (aExtension.getAny () instanceof Element);
+  public void testAll () {
+    final ConfigFile cf = ConfigFile.getInstance ();
+    // Existing elements
+    assertEquals ("string", cf.getString ("element1"));
+    assertEquals (6, cf.getCharArray ("element1").length);
+    assertEquals (2, cf.getInt ("element2", 5));
+    assertFalse (cf.getBoolean ("element3", true));
+    assertEquals ("abc", cf.getString ("element4"));
 
-    // Convert back to String
-    final String sXML2 = ExtensionConverter.convert (aExtension);
-    assertEquals (sXML, sXML2);
+    // Non-existing elements
+    assertNull (cf.getString ("element1a"));
+    assertNull (cf.getCharArray ("element1a"));
+    assertEquals (5, cf.getInt ("element2a", 5));
+    assertTrue (cf.getBoolean ("element3a", true));
 
-    try {
-      // Cannot convert non-element
-      ExtensionConverter.convert ("Plain text");
-      fail ();
-    }
-    catch (final IllegalArgumentException ex) {
-      // expected
-    }
-
-    // Try converting an empty extension
-    assertNull (ExtensionConverter.convert ((ExtensionType) null));
-    assertNull (ExtensionConverter.convert (new ObjectFactory ().createExtensionType ()));
+    // All keys
+    assertEquals (5, cf.getAllKeys ().size ());
   }
 }

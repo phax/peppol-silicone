@@ -35,24 +35,52 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package eu.peppol.common;
+package at.peppol.commons.utils;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
+import org.busdox.servicemetadata.publishing._1.ExtensionType;
+import org.busdox.servicemetadata.publishing._1.ObjectFactory;
 import org.junit.Test;
+import org.w3c.dom.Element;
 
-import at.peppol.commons.utils.HostnameVerifierAlwaysTrue;
+import at.peppol.commons.utils.ExtensionConverter;
 
 
 /**
- * Test class for class {@link HostnameVerifierAlwaysTrue}.
+ * Test class for class {@link ExtensionConverter}.
  *
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public final class HostnameVerifierAlwaysTrueTest {
+public final class ExtensionConverterTest {
   @Test
-  public void testAll () {
-    final HostnameVerifierAlwaysTrue hv = new HostnameVerifierAlwaysTrue ();
-    assertTrue (hv.verify (null, null));
+  public void testConvertFromXML () {
+    // Use elements
+    final String sXML = "<any xmlns=\"urn:foo\"><child>text1</child><child2 /></any>";
+    final ExtensionType aExtension = ExtensionConverter.convert (sXML);
+    assertNotNull (aExtension);
+    assertNotNull (aExtension.getAny ());
+    assertTrue (aExtension.getAny () instanceof Element);
+
+    // Convert back to String
+    final String sXML2 = ExtensionConverter.convert (aExtension);
+    assertEquals (sXML, sXML2);
+
+    try {
+      // Cannot convert non-element
+      ExtensionConverter.convert ("Plain text");
+      fail ();
+    }
+    catch (final IllegalArgumentException ex) {
+      // expected
+    }
+
+    // Try converting an empty extension
+    assertNull (ExtensionConverter.convert ((ExtensionType) null));
+    assertNull (ExtensionConverter.convert (new ObjectFactory ().createExtensionType ()));
   }
 }

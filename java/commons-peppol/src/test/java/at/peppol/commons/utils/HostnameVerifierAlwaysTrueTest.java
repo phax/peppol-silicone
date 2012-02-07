@@ -35,42 +35,24 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package eu.peppol.tools;
+package at.peppol.commons.utils;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.concurrent.Immutable;
+import static org.junit.Assert.assertTrue;
 
-import org.oasis_open.docs.codelist.ns.genericode._1.Column;
-import org.oasis_open.docs.codelist.ns.genericode._1.ColumnRef;
-import org.oasis_open.docs.codelist.ns.genericode._1.Row;
-import org.oasis_open.docs.codelist.ns.genericode._1.SimpleValue;
-import org.oasis_open.docs.codelist.ns.genericode._1.Value;
+import org.junit.Test;
+
+import at.peppol.commons.utils.HostnameVerifierAlwaysTrue;
+
 
 /**
- * Helper class for Genericode reading
+ * Test class for class {@link HostnameVerifierAlwaysTrue}.
  *
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-@Immutable
-public final class GenericodeUtils {
-  private GenericodeUtils () {}
-
-  @Nonnull
-  private static String _getColumnElementID (final Object aColumnElement) {
-    return aColumnElement instanceof ColumnRef ? ((ColumnRef) aColumnElement).getId ()
-                                              : ((Column) aColumnElement).getId ();
-  }
-
-  @Nullable
-  public static String getRowValue (final Row aRow, final String sColumnID) {
-    for (final Value aValue : aRow.getValue ()) {
-      final String sID = _getColumnElementID (aValue.getColumnRef ());
-      if (sID.equals (sColumnID)) {
-        final SimpleValue aSimpleValue = aValue.getSimpleValue ();
-        return aSimpleValue != null ? aSimpleValue.getValue () : null;
-      }
-    }
-    return null;
+public final class HostnameVerifierAlwaysTrueTest {
+  @Test
+  public void testAll () {
+    final HostnameVerifierAlwaysTrue hv = new HostnameVerifierAlwaysTrue ();
+    assertTrue (hv.verify (null, null));
   }
 }
