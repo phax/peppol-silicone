@@ -35,7 +35,7 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package org.busdox.transport.lime.api.impl;
+package org.busdox.transport.lime.impl;
 
 import java.net.URL;
 import java.security.KeyManagementException;

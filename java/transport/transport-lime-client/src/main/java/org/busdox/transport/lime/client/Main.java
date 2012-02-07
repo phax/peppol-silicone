@@ -54,12 +54,12 @@ import org.busdox.identifier.IReadonlyDocumentIdentifier;
 import org.busdox.identifier.IReadonlyIdentifier;
 import org.busdox.identifier.IReadonlyParticipantIdentifier;
 import org.busdox.identifier.IReadonlyProcessIdentifier;
-import org.busdox.transport.lime.api.impl.Factory;
-import org.busdox.transport.lime.api.interfaces.EndpointReferenceInterface;
-import org.busdox.transport.lime.api.interfaces.InboxInterface;
-import org.busdox.transport.lime.api.interfaces.MessageException;
-import org.busdox.transport.lime.api.interfaces.MessageInterface;
-import org.busdox.transport.lime.api.interfaces.MessageReferenceInterface;
+import org.busdox.transport.lime.EndpointReferenceInterface;
+import org.busdox.transport.lime.InboxInterface;
+import org.busdox.transport.lime.MessageException;
+import org.busdox.transport.lime.MessageInterface;
+import org.busdox.transport.lime.MessageReferenceInterface;
+import org.busdox.transport.lime.impl.Factory;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 

@@ -35,7 +35,7 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package org.busdox.transport.lime.api.impl;
+package org.busdox.transport.lime.impl;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -55,12 +55,12 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-import org.busdox.transport.base.Identifiers;
 import org.busdox.transport.identifiers._1.ProcessIdentifierType;
-import org.busdox.transport.lime.api.interfaces.EndpointReferenceInterface;
-import org.busdox.transport.lime.api.interfaces.MessageException;
-import org.busdox.transport.lime.api.interfaces.MessageInterface;
-import org.busdox.transport.lime.api.interfaces.OutboxInterface;
+import org.busdox.transport.lime.EndpointReferenceInterface;
+import org.busdox.transport.lime.Identifiers;
+import org.busdox.transport.lime.MessageException;
+import org.busdox.transport.lime.MessageInterface;
+import org.busdox.transport.lime.OutboxInterface;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3._2009._02.ws_tra.Create;

@@ -35,63 +35,32 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package org.busdox.transport.lime.api.impl;
+package org.busdox.transport.lime;
 
-import org.busdox.identifier.IDocumentIdentifier;
-import org.busdox.identifier.IParticipantIdentifier;
-import org.busdox.identifier.IProcessIdentifier;
-import org.busdox.transport.identifiers._1.DocumentIdentifierType;
-import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
-import org.busdox.transport.identifiers._1.ProcessIdentifierType;
-import org.busdox.transport.lime.api.interfaces.EndpointReferenceInterface;
-import org.busdox.transport.lime.api.interfaces.InboxInterface;
-import org.busdox.transport.lime.api.interfaces.MessageInterface;
-import org.busdox.transport.lime.api.interfaces.MessageReferenceInterface;
-import org.busdox.transport.lime.api.interfaces.OutboxInterface;
+import java.util.List;
 
 import eu.peppol.common.IReadonlyUsernamePWCredentials;
-import eu.peppol.common.UsernamePWCredentials;
 
 /**
  * @author Ravnholt<br>
  *         PEPPOL.AT, BRZ, Philip Helger
  */
-public final class Factory {
-  private Factory () {}
+public interface InboxInterface {
+  // Returns a reference to all messages in the inbox
+  List <MessageReferenceInterface> getMessageList (IReadonlyUsernamePWCredentials credentials,
+                                                   EndpointReferenceInterface endpointReference) throws MessageException;
 
-  public static IParticipantIdentifier createBusinessIdentifier () {
-    return new ParticipantIdentifierType ();
-  }
+  // Returns a reference to one page of messages in the inbox, pagenumbers
+  // starts at zero
+  List <MessageReferenceInterface> getMessageListPage (IReadonlyUsernamePWCredentials credentials,
+                                                       EndpointReferenceInterface endpointReference,
+                                                       int pageNumber) throws MessageException;
 
-  public static IDocumentIdentifier createDocumentType () {
-    return new DocumentIdentifierType ();
-  }
+  // Returns the message identified by the message reference. Messages may be
+  // retrieved more than once.
+  MessageInterface getMessage (IReadonlyUsernamePWCredentials credentials,
+                               MessageReferenceInterface messageReferenceInterface) throws MessageException;
 
-  public static EndpointReferenceInterface createEndpointReference () {
-    return new EndpointReference ();
-  }
-
-  public static MessageInterface createMessage () {
-    return new Message ();
-  }
-
-  public static MessageReferenceInterface createMessageReference () {
-    return new MessageReference ();
-  }
-
-  public static IProcessIdentifier createProcessType () {
-    return new ProcessIdentifierType ();
-  }
-
-  public static InboxInterface createInbox () {
-    return new Inbox ();
-  }
-
-  public static OutboxInterface createOutbox () {
-    return new Outbox ();
-  }
-
-  public static IReadonlyUsernamePWCredentials createCredentials (final String sUsername, final String sPassword) {
-    return new UsernamePWCredentials (sUsername, sPassword);
-  }
+  // Messages must be deleted when they are no longer needed.
+  void deleteMessage (IReadonlyUsernamePWCredentials credentials, MessageReferenceInterface messageReferenceInterface) throws MessageException;
 }

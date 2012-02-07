@@ -57,7 +57,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.ws.wsaddressing.W3CEndpointReference;
 
-import org.busdox.transport.base.Identifiers;
+import org.busdox.transport.lime.Identifiers;
 import org.busdox.transport.lime._1.Entry;
 import org.busdox.transport.lime._1.NextPageIdentifierType;
 import org.busdox.transport.lime._1.ObjectFactory;

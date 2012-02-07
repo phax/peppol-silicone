@@ -35,7 +35,7 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package org.busdox.transport.soapheader;
+package org.busdox.transport.lime.soapheader;
 
 import java.util.List;
 import java.util.Set;

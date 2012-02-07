@@ -35,17 +35,32 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package org.busdox.transport.lime.api.interfaces;
+package org.busdox.transport.lime.impl;
 
-import eu.peppol.common.IReadonlyUsernamePWCredentials;
+import org.busdox.transport.lime.EndpointReferenceInterface;
 
 /**
  * @author Ravnholt<br>
  *         PEPPOL.AT, BRZ, Philip Helger
  */
-public interface OutboxInterface {
-  // Sends a message. A new unique message ID is created and returned.
-  String sendMessage (IReadonlyUsernamePWCredentials credentials,
-                      MessageInterface message,
-                      EndpointReferenceInterface endpointReferenceInterface) throws MessageException;
+public class EndpointReference implements EndpointReferenceInterface {
+
+  private String m_sAddress;
+  private String m_sChannelID;
+
+  public String getAddress () {
+    return m_sAddress;
+  }
+
+  public void setAddress (final String address) {
+    m_sAddress = address;
+  }
+
+  public String getChannelID () {
+    return m_sChannelID;
+  }
+
+  public void setChannelID (final String channelID) {
+    m_sChannelID = channelID;
+  }
 }

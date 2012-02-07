@@ -35,7 +35,7 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package org.busdox.transport.lime.api.impl;
+package org.busdox.transport.lime.impl;
 
 import java.util.List;
 
@@ -49,7 +49,7 @@ import org.busdox.identifier.IReadonlyProcessIdentifier;
 import org.busdox.transport.identifiers._1.DocumentIdentifierType;
 import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 import org.busdox.transport.identifiers._1.ProcessIdentifierType;
-import org.busdox.transport.soapheader.SoapHeaderHandler;
+import org.busdox.transport.lime.soapheader.SoapHeaderHandler;
 import org.w3c.dom.Element;
 
 import eu.peppol.busdox.identifier.SimpleDocumentIdentifier;

@@ -35,18 +35,41 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package org.busdox.transport.lime.api.interfaces;
+package org.busdox.transport.lime;
+
+import java.util.Date;
+
+import org.busdox.identifier.IDocumentIdentifier;
+import org.busdox.identifier.IParticipantIdentifier;
+import org.busdox.identifier.IProcessIdentifier;
+import org.w3c.dom.Document;
 
 /**
  * @author Ravnholt<br>
  *         PEPPOL.AT, BRZ, Philip Helger
  */
-public interface EndpointReferenceInterface {
-  String getAddress ();
+public interface MessageInterface {
+  Date getCreatedTime ();
 
-  void setAddress (String address);
+  String getMessageID ();
 
-  String getChannelID ();
+  IParticipantIdentifier getSender ();
 
-  void setChannelID (String channelID);
+  void setSender (IParticipantIdentifier sender);
+
+  IParticipantIdentifier getReciever ();
+
+  void setReciever (IParticipantIdentifier reciever);
+
+  IDocumentIdentifier getDocumentType ();
+
+  void setDocumentType (IDocumentIdentifier documentType);
+
+  Document getDocument ();
+
+  void setDocument (Document document);
+
+  IProcessIdentifier getProcessType ();
+
+  void setProcessType (IProcessIdentifier processType);
 }
