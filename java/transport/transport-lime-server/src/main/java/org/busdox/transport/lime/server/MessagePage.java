@@ -62,7 +62,6 @@ import org.busdox.transport.lime._1.Entry;
 import org.busdox.transport.lime._1.NextPageIdentifierType;
 import org.busdox.transport.lime._1.ObjectFactory;
 import org.busdox.transport.lime._1.PageListType;
-import org.busdox.transport.messagestore.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;

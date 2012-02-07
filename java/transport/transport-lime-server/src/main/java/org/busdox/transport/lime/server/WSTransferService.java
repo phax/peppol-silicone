@@ -75,7 +75,6 @@ import org.busdox.transport.lime._1.ReasonCodeType;
 import org.busdox.transport.lime.server.exception.MessageIdReusedException;
 import org.busdox.transport.lime.server.exception.MessageMetadataException;
 import org.busdox.transport.lime.server.exception.RecipientUnreachableException;
-import org.busdox.transport.messagestore.Channel;
 import org.busdox.transport.smp.MetadataLookupException;
 import org.busdox.transport.smp.MetadataPublisherClient;
 import org.busdox.transport.soapheader.SoapHeaderHandler;
