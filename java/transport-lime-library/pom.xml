@@ -1,12 +1,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>eu.peppol</groupId>
+    <groupId>at.peppol</groupId>
     <artifactId>parent-pom</artifactId>
-    <version>12</version>
-    <relativePath>../../parent-pom/pom.xml</relativePath>
+    <version>13</version>
   </parent>
-  <groupId>at.peppol</groupId>
   <artifactId>peppol-transport-lime-library</artifactId>
   <version>1.1.1-SNAPSHOT</version>
   <name>peppol-transport-lime-library</name>
