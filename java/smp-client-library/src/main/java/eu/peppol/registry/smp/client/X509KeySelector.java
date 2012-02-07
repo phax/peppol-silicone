@@ -58,7 +58,8 @@ import javax.xml.crypto.dsig.SignatureMethod;
 import javax.xml.crypto.dsig.keyinfo.KeyInfo;
 import javax.xml.crypto.dsig.keyinfo.X509Data;
 
-import eu.peppol.busdox.security.KeyStoreUtils;
+import at.peppol.commons.security.KeyStoreUtils;
+
 
 /**
  * @author PEPPOL.AT, BRZ, Philip Helger

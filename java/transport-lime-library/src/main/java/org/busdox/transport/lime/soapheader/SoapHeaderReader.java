@@ -55,15 +55,16 @@ import org.busdox.transport.lime.Identifiers;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import at.peppol.commons.identifier.SimpleDocumentIdentifier;
+import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+import at.peppol.commons.identifier.SimpleProcessIdentifier;
+
 import com.phloc.commons.jaxb.JAXBContextCache;
 import com.phloc.commons.xml.XMLFactory;
 import com.sun.xml.ws.api.message.Header;
 import com.sun.xml.ws.api.message.HeaderList;
 import com.sun.xml.ws.developer.JAXWSProperties;
 
-import eu.peppol.busdox.identifier.SimpleDocumentIdentifier;
-import eu.peppol.busdox.identifier.SimpleParticipantIdentifier;
-import eu.peppol.busdox.identifier.SimpleProcessIdentifier;
 import eu.peppol.start.IMessageMetadata;
 import eu.peppol.start.MessageMetadata;
 

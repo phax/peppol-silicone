@@ -19,15 +19,16 @@ import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+import at.peppol.commons.identifier.docid.EPredefinedDocumentIdentifier;
+import at.peppol.commons.identifier.procid.EPredefinedProcessIdentifier;
+import at.peppol.commons.sml.ESML;
+import at.peppol.commons.sml.ISMLInfo;
+import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
+import at.peppol.commons.utils.UsernamePWCredentials;
+
 import com.phloc.commons.state.ESuccess;
 
-import eu.peppol.busdox.identifier.SimpleParticipantIdentifier;
-import eu.peppol.busdox.identifier.docid.EPredefinedDocumentIdentifier;
-import eu.peppol.busdox.identifier.procid.EPredefinedProcessIdentifier;
-import eu.peppol.busdox.sml.ESML;
-import eu.peppol.busdox.sml.ISMLInfo;
-import eu.peppol.common.IReadonlyUsernamePWCredentials;
-import eu.peppol.common.UsernamePWCredentials;
 
 public final class RegisterAPatSMP {
   public static final Logger s_aLogger = LoggerFactory.getLogger (RegisterAPatSMP.class);

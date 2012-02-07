@@ -46,13 +46,14 @@ import javax.net.ssl.TrustManager;
 
 import org.junit.BeforeClass;
 
+import at.peppol.commons.security.DoNothingTrustManager;
+import at.peppol.commons.security.KeyStoreUtils;
+import at.peppol.commons.sml.ESML;
+import at.peppol.commons.sml.ISMLInfo;
+
 import com.phloc.commons.annotations.DevelopersNote;
 import com.phloc.commons.random.VerySecureRandom;
 
-import eu.peppol.busdox.security.DoNothingTrustManager;
-import eu.peppol.busdox.security.KeyStoreUtils;
-import eu.peppol.busdox.sml.ESML;
-import eu.peppol.busdox.sml.ISMLInfo;
 
 /**
  * This class tests the URL connection to the SML that is secured with client

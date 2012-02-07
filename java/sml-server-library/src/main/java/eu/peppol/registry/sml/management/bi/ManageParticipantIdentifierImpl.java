@@ -57,10 +57,11 @@ import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.peppol.commons.identifier.IdentifierUtils;
+
 import com.phloc.commons.collections.ContainerHelper;
 import com.sun.xml.ws.developer.SchemaValidation;
 
-import eu.peppol.busdox.identifier.IdentifierUtils;
 import eu.peppol.registry.sml.IGenericDataHandler;
 import eu.peppol.registry.sml.IParticipantDataHandler;
 import eu.peppol.registry.sml.exceptions.BadRequestException;

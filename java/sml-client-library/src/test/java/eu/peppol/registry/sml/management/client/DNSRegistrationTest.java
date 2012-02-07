@@ -57,8 +57,9 @@ import org.xbill.DNS.Record;
 import org.xbill.DNS.SimpleResolver;
 import org.xbill.DNS.Type;
 
-import eu.peppol.busdox.identifier.SimpleParticipantIdentifier;
-import eu.peppol.busdox.uri.BusdoxURLUtils;
+import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+import at.peppol.commons.uri.BusdoxURLUtils;
+
 import eu.peppol.registry.sml.AbstractSMLClientTest;
 
 /**

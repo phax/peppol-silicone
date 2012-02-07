@@ -52,9 +52,10 @@ import org.busdox.transport.identifiers._1.ProcessIdentifierType;
 import org.busdox.transport.lime.soapheader.SoapHeaderHandler;
 import org.w3c.dom.Element;
 
-import eu.peppol.busdox.identifier.SimpleDocumentIdentifier;
-import eu.peppol.busdox.identifier.SimpleParticipantIdentifier;
-import eu.peppol.busdox.identifier.SimpleProcessIdentifier;
+import at.peppol.commons.identifier.SimpleDocumentIdentifier;
+import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+import at.peppol.commons.identifier.SimpleProcessIdentifier;
+
 
 /**
  * @author Ravnholt<br>

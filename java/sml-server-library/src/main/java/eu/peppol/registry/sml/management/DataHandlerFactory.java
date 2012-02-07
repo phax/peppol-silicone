@@ -40,10 +40,11 @@ package eu.peppol.registry.sml.management;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
+import at.peppol.commons.utils.ConfigFile;
+
 import com.phloc.commons.lang.GenericReflection;
 import com.phloc.commons.string.StringHelper;
 
-import eu.peppol.common.ConfigFile;
 import eu.peppol.registry.sml.IGenericDataHandler;
 import eu.peppol.registry.sml.IParticipantDataHandler;
 import eu.peppol.registry.sml.IParticipantDataHandlerCallback;

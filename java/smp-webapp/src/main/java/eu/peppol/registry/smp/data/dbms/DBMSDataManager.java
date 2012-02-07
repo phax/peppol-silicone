@@ -64,12 +64,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.peppol.commons.jpa.AbstractJPAEnabledManager;
+import at.peppol.commons.utils.ExtensionConverter;
+import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
+import at.peppol.commons.wsaddr.W3CEndpointReferenceUtils;
 
 import com.sun.jersey.api.NotFoundException;
 
-import eu.peppol.busdox.wsaddr.W3CEndpointReferenceUtils;
-import eu.peppol.common.ExtensionConverter;
-import eu.peppol.common.IReadonlyUsernamePWCredentials;
 import eu.peppol.registry.smp.data.IDataManager;
 import eu.peppol.registry.smp.data.dbms.model.DBEndpoint;
 import eu.peppol.registry.smp.data.dbms.model.DBEndpointID;

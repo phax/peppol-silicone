@@ -52,7 +52,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.peppol.common.ConfigFile;
+import at.peppol.commons.utils.ConfigFile;
+
 
 /**
  * Extract certificates from HTTP requests. These are the client certificates

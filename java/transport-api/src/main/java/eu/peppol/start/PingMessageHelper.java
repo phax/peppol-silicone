@@ -40,11 +40,12 @@ package eu.peppol.start;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
-import eu.peppol.busdox.identifier.CIdentifier;
-import eu.peppol.busdox.identifier.IdentifierUtils;
-import eu.peppol.busdox.identifier.ReadonlyDocumentIdentifier;
-import eu.peppol.busdox.identifier.ReadonlyParticipantIdentifier;
-import eu.peppol.busdox.identifier.ReadonlyProcessIdentifier;
+import at.peppol.commons.identifier.CIdentifier;
+import at.peppol.commons.identifier.IdentifierUtils;
+import at.peppol.commons.identifier.ReadonlyDocumentIdentifier;
+import at.peppol.commons.identifier.ReadonlyParticipantIdentifier;
+import at.peppol.commons.identifier.ReadonlyProcessIdentifier;
+
 
 /**
  * This file contains the PING message specific codes

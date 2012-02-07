@@ -39,7 +39,8 @@ package org.busdox.transport.lime;
 
 import java.util.List;
 
-import eu.peppol.common.IReadonlyUsernamePWCredentials;
+import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
+
 
 /**
  * @author Ravnholt<br>

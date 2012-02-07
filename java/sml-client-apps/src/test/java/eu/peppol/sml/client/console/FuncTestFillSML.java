@@ -44,11 +44,12 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+import at.peppol.commons.sml.ESML;
+import at.peppol.commons.sml.ISMLInfo;
+
 import com.phloc.commons.annotations.DevelopersNote;
 
-import eu.peppol.busdox.identifier.SimpleParticipantIdentifier;
-import eu.peppol.busdox.sml.ESML;
-import eu.peppol.busdox.sml.ISMLInfo;
 import eu.peppol.registry.sml.management.client.ManageParticipantIdentifierServiceCaller;
 import eu.peppol.registry.sml.management.client.ManageServiceMetadataServiceCaller;
 

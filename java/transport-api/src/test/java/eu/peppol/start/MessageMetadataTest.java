@@ -41,11 +41,12 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import at.peppol.commons.identifier.SimpleDocumentIdentifier;
+import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+import at.peppol.commons.identifier.SimpleProcessIdentifier;
+
 import com.phloc.commons.mock.PhlocTestUtils;
 
-import eu.peppol.busdox.identifier.SimpleDocumentIdentifier;
-import eu.peppol.busdox.identifier.SimpleParticipantIdentifier;
-import eu.peppol.busdox.identifier.SimpleProcessIdentifier;
 
 /**
  * Test class for class {@link MessageMetadata}.

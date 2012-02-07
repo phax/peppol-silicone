@@ -43,8 +43,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 import javax.ws.rs.core.HttpHeaders;
 
-import eu.peppol.common.IReadonlyUsernamePWCredentials;
-import eu.peppol.common.ReadonlyUsernamePWCredentials;
+import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
+import at.peppol.commons.utils.ReadonlyUsernamePWCredentials;
+
 import eu.peppol.registry.smp.exception.UnauthorizedException;
 
 /**

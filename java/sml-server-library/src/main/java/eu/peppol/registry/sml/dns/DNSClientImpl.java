@@ -65,11 +65,12 @@ import org.xbill.DNS.Update;
 import org.xbill.DNS.ZoneTransferException;
 import org.xbill.DNS.ZoneTransferIn;
 
+import at.peppol.commons.sml.CSMLDefault;
+import at.peppol.commons.uri.BusdoxURLUtils;
+
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 
-import eu.peppol.busdox.sml.CSMLDefault;
-import eu.peppol.busdox.uri.BusdoxURLUtils;
 import eu.peppol.registry.sml.exceptions.DNSErrorException;
 import eu.peppol.registry.sml.exceptions.IllegalHostnameException;
 import eu.peppol.registry.sml.exceptions.IllegalIdentifierSchemeException;

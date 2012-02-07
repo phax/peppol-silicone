@@ -49,8 +49,9 @@ import javax.annotation.Nonnull;
 import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 import org.junit.Test;
 
-import eu.peppol.busdox.identifier.CIdentifier;
-import eu.peppol.busdox.identifier.SimpleParticipantIdentifier;
+import at.peppol.commons.identifier.CIdentifier;
+import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+
 import eu.peppol.registry.sml.exceptions.IllegalHostnameException;
 import eu.peppol.registry.sml.exceptions.IllegalIdentifierSchemeException;
 

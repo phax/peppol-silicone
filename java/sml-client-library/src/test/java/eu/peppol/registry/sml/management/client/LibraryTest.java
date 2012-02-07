@@ -60,7 +60,8 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import eu.peppol.busdox.identifier.SimpleParticipantIdentifier;
+import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+
 import eu.peppol.registry.sml.AbstractSMLClientTest;
 
 /**

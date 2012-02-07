@@ -39,9 +39,10 @@ package eu.peppol.registry.sml.management.client;
 
 import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 
-import eu.peppol.busdox.identifier.SimpleParticipantIdentifier;
-import eu.peppol.busdox.sml.ESML;
-import eu.peppol.busdox.sml.ISMLInfo;
+import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+import at.peppol.commons.sml.ESML;
+import at.peppol.commons.sml.ISMLInfo;
+
 import eu.peppol.registry.sml.AbstractSMLClientTest;
 
 /**

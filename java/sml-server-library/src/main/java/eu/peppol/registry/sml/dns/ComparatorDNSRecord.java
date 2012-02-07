@@ -4,9 +4,10 @@ import org.xbill.DNS.NSRecord;
 import org.xbill.DNS.Record;
 import org.xbill.DNS.SOARecord;
 
+import at.peppol.commons.identifier.CIdentifier;
+
 import com.phloc.commons.compare.AbstractComparator;
 
-import eu.peppol.busdox.identifier.CIdentifier;
 
 /**
  * Comparator for sorting DNS records alphabetically.

@@ -41,6 +41,9 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import at.peppol.commons.utils.HostnameVerifierAlwaysTrue;
+
+
 /**
  * Test class for class {@link HostnameVerifierAlwaysTrue}.
  *

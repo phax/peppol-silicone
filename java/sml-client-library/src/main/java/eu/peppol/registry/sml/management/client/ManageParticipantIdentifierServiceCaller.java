@@ -58,8 +58,9 @@ import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.peppol.busdox.identifier.IdentifierUtils;
-import eu.peppol.busdox.sml.ISMLInfo;
+import at.peppol.commons.identifier.IdentifierUtils;
+import at.peppol.commons.sml.ISMLInfo;
+
 
 /**
  * This class is used for calling the Manage Participant Identifier interface on

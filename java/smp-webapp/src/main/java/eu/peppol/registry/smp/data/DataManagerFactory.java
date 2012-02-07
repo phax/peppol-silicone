@@ -40,9 +40,10 @@ package eu.peppol.registry.smp.data;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
+import at.peppol.commons.utils.ConfigFile;
+
 import com.phloc.commons.lang.GenericReflection;
 
-import eu.peppol.common.ConfigFile;
 
 /**
  * Factory for creating new DataManagers. This implementation retrieves the name

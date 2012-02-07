@@ -62,18 +62,19 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.internal.AssumptionViolatedException;
 
+import at.peppol.commons.identifier.CIdentifier;
+import at.peppol.commons.identifier.IdentifierUtils;
+import at.peppol.commons.identifier.SimpleDocumentIdentifier;
+import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+import at.peppol.commons.identifier.SimpleProcessIdentifier;
+import at.peppol.commons.utils.ExtensionConverter;
+import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
+import at.peppol.commons.utils.ReadonlyUsernamePWCredentials;
+import at.peppol.commons.wsaddr.W3CEndpointReferenceUtils;
+
 import com.phloc.commons.annotations.DevelopersNote;
 import com.sun.jersey.api.NotFoundException;
 
-import eu.peppol.busdox.identifier.CIdentifier;
-import eu.peppol.busdox.identifier.IdentifierUtils;
-import eu.peppol.busdox.identifier.SimpleDocumentIdentifier;
-import eu.peppol.busdox.identifier.SimpleParticipantIdentifier;
-import eu.peppol.busdox.identifier.SimpleProcessIdentifier;
-import eu.peppol.busdox.wsaddr.W3CEndpointReferenceUtils;
-import eu.peppol.common.ExtensionConverter;
-import eu.peppol.common.IReadonlyUsernamePWCredentials;
-import eu.peppol.common.ReadonlyUsernamePWCredentials;
 import eu.peppol.registry.smp.exception.UnauthorizedException;
 import eu.peppol.registry.smp.exception.UnknownUserException;
 import eu.peppol.registry.smp.hook.DoNothingRegistrationHook;

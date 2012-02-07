@@ -37,9 +37,10 @@
  */
 package eu.peppol.registry.smp.client;
 
+import at.peppol.commons.uri.BusdoxURLUtils;
+
 import com.phloc.commons.string.ToStringGenerator;
 
-import eu.peppol.busdox.uri.BusdoxURLUtils;
 
 /**
  * Represents a single user ID.

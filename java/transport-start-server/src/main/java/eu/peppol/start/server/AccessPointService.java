@@ -76,6 +76,12 @@ import org.w3._2009._02.ws_tra.GetResponse;
 import org.w3._2009._02.ws_tra.Put;
 import org.w3._2009._02.ws_tra.PutResponse;
 
+import at.peppol.commons.identifier.IdentifierUtils;
+import at.peppol.commons.security.KeyStoreUtils;
+import at.peppol.commons.sml.ESML;
+import at.peppol.commons.sml.ISMLInfo;
+import at.peppol.commons.utils.ExceptionUtils;
+
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.annotations.UnsupportedOperation;
@@ -85,11 +91,6 @@ import com.phloc.commons.io.misc.SizeHelper;
 import com.sun.xml.ws.api.message.HeaderList;
 import com.sun.xml.ws.developer.JAXWSProperties;
 
-import eu.peppol.busdox.identifier.IdentifierUtils;
-import eu.peppol.busdox.security.KeyStoreUtils;
-import eu.peppol.busdox.sml.ESML;
-import eu.peppol.busdox.sml.ISMLInfo;
-import eu.peppol.common.ExceptionUtils;
 import eu.peppol.registry.smp.client.SMPServiceCaller;
 import eu.peppol.start.IMessageMetadata;
 import eu.peppol.start.MessageMetadataHelper;

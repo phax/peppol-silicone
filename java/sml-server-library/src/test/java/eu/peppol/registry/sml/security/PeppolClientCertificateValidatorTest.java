@@ -49,7 +49,8 @@ import java.util.List;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import eu.peppol.busdox.security.KeyStoreUtils;
+import at.peppol.commons.security.KeyStoreUtils;
+
 
 /**
  * Test class for class {@link PeppolClientCertificateValidator}.

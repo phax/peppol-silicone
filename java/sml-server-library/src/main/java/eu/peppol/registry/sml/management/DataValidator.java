@@ -51,13 +51,14 @@ import org.busdox.servicemetadata.locator._1.ServiceMetadataPublisherServiceForP
 import org.busdox.servicemetadata.locator._1.ServiceMetadataPublisherServiceType;
 import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 
+import at.peppol.commons.identifier.CIdentifier;
+import at.peppol.commons.identifier.IdentifierUtils;
+import at.peppol.commons.identifier.actorid.IdentifierIssuingAgencyManager;
+import at.peppol.commons.sml.CSMLDefault;
+
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
 
-import eu.peppol.busdox.identifier.CIdentifier;
-import eu.peppol.busdox.identifier.IdentifierUtils;
-import eu.peppol.busdox.identifier.actorid.IdentifierIssuingAgencyManager;
-import eu.peppol.busdox.sml.CSMLDefault;
 import eu.peppol.registry.sml.exceptions.BadRequestException;
 
 /**

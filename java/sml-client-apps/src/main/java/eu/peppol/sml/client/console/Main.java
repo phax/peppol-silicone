@@ -49,8 +49,9 @@ import org.busdox.servicemetadata.managebusinessidentifierservice._1.NotFoundFau
 import org.busdox.servicemetadata.managebusinessidentifierservice._1.UnauthorizedFault;
 import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 
-import eu.peppol.busdox.sml.CSMLDefault;
-import eu.peppol.busdox.sml.ISMLInfo;
+import at.peppol.commons.sml.CSMLDefault;
+import at.peppol.commons.sml.ISMLInfo;
+
 import eu.peppol.sml.client.ESMLCommand;
 import eu.peppol.sml.client.ESMLObjectType;
 

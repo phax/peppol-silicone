@@ -68,16 +68,17 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.w3c.dom.Element;
 
+import at.peppol.commons.identifier.SimpleDocumentIdentifier;
+import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+import at.peppol.commons.identifier.SimpleProcessIdentifier;
+import at.peppol.commons.sml.ESML;
+import at.peppol.commons.sml.ISMLInfo;
+import at.peppol.commons.utils.ExtensionConverter;
+import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
+import at.peppol.commons.utils.ReadonlyUsernamePWCredentials;
+
 import com.phloc.commons.annotations.DevelopersNote;
 
-import eu.peppol.busdox.identifier.SimpleDocumentIdentifier;
-import eu.peppol.busdox.identifier.SimpleParticipantIdentifier;
-import eu.peppol.busdox.identifier.SimpleProcessIdentifier;
-import eu.peppol.busdox.sml.ESML;
-import eu.peppol.busdox.sml.ISMLInfo;
-import eu.peppol.common.ExtensionConverter;
-import eu.peppol.common.IReadonlyUsernamePWCredentials;
-import eu.peppol.common.ReadonlyUsernamePWCredentials;
 import eu.peppol.registry.smp.client.exception.NotFoundException;
 import eu.peppol.registry.smp.client.exception.UnauthorizedException;
 

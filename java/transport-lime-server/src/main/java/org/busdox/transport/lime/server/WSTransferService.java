@@ -91,10 +91,11 @@ import org.w3._2009._02.ws_tra.ResourceCreated;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import at.peppol.commons.sml.ESML;
+
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.string.StringHelper;
 
-import eu.peppol.busdox.sml.ESML;
 import eu.peppol.registry.smp.client.SMPServiceCaller;
 import eu.peppol.start.IMessageMetadata;
 import eu.peppol.start.MessageMetadata;

@@ -51,7 +51,8 @@ import org.busdox.servicemetadata.manageservicemetadataservice._1.ManageServiceM
 import org.busdox.servicemetadata.manageservicemetadataservice._1.NotFoundFault;
 import org.busdox.servicemetadata.manageservicemetadataservice._1.UnauthorizedFault;
 
-import eu.peppol.busdox.sml.ISMLInfo;
+import at.peppol.commons.sml.ISMLInfo;
+
 
 /**
  * This class is used for calling the service metadata interface of the SML.

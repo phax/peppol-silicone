@@ -67,6 +67,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3._2000._09.xmldsig.X509DataType;
 
+import at.peppol.commons.identifier.IdentifierUtils;
+import at.peppol.commons.sml.ISMLInfo;
+import at.peppol.commons.uri.BusdoxURLUtils;
+import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
+import at.peppol.commons.wsaddr.W3CEndpointReferenceUtils;
+
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.io.streams.NonBlockingByteArrayInputStream;
 import com.sun.jersey.api.client.Client;
@@ -76,11 +82,6 @@ import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.WebResource.Builder;
 
-import eu.peppol.busdox.identifier.IdentifierUtils;
-import eu.peppol.busdox.sml.ISMLInfo;
-import eu.peppol.busdox.uri.BusdoxURLUtils;
-import eu.peppol.busdox.wsaddr.W3CEndpointReferenceUtils;
-import eu.peppol.common.IReadonlyUsernamePWCredentials;
 import eu.peppol.registry.smp.client.exception.BadRequestException;
 import eu.peppol.registry.smp.client.exception.NotFoundException;
 import eu.peppol.registry.smp.client.exception.UnauthorizedException;

@@ -40,7 +40,8 @@ package eu.peppol.registry.smp.hook;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import eu.peppol.busdox.identifier.SimpleParticipantIdentifier;
+import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+
 
 /**
  * Test class for class {@link RegistrationServiceRegistrationHook}.

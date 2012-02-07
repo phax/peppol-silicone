@@ -40,9 +40,10 @@ package eu.peppol.registry.smp.hook;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
+import at.peppol.commons.utils.ConfigFile;
+
 import com.phloc.commons.lang.GenericReflection;
 
-import eu.peppol.common.ConfigFile;
 
 /**
  * @author PEPPOL.AT, BRZ, Philip Helger
