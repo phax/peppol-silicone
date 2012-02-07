@@ -35,7 +35,7 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package eu.peppol.registry.sml.jpa;
+package at.peppol.sml.server.jpa;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
