@@ -10,7 +10,8 @@
   <name>peppol-transport-lime-library</name>
 
   <scm>
-    <developerConnection>scm:svn:https://joinup.ec.europa.eu/svn/peppol/devinprogress/java/transport/transport-lime-library</developerConnection>
+    <connection>scm:svn:http://peppol-silicone.googlecode.com/svn/trunk/java/transport-lime-library</connection>
+    <developerConnection>scm:svn:https://peppol-silicone.googlecode.com/svn/trunk/java/transport-lime-library</developerConnection>
   </scm>
 
   <dependencies>

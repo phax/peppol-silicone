@@ -10,7 +10,8 @@
   <name>peppol-transport-api</name>
 
   <scm>
-    <developerConnection>scm:svn:https://joinup.ec.europa.eu/svn/peppol/devinprogress/java/transport2/peppol-start-api</developerConnection>
+    <connection>scm:svn:http://peppol-silicone.googlecode.com/svn/trunk/java/transport-api</connection>
+    <developerConnection>scm:svn:https://peppol-silicone.googlecode.com/svn/trunk/java/transport-api</developerConnection>
   </scm>
   
   <dependencies>

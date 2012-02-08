@@ -11,6 +11,11 @@
   <packaging>maven-plugin</packaging>
   <name>schematron2xslt-maven-plugin</name>
 
+  <scm>
+    <connection>scm:svn:http://peppol-silicone.googlecode.com/svn/trunk/java/schematron2xslt-maven-plugin</connection>
+    <developerConnection>scm:svn:https://peppol-silicone.googlecode.com/svn/trunk/java/schematron2xslt-maven-plugin</developerConnection>
+  </scm>
+
   <dependencies>
     <dependency>
       <groupId>org.apache.maven</groupId>

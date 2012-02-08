@@ -12,7 +12,8 @@
   <name>peppol-smp-webapp</name>
   
   <scm>
-    <developerConnection>scm:svn:https://joinup.ec.europa.eu/svn/peppol/devinprogress/java/smp/smp-webapp</developerConnection>
+    <connection>scm:svn:http://peppol-silicone.googlecode.com/svn/trunk/java/smp-webapp</connection>
+    <developerConnection>scm:svn:https://peppol-silicone.googlecode.com/svn/trunk/java/smp-webapp</developerConnection>
   </scm>
 
   <dependencies>

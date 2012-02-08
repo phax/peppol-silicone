@@ -12,7 +12,8 @@
   <name>peppol-sml-server-library</name>
 
   <scm>
-    <developerConnection>scm:svn:https://joinup.ec.europa.eu/svn/peppol/devinprogress/java/sml/sml-server-library</developerConnection>
+    <connection>scm:svn:http://peppol-silicone.googlecode.com/svn/trunk/java/sml-server-library</connection>
+    <developerConnection>scm:svn:https://peppol-silicone.googlecode.com/svn/trunk/java/sml-server-library</developerConnection>
   </scm>
 
   <dependencies>

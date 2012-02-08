@@ -9,6 +9,11 @@
   <version>2.0.0-SNAPSHOT</version>
   <name>peppol-transport-start-client</name>
   
+  <scm>
+    <connection>scm:svn:http://peppol-silicone.googlecode.com/svn/trunk/java/transport-start-client</connection>
+    <developerConnection>scm:svn:https://peppol-silicone.googlecode.com/svn/trunk/java/transport-start-client</developerConnection>
+  </scm>
+
   <dependencies>
     <dependency>
       <groupId>at.peppol</groupId>

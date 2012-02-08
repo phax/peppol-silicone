@@ -11,14 +11,15 @@
   <name>peppol-commons-peppol</name>
 
   <scm>
-    <developerConnection>scm:svn:https://joinup.ec.europa.eu/svn/peppol/devinprogress/java/commons/busdox-peppol</developerConnection>
+    <connection>scm:svn:http://peppol-silicone.googlecode.com/svn/trunk/java/commons-peppol</connection>
+    <developerConnection>scm:svn:https://peppol-silicone.googlecode.com/svn/trunk/java/commons-peppol</developerConnection>
   </scm>
 
   <dependencies>
     <dependency>
       <groupId>at.peppol</groupId>
       <artifactId>peppol-commons-busdox</artifactId>
-      <version>2.1.2-SNAPSHOT</version>
+      <version>2.2.0</version>
     </dependency>
     <dependency>
       <groupId>com.phloc</groupId>

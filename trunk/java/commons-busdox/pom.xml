@@ -13,7 +13,6 @@
   <scm>
     <connection>scm:svn:http://peppol-silicone.googlecode.com/svn/trunk/java/commons-busdox</connection>
     <developerConnection>scm:svn:https://peppol-silicone.googlecode.com/svn/trunk/java/commons-busdox</developerConnection>
-    <url>http://code.google.com/p/peppol-silicone/source/browse/peppol-commons-busdox/</url>
   </scm>
 
   <build>
