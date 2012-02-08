@@ -61,6 +61,7 @@ import javax.xml.ws.WebServiceContext;
 import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.soap.Addressing;
 
+import org.busdox.transport.start.cert.ServerConfigFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -85,7 +86,6 @@ import at.peppol.smp.client.SMPServiceCaller;
 import at.peppol.transport.IMessageMetadata;
 import at.peppol.transport.MessageMetadataHelper;
 import at.peppol.transport.PingMessageHelper;
-import at.peppol.transport.start.cert.ServerConfigFile;
 import at.peppol.transport.start.client.AccessPointClient;
 
 import com.phloc.commons.CGlobal;

@@ -35,7 +35,7 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.transport.start.ocsp;
+package org.busdox.transport.start.ocsp;
 
 import java.security.KeyStore;
 import java.security.cert.X509Certificate;
