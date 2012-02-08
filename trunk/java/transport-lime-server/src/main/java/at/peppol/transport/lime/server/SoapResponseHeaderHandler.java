@@ -57,7 +57,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import at.peppol.transport.lime.Identifiers;
-import at.peppol.transport.lime.soapheader.SOAPHelper;
 
 /**
  * @author Ravnholt<br>
@@ -68,7 +67,7 @@ public class SoapResponseHeaderHandler implements SOAPHandler <SOAPMessageContex
   public boolean handleMessage (final SOAPMessageContext messageContext) {
     final SOAPMessage msg = messageContext.getMessage ();
 
-    if (SOAPHelper.isOutboundMessage (messageContext)) {
+    if (((Boolean) messageContext.get (MessageContext.MESSAGE_OUTBOUND_PROPERTY)).booleanValue ()) {
       try {
         final SOAPEnvelope envelope = msg.getSOAPPart ().getEnvelope ();
         final NodeList aChildNodes = envelope.getBody ().getChildNodes ();

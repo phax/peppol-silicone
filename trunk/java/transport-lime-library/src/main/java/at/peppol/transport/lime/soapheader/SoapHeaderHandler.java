@@ -103,7 +103,7 @@ public class SoapHeaderHandler implements SOAPHandler <SOAPMessageContext> {
   }
 
   public boolean handleMessage (final SOAPMessageContext smc) {
-    if (SOAPHelper.isInboundMessage (smc))
+    if (!((Boolean) smc.get (MessageContext.MESSAGE_OUTBOUND_PROPERTY)).booleanValue ())
       return false;
 
     try {
