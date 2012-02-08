@@ -49,8 +49,11 @@ import javax.annotation.concurrent.ThreadSafe;
 import at.peppol.transport.IMessageMetadata;
 
 import com.phloc.commons.state.EChange;
+import com.phloc.commons.string.StringHelper;
 
 /**
+ * Memory backed storage of all known objects
+ * 
  * @author Ravnholt<br>
  *         PEPPOL.AT, BRZ, Philip Helger
  */
@@ -109,7 +112,11 @@ public final class ResourceMemoryStore {
   }
 
   @Nonnull
-  private static String _getKey (final String sMessageID, final String sURLStr) {
+  private static String _getKey (@Nonnull final String sMessageID, @Nonnull final String sURLStr) {
+    if (StringHelper.hasNoText (sMessageID))
+      throw new IllegalArgumentException ("messageID");
+    if (StringHelper.hasNoText (sURLStr))
+      throw new IllegalArgumentException ("urlStr");
     return sMessageID + sURLStr;
   }
 }

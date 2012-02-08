@@ -47,11 +47,8 @@ import javax.jws.HandlerChain;
 import javax.jws.WebService;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.namespace.QName;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.soap.SOAPConstants;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPFactory;
@@ -99,6 +96,8 @@ import at.peppol.transport.lime.soapheader.SoapHeaderReader;
 import at.peppol.transport.start.client.AccessPointClient;
 
 import com.phloc.commons.CGlobal;
+import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.jaxb.JAXBContextCache;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.xml.XMLFactory;
 import com.sun.xml.ws.api.message.HeaderList;
@@ -184,7 +183,7 @@ public class LimeService {
       aMetadata = MessageMetadataHelper.createMetadataFromHeadersWithCustomMessageID (aHeaderList, sMessageID);
 
       if (ResourceMemoryStore.getInstance ().createResource (sMessageID, sOurAPURL, aMetadata).isUnchanged ())
-        throw new MessageIdReusedException ("Message id " + sMessageID + " is reused");
+        throw new MessageIdReusedException ("Message id '" + sMessageID + "' is reused");
     }
     catch (final Exception ex) {
       throw _createSoapFault (FAULT_SERVER_ERROR, ex);
@@ -270,12 +269,13 @@ public class LimeService {
    * @return response
    */
   public DeleteResponse delete (final Delete body) {
+    final HeaderList aHeaderList = _getInboundHeaderList ();
+    final String channelID = MessageMetadataHelper.getChannelID (aHeaderList);
+    final String messageID = MessageMetadataHelper.getMessageID (aHeaderList);
     try {
-      final String channelID = SoapHeaderReader.getChannelID (webServiceContext);
-      final String messageID = SoapHeaderReader.getMessageID (webServiceContext);
-      final String realPath = ((ServletContext) webServiceContext.getMessageContext ()
-                                                                 .get (MessageContext.SERVLET_CONTEXT)).getRealPath ("/");
-      new LimeStorage (realPath).deleteDocument (channelID, messageID);
+      final String sStorageRoot = ((ServletContext) webServiceContext.getMessageContext ()
+                                                                     .get (MessageContext.SERVLET_CONTEXT)).getRealPath ("/");
+      new LimeStorage (sStorageRoot).deleteDocument (channelID, messageID);
     }
     catch (final Exception ex) {
       s_aLogger.error ("Error deleting document", ex);
@@ -314,17 +314,15 @@ public class LimeService {
                                                                     Identifiers.MESSAGEUNDELIVERABLE_DOCUMENT,
                                                                     Identifiers.MESSAGEUNDELIVERABLE_PROCESS);
 
+        final Document aDocument = XMLFactory.newDocument ();
+        final Marshaller aMarshaller = JAXBContextCache.getInstance ()
+                                                       .getFromCache (MessageUndeliverableType.class)
+                                                       .createMarshaller ();
+        aMarshaller.marshal (m_aObjFactory.createMessageUndeliverable (messageUndeliverableType),
+                             new DOMResult (aDocument));
+
         final Put put = new Put ();
-        final List <Object> objects = put.getAny ();
-
-        final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance ();
-        final DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder ();
-        final Document document = documentBuilder.newDocument ();
-        final DOMResult domResult = new DOMResult (document);
-        final Marshaller marshaller = JAXBContext.newInstance (MessageUndeliverableType.class).createMarshaller ();
-        marshaller.marshal (m_aObjFactory.createMessageUndeliverable (messageUndeliverableType), domResult);
-
-        objects.add (document.getDocumentElement ());
+        put.getAny ().add (aDocument.getDocumentElement ());
         _sendToInbox (aRealMetadata, put);
       }
       catch (final Exception ex1) {
@@ -443,27 +441,26 @@ public class LimeService {
     AccessPointClient.send (recipientAccessPointURLstr, soapHdr, createBody);
   }
 
-  private void _sendToInbox (final IMessageMetadata soapHdr, final Put body) throws RecipientUnreachableException {
-    final String channelID = soapHdr.getRecipientID ().getValue ();
-    if (channelID == null) {
-      throw new RecipientUnreachableException ("Unknown recipient at LIME-AP: " + soapHdr.getRecipientID ());
-    }
-    final String messageID = SoapHeaderReader.getMessageID (webServiceContext);
+  private void _sendToInbox (final IMessageMetadata aMetadata, final Put body) throws RecipientUnreachableException {
+    final String channelID = aMetadata.getRecipientID ().getValue ();
+    if (channelID == null)
+      throw new RecipientUnreachableException ("Unknown recipient at LIME-AP: " + aMetadata.getRecipientID ());
 
-    s_aLogger.info ("Recipient: " + soapHdr.getRecipientID () + "; ChannelID: " + channelID);
+    final HeaderList aHeaderList = _getInboundHeaderList ();
+    final String messageID = MessageMetadataHelper.getMessageID (aHeaderList);
+
+    s_aLogger.info ("Recipient: " + aMetadata.getRecipientID () + "; ChannelID: " + channelID);
 
     try {
       final List <Object> objects = body.getAny ();
-      if (objects != null && objects.size () == 1) {
-        final Element element = (Element) objects.iterator ().next ();
+      if (ContainerHelper.getSize (objects) == 1) {
+        final Element element = (Element) ContainerHelper.getFirstElement (objects);
         final Document document = element.getOwnerDocument ();
-        Document metadataDocument;
+        final Document metadataDocument = MessageMetadataHelper.createHeadersDocument (aMetadata);
 
-        metadataDocument = SoapHeaderReader.createSoapHeaderDocument (soapHdr);
-
-        final String realPath = ((ServletContext) webServiceContext.getMessageContext ()
-                                                                   .get (MessageContext.SERVLET_CONTEXT)).getRealPath ("/");
-        new LimeStorage (realPath).saveDocument (channelID, messageID, metadataDocument, document);
+        final String sStorageRoot = ((ServletContext) webServiceContext.getMessageContext ()
+                                                                       .get (MessageContext.SERVLET_CONTEXT)).getRealPath ("/");
+        new LimeStorage (sStorageRoot).saveDocument (channelID, messageID, metadataDocument, document);
       }
     }
     catch (final Exception ex) {
