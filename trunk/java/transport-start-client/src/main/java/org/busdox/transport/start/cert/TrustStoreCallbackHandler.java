@@ -35,7 +35,7 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.transport.start.cert;
+package org.busdox.transport.start.cert;
 
 import java.io.IOException;
 import java.security.KeyStore;
@@ -60,48 +60,44 @@ import com.sun.xml.wss.impl.callback.PrivateKeyCallback;
  *
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public final class KeyStoreCallbackHandler implements CallbackHandler {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (KeyStoreCallbackHandler.class);
+public final class TrustStoreCallbackHandler implements CallbackHandler {
+  private static final Logger s_aLogger = LoggerFactory.getLogger (TrustStoreCallbackHandler.class);
 
-  public KeyStoreCallbackHandler () {}
+  public TrustStoreCallbackHandler () {}
 
   @Override
   public void handle (final Callback [] aCallbacks) throws IOException, UnsupportedCallbackException {
-    final String sKeyStorePath = ServerConfigFile.getKeyStorePath ();
-    final String sKeyStorePassword = ServerConfigFile.getKeyStorePassword ();
-    final String sKeyStoreAlias = ServerConfigFile.getKeyStoreAlias ();
-    final char [] aKeyStoreAliasPassword = ServerConfigFile.getKeyStoreAliasPassword ();
+    final String sTrustStorePath = ServerConfigFile.getTrustStorePath ();
+    final String sTrustStorePassword = ServerConfigFile.getTrustStorePassword ();
+    final String sTrustStoreAlias = ServerConfigFile.getTrustStoreAlias ();
+    final char [] aTrustStoreAliasPassword = ServerConfigFile.getTrustStoreAliasPassword ();
 
-    s_aLogger.info ("Loading KeyStore from '" + sKeyStorePath + "'");
+    s_aLogger.info ("Loading TrustStore from '" + sTrustStorePath + "'");
     KeyStore aKeyStore;
     try {
-      aKeyStore = KeyStoreUtils.loadKeyStoreFromClassPath (sKeyStorePath, sKeyStorePassword);
+      aKeyStore = KeyStoreUtils.loadKeyStoreFromClassPath (sTrustStorePath, sTrustStorePassword);
     }
     catch (final Exception ex) {
-      throw new IllegalStateException ("Error in loading KeyStore from '" + sKeyStorePath + "'!", ex);
+      throw new IllegalStateException ("Error in loading TrustStore from '" + sTrustStorePath + "!", ex);
     }
 
     for (final Callback aCallback : aCallbacks) {
       if (aCallback instanceof KeyStoreCallback) {
         try {
-          // The returned keystore may not contain other entries than the
-          // requested one!
-          ((KeyStoreCallback) aCallback).setKeystore (KeyStoreUtils.createKeyStoreWithOnlyOneItem (aKeyStore,
-                                                                                                   sKeyStoreAlias,
-                                                                                                   aKeyStoreAliasPassword));
+          ((KeyStoreCallback) aCallback).setKeystore (aKeyStore);
         }
         catch (final Exception ex) {
-          s_aLogger.error ("Failed to set key store", ex);
+          s_aLogger.error ("Failed to set keystore", ex);
         }
       }
       else
         if (aCallback instanceof PrivateKeyCallback) {
           try {
-            final PrivateKey aPrivateKey = (PrivateKey) aKeyStore.getKey (sKeyStoreAlias, aKeyStoreAliasPassword);
-            ((PrivateKeyCallback) aCallback).setKey (aPrivateKey);
+            final PrivateKey privateKey = (PrivateKey) aKeyStore.getKey (sTrustStoreAlias, aTrustStoreAliasPassword);
+            ((PrivateKeyCallback) aCallback).setKey (privateKey);
           }
           catch (final Exception ex) {
-            s_aLogger.warn ("Failed to set private key", ex);
+            s_aLogger.error ("Failed to set private key", ex);
           }
         }
     }
