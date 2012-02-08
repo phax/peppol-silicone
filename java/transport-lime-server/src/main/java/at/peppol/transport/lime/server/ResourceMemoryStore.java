@@ -44,6 +44,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.ThreadSafe;
 
 import at.peppol.transport.IMessageMetadata;
 
@@ -53,6 +54,7 @@ import com.phloc.commons.state.EChange;
  * @author Ravnholt<br>
  *         PEPPOL.AT, BRZ, Philip Helger
  */
+@ThreadSafe
 public final class ResourceMemoryStore {
   private static final class SingletonHolder {
     static final ResourceMemoryStore s_aInstance = new ResourceMemoryStore ();

@@ -37,24 +37,12 @@
  */
 package at.peppol.transport.lime.server;
 
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import javax.xml.bind.PropertyException;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMResult;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import javax.xml.ws.wsaddressing.W3CEndpointReference;
 
 import org.busdox.transport.lime._1.Entry;
@@ -69,11 +57,14 @@ import org.w3c.dom.Node;
 
 import at.peppol.commons.wsaddr.W3CEndpointReferenceUtils;
 import at.peppol.transport.lime.Identifiers;
+import at.peppol.transport.lime.server.storage.Channel;
 
 import com.phloc.commons.jaxb.JAXBContextCache;
+import com.phloc.commons.jaxb.JAXBMarshallerUtils;
 import com.phloc.commons.xml.XMLFactory;
+import com.phloc.commons.xml.serialize.XMLWriter;
+import com.phloc.commons.xml.serialize.XMLWriterSettings;
 import com.sun.xml.bind.marshaller.NamespacePrefixMapper;
-
 
 /**
  * @author Ravnholt<br>
@@ -81,21 +72,18 @@ import com.sun.xml.bind.marshaller.NamespacePrefixMapper;
  */
 public final class MessagePage {
   public static final int MESSAGE_PAGE_SIZE = 100;
-  private static final Logger log = LoggerFactory.getLogger (MessagePage.class);
+  private static final Logger s_aLogger = LoggerFactory.getLogger (MessagePage.class);
 
   private final ObjectFactory m_aObjFactory = new ObjectFactory ();
 
-  public Document getPageList (final int pageNum, final String endpoint, final Channel channel, final String channelID) throws Exception {
-
+  public Document getPageList (final int pageNum, final String endpoint, final Channel channel, final String channelID) throws JAXBException {
     final int pageSize = MESSAGE_PAGE_SIZE;
     final String [] messageIDs = channel.getMessageIDs (channelID);
 
-    if (pageNum < 0 || pageNum > (messageIDs.length / pageSize)) {
-      throw new Exception ("Page number must be between 0 and " + (messageIDs.length / pageSize));
-    }
+    if (pageNum < 0 || pageNum > (messageIDs.length / pageSize))
+      throw new IllegalArgumentException ("Page number must be between 0 and " + (messageIDs.length / pageSize));
 
-    log.info ("Messages found in inbox: " + messageIDs.length);
-
+    s_aLogger.info ("Messages found in inbox: " + messageIDs.length);
     return createPageListDocument (messageIDs, pageSize, pageNum, channel, channelID, endpoint);
   }
 
@@ -104,9 +92,7 @@ public final class MessagePage {
                                         final String [] messageIDs,
                                         final Channel channel,
                                         final String channelID,
-                                        final String endpoint) throws ParserConfigurationException,
-                                                              JAXBException,
-                                                              Exception {
+                                        final String endpoint) throws JAXBException {
     final int fromMsg = pageNum * pageSize;
     final int toMsg = Math.min (((pageNum + 1) * pageSize) - 1, messageIDs.length - 1);
 
@@ -116,26 +102,23 @@ public final class MessagePage {
     if ((messageIDs.length / pageSize) >= pageNum + 1) {
       addNextPageIdentifier (endpoint, pageNum, pageList, channelID);
     }
-    final Document pageListDocument = marshallPageList (pageList);
-    return pageListDocument;
+    return marshallPageList (pageList);
   }
 
-  private Document marshallPageList (final PageListType pageList) throws ParserConfigurationException,
-                                                                 JAXBException,
-                                                                 PropertyException {
-    final DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance ();
-    final Document document = docFactory.newDocumentBuilder ().newDocument ();
+  private Document marshallPageList (final PageListType pageList) throws JAXBException {
     final Marshaller marshaller = JAXBContextCache.getInstance ().getFromCache (PageListType.class).createMarshaller ();
-    marshaller.setProperty ("com.sun.xml.bind.namespacePrefixMapper", new NamespacePrefixMapper () {
+    JAXBMarshallerUtils.setSunNamespacePrefixMapper (marshaller, new NamespacePrefixMapper () {
       @Override
       public String getPreferredPrefix (final String namespaceUri, final String suggestion, final boolean requirePrefix) {
-        if (namespaceUri.equalsIgnoreCase (Identifiers.NAMESPACE_LIME))
+        if (Identifiers.NAMESPACE_LIME.equalsIgnoreCase (namespaceUri))
           return "peppol";
         return suggestion;
       }
     });
+
+    final Document document = XMLFactory.newDocument ();
     marshaller.marshal (m_aObjFactory.createPageList (pageList), new DOMResult (document));
-    log.info (xmlToString (document));
+    s_aLogger.info (xmlToString (document));
     return document;
   }
 
@@ -166,7 +149,7 @@ public final class MessagePage {
                                    final Channel channel,
                                    final String channelID,
                                    final String endpoint,
-                                   final PageListType pageList) throws Exception {
+                                   final PageListType pageList) {
     pageList.setEntryList (m_aObjFactory.createEntryListType ());
 
     for (int i = fromMsg; i <= toMsg; i++) {
@@ -195,43 +178,33 @@ public final class MessagePage {
                                            final int pageNum,
                                            final Channel channel,
                                            final String channelID,
-                                           final String endpoint) throws Exception {
+                                           final String endpoint) throws JAXBException {
     Document pageListDocument = null;
     if (messageIDs.length > 0 && (messageIDs.length / pageSize) >= pageNum) {
 
-      log.info ("Messages in inbox: " + messageIDs.length);
+      s_aLogger.info ("Messages in inbox: " + messageIDs.length);
 
       pageListDocument = getPageListDocument (pageNum, pageSize, messageIDs, channel, channelID, endpoint);
 
-      log.info ("Page List created. MessageIDs=" + messageIDs.length + " pageSize=" + pageSize + " pageNum=" + pageNum);
+      s_aLogger.info ("Page List created. MessageIDs=" +
+                      messageIDs.length +
+                      " pageSize=" +
+                      pageSize +
+                      " pageNum=" +
+                      pageNum);
     }
     else {
-      log.info ("Page List not created. MessageIDs=" +
-                messageIDs.length +
-                " pageSize=" +
-                pageSize +
-                " pageNum=" +
-                pageNum);
+      s_aLogger.info ("Page List not created. MessageIDs=" +
+                      messageIDs.length +
+                      " pageSize=" +
+                      pageSize +
+                      " pageNum=" +
+                      pageNum);
     }
     return pageListDocument;
   }
 
   private static String xmlToString (final Node node) {
-    try {
-      final Source source = new DOMSource (node);
-      final StringWriter stringWriter = new StringWriter ();
-      final Result result = new StreamResult (stringWriter);
-      final TransformerFactory factory = TransformerFactory.newInstance ();
-      final Transformer transformer = factory.newTransformer ();
-      transformer.transform (source, result);
-      return stringWriter.getBuffer ().toString ();
-    }
-    catch (final TransformerConfigurationException e) {
-      e.printStackTrace ();
-    }
-    catch (final TransformerException e) {
-      e.printStackTrace ();
-    }
-    return null;
+    return XMLWriter.getNodeAsString (node, XMLWriterSettings.SUGGESTED_XML_SETTINGS);
   }
 }
