@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+        	CVA File T14
+        	Oriol Bausà 
+
+     -->
+<ValueListConstraints xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:qdt="urn:oasis:names:specification:ubl:schema:xsd:QualifiedDatatypes-2" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:cct="urn:oasis:names:specification:ubl:schema:xsd:CoreComponentParameters-2" name="CodesT14" version="Version 0.3" xmlns:udt="urn:un:unece:uncefact:data:draft:UnqualifiedDataTypesSchemaModule:2" xmlns:stat="urn:oasis:names:specification:ubl:schema:xsd:DocumentStatusCode-1.0" xmlns="http://docs.oasis-open.org/codelist/ns/ContextValueAssociation/cd2-1.0/">
+  <ValueLists>
+    <ValueList xml:id="LocationIdentifier" uri="../gc/LocationIdentifier.gc"/>
+    <ValueList xml:id="PostalAddressIdentifier" uri="../gc/PostalAddressIdentifier.gc"/>
+    <ValueList xml:id="PartyIdentifier" uri="../gc/PartyIdentifier.gc"/>
+    <ValueList xml:id="ItemIdentifier" uri="../gc/ItemIdentifier.gc"/>
+    <ValueList xml:id="CommodityClassificationCode" uri="../gc/CommodityClassificationCode.gc"/>
+    <ValueList xml:id="FinancialInstitutionIdentifier" uri="../gc/FinancialInstitutionIdentifier.gc"/>
+    <ValueList xml:id="PartyID" uri="../gc/PartyID.gc"/>
+  </ValueLists>
+  <Contexts>
+    <Context mark="fatal" values="BinaryObjectMimeCode" item="@mimeCode">
+      <Message>[PCL-014-001]-Mime code in attribute MUST be MIMEMediaType.</Message>
+    </Context>
+    <Context mark="warning" scope="cac:FinancialInstitution/cbc:ID" values="FinancialInstitutionIdentifier" item="@schemeID">
+      <Message>[PCL-014-002]-Financial Institution SHOULD be BIC code.</Message>
+    </Context>
+    <Context mark="warning" scope="cac:PostalAddress/cbc:ID" values="PostalAddressIdentifier" item="@schemeID">
+      <Message>[PCL-014-003]-Postal address identifiers SHOULD be GLN.</Message>
+    </Context>
+    <Context mark="warning" scope="cac:Delivery/cac:DeliveryLocation/cbc:ID" values="LocationIdentifier" item="@schemeID">
+      <Message>[PCL-014-004]-Location identifiers SHOULD be GLN</Message>
+    </Context>
+    <Context mark="warning" scope="cac:Item/cac:StandardItemIdentification/cbc:ID" values="ItemIdentifier" item="@schemeID">
+      <Message>[PCL-014-005]-Standard item identifiers SHOULD be GTIN.</Message>
+    </Context>
+    <Context mark="warning" scope="cac:Item/cac:CommodityClassification/cbc:ItemClassificationCode" values="CommodityClassificationCode" item="@listID">
+      <Message>[PCL-014-006]-Commodity classification SHOULD be one of UNSPSC, eClass or CPV.</Message>
+    </Context>
+    <Context mark="fatal" values="TaxExemptionReasonCode" item="cbc:TaxExemptionReasonCode">
+      <Message>[PCL-014-007]-Tax exemption reasons MUST be coded using Use CWA 15577 tax exemption code list. Version 2006</Message>
+    </Context>
+    <Context mark="fatal" scope="cac:PartyIdentification/cbc:ID" values="PartyID " item="@schemeID">
+      <Message>[PCL-014-008]-Party Identifiers MUST use the PEPPOL PartyID list</Message>
+    </Context>
+    <Context mark="fatal" scope="cbc:EndpointID" values="PartyID " item="@schemeID">
+      <Message>[PCL-014-009]-Endpoint Identifiers MUST use the PEPPOL PartyID list.</Message>
+    </Context>
+  </Contexts>
+</ValueListConstraints>
