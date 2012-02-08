@@ -77,8 +77,8 @@ final class X509KeySelector extends KeySelector {
                                    final KeySelector.Purpose purpose,
                                    final AlgorithmMethod method,
                                    final XMLCryptoContext context) throws KeySelectorException {
-    final String location = "truststore/global-truststore.jks";
-    final String password = "peppol";
+    final String sLocation = "truststore/global-truststore.jks";
+    final String sPassword = "peppol";
 
     final Iterator <?> ki = aKeyInfo.getContent ().iterator ();
     while (ki.hasNext ()) {
@@ -103,7 +103,7 @@ final class X509KeySelector extends KeySelector {
            */
           final X509Certificate [] certArray = new X509Certificate [] { certificate };
 
-          final KeyStore ks = KeyStoreUtils.loadKeyStoreFromClassPath (location, password);
+          final KeyStore ks = KeyStoreUtils.loadKeyStoreFromClassPath (sLocation, sPassword);
           // The PKIXParameters constructor may fail because:
           // - the trustAnchorsParameter is empty
           final PKIXParameters params = new PKIXParameters (ks);
