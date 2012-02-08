@@ -116,7 +116,7 @@ public class LimeService {
   public static final String FAULT_CHANNEL_FULL = "The channel is not accepting messages for this destination";
   public static final String FAULT_SECURITY_ERROR = "There is a security error in processing this request";
   public static final String FAULT_SERVER_ERROR = "ServerError";
-  public static final String SERVICENAME = "wstransferService";
+  public static final String SERVICENAME = LimeService.class.getAnnotation (WebService.class).serviceName ();
 
   // used to check if lime-ap has to process a local or remote call
   public static final String LIME_AP_SERVICEURL_PROP = "org.busdox.transport.lime.ap.own_url";
@@ -124,7 +124,8 @@ public class LimeService {
   private static final Logger s_aLogger = LoggerFactory.getLogger (LimeService.class);
 
   static {
-    CBusDox.setMetroDebugSystemProperties (true);
+    if (false)
+      CBusDox.setMetroDebugSystemProperties (true);
   }
 
   private final ObjectFactory m_aObjFactory = new ObjectFactory ();
