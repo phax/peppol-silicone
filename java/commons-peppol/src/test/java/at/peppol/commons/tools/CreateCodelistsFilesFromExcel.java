@@ -99,11 +99,10 @@ import com.sun.codemodel.JMethod;
 import com.sun.codemodel.JMod;
 import com.sun.codemodel.JVar;
 
-
 /**
  * Utility class to create the Genericode files from the Excel code list. Also
  * creates Java source files with the predefined identifiers.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class CreateCodelistsFilesFromExcel {
@@ -169,7 +168,7 @@ public final class CreateCodelistsFilesFromExcel {
 
     // Create Java source
     try {
-      final JDefinedClass jEnum = s_aCodeModel._package ("at.peppol.busdox.identifier.actorid")
+      final JDefinedClass jEnum = s_aCodeModel._package ("at.peppol.commons.identifier.actorid")
                                               ._enum ("EPredefinedIdentifierIssuingAgency")
                                               ._implements (IIdentifierIssuingAgency.class);
       jEnum.javadoc ().add ("This file is generated. Do NOT edit!");
@@ -295,7 +294,7 @@ public final class CreateCodelistsFilesFromExcel {
 
     // Create Java source
     try {
-      s_jEnumPredefinedDoc = s_aCodeModel._package ("at.peppol.busdox.identifier.docid")
+      s_jEnumPredefinedDoc = s_aCodeModel._package ("at.peppol.commons.identifier.docid")
                                          ._enum ("EPredefinedDocumentIdentifier")
                                          ._implements (IPredefinedDocumentIdentifier.class);
       s_jEnumPredefinedDoc.javadoc ().add ("This file is generated. Do NOT edit!");
@@ -451,7 +450,7 @@ public final class CreateCodelistsFilesFromExcel {
 
     // Create Java source
     try {
-      final JDefinedClass jEnum = s_aCodeModel._package ("at.peppol.busdox.identifier.procid")
+      final JDefinedClass jEnum = s_aCodeModel._package ("at.peppol.commons.identifier.procid")
                                               ._enum ("EPredefinedProcessIdentifier")
                                               ._implements (IPredefinedProcessIdentifier.class);
       jEnum.javadoc ().add ("This file is generated. Do NOT edit!");
