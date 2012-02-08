@@ -35,7 +35,7 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.transport.lime.server;
+package at.peppol.transport.lime.server.storage;
 
 import java.io.File;
 import java.io.IOException;
@@ -112,7 +112,7 @@ public final class Channel {
     }
   }
 
-  public void deleteDocument (final String channelID, final String messageID) throws Exception {
+  public void deleteDocument (final String channelID, final String messageID) {
     if (channelID != null && messageID != null) {
       final File channelInboxDir = _getChannelInboxDir (channelID);
       final File metadataFile = _getMetadataFile (channelInboxDir, messageID);
@@ -127,7 +127,7 @@ public final class Channel {
     }
   }
 
-  public String [] getMessageIDs (final String channelID) throws Exception {
+  public String [] getMessageIDs (final String channelID) {
     final File dir = _getChannelInboxDir (channelID);
     final File [] files = dir.listFiles (FilenameFilterFactory.getEndsWithFilter (EXT_PAYLOAD));
     if (files == null)
@@ -167,7 +167,7 @@ public final class Channel {
     return XMLReader.readXMLDOM (FileUtils.getInputStream (payloadFile));
   }
 
-  public long getSize (final String channelID, final String messageID) throws Exception {
+  public long getSize (final String channelID, final String messageID) {
     final File channelInboxDir = _getChannelInboxDir (channelID);
     final File payloadFile = _getPayloadFile (channelInboxDir, messageID);
     final long fileLength = payloadFile.length ();
@@ -176,7 +176,7 @@ public final class Channel {
     return fileLenghtInKB;
   }
 
-  public Date getCreationTime (final String channelID, final String messageID) throws Exception {
+  public Date getCreationTime (final String channelID, final String messageID) {
     final File channelInboxDir = _getChannelInboxDir (channelID);
     final File payloadFile = _getPayloadFile (channelInboxDir, messageID);
     return new Date (payloadFile.lastModified ());

@@ -92,6 +92,7 @@ import at.peppol.transport.MessageMetadataHelper;
 import at.peppol.transport.lime.Identifiers;
 import at.peppol.transport.lime.server.exception.MessageIdReusedException;
 import at.peppol.transport.lime.server.exception.RecipientUnreachableException;
+import at.peppol.transport.lime.server.storage.Channel;
 import at.peppol.transport.lime.soapheader.SoapHeaderReader;
 import at.peppol.transport.start.client.AccessPointClient;
 
