@@ -86,13 +86,13 @@ public final class MessageMetadataHelper {
   private static final QName QNAME_SCHEME = new QName (null, "scheme");
 
   static {
-    final ObjectFactory aObjFactory = new ObjectFactory ();
-    QNAME_MESSAGEID = aObjFactory.createMessageIdentifier (null).getName ();
-    QNAME_CHANNELID = aObjFactory.createChannelIdentifier (null).getName ();
-    QNAME_RECIPIENTID = aObjFactory.createRecipientIdentifier (null).getName ();
-    QNAME_SENDERID = aObjFactory.createSenderIdentifier (null).getName ();
-    QNAME_DOCUMENTID = aObjFactory.createDocumentIdentifier (null).getName ();
-    QNAME_PROCESSID = aObjFactory.createProcessIdentifier (null).getName ();
+    final ObjectFactory aIdentifierObjFactory = new ObjectFactory ();
+    QNAME_MESSAGEID = aIdentifierObjFactory.createMessageIdentifier (null).getName ();
+    QNAME_CHANNELID = aIdentifierObjFactory.createChannelIdentifier (null).getName ();
+    QNAME_RECIPIENTID = aIdentifierObjFactory.createRecipientIdentifier (null).getName ();
+    QNAME_SENDERID = aIdentifierObjFactory.createSenderIdentifier (null).getName ();
+    QNAME_DOCUMENTID = aIdentifierObjFactory.createDocumentIdentifier (null).getName ();
+    QNAME_PROCESSID = aIdentifierObjFactory.createProcessIdentifier (null).getName ();
   }
 
   private MessageMetadataHelper () {}
