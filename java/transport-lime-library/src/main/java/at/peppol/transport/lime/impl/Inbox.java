@@ -57,19 +57,16 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import at.peppol.commons.identifier.SimpleDocumentIdentifier;
-import at.peppol.commons.identifier.SimpleParticipantIdentifier;
-import at.peppol.commons.identifier.SimpleProcessIdentifier;
 import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
 import at.peppol.commons.wsaddr.W3CEndpointReferenceUtils;
+import at.peppol.transport.IMessageMetadata;
 import at.peppol.transport.Identifiers;
-import at.peppol.transport.MessageMetadata;
+import at.peppol.transport.MessageMetadataHelper;
 import at.peppol.transport.lime.IEndpointReference;
 import at.peppol.transport.lime.IInbox;
 import at.peppol.transport.lime.IMessage;
 import at.peppol.transport.lime.IMessageReference;
 import at.peppol.transport.lime.MessageException;
-import at.peppol.transport.lime.soapheader.SoapHeaderReader;
 
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.jaxb.JAXBContextCache;
@@ -83,7 +80,7 @@ import com.sun.xml.ws.developer.JAXWSProperties;
  *         PEPPOL.AT, BRZ, Philip Helger
  */
 public class Inbox implements IInbox {
-  private static final Logger log = LoggerFactory.getLogger (Inbox.class);
+  private static final Logger s_aLogger = LoggerFactory.getLogger (Inbox.class);
 
   public List <IMessageReference> getMessageList (final IReadonlyUsernamePWCredentials credentials,
                                                   final IEndpointReference origEndpointReference) throws MessageException {
@@ -102,7 +99,7 @@ public class Inbox implements IInbox {
       return messages;
     }
     catch (final Exception e) {
-      log.warn ("Inbox error", e);
+      s_aLogger.warn ("Inbox error", e);
       throw new MessageException (e);
     }
   }
@@ -125,8 +122,8 @@ public class Inbox implements IInbox {
                               final IMessageReference messageReferenceInterface) throws MessageException {
     validateCredentials (credentials);
     try {
-      final Resource port = LimeHelper.getServicePort (messageReferenceInterface.getEndpointReference ()
-                                                                                    .getAddress (), credentials);
+      final Resource port = LimeHelper.getServicePort (messageReferenceInterface.getEndpointReference ().getAddress (),
+                                                       credentials);
 
       // TODO is this necessary?
       SoapHeaderMapper.setupHandlerChain ((BindingProvider) port,
@@ -146,13 +143,13 @@ public class Inbox implements IInbox {
         final Message message = new Message ();
         message.setDocument (document);
         message.setMessageID (messageReferenceInterface.getMessageID ());
-        setMessageMetadata (port, messageReferenceInterface, message);
+        _setMessageMetadata (port, message);
         return message;
       }
       throw new MessageException ("No message found with id: " + messageReferenceInterface.getMessageID ());
     }
     catch (final Exception e) {
-      log.warn ("Inbox error: ", e);
+      s_aLogger.warn ("Inbox error: ", e);
       throw new MessageException (e);
     }
   }
@@ -161,8 +158,8 @@ public class Inbox implements IInbox {
                              final IMessageReference messageReferenceInterface) throws MessageException {
     validateCredentials (credentials);
     try {
-      final Resource port = LimeHelper.getServicePort (messageReferenceInterface.getEndpointReference ()
-                                                                                    .getAddress (), credentials);
+      final Resource port = LimeHelper.getServicePort (messageReferenceInterface.getEndpointReference ().getAddress (),
+                                                       credentials);
       SoapHeaderMapper.setupHandlerChain ((BindingProvider) port,
                                           messageReferenceInterface.getEndpointReference ().getChannelID (),
                                           messageReferenceInterface.getMessageID ());
@@ -237,21 +234,13 @@ public class Inbox implements IInbox {
     return morePages;
   }
 
-  private static void setMessageMetadata (final Resource port,
-                                          final IMessageReference messageReferenceInterface,
-                                          final Message message) throws Exception {
-    final HeaderList hl = (HeaderList) ((BindingProvider) port).getResponseContext ()
-                                                               .get (JAXWSProperties.INBOUND_HEADER_LIST_PROPERTY);
-    MessageMetadata soapHeader = SoapHeaderReader.getSoapHeader (hl);
-    soapHeader = new MessageMetadata (messageReferenceInterface.getMessageID (),
-                                      soapHeader.getChannelID (),
-                                      soapHeader.getSenderID (),
-                                      soapHeader.getRecipientID (),
-                                      soapHeader.getDocumentTypeID (),
-                                      soapHeader.getProcessID ());
-    message.setSender (new SimpleParticipantIdentifier (soapHeader.getSenderID ()));
-    message.setReciever (new SimpleParticipantIdentifier (soapHeader.getRecipientID ()));
-    message.setDocumentType (new SimpleDocumentIdentifier (soapHeader.getDocumentTypeID ()));
-    message.setProcessType (new SimpleProcessIdentifier (soapHeader.getProcessID ()));
+  private static void _setMessageMetadata (final Resource port, final Message message) throws Exception {
+    final HeaderList aHeaderList = (HeaderList) ((BindingProvider) port).getResponseContext ()
+                                                                        .get (JAXWSProperties.INBOUND_HEADER_LIST_PROPERTY);
+    final IMessageMetadata soapHeader = MessageMetadataHelper.createMetadataFromHeaders (aHeaderList);
+    message.setSender (soapHeader.getSenderID ());
+    message.setReciever (soapHeader.getRecipientID ());
+    message.setDocumentType (soapHeader.getDocumentTypeID ());
+    message.setProcessType (soapHeader.getProcessID ());
   }
 }

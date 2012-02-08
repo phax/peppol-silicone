@@ -71,13 +71,55 @@ import com.sun.xml.ws.developer.WSBindingProvider;
  * @author Ravnholt<br>
  *         PEPPOL.AT, BRZ, Philip Helger
  */
-public class Outbox implements IOutbox {
-  private static final Logger log = LoggerFactory.getLogger (Outbox.class);
+public final class Outbox implements IOutbox {
+  private static final Logger s_aLogger = LoggerFactory.getLogger (Outbox.class);
 
+  private static void _validateCredentials (@Nonnull final IReadonlyUsernamePWCredentials credentials) throws MessageException {
+    if (credentials == null)
+      throw new MessageException ("Credentials can not be a null value");
+
+    if (StringHelper.hasNoTextAfterTrim (credentials.getUsername ()) ||
+        StringHelper.hasNoTextAfterTrim (credentials.getPassword ())) {
+      throw new MessageException ("Credentials are invalid, username=" +
+                                  credentials.getUsername () +
+                                  " password=" +
+                                  credentials.getPassword ());
+    }
+  }
+
+  @Nonnull
+  private static EndpointReferenceWithMessageID _createEndpointReferenceDocument (final CreateResponse createResponse) {
+    ResourceCreated resourceCreated = (ResourceCreated) createResponse.getAny ();
+    if (resourceCreated == null) {
+      resourceCreated = createResponse.getResourceCreated ();
+      if (resourceCreated == null)
+        throw new IllegalStateException ("No content of create response!");
+    }
+
+    final W3CEndpointReference aEndpointReference = resourceCreated.getEndpointReference ().get (0);
+
+    // Extract address, channel ID and message ID
+    final EndpointReferenceWithMessageID ret = new EndpointReferenceWithMessageID ();
+    ret.setAddress (W3CEndpointReferenceUtils.getAddress (aEndpointReference));
+    for (final Element e : W3CEndpointReferenceUtils.getReferenceParameters (aEndpointReference)) {
+      if (Identifiers.CHANNELID.equals (e.getLocalName ()))
+        ret.setChannelID (e.getTextContent ());
+      else
+        if (Identifiers.MESSAGEID.equals (e.getLocalName ()))
+          ret.setMessageID (e.getTextContent ());
+        else
+          s_aLogger.warn ("EndpointReference contains illegal element " + e.getLocalName ());
+    }
+    return ret;
+  }
+
+  /*
+   * Send a new message and return the created message ID
+   */
   public String sendMessage (final IReadonlyUsernamePWCredentials aCredentials,
                              final IMessage aMessage,
                              final IEndpointReference aEndpointReference) throws MessageException {
-    checkCredentials (aCredentials);
+    _validateCredentials (aCredentials);
 
     try {
       // Create metadata (everything except messageID)
@@ -100,7 +142,7 @@ public class Outbox implements IOutbox {
       final CreateResponse createResponse = aPort.create (new Create ());
 
       // Evaluate "create" response
-      final EndpointReferenceWithMessageID aEndpointDoc = createEndpointReferenceDocument (createResponse);
+      final EndpointReferenceWithMessageID aEndpointDoc = _createEndpointReferenceDocument (createResponse);
 
       // Create "put" port
       aPort = LimeHelper.getServicePort (aEndpointDoc.getAddress (), aCredentials);
@@ -112,48 +154,11 @@ public class Outbox implements IOutbox {
       put.getAny ().add (aMessage.getDocument ().getDocumentElement ());
       aPort.put (put);
 
-      return aMessage.getMessageID ();
+      return aEndpointDoc.getMessageID ();
     }
     catch (final Exception e) {
-      log.warn ("Outbox error", e);
+      s_aLogger.warn ("Outbox error", e);
       throw new MessageException (e);
-    }
-  }
-
-  @Nonnull
-  private static EndpointReferenceWithMessageID createEndpointReferenceDocument (final CreateResponse createResponse) {
-    ResourceCreated resourceCreated = (ResourceCreated) createResponse.getAny ();
-    if (resourceCreated == null) {
-      resourceCreated = createResponse.getResourceCreated ();
-      if (resourceCreated == null)
-        throw new IllegalStateException ("No content of create response!");
-    }
-
-    final W3CEndpointReference aEndpointReference = resourceCreated.getEndpointReference ().get (0);
-    final EndpointReferenceWithMessageID ret = new EndpointReferenceWithMessageID ();
-    ret.setAddress (W3CEndpointReferenceUtils.getAddress (aEndpointReference));
-    for (final Element e : W3CEndpointReferenceUtils.getReferenceParameters (aEndpointReference)) {
-      if (Identifiers.CHANNELID.equals (e.getLocalName ()))
-        ret.setChannelID (e.getTextContent ());
-      else
-        if (Identifiers.MESSAGEID.equals (e.getLocalName ()))
-          ret.setMessageID (e.getTextContent ());
-        else
-          log.warn ("EndpointReference contains illegal element " + e.getLocalName ());
-    }
-    return ret;
-  }
-
-  private static void checkCredentials (@Nonnull final IReadonlyUsernamePWCredentials credentials) throws MessageException {
-    if (credentials == null)
-      throw new MessageException ("Credentials can not be a null value");
-
-    if (StringHelper.hasNoTextAfterTrim (credentials.getUsername ()) ||
-        StringHelper.hasNoTextAfterTrim (credentials.getPassword ())) {
-      throw new MessageException ("Credentials are invalid, username=" +
-                                  credentials.getUsername () +
-                                  " password=" +
-                                  credentials.getPassword ());
     }
   }
 }
