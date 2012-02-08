@@ -60,6 +60,7 @@ import at.peppol.transport.lime.soapheader.SoapHeaderHandler;
  * @author Ravnholt<br>
  *         PEPPOL.AT, BRZ, Philip Helger
  */
+@Deprecated
 public class SoapHeaderMapper {
   private SoapHeaderMapper () {}
 
@@ -76,34 +77,34 @@ public class SoapHeaderMapper {
     setupHandlerChain (bindingProvider, null, null, null, null, channelID, messageID, null);
   }
 
-  public static void setupHandlerChain (final BindingProvider bindingProvider,
-                                        final IReadonlyParticipantIdentifier sender,
-                                        final IReadonlyParticipantIdentifier receiver,
-                                        final IReadonlyDocumentIdentifier documentType,
-                                        final IReadonlyProcessIdentifier processType,
-                                        final String channelID,
-                                        final String messageID,
-                                        final List <Element> referenceParameters) {
+  private static void setupHandlerChain (final BindingProvider bindingProvider,
+                                         final IReadonlyParticipantIdentifier sender,
+                                         final IReadonlyParticipantIdentifier receiver,
+                                         final IReadonlyDocumentIdentifier documentType,
+                                         final IReadonlyProcessIdentifier processType,
+                                         final String channelID,
+                                         final String messageID,
+                                         final List <Element> referenceParameters) {
     final Binding binding = bindingProvider.getBinding ();
     @SuppressWarnings ("rawtypes")
     final List <Handler> handlerList = binding.getHandlerChain ();
-    handlerList.add (createSoapHeaderHandler (sender,
-                                              receiver,
-                                              documentType,
-                                              processType,
-                                              channelID,
-                                              messageID,
-                                              referenceParameters));
+    handlerList.add (_createSoapHeaderHandler (sender,
+                                               receiver,
+                                               documentType,
+                                               processType,
+                                               channelID,
+                                               messageID,
+                                               referenceParameters));
     binding.setHandlerChain (handlerList);
   }
 
-  private static SoapHeaderHandler createSoapHeaderHandler (final IReadonlyParticipantIdentifier sender,
-                                                            final IReadonlyParticipantIdentifier recipient,
-                                                            final IReadonlyDocumentIdentifier documentType,
-                                                            final IReadonlyProcessIdentifier processType,
-                                                            final String channelID,
-                                                            final String messageID,
-                                                            final List <Element> referenceParameters) {
+  private static SoapHeaderHandler _createSoapHeaderHandler (final IReadonlyParticipantIdentifier sender,
+                                                             final IReadonlyParticipantIdentifier recipient,
+                                                             final IReadonlyDocumentIdentifier documentType,
+                                                             final IReadonlyProcessIdentifier processType,
+                                                             final String channelID,
+                                                             final String messageID,
+                                                             final List <Element> referenceParameters) {
     if (documentType != null) {
       final DocumentIdentifierType headerDocumentType = new SimpleDocumentIdentifier (documentType);
       final ParticipantIdentifierType headerRecipient = new SimpleParticipantIdentifier (recipient);

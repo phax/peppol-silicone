@@ -90,15 +90,6 @@ public class SoapHeaderHandler implements SOAPHandler <SOAPMessageContext> {
                             @Nullable final IReadonlyDocumentIdentifier documentType,
                             @Nullable final IReadonlyProcessIdentifier processType,
                             final String channelID,
-                            final String messageID) {
-    this (sender, recipient, documentType, processType, channelID, messageID, null);
-  }
-
-  public SoapHeaderHandler (@Nullable final IReadonlyParticipantIdentifier sender,
-                            @Nullable final IReadonlyParticipantIdentifier recipient,
-                            @Nullable final IReadonlyDocumentIdentifier documentType,
-                            @Nullable final IReadonlyProcessIdentifier processType,
-                            final String channelID,
                             final String messageID,
                             @Nullable final List <Element> referenceParameters) {
     // Create a copy if required

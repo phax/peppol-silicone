@@ -38,8 +38,6 @@
 package at.peppol.transport.start.client;
 
 import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.LogManager;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -60,7 +58,6 @@ import at.peppol.smp.client.SMPServiceCaller;
 import at.peppol.transport.IMessageMetadata;
 import at.peppol.transport.MessageMetadata;
 import at.peppol.transport.PingMessageHelper;
-import at.peppol.transport.start.client.AccessPointClient;
 
 import com.phloc.commons.SystemProperties;
 import com.phloc.commons.charset.CCharset;
@@ -68,7 +65,6 @@ import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.commons.io.streams.StringInputStream;
 import com.phloc.commons.xml.serialize.XMLReader;
-
 
 /**
  * @author Ravnholt<br>
@@ -136,11 +132,12 @@ public class MainPingAccessPoint {
       SystemProperties.setPropertyValue ("com.sun.xml.ws.transport.http.client.HttpTransportPipe.dump",
                                          Boolean.toString (false));
       SystemProperties.setPropertyValue ("com.sun.xml.ws.rx.rm.runtime.ClientTube.dump", Boolean.toString (true));
-      LogManager.getLogManager ()
-                .readConfiguration (new StringInputStream ("handlers=java.util.logging.ConsoleHandler\r\n"
-                                                               + "java.util.logging.ConsoleHandler.level=FINEST",
-                                                           CCharset.CHARSET_ISO_8859_1));
-      java.util.logging.Logger.getLogger ("com.sun.metro.rx").setLevel (Level.FINER);
+      // Metro uses java.util.logging
+      java.util.logging.LogManager.getLogManager ()
+                                  .readConfiguration (new StringInputStream ("handlers=java.util.logging.ConsoleHandler\r\n"
+                                                                                 + "java.util.logging.ConsoleHandler.level=FINEST",
+                                                                             CCharset.CHARSET_ISO_8859_1));
+      java.util.logging.Logger.getLogger ("com.sun.metro.rx").setLevel (java.util.logging.Level.FINER);
     }
     if (true) {
       SystemProperties.setPropertyValue ("com.sun.xml.ws.rx.mc.runtime.McTubeFactory.dump.client.after",
