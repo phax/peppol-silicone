@@ -67,6 +67,7 @@ import at.peppol.transport.lime.IInbox;
 import at.peppol.transport.lime.IMessage;
 import at.peppol.transport.lime.IMessageReference;
 import at.peppol.transport.lime.MessageException;
+import at.peppol.transport.lime.soapheader.SoapHeaderMapper;
 
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.jaxb.JAXBContextCache;

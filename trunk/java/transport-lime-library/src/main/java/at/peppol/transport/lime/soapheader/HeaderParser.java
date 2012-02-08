@@ -48,6 +48,7 @@ import javax.xml.stream.XMLStreamReader;
  * @author Ravnholt<br>
  *         PEPPOL.AT, BRZ, Philip Helger
  */
+@Deprecated
 final class HeaderParser {
   private HeaderParser () {}
 

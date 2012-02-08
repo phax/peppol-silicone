@@ -74,7 +74,8 @@ import com.sun.xml.bind.marshaller.NamespacePrefixMapper;
  * @author Ravnholt<br>
  *         PEPPOL.AT, BRZ, Philip Helger
  */
-public class SoapHeaderHandler implements SOAPHandler <SOAPMessageContext> {
+@Deprecated
+final class SoapHeaderHandler implements SOAPHandler <SOAPMessageContext> {
   private static final Logger log = LoggerFactory.getLogger (SoapHeaderHandler.class.getName ());
 
   private final SimpleParticipantIdentifier m_aRecipient;
