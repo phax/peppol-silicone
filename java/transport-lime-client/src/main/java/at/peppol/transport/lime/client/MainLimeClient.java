@@ -83,7 +83,7 @@ import com.phloc.commons.xml.serialize.XMLReader;
  * @author Ravnholt<br>
  *         PEPPOL.AT, BRZ, Philip Helger
  */
-public final class Main {
+public final class MainLimeClient {
   public static final int POLL_SLEEP_MS = 3000;
   private static boolean s_bLeaveMessages = false;
   private static final IReadonlyParticipantIdentifier SENDER = ReadonlyParticipantIdentifier.createWithDefaultScheme ("9914:atu415427xx");
@@ -107,13 +107,12 @@ public final class Main {
     final String xmlFile = "src/test/resources/xml/CENBII-Order-maximal.xml";
 
     _testSend (apUrl2, xmlFile, SENDER, RECEIVER);
-    /*
-     * new Main().testReadAndDelete(apUrl1, receiver); new
-     * Main().testMessageUndeliverable(apUrl2, xmlFile, sender, receiver);
-     */
+    if (false)
+      _testReadAndDelete (apUrl2, RECEIVER);
+    if (false)
+      _testMessageUndeliverable (apUrl2, xmlFile, SENDER, RECEIVER);
   }
 
-  @SuppressWarnings ("unused")
   private static void _testReadAndDelete (final String apUrl, final IReadonlyIdentifier receiverID) throws Exception {
     final String channelID = receiverID.getValue ();
     final IEndpointReference endpointReference = new EndpointReference ();
@@ -123,7 +122,6 @@ public final class Main {
     _testPollForMessages (endpointReference, s_bLeaveMessages);
   }
 
-  @SuppressWarnings ("unused")
   private static void _testMessageUndeliverable (final String apUrl,
                                                  final String xmlFilename,
                                                  final IReadonlyParticipantIdentifier senderID,

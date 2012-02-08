@@ -109,7 +109,7 @@ import com.sun.xml.ws.developer.JAXWSProperties;
              portName = "ResourceBindingPort",
              endpointInterface = "org.w3._2009._02.ws_tra.Resource",
              targetNamespace = "http://www.w3.org/2009/02/ws-tra",
-             wsdlLocation = "WEB-INF/wsdl/lime-server.wsdl")
+             wsdlLocation = "WEB-INF/wsdl/peppol-lime-1.0.wsdl")
 @HandlerChain (file = "WSTransferService_handler.xml")
 public class LimeService {
   public static final String FAULT_UNKNOWN_ENDPOINT = "The endpoint is not known";
