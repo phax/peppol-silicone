@@ -92,7 +92,6 @@ import at.peppol.transport.lime.server.exception.MessageIdReusedException;
 import at.peppol.transport.lime.server.exception.RecipientUnreachableException;
 import at.peppol.transport.lime.server.storage.LimeStorage;
 import at.peppol.transport.lime.server.storage.MessagePage;
-import at.peppol.transport.lime.soapheader.SoapHeaderReader;
 import at.peppol.transport.start.client.AccessPointClient;
 
 import com.phloc.commons.CGlobal;
@@ -197,7 +196,7 @@ public class LimeService {
   }
 
   @Nonnull
-  public PutResponse put (final Put body) {
+  public PutResponse put (final Put aBody) {
     final HeaderList aHeaderList = _getInboundHeaderList ();
     final String sMessageID = MessageMetadataHelper.getMessageID (aHeaderList);
     final String sOwnAPURL = _getOwnUrl () + SERVICENAME;
@@ -207,26 +206,26 @@ public class LimeService {
       if (aMetadata == null)
         throw new IllegalStateException ("No such message ID found: " + sMessageID);
 
-      final String recipientAccessPointURLstr = _getAccessPointUrl (aMetadata.getRecipientID (),
-                                                                    aMetadata.getDocumentTypeID (),
-                                                                    aMetadata.getProcessID ());
-      final String senderAccessPointURLstr = _getAccessPointUrl (aMetadata.getSenderID (),
-                                                                 aMetadata.getDocumentTypeID (),
-                                                                 aMetadata.getProcessID ());
+      final String sRecipientAccessPointURLstr = _getAccessPointUrl (aMetadata.getRecipientID (),
+                                                                     aMetadata.getDocumentTypeID (),
+                                                                     aMetadata.getProcessID ());
+      final String sSenderAccessPointURLstr = _getAccessPointUrl (aMetadata.getSenderID (),
+                                                                  aMetadata.getDocumentTypeID (),
+                                                                  aMetadata.getProcessID ());
 
-      if (recipientAccessPointURLstr.equalsIgnoreCase (senderAccessPointURLstr)) {
+      if (sRecipientAccessPointURLstr.equalsIgnoreCase (sSenderAccessPointURLstr)) {
         _logRequest ("This is a local request - sending directly to inbox",
                      sOwnAPURL,
                      aMetadata,
                      "INBOX: " + aMetadata.getRecipientID ().getValue ());
-        _sendToInbox (aMetadata, body);
+        _sendToInbox (aMetadata, aBody);
       }
       else {
         _logRequest ("This is a request for a remote access point",
-                     senderAccessPointURLstr,
+                     sSenderAccessPointURLstr,
                      aMetadata,
-                     recipientAccessPointURLstr);
-        _sendToAccessPoint (body, recipientAccessPointURLstr, aMetadata);
+                     sRecipientAccessPointURLstr);
+        _sendToAccessPoint (aBody, sRecipientAccessPointURLstr, aMetadata);
       }
     }
     catch (final RecipientUnreachableException ex) {
@@ -240,11 +239,13 @@ public class LimeService {
     return new PutResponse ();
   }
 
+  private static final QName QNAME_PAGEIDENTIFIER = new QName (Identifiers.NAMESPACE_LIME, Identifiers.PAGEIDENTIFIER);
+
   public GetResponse get (@SuppressWarnings ("unused") final Get body) {
     final HeaderList aHeaderList = _getInboundHeaderList ();
     final String sChannelID = MessageMetadataHelper.getChannelID (aHeaderList);
     final String sMessageID = MessageMetadataHelper.getMessageID (aHeaderList);
-    final String sPageIdentifier = SoapHeaderReader.getPageNumber (webServiceContext);
+    final String sPageIdentifier = MessageMetadataHelper.getStringContent (aHeaderList.get (QNAME_PAGEIDENTIFIER, false));
 
     final GetResponse aGetResponse = new GetResponse ();
     try {
@@ -255,8 +256,8 @@ public class LimeService {
       else
         _addSingleMessageToResponse (sStorageRoot, sChannelID, sMessageID, aGetResponse);
     }
-    catch (final Exception e) {
-      s_aLogger.error ("Error on get", e);
+    catch (final Exception ex) {
+      s_aLogger.error ("Error on get", ex);
     }
     return aGetResponse;
   }

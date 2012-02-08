@@ -173,7 +173,7 @@ public final class MessageMetadataHelper {
   }
 
   @Nullable
-  private static String _getStringContent (@Nullable final Header aHeader) {
+  public static String getStringContent (@Nullable final Header aHeader) {
     if (aHeader == null)
       return null;
     final String sContent = aHeader.getStringContent ();
@@ -182,12 +182,12 @@ public final class MessageMetadataHelper {
 
   @Nullable
   public static String getMessageID (@Nonnull final HeaderList aHeaderList) {
-    return _getStringContent (aHeaderList.get (QNAME_MESSAGEID, false));
+    return getStringContent (aHeaderList.get (QNAME_MESSAGEID, false));
   }
 
   @Nullable
   public static String getChannelID (@Nonnull final HeaderList aHeaderList) {
-    return _getStringContent (aHeaderList.get (QNAME_CHANNELID, false));
+    return getStringContent (aHeaderList.get (QNAME_CHANNELID, false));
   }
 
   @Nullable
