@@ -38,4 +38,4 @@
     under either the MPL or the EUPL License.
 
 -->
-<Context antiJARLocking="true" path="/busdox-transport-lime-server-1.0.1"/>
+<Context antiJARLocking="true" path="/peppol-lime-server"/>

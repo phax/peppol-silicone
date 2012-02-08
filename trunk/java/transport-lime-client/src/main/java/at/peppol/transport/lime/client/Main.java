@@ -67,9 +67,9 @@ import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
 import at.peppol.commons.utils.UsernamePWCredentials;
 import at.peppol.transport.lime.IEndpointReference;
 import at.peppol.transport.lime.IInbox;
-import at.peppol.transport.lime.MessageException;
 import at.peppol.transport.lime.IMessage;
 import at.peppol.transport.lime.IMessageReference;
+import at.peppol.transport.lime.MessageException;
 import at.peppol.transport.lime.impl.EndpointReference;
 import at.peppol.transport.lime.impl.Inbox;
 import at.peppol.transport.lime.impl.Message;
@@ -102,11 +102,11 @@ public final class Main {
 
   public static void main (final String [] args) throws Exception {
     CBusDox.setMetroDebugSystemProperties (true);
-    final String apUrl2 = "http://localhost:8080/busdox-transport-lime-server/limeService";
+    final String apUrl2 = "http://localhost:8091/limeService";
     // any xml will do
-    final String xmlFile = "src/test/java/xml/CENBII-Order-maximal.xml";
+    final String xmlFile = "src/test/resources/xml/CENBII-Order-maximal.xml";
 
-    Main.testSend (apUrl2, xmlFile, SENDER, RECEIVER);
+    _testSend (apUrl2, xmlFile, SENDER, RECEIVER);
     /*
      * new Main().testReadAndDelete(apUrl1, receiver); new
      * Main().testMessageUndeliverable(apUrl2, xmlFile, sender, receiver);
@@ -114,20 +114,20 @@ public final class Main {
   }
 
   @SuppressWarnings ("unused")
-  private static void testReadAndDelete (final String apUrl, final IReadonlyIdentifier receiverID) throws Exception {
+  private static void _testReadAndDelete (final String apUrl, final IReadonlyIdentifier receiverID) throws Exception {
     final String channelID = receiverID.getValue ();
     final IEndpointReference endpointReference = new EndpointReference ();
     endpointReference.setAddress (apUrl);
     endpointReference.setChannelID (channelID);
 
-    testPollForMessages (endpointReference, s_bLeaveMessages);
+    _testPollForMessages (endpointReference, s_bLeaveMessages);
   }
 
   @SuppressWarnings ("unused")
-  private static void testMessageUndeliverable (final String apUrl,
-                                                final String xmlFilename,
-                                                final IReadonlyParticipantIdentifier senderID,
-                                                final IReadonlyParticipantIdentifier receiverID) throws Exception {
+  private static void _testMessageUndeliverable (final String apUrl,
+                                                 final String xmlFilename,
+                                                 final IReadonlyParticipantIdentifier senderID,
+                                                 final IReadonlyParticipantIdentifier receiverID) throws Exception {
     final IReadonlyParticipantIdentifier unFindable = new SimpleParticipantIdentifier (receiverID.getScheme (),
                                                                                        receiverID.getValue () +
                                                                                            "UNKNOWN");
@@ -137,70 +137,69 @@ public final class Main {
     endpointReference.setChannelID (channelID);
 
     try {
-      final IMessage message = createSampleMessage (xmlFilename, senderID, unFindable, DOCID, PROCESS);
-      testSendMessage (message, endpointReference);
+      final IMessage message = _createSampleMessage (xmlFilename, senderID, unFindable, DOCID, PROCESS);
+      _testSendMessage (message, endpointReference);
     }
     catch (final Exception e) {
       // Exception is OK. The method sendMessage fails because of invalid
       // recipient
     }
 
-    final String lastMessage = testGetLastMessage (endpointReference);
-    testGetMessage (lastMessage, endpointReference);
-    testDeleteMessage (lastMessage, endpointReference);
+    final String lastMessage = _testGetLastMessage (endpointReference);
+    _testGetMessage (lastMessage, endpointReference);
+    _testDeleteMessage (lastMessage, endpointReference);
   }
 
-  private static String testSend (final String apUrl,
-                                  final String xmlFilename,
-                                  final IReadonlyParticipantIdentifier senderID,
-                                  final IReadonlyParticipantIdentifier receiverID) throws Exception {
+  private static String _testSend (final String apUrl,
+                                   final String xmlFilename,
+                                   final IReadonlyParticipantIdentifier senderID,
+                                   final IReadonlyParticipantIdentifier receiverID) throws Exception {
     final String channelID = senderID.getValue ();
     final IEndpointReference endpointReference = new EndpointReference ();
     endpointReference.setAddress (apUrl);
     endpointReference.setChannelID (channelID);
 
-    final IMessage message = createSampleMessage (xmlFilename, senderID, receiverID, DOCID, PROCESS);
-    final String messageID = testSendMessage (message, endpointReference);
+    final IMessage message = _createSampleMessage (xmlFilename, senderID, receiverID, DOCID, PROCESS);
+    final String messageID = _testSendMessage (message, endpointReference);
     return messageID;
   }
 
-  private static IReadonlyUsernamePWCredentials createCredentials () {
+  private static IReadonlyUsernamePWCredentials _createCredentials () {
     return new UsernamePWCredentials ("peppol", "peppol");
   }
 
-  private static String testSendMessage (final IMessage message,
-                                         final IEndpointReference endpointReference) throws MessageException {
+  private static String _testSendMessage (final IMessage message, final IEndpointReference endpointReference) throws MessageException {
     String messageid = null;
     for (int i = 0; i < 1; i++) {
 
-      messageid = new Outbox ().sendMessage (createCredentials (), message, endpointReference);
+      messageid = new Outbox ().sendMessage (_createCredentials (), message, endpointReference);
       System.out.println ("OUTBOX - MESSAGE DELIVERED: " + messageid);
     }
     return messageid;
   }
 
-  private static void testGetMessage (final String messageID, final IEndpointReference endpointReference) throws MessageException,
-                                                                                                                 TransformerException,
-                                                                                                                 TransformerFactoryConfigurationError {
+  private static void _testGetMessage (final String messageID, final IEndpointReference endpointReference) throws MessageException,
+                                                                                                          TransformerException,
+                                                                                                          TransformerFactoryConfigurationError {
     final IMessageReference messageReference = new MessageReference ();
     messageReference.setMessageId (messageID);
     messageReference.setEndpointReference (endpointReference);
-    final IMessage fetchedMessage = new Inbox ().getMessage (createCredentials (), messageReference);
+    final IMessage fetchedMessage = new Inbox ().getMessage (_createCredentials (), messageReference);
     if (fetchedMessage != null) {
       System.out.println ("INBOX - MESSAGE: " + messageID);
       System.out.println (fetchedMessage);
-      streamMessage (fetchedMessage, System.out);
+      _streamMessage (fetchedMessage, System.out);
     }
     else {
       System.out.println ("INBOX - MESSAGE NOT FOUND: " + messageID);
     }
   }
 
-  private static String testGetLastMessage (final IEndpointReference endpointReference) throws MessageException,
-                                                                                               TransformerFactoryConfigurationError {
+  private static String _testGetLastMessage (final IEndpointReference endpointReference) throws MessageException,
+                                                                                        TransformerFactoryConfigurationError {
     String lastMessage = null;
-    final List <IMessageReference> messageReferences = new Inbox ().getMessageList (createCredentials (),
-                                                                                            endpointReference);
+    final List <IMessageReference> messageReferences = new Inbox ().getMessageList (_createCredentials (),
+                                                                                    endpointReference);
     if (messageReferences != null && messageReferences.size () > 0) {
       for (final IMessageReference messageReference : messageReferences) {
         System.out.println ("INBOX - MESSAGE: " + messageReference.getMessageID ());
@@ -213,23 +212,21 @@ public final class Main {
     return lastMessage;
   }
 
-  private static void testDeleteMessage (final String messageID, final IEndpointReference endpointReference) throws MessageException,
-                                                                                                                    TransformerFactoryConfigurationError {
+  private static void _testDeleteMessage (final String messageID, final IEndpointReference endpointReference) throws MessageException,
+                                                                                                             TransformerFactoryConfigurationError {
     final IMessageReference messageReference = new MessageReference ();
     messageReference.setMessageId (messageID);
     messageReference.setEndpointReference (endpointReference);
-    new Inbox ().deleteMessage (createCredentials (), messageReference);
+    new Inbox ().deleteMessage (_createCredentials (), messageReference);
     System.out.println ("INBOX - MESSAGE DELETED: " + messageID);
   }
 
-  private static void testPollForMessages (final IEndpointReference endpointReference,
-                                           final boolean leaveMessages) throws TransformerConfigurationException,
-                                                                       TransformerException {
+  private static void _testPollForMessages (final IEndpointReference endpointReference, final boolean leaveMessages) throws TransformerConfigurationException,
+                                                                                                                    TransformerException {
     final IInbox inbox = new Inbox ();
     final long millis = POLL_SLEEP_MS;
     try {
-      final List <IMessageReference> messageReferences = inbox.getMessageList (createCredentials (),
-                                                                                       endpointReference);
+      final List <IMessageReference> messageReferences = inbox.getMessageList (_createCredentials (), endpointReference);
       if (messageReferences != null && messageReferences.size () > 0) {
         System.out.println ("INBOX - RETRIEVED " +
                             messageReferences.size () +
@@ -238,13 +235,13 @@ public final class Main {
         final int index = 1;
         for (final IMessageReference messageReference : messageReferences) {
           try {
-            final IMessage message = inbox.getMessage (createCredentials (), messageReference);
-            streamMessage (message, System.out);
+            final IMessage message = inbox.getMessage (_createCredentials (), messageReference);
+            _streamMessage (message, System.out);
             System.out.println ("INBOX - MESSAGE (" + index + "/" + messageReferences.size () + ")");
             System.out.println (message);
             if (!leaveMessages) {
               // clean up
-              inbox.deleteMessage (createCredentials (), messageReference);
+              inbox.deleteMessage (_createCredentials (), messageReference);
               System.out.println ("INBOX - MESSAGE DELETED: " + message.getMessageID ());
             }
             System.out.println ();
@@ -267,17 +264,17 @@ public final class Main {
     }
   }
 
-  private static Document loadXMLFromFile (final String filename) throws SAXException {
+  private static Document _loadXMLFromFile (final String filename) throws SAXException {
     return XMLReader.readXMLDOM (new FileSystemResource (filename));
   }
 
-  private static IMessage createSampleMessage (final String xmlFilename,
-                                                       final IReadonlyParticipantIdentifier senderID,
-                                                       final IReadonlyParticipantIdentifier receiverID,
-                                                       final IReadonlyDocumentIdentifier documentID,
-                                                       final IReadonlyProcessIdentifier processID) throws SAXException {
+  private static IMessage _createSampleMessage (final String xmlFilename,
+                                                final IReadonlyParticipantIdentifier senderID,
+                                                final IReadonlyParticipantIdentifier receiverID,
+                                                final IReadonlyDocumentIdentifier documentID,
+                                                final IReadonlyProcessIdentifier processID) throws SAXException {
     final IMessage message = new Message ();
-    message.setDocument (loadXMLFromFile (xmlFilename));
+    message.setDocument (_loadXMLFromFile (xmlFilename));
     message.setDocumentType (new SimpleDocumentIdentifier (documentID));
     message.setSender (new SimpleParticipantIdentifier (senderID));
     message.setReciever (new SimpleParticipantIdentifier (receiverID));
@@ -285,8 +282,8 @@ public final class Main {
     return message;
   }
 
-  private static void streamMessage (final IMessage fetchedMessage, final PrintStream out) throws TransformerConfigurationException,
-                                                                                                  TransformerException {
+  private static void _streamMessage (final IMessage fetchedMessage, final PrintStream out) throws TransformerConfigurationException,
+                                                                                           TransformerException {
     final TransformerFactory transformerFactory = TransformerFactory.newInstance ();
     final Transformer transformer = transformerFactory.newTransformer ();
     final DOMSource source = new DOMSource (fetchedMessage.getDocument ());

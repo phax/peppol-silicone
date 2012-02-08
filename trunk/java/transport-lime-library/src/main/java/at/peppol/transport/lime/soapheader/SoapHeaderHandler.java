@@ -41,6 +41,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Nullable;
+import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.namespace.QName;
 import javax.xml.soap.SOAPElement;
@@ -68,7 +69,6 @@ import at.peppol.commons.identifier.SimpleProcessIdentifier;
 
 import com.phloc.commons.jaxb.JAXBContextCache;
 import com.sun.xml.bind.marshaller.NamespacePrefixMapper;
-
 
 /**
  * @author Ravnholt<br>
@@ -177,7 +177,8 @@ public class SoapHeaderHandler implements SOAPHandler <SOAPMessageContext> {
       marshaller.marshal (objFactory.createProcessIdentifier (m_aProcessType), new DOMResult (header));
     }
 
-    marshaller = JAXBContextCache.getInstance ().getFromCache (String.class).createMarshaller ();
+    // java.lang. classes cannot be used with JAXBContextCache
+    marshaller = JAXBContext.newInstance (String.class).createMarshaller ();
     if (m_sChannelID != null) {
       marshaller.marshal (objFactory.createChannelIdentifier (m_sChannelID), new DOMResult (header));
     }

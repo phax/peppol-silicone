@@ -56,12 +56,11 @@ import javax.xml.ws.WebServiceClient;
 import org.w3._2009._02.ws_tra.Resource;
 
 import at.peppol.transport.cert.AccessPointX509TrustManager;
-import at.peppol.transport.lime.ws.WstransferService;
+import at.peppol.transport.lime.ws.LimeClientService;
 
 import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.commons.random.VerySecureRandom;
 import com.phloc.commons.string.StringHelper;
-import com.sun.xml.ws.developer.WSBindingProvider;
 
 /**
  * @author Ravnholt<br>
@@ -74,49 +73,48 @@ public class WebservicePort {
     if (StringHelper.hasNoTextAfterTrim (urlStr))
       throw new Exception ("LIME access point url is empty");
 
-    setupCertificateTrustManager ();
+    _setupCertificateTrustManager ();
 
     // we need the wsdl for the lime version of accesspoint to get rid of ws-rm
     // policies etc.
     final URL wsdlURL = ClassPathResource.getAsURL ("WEB-INF/wsdl/WSTransferService/ws-tra.wsdl");
     // we need the right WebServiceClient annotation in order to retrieve the
     // correct dependencies e.g. servicename, wsdl-location
-    final WebServiceClient ann = WstransferService.class.getAnnotation (WebServiceClient.class);
+    final WebServiceClient ann = LimeClientService.class.getAnnotation (WebServiceClient.class);
     if (ann == null)
-      throw new IllegalStateException (WstransferService.class.getName () + " has no WebServiceClient annotation...");
-    final WstransferService wstransferService = new WstransferService (wsdlURL, new QName (ann.targetNamespace (),
+      throw new IllegalStateException (LimeClientService.class.getName () + " has no WebServiceClient annotation...");
+    final LimeClientService wstransferService = new LimeClientService (wsdlURL, new QName (ann.targetNamespace (),
                                                                                            ann.name ()));
     final Resource port = wstransferService.getResourceBindingPort ();
-    final WSBindingProvider bp = (WSBindingProvider) port;
-    setupBasicAuthentication (bp, basicAuthUsername, basicAuthPassword);
-    bp.setAddress (urlStr);
-    verifyHostname ();
+    final BindingProvider bp = (BindingProvider) port;
+    _setupBasicAuthentication (bp, basicAuthUsername, basicAuthPassword);
+    bp.getRequestContext ().put (BindingProvider.ENDPOINT_ADDRESS_PROPERTY, urlStr);
+    _verifyHostname ();
 
     return port;
   }
 
-  private X509Certificate getRootCert () throws CertificateException {
+  private static X509Certificate _getRootCert () throws CertificateException {
     final X509Certificate x509 = (X509Certificate) CertificateFactory.getInstance ("X.509")
-                                                                     .generateCertificate (this.getClass ()
-                                                                                               .getResourceAsStream ("/peppol-root.crt"));
+                                                                     .generateCertificate (ClassPathResource.getInputStream ("peppol-root.crt"));
     return x509;
   }
 
-  private static void setupBasicAuthentication (final WSBindingProvider bp,
-                                                final String basicAuthUsername,
-                                                final String basicAuthPassword) {
+  private static void _setupBasicAuthentication (final BindingProvider bp,
+                                                 final String basicAuthUsername,
+                                                 final String basicAuthPassword) {
     bp.getRequestContext ().put (BindingProvider.USERNAME_PROPERTY, basicAuthUsername);
     bp.getRequestContext ().put (BindingProvider.PASSWORD_PROPERTY, basicAuthPassword);
   }
 
-  private void setupCertificateTrustManager () throws Exception, KeyManagementException, NoSuchAlgorithmException {
-    final TrustManager [] aTrustManagers = new TrustManager [] { new AccessPointX509TrustManager (null, getRootCert ()) };
+  private void _setupCertificateTrustManager () throws Exception, KeyManagementException, NoSuchAlgorithmException {
+    final TrustManager [] aTrustManagers = new TrustManager [] { new AccessPointX509TrustManager (null, _getRootCert ()) };
     final SSLContext aSSLContext = SSLContext.getInstance ("SSL");
     aSSLContext.init (null, aTrustManagers, VerySecureRandom.getInstance ());
     HttpsURLConnection.setDefaultSSLSocketFactory (aSSLContext.getSocketFactory ());
   }
 
-  private static void verifyHostname () {
+  private static void _verifyHostname () {
     final HostnameVerifier aHostVerifier = new HostnameVerifier () {
       public boolean verify (final String sUrlHostName, final SSLSession aSSLSession) {
         return sUrlHostName.equals (aSSLSession.getPeerHost ());

@@ -39,16 +39,16 @@ package at.peppol.transport.lime.server;
 
 import org.junit.Test;
 
-import at.peppol.transport.lime.server.WSTransferService;
+import at.peppol.transport.lime.server.LimeService;
 
 /**
- * Test class for class {@link WSTransferService}.
+ * Test class for class {@link LimeService}.
  *
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public final class WSTransferServiceTest {
+public final class LimeServiceTest {
   @Test
   public void testCtor () {
-    new WSTransferService ();
+    new LimeService ();
   }
 }
