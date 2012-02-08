@@ -42,8 +42,7 @@ import java.util.Map;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import at.peppol.transport.MessageMetadata;
-
+import at.peppol.transport.IMessageMetadata;
 
 /**
  * @author Ravnholt<br>
@@ -55,7 +54,7 @@ public final class ResourceMemoryStore {
   }
 
   private final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
-  private final Map <String, MessageMetadata> resourceMap = new HashMap <String, MessageMetadata> ();
+  private final Map <String, IMessageMetadata> resourceMap = new HashMap <String, IMessageMetadata> ();
 
   private ResourceMemoryStore () {}
 
@@ -74,7 +73,7 @@ public final class ResourceMemoryStore {
     }
   }
 
-  public boolean createResource (final String messageID, final String urlStr, final MessageMetadata soapHeader) {
+  public boolean createResource (final String messageID, final String urlStr, final IMessageMetadata soapHeader) {
     m_aRWLock.writeLock ().lock ();
     try {
       final String key = getKey (messageID, urlStr);
@@ -88,7 +87,7 @@ public final class ResourceMemoryStore {
     }
   }
 
-  public MessageMetadata getMessage (final String messageID, final String urlStr) {
+  public IMessageMetadata getMessage (final String messageID, final String urlStr) {
     m_aRWLock.readLock ().lock ();
     try {
       final String key = getKey (messageID, urlStr);

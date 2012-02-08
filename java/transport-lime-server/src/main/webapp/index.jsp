@@ -50,7 +50,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Access Point</title>
+        <title>LIME Access Point</title>
         <style type="text/css">
             body {background-color: white; margin: 20px;}
             body, tr, td {font-family: Verdana, Helvetica, sans-serif; color: #416080;}
@@ -64,7 +64,7 @@
     </head>
     <body>
         <h1>LIME Accesspoint</h1>
-        <a href="wstransferService">Service endpoint</a><br/><br/>
-        <a href="wstransferService?wsdl">WSDL</a><br/><br/>
+        <a href="limeService">Service endpoint</a><br/><br/>
+        <a href="limeService?wsdl">WSDL</a><br/><br/>
     </body>
 </html>

@@ -41,7 +41,6 @@ import java.io.StringReader;
 import java.util.List;
 import java.util.UUID;
 
-import javax.annotation.Nullable;
 import javax.jws.HandlerChain;
 import javax.jws.WebService;
 import javax.servlet.ServletContext;
@@ -89,9 +88,9 @@ import at.peppol.commons.sml.ESML;
 import at.peppol.smp.client.SMPServiceCaller;
 import at.peppol.transport.IMessageMetadata;
 import at.peppol.transport.MessageMetadata;
+import at.peppol.transport.MessageMetadataHelper;
 import at.peppol.transport.lime.Identifiers;
 import at.peppol.transport.lime.server.exception.MessageIdReusedException;
-import at.peppol.transport.lime.server.exception.MessageMetadataException;
 import at.peppol.transport.lime.server.exception.RecipientUnreachableException;
 import at.peppol.transport.lime.soapheader.SoapHeaderHandler;
 import at.peppol.transport.lime.soapheader.SoapHeaderReader;
@@ -99,19 +98,20 @@ import at.peppol.transport.start.client.AccessPointClient;
 
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.string.StringHelper;
-
+import com.sun.xml.ws.api.message.HeaderList;
+import com.sun.xml.ws.developer.JAXWSProperties;
 
 /**
  * @author Ravnholt<br>
  *         PEPPOL.AT, BRZ, Philip Helger
  */
-@WebService (serviceName = "wstransferService",
+@WebService (serviceName = "limeService",
              portName = "ResourceBindingPort",
              endpointInterface = "org.w3._2009._02.ws_tra.Resource",
              targetNamespace = "http://www.w3.org/2009/02/ws-tra",
-             wsdlLocation = CBusDox.START_WSDL_PATH)
+             wsdlLocation = "WEB-INF/wsdl/lime-server.wsdl")
 @HandlerChain (file = "WSTransferService_handler.xml")
-public class WSTransferService {
+public class LimeService {
   public static final String FAULT_UNKNOWN_ENDPOINT = "The endpoint is not known";
   public static final String FAULT_CHANNEL_FULL = "The channel is not accepting messages for this destination";
   public static final String FAULT_SECURITY_ERROR = "There is a security error in processing this request";
@@ -121,7 +121,7 @@ public class WSTransferService {
   // used to check if lime-ap has to process a local or remote call
   public static final String LIME_AP_SERVICEURL_PROP = "org.busdox.transport.lime.ap.own_url";
 
-  private static final Logger log = LoggerFactory.getLogger (WSTransferService.class);
+  private static final Logger s_aLogger = LoggerFactory.getLogger (LimeService.class);
 
   static {
     CBusDox.setMetroDebugSystemProperties (true);
@@ -147,14 +147,14 @@ public class WSTransferService {
         addSingleMessageToResponse (realPath, channelID, messageID, aGetResponse);
     }
     catch (final Exception e) {
-      log.error ("Error on get", e);
+      s_aLogger.error ("Error on get", e);
     }
     return aGetResponse;
   }
 
   /**
    * Delete
-   *
+   * 
    * @param body
    *        delete body
    * @return response
@@ -168,39 +168,26 @@ public class WSTransferService {
       new Channel (realPath).deleteDocument (channelID, messageID);
     }
     catch (final Exception ex) {
-      log.error (null, ex);
+      s_aLogger.error (null, ex);
     }
     return new DeleteResponse ();
   }
 
-  public CreateResponse create (@SuppressWarnings ("unused") final Create body,
-                                @SuppressWarnings ("unused") final String messageIdHeader,
-                                final String channelIdHeader,
-                                final ParticipantIdentifierType recipientIdHeader,
-                                final ParticipantIdentifierType senderIdHeader,
-                                final DocumentIdentifierType documentIdHeader,
-                                final ProcessIdentifierType processIdHeader) {
+  public CreateResponse create (@SuppressWarnings ("unused") final Create body) {
     final String messageID = "uuid:" + UUID.randomUUID ().toString ();
-    MessageMetadata soapHeader = null;
+    IMessageMetadata soapHeader = null;
     final String thisURLstr = getOwnUrl () + SERVICENAME;
+
     try {
-      soapHeader = getMessageMetadata (senderIdHeader,
-                                       recipientIdHeader,
-                                       documentIdHeader,
-                                       processIdHeader,
-                                       messageID,
-                                       channelIdHeader);
-      if (soapHeader == null) {
-        throw new MessageMetadataException ("Message metadata fields are missing");
-      }
+      // Grabs the list of headers from the SOAP message
+      final HeaderList aHeaderList = (HeaderList) webServiceContext.getMessageContext ()
+                                                                   .get (JAXWSProperties.INBOUND_HEADER_LIST_PROPERTY);
+      soapHeader = MessageMetadataHelper.createMetadataFromHeaders (aHeaderList);
 
       final boolean isNewID = ResourceMemoryStore.getInstance ().createResource (messageID, thisURLstr, soapHeader);
       if (!isNewID) {
         throw new MessageIdReusedException ("Message id " + messageID + " is reused");
       }
-    }
-    catch (final MessageMetadataException ex) {
-      throwSoapFault (FAULT_SERVER_ERROR, ex);
     }
     catch (final MessageIdReusedException ex) {
       throwSoapFault (FAULT_SERVER_ERROR, ex);
@@ -214,7 +201,7 @@ public class WSTransferService {
   public PutResponse put (final Put body) {
     final String messageID = SoapHeaderReader.getMessageID (webServiceContext);
     final String ownLIMEServiceURLStr = getOwnUrl () + SERVICENAME;
-    final MessageMetadata soapHdr = ResourceMemoryStore.getInstance ().getMessage (messageID, ownLIMEServiceURLStr);
+    final IMessageMetadata soapHdr = ResourceMemoryStore.getInstance ().getMessage (messageID, ownLIMEServiceURLStr);
 
     try {
       final String recipientAccessPointURLstr = getAccessPointUrl (soapHdr.getRecipientID (),
@@ -251,7 +238,7 @@ public class WSTransferService {
   }
 
   private static CreateResponse getCreateResponse (final String thisURLstr,
-                                                   final MessageMetadata soapHeader,
+                                                   final IMessageMetadata soapHeader,
                                                    final String messageID) {
     final CreateResponse createResponse = new CreateResponse ();
     final W3CEndpointReference w3CEndpointReference = getW3CEndpointReference (thisURLstr, soapHeader, messageID);
@@ -262,7 +249,7 @@ public class WSTransferService {
   }
 
   private static W3CEndpointReference getW3CEndpointReference (final String thisURLstr,
-                                                               final MessageMetadata soapHeader,
+                                                               final IMessageMetadata soapHeader,
                                                                final String messageID) {
     final String endpointReferenceXML = "<wsa:EndpointReference xmlns:wsa=\"http://www.w3.org/2005/08/addressing\" >"
                                         + "<wsa:Address>" +
@@ -297,13 +284,16 @@ public class WSTransferService {
   private void sendMessageUndeliverable (final Exception ex,
                                          final String messageID,
                                          final ReasonCodeType reasonCodeType,
-                                         final MessageMetadata messageMetadata) {
+                                         final IMessageMetadata messageMetadata) {
     if (messageMetadata == null) {
-      log.error ("No message metadata found. Unable to send MessageUndeliverable for Message ID: " + messageID);
+      s_aLogger.error ("No message metadata found. Unable to send MessageUndeliverable for Message ID: " + messageID);
     }
     else {
       try {
-        log.warn ("Unable to send MessageUndeliverable for Message ID: " + messageID + " Reason: " + ex.getMessage ());
+        s_aLogger.warn ("Unable to send MessageUndeliverable for Message ID: " +
+                        messageID +
+                        " Reason: " +
+                        ex.getMessage ());
 
         final MessageUndeliverableType messageUndeliverableType = m_aObjFactory.createMessageUndeliverableType ();
         messageUndeliverableType.setMessageIdentifier (messageID);
@@ -336,14 +326,14 @@ public class WSTransferService {
         sendToInbox (aRealMetadata, put);
       }
       catch (final Exception ex1) {
-        log.error ("Unable to send MessageUndeliverable for Message ID: " + messageID, ex1);
+        s_aLogger.error ("Unable to send MessageUndeliverable for Message ID: " + messageID, ex1);
       }
     }
   }
 
   private static void throwSoapFault (final String faultMessage, final Exception e) throws RuntimeException {
     try {
-      log.info ("Server error", e);
+      s_aLogger.info ("Server error", e);
       final SOAPFault soapFault = SOAPFactory.newInstance ().createFault ();
       soapFault.setFaultString (faultMessage);
       soapFault.setFaultCode (new QName (SOAPConstants.URI_NS_SOAP_ENVELOPE, "Sender"));
@@ -413,7 +403,7 @@ public class WSTransferService {
 
   private static void logRequest (final String action,
                                   final String ownUrl,
-                                  final MessageMetadata soapHdr,
+                                  final IMessageMetadata soapHdr,
                                   final String nextUrl) {
     final String NEWLINE = CGlobal.LINE_SEPARATOR;
 
@@ -433,7 +423,7 @@ public class WSTransferService {
     strbuf.append (NEWLINE + "Process type: " + soapHdr.getProcessID ().getScheme ());
     strbuf.append (NEWLINE + "REQUEST end----------------------------------------------------" + NEWLINE);
 
-    log.info (strbuf.toString ());
+    s_aLogger.info (strbuf.toString ());
   }
 
   private static void sendToAccessPoint (final Put body,
@@ -451,7 +441,7 @@ public class WSTransferService {
     }
     final String messageID = SoapHeaderReader.getMessageID (webServiceContext);
 
-    log.info ("Recipient: " + soapHdr.getRecipientID () + "; ChannelID: " + channelID);
+    s_aLogger.info ("Recipient: " + soapHdr.getRecipientID () + "; ChannelID: " + channelID);
 
     try {
       final List <Object> objects = body.getAny ();
@@ -468,28 +458,9 @@ public class WSTransferService {
       }
     }
     catch (final Exception ex) {
-      log.error (null, ex);
+      s_aLogger.error (null, ex);
       throw new RecipientUnreachableException (ex);
     }
-  }
-
-  @Nullable
-  private static MessageMetadata getMessageMetadata (final ParticipantIdentifierType senderIdHeader,
-                                                     final ParticipantIdentifierType recipientIdHeader,
-                                                     final DocumentIdentifierType documentIdHeader,
-                                                     final ProcessIdentifierType processIdHeader,
-                                                     final String messageID,
-                                                     final String channelIdHeader) {
-    MessageMetadata soapHdr = null;
-    if (senderIdHeader != null && recipientIdHeader != null && documentIdHeader != null && processIdHeader != null) {
-      soapHdr = new MessageMetadata (messageID,
-                                     channelIdHeader,
-                                     senderIdHeader,
-                                     recipientIdHeader,
-                                     documentIdHeader,
-                                     processIdHeader);
-    }
-    return soapHdr;
   }
 
   private static String getAccessPointUrl (final ParticipantIdentifierType recipientId,

@@ -45,7 +45,6 @@
   <servlet>
     <servlet-name>limeService</servlet-name>
     <servlet-class>com.sun.xml.ws.transport.http.servlet.WSServlet</servlet-class>
-    <load-on-startup>1</load-on-startup>
   </servlet>
   <servlet-mapping>
     <servlet-name>limeService</servlet-name>

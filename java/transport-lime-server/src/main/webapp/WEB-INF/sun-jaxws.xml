@@ -39,7 +39,7 @@
 
 -->
 <endpoints version="2.0" xmlns="http://java.sun.com/xml/ns/jax-ws/ri/runtime">
-  <endpoint name="wstransferService" 
-            implementation="at.peppol.transport.lime.server.WSTransferService" 
+  <endpoint name="limeService" 
+            implementation="at.peppol.transport.lime.server.LimeService" 
             url-pattern="/limeService"/>
 </endpoints>
