@@ -54,11 +54,10 @@ import at.peppol.commons.sml.ISMLInfo;
 import com.phloc.commons.annotations.DevelopersNote;
 import com.phloc.commons.random.VerySecureRandom;
 
-
 /**
  * This class tests the URL connection to the SML that is secured with client
  * certificates.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @DevelopersNote ("You need to create a keystore file !")

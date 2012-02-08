@@ -56,6 +56,7 @@ import javax.xml.ws.WebServiceClient;
 import org.w3._2009._02.ws_tra.Resource;
 
 import at.peppol.busdox.CBusDox;
+import at.peppol.transport.cert.AccessPointX509TrustManager;
 import at.peppol.transport.lime.ws.WstransferService;
 
 import com.phloc.commons.io.resource.ClassPathResource;
