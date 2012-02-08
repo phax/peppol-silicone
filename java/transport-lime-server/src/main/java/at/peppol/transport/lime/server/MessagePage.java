@@ -145,13 +145,13 @@ public final class MessagePage {
                                       final String channelID) {
     final Document aDummyDoc = XMLFactory.newDocument ();
     final List <Element> referenceParametersType = new ArrayList <Element> ();
-    Element element = aDummyDoc.createElementNS (Identifiers.NAMESPACE_LIME, Identifiers.PAGEIDENTIFIER);
-    element.appendChild (aDummyDoc.createTextNode (Integer.toString (curPageNum + 1)));
-    referenceParametersType.add (element);
+    Element aElement = aDummyDoc.createElementNS (Identifiers.NAMESPACE_LIME, Identifiers.PAGEIDENTIFIER);
+    aElement.appendChild (aDummyDoc.createTextNode (Integer.toString (curPageNum + 1)));
+    referenceParametersType.add (aElement);
 
-    element = aDummyDoc.createElementNS (Identifiers.NAMESPACE_TRANSPORT_IDS, Identifiers.CHANNELID);
-    element.appendChild (aDummyDoc.createTextNode (channelID));
-    referenceParametersType.add (element);
+    aElement = aDummyDoc.createElementNS (Identifiers.NAMESPACE_TRANSPORT_IDS, Identifiers.CHANNELID);
+    aElement.appendChild (aDummyDoc.createTextNode (channelID));
+    referenceParametersType.add (aElement);
 
     final NextPageIdentifierType nextPageIdentifierType = m_aObjFactory.createNextPageIdentifierType ();
     final W3CEndpointReference endpointReferenceType = W3CEndpointReferenceUtils.createEndpointReference (endpoint,

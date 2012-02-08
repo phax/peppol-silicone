@@ -37,10 +37,12 @@
  */
 package at.peppol.transport.lime.server;
 
-import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Resource;
 import javax.jws.HandlerChain;
 import javax.jws.WebService;
 import javax.servlet.ServletContext;
@@ -55,7 +57,6 @@ import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPFactory;
 import javax.xml.soap.SOAPFault;
 import javax.xml.transform.dom.DOMResult;
-import javax.xml.transform.stream.StreamSource;
 import javax.xml.ws.Binding;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.WebServiceContext;
@@ -86,6 +87,7 @@ import org.w3c.dom.Element;
 
 import at.peppol.busdox.CBusDox;
 import at.peppol.commons.sml.ESML;
+import at.peppol.commons.wsaddr.W3CEndpointReferenceUtils;
 import at.peppol.smp.client.SMPServiceCaller;
 import at.peppol.transport.IMessageMetadata;
 import at.peppol.transport.MessageMetadata;
@@ -99,6 +101,7 @@ import at.peppol.transport.start.client.AccessPointClient;
 
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.xml.XMLFactory;
 import com.sun.xml.ws.api.message.HeaderList;
 import com.sun.xml.ws.developer.JAXWSProperties;
 
@@ -119,9 +122,6 @@ public class LimeService {
   public static final String FAULT_SERVER_ERROR = "ServerError";
   public static final String SERVICENAME = LimeService.class.getAnnotation (WebService.class).serviceName ();
 
-  // used to check if lime-ap has to process a local or remote call
-  public static final String LIME_AP_SERVICEURL_PROP = "org.busdox.transport.lime.ap.own_url";
-
   private static final Logger s_aLogger = LoggerFactory.getLogger (LimeService.class);
 
   static {
@@ -131,8 +131,108 @@ public class LimeService {
 
   private final ObjectFactory m_aObjFactory = new ObjectFactory ();
 
-  @javax.annotation.Resource
+  @Resource
   private WebServiceContext webServiceContext;
+
+  @Nonnull
+  private HeaderList _getInboundHeaderList () {
+    return (HeaderList) webServiceContext.getMessageContext ().get (JAXWSProperties.INBOUND_HEADER_LIST_PROPERTY);
+  }
+
+  @Nonnull
+  private static W3CEndpointReference _createW3CEndpointReference (final String sOurAPURL,
+                                                                   final String sChannelID,
+                                                                   final String sMessageID) {
+    final Document aDummyDoc = XMLFactory.newDocument ();
+    final List <Element> aReferenceParameters = new ArrayList <Element> ();
+    Element aElement = aDummyDoc.createElementNS (Identifiers.NAMESPACE_TRANSPORT_IDS, Identifiers.CHANNELID);
+    aElement.appendChild (aDummyDoc.createTextNode (sChannelID));
+    aReferenceParameters.add (aElement);
+    aElement = aDummyDoc.createElementNS (Identifiers.NAMESPACE_TRANSPORT_IDS, Identifiers.MESSAGEID);
+    aElement.appendChild (aDummyDoc.createTextNode (sMessageID));
+    aReferenceParameters.add (aElement);
+
+    return W3CEndpointReferenceUtils.createEndpointReference (sOurAPURL, aReferenceParameters);
+  }
+
+  @Nonnull
+  private static CreateResponse _createCreateResponse (final String sOurAPURL,
+                                                       final String sChannelID,
+                                                       final String sMessageID) {
+    final W3CEndpointReference w3CEndpointReference = _createW3CEndpointReference (sOurAPURL, sChannelID, sMessageID);
+
+    final CreateResponse createResponse = new CreateResponse ();
+    final ResourceCreated resourceCreated = new ResourceCreated ();
+    resourceCreated.getEndpointReference ().add (w3CEndpointReference);
+    createResponse.setResourceCreated (resourceCreated);
+    return createResponse;
+  }
+
+  @Nonnull
+  public CreateResponse create (@SuppressWarnings ("unused") final Create body) {
+    final String sMessageID = "uuid:" + UUID.randomUUID ().toString ();
+    IMessageMetadata aMetadata = null;
+    final String sOurAPURL = getOwnUrl () + SERVICENAME;
+
+    try {
+      // Grabs the list of headers from the SOAP message
+      final HeaderList aHeaderList = _getInboundHeaderList ();
+      aMetadata = MessageMetadataHelper.createMetadataFromHeadersWithCustomMessageID (aHeaderList, sMessageID);
+
+      if (ResourceMemoryStore.getInstance ().createResource (sMessageID, sOurAPURL, aMetadata).isUnchanged ())
+        throw new MessageIdReusedException ("Message id " + sMessageID + " is reused");
+    }
+    catch (final Exception ex) {
+      throw _createSoapFault (FAULT_SERVER_ERROR, ex);
+    }
+
+    // Will not happen
+    if (aMetadata == null)
+      throw _createSoapFault (FAULT_SERVER_ERROR, new IllegalStateException ());
+
+    return _createCreateResponse (sOurAPURL, aMetadata.getChannelID (), sMessageID);
+  }
+
+  @Nonnull
+  public PutResponse put (final Put body) {
+    final HeaderList aHeaderList = _getInboundHeaderList ();
+    final String sMessageID = MessageMetadataHelper.getMessageID (aHeaderList);
+    final String sOwnAPURL = getOwnUrl () + SERVICENAME;
+    final IMessageMetadata aMetadata = ResourceMemoryStore.getInstance ().getMessage (sMessageID, sOwnAPURL);
+
+    try {
+      final String recipientAccessPointURLstr = getAccessPointUrl (aMetadata.getRecipientID (),
+                                                                   aMetadata.getDocumentTypeID (),
+                                                                   aMetadata.getProcessID ());
+      final String senderAccessPointURLstr = getAccessPointUrl (aMetadata.getSenderID (),
+                                                                aMetadata.getDocumentTypeID (),
+                                                                aMetadata.getProcessID ());
+
+      if (recipientAccessPointURLstr.equalsIgnoreCase (senderAccessPointURLstr)) {
+        logRequest ("This is a local request - sending directly to inbox",
+                    sOwnAPURL,
+                    aMetadata,
+                    "INBOX: " + aMetadata.getRecipientID ().getValue ());
+        sendToInbox (aMetadata, body);
+      }
+      else {
+        logRequest ("This is a request for a remote access point",
+                    senderAccessPointURLstr,
+                    aMetadata,
+                    recipientAccessPointURLstr);
+        sendToAccessPoint (body, recipientAccessPointURLstr, aMetadata);
+      }
+    }
+    catch (final RecipientUnreachableException ex) {
+      sendMessageUndeliverable (ex, sMessageID, ReasonCodeType.TRANSPORT_ERROR, aMetadata);
+      throw _createSoapFault (FAULT_UNKNOWN_ENDPOINT, ex);
+    }
+    catch (final Exception ex) {
+      sendMessageUndeliverable (ex, sMessageID, ReasonCodeType.OTHER_ERROR, aMetadata);
+      throw _createSoapFault (FAULT_SERVER_ERROR, ex);
+    }
+    return new PutResponse ();
+  }
 
   public GetResponse get (@SuppressWarnings ("unused") final Get body) {
     final String realPath = ((ServletContext) webServiceContext.getMessageContext ()
@@ -170,117 +270,9 @@ public class LimeService {
       new Channel (realPath).deleteDocument (channelID, messageID);
     }
     catch (final Exception ex) {
-      s_aLogger.error (null, ex);
+      s_aLogger.error ("Error deleting document", ex);
     }
     return new DeleteResponse ();
-  }
-
-  public CreateResponse create (@SuppressWarnings ("unused") final Create body) {
-    final String messageID = "uuid:" + UUID.randomUUID ().toString ();
-    IMessageMetadata soapHeader = null;
-    final String thisURLstr = getOwnUrl () + SERVICENAME;
-
-    try {
-      // Grabs the list of headers from the SOAP message
-      final HeaderList aHeaderList = (HeaderList) webServiceContext.getMessageContext ()
-                                                                   .get (JAXWSProperties.INBOUND_HEADER_LIST_PROPERTY);
-      soapHeader = MessageMetadataHelper.createMetadataFromHeaders (aHeaderList);
-
-      final boolean isNewID = ResourceMemoryStore.getInstance ().createResource (messageID, thisURLstr, soapHeader);
-      if (!isNewID) {
-        throw new MessageIdReusedException ("Message id " + messageID + " is reused");
-      }
-    }
-    catch (final MessageIdReusedException ex) {
-      throwSoapFault (FAULT_SERVER_ERROR, ex);
-    }
-    catch (final Exception ex) {
-      throwSoapFault (FAULT_SERVER_ERROR, ex);
-    }
-    return getCreateResponse (thisURLstr, soapHeader, messageID);
-  }
-
-  public PutResponse put (final Put body) {
-    final String messageID = SoapHeaderReader.getMessageID (webServiceContext);
-    final String ownLIMEServiceURLStr = getOwnUrl () + SERVICENAME;
-    final IMessageMetadata soapHdr = ResourceMemoryStore.getInstance ().getMessage (messageID, ownLIMEServiceURLStr);
-
-    try {
-      final String recipientAccessPointURLstr = getAccessPointUrl (soapHdr.getRecipientID (),
-                                                                   soapHdr.getDocumentTypeID (),
-                                                                   soapHdr.getProcessID ());
-      final String senderAccessPointURLstr = getAccessPointUrl (soapHdr.getSenderID (),
-                                                                soapHdr.getDocumentTypeID (),
-                                                                soapHdr.getProcessID ());
-
-      if (recipientAccessPointURLstr.equalsIgnoreCase (senderAccessPointURLstr)) {
-        logRequest ("This is a local request - sending directly to inbox",
-                    ownLIMEServiceURLStr,
-                    soapHdr,
-                    "INBOX: " + soapHdr.getRecipientID ().getValue ());
-        sendToInbox (soapHdr, body);
-      }
-      else {
-        logRequest ("This is a request for a remote access point",
-                    senderAccessPointURLstr,
-                    soapHdr,
-                    recipientAccessPointURLstr);
-        sendToAccessPoint (body, recipientAccessPointURLstr, soapHdr);
-      }
-    }
-    catch (final RecipientUnreachableException ex) {
-      sendMessageUndeliverable (ex, messageID, ReasonCodeType.TRANSPORT_ERROR, soapHdr);
-      throwSoapFault (FAULT_UNKNOWN_ENDPOINT, ex);
-    }
-    catch (final Exception ex) {
-      sendMessageUndeliverable (ex, messageID, ReasonCodeType.OTHER_ERROR, soapHdr);
-      throwSoapFault (FAULT_SERVER_ERROR, ex);
-    }
-    return new PutResponse ();
-  }
-
-  private static CreateResponse getCreateResponse (final String thisURLstr,
-                                                   final IMessageMetadata soapHeader,
-                                                   final String messageID) {
-    final CreateResponse createResponse = new CreateResponse ();
-    final W3CEndpointReference w3CEndpointReference = getW3CEndpointReference (thisURLstr, soapHeader, messageID);
-    final ResourceCreated resourceCreated = new ResourceCreated ();
-    resourceCreated.getEndpointReference ().add (w3CEndpointReference);
-    createResponse.setResourceCreated (resourceCreated);
-    return createResponse;
-  }
-
-  private static W3CEndpointReference getW3CEndpointReference (final String thisURLstr,
-                                                               final IMessageMetadata soapHeader,
-                                                               final String messageID) {
-    final String endpointReferenceXML = "<wsa:EndpointReference xmlns:wsa=\"http://www.w3.org/2005/08/addressing\" >"
-                                        + "<wsa:Address>" +
-                                        thisURLstr +
-                                        "</wsa:Address>" +
-                                        "<wsa:ReferenceParameters>" +
-                                        "<" +
-                                        Identifiers.CHANNELID +
-                                        " xmlns=\"" +
-                                        Identifiers.NAMESPACE_TRANSPORT_IDS +
-                                        "\">" +
-                                        soapHeader.getChannelID () +
-                                        "</" +
-                                        Identifiers.CHANNELID +
-                                        ">" +
-                                        "<" +
-                                        Identifiers.MESSAGEID +
-                                        " xmlns=\"" +
-                                        Identifiers.NAMESPACE_TRANSPORT_IDS +
-                                        "\">" +
-                                        messageID +
-                                        "</" +
-                                        Identifiers.MESSAGEID +
-                                        ">" +
-                                        "</wsa:ReferenceParameters>" +
-                                        "</wsa:EndpointReference>";
-    final StreamSource source = new StreamSource (new StringReader (endpointReferenceXML));
-    final W3CEndpointReference w3CEndpointReference = new W3CEndpointReference (source);
-    return w3CEndpointReference;
   }
 
   private void sendMessageUndeliverable (final Exception ex,
@@ -333,14 +325,15 @@ public class LimeService {
     }
   }
 
-  private static void throwSoapFault (final String faultMessage, final Exception e) throws RuntimeException {
+  @Nonnull
+  private static SOAPFaultException _createSoapFault (final String faultMessage, final Exception e) throws RuntimeException {
     try {
       s_aLogger.info ("Server error", e);
       final SOAPFault soapFault = SOAPFactory.newInstance ().createFault ();
       soapFault.setFaultString (faultMessage);
       soapFault.setFaultCode (new QName (SOAPConstants.URI_NS_SOAP_ENVELOPE, "Sender"));
       soapFault.setFaultActor ("LIME AP");
-      throw new SOAPFaultException (soapFault);
+      return new SOAPFaultException (soapFault);
     }
     catch (final SOAPException e2) {
       throw new RuntimeException ("Problem processing SOAP Fault on service-side", e2);

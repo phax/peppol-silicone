@@ -63,8 +63,8 @@ import com.phloc.commons.string.StringHelper;
  * @author Ravnholt<br>
  *         PEPPOL.AT, BRZ, Philip Helger
  */
-public final class WebservicePort {
-  private WebservicePort () {}
+public final class LimeHelper {
+  private LimeHelper () {}
 
   private static void _setupSSLSocketFactory () throws Exception, KeyManagementException, NoSuchAlgorithmException {
     final X509Certificate aRootCert = (X509Certificate) CertificateFactory.getInstance ("X.509")

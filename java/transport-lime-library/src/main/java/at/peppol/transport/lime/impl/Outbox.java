@@ -37,38 +37,26 @@
  */
 package at.peppol.transport.lime.impl;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.StringReader;
 import java.util.List;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.ws.BindingProvider;
 import javax.xml.ws.wsaddressing.W3CEndpointReference;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
 
-import org.busdox.transport.identifiers._1.ProcessIdentifierType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3._2009._02.ws_tra.Create;
 import org.w3._2009._02.ws_tra.CreateResponse;
 import org.w3._2009._02.ws_tra.Put;
 import org.w3._2009._02.ws_tra.Resource;
-import org.w3c.dom.DOMException;
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
+import org.w3._2009._02.ws_tra.ResourceCreated;
+import org.w3c.dom.Element;
 
+import at.peppol.commons.identifier.SimpleProcessIdentifier;
 import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
+import at.peppol.commons.wsaddr.W3CEndpointReferenceUtils;
+import at.peppol.transport.IMessageMetadata;
+import at.peppol.transport.MessageMetadata;
+import at.peppol.transport.MessageMetadataHelper;
 import at.peppol.transport.lime.IEndpointReference;
 import at.peppol.transport.lime.IMessage;
 import at.peppol.transport.lime.IOutbox;
@@ -76,6 +64,8 @@ import at.peppol.transport.lime.Identifiers;
 import at.peppol.transport.lime.MessageException;
 
 import com.phloc.commons.string.StringHelper;
+import com.sun.xml.ws.api.message.Header;
+import com.sun.xml.ws.developer.WSBindingProvider;
 
 /**
  * @author Ravnholt<br>
@@ -84,65 +74,45 @@ import com.phloc.commons.string.StringHelper;
 public class Outbox implements IOutbox {
   private static final Logger log = LoggerFactory.getLogger (Outbox.class);
 
-  public String sendMessage (final IReadonlyUsernamePWCredentials credentials,
-                             final IMessage message,
-                             final IEndpointReference endpointReferenceInterface) throws MessageException {
-    checkCredentials (credentials);
+  public String sendMessage (final IReadonlyUsernamePWCredentials aCredentials,
+                             final IMessage aMessage,
+                             final IEndpointReference aEndpointReference) throws MessageException {
+    checkCredentials (aCredentials);
 
     try {
-      Resource port = WebservicePort.getServicePort (endpointReferenceInterface.getAddress (), credentials);
-      // new SoapHeaderMapper().setupHandlerChain((BindingProvider) port,
-      // message.getSender(), message.getReciever(), message.getDocumentType(),
-      // message.getProcessType(), endpointReferenceInterface.getChannelID(),
-      // null, null);
-      final Create create = new Create ();
+      // Create metadata (everything except messageID)
+      final IMessageMetadata aMetadata = new MessageMetadata (null,
+                                                              aEndpointReference.getChannelID (),
+                                                              aMessage.getSender (),
+                                                              aMessage.getReciever (),
+                                                              aMessage.getDocumentType (),
+                                                              aMessage.getProcessType () != null
+                                                                                                ? aMessage.getProcessType ()
+                                                                                                : new SimpleProcessIdentifier (Identifiers.BUSDOX_PROCID_TRANSPORT,
+                                                                                                                               Identifiers.BUSDOX_NO_PROCESS));
 
-      /*
-       * final ParticipantIdentifierType sender = new
-       * SimpleParticipantIdentifier (message.getSender ()); final
-       * ParticipantIdentifierType reciever = new SimpleParticipantIdentifier
-       * (message.getReciever ()); final DocumentIdentifierType documentType =
-       * new SimpleDocumentIdentifier (message.getDocumentType ());
-       */
-      final ProcessIdentifierType processType = new ProcessIdentifierType ();
-      if (message.getProcessType () != null && StringHelper.hasTextAfterTrim (message.getProcessType ().getValue ())) {
-        processType.setValue (message.getProcessType ().getValue ());
-        processType.setScheme (message.getProcessType ().getScheme ());
-      }
-      else {
-        processType.setValue (Identifiers.BUSDOX_NO_PROCESS);
-        processType.setScheme (Identifiers.BUSDOX_PROCID_TRANSPORT);
-      }
+      // Create "create" port
+      Resource aPort = LimeHelper.getServicePort (aEndpointReference.getAddress (), aCredentials);
+      List <Header> aHeaders = MessageMetadataHelper.createHeadersFromMetadata (aMetadata);
+      ((WSBindingProvider) aPort).setOutboundHeaders (aHeaders);
 
-      final CreateResponse createResponse = port.create (create);
-      /**
-       * FIXME correct service call!<br>
-       * null, endpointReferenceInterface.getChannelID (), reciever, sender,
-       * documentType, processType);
-       */
-      // CreateResponse createResponse = port.create(create, null, null, null,
-      // null, null, null);
-      // CreateResponse createResponse = port.create(create);
+      // Perform "create" action
+      final CreateResponse createResponse = aPort.create (new Create ());
 
-      final Document endpointDoc = getEndpointReferenceDocument (createResponse);
-      final XPath xpath = XPathFactory.newInstance ().newXPath ();
-      final String endpointAddress = getNodeValue (xpath, "/EndpointReference/Address/text()", endpointDoc);
-      final String channelID = getNodeValue (xpath,
-                                             "/EndpointReference/ReferenceParameters/ChannelIdentifier/text()",
-                                             endpointDoc);
-      final String messageID = getNodeValue (xpath,
-                                             "/EndpointReference/ReferenceParameters/MessageIdentifier/text()",
-                                             endpointDoc);
+      // Evaluate "create" response
+      final EndpointReferenceWithMessageID aEndpointDoc = createEndpointReferenceDocument (createResponse);
 
-      port = WebservicePort.getServicePort (endpointAddress, credentials);
-      SoapHeaderMapper.setupHandlerChain ((BindingProvider) port, channelID, messageID);
+      // Create "put" port
+      aPort = LimeHelper.getServicePort (aEndpointDoc.getAddress (), aCredentials);
+      aHeaders = MessageMetadataHelper.createHeadersFromMetadata (aEndpointDoc);
+      ((WSBindingProvider) aPort).setOutboundHeaders (aHeaders);
 
+      // Perform "put" action (no real response expected)
       final Put put = new Put ();
-      final List <Object> objects = put.getAny ();
-      objects.add (message.getDocument ().getDocumentElement ());
-      port.put (put);
+      put.getAny ().add (aMessage.getDocument ().getDocumentElement ());
+      aPort.put (put);
 
-      return message.getMessageID ();
+      return aMessage.getMessageID ();
     }
     catch (final Exception e) {
       log.warn ("Outbox error", e);
@@ -150,34 +120,28 @@ public class Outbox implements IOutbox {
     }
   }
 
-  @Nullable
-  private static String getNodeValue (final XPath xpath, final String xPathExpr, final Document documentMetadata) throws XPathExpressionException,
-                                                                                                                 DOMException {
-    String strValue = null;
-    final NodeList nodes = (NodeList) xpath.evaluate (xPathExpr, documentMetadata, XPathConstants.NODESET);
-    if (nodes != null && nodes.getLength () > 0) {
-      strValue = nodes.item (0).getNodeValue ();
-    }
-    return strValue;
-  }
-
-  private static Document getEndpointReferenceDocument (final CreateResponse createResponse) throws ParserConfigurationException,
-                                                                                            IOException,
-                                                                                            SAXException {
-    org.w3._2009._02.ws_tra.ResourceCreated resourceCreated = (org.w3._2009._02.ws_tra.ResourceCreated) createResponse.getAny ();
+  @Nonnull
+  private static EndpointReferenceWithMessageID createEndpointReferenceDocument (final CreateResponse createResponse) {
+    ResourceCreated resourceCreated = (ResourceCreated) createResponse.getAny ();
     if (resourceCreated == null) {
       resourceCreated = createResponse.getResourceCreated ();
+      if (resourceCreated == null)
+        throw new IllegalStateException ("No content of create response!");
     }
-    final W3CEndpointReference w3CEndpointReference = resourceCreated.getEndpointReference ().get (0);
-    final ByteArrayOutputStream baos = new ByteArrayOutputStream ();
-    w3CEndpointReference.writeTo (new StreamResult (baos));
-    final String endPointXML = baos.toString ();
-    baos.close ();
-    final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance ();
-    documentBuilderFactory.setNamespaceAware (false);
-    final DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder ();
-    final Document endpointDoc = documentBuilder.parse (new InputSource (new StringReader (endPointXML)));
-    return endpointDoc;
+
+    final W3CEndpointReference aEndpointReference = resourceCreated.getEndpointReference ().get (0);
+    final EndpointReferenceWithMessageID ret = new EndpointReferenceWithMessageID ();
+    ret.setAddress (W3CEndpointReferenceUtils.getAddress (aEndpointReference));
+    for (final Element e : W3CEndpointReferenceUtils.getReferenceParameters (aEndpointReference)) {
+      if (Identifiers.CHANNELID.equals (e.getLocalName ()))
+        ret.setChannelID (e.getTextContent ());
+      else
+        if (Identifiers.MESSAGEID.equals (e.getLocalName ()))
+          ret.setMessageID (e.getTextContent ());
+        else
+          log.warn ("EndpointReference contains illegal element " + e.getLocalName ());
+    }
+    return ret;
   }
 
   private static void checkCredentials (@Nonnull final IReadonlyUsernamePWCredentials credentials) throws MessageException {
