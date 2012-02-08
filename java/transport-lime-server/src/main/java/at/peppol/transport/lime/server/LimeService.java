@@ -241,8 +241,9 @@ public class LimeService {
   public GetResponse get (@SuppressWarnings ("unused") final Get body) {
     final String realPath = ((ServletContext) webServiceContext.getMessageContext ()
                                                                .get (MessageContext.SERVLET_CONTEXT)).getRealPath ("/");
-    final String channelID = SoapHeaderReader.getChannelID (webServiceContext);
-    final String messageID = SoapHeaderReader.getMessageID (webServiceContext);
+    final HeaderList aHeaderList = _getInboundHeaderList ();
+    final String channelID = MessageMetadataHelper.getChannelID (aHeaderList);
+    final String messageID = MessageMetadataHelper.getMessageID (aHeaderList);
     final String pageNumber = SoapHeaderReader.getPageNumber (webServiceContext);
 
     final GetResponse aGetResponse = new GetResponse ();
@@ -372,28 +373,21 @@ public class LimeService {
 
   private void _addPageListToResponse (final String pageNumber,
                                        final String realPath,
-                                       final String channelID,
+                                       final String sChannelID,
                                        final GetResponse getResponse) throws Exception {
-    final String thisRelayServiceURLstr = _getOwnUrl () + SERVICENAME;
-    int intPageNumber = 0;
-    if (pageNumber != null) {
-      if (pageNumber.trim ().length () > 0) {
-        intPageNumber = Integer.parseInt (pageNumber);
-      }
-    }
-    final Document document = new MessagePage ().getPageList (intPageNumber,
-                                                              thisRelayServiceURLstr,
-                                                              new Channel (realPath),
-                                                              channelID);
-    if (document != null) {
-      final List <Object> objects = getResponse.getAny ();
-      objects.add (document.getDocumentElement ());
-    }
+    final String sOwnAPURL = _getOwnUrl () + SERVICENAME;
+    final int nPageNumber = StringHelper.parseInt (StringHelper.trim (pageNumber), 0);
+    final Document aDocument = new MessagePage ().getPageList (nPageNumber,
+                                                               sOwnAPURL,
+                                                               new Channel (realPath),
+                                                               sChannelID);
+    if (aDocument != null)
+      getResponse.getAny ().add (aDocument.getDocumentElement ());
   }
 
   private static void _logRequest (final String action,
                                    final String ownUrl,
-                                   final IMessageMetadata soapHdr,
+                                   final IMessageMetadata aMetadata,
                                    final String nextUrl) {
     final String s = "REQUEST start--------------------------------------------------" +
                      CGlobal.LINE_SEPARATOR +
@@ -407,31 +401,31 @@ public class LimeService {
                      nextUrl +
                      CGlobal.LINE_SEPARATOR +
                      "Messsage ID: " +
-                     soapHdr.getMessageID () +
+                     aMetadata.getMessageID () +
                      CGlobal.LINE_SEPARATOR +
                      "Sender ID: " +
-                     soapHdr.getSenderID ().getValue () +
+                     aMetadata.getSenderID ().getValue () +
                      CGlobal.LINE_SEPARATOR +
                      "Sender type: " +
-                     soapHdr.getSenderID ().getScheme () +
+                     aMetadata.getSenderID ().getScheme () +
                      CGlobal.LINE_SEPARATOR +
                      "Recipient ID: " +
-                     soapHdr.getRecipientID ().getValue () +
+                     aMetadata.getRecipientID ().getValue () +
                      CGlobal.LINE_SEPARATOR +
                      "Recipient type: " +
-                     soapHdr.getRecipientID ().getScheme () +
+                     aMetadata.getRecipientID ().getScheme () +
                      CGlobal.LINE_SEPARATOR +
                      "Document ID: " +
-                     soapHdr.getDocumentTypeID ().getValue () +
+                     aMetadata.getDocumentTypeID ().getValue () +
                      CGlobal.LINE_SEPARATOR +
                      "Document type: " +
-                     soapHdr.getDocumentTypeID ().getScheme () +
+                     aMetadata.getDocumentTypeID ().getScheme () +
                      CGlobal.LINE_SEPARATOR +
                      "Process ID: " +
-                     soapHdr.getProcessID ().getValue () +
+                     aMetadata.getProcessID ().getValue () +
                      CGlobal.LINE_SEPARATOR +
                      "Process type: " +
-                     soapHdr.getProcessID ().getScheme () +
+                     aMetadata.getProcessID ().getScheme () +
                      CGlobal.LINE_SEPARATOR +
                      "REQUEST end----------------------------------------------------" +
                      CGlobal.LINE_SEPARATOR;

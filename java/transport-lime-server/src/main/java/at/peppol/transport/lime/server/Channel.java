@@ -37,10 +37,7 @@
  */
 package at.peppol.transport.lime.server;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 
@@ -48,13 +45,6 @@ import javax.annotation.Nonnull;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.TransformerFactoryConfigurationError;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,7 +52,11 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import com.phloc.commons.CGlobal;
+import com.phloc.commons.io.file.FileOperations;
+import com.phloc.commons.io.file.FileUtils;
 import com.phloc.commons.io.file.filter.FilenameFilterFactory;
+import com.phloc.commons.xml.serialize.XMLReader;
+import com.phloc.commons.xml.serialize.XMLWriter;
 
 /**
  * @author Ravnholt<br>
@@ -85,10 +79,10 @@ public final class Channel {
                             final String messageID,
                             final Document metadataDocument,
                             final Document payloadDocument) throws Exception {
-    final File channelInboxDir = getChannelInboxDir (channelID);
+    final File channelInboxDir = _getChannelInboxDir (channelID);
 
-    final File metadataFile = getMetadataFile (channelInboxDir, messageID);
-    final File payloadFile = getPayloadFile (channelInboxDir, messageID);
+    final File metadataFile = _getMetadataFile (channelInboxDir, messageID);
+    final File payloadFile = _getPayloadFile (channelInboxDir, messageID);
 
     if (!metadataFile.createNewFile ()) {
       log.info ("Metadata filename: " + metadataFile.getAbsolutePath ());
@@ -108,8 +102,8 @@ public final class Channel {
     }
 
     try {
-      writeDocumentToFile (metadataFile, metadataDocument);
-      writeDocumentToFile (payloadFile, payloadDocument);
+      _writeDocumentToFile (metadataFile, metadataDocument);
+      _writeDocumentToFile (payloadFile, payloadDocument);
     }
     catch (final Exception ex) {
       metadataFile.delete ();
@@ -120,9 +114,9 @@ public final class Channel {
 
   public void deleteDocument (final String channelID, final String messageID) throws Exception {
     if (channelID != null && messageID != null) {
-      final File channelInboxDir = getChannelInboxDir (channelID);
-      final File metadataFile = getMetadataFile (channelInboxDir, messageID);
-      final File payloadFile = getPayloadFile (channelInboxDir, messageID);
+      final File channelInboxDir = _getChannelInboxDir (channelID);
+      final File metadataFile = _getMetadataFile (channelInboxDir, messageID);
+      final File payloadFile = _getPayloadFile (channelInboxDir, messageID);
       // TODO: log if only one of the two exists?
       if (metadataFile.exists ()) {
         metadataFile.delete ();
@@ -134,7 +128,7 @@ public final class Channel {
   }
 
   public String [] getMessageIDs (final String channelID) throws Exception {
-    final File dir = getChannelInboxDir (channelID);
+    final File dir = _getChannelInboxDir (channelID);
     final File [] files = dir.listFiles (FilenameFilterFactory.getEndsWithFilter (EXT_PAYLOAD));
     if (files == null)
       return new String [0];
@@ -142,7 +136,7 @@ public final class Channel {
     final String [] messageIDs = new String [files.length];
     int i = 0;
     for (final File payloadFile : files) {
-      final String curMessageId = getMessageIDFromPayloadFile (payloadFile);
+      final String curMessageId = _getMessageIDFromPayloadFile (payloadFile);
 
       if ((System.currentTimeMillis () - payloadFile.lastModified ()) > MESSAGE_INVALID_TIME_IN_MILLIS) {
         deleteDocument (channelID, curMessageId);
@@ -159,28 +153,23 @@ public final class Channel {
                                                                                       IOException,
                                                                                       ParserConfigurationException,
                                                                                       Exception {
-    final File channelInboxDir = getChannelInboxDir (channelID);
-    final File metadataFile = getMetadataFile (channelInboxDir, messageID);
+    final File channelInboxDir = _getChannelInboxDir (channelID);
+    final File metadataFile = _getMetadataFile (channelInboxDir, messageID);
     final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance ();
     documentBuilderFactory.setNamespaceAware (false);
     final DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder ();
     return documentBuilder.parse (metadataFile);
   }
 
-  public Document getDocument (final String channelID, final String messageID) throws SAXException,
-                                                                              IOException,
-                                                                              ParserConfigurationException,
-                                                                              Exception {
-    final File channelInboxDir = getChannelInboxDir (channelID);
-    final File payloadFile = getPayloadFile (channelInboxDir, messageID);
-    final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance ();
-    final DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder ();
-    return documentBuilder.parse (payloadFile);
+  public Document getDocument (final String channelID, final String messageID) throws SAXException {
+    final File channelInboxDir = _getChannelInboxDir (channelID);
+    final File payloadFile = _getPayloadFile (channelInboxDir, messageID);
+    return XMLReader.readXMLDOM (FileUtils.getInputStream (payloadFile));
   }
 
   public long getSize (final String channelID, final String messageID) throws Exception {
-    final File channelInboxDir = getChannelInboxDir (channelID);
-    final File payloadFile = getPayloadFile (channelInboxDir, messageID);
+    final File channelInboxDir = _getChannelInboxDir (channelID);
+    final File payloadFile = _getPayloadFile (channelInboxDir, messageID);
     final long fileLength = payloadFile.length ();
     // calculate length in Kilobytes and round up
     final long fileLenghtInKB = (fileLength + 1023) / 1024;
@@ -188,65 +177,52 @@ public final class Channel {
   }
 
   public Date getCreationTime (final String channelID, final String messageID) throws Exception {
-    final File channelInboxDir = getChannelInboxDir (channelID);
-    final File payloadFile = getPayloadFile (channelInboxDir, messageID);
+    final File channelInboxDir = _getChannelInboxDir (channelID);
+    final File payloadFile = _getPayloadFile (channelInboxDir, messageID);
     return new Date (payloadFile.lastModified ());
   }
 
-  private static String getMessageIDFromPayloadFile (final File payloadFile) {
+  private static String _getMessageIDFromPayloadFile (final File payloadFile) {
     final String str = payloadFile.getName ();
     String messageID = str.substring (0, str.length () - EXT_PAYLOAD.length ());
     messageID = messageID.replace ('_', ':');
     return messageID;
   }
 
-  private static File getMetadataFile (final File channelInboxDir, final String messageID) {
-    final String sRealMessageID = removeSpecialChars (messageID);
+  private static File _getMetadataFile (final File channelInboxDir, final String messageID) {
+    final String sRealMessageID = _removeSpecialChars (messageID);
     return new File (channelInboxDir, sRealMessageID + EXT_METADATA);
   }
 
-  private static File getPayloadFile (final File channelInboxDir, final String messageID) {
-    final String sRealMessageID = removeSpecialChars (messageID);
+  private static File _getPayloadFile (final File channelInboxDir, final String messageID) {
+    final String sRealMessageID = _removeSpecialChars (messageID);
     final File file = new File (channelInboxDir, sRealMessageID + EXT_PAYLOAD);
     log.info ("Getting payload file: " + file.getAbsolutePath ());
     return file;
   }
 
-  private File getChannelInboxDir (final String channelID) throws Exception {
+  private File _getChannelInboxDir (final String channelID) {
     final File inboxDir = new File (m_sStorePath, INBOX_DIR);
-    if (inboxDir.exists () == false) {
-      inboxDir.mkdir ();
-    }
-    final String sRealChannelID = removeSpecialChars (channelID);
+    FileOperations.createDirIfNotExisting (inboxDir);
 
+    final String sRealChannelID = _removeSpecialChars (channelID);
     final File channelDir = new File (inboxDir, sRealChannelID);
-    if (channelDir.exists () == false) {
-      channelDir.mkdir ();
-    }
+    FileOperations.createDirIfNotExisting (channelDir);
     if (!channelDir.exists ()) {
-      throw new Exception ("Inbox for channel \"" +
-                           sRealChannelID +
-                           "\" could not be found or created: " +
-                           channelDir.getAbsolutePath ());
+      throw new IllegalArgumentException ("Inbox for channel \"" +
+                                          sRealChannelID +
+                                          "\" could not be found or created: " +
+                                          channelDir.getAbsolutePath ());
     }
     return channelDir;
   }
 
   @Nonnull
-  private static String removeSpecialChars (@Nonnull final String fileOrDirName) {
+  private static String _removeSpecialChars (@Nonnull final String fileOrDirName) {
     return fileOrDirName.replace (':', '_');
   }
 
-  private static void writeDocumentToFile (final File messageFile, final Document document) throws FileNotFoundException,
-                                                                                           TransformerFactoryConfigurationError,
-                                                                                           TransformerException,
-                                                                                           TransformerConfigurationException,
-                                                                                           TransformerException {
-    final BufferedOutputStream bos = new BufferedOutputStream (new FileOutputStream (messageFile));
-    final TransformerFactory transformerFactory = TransformerFactory.newInstance ();
-    final Transformer transformer = transformerFactory.newTransformer ();
-    final DOMSource source = new DOMSource (document);
-    final StreamResult result = new StreamResult (bos);
-    transformer.transform (source, result);
+  private static void _writeDocumentToFile (final File messageFile, final Document document) {
+    XMLWriter.writeToStream (document, FileUtils.getOutputStream (messageFile));
   }
 }
