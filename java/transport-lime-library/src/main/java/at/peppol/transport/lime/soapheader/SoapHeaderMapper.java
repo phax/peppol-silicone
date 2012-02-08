@@ -35,7 +35,7 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.transport.lime.impl;
+package at.peppol.transport.lime.soapheader;
 
 import java.util.List;
 
@@ -54,7 +54,6 @@ import at.peppol.busdox.identifier.IReadonlyProcessIdentifier;
 import at.peppol.commons.identifier.SimpleDocumentIdentifier;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 import at.peppol.commons.identifier.SimpleProcessIdentifier;
-import at.peppol.transport.lime.soapheader.SoapHeaderHandler;
 
 /**
  * @author Ravnholt<br>
