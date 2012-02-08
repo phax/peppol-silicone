@@ -60,8 +60,8 @@
       <!-- Values: Values: none/create-tables/drop-and-create-tables -->
       <property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>
       <property name="eclipselink.ddl-generation.output-mode" value="sql-script"/>
-      <property name="eclipselink.create-ddl-jdbc-file-name" value="db-create.sql"/>
-      <property name="eclipselink.drop-ddl-jdbc-file-name" value="db-drop.sql"/>
+      <property name="eclipselink.create-ddl-jdbc-file-name" value="db-create-sml.sql"/>
+      <property name="eclipselink.drop-ddl-jdbc-file-name" value="db-drop-sml.sql"/>
     </properties>
   </persistence-unit>
 </persistence>

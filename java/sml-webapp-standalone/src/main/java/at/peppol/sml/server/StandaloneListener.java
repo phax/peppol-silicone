@@ -54,6 +54,7 @@ public final class StandaloneListener implements ServletContextListener {
   }
 
   public void contextDestroyed (final ServletContextEvent sce) {
+    s_aLogger.info ("Shutting down standalone SML");
     // Unload the H2 JDBC driver
     org.h2.Driver.unload ();
   }
