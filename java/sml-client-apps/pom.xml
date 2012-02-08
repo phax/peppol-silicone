@@ -7,12 +7,12 @@
     <version>13</version>
   </parent>
   <artifactId>peppol-sml-client-apps</artifactId>
-  <version>1.2.1-SNAPSHOT</version>
+  <version>2.2.0</version>
   <name>peppol-sml-client-apps</name>
 
   <scm>
-    <connection>scm:svn:http://peppol-silicone.googlecode.com/svn/trunk/java/sml-client-apps</connection>
-    <developerConnection>scm:svn:https://peppol-silicone.googlecode.com/svn/trunk/java/sml-client-apps</developerConnection>
+    <connection>scm:svn:http://peppol-silicone.googlecode.com/svn/tags/peppol-sml-client-apps/peppol-sml-client-apps-2.2.0</connection>
+    <developerConnection>scm:svn:https://peppol-silicone.googlecode.com/svn/tags/peppol-sml-client-apps/peppol-sml-client-apps-2.2.0</developerConnection>
   </scm>
 
   <dependencies>
