@@ -11,7 +11,8 @@
   <name>peppol-sml-client-apps</name>
 
   <scm>
-    <developerConnection>scm:svn:https://joinup.ec.europa.eu/svn/peppol/devinprogress/java/sml/client-apps</developerConnection>
+    <connection>scm:svn:http://peppol-silicone.googlecode.com/svn/trunk/java/sml-client-apps</connection>
+    <developerConnection>scm:svn:https://peppol-silicone.googlecode.com/svn/trunk/java/sml-client-apps</developerConnection>
   </scm>
 
   <dependencies>

@@ -11,7 +11,8 @@
   <packaging>war</packaging>
 
   <scm>
-    <developerConnection>scm:svn:https://joinup.ec.europa.eu/svn/peppol/devinprogress/java/transport2/peppol-start-server</developerConnection>
+    <connection>scm:svn:http://peppol-silicone.googlecode.com/svn/trunk/java/transport-start-server</connection>
+    <developerConnection>scm:svn:https://peppol-silicone.googlecode.com/svn/trunk/java/transport-start-server</developerConnection>
   </scm>
   
   <dependencies>

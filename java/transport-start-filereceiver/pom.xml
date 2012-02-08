@@ -10,7 +10,8 @@
   <name>peppol-transport-start-filereceiver</name>
 
   <scm>
-    <developerConnection>scm:svn:https://joinup.ec.europa.eu/svn/peppol/devinprogress/java/transport2/peppol-start-filereceiver</developerConnection>
+    <connection>scm:svn:http://peppol-silicone.googlecode.com/svn/trunk/java/transport-start-filereceiver</connection>
+    <developerConnection>scm:svn:https://peppol-silicone.googlecode.com/svn/trunk/java/transport-start-filereceiver</developerConnection>
   </scm>
   
   <dependencies>

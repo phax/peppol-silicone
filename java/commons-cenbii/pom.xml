@@ -11,7 +11,8 @@
   <name>peppol-commons-cenbii</name>
 
   <scm>
-    <developerConnection>scm:svn:https://joinup.ec.europa.eu/svn/peppol/devinprogress/java/commons/bii-peppol</developerConnection>
+    <connection>scm:svn:http://peppol-silicone.googlecode.com/svn/trunk/java/commons-cenbii</connection>
+    <developerConnection>scm:svn:https://peppol-silicone.googlecode.com/svn/trunk/java/commons-cenbii</developerConnection>
   </scm>
 
   <dependencies>

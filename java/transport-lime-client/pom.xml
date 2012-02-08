@@ -10,7 +10,8 @@
   <name>peppol-transport-lime-client</name>
 
   <scm>
-    <developerConnection>scm:svn:https://joinup.ec.europa.eu/svn/peppol/devinprogress/java/transport/transport-lime-client</developerConnection>
+    <connection>scm:svn:http://peppol-silicone.googlecode.com/svn/trunk/java/transport-lime-client</connection>
+    <developerConnection>scm:svn:https://peppol-silicone.googlecode.com/svn/trunk/java/transport-lime-client</developerConnection>
   </scm>
 
   <dependencies>

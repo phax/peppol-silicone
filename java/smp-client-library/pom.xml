@@ -11,7 +11,8 @@
   <name>peppol-smp-client-library</name>
 
   <scm>
-    <developerConnection>scm:svn:https://joinup.ec.europa.eu/svn/peppol/devinprogress/java/smp/smp-client-library</developerConnection>
+    <connection>scm:svn:http://peppol-silicone.googlecode.com/svn/trunk/java/smp-client-library</connection>
+    <developerConnection>scm:svn:https://peppol-silicone.googlecode.com/svn/trunk/java/smp-client-library</developerConnection>
   </scm>
 
   <dependencies>
