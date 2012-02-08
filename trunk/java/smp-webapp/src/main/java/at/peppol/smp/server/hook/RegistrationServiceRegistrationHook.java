@@ -61,13 +61,12 @@ import at.peppol.sml.client.ManageParticipantIdentifierServiceCaller;
 import com.phloc.commons.random.VerySecureRandom;
 import com.phloc.commons.state.ESuccess;
 
-
 /**
  * An implementation of the RegistrationHook that informs the SML of updates to
  * this SMP's identifiers.<br>
  * The design of this hook is very bogus! It relies on the postUpdate always
  * being called in order in this Thread.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @NotThreadSafe
@@ -90,9 +89,24 @@ public final class RegistrationServiceRegistrationHook extends AbstractRegistrat
 
     // SMP ID
     s_sSMPID = aConfigFile.getString ("regServiceRegistrationHook.id");
+  }
 
+  private static enum MethodType {
+    CREATE,
+    DELETE
+  }
+
+  private SimpleParticipantIdentifier m_aBusinessIdentifier;
+  private MethodType m_eMethodType;
+
+  public RegistrationServiceRegistrationHook () {
+    resetQueue ();
+  }
+
+  private static void _initSSLContextFactory () {
     // Keystore for SML access:
     try {
+      final ConfigFile aConfigFile = ConfigFile.getInstance ();
       final String sKeystorePath = aConfigFile.getString ("regServiceRegistrationHook.keystore.classpath");
       final String sKeystorePassword = aConfigFile.getString ("regServiceRegistrationHook.keystore.password");
 
@@ -113,31 +127,20 @@ public final class RegistrationServiceRegistrationHook extends AbstractRegistrat
       HttpsURLConnection.setDefaultSSLSocketFactory (aSSLCtx.getSocketFactory ());
     }
     catch (final Exception ex) {
-      throw new IllegalStateException ("Failed to init keyStore for SML access");
+      throw new IllegalStateException ("Failed to init keyStore for SML access", ex);
     }
   }
 
-  private static enum MethodType {
-    CREATE,
-    DELETE
-  }
-
-  private SimpleParticipantIdentifier m_aBusinessIdentifier;
-  private MethodType m_eMethodType;
-
-  public RegistrationServiceRegistrationHook () {
-    resetQueue ();
-  }
-
   public void create (final IParticipantIdentifier aPI) throws HookException {
-    s_aLogger.debug ("Trying to create business in Business Identifier Manager Service");
+    s_aLogger.debug ("Trying to create business " + aPI + "in Business Identifier Manager Service");
     m_aBusinessIdentifier = new SimpleParticipantIdentifier (aPI);
     m_eMethodType = MethodType.CREATE;
 
     try {
-      final ManageParticipantIdentifierServiceCaller caller = new ManageParticipantIdentifierServiceCaller (s_aSMLEndpointURL);
-      caller.create (s_sSMPID, m_aBusinessIdentifier);
-      s_aLogger.debug ("Succeded in creating business using Business Identifier Manager Service");
+      _initSSLContextFactory ();
+      final ManageParticipantIdentifierServiceCaller aSMLCaller = new ManageParticipantIdentifierServiceCaller (s_aSMLEndpointURL);
+      aSMLCaller.create (s_sSMPID, m_aBusinessIdentifier);
+      s_aLogger.debug ("Succeeded in creating business using Business Identifier Manager Service");
       getQueueInstance ().set (this);
     }
     catch (final Throwable t) {
@@ -147,14 +150,15 @@ public final class RegistrationServiceRegistrationHook extends AbstractRegistrat
   }
 
   public void delete (final IParticipantIdentifier aPI) throws HookException {
-    s_aLogger.debug ("Trying to delete business in Business Identifier Manager Service");
+    s_aLogger.debug ("Trying to delete business " + aPI + " in Business Identifier Manager Service");
     m_aBusinessIdentifier = new SimpleParticipantIdentifier (aPI);
     m_eMethodType = MethodType.DELETE;
 
     try {
-      final ManageParticipantIdentifierServiceCaller caller = new ManageParticipantIdentifierServiceCaller (s_aSMLEndpointURL);
-      caller.delete (m_aBusinessIdentifier);
-      s_aLogger.debug ("Succeded in deleting business using Business Identifier Manager Service");
+      _initSSLContextFactory ();
+      final ManageParticipantIdentifierServiceCaller aSMLCaller = new ManageParticipantIdentifierServiceCaller (s_aSMLEndpointURL);
+      aSMLCaller.delete (m_aBusinessIdentifier);
+      s_aLogger.debug ("Succeeded in deleting business using Business Identifier Manager Service");
       getQueueInstance ().set (this);
     }
     catch (final NotFoundFault e) {
@@ -171,16 +175,21 @@ public final class RegistrationServiceRegistrationHook extends AbstractRegistrat
   public void postUpdate (final ESuccess eSuccess) throws HookException {
     if (eSuccess.isFailure ())
       try {
-        final ManageParticipantIdentifierServiceCaller caller = new ManageParticipantIdentifierServiceCaller (s_aSMLEndpointURL);
+        _initSSLContextFactory ();
+        final ManageParticipantIdentifierServiceCaller aSMLCaller = new ManageParticipantIdentifierServiceCaller (s_aSMLEndpointURL);
 
         switch (m_eMethodType) {
           case CREATE:
-            s_aLogger.warn ("CREATE failed in database, so deleting " + m_aBusinessIdentifier.getURIEncoded () + " from SML.");
-            caller.delete (m_aBusinessIdentifier);
+            s_aLogger.warn ("CREATE failed in database, so deleting " +
+                            m_aBusinessIdentifier.getURIEncoded () +
+                            " from SML.");
+            aSMLCaller.delete (m_aBusinessIdentifier);
             break;
           case DELETE:
-            s_aLogger.warn ("DELETE failed in database, so creating " + m_aBusinessIdentifier.getURIEncoded () + " in SML.");
-            caller.create (s_sSMPID, m_aBusinessIdentifier);
+            s_aLogger.warn ("DELETE failed in database, so creating " +
+                            m_aBusinessIdentifier.getURIEncoded () +
+                            " in SML.");
+            aSMLCaller.create (s_sSMPID, m_aBusinessIdentifier);
             break;
         }
       }

@@ -62,7 +62,7 @@ import com.phloc.commons.random.VerySecureRandom;
  */
 @DevelopersNote ("You need to create a keystore file !")
 public abstract class AbstractSMLClientTest {
-  public static final ISMLInfo SML_INFO = ESML.TEST;
+  public static final ISMLInfo SML_INFO = ESML.DEVELOPMENT_LOCAL;
 
   private static final String KEYSTORE_PATH = "keys/sml_client_keystore.jks";
   private static final String KEYSTORE_PASSWORD = "peppol";

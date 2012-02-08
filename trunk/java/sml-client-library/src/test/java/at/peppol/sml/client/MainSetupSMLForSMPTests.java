@@ -43,18 +43,15 @@ import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 import at.peppol.commons.sml.ESML;
 import at.peppol.commons.sml.ISMLInfo;
 import at.peppol.sml.AbstractSMLClientTest;
-import at.peppol.sml.client.ManageParticipantIdentifierServiceCaller;
-import at.peppol.sml.client.ManageServiceMetadataServiceCaller;
-
 
 /**
  * This class ensures the SML contains the necessary data for performing the SMP
  * client tests.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class MainSetupSMLForSMPTests {
-  private static final ISMLInfo SML_INFO = ESML.TEST;
+  private static final ISMLInfo SML_INFO = ESML.DEVELOPMENT_LOCAL;
   private static final String SMP_ID1 = "SMP-ID1";
 
   public static void main (final String [] args) throws Exception {
