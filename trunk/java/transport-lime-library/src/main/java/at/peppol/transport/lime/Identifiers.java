@@ -45,7 +45,6 @@ import at.peppol.commons.identifier.ReadonlyDocumentIdentifier;
 import at.peppol.commons.identifier.ReadonlyParticipantIdentifier;
 import at.peppol.commons.identifier.ReadonlyProcessIdentifier;
 
-
 /**
  * @author Ravnholt<br>
  *         PEPPOL.AT, BRZ, Philip Helger
@@ -69,23 +68,6 @@ public final class Identifiers {
   public static final String SCHEME_ATTR = "scheme";
   public static final String BUSDOX_NO_PROCESS = CIdentifier.DEFAULT_PROCESS_IDENTIFIER_NOPROCESS;
   public static final String BUSDOX_PROCID_TRANSPORT = "busdox-procid-transport";
-
-  public static final String PING_SENDER_SCHEME = "busdox-actorid-transport";
-  public static final String PING_SENDER_VALUE = "busdox:sender";
-  public static final ReadonlyParticipantIdentifier PING_SENDER = new ReadonlyParticipantIdentifier (PING_SENDER_SCHEME,
-                                                                                                     PING_SENDER_VALUE);
-  public static final String PING_RECIPIENT_SCHEME = "busdox-actorid-transport";
-  public static final String PING_RECIPIENT_VALUE = "busdox:recipient";
-  public static final ReadonlyParticipantIdentifier PING_RECIPIENT = new ReadonlyParticipantIdentifier (PING_RECIPIENT_SCHEME,
-                                                                                                        PING_RECIPIENT_VALUE);
-  public static final String PING_DOCUMENT_SCHEME = CIdentifier.DEFAULT_DOCUMENT_IDENTIFIER_SCHEME;
-  public static final String PING_DOCUMENT_VALUE = "busdox:ping";
-  public static final ReadonlyDocumentIdentifier PING_DOCUMENT = new ReadonlyDocumentIdentifier (PING_DOCUMENT_SCHEME,
-                                                                                                 PING_DOCUMENT_VALUE);
-  public static final String PING_PROCESS_SCHEME = "busdox-procid-transport";
-  public static final String PING_PROCESS_VALUE = CIdentifier.DEFAULT_PROCESS_IDENTIFIER_NOPROCESS;
-  public static final ReadonlyProcessIdentifier PING_PROCESS = new ReadonlyProcessIdentifier (PING_PROCESS_SCHEME,
-                                                                                              PING_PROCESS_VALUE);
 
   public static final ReadonlyParticipantIdentifier MESSAGEUNDELIVERABLE_SENDER = new ReadonlyParticipantIdentifier ("busdox-actorid-transport",
                                                                                                                      "busdox:sender");

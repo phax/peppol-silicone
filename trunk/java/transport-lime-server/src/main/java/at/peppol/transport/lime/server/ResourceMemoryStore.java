@@ -42,6 +42,8 @@ import java.util.Map;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import javax.annotation.Nonnull;
+
 import at.peppol.transport.IMessageMetadata;
 
 /**
@@ -58,6 +60,7 @@ public final class ResourceMemoryStore {
 
   private ResourceMemoryStore () {}
 
+  @Nonnull
   public static ResourceMemoryStore getInstance () {
     return SingletonHolder.s_aInstance;
   }

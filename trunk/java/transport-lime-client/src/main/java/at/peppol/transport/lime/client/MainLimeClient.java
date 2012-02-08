@@ -89,19 +89,12 @@ public final class MainLimeClient {
   private static final IReadonlyParticipantIdentifier SENDER = ReadonlyParticipantIdentifier.createWithDefaultScheme ("9914:atu415427xx");
   private static final IReadonlyParticipantIdentifier RECEIVER = ReadonlyParticipantIdentifier.createWithDefaultScheme ("9914:iwannatest");
   private static final IReadonlyDocumentIdentifier DOCID = EPredefinedDocumentIdentifier.urn_oasis_names_specification_ubl_schema_xsd_Order_2__Order__urn_www_cenbii_eu_transaction_biicoretrdm001_ver1_0__urn_www_peppol_eu_bis_peppol6a_ver1_0__2_0;
-
-  /*
-   * ("busdox-docid-qns",
-   * "urn:oasis:names:specification:ubl:schema:xsd:OrderResponseSimple-2::OrderResponseSimple"
-   * + "##urn:www.cenbii.eu:transaction:biicoretrdm002:ver1.0:" +
-   * "#urn:www.peppol.eu:bis:peppol6a:ver1.0::2.0");
-   */
   private static final IReadonlyProcessIdentifier PROCESS = EPredefinedProcessIdentifier.urn_www_cenbii_eu_profile_bii06_ver1_0;
 
-  // ("cenbii-procid-ubl", "urn:www.cenbii.eu:profile:bii06:ver1.0");
-
   public static void main (final String [] args) throws Exception {
-    CBusDox.setMetroDebugSystemProperties (true);
+    if (false)
+      CBusDox.setMetroDebugSystemProperties (true);
+
     final String apUrl2 = "http://localhost:8091/limeService";
     // any xml will do
     final String xmlFile = "src/test/resources/xml/CENBII-Order-maximal.xml";
@@ -169,7 +162,6 @@ public final class MainLimeClient {
   private static String _testSendMessage (final IMessage message, final IEndpointReference endpointReference) throws MessageException {
     String messageid = null;
     for (int i = 0; i < 1; i++) {
-
       messageid = new Outbox ().sendMessage (_createCredentials (), message, endpointReference);
       System.out.println ("OUTBOX - MESSAGE DELIVERED: " + messageid);
     }

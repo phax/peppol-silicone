@@ -58,8 +58,8 @@ import com.phloc.commons.io.resource.ClassPathResource;
                    targetNamespace = "http://www.w3.org/2009/02/ws-tra",
                    wsdlLocation = LimeClientService.WSDL_PATH)
 public class LimeClientService extends Service {
-  public static final String WSDL_PATH = "wsdl/WSTransferService/ws-tra.wsdl";
-  private final static URL WSTRANSFERSERVICE_WSDL_LOCATION;
+  public static final String WSDL_PATH = "WEB-INF/wsdl/peppol-lime-1.0.wsdl";
+  private static final URL WSTRANSFERSERVICE_WSDL_LOCATION;
 
   static {
     final URL url = ClassPathResource.getAsURL (WSDL_PATH);
@@ -68,10 +68,6 @@ public class LimeClientService extends Service {
                                          WSDL_PATH +
                                          "', retrying as a local file");
     WSTRANSFERSERVICE_WSDL_LOCATION = url;
-  }
-
-  public LimeClientService (final URL wsdlLocation, final QName serviceName) {
-    super (wsdlLocation, serviceName);
   }
 
   public LimeClientService () {
