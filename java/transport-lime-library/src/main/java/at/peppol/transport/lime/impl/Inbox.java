@@ -40,6 +40,7 @@ package at.peppol.transport.lime.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -83,21 +84,17 @@ import com.sun.xml.ws.developer.JAXWSProperties;
 public class Inbox implements IInbox {
   private static final Logger s_aLogger = LoggerFactory.getLogger (Inbox.class);
 
-  public List <IMessageReference> getMessageList (final IReadonlyUsernamePWCredentials credentials,
-                                                  final IEndpointReference origEndpointReference) throws MessageException {
-    final EndpointReference endpointReference = new EndpointReference ();
-    endpointReference.setAddress (origEndpointReference.getAddress ());
-    endpointReference.setChannelID (origEndpointReference.getChannelID ());
-
-    validateCredentials (credentials);
+  public List <IMessageReference> getMessageList (final IReadonlyUsernamePWCredentials aCredentials,
+                                                  final IEndpointReference aEndpointReference) throws MessageException {
+    _validateCredentials (aCredentials);
     try {
-      final List <Element> referenceParameters = createChannelReferenceParameter (endpointReference);
-      final List <IMessageReference> messages = new ArrayList <IMessageReference> ();
-      boolean morePages = true;
+      final List <Element> aReferenceParameters = _createChannelReferenceParameter (aEndpointReference);
+      final List <IMessageReference> aMessages = new ArrayList <IMessageReference> ();
+      boolean bMorePages;
       do {
-        morePages = getSinglePage (endpointReference, referenceParameters, credentials, messages);
-      } while (morePages);
-      return messages;
+        bMorePages = _getSinglePage (aEndpointReference, aReferenceParameters, aCredentials, aMessages);
+      } while (bMorePages);
+      return aMessages;
     }
     catch (final Exception e) {
       s_aLogger.warn ("Inbox error", e);
@@ -105,49 +102,44 @@ public class Inbox implements IInbox {
     }
   }
 
-  public List <IMessageReference> getMessageListPage (final IReadonlyUsernamePWCredentials credentials,
-                                                      final IEndpointReference endpointReference,
-                                                      final int pageNumber) throws MessageException {
-    validateCredentials (credentials);
+  public List <IMessageReference> getMessageListPage (final IReadonlyUsernamePWCredentials aCredentials,
+                                                      final IEndpointReference aEndpointReference,
+                                                      final int nPageNumber) throws MessageException {
+    _validateCredentials (aCredentials);
     try {
-      final ArrayList <IMessageReference> messages = new ArrayList <IMessageReference> ();
-      getSinglePage (endpointReference, null, credentials, messages);
-      return messages;
+      final List <IMessageReference> aMessages = new ArrayList <IMessageReference> ();
+      _getSinglePage (aEndpointReference, null, aCredentials, aMessages);
+      return aMessages;
     }
     catch (final Exception e) {
       throw new MessageException (e);
     }
   }
 
-  public IMessage getMessage (final IReadonlyUsernamePWCredentials credentials,
-                              final IMessageReference messageReferenceInterface) throws MessageException {
-    validateCredentials (credentials);
+  public IMessage getMessage (final IReadonlyUsernamePWCredentials aCredentials,
+                              final IMessageReference aMessageReference) throws MessageException {
+    _validateCredentials (aCredentials);
     try {
-      final Resource port = LimeHelper.getServicePort (messageReferenceInterface.getEndpointReference ().getAddress (),
-                                                       credentials);
+      // get a specifc message
+      final Resource aPort = LimeHelper.getServicePort (aMessageReference.getEndpointReference ().getAddress (),
+                                                        aCredentials);
+      SoapHeaderMapper.setupHandlerChain ((BindingProvider) aPort,
+                                          aMessageReference.getEndpointReference ().getChannelID (),
+                                          aMessageReference.getMessageID ());
 
-      // TODO is this necessary?
-      SoapHeaderMapper.setupHandlerChain ((BindingProvider) port,
-                                          messageReferenceInterface.getEndpointReference ().getChannelID (),
-                                          messageReferenceInterface.getMessageID ());
+      // no body required
+      final GetResponse aGetResponse = aPort.get (null);
+      final List <Object> aObjects = aGetResponse.getAny ();
 
-      final GetResponse getResponse = port.get (null);
-      final List <Object> objects = getResponse.getAny ();
-
-      // Logger.getLogger(Outbox.class.getName()).log(Level.WARNING,
-      // "objects size: "+objects.size());
-
-      // writeDocumentToFile(((Element) objects.get(1)).getOwnerDocument());
-
-      if (objects != null && objects.size () == 1) {
-        final Document document = ((Element) objects.get (0)).getOwnerDocument ();
-        final Message message = new Message ();
-        message.setDocument (document);
-        message.setMessageID (messageReferenceInterface.getMessageID ());
-        _setMessageMetadata (port, message);
-        return message;
+      if (ContainerHelper.getSize (aObjects) == 1) {
+        final Document document = ((Node) ContainerHelper.getFirstElement (aObjects)).getOwnerDocument ();
+        final Message aMessage = new Message ();
+        aMessage.setDocument (document);
+        aMessage.setMessageID (aMessageReference.getMessageID ());
+        _setMessageMetadata (aPort, aMessage);
+        return aMessage;
       }
-      throw new MessageException ("No message found with id: " + messageReferenceInterface.getMessageID ());
+      throw new MessageException ("No message found with id: " + aMessageReference.getMessageID ());
     }
     catch (final Exception e) {
       s_aLogger.warn ("Inbox error: ", e);
@@ -155,33 +147,35 @@ public class Inbox implements IInbox {
     }
   }
 
-  public void deleteMessage (final IReadonlyUsernamePWCredentials credentials,
-                             final IMessageReference messageReferenceInterface) throws MessageException {
-    validateCredentials (credentials);
+  public void deleteMessage (final IReadonlyUsernamePWCredentials aCredentials,
+                             final IMessageReference aMessageReference) throws MessageException {
+    _validateCredentials (aCredentials);
     try {
-      final Resource port = LimeHelper.getServicePort (messageReferenceInterface.getEndpointReference ().getAddress (),
-                                                       credentials);
-      SoapHeaderMapper.setupHandlerChain ((BindingProvider) port,
-                                          messageReferenceInterface.getEndpointReference ().getChannelID (),
-                                          messageReferenceInterface.getMessageID ());
-      port.delete (null);
+      // Delete a specific message
+      final Resource aPort = LimeHelper.getServicePort (aMessageReference.getEndpointReference ().getAddress (),
+                                                        aCredentials);
+      SoapHeaderMapper.setupHandlerChain ((BindingProvider) aPort,
+                                          aMessageReference.getEndpointReference ().getChannelID (),
+                                          aMessageReference.getMessageID ());
+      aPort.delete (null);
     }
     catch (final Exception e) {
       throw new MessageException (e);
     }
   }
 
-  private static List <Element> createChannelReferenceParameter (final IEndpointReference endpointReference) {
+  @Nonnull
+  private static List <Element> _createChannelReferenceParameter (final IEndpointReference aEndpointReference) {
     final Document aDummyDoc = XMLFactory.newDocument ();
     final Element node = aDummyDoc.createElementNS (Identifiers.NAMESPACE_TRANSPORT_IDS, "ChannelIdentifier");
-    node.setTextContent (endpointReference.getChannelID ());
+    node.setTextContent (aEndpointReference.getChannelID ());
     return ContainerHelper.newList (node);
   }
 
-  private static void validateCredentials (final IReadonlyUsernamePWCredentials credentials) throws MessageException {
-    if (credentials == null) {
+  private static void _validateCredentials (final IReadonlyUsernamePWCredentials credentials) throws MessageException {
+    if (credentials == null)
       throw new MessageException ("Credentials can not be a null value");
-    }
+
     if (StringHelper.hasNoTextAfterTrim (credentials.getUsername ()) ||
         StringHelper.hasNoTextAfterTrim (credentials.getPassword ())) {
       throw new MessageException ("Credentials are invalid, username=" +
@@ -193,16 +187,18 @@ public class Inbox implements IInbox {
 
   // TODO MessageReferenceInterface skal ændres til at indeholde en
   // endpointreference og reference parameters
-  private static boolean getSinglePage (final IEndpointReference endpointReference,
-                                        @Nullable final List <Element> referenceParameters,
-                                        final IReadonlyUsernamePWCredentials credentials,
-                                        final List <IMessageReference> messages) throws Exception,
-                                                                                JAXBException,
-                                                                                DOMException {
-    boolean morePages = false;
-    final Resource port = LimeHelper.getServicePort (endpointReference.getAddress (), credentials);
-    SoapHeaderMapper.setupHandlerChain ((BindingProvider) port, null, null, referenceParameters);
-    final GetResponse aGetResponse = port.get (null);
+  private static boolean _getSinglePage (final IEndpointReference aEndpointReference,
+                                         @Nullable final List <Element> aReferenceParameters,
+                                         final IReadonlyUsernamePWCredentials aCredentials,
+                                         final List <IMessageReference> aMessages) throws Exception,
+                                                                                  JAXBException,
+                                                                                  DOMException {
+    // Get a message list
+    final Resource aPort = LimeHelper.getServicePort (aEndpointReference.getAddress (), aCredentials);
+    SoapHeaderMapper.setupHandlerChain ((BindingProvider) aPort, null, null, aReferenceParameters);
+    final GetResponse aGetResponse = aPort.get (null);
+
+    boolean bMorePages = false;
     if (aGetResponse != null && aGetResponse.getAny () != null && aGetResponse.getAny ().size () == 1) {
       final Unmarshaller unmarshaller = JAXBContextCache.getInstance ()
                                                         .getFromCache (PageListType.class)
@@ -212,7 +208,7 @@ public class Inbox implements IInbox {
       if (pageList != null && pageList.getEntryList () != null) {
         for (final Entry entry : pageList.getEntryList ().getEntry ()) {
           final IMessageReference messageReference = new MessageReference ();
-          messageReference.setEndpointReference (endpointReference);
+          messageReference.setEndpointReference (aEndpointReference);
           // Element element = (Element)
           // ((JAXBElement)entry.getEndpointReference().getReferenceParameters().getAny().get(1)).getValue();
           // messageReference.setMessageId((String)
@@ -220,28 +216,28 @@ public class Inbox implements IInbox {
           final Element aReferenceParam1 = W3CEndpointReferenceUtils.getReferenceParameter (entry.getEndpointReference (),
                                                                                             1);
           messageReference.setMessageId (aReferenceParam1.getTextContent ());
-          messages.add (messageReference);
+          aMessages.add (messageReference);
         }
         if (pageList.getNextPageIdentifier () != null &&
             pageList.getNextPageIdentifier ().getEndpointReference () != null) {
           final W3CEndpointReference aNextPageER = pageList.getNextPageIdentifier ().getEndpointReference ();
-          endpointReference.setAddress (W3CEndpointReferenceUtils.getAddress (aNextPageER));
-          referenceParameters.clear ();
-          referenceParameters.addAll (W3CEndpointReferenceUtils.getReferenceParameters (aNextPageER));
-          morePages = true;
+          aEndpointReference.setAddress (W3CEndpointReferenceUtils.getAddress (aNextPageER));
+          aReferenceParameters.clear ();
+          aReferenceParameters.addAll (W3CEndpointReferenceUtils.getReferenceParameters (aNextPageER));
+          bMorePages = true;
         }
       }
     }
-    return morePages;
+    return bMorePages;
   }
 
   private static void _setMessageMetadata (final Resource port, final Message message) throws Exception {
     final HeaderList aHeaderList = (HeaderList) ((BindingProvider) port).getResponseContext ()
                                                                         .get (JAXWSProperties.INBOUND_HEADER_LIST_PROPERTY);
-    final IMessageMetadata soapHeader = MessageMetadataHelper.createMetadataFromHeaders (aHeaderList);
-    message.setSender (soapHeader.getSenderID ());
-    message.setReciever (soapHeader.getRecipientID ());
-    message.setDocumentType (soapHeader.getDocumentTypeID ());
-    message.setProcessType (soapHeader.getProcessID ());
+    final IMessageMetadata aMetadata = MessageMetadataHelper.createMetadataFromHeaders (aHeaderList);
+    message.setSender (aMetadata.getSenderID ());
+    message.setReciever (aMetadata.getRecipientID ());
+    message.setDocumentType (aMetadata.getDocumentTypeID ());
+    message.setProcessType (aMetadata.getProcessID ());
   }
 }

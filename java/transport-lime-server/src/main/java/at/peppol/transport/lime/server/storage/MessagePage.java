@@ -103,7 +103,7 @@ public final class MessagePage {
     pageList.setNumberOfEntries (new Long (toMsg - fromMsg + 1));
     _addPageListEntries (fromMsg, toMsg, messageIDs, channel, channelID, endpoint, pageList);
     if ((messageIDs.length / pageSize) >= pageNum + 1) {
-      _addNextPageIdentifier (endpoint, pageNum, pageList, channelID);
+      _addNextPageIdentifier (endpoint, pageNum, channelID, pageList);
     }
     return _marshallPageList (pageList);
   }
@@ -125,25 +125,27 @@ public final class MessagePage {
     return document;
   }
 
-  private static void _addNextPageIdentifier (final String endpoint,
-                                              final int curPageNum,
-                                              final PageListType pageList,
-                                              final String channelID) {
+  private static void _addNextPageIdentifier (final String sEndpointURL,
+                                              final int nCurPageNum,
+                                              final String sChannelID,
+                                              final PageListType aPageList) {
     final Document aDummyDoc = XMLFactory.newDocument ();
-    final List <Element> referenceParametersType = new ArrayList <Element> ();
+    final List <Element> aReferenceParameters = new ArrayList <Element> ();
+
+    // Page identifier
     Element aElement = aDummyDoc.createElementNS (Identifiers.NAMESPACE_LIME, Identifiers.PAGEIDENTIFIER);
-    aElement.appendChild (aDummyDoc.createTextNode (Integer.toString (curPageNum + 1)));
-    referenceParametersType.add (aElement);
+    aElement.appendChild (aDummyDoc.createTextNode (Integer.toString (nCurPageNum + 1)));
+    aReferenceParameters.add (aElement);
 
+    // Channel ID
     aElement = aDummyDoc.createElementNS (Identifiers.NAMESPACE_TRANSPORT_IDS, Identifiers.CHANNELID);
-    aElement.appendChild (aDummyDoc.createTextNode (channelID));
-    referenceParametersType.add (aElement);
+    aElement.appendChild (aDummyDoc.createTextNode (sChannelID));
+    aReferenceParameters.add (aElement);
 
-    final NextPageIdentifierType nextPageIdentifierType = s_aObjFactory.createNextPageIdentifierType ();
-    final W3CEndpointReference endpointReferenceType = W3CEndpointReferenceUtils.createEndpointReference (endpoint,
-                                                                                                          referenceParametersType);
-    nextPageIdentifierType.setEndpointReference (endpointReferenceType);
-    pageList.setNextPageIdentifier (nextPageIdentifierType);
+    final NextPageIdentifierType aNextPageIdentifier = s_aObjFactory.createNextPageIdentifierType ();
+    aNextPageIdentifier.setEndpointReference (W3CEndpointReferenceUtils.createEndpointReference (sEndpointURL,
+                                                                                                 aReferenceParameters));
+    aPageList.setNextPageIdentifier (aNextPageIdentifier);
   }
 
   private static void _addPageListEntries (final int fromMsg,

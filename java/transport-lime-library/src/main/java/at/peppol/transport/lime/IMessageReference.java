@@ -44,9 +44,9 @@ package at.peppol.transport.lime;
 public interface IMessageReference {
   IEndpointReference getEndpointReference ();
 
-  String getMessageID ();
-
   void setEndpointReference (IEndpointReference endpointReference);
+
+  String getMessageID ();
 
   void setMessageId (String messageId);
 }
