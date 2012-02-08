@@ -198,7 +198,7 @@
     <wsp:ExactlyOne>
       <wsp:All>
         <sc1:CallbackHandlerConfiguration wspp:visibility="private">
-          <sc1:CallbackHandler name="samlHandler" classname="at.peppol.start.saml.SAMLCallbackHandler"/>
+          <sc1:CallbackHandler name="samlHandler" classname="org.busdox.transport.start.saml.SAMLCallbackHandler"/>
         </sc1:CallbackHandlerConfiguration>
         <!-- Use the same callback handler as the server -->
         <sc1:KeyStore wspp:visibility="private" 

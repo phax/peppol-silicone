@@ -41,8 +41,8 @@
 <handler-chains xmlns="http://java.sun.com/xml/ns/javaee">
   <handler-chain>
     <handler>
-      <handler-name>org.busdox.transport.lime.server.SoapResponseHeaderHandler</handler-name>
-      <handler-class>org.busdox.transport.lime.server.SoapResponseHeaderHandler</handler-class>
+      <handler-name>at.peppol.transport.lime.server.SoapResponseHeaderHandler</handler-name>
+      <handler-class>at.peppol.transport.lime.server.SoapResponseHeaderHandler</handler-class>
     </handler>
   </handler-chain>
 </handler-chains>
