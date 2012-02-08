@@ -58,14 +58,11 @@ import at.peppol.sml.server.ISMPDataHandler;
 import at.peppol.sml.server.exceptions.BadRequestException;
 import at.peppol.sml.server.exceptions.NotFoundException;
 import at.peppol.sml.server.exceptions.UnauthorizedException;
-import at.peppol.sml.server.jpa.JPAParticipantDataHandler;
-import at.peppol.sml.server.jpa.JPASMPDataHandler;
-
 
 /**
  * Test class for class {@link JPAParticipantDataHandler} and
  * {@link JPASMPDataHandler}.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class JPAParticipantDataHandlerTest {
