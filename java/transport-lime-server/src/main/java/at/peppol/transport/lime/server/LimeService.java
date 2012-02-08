@@ -81,6 +81,7 @@ import org.w3._2009._02.ws_tra.PutResponse;
 import org.w3._2009._02.ws_tra.ResourceCreated;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
 
 import at.peppol.busdox.CBusDox;
 import at.peppol.commons.sml.ESML;
@@ -92,7 +93,8 @@ import at.peppol.transport.MessageMetadataHelper;
 import at.peppol.transport.lime.Identifiers;
 import at.peppol.transport.lime.server.exception.MessageIdReusedException;
 import at.peppol.transport.lime.server.exception.RecipientUnreachableException;
-import at.peppol.transport.lime.server.storage.Channel;
+import at.peppol.transport.lime.server.storage.LimeStorage;
+import at.peppol.transport.lime.server.storage.MessagePage;
 import at.peppol.transport.lime.soapheader.SoapHeaderReader;
 import at.peppol.transport.start.client.AccessPointClient;
 
@@ -240,19 +242,19 @@ public class LimeService {
   }
 
   public GetResponse get (@SuppressWarnings ("unused") final Get body) {
-    final String realPath = ((ServletContext) webServiceContext.getMessageContext ()
-                                                               .get (MessageContext.SERVLET_CONTEXT)).getRealPath ("/");
     final HeaderList aHeaderList = _getInboundHeaderList ();
-    final String channelID = MessageMetadataHelper.getChannelID (aHeaderList);
-    final String messageID = MessageMetadataHelper.getMessageID (aHeaderList);
-    final String pageNumber = SoapHeaderReader.getPageNumber (webServiceContext);
+    final String sChannelID = MessageMetadataHelper.getChannelID (aHeaderList);
+    final String sMessageID = MessageMetadataHelper.getMessageID (aHeaderList);
+    final String sPageIdentifier = SoapHeaderReader.getPageNumber (webServiceContext);
 
     final GetResponse aGetResponse = new GetResponse ();
     try {
-      if (StringHelper.hasNoText (messageID))
-        _addPageListToResponse (pageNumber, realPath, channelID, aGetResponse);
+      final String sStorageRoot = ((ServletContext) webServiceContext.getMessageContext ()
+                                                                     .get (MessageContext.SERVLET_CONTEXT)).getRealPath ("/");
+      if (StringHelper.hasNoText (sMessageID))
+        _addPageListToResponse (sStorageRoot, sPageIdentifier, sChannelID, aGetResponse);
       else
-        _addSingleMessageToResponse (realPath, channelID, messageID, aGetResponse);
+        _addSingleMessageToResponse (sStorageRoot, sChannelID, sMessageID, aGetResponse);
     }
     catch (final Exception e) {
       s_aLogger.error ("Error on get", e);
@@ -273,7 +275,7 @@ public class LimeService {
       final String messageID = SoapHeaderReader.getMessageID (webServiceContext);
       final String realPath = ((ServletContext) webServiceContext.getMessageContext ()
                                                                  .get (MessageContext.SERVLET_CONTEXT)).getRealPath ("/");
-      new Channel (realPath).deleteDocument (channelID, messageID);
+      new LimeStorage (realPath).deleteDocument (channelID, messageID);
     }
     catch (final Exception ex) {
       s_aLogger.error ("Error deleting document", ex);
@@ -346,15 +348,15 @@ public class LimeService {
     }
   }
 
-  private static void _addSingleMessageToResponse (final String realPath,
-                                                   final String channelID,
-                                                   final String messageID,
-                                                   final GetResponse getResponse) throws Exception {
-    final Document document = new Channel (realPath).getDocument (channelID, messageID);
-    final Document documentMetadata = new Channel (realPath).getDocumentMetadata (channelID, messageID);
-    final List <Object> objects = getResponse.getAny ();
-    objects.add (documentMetadata.getDocumentElement ());
-    objects.add (document.getDocumentElement ());
+  private static void _addSingleMessageToResponse (final String sStorageRoot,
+                                                   final String sChannelID,
+                                                   final String sMessageID,
+                                                   final GetResponse getResponse) throws SAXException {
+    final LimeStorage aStorage = new LimeStorage (sStorageRoot);
+    final Document documentMetadata = aStorage.getDocumentMetadata (sChannelID, sMessageID);
+    final Document document = aStorage.getDocument (sChannelID, sMessageID);
+    getResponse.getAny ().add (documentMetadata.getDocumentElement ());
+    getResponse.getAny ().add (document.getDocumentElement ());
   }
 
   private String _getOwnUrl () {
@@ -372,16 +374,16 @@ public class LimeService {
     return thisAccessPointURLstr;
   }
 
-  private void _addPageListToResponse (final String pageNumber,
-                                       final String realPath,
+  private void _addPageListToResponse (final String sStorageRoot,
+                                       final String pageNumber,
                                        final String sChannelID,
                                        final GetResponse getResponse) throws Exception {
     final String sOwnAPURL = _getOwnUrl () + SERVICENAME;
     final int nPageNumber = StringHelper.parseInt (StringHelper.trim (pageNumber), 0);
-    final Document aDocument = new MessagePage ().getPageList (nPageNumber,
-                                                               sOwnAPURL,
-                                                               new Channel (realPath),
-                                                               sChannelID);
+    final Document aDocument = MessagePage.getPageList (nPageNumber,
+                                                        sOwnAPURL,
+                                                        new LimeStorage (sStorageRoot),
+                                                        sChannelID);
     if (aDocument != null)
       getResponse.getAny ().add (aDocument.getDocumentElement ());
   }
@@ -461,7 +463,7 @@ public class LimeService {
 
         final String realPath = ((ServletContext) webServiceContext.getMessageContext ()
                                                                    .get (MessageContext.SERVLET_CONTEXT)).getRealPath ("/");
-        new Channel (realPath).saveDocument (channelID, messageID, metadataDocument, document);
+        new LimeStorage (realPath).saveDocument (channelID, messageID, metadataDocument, document);
       }
     }
     catch (final Exception ex) {

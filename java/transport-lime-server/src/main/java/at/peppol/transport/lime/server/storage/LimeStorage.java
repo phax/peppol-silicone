@@ -38,13 +38,9 @@
 package at.peppol.transport.lime.server.storage;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Date;
 
 import javax.annotation.Nonnull;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,9 +48,11 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import com.phloc.commons.CGlobal;
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.io.file.FileOperations;
 import com.phloc.commons.io.file.FileUtils;
 import com.phloc.commons.io.file.filter.FilenameFilterFactory;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.xml.serialize.XMLReader;
 import com.phloc.commons.xml.serialize.XMLWriter;
 
@@ -62,17 +60,19 @@ import com.phloc.commons.xml.serialize.XMLWriter;
  * @author Ravnholt<br>
  *         PEPPOL.AT, BRZ, Philip Helger
  */
-public final class Channel {
-  public static final String EXT_METADATA = ".metadata";
-  public static final String EXT_PAYLOAD = ".payload";
-  public static final String INBOX_DIR = "inbox";
-  public static final long MESSAGE_INVALID_TIME_IN_MILLIS = CGlobal.MILLISECONDS_PER_HOUR * 2L;
-  private static final Logger log = LoggerFactory.getLogger (Channel.class);
+public final class LimeStorage {
+  private static final String EXT_METADATA = ".metadata";
+  private static final String EXT_PAYLOAD = ".payload";
+  private static final String INBOX_DIR = "inbox";
+  private static final long MESSAGE_INVALID_TIME_IN_MILLIS = CGlobal.MILLISECONDS_PER_HOUR * 2;
+  private static final Logger s_aLogger = LoggerFactory.getLogger (LimeStorage.class);
 
   private final String m_sStorePath;
 
-  public Channel (final String storePath) {
-    m_sStorePath = storePath;
+  public LimeStorage (@Nonnull @Nonempty final String sStorePath) {
+    if (StringHelper.hasNoText (sStorePath))
+      throw new IllegalArgumentException ("storePath");
+    m_sStorePath = sStorePath;
   }
 
   public void saveDocument (final String channelID,
@@ -85,7 +85,7 @@ public final class Channel {
     final File payloadFile = _getPayloadFile (channelInboxDir, messageID);
 
     if (!metadataFile.createNewFile ()) {
-      log.info ("Metadata filename: " + metadataFile.getAbsolutePath ());
+      s_aLogger.info ("Metadata filename: " + metadataFile.getAbsolutePath ());
       throw new Exception ("Cannot create new metadata file for message ID " +
                            messageID +
                            " in inbox for channel " +
@@ -93,7 +93,7 @@ public final class Channel {
 
     }
     if (!payloadFile.createNewFile ()) {
-      log.info ("Payload filename: " + payloadFile.getAbsolutePath ());
+      s_aLogger.info ("Payload filename: " + payloadFile.getAbsolutePath ());
       metadataFile.delete ();
       throw new Exception ("Cannot create new document file for message ID " +
                            messageID +
@@ -127,6 +127,7 @@ public final class Channel {
     }
   }
 
+  @Nonnull
   public String [] getMessageIDs (final String channelID) {
     final File dir = _getChannelInboxDir (channelID);
     final File [] files = dir.listFiles (FilenameFilterFactory.getEndsWithFilter (EXT_PAYLOAD));
@@ -149,16 +150,10 @@ public final class Channel {
     return messageIDs;
   }
 
-  public Document getDocumentMetadata (final String channelID, final String messageID) throws SAXException,
-                                                                                      IOException,
-                                                                                      ParserConfigurationException,
-                                                                                      Exception {
+  public Document getDocumentMetadata (final String channelID, final String messageID) throws SAXException {
     final File channelInboxDir = _getChannelInboxDir (channelID);
     final File metadataFile = _getMetadataFile (channelInboxDir, messageID);
-    final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance ();
-    documentBuilderFactory.setNamespaceAware (false);
-    final DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder ();
-    return documentBuilder.parse (metadataFile);
+    return XMLReader.readXMLDOM (FileUtils.getInputStream (metadataFile));
   }
 
   public Document getDocument (final String channelID, final String messageID) throws SAXException {
@@ -197,7 +192,7 @@ public final class Channel {
   private static File _getPayloadFile (final File channelInboxDir, final String messageID) {
     final String sRealMessageID = _removeSpecialChars (messageID);
     final File file = new File (channelInboxDir, sRealMessageID + EXT_PAYLOAD);
-    log.info ("Getting payload file: " + file.getAbsolutePath ());
+    s_aLogger.info ("Getting payload file: " + file.getAbsolutePath ());
     return file;
   }
 

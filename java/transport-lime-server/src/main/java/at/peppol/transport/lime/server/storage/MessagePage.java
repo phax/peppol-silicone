@@ -35,7 +35,7 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.transport.lime.server;
+package at.peppol.transport.lime.server.storage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +57,6 @@ import org.w3c.dom.Node;
 
 import at.peppol.commons.wsaddr.W3CEndpointReferenceUtils;
 import at.peppol.transport.lime.Identifiers;
-import at.peppol.transport.lime.server.storage.Channel;
 
 import com.phloc.commons.jaxb.JAXBContextCache;
 import com.phloc.commons.jaxb.JAXBMarshallerUtils;
@@ -73,10 +72,14 @@ import com.sun.xml.bind.marshaller.NamespacePrefixMapper;
 public final class MessagePage {
   public static final int MESSAGE_PAGE_SIZE = 100;
   private static final Logger s_aLogger = LoggerFactory.getLogger (MessagePage.class);
+  private static final ObjectFactory s_aObjFactory = new ObjectFactory ();
 
-  private final ObjectFactory m_aObjFactory = new ObjectFactory ();
+  private MessagePage () {}
 
-  public Document getPageList (final int pageNum, final String endpoint, final Channel channel, final String channelID) throws JAXBException {
+  public static Document getPageList (final int pageNum,
+                                      final String endpoint,
+                                      final LimeStorage channel,
+                                      final String channelID) throws JAXBException {
     final int pageSize = MESSAGE_PAGE_SIZE;
     final String [] messageIDs = channel.getMessageIDs (channelID);
 
@@ -84,28 +87,28 @@ public final class MessagePage {
       throw new IllegalArgumentException ("Page number must be between 0 and " + (messageIDs.length / pageSize));
 
     s_aLogger.info ("Messages found in inbox: " + messageIDs.length);
-    return createPageListDocument (messageIDs, pageSize, pageNum, channel, channelID, endpoint);
+    return _createPageListDocument (messageIDs, pageSize, pageNum, channel, channelID, endpoint);
   }
 
-  private Document getPageListDocument (final int pageNum,
-                                        final int pageSize,
-                                        final String [] messageIDs,
-                                        final Channel channel,
-                                        final String channelID,
-                                        final String endpoint) throws JAXBException {
+  private static Document _getPageListDocument (final int pageNum,
+                                                final int pageSize,
+                                                final String [] messageIDs,
+                                                final LimeStorage channel,
+                                                final String channelID,
+                                                final String endpoint) throws JAXBException {
     final int fromMsg = pageNum * pageSize;
     final int toMsg = Math.min (((pageNum + 1) * pageSize) - 1, messageIDs.length - 1);
 
-    final PageListType pageList = m_aObjFactory.createPageListType ();
+    final PageListType pageList = s_aObjFactory.createPageListType ();
     pageList.setNumberOfEntries (new Long (toMsg - fromMsg + 1));
-    addPageListEntries (fromMsg, toMsg, messageIDs, channel, channelID, endpoint, pageList);
+    _addPageListEntries (fromMsg, toMsg, messageIDs, channel, channelID, endpoint, pageList);
     if ((messageIDs.length / pageSize) >= pageNum + 1) {
-      addNextPageIdentifier (endpoint, pageNum, pageList, channelID);
+      _addNextPageIdentifier (endpoint, pageNum, pageList, channelID);
     }
-    return marshallPageList (pageList);
+    return _marshallPageList (pageList);
   }
 
-  private Document marshallPageList (final PageListType pageList) throws JAXBException {
+  private static Document _marshallPageList (final PageListType pageList) throws JAXBException {
     final Marshaller marshaller = JAXBContextCache.getInstance ().getFromCache (PageListType.class).createMarshaller ();
     JAXBMarshallerUtils.setSunNamespacePrefixMapper (marshaller, new NamespacePrefixMapper () {
       @Override
@@ -117,15 +120,15 @@ public final class MessagePage {
     });
 
     final Document document = XMLFactory.newDocument ();
-    marshaller.marshal (m_aObjFactory.createPageList (pageList), new DOMResult (document));
-    s_aLogger.info (xmlToString (document));
+    marshaller.marshal (s_aObjFactory.createPageList (pageList), new DOMResult (document));
+    s_aLogger.info (_xmlToString (document));
     return document;
   }
 
-  private void addNextPageIdentifier (final String endpoint,
-                                      final int curPageNum,
-                                      final PageListType pageList,
-                                      final String channelID) {
+  private static void _addNextPageIdentifier (final String endpoint,
+                                              final int curPageNum,
+                                              final PageListType pageList,
+                                              final String channelID) {
     final Document aDummyDoc = XMLFactory.newDocument ();
     final List <Element> referenceParametersType = new ArrayList <Element> ();
     Element aElement = aDummyDoc.createElementNS (Identifiers.NAMESPACE_LIME, Identifiers.PAGEIDENTIFIER);
@@ -136,25 +139,25 @@ public final class MessagePage {
     aElement.appendChild (aDummyDoc.createTextNode (channelID));
     referenceParametersType.add (aElement);
 
-    final NextPageIdentifierType nextPageIdentifierType = m_aObjFactory.createNextPageIdentifierType ();
+    final NextPageIdentifierType nextPageIdentifierType = s_aObjFactory.createNextPageIdentifierType ();
     final W3CEndpointReference endpointReferenceType = W3CEndpointReferenceUtils.createEndpointReference (endpoint,
                                                                                                           referenceParametersType);
     nextPageIdentifierType.setEndpointReference (endpointReferenceType);
     pageList.setNextPageIdentifier (nextPageIdentifierType);
   }
 
-  private void addPageListEntries (final int fromMsg,
-                                   final int toMsg,
-                                   final String [] messageIDs,
-                                   final Channel channel,
-                                   final String channelID,
-                                   final String endpoint,
-                                   final PageListType pageList) {
-    pageList.setEntryList (m_aObjFactory.createEntryListType ());
+  private static void _addPageListEntries (final int fromMsg,
+                                           final int toMsg,
+                                           final String [] messageIDs,
+                                           final LimeStorage channel,
+                                           final String channelID,
+                                           final String endpoint,
+                                           final PageListType pageList) {
+    pageList.setEntryList (s_aObjFactory.createEntryListType ());
 
     for (int i = fromMsg; i <= toMsg; i++) {
       final String messageID = messageIDs[i];
-      final Entry entry = m_aObjFactory.createEntry ();
+      final Entry entry = s_aObjFactory.createEntry ();
       entry.setSize (Long.valueOf (channel.getSize (channelID, messageID)));
       entry.setCreationTime (channel.getCreationTime (channelID, messageID));
 
@@ -173,18 +176,18 @@ public final class MessagePage {
     }
   }
 
-  private Document createPageListDocument (final String [] messageIDs,
-                                           final int pageSize,
-                                           final int pageNum,
-                                           final Channel channel,
-                                           final String channelID,
-                                           final String endpoint) throws JAXBException {
+  private static Document _createPageListDocument (final String [] messageIDs,
+                                                   final int pageSize,
+                                                   final int pageNum,
+                                                   final LimeStorage channel,
+                                                   final String channelID,
+                                                   final String endpoint) throws JAXBException {
     Document pageListDocument = null;
     if (messageIDs.length > 0 && (messageIDs.length / pageSize) >= pageNum) {
 
       s_aLogger.info ("Messages in inbox: " + messageIDs.length);
 
-      pageListDocument = getPageListDocument (pageNum, pageSize, messageIDs, channel, channelID, endpoint);
+      pageListDocument = _getPageListDocument (pageNum, pageSize, messageIDs, channel, channelID, endpoint);
 
       s_aLogger.info ("Page List created. MessageIDs=" +
                       messageIDs.length +
@@ -204,7 +207,7 @@ public final class MessagePage {
     return pageListDocument;
   }
 
-  private static String xmlToString (final Node node) {
+  private static String _xmlToString (final Node node) {
     return XMLWriter.getNodeAsString (node, XMLWriterSettings.SUGGESTED_XML_SETTINGS);
   }
 }
