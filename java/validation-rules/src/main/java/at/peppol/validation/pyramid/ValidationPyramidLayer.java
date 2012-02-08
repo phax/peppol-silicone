@@ -40,7 +40,7 @@ package at.peppol.validation.pyramid;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
-import at.peppol.validation.IXMLValidator;
+import at.peppol.validation.generic.IXMLValidator;
 import at.peppol.validation.rules.EValidationLevel;
 
 import com.phloc.commons.string.ToStringGenerator;

@@ -46,9 +46,9 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 import javax.xml.transform.Source;
 
-import at.peppol.validation.IXMLValidator;
-import at.peppol.validation.XMLSchemaValidator;
-import at.peppol.validation.XMLSchematronValidator;
+import at.peppol.validation.generic.IXMLValidator;
+import at.peppol.validation.generic.XMLSchemaValidator;
+import at.peppol.validation.generic.XMLSchematronValidator;
 import at.peppol.validation.rules.EValidationArtefact;
 import at.peppol.validation.rules.EValidationDocumentType;
 import at.peppol.validation.rules.EValidationLevel;
