@@ -64,11 +64,11 @@ import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
 import at.peppol.commons.wsaddr.W3CEndpointReferenceUtils;
 import at.peppol.transport.Identifiers;
 import at.peppol.transport.MessageMetadata;
-import at.peppol.transport.lime.EndpointReferenceInterface;
-import at.peppol.transport.lime.InboxInterface;
+import at.peppol.transport.lime.IEndpointReference;
+import at.peppol.transport.lime.IInbox;
 import at.peppol.transport.lime.MessageException;
-import at.peppol.transport.lime.MessageInterface;
-import at.peppol.transport.lime.MessageReferenceInterface;
+import at.peppol.transport.lime.IMessage;
+import at.peppol.transport.lime.IMessageReference;
 import at.peppol.transport.lime.soapheader.SoapHeaderReader;
 
 import com.phloc.commons.collections.ContainerHelper;
@@ -78,16 +78,15 @@ import com.phloc.commons.xml.XMLFactory;
 import com.sun.xml.ws.api.message.HeaderList;
 import com.sun.xml.ws.developer.JAXWSProperties;
 
-
 /**
  * @author Ravnholt<br>
  *         PEPPOL.AT, BRZ, Philip Helger
  */
-public class Inbox implements InboxInterface {
+public class Inbox implements IInbox {
   private static final Logger log = LoggerFactory.getLogger (Inbox.class);
 
-  public List <MessageReferenceInterface> getMessageList (final IReadonlyUsernamePWCredentials credentials,
-                                                          final EndpointReferenceInterface origEndpointReference) throws MessageException {
+  public List <IMessageReference> getMessageList (final IReadonlyUsernamePWCredentials credentials,
+                                                          final IEndpointReference origEndpointReference) throws MessageException {
     final EndpointReference endpointReference = new EndpointReference ();
     endpointReference.setAddress (origEndpointReference.getAddress ());
     endpointReference.setChannelID (origEndpointReference.getChannelID ());
@@ -95,7 +94,7 @@ public class Inbox implements InboxInterface {
     validateCredentials (credentials);
     try {
       final List <Element> referenceParameters = createChannelReferenceParameter (endpointReference);
-      final ArrayList <MessageReferenceInterface> messages = new ArrayList <MessageReferenceInterface> ();
+      final List <IMessageReference> messages = new ArrayList <IMessageReference> ();
       boolean morePages = true;
       do {
         morePages = getSinglePage (endpointReference, referenceParameters, credentials, messages);
@@ -108,12 +107,12 @@ public class Inbox implements InboxInterface {
     }
   }
 
-  public List <MessageReferenceInterface> getMessageListPage (final IReadonlyUsernamePWCredentials credentials,
-                                                              final EndpointReferenceInterface endpointReference,
+  public List <IMessageReference> getMessageListPage (final IReadonlyUsernamePWCredentials credentials,
+                                                              final IEndpointReference endpointReference,
                                                               final int pageNumber) throws MessageException {
     validateCredentials (credentials);
     try {
-      final ArrayList <MessageReferenceInterface> messages = new ArrayList <MessageReferenceInterface> ();
+      final ArrayList <IMessageReference> messages = new ArrayList <IMessageReference> ();
       getSinglePage (endpointReference, null, credentials, messages);
       return messages;
     }
@@ -122,8 +121,8 @@ public class Inbox implements InboxInterface {
     }
   }
 
-  public MessageInterface getMessage (final IReadonlyUsernamePWCredentials credentials,
-                                      final MessageReferenceInterface messageReferenceInterface) throws MessageException {
+  public IMessage getMessage (final IReadonlyUsernamePWCredentials credentials,
+                                      final IMessageReference messageReferenceInterface) throws MessageException {
     validateCredentials (credentials);
     try {
       final Resource port = new WebservicePort ().getServicePort (messageReferenceInterface.getEndpointReference ()
@@ -161,7 +160,7 @@ public class Inbox implements InboxInterface {
   }
 
   public void deleteMessage (final IReadonlyUsernamePWCredentials credentials,
-                             final MessageReferenceInterface messageReferenceInterface) throws MessageException {
+                             final IMessageReference messageReferenceInterface) throws MessageException {
     validateCredentials (credentials);
     try {
       final Resource port = new WebservicePort ().getServicePort (messageReferenceInterface.getEndpointReference ()
@@ -178,7 +177,7 @@ public class Inbox implements InboxInterface {
     }
   }
 
-  private static List <Element> createChannelReferenceParameter (final EndpointReferenceInterface endpointReference) {
+  private static List <Element> createChannelReferenceParameter (final IEndpointReference endpointReference) {
     final Document aDummyDoc = XMLFactory.newDocument ();
     final Element node = aDummyDoc.createElementNS (Identifiers.NAMESPACE_TRANSPORT_IDS, "ChannelIdentifier");
     node.setTextContent (endpointReference.getChannelID ());
@@ -200,12 +199,12 @@ public class Inbox implements InboxInterface {
 
   // TODO MessageReferenceInterface skal ændres til at indeholde en
   // endpointreference og reference parameters
-  private static boolean getSinglePage (final EndpointReferenceInterface endpointReference,
+  private static boolean getSinglePage (final IEndpointReference endpointReference,
                                         @Nullable final List <Element> referenceParameters,
                                         final IReadonlyUsernamePWCredentials credentials,
-                                        final ArrayList <MessageReferenceInterface> messages) throws Exception,
-                                                                                             JAXBException,
-                                                                                             DOMException {
+                                        final List <IMessageReference> messages) throws Exception,
+                                                                                        JAXBException,
+                                                                                        DOMException {
     boolean morePages = false;
     final Resource port = new WebservicePort ().getServicePort (endpointReference.getAddress (),
                                                                 credentials.getUsername (),
@@ -220,7 +219,7 @@ public class Inbox implements InboxInterface {
       final PageListType pageList = unmarshaller.unmarshal (aResponseAnyNode, PageListType.class).getValue ();
       if (pageList != null && pageList.getEntryList () != null) {
         for (final Entry entry : pageList.getEntryList ().getEntry ()) {
-          final MessageReferenceInterface messageReference = new MessageReference ();
+          final IMessageReference messageReference = new MessageReference ();
           messageReference.setEndpointReference (endpointReference);
           // Element element = (Element)
           // ((JAXBElement)entry.getEndpointReference().getReferenceParameters().getAny().get(1)).getValue();
@@ -245,7 +244,7 @@ public class Inbox implements InboxInterface {
   }
 
   private static void setMessageMetadata (final Resource port,
-                                          final MessageReferenceInterface messageReferenceInterface,
+                                          final IMessageReference messageReferenceInterface,
                                           final Message message) throws Exception {
     final HeaderList hl = (HeaderList) ((BindingProvider) port).getResponseContext ()
                                                                .get (JAXWSProperties.INBOUND_HEADER_LIST_PROPERTY);

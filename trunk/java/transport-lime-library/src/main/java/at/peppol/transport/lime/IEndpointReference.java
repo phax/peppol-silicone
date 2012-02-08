@@ -35,64 +35,18 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.transport.lime.impl;
-
-import org.busdox.transport.identifiers._1.DocumentIdentifierType;
-import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
-import org.busdox.transport.identifiers._1.ProcessIdentifierType;
-
-import at.peppol.busdox.identifier.IDocumentIdentifier;
-import at.peppol.busdox.identifier.IParticipantIdentifier;
-import at.peppol.busdox.identifier.IProcessIdentifier;
-import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
-import at.peppol.commons.utils.UsernamePWCredentials;
-import at.peppol.transport.lime.EndpointReferenceInterface;
-import at.peppol.transport.lime.InboxInterface;
-import at.peppol.transport.lime.MessageInterface;
-import at.peppol.transport.lime.MessageReferenceInterface;
-import at.peppol.transport.lime.OutboxInterface;
-
+package at.peppol.transport.lime;
 
 /**
  * @author Ravnholt<br>
  *         PEPPOL.AT, BRZ, Philip Helger
  */
-public final class Factory {
-  private Factory () {}
+public interface IEndpointReference {
+  String getAddress ();
 
-  public static IParticipantIdentifier createBusinessIdentifier () {
-    return new ParticipantIdentifierType ();
-  }
+  void setAddress (String address);
 
-  public static IDocumentIdentifier createDocumentType () {
-    return new DocumentIdentifierType ();
-  }
+  String getChannelID ();
 
-  public static EndpointReferenceInterface createEndpointReference () {
-    return new EndpointReference ();
-  }
-
-  public static MessageInterface createMessage () {
-    return new Message ();
-  }
-
-  public static MessageReferenceInterface createMessageReference () {
-    return new MessageReference ();
-  }
-
-  public static IProcessIdentifier createProcessType () {
-    return new ProcessIdentifierType ();
-  }
-
-  public static InboxInterface createInbox () {
-    return new Inbox ();
-  }
-
-  public static OutboxInterface createOutbox () {
-    return new Outbox ();
-  }
-
-  public static IReadonlyUsernamePWCredentials createCredentials (final String sUsername, final String sPassword) {
-    return new UsernamePWCredentials (sUsername, sPassword);
-  }
+  void setChannelID (String channelID);
 }

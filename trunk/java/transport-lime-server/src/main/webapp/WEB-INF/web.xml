@@ -43,13 +43,13 @@
     <listener-class>com.sun.xml.ws.transport.http.servlet.WSServletContextListener</listener-class>
   </listener>
   <servlet>
-    <servlet-name>wstransferService</servlet-name>
+    <servlet-name>limeService</servlet-name>
     <servlet-class>com.sun.xml.ws.transport.http.servlet.WSServlet</servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
   <servlet-mapping>
-    <servlet-name>wstransferService</servlet-name>
-    <url-pattern>/wstransferService</url-pattern>
+    <servlet-name>limeService</servlet-name>
+    <url-pattern>/limeService</url-pattern>
   </servlet-mapping>
   <session-config>
     <session-timeout>30</session-timeout>

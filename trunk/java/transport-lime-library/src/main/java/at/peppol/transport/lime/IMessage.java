@@ -37,31 +37,40 @@
  */
 package at.peppol.transport.lime;
 
-import java.util.List;
+import java.util.Date;
 
-import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
+import org.w3c.dom.Document;
 
+import at.peppol.busdox.identifier.IDocumentIdentifier;
+import at.peppol.busdox.identifier.IParticipantIdentifier;
+import at.peppol.busdox.identifier.IProcessIdentifier;
 
 /**
  * @author Ravnholt<br>
  *         PEPPOL.AT, BRZ, Philip Helger
  */
-public interface InboxInterface {
-  // Returns a reference to all messages in the inbox
-  List <MessageReferenceInterface> getMessageList (IReadonlyUsernamePWCredentials credentials,
-                                                   EndpointReferenceInterface endpointReference) throws MessageException;
+public interface IMessage {
+  Date getCreatedTime ();
 
-  // Returns a reference to one page of messages in the inbox, pagenumbers
-  // starts at zero
-  List <MessageReferenceInterface> getMessageListPage (IReadonlyUsernamePWCredentials credentials,
-                                                       EndpointReferenceInterface endpointReference,
-                                                       int pageNumber) throws MessageException;
+  String getMessageID ();
 
-  // Returns the message identified by the message reference. Messages may be
-  // retrieved more than once.
-  MessageInterface getMessage (IReadonlyUsernamePWCredentials credentials,
-                               MessageReferenceInterface messageReferenceInterface) throws MessageException;
+  IParticipantIdentifier getSender ();
 
-  // Messages must be deleted when they are no longer needed.
-  void deleteMessage (IReadonlyUsernamePWCredentials credentials, MessageReferenceInterface messageReferenceInterface) throws MessageException;
+  void setSender (IParticipantIdentifier sender);
+
+  IParticipantIdentifier getReciever ();
+
+  void setReciever (IParticipantIdentifier reciever);
+
+  IDocumentIdentifier getDocumentType ();
+
+  void setDocumentType (IDocumentIdentifier documentType);
+
+  Document getDocument ();
+
+  void setDocument (Document document);
+
+  IProcessIdentifier getProcessType ();
+
+  void setProcessType (IProcessIdentifier processType);
 }

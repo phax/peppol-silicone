@@ -37,13 +37,13 @@
  */
 package at.peppol.transport.lime.impl;
 
-import at.peppol.transport.lime.EndpointReferenceInterface;
+import at.peppol.transport.lime.IEndpointReference;
 
 /**
  * @author Ravnholt<br>
  *         PEPPOL.AT, BRZ, Philip Helger
  */
-public class EndpointReference implements EndpointReferenceInterface {
+public class EndpointReference implements IEndpointReference {
 
   private String m_sAddress;
   private String m_sChannelID;
