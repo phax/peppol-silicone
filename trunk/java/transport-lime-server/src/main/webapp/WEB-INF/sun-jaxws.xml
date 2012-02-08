@@ -40,6 +40,6 @@
 -->
 <endpoints version="2.0" xmlns="http://java.sun.com/xml/ns/jax-ws/ri/runtime">
   <endpoint name="wstransferService" 
-            implementation="org.busdox.transport.lime.server.WSTransferService" 
-            url-pattern="/wstransferService"/>
+            implementation="at.peppol.transport.lime.server.WSTransferService" 
+            url-pattern="/limeService"/>
 </endpoints>

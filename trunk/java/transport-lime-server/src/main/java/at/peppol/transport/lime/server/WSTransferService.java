@@ -154,7 +154,7 @@ public class WSTransferService {
 
   /**
    * Delete
-   * 
+   *
    * @param body
    *        delete body
    * @return response
@@ -176,10 +176,10 @@ public class WSTransferService {
   public CreateResponse create (@SuppressWarnings ("unused") final Create body,
                                 @SuppressWarnings ("unused") final String messageIdHeader,
                                 final String channelIdHeader,
-                                final org.busdox.transport.identifiers._1.ParticipantIdentifierType recipientIdHeader,
-                                final org.busdox.transport.identifiers._1.ParticipantIdentifierType senderIdHeader,
-                                final org.busdox.transport.identifiers._1.DocumentIdentifierType documentIdHeader,
-                                final org.busdox.transport.identifiers._1.ProcessIdentifierType processIdHeader) {
+                                final ParticipantIdentifierType recipientIdHeader,
+                                final ParticipantIdentifierType senderIdHeader,
+                                final DocumentIdentifierType documentIdHeader,
+                                final ProcessIdentifierType processIdHeader) {
     final String messageID = "uuid:" + UUID.randomUUID ().toString ();
     MessageMetadata soapHeader = null;
     final String thisURLstr = getOwnUrl () + SERVICENAME;
