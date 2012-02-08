@@ -43,6 +43,7 @@ package at.peppol.transport.start.server;
 
 import java.security.KeyStore;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.ServiceLoader;
@@ -86,14 +87,17 @@ import at.peppol.transport.MessageMetadataHelper;
 import at.peppol.transport.PingMessageHelper;
 import at.peppol.transport.start.cert.ServerConfigFile;
 import at.peppol.transport.start.client.AccessPointClient;
-import at.peppol.transport.start.server.IAccessPointServiceReceiverSPI;
 
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.annotations.UnsupportedOperation;
 import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.error.EErrorLevel;
 import com.phloc.commons.exceptions.InitializationException;
 import com.phloc.commons.io.misc.SizeHelper;
+import com.phloc.commons.log.LogMessage;
+import com.phloc.commons.state.ESuccess;
+import com.phloc.commons.state.impl.SuccessWithValue;
 import com.sun.xml.ws.api.message.HeaderList;
 import com.sun.xml.ws.developer.JAXWSProperties;
 
@@ -291,14 +295,40 @@ public class AccessPointService {
           s_aLogger.info ("Sender Access Point and Receiver Access Point are the same");
           s_aLogger.info ("This is a local request - storage directly " + aMetadata.getRecipientID ().getValue ());
 
-          // Invoke all available SPI implementations
+          ESuccess eOverallSuccess = ESuccess.SUCCESS;
+          final List <LogMessage> aProcessingMessages = new ArrayList <LogMessage> ();
           try {
-            for (final IAccessPointServiceReceiverSPI aReceiver : s_aReceivers)
-              aReceiver.receiveDocument (webServiceContext, aMetadata, aBody);
+            // Invoke all available SPI implementations
+            for (final IAccessPointServiceReceiverSPI aReceiver : s_aReceivers) {
+              final SuccessWithValue <AccessPointReceiveError> aSV = aReceiver.receiveDocument (webServiceContext,
+                                                                                                aMetadata,
+                                                                                                aBody);
+              eOverallSuccess = eOverallSuccess.and (aSV);
+              final AccessPointReceiveError aError = aSV.get ();
+              if (aError != null) {
+                // Remember all messages
+                aProcessingMessages.addAll (aError.getAllMessages ());
+              }
+            }
           }
           catch (final Exception ex) {
-            throw ExceptionUtils.createFaultMessage (ex, "Receive document via SPI");
+            aProcessingMessages.add (new LogMessage (EErrorLevel.ERROR,
+                                                     "Internal error in processing incoming message",
+                                                     ex));
+            eOverallSuccess = ESuccess.FAILURE;
           }
+
+          if (!aProcessingMessages.isEmpty ()) {
+            // Log all messages from processing
+            s_aLogger.info ("Messages from processing the document " + aMetadata.getMessageID () + ":");
+            for (final LogMessage aLogMsg : aProcessingMessages)
+              s_aLogger.info ('[' + aLogMsg.getErrorLevel ().getID () + "] " + aLogMsg.getMessage (),
+                              aLogMsg.getThrowable ());
+          }
+
+          if (eOverallSuccess.isFailure ())
+            throw ExceptionUtils.createFaultMessage (new IllegalStateException ("Failure in processing document from PEPPOL"),
+                                                     "Internal error in processing the incoming PEPPOL document");
         }
         else {
           // TODO throw an exception if it is not for us

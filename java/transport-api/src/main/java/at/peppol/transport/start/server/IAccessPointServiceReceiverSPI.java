@@ -45,7 +45,7 @@ import org.w3._2009._02.ws_tra.Create;
 import at.peppol.transport.IMessageMetadata;
 
 import com.phloc.commons.annotations.IsSPIInterface;
-
+import com.phloc.commons.state.impl.SuccessWithValue;
 
 /**
  * Implement this SPI interface, if you want to handle incoming document
@@ -57,7 +57,10 @@ public interface IAccessPointServiceReceiverSPI {
   /**
    * Called when a message is received from the server.<br>
    * Note: if an exception is thrown, further SPI implementations will not be
-   * invoked.
+   * invoked.<br>
+   * Messages that are added into the result {@link AccessPointReceiveError} 
+   * don't need to be logged, as they are automatically logged by the invoking
+   * component.
    * 
    * @param aWebServiceContext
    *        The context of the receiving web service. Never <code>null</code>.
@@ -65,8 +68,12 @@ public interface IAccessPointServiceReceiverSPI {
    *        The received message metadata. Never <code>null</code>.
    * @param aBody
    *        The message body that was received. Never <code>null</code>.
+   * @return A success indicator with an attached value. If the processing was
+   *         successful, the contained {@link AccessPointReceiveError}. may be
+   *         <code>null</code>.
    */
-  void receiveDocument (@Nonnull WebServiceContext aWebServiceContext,
-                        @Nonnull IMessageMetadata aMetadata,
-                        @Nonnull Create aBody);
+  @Nonnull
+  SuccessWithValue <AccessPointReceiveError> receiveDocument (@Nonnull WebServiceContext aWebServiceContext,
+                                                              @Nonnull IMessageMetadata aMetadata,
+                                                              @Nonnull Create aBody);
 }

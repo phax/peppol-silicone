@@ -56,11 +56,12 @@ import org.w3c.dom.Element;
 
 import at.peppol.transport.IMessageMetadata;
 import at.peppol.transport.MessageMetadataHelper;
+import at.peppol.transport.start.server.AccessPointReceiveError;
 import at.peppol.transport.start.server.IAccessPointServiceReceiverSPI;
 
 import com.phloc.commons.annotations.IsSPIImplementation;
 import com.phloc.commons.collections.ContainerHelper;
-
+import com.phloc.commons.state.impl.SuccessWithValue;
 
 @IsSPIImplementation
 public final class AccessPointServiceFileReceiver implements IAccessPointServiceReceiverSPI {
@@ -70,10 +71,12 @@ public final class AccessPointServiceFileReceiver implements IAccessPointService
   // stored
   private static final String INIT_PARAMETER_REAL_PATH = "userfolder";
 
-  public void receiveDocument (@Nonnull final WebServiceContext aWebServiceContext,
-                               @Nonnull final IMessageMetadata aMetadata,
-                               @Nonnull final Create aBody) {
+  @Nonnull
+  public SuccessWithValue <AccessPointReceiveError> receiveDocument (@Nonnull final WebServiceContext aWebServiceContext,
+                                                                     @Nonnull final IMessageMetadata aMetadata,
+                                                                     @Nonnull final Create aBody) {
     // get Body object
+    final AccessPointReceiveError aErrs = new AccessPointReceiveError ();
     final List <Object> objects = aBody.getAny ();
     if (ContainerHelper.getSize (objects) == 1) {
       // It must be an Element
@@ -94,12 +97,17 @@ public final class AccessPointServiceFileReceiver implements IAccessPointService
                                                        aMetadata.getMessageID (),
                                                        aMetadataDocument,
                                                        aMessageDocument);
+        return SuccessWithValue.createSuccess (aErrs);
       }
       catch (final Exception ex) {
+        aErrs.error ("Failed to save document", ex);
         s_aLogger.error ("Failed to save document", ex);
       }
     }
-    else
-      s_aLogger.warn ("The received message contains more than one element!");
+    else {
+      aErrs.error ("The received message contains more than one element!");
+      s_aLogger.error ("The received message contains more than one element!");
+    }
+    return SuccessWithValue.createFailure (aErrs);
   }
 }
