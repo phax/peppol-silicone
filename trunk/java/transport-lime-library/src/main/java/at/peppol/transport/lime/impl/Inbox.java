@@ -125,7 +125,7 @@ public class Inbox implements IInbox {
                               final IMessageReference messageReferenceInterface) throws MessageException {
     validateCredentials (credentials);
     try {
-      final Resource port = WebservicePort.getServicePort (messageReferenceInterface.getEndpointReference ()
+      final Resource port = LimeHelper.getServicePort (messageReferenceInterface.getEndpointReference ()
                                                                                     .getAddress (), credentials);
 
       // TODO is this necessary?
@@ -161,7 +161,7 @@ public class Inbox implements IInbox {
                              final IMessageReference messageReferenceInterface) throws MessageException {
     validateCredentials (credentials);
     try {
-      final Resource port = WebservicePort.getServicePort (messageReferenceInterface.getEndpointReference ()
+      final Resource port = LimeHelper.getServicePort (messageReferenceInterface.getEndpointReference ()
                                                                                     .getAddress (), credentials);
       SoapHeaderMapper.setupHandlerChain ((BindingProvider) port,
                                           messageReferenceInterface.getEndpointReference ().getChannelID (),
@@ -202,7 +202,7 @@ public class Inbox implements IInbox {
                                                                                 JAXBException,
                                                                                 DOMException {
     boolean morePages = false;
-    final Resource port = WebservicePort.getServicePort (endpointReference.getAddress (), credentials);
+    final Resource port = LimeHelper.getServicePort (endpointReference.getAddress (), credentials);
     SoapHeaderMapper.setupHandlerChain ((BindingProvider) port, null, null, referenceParameters);
     final GetResponse aGetResponse = port.get (null);
     if (aGetResponse != null && aGetResponse.getAny () != null && aGetResponse.getAny ().size () == 1) {

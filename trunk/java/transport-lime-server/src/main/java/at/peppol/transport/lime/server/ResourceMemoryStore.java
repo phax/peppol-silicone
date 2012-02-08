@@ -43,8 +43,11 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import at.peppol.transport.IMessageMetadata;
+
+import com.phloc.commons.state.EChange;
 
 /**
  * @author Ravnholt<br>
@@ -56,7 +59,7 @@ public final class ResourceMemoryStore {
   }
 
   private final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
-  private final Map <String, IMessageMetadata> resourceMap = new HashMap <String, IMessageMetadata> ();
+  private final Map <String, IMessageMetadata> m_aResourceMap = new HashMap <String, IMessageMetadata> ();
 
   private ResourceMemoryStore () {}
 
@@ -65,43 +68,46 @@ public final class ResourceMemoryStore {
     return SingletonHolder.s_aInstance;
   }
 
-  public boolean isStored (final String messageID, final String urlStr) {
+  public boolean isStored (final String sMessageID, final String sURLStr) {
     m_aRWLock.readLock ().lock ();
     try {
-      final String key = getKey (messageID, urlStr);
-      return resourceMap.containsKey (key);
+      final String key = _getKey (sMessageID, sURLStr);
+      return m_aResourceMap.containsKey (key);
     }
     finally {
       m_aRWLock.readLock ().unlock ();
     }
   }
 
-  public boolean createResource (final String messageID, final String urlStr, final IMessageMetadata soapHeader) {
+  @Nonnull
+  public EChange createResource (final String sMessageID, final String sURLStr, final IMessageMetadata soapHeader) {
     m_aRWLock.writeLock ().lock ();
     try {
-      final String key = getKey (messageID, urlStr);
-      if (resourceMap.containsKey (key))
-        return false;
-      resourceMap.put (key, soapHeader);
-      return true;
+      final String key = _getKey (sMessageID, sURLStr);
+      if (m_aResourceMap.containsKey (key))
+        return EChange.UNCHANGED;
+      m_aResourceMap.put (key, soapHeader);
+      return EChange.CHANGED;
     }
     finally {
       m_aRWLock.writeLock ().unlock ();
     }
   }
 
-  public IMessageMetadata getMessage (final String messageID, final String urlStr) {
+  @Nullable
+  public IMessageMetadata getMessage (final String sMessageID, final String sURLStr) {
     m_aRWLock.readLock ().lock ();
     try {
-      final String key = getKey (messageID, urlStr);
-      return resourceMap.get (key);
+      final String key = _getKey (sMessageID, sURLStr);
+      return m_aResourceMap.get (key);
     }
     finally {
       m_aRWLock.readLock ().unlock ();
     }
   }
 
-  private static String getKey (final String messageID, final String urlStr) {
-    return messageID + urlStr;
+  @Nonnull
+  private static String _getKey (final String sMessageID, final String sURLStr) {
+    return sMessageID + sURLStr;
   }
 }
