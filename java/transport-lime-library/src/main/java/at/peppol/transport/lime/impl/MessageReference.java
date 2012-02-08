@@ -37,19 +37,19 @@
  */
 package at.peppol.transport.lime.impl;
 
-import at.peppol.transport.lime.EndpointReferenceInterface;
-import at.peppol.transport.lime.MessageReferenceInterface;
+import at.peppol.transport.lime.IEndpointReference;
+import at.peppol.transport.lime.IMessageReference;
 
 /**
  * @author Ravnholt<br>
  *         PEPPOL.AT, BRZ, Philip Helger
  */
-public class MessageReference implements MessageReferenceInterface {
+public class MessageReference implements IMessageReference {
 
-  private EndpointReferenceInterface m_aEndpointReference;
+  private IEndpointReference m_aEndpointReference;
   private String m_sMessageId;
 
-  public void setEndpointReference (final EndpointReferenceInterface endpointReference) {
+  public void setEndpointReference (final IEndpointReference endpointReference) {
     m_aEndpointReference = endpointReference;
   }
 
@@ -57,7 +57,7 @@ public class MessageReference implements MessageReferenceInterface {
     m_sMessageId = messageId;
   }
 
-  public EndpointReferenceInterface getEndpointReference () {
+  public IEndpointReference getEndpointReference () {
     return m_aEndpointReference;
   }
 

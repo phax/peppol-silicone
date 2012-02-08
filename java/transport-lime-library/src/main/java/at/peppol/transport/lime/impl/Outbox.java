@@ -69,11 +69,11 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
-import at.peppol.transport.lime.EndpointReferenceInterface;
+import at.peppol.transport.lime.IEndpointReference;
 import at.peppol.transport.lime.Identifiers;
 import at.peppol.transport.lime.MessageException;
-import at.peppol.transport.lime.MessageInterface;
-import at.peppol.transport.lime.OutboxInterface;
+import at.peppol.transport.lime.IMessage;
+import at.peppol.transport.lime.IOutbox;
 
 import com.phloc.commons.string.StringHelper;
 
@@ -82,12 +82,12 @@ import com.phloc.commons.string.StringHelper;
  * @author Ravnholt<br>
  *         PEPPOL.AT, BRZ, Philip Helger
  */
-public class Outbox implements OutboxInterface {
+public class Outbox implements IOutbox {
   private static final Logger log = LoggerFactory.getLogger (Outbox.class);
 
   public String sendMessage (final IReadonlyUsernamePWCredentials credentials,
-                             final MessageInterface message,
-                             final EndpointReferenceInterface endpointReferenceInterface) throws MessageException {
+                             final IMessage message,
+                             final IEndpointReference endpointReferenceInterface) throws MessageException {
     checkCredentials (credentials);
 
     try {

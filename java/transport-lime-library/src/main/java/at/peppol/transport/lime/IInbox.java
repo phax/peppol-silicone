@@ -37,16 +37,31 @@
  */
 package at.peppol.transport.lime;
 
+import java.util.List;
+
+import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
+
+
 /**
  * @author Ravnholt<br>
  *         PEPPOL.AT, BRZ, Philip Helger
  */
-public interface MessageReferenceInterface {
-  EndpointReferenceInterface getEndpointReference ();
+public interface IInbox {
+  // Returns a reference to all messages in the inbox
+  List <IMessageReference> getMessageList (IReadonlyUsernamePWCredentials credentials,
+                                                   IEndpointReference endpointReference) throws MessageException;
 
-  String getMessageID ();
+  // Returns a reference to one page of messages in the inbox, pagenumbers
+  // starts at zero
+  List <IMessageReference> getMessageListPage (IReadonlyUsernamePWCredentials credentials,
+                                                       IEndpointReference endpointReference,
+                                                       int pageNumber) throws MessageException;
 
-  void setEndpointReference (EndpointReferenceInterface endpointReference);
+  // Returns the message identified by the message reference. Messages may be
+  // retrieved more than once.
+  IMessage getMessage (IReadonlyUsernamePWCredentials credentials,
+                               IMessageReference messageReferenceInterface) throws MessageException;
 
-  void setMessageId (String messageId);
+  // Messages must be deleted when they are no longer needed.
+  void deleteMessage (IReadonlyUsernamePWCredentials credentials, IMessageReference messageReferenceInterface) throws MessageException;
 }

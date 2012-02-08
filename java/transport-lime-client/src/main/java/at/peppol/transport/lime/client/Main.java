@@ -64,16 +64,20 @@ import at.peppol.commons.identifier.SimpleProcessIdentifier;
 import at.peppol.commons.identifier.docid.EPredefinedDocumentIdentifier;
 import at.peppol.commons.identifier.procid.EPredefinedProcessIdentifier;
 import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
-import at.peppol.transport.lime.EndpointReferenceInterface;
-import at.peppol.transport.lime.InboxInterface;
+import at.peppol.commons.utils.UsernamePWCredentials;
+import at.peppol.transport.lime.IEndpointReference;
+import at.peppol.transport.lime.IInbox;
 import at.peppol.transport.lime.MessageException;
-import at.peppol.transport.lime.MessageInterface;
-import at.peppol.transport.lime.MessageReferenceInterface;
-import at.peppol.transport.lime.impl.Factory;
+import at.peppol.transport.lime.IMessage;
+import at.peppol.transport.lime.IMessageReference;
+import at.peppol.transport.lime.impl.EndpointReference;
+import at.peppol.transport.lime.impl.Inbox;
+import at.peppol.transport.lime.impl.Message;
+import at.peppol.transport.lime.impl.MessageReference;
+import at.peppol.transport.lime.impl.Outbox;
 
 import com.phloc.commons.io.resource.FileSystemResource;
 import com.phloc.commons.xml.serialize.XMLReader;
-
 
 /**
  * @author Ravnholt<br>
@@ -98,11 +102,10 @@ public final class Main {
 
   public static void main (final String [] args) throws Exception {
     CBusDox.setMetroDebugSystemProperties (true);
-    final String apUrl2 = "http://localhost:8080/busdox-transport-lime-server/wstransferService";
+    final String apUrl2 = "http://localhost:8080/busdox-transport-lime-server/limeService";
     // any xml will do
     final String xmlFile = "src/test/java/xml/CENBII-Order-maximal.xml";
 
-    new Main ();
     Main.testSend (apUrl2, xmlFile, SENDER, RECEIVER);
     /*
      * new Main().testReadAndDelete(apUrl1, receiver); new
@@ -113,7 +116,7 @@ public final class Main {
   @SuppressWarnings ("unused")
   private static void testReadAndDelete (final String apUrl, final IReadonlyIdentifier receiverID) throws Exception {
     final String channelID = receiverID.getValue ();
-    final EndpointReferenceInterface endpointReference = Factory.createEndpointReference ();
+    final IEndpointReference endpointReference = new EndpointReference ();
     endpointReference.setAddress (apUrl);
     endpointReference.setChannelID (channelID);
 
@@ -129,12 +132,12 @@ public final class Main {
                                                                                        receiverID.getValue () +
                                                                                            "UNKNOWN");
     final String channelID = senderID.getValue ();
-    final EndpointReferenceInterface endpointReference = Factory.createEndpointReference ();
+    final IEndpointReference endpointReference = new EndpointReference ();
     endpointReference.setAddress (apUrl);
     endpointReference.setChannelID (channelID);
 
     try {
-      final MessageInterface message = createSampleMessage (xmlFilename, senderID, unFindable, DOCID, PROCESS);
+      final IMessage message = createSampleMessage (xmlFilename, senderID, unFindable, DOCID, PROCESS);
       testSendMessage (message, endpointReference);
     }
     catch (final Exception e) {
@@ -152,38 +155,37 @@ public final class Main {
                                   final IReadonlyParticipantIdentifier senderID,
                                   final IReadonlyParticipantIdentifier receiverID) throws Exception {
     final String channelID = senderID.getValue ();
-    final EndpointReferenceInterface endpointReference = Factory.createEndpointReference ();
+    final IEndpointReference endpointReference = new EndpointReference ();
     endpointReference.setAddress (apUrl);
     endpointReference.setChannelID (channelID);
 
-    final MessageInterface message = createSampleMessage (xmlFilename, senderID, receiverID, DOCID, PROCESS);
+    final IMessage message = createSampleMessage (xmlFilename, senderID, receiverID, DOCID, PROCESS);
     final String messageID = testSendMessage (message, endpointReference);
     return messageID;
   }
 
   private static IReadonlyUsernamePWCredentials createCredentials () {
-
-    return Factory.createCredentials ("peppol", "peppol");
+    return new UsernamePWCredentials ("peppol", "peppol");
   }
 
-  private static String testSendMessage (final MessageInterface message,
-                                         final EndpointReferenceInterface endpointReference) throws MessageException {
+  private static String testSendMessage (final IMessage message,
+                                         final IEndpointReference endpointReference) throws MessageException {
     String messageid = null;
     for (int i = 0; i < 1; i++) {
 
-      messageid = Factory.createOutbox ().sendMessage (createCredentials (), message, endpointReference);
+      messageid = new Outbox ().sendMessage (createCredentials (), message, endpointReference);
       System.out.println ("OUTBOX - MESSAGE DELIVERED: " + messageid);
     }
     return messageid;
   }
 
-  private static void testGetMessage (final String messageID, final EndpointReferenceInterface endpointReference) throws MessageException,
+  private static void testGetMessage (final String messageID, final IEndpointReference endpointReference) throws MessageException,
                                                                                                                  TransformerException,
                                                                                                                  TransformerFactoryConfigurationError {
-    final MessageReferenceInterface messageReference = Factory.createMessageReference ();
+    final IMessageReference messageReference = new MessageReference ();
     messageReference.setMessageId (messageID);
     messageReference.setEndpointReference (endpointReference);
-    final MessageInterface fetchedMessage = Factory.createInbox ().getMessage (createCredentials (), messageReference);
+    final IMessage fetchedMessage = new Inbox ().getMessage (createCredentials (), messageReference);
     if (fetchedMessage != null) {
       System.out.println ("INBOX - MESSAGE: " + messageID);
       System.out.println (fetchedMessage);
@@ -194,14 +196,13 @@ public final class Main {
     }
   }
 
-  private static String testGetLastMessage (final EndpointReferenceInterface endpointReference) throws MessageException,
+  private static String testGetLastMessage (final IEndpointReference endpointReference) throws MessageException,
                                                                                                TransformerFactoryConfigurationError {
     String lastMessage = null;
-    final List <MessageReferenceInterface> messageReferences = Factory.createInbox ()
-                                                                      .getMessageList (createCredentials (),
-                                                                                       endpointReference);
+    final List <IMessageReference> messageReferences = new Inbox ().getMessageList (createCredentials (),
+                                                                                            endpointReference);
     if (messageReferences != null && messageReferences.size () > 0) {
-      for (final MessageReferenceInterface messageReference : messageReferences) {
+      for (final IMessageReference messageReference : messageReferences) {
         System.out.println ("INBOX - MESSAGE: " + messageReference.getMessageID ());
         lastMessage = messageReference.getMessageID ();
       }
@@ -212,22 +213,22 @@ public final class Main {
     return lastMessage;
   }
 
-  private static void testDeleteMessage (final String messageID, final EndpointReferenceInterface endpointReference) throws MessageException,
+  private static void testDeleteMessage (final String messageID, final IEndpointReference endpointReference) throws MessageException,
                                                                                                                     TransformerFactoryConfigurationError {
-    final MessageReferenceInterface messageReference = Factory.createMessageReference ();
+    final IMessageReference messageReference = new MessageReference ();
     messageReference.setMessageId (messageID);
     messageReference.setEndpointReference (endpointReference);
-    Factory.createInbox ().deleteMessage (createCredentials (), messageReference);
+    new Inbox ().deleteMessage (createCredentials (), messageReference);
     System.out.println ("INBOX - MESSAGE DELETED: " + messageID);
   }
 
-  private static void testPollForMessages (final EndpointReferenceInterface endpointReference,
+  private static void testPollForMessages (final IEndpointReference endpointReference,
                                            final boolean leaveMessages) throws TransformerConfigurationException,
                                                                        TransformerException {
-    final InboxInterface inbox = Factory.createInbox ();
+    final IInbox inbox = new Inbox ();
     final long millis = POLL_SLEEP_MS;
     try {
-      final List <MessageReferenceInterface> messageReferences = inbox.getMessageList (createCredentials (),
+      final List <IMessageReference> messageReferences = inbox.getMessageList (createCredentials (),
                                                                                        endpointReference);
       if (messageReferences != null && messageReferences.size () > 0) {
         System.out.println ("INBOX - RETRIEVED " +
@@ -235,9 +236,9 @@ public final class Main {
                             " MESSAGES AT " +
                             (new Date ()).toString ());
         final int index = 1;
-        for (final MessageReferenceInterface messageReference : messageReferences) {
+        for (final IMessageReference messageReference : messageReferences) {
           try {
-            final MessageInterface message = inbox.getMessage (createCredentials (), messageReference);
+            final IMessage message = inbox.getMessage (createCredentials (), messageReference);
             streamMessage (message, System.out);
             System.out.println ("INBOX - MESSAGE (" + index + "/" + messageReferences.size () + ")");
             System.out.println (message);
@@ -270,12 +271,12 @@ public final class Main {
     return XMLReader.readXMLDOM (new FileSystemResource (filename));
   }
 
-  private static MessageInterface createSampleMessage (final String xmlFilename,
+  private static IMessage createSampleMessage (final String xmlFilename,
                                                        final IReadonlyParticipantIdentifier senderID,
                                                        final IReadonlyParticipantIdentifier receiverID,
                                                        final IReadonlyDocumentIdentifier documentID,
                                                        final IReadonlyProcessIdentifier processID) throws SAXException {
-    final MessageInterface message = Factory.createMessage ();
+    final IMessage message = new Message ();
     message.setDocument (loadXMLFromFile (xmlFilename));
     message.setDocumentType (new SimpleDocumentIdentifier (documentID));
     message.setSender (new SimpleParticipantIdentifier (senderID));
@@ -284,7 +285,7 @@ public final class Main {
     return message;
   }
 
-  private static void streamMessage (final MessageInterface fetchedMessage, final PrintStream out) throws TransformerConfigurationException,
+  private static void streamMessage (final IMessage fetchedMessage, final PrintStream out) throws TransformerConfigurationException,
                                                                                                   TransformerException {
     final TransformerFactory transformerFactory = TransformerFactory.newInstance ();
     final Transformer transformer = transformerFactory.newTransformer ();

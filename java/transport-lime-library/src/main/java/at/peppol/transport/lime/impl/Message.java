@@ -45,13 +45,13 @@ import org.w3c.dom.Document;
 import at.peppol.busdox.identifier.IDocumentIdentifier;
 import at.peppol.busdox.identifier.IParticipantIdentifier;
 import at.peppol.busdox.identifier.IProcessIdentifier;
-import at.peppol.transport.lime.MessageInterface;
+import at.peppol.transport.lime.IMessage;
 
 /**
  * @author Ravnholt<br>
  *         PEPPOL.AT, BRZ, Philip Helger
  */
-public class Message implements MessageInterface {
+public class Message implements IMessage {
 
   private final Date m_aCreatedTime;
   private String m_sMessageID;

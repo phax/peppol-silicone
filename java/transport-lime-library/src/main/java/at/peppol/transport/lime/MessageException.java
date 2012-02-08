@@ -42,7 +42,6 @@ package at.peppol.transport.lime;
  *         PEPPOL.AT, BRZ, Philip Helger
  */
 public class MessageException extends Exception {
-
   public MessageException (final String message) {
     super (message);
   }

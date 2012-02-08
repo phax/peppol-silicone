@@ -55,11 +55,11 @@ import javax.xml.ws.WebServiceClient;
 
 import org.w3._2009._02.ws_tra.Resource;
 
-import at.peppol.busdox.CBusDox;
 import at.peppol.transport.cert.AccessPointX509TrustManager;
 import at.peppol.transport.lime.ws.WstransferService;
 
 import com.phloc.commons.io.resource.ClassPathResource;
+import com.phloc.commons.random.VerySecureRandom;
 import com.phloc.commons.string.StringHelper;
 import com.sun.xml.ws.developer.WSBindingProvider;
 
@@ -78,7 +78,7 @@ public class WebservicePort {
 
     // we need the wsdl for the lime version of accesspoint to get rid of ws-rm
     // policies etc.
-    final URL wsdlURL = ClassPathResource.getAsURL (CBusDox.START_WSDL_PATH);
+    final URL wsdlURL = ClassPathResource.getAsURL ("WEB-INF/wsdl/WSTransferService/ws-tra.wsdl");
     // we need the right WebServiceClient annotation in order to retrieve the
     // correct dependencies e.g. servicename, wsdl-location
     final WebServiceClient ann = WstransferService.class.getAnnotation (WebServiceClient.class);
@@ -110,18 +110,18 @@ public class WebservicePort {
   }
 
   private void setupCertificateTrustManager () throws Exception, KeyManagementException, NoSuchAlgorithmException {
-    final TrustManager [] trustManagers = new TrustManager [] { new AccessPointX509TrustManager (null, getRootCert ()) };
-    final SSLContext sc = SSLContext.getInstance ("SSL");
-    sc.init (null, trustManagers, new java.security.SecureRandom ());
-    HttpsURLConnection.setDefaultSSLSocketFactory (sc.getSocketFactory ());
+    final TrustManager [] aTrustManagers = new TrustManager [] { new AccessPointX509TrustManager (null, getRootCert ()) };
+    final SSLContext aSSLContext = SSLContext.getInstance ("SSL");
+    aSSLContext.init (null, aTrustManagers, VerySecureRandom.getInstance ());
+    HttpsURLConnection.setDefaultSSLSocketFactory (aSSLContext.getSocketFactory ());
   }
 
   private static void verifyHostname () {
-    final HostnameVerifier hv = new HostnameVerifier () {
-      public boolean verify (final String urlHostName, final SSLSession session) {
-        return urlHostName.equals (session.getPeerHost ());
+    final HostnameVerifier aHostVerifier = new HostnameVerifier () {
+      public boolean verify (final String sUrlHostName, final SSLSession aSSLSession) {
+        return sUrlHostName.equals (aSSLSession.getPeerHost ());
       }
     };
-    HttpsURLConnection.setDefaultHostnameVerifier (hv);
+    HttpsURLConnection.setDefaultHostnameVerifier (aHostVerifier);
   }
 }

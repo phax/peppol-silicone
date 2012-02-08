@@ -41,12 +41,12 @@ package at.peppol.transport.lime;
  * @author Ravnholt<br>
  *         PEPPOL.AT, BRZ, Philip Helger
  */
-public interface EndpointReferenceInterface {
-  String getAddress ();
+public interface IMessageReference {
+  IEndpointReference getEndpointReference ();
 
-  void setAddress (String address);
+  String getMessageID ();
 
-  String getChannelID ();
+  void setEndpointReference (IEndpointReference endpointReference);
 
-  void setChannelID (String channelID);
+  void setMessageId (String messageId);
 }

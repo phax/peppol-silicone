@@ -43,9 +43,9 @@ import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
  * @author Ravnholt<br>
  *         PEPPOL.AT, BRZ, Philip Helger
  */
-public interface OutboxInterface {
+public interface IOutbox {
   // Sends a message. A new unique message ID is created and returned.
   String sendMessage (IReadonlyUsernamePWCredentials credentials,
-                      MessageInterface message,
-                      EndpointReferenceInterface endpointReferenceInterface) throws MessageException;
+                      IMessage message,
+                      IEndpointReference endpointReferenceInterface) throws MessageException;
 }
