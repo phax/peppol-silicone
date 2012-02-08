@@ -7,12 +7,12 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>peppol-validation-rules</artifactId>
-  <version>1.1.12-SNAPSHOT</version>
+  <version>2.2.0</version>
   <name>peppol-validation-rules</name>
   
   <scm>
-    <connection>scm:svn:http://peppol-silicone.googlecode.com/svn/trunk/java/validation-rules</connection>
-    <developerConnection>scm:svn:https://peppol-silicone.googlecode.com/svn/trunk/java/validation-rules</developerConnection>
+    <connection>scm:svn:http://peppol-silicone.googlecode.com/svn/tags/peppol-validation-rules/peppol-validation-rules-2.2.0</connection>
+    <developerConnection>scm:svn:https://peppol-silicone.googlecode.com/svn/tags/peppol-validation-rules/peppol-validation-rules-2.2.0</developerConnection>
   </scm>
 
   <dependencies>
