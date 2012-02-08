@@ -20,12 +20,6 @@
       <groupId>at.peppol</groupId>
       <artifactId>peppol-transport-lime-library</artifactId>
       <version>1.1.1-SNAPSHOT</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.glassfish.metro</groupId>
-          <artifactId>webservices-rt</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>at.peppol</groupId>
@@ -42,11 +36,6 @@
       <groupId>at.peppol</groupId>
       <artifactId>peppol-smp-client-library</artifactId>
       <version>1.2.2-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>com.sun.xml.ws</groupId>
-      <artifactId>jaxws-rt</artifactId>
-      <version>2.2.5</version>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>

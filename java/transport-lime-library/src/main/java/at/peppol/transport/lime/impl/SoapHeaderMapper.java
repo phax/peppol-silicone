@@ -56,32 +56,34 @@ import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 import at.peppol.commons.identifier.SimpleProcessIdentifier;
 import at.peppol.transport.lime.soapheader.SoapHeaderHandler;
 
-
 /**
  * @author Ravnholt<br>
  *         PEPPOL.AT, BRZ, Philip Helger
  */
 public class SoapHeaderMapper {
+  private SoapHeaderMapper () {}
 
-  public void setupHandlerChain (final BindingProvider bindingProvider,
-                                 final String channelID,
-                                 final String messageID,
-                                 final List <Element> referenceParameters) {
+  public static void setupHandlerChain (final BindingProvider bindingProvider,
+                                        final String channelID,
+                                        final String messageID,
+                                        final List <Element> referenceParameters) {
     setupHandlerChain (bindingProvider, null, null, null, null, channelID, messageID, referenceParameters);
   }
 
-  public void setupHandlerChain (final BindingProvider bindingProvider, final String channelID, final String messageID) {
+  public static void setupHandlerChain (final BindingProvider bindingProvider,
+                                        final String channelID,
+                                        final String messageID) {
     setupHandlerChain (bindingProvider, null, null, null, null, channelID, messageID, null);
   }
 
-  public void setupHandlerChain (final BindingProvider bindingProvider,
-                                 final IReadonlyParticipantIdentifier sender,
-                                 final IReadonlyParticipantIdentifier receiver,
-                                 final IReadonlyDocumentIdentifier documentType,
-                                 final IReadonlyProcessIdentifier processType,
-                                 final String channelID,
-                                 final String messageID,
-                                 final List <Element> referenceParameters) {
+  public static void setupHandlerChain (final BindingProvider bindingProvider,
+                                        final IReadonlyParticipantIdentifier sender,
+                                        final IReadonlyParticipantIdentifier receiver,
+                                        final IReadonlyDocumentIdentifier documentType,
+                                        final IReadonlyProcessIdentifier processType,
+                                        final String channelID,
+                                        final String messageID,
+                                        final List <Element> referenceParameters) {
     final Binding binding = bindingProvider.getBinding ();
     @SuppressWarnings ("rawtypes")
     final List <Handler> handlerList = binding.getHandlerChain ();

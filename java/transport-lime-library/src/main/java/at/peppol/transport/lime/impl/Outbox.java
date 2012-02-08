@@ -70,13 +70,12 @@ import org.xml.sax.SAXException;
 
 import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
 import at.peppol.transport.lime.IEndpointReference;
-import at.peppol.transport.lime.Identifiers;
-import at.peppol.transport.lime.MessageException;
 import at.peppol.transport.lime.IMessage;
 import at.peppol.transport.lime.IOutbox;
+import at.peppol.transport.lime.Identifiers;
+import at.peppol.transport.lime.MessageException;
 
 import com.phloc.commons.string.StringHelper;
-
 
 /**
  * @author Ravnholt<br>
@@ -91,9 +90,7 @@ public class Outbox implements IOutbox {
     checkCredentials (credentials);
 
     try {
-      Resource port = new WebservicePort ().getServicePort (endpointReferenceInterface.getAddress (),
-                                                            credentials.getUsername (),
-                                                            credentials.getPassword ());
+      Resource port = WebservicePort.getServicePort (endpointReferenceInterface.getAddress (), credentials);
       // new SoapHeaderMapper().setupHandlerChain((BindingProvider) port,
       // message.getSender(), message.getReciever(), message.getDocumentType(),
       // message.getProcessType(), endpointReferenceInterface.getChannelID(),
@@ -137,10 +134,8 @@ public class Outbox implements IOutbox {
                                              "/EndpointReference/ReferenceParameters/MessageIdentifier/text()",
                                              endpointDoc);
 
-      port = new WebservicePort ().getServicePort (endpointAddress,
-                                                   credentials.getUsername (),
-                                                   credentials.getPassword ());
-      new SoapHeaderMapper ().setupHandlerChain ((BindingProvider) port, channelID, messageID);
+      port = WebservicePort.getServicePort (endpointAddress, credentials);
+      SoapHeaderMapper.setupHandlerChain ((BindingProvider) port, channelID, messageID);
 
       final Put put = new Put ();
       final List <Object> objects = put.getAny ();

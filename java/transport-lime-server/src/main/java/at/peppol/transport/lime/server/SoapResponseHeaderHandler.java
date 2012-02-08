@@ -76,8 +76,8 @@ public class SoapResponseHeaderHandler implements SOAPHandler <SOAPMessageContex
             aChildNodes.item (0).getChildNodes () != null &&
             aChildNodes.item (0).getChildNodes ().item (0) != null &&
             aChildNodes.item (0).getChildNodes ().item (0).getNodeName ().indexOf ("Headers") >= 0) {
-          final SOAPHeader header = attachIncommingHeaders (envelope);
-          moveHeaderFromBodyToSoapHeader (envelope, header);
+          final SOAPHeader header = _attachIncomingHeaders (envelope);
+          _moveHeaderFromBodyToSoapHeader (envelope, header);
         }
         msg.saveChanges ();
       }
@@ -90,6 +90,7 @@ public class SoapResponseHeaderHandler implements SOAPHandler <SOAPMessageContex
   }
 
   public boolean handleFault (final SOAPMessageContext messageContext) {
+    // Continue processing
     return true;
   }
 
@@ -99,12 +100,12 @@ public class SoapResponseHeaderHandler implements SOAPHandler <SOAPMessageContex
     return null;
   }
 
-  private static SOAPHeader attachIncommingHeaders (final SOAPEnvelope envelope) throws SOAPException {
+  private static SOAPHeader _attachIncomingHeaders (final SOAPEnvelope aSoapEnv) throws SOAPException {
     SOAPHeader header = null;
-    if (envelope.getHeader () != null) {
-      final Iterator <?> iter = envelope.getHeader ().extractAllHeaderElements ();
-      envelope.getHeader ().detachNode ();
-      header = envelope.addHeader ();
+    if (aSoapEnv.getHeader () != null) {
+      final Iterator <?> iter = aSoapEnv.getHeader ().extractAllHeaderElements ();
+      aSoapEnv.getHeader ().detachNode ();
+      header = aSoapEnv.addHeader ();
       SOAPHeaderElement soapHeaderElement = null;
       for (; iter.hasNext ();) {
         soapHeaderElement = (SOAPHeaderElement) iter.next ();
@@ -112,19 +113,19 @@ public class SoapResponseHeaderHandler implements SOAPHandler <SOAPMessageContex
       }
     }
     else {
-      header = envelope.addHeader ();
+      header = aSoapEnv.addHeader ();
     }
     return header;
   }
 
-  private static void moveHeaderFromBodyToSoapHeader (final SOAPEnvelope envelope, final SOAPHeader header) throws DOMException,
-                                                                                                           SOAPException {
-    final Node node = envelope.getBody ().getChildNodes ().item (0).getChildNodes ().item (0);
+  private static void _moveHeaderFromBodyToSoapHeader (final SOAPEnvelope aSoapEnv, final SOAPHeader aSoapHeader) throws DOMException,
+                                                                                                                 SOAPException {
+    final Node node = aSoapEnv.getBody ().getChildNodes ().item (0).getChildNodes ().item (0);
     for (int i = 0; i < node.getChildNodes ().getLength (); i++) {
       final Node childNode = node.getChildNodes ().item (i);
-      final SOAPElement soapElement = header.addHeaderElement (envelope.createName (childNode.getLocalName (),
-                                                                                    "",
-                                                                                    childNode.getNamespaceURI ()));
+      final SOAPElement soapElement = aSoapHeader.addHeaderElement (aSoapEnv.createName (childNode.getLocalName (),
+                                                                                         "",
+                                                                                         childNode.getNamespaceURI ()));
       if (childNode.getChildNodes () != null && childNode.getChildNodes ().getLength () > 0) {
         for (int j = 0; j < childNode.getChildNodes ().getLength (); j++) {
           final Node curChildNode = childNode.getChildNodes ().item (j);
@@ -140,6 +141,6 @@ public class SoapResponseHeaderHandler implements SOAPHandler <SOAPMessageContex
         }
       }
     }
-    envelope.getBody ().getChildNodes ().item (0).removeChild (node);
+    aSoapEnv.getBody ().getChildNodes ().item (0).removeChild (node);
   }
 }

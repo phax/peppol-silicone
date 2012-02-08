@@ -20,11 +20,9 @@
       <artifactId>peppol-transport-lime-library</artifactId>
       <version>1.1.1-SNAPSHOT</version>
     </dependency>
-
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
-      <scope>test</scope>
     </dependency>
   </dependencies>
 

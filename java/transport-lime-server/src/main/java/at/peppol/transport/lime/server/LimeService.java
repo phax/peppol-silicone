@@ -51,6 +51,7 @@ import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.soap.SOAPConstants;
+import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPFactory;
 import javax.xml.soap.SOAPFault;
 import javax.xml.transform.dom.DOMResult;
@@ -341,8 +342,8 @@ public class LimeService {
       soapFault.setFaultActor ("LIME AP");
       throw new SOAPFaultException (soapFault);
     }
-    catch (final Exception e2) {
-      throw new RuntimeException ("Problem processing SOAP Fault on service-side." + e2.getMessage ());
+    catch (final SOAPException e2) {
+      throw new RuntimeException ("Problem processing SOAP Fault on service-side", e2);
     }
   }
 

@@ -66,9 +66,9 @@ import at.peppol.transport.Identifiers;
 import at.peppol.transport.MessageMetadata;
 import at.peppol.transport.lime.IEndpointReference;
 import at.peppol.transport.lime.IInbox;
-import at.peppol.transport.lime.MessageException;
 import at.peppol.transport.lime.IMessage;
 import at.peppol.transport.lime.IMessageReference;
+import at.peppol.transport.lime.MessageException;
 import at.peppol.transport.lime.soapheader.SoapHeaderReader;
 
 import com.phloc.commons.collections.ContainerHelper;
@@ -86,7 +86,7 @@ public class Inbox implements IInbox {
   private static final Logger log = LoggerFactory.getLogger (Inbox.class);
 
   public List <IMessageReference> getMessageList (final IReadonlyUsernamePWCredentials credentials,
-                                                          final IEndpointReference origEndpointReference) throws MessageException {
+                                                  final IEndpointReference origEndpointReference) throws MessageException {
     final EndpointReference endpointReference = new EndpointReference ();
     endpointReference.setAddress (origEndpointReference.getAddress ());
     endpointReference.setChannelID (origEndpointReference.getChannelID ());
@@ -108,8 +108,8 @@ public class Inbox implements IInbox {
   }
 
   public List <IMessageReference> getMessageListPage (final IReadonlyUsernamePWCredentials credentials,
-                                                              final IEndpointReference endpointReference,
-                                                              final int pageNumber) throws MessageException {
+                                                      final IEndpointReference endpointReference,
+                                                      final int pageNumber) throws MessageException {
     validateCredentials (credentials);
     try {
       final ArrayList <IMessageReference> messages = new ArrayList <IMessageReference> ();
@@ -122,18 +122,16 @@ public class Inbox implements IInbox {
   }
 
   public IMessage getMessage (final IReadonlyUsernamePWCredentials credentials,
-                                      final IMessageReference messageReferenceInterface) throws MessageException {
+                              final IMessageReference messageReferenceInterface) throws MessageException {
     validateCredentials (credentials);
     try {
-      final Resource port = new WebservicePort ().getServicePort (messageReferenceInterface.getEndpointReference ()
-                                                                                           .getAddress (),
-                                                                  credentials.getUsername (),
-                                                                  credentials.getPassword ());
+      final Resource port = WebservicePort.getServicePort (messageReferenceInterface.getEndpointReference ()
+                                                                                    .getAddress (), credentials);
 
       // TODO is this necessary?
-      new SoapHeaderMapper ().setupHandlerChain ((BindingProvider) port,
-                                                 messageReferenceInterface.getEndpointReference ().getChannelID (),
-                                                 messageReferenceInterface.getMessageID ());
+      SoapHeaderMapper.setupHandlerChain ((BindingProvider) port,
+                                          messageReferenceInterface.getEndpointReference ().getChannelID (),
+                                          messageReferenceInterface.getMessageID ());
 
       final GetResponse getResponse = port.get (null);
       final List <Object> objects = getResponse.getAny ();
@@ -163,13 +161,11 @@ public class Inbox implements IInbox {
                              final IMessageReference messageReferenceInterface) throws MessageException {
     validateCredentials (credentials);
     try {
-      final Resource port = new WebservicePort ().getServicePort (messageReferenceInterface.getEndpointReference ()
-                                                                                           .getAddress (),
-                                                                  credentials.getUsername (),
-                                                                  credentials.getPassword ());
-      new SoapHeaderMapper ().setupHandlerChain ((BindingProvider) port,
-                                                 messageReferenceInterface.getEndpointReference ().getChannelID (),
-                                                 messageReferenceInterface.getMessageID ());
+      final Resource port = WebservicePort.getServicePort (messageReferenceInterface.getEndpointReference ()
+                                                                                    .getAddress (), credentials);
+      SoapHeaderMapper.setupHandlerChain ((BindingProvider) port,
+                                          messageReferenceInterface.getEndpointReference ().getChannelID (),
+                                          messageReferenceInterface.getMessageID ());
       port.delete (null);
     }
     catch (final Exception e) {
@@ -203,13 +199,11 @@ public class Inbox implements IInbox {
                                         @Nullable final List <Element> referenceParameters,
                                         final IReadonlyUsernamePWCredentials credentials,
                                         final List <IMessageReference> messages) throws Exception,
-                                                                                        JAXBException,
-                                                                                        DOMException {
+                                                                                JAXBException,
+                                                                                DOMException {
     boolean morePages = false;
-    final Resource port = new WebservicePort ().getServicePort (endpointReference.getAddress (),
-                                                                credentials.getUsername (),
-                                                                credentials.getPassword ());
-    new SoapHeaderMapper ().setupHandlerChain ((BindingProvider) port, null, null, referenceParameters);
+    final Resource port = WebservicePort.getServicePort (endpointReference.getAddress (), credentials);
+    SoapHeaderMapper.setupHandlerChain ((BindingProvider) port, null, null, referenceParameters);
     final GetResponse aGetResponse = port.get (null);
     if (aGetResponse != null && aGetResponse.getAny () != null && aGetResponse.getAny ().size () == 1) {
       final Unmarshaller unmarshaller = JAXBContextCache.getInstance ()
