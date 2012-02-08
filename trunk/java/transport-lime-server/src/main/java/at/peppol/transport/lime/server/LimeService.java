@@ -80,7 +80,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
-import at.peppol.busdox.CBusDox;
 import at.peppol.commons.sml.ESML;
 import at.peppol.commons.wsaddr.W3CEndpointReferenceUtils;
 import at.peppol.smp.client.SMPServiceCaller;
@@ -113,20 +112,13 @@ import com.sun.xml.ws.developer.JAXWSProperties;
              wsdlLocation = "WEB-INF/wsdl/peppol-lime-1.0.wsdl")
 @HandlerChain (file = "WSTransferService_handler.xml")
 public class LimeService {
-  public static final String FAULT_UNKNOWN_ENDPOINT = "The endpoint is not known";
-  public static final String FAULT_CHANNEL_FULL = "The channel is not accepting messages for this destination";
-  public static final String FAULT_SECURITY_ERROR = "There is a security error in processing this request";
-  public static final String FAULT_SERVER_ERROR = "ServerError";
-  public static final String SERVICENAME = LimeService.class.getAnnotation (WebService.class).serviceName ();
-
+  private static final String FAULT_UNKNOWN_ENDPOINT = "The endpoint is not known";
+  private static final String FAULT_SERVER_ERROR = "ServerError";
+  private static final String SERVICENAME = LimeService.class.getAnnotation (WebService.class).serviceName ();
+  private static final QName QNAME_PAGEIDENTIFIER = new QName (Identifiers.NAMESPACE_LIME, Identifiers.PAGEIDENTIFIER);
   private static final Logger s_aLogger = LoggerFactory.getLogger (LimeService.class);
 
-  static {
-    if (false)
-      CBusDox.setMetroDebugSystemProperties (true);
-  }
-
-  private final ObjectFactory m_aObjFactory = new ObjectFactory ();
+  private static final ObjectFactory s_aObjFactory = new ObjectFactory ();
 
   @Resource
   private WebServiceContext webServiceContext;
@@ -239,8 +231,6 @@ public class LimeService {
     return new PutResponse ();
   }
 
-  private static final QName QNAME_PAGEIDENTIFIER = new QName (Identifiers.NAMESPACE_LIME, Identifiers.PAGEIDENTIFIER);
-
   public GetResponse get (@SuppressWarnings ("unused") final Get body) {
     final HeaderList aHeaderList = _getInboundHeaderList ();
     final String sChannelID = MessageMetadataHelper.getChannelID (aHeaderList);
@@ -285,33 +275,33 @@ public class LimeService {
   }
 
   private void _sendMessageUndeliverable (final Exception ex,
-                                          final String messageID,
+                                          final String sMessageID,
                                           final ReasonCodeType reasonCodeType,
-                                          final IMessageMetadata messageMetadata) {
-    if (messageMetadata == null) {
-      s_aLogger.error ("No message metadata found. Unable to send MessageUndeliverable for Message ID: " + messageID);
+                                          final IMessageMetadata aMetadata) {
+    if (aMetadata == null) {
+      s_aLogger.error ("No message metadata found. Unable to send MessageUndeliverable for Message ID: " + sMessageID);
     }
     else {
       try {
         s_aLogger.warn ("Unable to send MessageUndeliverable for Message ID: " +
-                        messageID +
+                        sMessageID +
                         " Reason: " +
                         ex.getMessage ());
 
-        final MessageUndeliverableType messageUndeliverableType = m_aObjFactory.createMessageUndeliverableType ();
-        messageUndeliverableType.setMessageIdentifier (messageID);
+        final MessageUndeliverableType messageUndeliverableType = s_aObjFactory.createMessageUndeliverableType ();
+        messageUndeliverableType.setMessageIdentifier (sMessageID);
         messageUndeliverableType.setReasonCode (reasonCodeType);
         messageUndeliverableType.setDetails ("(" +
-                                             messageMetadata.getRecipientID ().getValue () +
+                                             aMetadata.getRecipientID ().getValue () +
                                              "," +
-                                             messageMetadata.getRecipientID ().getScheme () +
+                                             aMetadata.getRecipientID ().getScheme () +
                                              ") " +
                                              ex.getMessage ());
 
-        final IMessageMetadata aRealMetadata = new MessageMetadata (messageMetadata.getMessageID (),
-                                                                    messageMetadata.getChannelID (),
+        final IMessageMetadata aRealMetadata = new MessageMetadata (aMetadata.getMessageID (),
+                                                                    aMetadata.getChannelID (),
                                                                     Identifiers.MESSAGEUNDELIVERABLE_SENDER,
-                                                                    messageMetadata.getSenderID (),
+                                                                    aMetadata.getSenderID (),
                                                                     Identifiers.MESSAGEUNDELIVERABLE_DOCUMENT,
                                                                     Identifiers.MESSAGEUNDELIVERABLE_PROCESS);
 
@@ -319,7 +309,7 @@ public class LimeService {
         final Marshaller aMarshaller = JAXBContextCache.getInstance ()
                                                        .getFromCache (MessageUndeliverableType.class)
                                                        .createMarshaller ();
-        aMarshaller.marshal (m_aObjFactory.createMessageUndeliverable (messageUndeliverableType),
+        aMarshaller.marshal (s_aObjFactory.createMessageUndeliverable (messageUndeliverableType),
                              new DOMResult (aDocument));
 
         final Put put = new Put ();
@@ -327,7 +317,7 @@ public class LimeService {
         _sendToInbox (aRealMetadata, put);
       }
       catch (final Exception ex1) {
-        s_aLogger.error ("Unable to send MessageUndeliverable for Message ID: " + messageID, ex1);
+        s_aLogger.error ("Unable to send MessageUndeliverable for Message ID: " + sMessageID, ex1);
       }
     }
   }
