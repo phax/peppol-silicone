@@ -60,6 +60,7 @@ import org.w3c.dom.Document;
 import at.peppol.commons.utils.HostnameVerifierAlwaysTrue;
 import at.peppol.transport.IMessageMetadata;
 import at.peppol.transport.MessageMetadataHelper;
+import at.peppol.transport.cert.AccessPointX509TrustManager;
 
 import com.phloc.commons.random.VerySecureRandom;
 import com.phloc.commons.state.ESuccess;

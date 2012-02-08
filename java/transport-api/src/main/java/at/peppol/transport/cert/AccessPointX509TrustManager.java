@@ -35,7 +35,7 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.transport.start.client;
+package at.peppol.transport.cert;
 
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -52,13 +52,11 @@ import com.phloc.commons.regex.RegExHelper;
 /**
  * The AccessPointX509TrustManager is pointed to authenticate the remote side
  * when using SSL.
- *
- * @author Alexander Aguirre Julcapoma(alex@alfa1lab.com) Jose Gorvenia<br>
- *         Narvaez(jose@alfa1lab.com)<br>
+ * 
+ * @author Thomas Ravnholt<br>
  *         PEPPOL.AT, BRZ, Philip Helger
  */
-public class AccessPointX509TrustManager implements X509TrustManager {
-
+public final class AccessPointX509TrustManager implements X509TrustManager {
   /** Logger to follow this class behavior. */
   private static final Logger s_aLogger = LoggerFactory.getLogger (AccessPointX509TrustManager.class);
 
@@ -70,59 +68,61 @@ public class AccessPointX509TrustManager implements X509TrustManager {
 
   /**
    * Constructor with parameters.
-   *
-   * @param acceptedCommonNames
+   * 
+   * @param aAcceptedCommonNames
    *        A Collection(Set) of Names accepted.
-   * @param acceptedRootCertificate
+   * @param aAcceptedRootCertificate
    *        Represents a Certificate.
    * @throws Exception
    *         Throws an Exception.
    */
-  public AccessPointX509TrustManager (final Set <String> acceptedCommonNames,
-                                      final X509Certificate acceptedRootCertificate) throws Exception {
+  public AccessPointX509TrustManager (final Set <String> aAcceptedCommonNames,
+                                      final X509Certificate aAcceptedRootCertificate) throws Exception {
 
-    m_aRootCertificate = acceptedRootCertificate;
-    m_aCommonNames = acceptedCommonNames;
+    m_aRootCertificate = aAcceptedRootCertificate;
+    m_aCommonNames = aAcceptedCommonNames;
+    if (m_aCommonNames == null)
+      s_aLogger.warn ("No accepted common names present!");
   }
 
   /**
    * Check if client is trusted.
-   *
-   * @param chain
+   * 
+   * @param aChain
    *        an array of X509Certificate holding the certificates.
-   * @param authType
+   * @param sAuthType
    *        authentication type.
    * @throws CertificateException
    *         Throws a CertificateException.
    */
   @Override
-  public final void checkClientTrusted (final X509Certificate [] chain, final String authType) throws CertificateException {
+  public final void checkClientTrusted (final X509Certificate [] aChain, final String sAuthType) throws CertificateException {
     if (s_aLogger.isDebugEnabled ())
       s_aLogger.debug ("Checking client certificates.");
-    _check (chain);
+    _check (aChain);
   }
 
   /**
    * Check if server is trusted.
-   *
-   * @param chain
+   * 
+   * @param aChain
    *        Array of Certificates.
-   * @param authType
+   * @param sAuthType
    *        is never used
    * @throws CertificateException
    *         Error with certificates.
    */
   @Override
-  public final void checkServerTrusted (final X509Certificate [] chain, final String authType) throws CertificateException {
+  public final void checkServerTrusted (final X509Certificate [] aChain, final String sAuthType) throws CertificateException {
     if (s_aLogger.isDebugEnabled ())
       s_aLogger.debug ("Checking server certificates.");
-    _check (chain);
+    _check (aChain);
   }
 
   /**
    * Returns an array of X509Certificate objects which are trusted for
    * authenticating peers.
-   *
+   * 
    * @return X509Certificate array containing the accepted root certificates.
    */
   @Override
@@ -132,28 +132,28 @@ public class AccessPointX509TrustManager implements X509TrustManager {
 
   /**
    * Checks chain.
-   *
-   * @param chain
+   * 
+   * @param aChain
    *        Array of certificates.
    * @throws CertificateException
    *         Exception for Certificates.
    */
-  private void _check (final X509Certificate [] chain) throws CertificateException {
-    _checkPrincipal (chain);
+  private void _check (final X509Certificate [] aChain) throws CertificateException {
+    _checkPrincipal (aChain);
   }
 
   /**
    * Check Principal.
-   *
-   * @param chain
+   * 
+   * @param aChain
    *        Array of Certificates.
    * @throws CertificateException
    *         Exception for Certificates.
    */
-  private void _checkPrincipal (final X509Certificate [] chain) throws CertificateException {
+  private void _checkPrincipal (final X509Certificate [] aChain) throws CertificateException {
     if (m_aCommonNames != null) {
       boolean bCommonNameOK = false;
-      final String [] aArray = RegExHelper.split (chain[0].getSubjectX500Principal ().toString (), ",");
+      final String [] aArray = RegExHelper.split (aChain[0].getSubjectX500Principal ().toString (), ",");
       for (final String sToken : aArray) {
         final int nIndex = sToken.indexOf ("CN=");
         if (nIndex >= 0) {
@@ -167,7 +167,7 @@ public class AccessPointX509TrustManager implements X509TrustManager {
       }
 
       if (!bCommonNameOK) {
-        s_aLogger.error ("No accepted issuer: " + chain[0].getSubjectX500Principal ().toString ());
+        s_aLogger.error ("No accepted issuer: " + aChain[0].getSubjectX500Principal ().toString ());
         throw new CertificateException ("Remote principal is not trusted");
       }
     }
