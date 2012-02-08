@@ -14,9 +14,8 @@
   
   <!-- SVN location -->
   <scm>
-    <url>http://code.google.com/p/peppol-silicone/source/browse/</url>
-    <connection>scm:svn:http://peppol-silicone.googlecode.com/svn/trunk</connection>
-    <developerConnection>scm:svn:https://peppol-silicone.googlecode.com/svn/trunk</developerConnection>
+    <connection>scm:svn:http://peppol-silicone.googlecode.com/svn/trunk/java</connection>
+    <developerConnection>scm:svn:https://peppol-silicone.googlecode.com/svn/trunk/java</developerConnection>
   </scm>
   
   <!-- Used licenses -->
