@@ -86,12 +86,12 @@ import at.peppol.smp.server.exception.UnknownUserException;
 import at.peppol.smp.server.hook.IRegistrationHook;
 import at.peppol.smp.server.hook.RegistrationHookFactory;
 
+import com.phloc.commons.GlobalDebug;
 import com.sun.jersey.api.NotFoundException;
-
 
 /**
  * A Hibernate implementation of the DataManager interface.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class DBMSDataManager extends AbstractJPAEnabledManager implements IDataManager {
@@ -167,6 +167,7 @@ public final class DBMSDataManager extends AbstractJPAEnabledManager implements 
       final DBServiceGroup aDBServiceGroup = getEntityManager ().find (DBServiceGroup.class, aDBServiceGroupID);
       if (aDBServiceGroup == null) {
         s_aLogger.warn ("No such service group to retrieve: " + aDBServiceGroupID.toString ());
+        aTransaction.rollback ();
         return null;
       }
 
@@ -207,6 +208,7 @@ public final class DBMSDataManager extends AbstractJPAEnabledManager implements 
           throw new UnauthorizedException ();
         }
 
+        // Simply update the extension
         final String sXMLString = ExtensionConverter.convert (aServiceGroup.getExtension ());
         aDBServiceGroup.setExtension (sXMLString);
       }
@@ -309,16 +311,16 @@ public final class DBMSDataManager extends AbstractJPAEnabledManager implements 
     aTransaction.begin ();
     try {
       final DBServiceMetadataID id = new DBServiceMetadataID (docType, serviceGroupId);
-      final DBServiceMetadata serviceMetadataDB = getEntityManager ().find (DBServiceMetadata.class, id);
+      final DBServiceMetadata aDBServiceMetadata = getEntityManager ().find (DBServiceMetadata.class, id);
 
-      if (serviceMetadataDB == null) {
+      if (aDBServiceMetadata == null) {
         s_aLogger.info ("Service group ID " + id.toString () + " not found");
+        aTransaction.rollback ();
         return null;
       }
 
       final ServiceMetadataType serviceMetadata = m_aObjFactory.createServiceMetadataType ();
-      _convertFromDBToService (serviceMetadataDB, serviceMetadata);
-
+      _convertFromDBToService (aDBServiceMetadata, serviceMetadata);
       aTransaction.commit ();
 
       return serviceMetadata;
@@ -473,17 +475,19 @@ public final class DBMSDataManager extends AbstractJPAEnabledManager implements 
     }
   }
 
-  public ServiceMetadataType getRedirection (final ParticipantIdentifierType serviceGroupId,
+  public ServiceMetadataType getRedirection (final ParticipantIdentifierType aServiceGroupId,
                                              final DocumentIdentifierType docType) {
     final EntityTransaction aTransaction = getEntityManager ().getTransaction ();
     aTransaction.begin ();
     try {
-      final DBServiceMetadataRedirectionID id = new DBServiceMetadataRedirectionID (serviceGroupId, docType);
-      final DBServiceMetadataRedirection serviceMetadataRedirectionDB = getEntityManager ().find (DBServiceMetadataRedirection.class,
-                                                                                                  id);
+      final DBServiceMetadataRedirectionID id = new DBServiceMetadataRedirectionID (aServiceGroupId, docType);
+      final DBServiceMetadataRedirection aDBServiceMetadataRedirection = getEntityManager ().find (DBServiceMetadataRedirection.class,
+                                                                                                   id);
 
-      if (serviceMetadataRedirectionDB == null) {
-        s_aLogger.warn ("No such service group id: " + serviceGroupId.toString ());
+      if (aDBServiceMetadataRedirection == null) {
+        if (GlobalDebug.isDebugMode ())
+          s_aLogger.info ("No redirection service group id: " + aServiceGroupId.toString ());
+        aTransaction.rollback ();
         return null;
       }
 
@@ -492,9 +496,9 @@ public final class DBMSDataManager extends AbstractJPAEnabledManager implements 
 
       // Then return a redirect instead.
       final RedirectType redirectType = m_aObjFactory.createRedirectType ();
-      redirectType.setCertificateUID (serviceMetadataRedirectionDB.getCertificateUid ());
-      redirectType.setHref (serviceMetadataRedirectionDB.getRedirectionUrl ());
-      redirectType.setExtension (ExtensionConverter.convert (serviceMetadataRedirectionDB.getExtension ()));
+      redirectType.setCertificateUID (aDBServiceMetadataRedirection.getCertificateUid ());
+      redirectType.setHref (aDBServiceMetadataRedirection.getRedirectionUrl ());
+      redirectType.setExtension (ExtensionConverter.convert (aDBServiceMetadataRedirection.getExtension ()));
       serviceMetadata.setRedirect (redirectType);
 
       aTransaction.commit ();
@@ -525,44 +529,44 @@ public final class DBMSDataManager extends AbstractJPAEnabledManager implements 
     serviceMetadata.setServiceInformation (serviceInformationType);
 
     final ProcessListType processListType = m_aObjFactory.createProcessListType ();
-    for (final DBProcess processDB : serviceMetadataDB.getProcesses ()) {
-      final ProcessType processType = m_aObjFactory.createProcessType ();
+    for (final DBProcess aDBProcess : serviceMetadataDB.getProcesses ()) {
+      final ProcessType aProcessType = m_aObjFactory.createProcessType ();
 
       final ServiceEndpointList endpoints = m_aObjFactory.createServiceEndpointList ();
-      for (final DBEndpoint endpointDB : processDB.getEndpoints ()) {
-        final EndpointType endpointType = m_aObjFactory.createEndpointType ();
+      for (final DBEndpoint aDBEndpoint : aDBProcess.getEndpoints ()) {
+        final EndpointType aEndpointType = m_aObjFactory.createEndpointType ();
 
-        endpointType.setTransportProfile (endpointDB.getId ().getTransportProfile ());
-        endpointType.setExtension (ExtensionConverter.convert (endpointDB.getExtension ()));
+        aEndpointType.setTransportProfile (aDBEndpoint.getId ().getTransportProfile ());
+        aEndpointType.setExtension (ExtensionConverter.convert (aDBEndpoint.getExtension ()));
 
-        final W3CEndpointReference endpointRef = W3CEndpointReferenceUtils.createEndpointReference (endpointDB.getId ()
-                                                                                                              .getEndpointReference ());
-        endpointType.setEndpointReference (endpointRef);
+        final W3CEndpointReference endpointRef = W3CEndpointReferenceUtils.createEndpointReference (aDBEndpoint.getId ()
+                                                                                                               .getEndpointReference ());
+        aEndpointType.setEndpointReference (endpointRef);
 
-        endpointType.setServiceActivationDate (endpointDB.getServiceActivationDate ());
-        endpointType.setServiceDescription (endpointDB.getServiceDescription ());
-        endpointType.setServiceExpirationDate (endpointDB.getServiceExpirationDate ());
-        endpointType.setTechnicalContactUrl (endpointDB.getTechnicalContactUrl ());
-        endpointType.setTechnicalInformationUrl (endpointDB.getTechnicalInformationUrl ());
-        endpointType.setCertificate (endpointDB.getCertificate ());
-        endpointType.setMinimumAuthenticationLevel (endpointDB.getMinimumAuthenticationLevel ());
-        endpointType.setRequireBusinessLevelSignature (endpointDB.isRequireBusinessLevelSignature ());
+        aEndpointType.setServiceActivationDate (aDBEndpoint.getServiceActivationDate ());
+        aEndpointType.setServiceDescription (aDBEndpoint.getServiceDescription ());
+        aEndpointType.setServiceExpirationDate (aDBEndpoint.getServiceExpirationDate ());
+        aEndpointType.setTechnicalContactUrl (aDBEndpoint.getTechnicalContactUrl ());
+        aEndpointType.setTechnicalInformationUrl (aDBEndpoint.getTechnicalInformationUrl ());
+        aEndpointType.setCertificate (aDBEndpoint.getCertificate ());
+        aEndpointType.setMinimumAuthenticationLevel (aDBEndpoint.getMinimumAuthenticationLevel ());
+        aEndpointType.setRequireBusinessLevelSignature (aDBEndpoint.isRequireBusinessLevelSignature ());
 
-        endpoints.getEndpoint ().add (endpointType);
+        endpoints.getEndpoint ().add (aEndpointType);
       }
 
-      processType.setServiceEndpointList (endpoints);
-      processType.setExtension (ExtensionConverter.convert (processDB.getExtension ()));
-      processType.setProcessIdentifier (processDB.getId ().asProcessIdentifier ());
+      aProcessType.setServiceEndpointList (endpoints);
+      aProcessType.setExtension (ExtensionConverter.convert (aDBProcess.getExtension ()));
+      aProcessType.setProcessIdentifier (aDBProcess.getId ().asProcessIdentifier ());
 
-      processListType.getProcess ().add (processType);
+      processListType.getProcess ().add (aProcessType);
     }
 
     serviceInformationType.setProcessList (processListType);
   }
 
-  private static void _convertFromServiceToDB (final ServiceMetadataType aServiceMetadata,
-                                               final DBServiceMetadata aDBServiceMetadata) {
+  private static void _convertFromServiceToDB (@Nonnull final ServiceMetadataType aServiceMetadata,
+                                               @Nonnull final DBServiceMetadata aDBServiceMetadata) {
     // Update it.
     final ServiceInformationType aServiceInformation = aServiceMetadata.getServiceInformation ();
     aDBServiceMetadata.setExtension (ExtensionConverter.convert (aServiceInformation.getExtension ()));

@@ -48,7 +48,7 @@ import com.sun.jersey.api.NotFoundException;
  */
 @Provider
 public class NotFoundExceptionMapper implements ExceptionMapper <NotFoundException> {
-  public Response toResponse (final NotFoundException ex) {
-    return ex.getResponse ();
+  public Response toResponse (final NotFoundException aEx) {
+    return aEx.getResponse ();
   }
 }

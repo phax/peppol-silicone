@@ -63,35 +63,41 @@ import com.phloc.commons.state.ESuccess;
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public class PostRegistrationFilter implements Filter {
-  private static final class ResponseWrapper extends HttpServletResponseWrapper {
+  /**
+   * This response wrapper simply captures the status of the response in an
+   * easily accessible way.
+   * 
+   * @author Ravnholdt
+   */
+  private static final class HttpServletResponseWrapperWithStatus extends HttpServletResponseWrapper {
     private int m_nStatus = HttpServletResponse.SC_OK;
 
-    public ResponseWrapper (final HttpServletResponse response) {
+    public HttpServletResponseWrapperWithStatus (final HttpServletResponse response) {
       super (response);
     }
 
     @Override
     public void sendError (final int sc) throws IOException {
       super.sendError (sc);
-      this.m_nStatus = sc;
+      m_nStatus = sc;
     }
 
     @Override
     public void sendError (final int sc, final String msg) throws IOException {
       super.sendError (sc, msg);
-      this.m_nStatus = sc;
+      m_nStatus = sc;
     }
 
     @Override
     public void setStatus (final int sc) {
       super.setStatus (sc);
-      this.m_nStatus = sc;
+      m_nStatus = sc;
     }
 
     @Override
     public void setStatus (final int sc, final String sm) {
       super.setStatus (sc, sm);
-      this.m_nStatus = sc;
+      m_nStatus = sc;
     }
 
     public int getStatus () {
@@ -103,47 +109,52 @@ public class PostRegistrationFilter implements Filter {
 
   public void init (final FilterConfig arg0) {}
 
-  private static void _notify (@Nonnull final ESuccess eSuccess) throws ServletException {
-    final AbstractRegistrationHook q = AbstractRegistrationHook.getQueue ();
-    if (q == null)
-      return;
-
+  private static void _notifyRegistrationHook (@Nonnull final ESuccess eSuccess) throws ServletException {
+    final AbstractRegistrationHook aCallback = AbstractRegistrationHook.getQueue ();
+    if (aCallback != null) {
     try {
-      q.postUpdate (eSuccess);
+        aCallback.postUpdate (eSuccess);
     }
     catch (final HookException e) {
       throw new ServletException (e);
+    }
+      finally {
+        // Ensure that no memory leak resides in the ThreadLocal
+        AbstractRegistrationHook.resetQueue ();
+      }
     }
   }
 
   public void doFilter (final ServletRequest req, final ServletResponse res, final FilterChain fc) throws IOException,
                                                                                                   ServletException {
-    final ResponseWrapper r = new ResponseWrapper ((HttpServletResponse) res);
+    // Wrap the response
+    final HttpServletResponseWrapperWithStatus r = new HttpServletResponseWrapperWithStatus ((HttpServletResponse) res);
     try {
       fc.doFilter (req, r);
 
+      // Success or failure?
       if (r.getStatus () >= 400) {
         s_aLogger.debug ("Operation failed, status: " + r.getStatus ());
-        _notify (ESuccess.FAILURE);
+        _notifyRegistrationHook (ESuccess.FAILURE);
       }
       else {
         s_aLogger.debug ("Operation ok, status: " + r.getStatus ());
-        _notify (ESuccess.SUCCESS);
+        _notifyRegistrationHook (ESuccess.SUCCESS);
       }
     }
     catch (final IOException e) {
-      s_aLogger.debug ("Got exception " + e);
-      _notify (ESuccess.FAILURE);
+      s_aLogger.debug ("Got IOException", e);
+      _notifyRegistrationHook (ESuccess.FAILURE);
       throw e;
     }
     catch (final ServletException e) {
-      s_aLogger.debug ("Got exception " + e);
-      _notify (ESuccess.FAILURE);
+      s_aLogger.debug ("Got ServletException", e);
+      _notifyRegistrationHook (ESuccess.FAILURE);
       throw e;
     }
     catch (final RuntimeException e) {
-      s_aLogger.debug ("Got runtime exception " + e);
-      _notify (ESuccess.FAILURE);
+      s_aLogger.debug ("Got RuntimeException", e);
+      _notifyRegistrationHook (ESuccess.FAILURE);
       throw e;
     }
   }
