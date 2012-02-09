@@ -35,7 +35,7 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.transport.start.saml;
+package org.busdox.transport.start.saml;
 
 import java.io.IOException;
 import java.security.Key;
