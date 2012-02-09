@@ -40,6 +40,7 @@ package at.peppol.transport.lime.server.storage;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nullable;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.transform.dom.DOMResult;
@@ -76,18 +77,18 @@ public final class MessagePage {
 
   private MessagePage () {}
 
-  public static Document getPageList (final int pageNum,
-                                      final String endpoint,
-                                      final LimeStorage channel,
-                                      final String channelID) throws JAXBException {
-    final int pageSize = MESSAGE_PAGE_SIZE;
-    final String [] messageIDs = channel.getMessageIDs (channelID);
+  public static Document getPageList (final int nPageNum,
+                                      final String sAPURL,
+                                      final LimeStorage aStorage,
+                                      final String sChannelID) throws JAXBException {
+    // Get all message IDs
+    final String [] aMessageIDs = aStorage.getMessageIDs (sChannelID);
+    final int nMaxPageIndex = aMessageIDs.length / MESSAGE_PAGE_SIZE;
+    if (nPageNum < 0 || nPageNum > nMaxPageIndex)
+      throw new IllegalArgumentException ("Page number must be between 0 and " + nMaxPageIndex);
 
-    if (pageNum < 0 || pageNum > (messageIDs.length / pageSize))
-      throw new IllegalArgumentException ("Page number must be between 0 and " + (messageIDs.length / pageSize));
-
-    s_aLogger.info ("Messages found in inbox: " + messageIDs.length);
-    return _createPageListDocument (messageIDs, pageSize, pageNum, channel, channelID, endpoint);
+    s_aLogger.info ("Messages found in inbox: " + aMessageIDs.length);
+    return _createPageListDocument (aMessageIDs, MESSAGE_PAGE_SIZE, nPageNum, aStorage, sChannelID, sAPURL);
   }
 
   private static Document _getPageListDocument (final int pageNum,
@@ -178,33 +179,34 @@ public final class MessagePage {
     }
   }
 
+  @Nullable
   private static Document _createPageListDocument (final String [] messageIDs,
-                                                   final int pageSize,
-                                                   final int pageNum,
+                                                   final int nPageSize,
+                                                   final int nPageNum,
                                                    final LimeStorage channel,
                                                    final String channelID,
                                                    final String endpoint) throws JAXBException {
     Document pageListDocument = null;
-    if (messageIDs.length > 0 && (messageIDs.length / pageSize) >= pageNum) {
+    if (messageIDs.length > 0 && (messageIDs.length / nPageSize) >= nPageNum) {
 
       s_aLogger.info ("Messages in inbox: " + messageIDs.length);
 
-      pageListDocument = _getPageListDocument (pageNum, pageSize, messageIDs, channel, channelID, endpoint);
+      pageListDocument = _getPageListDocument (nPageNum, nPageSize, messageIDs, channel, channelID, endpoint);
 
       s_aLogger.info ("Page List created. MessageIDs=" +
                       messageIDs.length +
                       " pageSize=" +
-                      pageSize +
+                      nPageSize +
                       " pageNum=" +
-                      pageNum);
+                      nPageNum);
     }
     else {
       s_aLogger.info ("Page List not created. MessageIDs=" +
                       messageIDs.length +
                       " pageSize=" +
-                      pageSize +
+                      nPageSize +
                       " pageNum=" +
-                      pageNum);
+                      nPageNum);
     }
     return pageListDocument;
   }

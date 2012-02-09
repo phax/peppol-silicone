@@ -42,6 +42,7 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.Resource;
 import javax.jws.HandlerChain;
 import javax.jws.WebService;
@@ -154,19 +155,30 @@ public class LimeService {
                                                        final String sMessageID) {
     final W3CEndpointReference w3CEndpointReference = _createW3CEndpointReference (sOurAPURL, sChannelID, sMessageID);
 
-    final CreateResponse createResponse = new CreateResponse ();
-    final ResourceCreated resourceCreated = new ResourceCreated ();
-    resourceCreated.getEndpointReference ().add (w3CEndpointReference);
-    createResponse.setResourceCreated (resourceCreated);
-    return createResponse;
+    final CreateResponse ret = new CreateResponse ();
+    final ResourceCreated aResourceCreated = new ResourceCreated ();
+    aResourceCreated.getEndpointReference ().add (w3CEndpointReference);
+    ret.setResourceCreated (aResourceCreated);
+    return ret;
   }
 
+  /**
+   * Called to initiate a new message. All standard PEPPOL SOAP headers except
+   * messageID must be passed in. The messageID is created in this method and
+   * returned.
+   * 
+   * @param body
+   *        The body - is ignored. May be <code>null</code>.
+   * @return A non-<code>null</code> response containing a
+   *         {@link ResourceCreated} object containing our AP URL, message ID
+   *         and channel ID.
+   */
   @Nonnull
-  public CreateResponse create (@SuppressWarnings ("unused") final Create body) {
+  public CreateResponse create (@Nullable final Create body) {
     // Create a new unique messageID
     final String sMessageID = "uuid:" + UUID.randomUUID ().toString ();
     IMessageMetadata aMetadata = null;
-    final String sOurAPURL = _getOwnUrl () + SERVICENAME;
+    final String sOurAPURL = _getOurAPURL ();
 
     try {
       // Grabs the list of headers from the SOAP message
@@ -187,11 +199,20 @@ public class LimeService {
     return _createCreateResponse (sOurAPURL, aMetadata.getChannelID (), sMessageID);
   }
 
+  /**
+   * After {@link #create(Create)} the main document can be transmitted using
+   * this method. Expects the message ID from {@link #create(Create)} as a SOAP
+   * header.
+   * 
+   * @param aBody
+   *        The message to be put.
+   * @return An empty, non-<code>null</code> put response.
+   */
   @Nonnull
-  public PutResponse put (final Put aBody) {
+  public PutResponse put (@Nonnull final Put aBody) {
     final HeaderList aHeaderList = _getInboundHeaderList ();
     final String sMessageID = MessageMetadataHelper.getMessageID (aHeaderList);
-    final String sOwnAPURL = _getOwnUrl () + SERVICENAME;
+    final String sOwnAPURL = _getOurAPURL ();
     final IMessageMetadata aMetadata = ResourceMemoryStore.getInstance ().getMessage (sMessageID, sOwnAPURL);
 
     try {
@@ -231,7 +252,15 @@ public class LimeService {
     return new PutResponse ();
   }
 
-  public GetResponse get (@SuppressWarnings ("unused") final Get body) {
+  /**
+   * Retrieve a list of messages, or a certain message from the inbox.
+   * 
+   * @param body
+   *        Ignored - may be <code>null</code>.
+   * @return Never <code>null</code>.
+   */
+  @Nonnull
+  public GetResponse get (@Nullable final Get body) {
     final HeaderList aHeaderList = _getInboundHeaderList ();
     final String sChannelID = MessageMetadataHelper.getChannelID (aHeaderList);
     final String sMessageID = MessageMetadataHelper.getMessageID (aHeaderList);
@@ -274,10 +303,10 @@ public class LimeService {
     return new DeleteResponse ();
   }
 
-  private void _sendMessageUndeliverable (final Exception ex,
-                                          final String sMessageID,
-                                          final ReasonCodeType reasonCodeType,
-                                          final IMessageMetadata aMetadata) {
+  private void _sendMessageUndeliverable (@Nonnull final Exception ex,
+                                          @Nullable final String sMessageID,
+                                          @Nonnull final ReasonCodeType eReasonCode,
+                                          @Nullable final IMessageMetadata aMetadata) {
     if (aMetadata == null) {
       s_aLogger.error ("No message metadata found. Unable to send MessageUndeliverable for Message ID: " + sMessageID);
     }
@@ -288,15 +317,15 @@ public class LimeService {
                         " Reason: " +
                         ex.getMessage ());
 
-        final MessageUndeliverableType messageUndeliverableType = s_aObjFactory.createMessageUndeliverableType ();
-        messageUndeliverableType.setMessageIdentifier (sMessageID);
-        messageUndeliverableType.setReasonCode (reasonCodeType);
-        messageUndeliverableType.setDetails ("(" +
-                                             aMetadata.getRecipientID ().getValue () +
-                                             "," +
-                                             aMetadata.getRecipientID ().getScheme () +
-                                             ") " +
-                                             ex.getMessage ());
+        final MessageUndeliverableType aMsgUndeliverable = s_aObjFactory.createMessageUndeliverableType ();
+        aMsgUndeliverable.setMessageIdentifier (sMessageID);
+        aMsgUndeliverable.setReasonCode (eReasonCode);
+        aMsgUndeliverable.setDetails ("(" +
+                                      aMetadata.getRecipientID ().getScheme () +
+                                      "," +
+                                      aMetadata.getRecipientID ().getValue () +
+                                      ") " +
+                                      ex.getMessage ());
 
         final IMessageMetadata aRealMetadata = new MessageMetadata (aMetadata.getMessageID (),
                                                                     aMetadata.getChannelID (),
@@ -309,9 +338,9 @@ public class LimeService {
         final Marshaller aMarshaller = JAXBContextCache.getInstance ()
                                                        .getFromCache (MessageUndeliverableType.class)
                                                        .createMarshaller ();
-        aMarshaller.marshal (s_aObjFactory.createMessageUndeliverable (messageUndeliverableType),
-                             new DOMResult (aDocument));
+        aMarshaller.marshal (s_aObjFactory.createMessageUndeliverable (aMsgUndeliverable), new DOMResult (aDocument));
 
+        // Create a dummy "put" and send it to the inbox of the sender
         final Put put = new Put ();
         put.getAny ().add (aDocument.getDocumentElement ());
         _sendToInbox (aRealMetadata, put);
@@ -348,7 +377,8 @@ public class LimeService {
     getResponse.getAny ().add (document.getDocumentElement ());
   }
 
-  private String _getOwnUrl () {
+  @Nonnull
+  private String _getOurAPURL () {
     final ServletRequest servletRequest = (ServletRequest) webServiceContext.getMessageContext ()
                                                                             .get (MessageContext.SERVLET_REQUEST);
     final String contextPath = ((ServletContext) webServiceContext.getMessageContext ()
@@ -360,21 +390,21 @@ public class LimeService {
                                          servletRequest.getLocalPort () +
                                          contextPath +
                                          '/';
-    return thisAccessPointURLstr;
+    return thisAccessPointURLstr + SERVICENAME;
   }
 
   private void _addPageListToResponse (final String sStorageRoot,
-                                       final String pageNumber,
+                                       final String sPageNumber,
                                        final String sChannelID,
-                                       final GetResponse getResponse) throws Exception {
-    final String sOwnAPURL = _getOwnUrl () + SERVICENAME;
-    final int nPageNumber = StringHelper.parseInt (StringHelper.trim (pageNumber), 0);
+                                       final GetResponse aGetResponse) throws Exception {
+    final String sOwnAPURL = _getOurAPURL ();
+    final int nPageNumber = StringHelper.parseInt (StringHelper.trim (sPageNumber), 0);
     final Document aDocument = MessagePage.getPageList (nPageNumber,
                                                         sOwnAPURL,
                                                         new LimeStorage (sStorageRoot),
                                                         sChannelID);
     if (aDocument != null)
-      getResponse.getAny ().add (aDocument.getDocumentElement ());
+      aGetResponse.getAny ().add (aDocument.getDocumentElement ());
   }
 
   private static void _logRequest (final String action,
@@ -424,23 +454,23 @@ public class LimeService {
     s_aLogger.info (s);
   }
 
-  private static void _sendToAccessPoint (final Put body,
-                                          final String recipientAccessPointURLstr,
-                                          final IMessageMetadata soapHdr) throws Exception {
+  private static void _sendToAccessPoint (@Nonnull final Put aBody,
+                                          @Nonnull final String sStartAPEndpointAddress,
+                                          final IMessageMetadata aMetadata) throws Exception {
     final Create createBody = new Create ();
-    createBody.getAny ().addAll (body.getAny ());
-    AccessPointClient.send (recipientAccessPointURLstr, soapHdr, createBody);
+    createBody.getAny ().addAll (aBody.getAny ());
+    AccessPointClient.send (sStartAPEndpointAddress, aMetadata, createBody);
   }
 
   private void _sendToInbox (final IMessageMetadata aMetadata, final Put body) throws RecipientUnreachableException {
-    final String channelID = aMetadata.getRecipientID ().getValue ();
-    if (channelID == null)
+    final String sStorageChannelID = aMetadata.getRecipientID ().getValue ();
+    if (sStorageChannelID == null)
       throw new RecipientUnreachableException ("Unknown recipient at LIME-AP: " + aMetadata.getRecipientID ());
 
     final HeaderList aHeaderList = _getInboundHeaderList ();
     final String messageID = MessageMetadataHelper.getMessageID (aHeaderList);
 
-    s_aLogger.info ("Recipient: " + aMetadata.getRecipientID () + "; ChannelID: " + channelID);
+    s_aLogger.info ("Recipient: " + aMetadata.getRecipientID () + "; ChannelID: " + sStorageChannelID);
 
     try {
       final List <Object> objects = body.getAny ();
@@ -451,7 +481,7 @@ public class LimeService {
 
         final String sStorageRoot = ((ServletContext) webServiceContext.getMessageContext ()
                                                                        .get (MessageContext.SERVLET_CONTEXT)).getRealPath ("/");
-        new LimeStorage (sStorageRoot).saveDocument (channelID, messageID, metadataDocument, document);
+        new LimeStorage (sStorageRoot).saveDocument (sStorageChannelID, messageID, metadataDocument, document);
       }
     }
     catch (final Exception ex) {

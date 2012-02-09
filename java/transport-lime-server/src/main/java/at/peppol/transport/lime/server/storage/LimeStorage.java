@@ -128,26 +128,25 @@ public final class LimeStorage {
   }
 
   @Nonnull
-  public String [] getMessageIDs (final String channelID) {
-    final File dir = _getChannelInboxDir (channelID);
-    final File [] files = dir.listFiles (FilenameFilterFactory.getEndsWithFilter (EXT_PAYLOAD));
-    if (files == null)
+  public String [] getMessageIDs (final String sChannelID) {
+    final File aChannnelDir = _getChannelInboxDir (sChannelID);
+    final File [] aPayloadFiles = aChannnelDir.listFiles (FilenameFilterFactory.getEndsWithFilter (EXT_PAYLOAD));
+    if (aPayloadFiles == null)
       return new String [0];
 
-    final String [] messageIDs = new String [files.length];
+    final String [] aMessageIDs = new String [aPayloadFiles.length];
     int i = 0;
-    for (final File payloadFile : files) {
-      final String curMessageId = _getMessageIDFromPayloadFile (payloadFile);
+    for (final File aPayloadFile : aPayloadFiles) {
+      final String sMsgID = _getMessageIDFromPayloadFile (aPayloadFile);
 
-      if ((System.currentTimeMillis () - payloadFile.lastModified ()) > MESSAGE_INVALID_TIME_IN_MILLIS) {
-        deleteDocument (channelID, curMessageId);
+      if ((System.currentTimeMillis () - aPayloadFile.lastModified ()) > MESSAGE_INVALID_TIME_IN_MILLIS) {
+        deleteDocument (sChannelID, sMsgID);
       }
       else {
-        messageIDs[i] = curMessageId;
-        i++;
+        aMessageIDs[i++] = sMsgID;
       }
     }
-    return messageIDs;
+    return aMessageIDs;
   }
 
   public Document getDocumentMetadata (final String channelID, final String messageID) throws SAXException {
@@ -196,28 +195,27 @@ public final class LimeStorage {
     return file;
   }
 
-  private File _getChannelInboxDir (final String channelID) {
-    final File inboxDir = new File (m_sStorePath, INBOX_DIR);
-    FileOperations.createDirIfNotExisting (inboxDir);
+  private File _getChannelInboxDir (final String sChannelID) {
+    final File aInboxDir = new File (m_sStorePath, INBOX_DIR);
+    FileOperations.createDirIfNotExisting (aInboxDir);
 
-    final String sRealChannelID = _removeSpecialChars (channelID);
-    final File channelDir = new File (inboxDir, sRealChannelID);
-    FileOperations.createDirIfNotExisting (channelDir);
-    if (!channelDir.exists ()) {
-      throw new IllegalArgumentException ("Inbox for channel \"" +
-                                          sRealChannelID +
-                                          "\" could not be found or created: " +
-                                          channelDir.getAbsolutePath ());
-    }
-    return channelDir;
+    final String sRealChannelID = _removeSpecialChars (sChannelID);
+    final File aChannelDir = new File (aInboxDir, sRealChannelID);
+    FileOperations.createDirIfNotExisting (aChannelDir);
+    if (!aChannelDir.exists ())
+      throw new IllegalStateException ("Inbox for channel \"" +
+                                       sRealChannelID +
+                                       "\" could not be found or created: " +
+                                       aChannelDir.getAbsolutePath ());
+    return aChannelDir;
   }
 
   @Nonnull
-  private static String _removeSpecialChars (@Nonnull final String fileOrDirName) {
-    return fileOrDirName.replace (':', '_');
+  private static String _removeSpecialChars (@Nonnull final String sFileOrDirName) {
+    return sFileOrDirName.replace (':', '_');
   }
 
-  private static void _writeDocumentToFile (final File messageFile, final Document document) {
-    XMLWriter.writeToStream (document, FileUtils.getOutputStream (messageFile));
+  private static void _writeDocumentToFile (final File aMessageFile, final Document aDoc) {
+    XMLWriter.writeToStream (aDoc, FileUtils.getOutputStream (aMessageFile));
   }
 }
