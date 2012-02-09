@@ -23,12 +23,10 @@ import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 import at.peppol.commons.identifier.SimpleProcessIdentifier;
 import at.peppol.transport.IMessageMetadata;
 import at.peppol.transport.MessageMetadata;
-import at.peppol.transport.start.client.AccessPointClient;
 
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.commons.xml.serialize.XMLReader;
-
 
 /**
  * @author nigel@mazeppa.no
@@ -39,7 +37,7 @@ import com.phloc.commons.xml.serialize.XMLReader;
 @Ignore ("Takes too long and requires a local AP up and running")
 public final class StressTest {
 
-  private static final long MESSAGES = 900;
+  private static final long MESSAGES = 90;
   private static final int THREADS = 6;
 
   private static final Logger log = LoggerFactory.getLogger (StressTest.class);

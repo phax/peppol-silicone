@@ -48,10 +48,6 @@ import org.busdox.transport.identifiers._1.ProcessIdentifierType;
 import org.w3c.dom.Document;
 
 import at.peppol.busdox.CBusDox;
-import at.peppol.commons.identifier.ReadonlyParticipantIdentifier;
-import at.peppol.commons.identifier.SimpleDocumentIdentifier;
-import at.peppol.commons.identifier.SimpleParticipantIdentifier;
-import at.peppol.commons.identifier.SimpleProcessIdentifier;
 import at.peppol.commons.sml.ESML;
 import at.peppol.commons.sml.ISMLInfo;
 import at.peppol.smp.client.SMPServiceCaller;
@@ -84,28 +80,10 @@ public class MainPingAccessPoint {
                                               aSOAPHeaderObject.getProcessID ());
   }
 
-  private static IMessageMetadata _createMetadata () {
-    final String senderValue = "0010:5798000000002";
-    final String recipientValue = "0010:5798000000004";
-    final String documentIdValue = "AcceptCatalogue##UBL-2.0";
-    final String processIdValue = "BII01";
-
-    final ParticipantIdentifierType aSender = SimpleParticipantIdentifier.createWithDefaultScheme (senderValue);
-    final ParticipantIdentifierType aRecipient = SimpleParticipantIdentifier.createWithDefaultScheme (recipientValue);
-    final DocumentIdentifierType aDocumentType = SimpleDocumentIdentifier.createWithDefaultScheme (documentIdValue);
-    final ProcessIdentifierType aProcessIdentifierType = SimpleProcessIdentifier.createWithDefaultScheme (processIdValue);
-    final String sMessageID = "uuid:" + UUID.randomUUID ().toString ();
-    return new MessageMetadata (sMessageID, null, aSender, aRecipient, aDocumentType, aProcessIdentifierType);
-  }
-
   @Nonnull
   private static IMessageMetadata _createPingMetadata () {
     final ParticipantIdentifierType sender = PingMessageHelper.PING_SENDER;
-    final ParticipantIdentifierType recipient = false
-                                                     ? PingMessageHelper.PING_RECIPIENT
-                                                     : new ReadonlyParticipantIdentifier (PingMessageHelper.PING_RECIPIENT_SCHEME,
-                                                                                          PingMessageHelper.PING_RECIPIENT_VALUE +
-                                                                                              "2");
+    final ParticipantIdentifierType recipient = PingMessageHelper.PING_RECIPIENT;
     final DocumentIdentifierType documentType = PingMessageHelper.PING_DOCUMENT;
     final ProcessIdentifierType processIdentifierType = PingMessageHelper.PING_PROCESS;
     final String sMessageID = "uuid:" + UUID.randomUUID ().toString ();
@@ -120,8 +98,8 @@ public class MainPingAccessPoint {
   }
 
   private static void _pingAccessPoint (final IReadableResource xmlFile) throws Exception {
-    final IMessageMetadata aMetadata = true ? _createPingMetadata () : _createMetadata ();
-    final String apURL = true ? "http://localhost:8090/accessPointService" : _getAccessPointUrl (aMetadata);
+    final IMessageMetadata aMetadata = _createPingMetadata ();
+    final String apURL = false ? "http://localhost:8090/accessPointService" : _getAccessPointUrl (aMetadata);
     _testService (apURL, xmlFile, aMetadata);
   }
 
