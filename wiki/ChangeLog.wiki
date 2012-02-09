@@ -12,3 +12,4 @@ Functional improvements:
   * The LIME client does not expect the LIME server to have a PEPPOL based https certificate (thanks to Stefano for clarification)
   * A potential memory leak in the SMP (PostRegistrationFilter) has been resolved
   * Some missing transaction rollbacks in the SMP server have been resolved
+  * The endpoint address of the START AP is now read from the configServer.properties configuration file to be more flexible
