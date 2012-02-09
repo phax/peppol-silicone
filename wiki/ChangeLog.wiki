@@ -1,0 +1,14 @@
+#summary The change log of the software components
+
+= v2.2.0 (2012-02-09, initial release, all components) =
+
+The main target of this release is to have an easy transition from the previous repository on JoinUp.
+All package names are now starting with "at.peppol" instead of "eu.peppol" but the classes itself haven't been renamed, so a simple "Organize imports" (in Eclipse) should do the trick.
+
+Functional improvements:
+  * LIME client and server were updated, so that they are using the correct START client compared to Joinup
+  * The WSDL file handling of LIME has been unified, so that they need to be maintained only once - equal to the START implementation
+  * The name of the LIME WebService has been changed to "limeService" as it is more speaking than the old "wstransferService"
+  * The LIME client does not expect the LIME server to have a PEPPOL based https certificate (thanks to Stefano for clarification)
+  * A potential memory leak in the SMP (PostRegistrationFilter) has been resolved
+  * Some missing transaction rollbacks in the SMP server have been resolved
