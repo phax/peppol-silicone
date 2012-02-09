@@ -79,8 +79,8 @@ public final class AccessPointX509TrustManager implements X509TrustManager {
 
     m_aRootCertificate = aAcceptedRootCertificate;
     m_aCommonNames = aAcceptedCommonNames;
-    if (m_aCommonNames == null)
-      s_aLogger.warn ("No accepted common names present!");
+    if (m_aCommonNames == null && s_aLogger.isDebugEnabled ())
+      s_aLogger.debug ("No accepted common names present!");
   }
 
   /**
