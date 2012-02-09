@@ -122,8 +122,11 @@ public class Inbox implements IInbox {
     try {
       // get a specifc message
       final Resource aPort = LimeHelper.createServicePort (aMessageReference.getEndpointReference ().getAddress (),
-                                                        aCredentials);
-      SoapHeaderMapper.setupHandlerChain ((BindingProvider) aPort, aMessageReference.getEndpointReference ().getChannelID (), aMessageReference.getMessageID (), null);
+                                                           aCredentials);
+      SoapHeaderMapper.setupHandlerChain ((BindingProvider) aPort,
+                                          aMessageReference.getEndpointReference ().getChannelID (),
+                                          aMessageReference.getMessageID (),
+                                          null);
 
       // no body required
       final GetResponse aGetResponse = aPort.get (null);
@@ -151,8 +154,11 @@ public class Inbox implements IInbox {
     try {
       // Delete a specific message
       final Resource aPort = LimeHelper.createServicePort (aMessageReference.getEndpointReference ().getAddress (),
-                                                        aCredentials);
-      SoapHeaderMapper.setupHandlerChain ((BindingProvider) aPort, aMessageReference.getEndpointReference ().getChannelID (), aMessageReference.getMessageID (), null);
+                                                           aCredentials);
+      SoapHeaderMapper.setupHandlerChain ((BindingProvider) aPort,
+                                          aMessageReference.getEndpointReference ().getChannelID (),
+                                          aMessageReference.getMessageID (),
+                                          null);
       aPort.delete (null);
     }
     catch (final Exception e) {
@@ -189,6 +195,7 @@ public class Inbox implements IInbox {
                                          final List <IMessageReference> aMessages) throws Exception,
                                                                                   JAXBException,
                                                                                   DOMException {
+    s_aLogger.info ("Retrieving inbox messages");
     // Get a message list
     final Resource aPort = LimeHelper.createServicePort (aEndpointReference.getAddress (), aCredentials);
     SoapHeaderMapper.setupHandlerChain ((BindingProvider) aPort, null, null, aReferenceParameters);
