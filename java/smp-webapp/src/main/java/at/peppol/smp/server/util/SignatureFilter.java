@@ -158,7 +158,6 @@ public final class SignatureFilter implements ContainerResponseFilter {
     }
 
     public void finish () throws IOException {
-
       final byte [] content = m_aBAOS.toByteArray ();
       final OutputStream out = m_aCRW.writeStatusAndHeaders (-1, m_aResponse);
 

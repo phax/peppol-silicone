@@ -48,6 +48,7 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 
 import org.busdox.servicemetadata.managebusinessidentifierservice._1.NotFoundFault;
+import org.busdox.servicemetadata.managebusinessidentifierservice._1.UnauthorizedFault;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -89,6 +90,9 @@ public final class RegistrationServiceRegistrationHook extends AbstractRegistrat
 
     // SMP ID
     s_sSMPID = aConfigFile.getString ("regServiceRegistrationHook.id");
+
+    s_aLogger.info ("Using the following SML address: " + s_aSMLEndpointURL);
+    s_aLogger.info ("This SMP has the ID: " + s_sSMPID);
   }
 
   private static enum MethodType {
@@ -103,7 +107,7 @@ public final class RegistrationServiceRegistrationHook extends AbstractRegistrat
     resetQueue ();
   }
 
-  private static void _initSSLContextFactory () {
+  private static void _setupSSLSocketFactory () {
     // Keystore for SML access:
     try {
       final ConfigFile aConfigFile = ConfigFile.getInstance ();
@@ -132,50 +136,63 @@ public final class RegistrationServiceRegistrationHook extends AbstractRegistrat
   }
 
   public void create (final IParticipantIdentifier aPI) throws HookException {
-    s_aLogger.debug ("Trying to create business " + aPI + "in Business Identifier Manager Service");
     m_aBusinessIdentifier = new SimpleParticipantIdentifier (aPI);
     m_eMethodType = MethodType.CREATE;
+    s_aLogger.info ("Trying to create business " + m_aBusinessIdentifier + " in Business Identifier Manager Service");
 
     try {
-      _initSSLContextFactory ();
+      _setupSSLSocketFactory ();
       final ManageParticipantIdentifierServiceCaller aSMLCaller = new ManageParticipantIdentifierServiceCaller (s_aSMLEndpointURL);
       aSMLCaller.create (s_sSMPID, m_aBusinessIdentifier);
-      s_aLogger.debug ("Succeeded in creating business using Business Identifier Manager Service");
+      s_aLogger.info ("Succeeded in creating business " +
+                      m_aBusinessIdentifier +
+                      " using Business Identifier Manager Service");
       getQueueInstance ().set (this);
     }
+    catch (final UnauthorizedFault ex) {
+      final String sMsg = "Seems like this SMP is not registered to the SML, or you're providing invalid credentials!";
+      s_aLogger.warn (sMsg);
+      throw new HookException (sMsg, ex);
+    }
     catch (final Throwable t) {
-      s_aLogger.warn ("Could not create business in Business Identifier Manager Service", t);
-      throw new HookException ("Unable to register business", t);
+      final String sMsg = "Could not create business " +
+                          m_aBusinessIdentifier +
+                          " in Business Identifier Manager Service";
+      s_aLogger.warn (sMsg, t);
+      throw new HookException (sMsg, t);
     }
   }
 
   public void delete (final IParticipantIdentifier aPI) throws HookException {
-    s_aLogger.debug ("Trying to delete business " + aPI + " in Business Identifier Manager Service");
     m_aBusinessIdentifier = new SimpleParticipantIdentifier (aPI);
     m_eMethodType = MethodType.DELETE;
+    s_aLogger.info ("Trying to delete business " + m_aBusinessIdentifier + " in Business Identifier Manager Service");
 
     try {
-      _initSSLContextFactory ();
-      final ManageParticipantIdentifierServiceCaller aSMLCaller = new ManageParticipantIdentifierServiceCaller (s_aSMLEndpointURL);
-      aSMLCaller.delete (m_aBusinessIdentifier);
-      s_aLogger.debug ("Succeeded in deleting business using Business Identifier Manager Service");
+      _setupSSLSocketFactory ();
+      final ManageParticipantIdentifierServiceCaller aSMPCaller = new ManageParticipantIdentifierServiceCaller (s_aSMLEndpointURL);
+      aSMPCaller.delete (m_aBusinessIdentifier);
+      s_aLogger.info ("Succeded in deleting business " +
+                      m_aBusinessIdentifier +
+                      " using Business Identifier Manager Service");
       getQueueInstance ().set (this);
     }
     catch (final NotFoundFault e) {
-      s_aLogger.debug ("The business was not present. Just ignore.");
-      // getQueueInstance().set(this); // Don't create it if DB fails, since it
-      // was not the in the first place.
+      s_aLogger.warn ("The business " + m_aBusinessIdentifier + " was not present in the SML. Just ignore.");
     }
     catch (final Throwable t) {
-      s_aLogger.warn ("Could not delete business in Business Identifier Manager Service", t);
-      throw new HookException ("Unable to delete business", t);
+      final String sMsg = "Could not delete business " +
+                          m_aBusinessIdentifier +
+                          " in Business Identifier Manager Service";
+      s_aLogger.warn (sMsg, t);
+      throw new HookException (sMsg, t);
     }
   }
 
   public void postUpdate (final ESuccess eSuccess) throws HookException {
     if (eSuccess.isFailure ())
       try {
-        _initSSLContextFactory ();
+        _setupSSLSocketFactory ();
         final ManageParticipantIdentifierServiceCaller aSMLCaller = new ManageParticipantIdentifierServiceCaller (s_aSMLEndpointURL);
 
         switch (m_eMethodType) {
@@ -194,7 +211,7 @@ public final class RegistrationServiceRegistrationHook extends AbstractRegistrat
         }
       }
       catch (final Throwable t) {
-        throw new HookException ("Unable to rollback update business.", t);
+        throw new HookException ("Unable to rollback update business " + m_aBusinessIdentifier, t);
       }
   }
 }
