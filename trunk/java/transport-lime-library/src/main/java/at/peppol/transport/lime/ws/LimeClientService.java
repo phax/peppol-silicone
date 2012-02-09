@@ -95,5 +95,4 @@ public class LimeClientService extends Service {
                           Resource.class,
                           features);
   }
-
 }

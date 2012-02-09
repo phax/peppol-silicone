@@ -39,9 +39,6 @@ package at.peppol.transport.lime.impl;
 
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
-import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
 
 import javax.annotation.Nonnull;
 import javax.net.ssl.HostnameVerifier;
@@ -58,7 +55,6 @@ import at.peppol.transport.cert.AccessPointX509TrustManager;
 import at.peppol.transport.lime.ws.LimeClientService;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.commons.random.VerySecureRandom;
 import com.phloc.commons.string.StringHelper;
 
@@ -69,12 +65,8 @@ import com.phloc.commons.string.StringHelper;
 public final class LimeHelper {
   private LimeHelper () {}
 
-  private static void _setupSSLSocketFactory () throws CertificateException,
-                                               NoSuchAlgorithmException,
-                                               KeyManagementException {
-    final X509Certificate aRootCert = (X509Certificate) CertificateFactory.getInstance ("X.509")
-                                                                          .generateCertificate (ClassPathResource.getInputStream ("peppol-root.crt"));
-    final TrustManager [] aTrustManagers = new TrustManager [] { new AccessPointX509TrustManager (null, aRootCert) };
+  private static void _setupSSLSocketFactory () throws NoSuchAlgorithmException, KeyManagementException {
+    final TrustManager [] aTrustManagers = new TrustManager [] { new AccessPointX509TrustManager (null, null) };
     final SSLContext aSSLContext = SSLContext.getInstance ("SSL");
     aSSLContext.init (null, aTrustManagers, VerySecureRandom.getInstance ());
     HttpsURLConnection.setDefaultSSLSocketFactory (aSSLContext.getSocketFactory ());
@@ -92,7 +84,6 @@ public final class LimeHelper {
   @Nonnull
   public static Resource createServicePort (@Nonnull @Nonempty final String sAPStr,
                                             @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws KeyManagementException,
-                                                                                                       CertificateException,
                                                                                                        NoSuchAlgorithmException {
     if (StringHelper.hasNoTextAfterTrim (sAPStr))
       throw new IllegalArgumentException ("LIME access point url is empty");

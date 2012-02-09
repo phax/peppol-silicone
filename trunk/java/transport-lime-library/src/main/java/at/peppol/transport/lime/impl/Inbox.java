@@ -39,7 +39,6 @@ package at.peppol.transport.lime.impl;
 
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -203,7 +202,6 @@ public class Inbox implements IInbox {
                                          @Nonnull final List <IMessageReference> aMessages) throws JAXBException,
                                                                                            DOMException,
                                                                                            KeyManagementException,
-                                                                                           CertificateException,
                                                                                            NoSuchAlgorithmException {
     s_aLogger.info ("Retrieving inbox messages");
     // Get a message list
