@@ -52,67 +52,45 @@ import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
 
-import org.busdox.transport.identifiers._1.DocumentIdentifierType;
 import org.busdox.transport.identifiers._1.ObjectFactory;
 import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
-import org.busdox.transport.identifiers._1.ProcessIdentifierType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 
-import at.peppol.busdox.identifier.IReadonlyDocumentIdentifier;
-import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
-import at.peppol.busdox.identifier.IReadonlyProcessIdentifier;
-import at.peppol.commons.identifier.SimpleDocumentIdentifier;
-import at.peppol.commons.identifier.SimpleParticipantIdentifier;
-import at.peppol.commons.identifier.SimpleProcessIdentifier;
-
 import com.phloc.commons.jaxb.JAXBContextCache;
+import com.phloc.commons.jaxb.JAXBMarshallerUtils;
 import com.sun.xml.bind.marshaller.NamespacePrefixMapper;
 
 /**
  * @author Ravnholt<br>
  *         PEPPOL.AT, BRZ, Philip Helger
  */
-@Deprecated
 final class SoapHeaderHandler implements SOAPHandler <SOAPMessageContext> {
-  private static final Logger log = LoggerFactory.getLogger (SoapHeaderHandler.class.getName ());
+  private static final Logger s_aLogger = LoggerFactory.getLogger (SoapHeaderHandler.class.getName ());
 
-  private final SimpleParticipantIdentifier m_aRecipient;
-  private final SimpleParticipantIdentifier m_aSender;
-  private final SimpleDocumentIdentifier m_aDocumentType;
-  private final SimpleProcessIdentifier m_aProcessType;
   private final String m_sChannelID;
   private final String m_sMessageID;
   private final List <Element> m_aReferenceParameters;
 
-  public SoapHeaderHandler (@Nullable final IReadonlyParticipantIdentifier sender,
-                            @Nullable final IReadonlyParticipantIdentifier recipient,
-                            @Nullable final IReadonlyDocumentIdentifier documentType,
-                            @Nullable final IReadonlyProcessIdentifier processType,
-                            final String channelID,
+  public SoapHeaderHandler (final String channelID,
                             final String messageID,
                             @Nullable final List <Element> referenceParameters) {
-    // Create a copy if required
-    m_aSender = sender == null ? null : new SimpleParticipantIdentifier (sender);
-    m_aRecipient = recipient == null ? null : new SimpleParticipantIdentifier (recipient);
-    m_aDocumentType = documentType == null ? null : new SimpleDocumentIdentifier (documentType);
-    m_aProcessType = processType == null ? null : new SimpleProcessIdentifier (processType);
     m_sMessageID = messageID;
     m_sChannelID = channelID;
     m_aReferenceParameters = referenceParameters;
   }
 
   public boolean handleMessage (final SOAPMessageContext smc) {
-    if (!((Boolean) smc.get (MessageContext.MESSAGE_OUTBOUND_PROPERTY)).booleanValue ())
-      return false;
-
-    try {
-      final SOAPEnvelope envelope = smc.getMessage ().getSOAPPart ().getEnvelope ();
-      createSOAPHeader (envelope);
-    }
-    catch (final Exception e) {
-      e.printStackTrace ();
+    if (((Boolean) smc.get (MessageContext.MESSAGE_OUTBOUND_PROPERTY)).booleanValue ()) {
+      // Outgoing message...
+      try {
+        final SOAPEnvelope envelope = smc.getMessage ().getSOAPPart ().getEnvelope ();
+        createSOAPHeader (envelope);
+      }
+      catch (final Exception ex) {
+        s_aLogger.warn ("Failed to set header", ex);
+      }
     }
     return true;
   }
@@ -147,27 +125,7 @@ final class SoapHeaderHandler implements SOAPHandler <SOAPMessageContext> {
                                             .createMarshaller ();
 
     marshaller.setProperty (Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-    marshaller.setProperty ("com.sun.xml.bind.namespacePrefixMapper", new PrefixMapper ());
-
-    if (m_aRecipient != null) {
-      marshaller.marshal (objFactory.createRecipientIdentifier (m_aRecipient), new DOMResult (header));
-    }
-    if (m_aSender != null) {
-      marshaller.marshal (objFactory.createSenderIdentifier (m_aSender), new DOMResult (header));
-    }
-    if (m_aDocumentType != null) {
-      marshaller = JAXBContextCache.getInstance ()
-                                   .getFromCache (DocumentIdentifierType.class.getPackage ())
-                                   .createMarshaller ();
-      marshaller.marshal (objFactory.createDocumentIdentifier (m_aDocumentType), new DOMResult (header));
-    }
-
-    if (m_aProcessType != null) {
-      marshaller = JAXBContextCache.getInstance ()
-                                   .getFromCache (ProcessIdentifierType.class.getPackage ())
-                                   .createMarshaller ();
-      marshaller.marshal (objFactory.createProcessIdentifier (m_aProcessType), new DOMResult (header));
-    }
+    JAXBMarshallerUtils.setSunNamespacePrefixMapper (marshaller, new PrefixMapper ());
 
     // java.lang. classes cannot be used with JAXBContextCache
     marshaller = JAXBContext.newInstance (String.class).createMarshaller ();
@@ -187,7 +145,7 @@ final class SoapHeaderHandler implements SOAPHandler <SOAPMessageContext> {
         }
       }
       catch (final Exception ex) {
-        log.info ("Unable to use reference parameters", ex);
+        s_aLogger.info ("Unable to set reference parameters", ex);
         throw ex;
       }
     }

@@ -94,11 +94,11 @@ public class Message implements IMessage {
     m_aSender = sender;
   }
 
-  public IParticipantIdentifier getReciever () {
+  public IParticipantIdentifier getReceiver () {
     return m_aReceiver;
   }
 
-  public void setReciever (final IParticipantIdentifier reciever) {
+  public void setReceiver (final IParticipantIdentifier reciever) {
     m_aReceiver = reciever;
   }
 
@@ -124,8 +124,8 @@ public class Message implements IMessage {
     strBuf.append ("MESSAGE ID: " + (getMessageID () != null ? getMessageID () : ""));
     strBuf.append ("\nSENDER: " + (getSender () != null ? getSender ().getValue () : ""));
     strBuf.append ("\nSENDER TYPE: " + (getSender () != null ? getSender ().getScheme () : ""));
-    strBuf.append ("\nRECIEVER: " + (getReciever () != null ? getReciever ().getValue () : ""));
-    strBuf.append ("\nRECIEVER TYPE: " + (getReciever () != null ? getReciever ().getScheme () : ""));
+    strBuf.append ("\nRECIEVER: " + (getReceiver () != null ? getReceiver ().getValue () : ""));
+    strBuf.append ("\nRECIEVER TYPE: " + (getReceiver () != null ? getReceiver ().getScheme () : ""));
     strBuf.append ("\nDOC: " + (getDocumentType () != null ? getDocumentType ().getValue () : ""));
     strBuf.append ("\nDOC TYPE: " + (getDocumentType () != null ? getDocumentType ().getScheme () : ""));
     strBuf.append ("\nPROCESS: " + (getProcessType () != null ? getProcessType ().getValue () : ""));

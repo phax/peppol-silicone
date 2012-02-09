@@ -39,9 +39,11 @@ package at.peppol.transport.lime.impl;
 
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 
+import javax.annotation.Nonnull;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -55,6 +57,7 @@ import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
 import at.peppol.transport.cert.AccessPointX509TrustManager;
 import at.peppol.transport.lime.ws.LimeClientService;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.commons.random.VerySecureRandom;
 import com.phloc.commons.string.StringHelper;
@@ -66,7 +69,9 @@ import com.phloc.commons.string.StringHelper;
 public final class LimeHelper {
   private LimeHelper () {}
 
-  private static void _setupSSLSocketFactory () throws Exception, KeyManagementException, NoSuchAlgorithmException {
+  private static void _setupSSLSocketFactory () throws CertificateException,
+                                               NoSuchAlgorithmException,
+                                               KeyManagementException {
     final X509Certificate aRootCert = (X509Certificate) CertificateFactory.getInstance ("X.509")
                                                                           .generateCertificate (ClassPathResource.getInputStream ("peppol-root.crt"));
     final TrustManager [] aTrustManagers = new TrustManager [] { new AccessPointX509TrustManager (null, aRootCert) };
@@ -75,29 +80,33 @@ public final class LimeHelper {
     HttpsURLConnection.setDefaultSSLSocketFactory (aSSLContext.getSocketFactory ());
   }
 
-  public static Resource getServicePort (final String urlStr, final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
-    if (StringHelper.hasNoTextAfterTrim (urlStr))
-      throw new Exception ("LIME access point url is empty");
-
-    _setupSSLSocketFactory ();
-
-    final LimeClientService wstransferService = new LimeClientService ();
-    final Resource port = wstransferService.getResourceBindingPort ();
-    final BindingProvider bp = (BindingProvider) port;
-    bp.getRequestContext ().put (BindingProvider.USERNAME_PROPERTY, aCredentials.getUsername ());
-    bp.getRequestContext ().put (BindingProvider.PASSWORD_PROPERTY, aCredentials.getPassword ());
-    bp.getRequestContext ().put (BindingProvider.ENDPOINT_ADDRESS_PROPERTY, urlStr);
-    _verifyHostname ();
-
-    return port;
-  }
-
-  private static void _verifyHostname () {
+  private static void _setupHostnameVerifier () {
     final HostnameVerifier aHostVerifier = new HostnameVerifier () {
       public boolean verify (final String sUrlHostName, final SSLSession aSSLSession) {
         return sUrlHostName.equals (aSSLSession.getPeerHost ());
       }
     };
     HttpsURLConnection.setDefaultHostnameVerifier (aHostVerifier);
+  }
+
+  @Nonnull
+  public static Resource createServicePort (@Nonnull @Nonempty final String sAPStr,
+                                            @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws KeyManagementException,
+                                                                                                       CertificateException,
+                                                                                                       NoSuchAlgorithmException {
+    if (StringHelper.hasNoTextAfterTrim (sAPStr))
+      throw new IllegalArgumentException ("LIME access point url is empty");
+
+    _setupSSLSocketFactory ();
+
+    final LimeClientService aService = new LimeClientService ();
+    final Resource aPort = aService.getResourceBindingPort ();
+    final BindingProvider bp = (BindingProvider) aPort;
+    bp.getRequestContext ().put (BindingProvider.USERNAME_PROPERTY, aCredentials.getUsername ());
+    bp.getRequestContext ().put (BindingProvider.PASSWORD_PROPERTY, aCredentials.getPassword ());
+    bp.getRequestContext ().put (BindingProvider.ENDPOINT_ADDRESS_PROPERTY, sAPStr);
+    _setupHostnameVerifier ();
+
+    return aPort;
   }
 }
