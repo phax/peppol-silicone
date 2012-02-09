@@ -41,6 +41,7 @@
  */
 package at.peppol.transport.start.server;
 
+import java.math.BigInteger;
 import java.security.KeyStore;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
@@ -52,13 +53,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.Resource;
 import javax.jws.WebService;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletRequest;
 import javax.xml.ws.Action;
 import javax.xml.ws.BindingType;
 import javax.xml.ws.FaultAction;
 import javax.xml.ws.WebServiceContext;
-import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.soap.Addressing;
 
 import org.busdox.transport.start.cert.ServerConfigFile;
@@ -86,7 +84,6 @@ import at.peppol.smp.client.SMPServiceCaller;
 import at.peppol.transport.IMessageMetadata;
 import at.peppol.transport.MessageMetadataHelper;
 import at.peppol.transport.PingMessageHelper;
-import at.peppol.transport.start.client.AccessPointClient;
 
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.GlobalDebug;
@@ -100,7 +97,6 @@ import com.phloc.commons.state.ESuccess;
 import com.phloc.commons.state.impl.SuccessWithValue;
 import com.sun.xml.ws.api.message.HeaderList;
 import com.sun.xml.ws.developer.JAXWSProperties;
-
 
 /**
  * WebService implementation.
@@ -119,7 +115,6 @@ import com.sun.xml.ws.developer.JAXWSProperties;
 public class AccessPointService {
   private static final Logger s_aLogger = LoggerFactory.getLogger (AccessPointService.class);
   private static final ISMLInfo SML_INFO = ESML.PRODUCTION;
-  private static final String SERVICE_NAME = AccessPointService.class.getAnnotation (WebService.class).serviceName ();
   private static final List <IAccessPointServiceReceiverSPI> s_aReceivers;
   private static final X509Certificate s_aConfiguredCert;
 
@@ -147,29 +142,6 @@ public class AccessPointService {
 
   @Resource
   private WebServiceContext webServiceContext;
-
-  /**
-   * @return Our own URL
-   */
-  private String _getOwnAPUrl () {
-    // TODO verify what the result of this method is (e.g. for a Tomcat behind
-    // an Apache httpd)
-    final ServletRequest aServletRequest = (ServletRequest) webServiceContext.getMessageContext ()
-                                                                             .get (MessageContext.SERVLET_REQUEST);
-
-    // Context path we're running in
-    final String sContextPath = ((ServletContext) webServiceContext.getMessageContext ()
-                                                                   .get (MessageContext.SERVLET_CONTEXT)).getContextPath ();
-    final String sThisAPUrl = aServletRequest.getScheme () +
-                              "://" +
-                              aServletRequest.getServerName () +
-                              ":" +
-                              aServletRequest.getLocalPort () +
-                              sContextPath +
-                              '/';
-
-    return sThisAPUrl + SERVICE_NAME;
-  }
 
   /**
    * @param aMetadata
@@ -222,11 +194,33 @@ public class AccessPointService {
   }
 
   /**
+   * Check if the certificate of the receiver is identical to the configured
+   * one. This is done by checking the certificate serial numbers.
+   * 
    * @param aReceiverCert
+   *        The certificate of the receiver
    * @return <code>true</code> if equal
    */
   private static boolean _isTheSameCert (@Nullable final X509Certificate aReceiverCert) {
-    return aReceiverCert != null && s_aConfiguredCert.getSerialNumber ().equals (aReceiverCert.getSerialNumber ());
+    if (GlobalDebug.isDebugMode ()) {
+      s_aLogger.info ("In debug mode the certificate is always approved");
+      return true;
+    }
+
+    if (aReceiverCert == null) {
+      s_aLogger.error ("No receiver certificate present");
+      return false;
+    }
+
+    final BigInteger aMySerial = s_aConfiguredCert.getSerialNumber ();
+    final BigInteger aReceiverSerial = aReceiverCert.getSerialNumber ();
+    if (!aMySerial.equals (aReceiverSerial)) {
+      s_aLogger.error ("Certificate serial number mismatch!");
+      s_aLogger.info ("My certificate serial number: " + aMySerial.toString ());
+      s_aLogger.info ("      Receiver serial number: " + aReceiverSerial.toString ());
+      return false;
+    }
+    return true;
   }
 
   /**
@@ -253,6 +247,14 @@ public class AccessPointService {
     throw new UnsupportedOperationException ("Not supported by the current implementation according to the specifications");
   }
 
+  /**
+   * Main action for receiving.
+   * 
+   * @param aBody
+   * @return Never <code>null</code>
+   * @throws FaultMessage
+   *         In case of an error
+   */
   @Action (input = "http://www.w3.org/2009/02/ws-tra/Create",
            output = "http://www.w3.org/2009/02/ws-tra/CreateResponse",
            fault = { @FaultAction (className = FaultMessage.class, value = "http://busdox.org/2010/02/channel/fault") })
@@ -276,25 +278,35 @@ public class AccessPointService {
       s_aLogger.info ("Got a ping message!");
     }
     else {
-      final String sOwnAPUrl = _getOwnAPUrl ();
-      s_aLogger.info ("Our endpoint: " + sOwnAPUrl);
-
-      final String sRecipientAPUrl = GlobalDebug.isDebugMode () ? sOwnAPUrl : _getAPURL (aMetadata);
-      s_aLogger.info ("Recipient endpoint: " + sOwnAPUrl);
-
-      final X509Certificate aRecipientSMPCert = _getRecipientCert (aMetadata);
-      if (aRecipientSMPCert != null)
-        s_aLogger.debug ("Metadata Certificate: \n" + aRecipientSMPCert);
-      else
-        s_aLogger.error ("No Metadata Certificate found! Is this AP maybe not contained in an SMP?");
-
       // Not a ping message
-      if (GlobalDebug.isDebugMode () || _isTheSameCert (aRecipientSMPCert)) {
+
+      // Get our public endpoint address from the config file
+      final String sOwnAPUrl = ServerConfigFile.getConfigFile ().getString ("server.endpoint.url");
+
+      // In debug mode, use our recipient URL, so that the URL check will work
+      final String sRecipientAPUrl = GlobalDebug.isDebugMode () ? sOwnAPUrl : _getAPURL (aMetadata);
+
+      // Get the recipient certificate from the SMP
+      final X509Certificate aRecipientSMPCert = _getRecipientCert (aMetadata);
+      if (aRecipientSMPCert == null)
+        s_aLogger.error ("No Metadata Certificate found! Is this AP maybe not contained in an SMP? Recipient ID is " +
+                         IdentifierUtils.getIdentifierURIEncoded (aMetadata.getRecipientID ()));
+
+      if (s_aLogger.isDebugEnabled ()) {
+        s_aLogger.debug ("Our endpoint: " + sOwnAPUrl);
+        s_aLogger.debug ("Recipient endpoint: " + sRecipientAPUrl);
+        if (aRecipientSMPCert == null)
+          s_aLogger.debug ("No Recipient certificate found");
+        else
+          s_aLogger.debug ("Recipient certificate present: " + aRecipientSMPCert.toString ());
+      }
+
+      if (_isTheSameCert (aRecipientSMPCert)) {
         // Is it for us?
         if (sRecipientAPUrl.indexOf (sOwnAPUrl) >= 0) {
-          s_aLogger.info ("Sender Access Point and Receiver Access Point are the same");
-          s_aLogger.info ("This is a local request - storage directly " + aMetadata.getRecipientID ().getValue ());
+          s_aLogger.info ("This is a handled request for " + aMetadata.getRecipientID ().getValue ());
 
+          // Invoke all available SPI implementations
           ESuccess eOverallSuccess = ESuccess.SUCCESS;
           final List <LogMessage> aProcessingMessages = new ArrayList <LogMessage> ();
           try {
@@ -329,17 +341,21 @@ public class AccessPointService {
           if (eOverallSuccess.isFailure ())
             throw ExceptionUtils.createFaultMessage (new IllegalStateException ("Failure in processing document from PEPPOL"),
                                                      "Internal error in processing the incoming PEPPOL document");
+
+          // Log success
+          s_aLogger.info ("Done handling document from PEPPOL");
         }
         else {
-          // TODO throw an exception if it is not for us
-          s_aLogger.info ("Sender Access Point and Receiver Access Point are different");
-          s_aLogger.info ("This is a request for a remote Access Point: " + sRecipientAPUrl);
-          try {
-            AccessPointClient.send (sRecipientAPUrl, aMetadata, aBody);
-          }
-          catch (final Exception ex) {
-            throw ExceptionUtils.createFaultMessage (ex, "Deliver to remote Access Point");
-          }
+          s_aLogger.info ("The received document is not for us!");
+          s_aLogger.info ("Request is for: " + sRecipientAPUrl);
+          s_aLogger.info ("    Our URL is: " + sOwnAPUrl);
+
+          // Avoid endless loop
+          ExceptionUtils.createFaultMessage (new IllegalStateException ("Receiver(" +
+                                                                        sRecipientAPUrl +
+                                                                        ") invalid for us (" +
+                                                                        sOwnAPUrl +
+                                                                        ")"), "The received document is not for us!");
         }
       }
       else {
@@ -347,15 +363,15 @@ public class AccessPointService {
                          aRecipientSMPCert +
                          ") does final not match Access Point Certificate (" +
                          s_aConfiguredCert +
-                         ")");
+                         ") - ignoring document");
       }
     }
 
-    s_aLogger.info ("Done");
+    if (GlobalDebug.isDebugMode ())
+      _checkMemoryUsage ();
 
-    _checkMemoryUsage ();
-
-    return new CreateResponse ();
+    final CreateResponse aResponse = new CreateResponse ();
+    return aResponse;
   }
 
   private static final long MEMORY_THRESHOLD_BYTES = 10 * CGlobal.BYTES_PER_MEGABYTE;
@@ -363,22 +379,22 @@ public class AccessPointService {
 
   private static void _checkMemoryUsage () {
     System.gc ();
-    final Runtime runtime = Runtime.getRuntime ();
-    final long freeMemory = runtime.freeMemory ();
-    final long totalMemory = runtime.totalMemory ();
-    final long usedMemory = totalMemory - freeMemory;
+    final Runtime aRuntime = Runtime.getRuntime ();
+    final long nFreeMemory = aRuntime.freeMemory ();
+    final long nTotalMemory = aRuntime.totalMemory ();
+    final long nUsedMemory = nTotalMemory - nFreeMemory;
     final SizeHelper aSH = SizeHelper.getSizeHelperOfLocale (Locale.US);
-    final String memoryStatus = aSH.getAsMatching (usedMemory, 1) +
-                                " / " +
-                                aSH.getAsMatching (totalMemory, 1) +
-                                " / " +
-                                aSH.getAsMatching (runtime.maxMemory (), 1);
+    final String sMemoryStatus = aSH.getAsMatching (nUsedMemory, 1) +
+                                 " / " +
+                                 aSH.getAsMatching (nTotalMemory, 1) +
+                                 " / " +
+                                 aSH.getAsMatching (aRuntime.maxMemory (), 1);
 
-    if (usedMemory <= (s_nLastUsageInBytes - MEMORY_THRESHOLD_BYTES) ||
-        usedMemory >= (s_nLastUsageInBytes + MEMORY_THRESHOLD_BYTES)) {
+    if (nUsedMemory <= (s_nLastUsageInBytes - MEMORY_THRESHOLD_BYTES) ||
+        nUsedMemory >= (s_nLastUsageInBytes + MEMORY_THRESHOLD_BYTES)) {
       final String sThreadName = Thread.currentThread ().getName ();
-      s_aLogger.info ("%%% [" + sThreadName + "] Memory usage: " + memoryStatus);
-      s_nLastUsageInBytes = usedMemory;
+      s_aLogger.info ("%%% [" + sThreadName + "] Memory usage: " + sMemoryStatus);
+      s_nLastUsageInBytes = nUsedMemory;
     }
   }
 }
