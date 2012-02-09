@@ -63,8 +63,8 @@ import org.w3c.dom.Node;
 
 import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
 import at.peppol.commons.wsaddr.W3CEndpointReferenceUtils;
-import at.peppol.transport.IMessageMetadata;
 import at.peppol.transport.CTransportIdentifiers;
+import at.peppol.transport.IMessageMetadata;
 import at.peppol.transport.MessageMetadataHelper;
 import at.peppol.transport.lime.CLimeIdentifiers;
 import at.peppol.transport.lime.IEndpointReference;
@@ -107,7 +107,8 @@ public class Inbox implements IInbox {
   @ReturnsMutableCopy
   private static List <Element> _createChannelReferenceParameter (final IEndpointReference aEndpointReference) {
     final Document aDummyDoc = XMLFactory.newDocument ();
-    final Element node = aDummyDoc.createElementNS (CTransportIdentifiers.NAMESPACE_TRANSPORT_IDS, CLimeIdentifiers.CHANNELID);
+    final Element node = aDummyDoc.createElementNS (CTransportIdentifiers.NAMESPACE_TRANSPORT_IDS,
+                                                    CLimeIdentifiers.CHANNELID);
     node.setTextContent (aEndpointReference.getChannelID ());
     return ContainerHelper.newList (node);
   }
@@ -148,7 +149,7 @@ public class Inbox implements IInbox {
                               final IMessageReference aMessageReference) throws MessageException {
     _validateCredentialsObj (aCredentials);
     try {
-      // get a specifc message
+      // get a specific message
       final Resource aPort = LimeHelper.createServicePort (aMessageReference.getEndpointReference ().getAddress (),
                                                            aCredentials);
       SoapHeaderMapper.setupHandlerChain ((BindingProvider) aPort,
