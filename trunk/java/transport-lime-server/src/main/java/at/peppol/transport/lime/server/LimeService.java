@@ -85,9 +85,10 @@ import at.peppol.commons.sml.ESML;
 import at.peppol.commons.wsaddr.W3CEndpointReferenceUtils;
 import at.peppol.smp.client.SMPServiceCaller;
 import at.peppol.transport.IMessageMetadata;
+import at.peppol.transport.CTransportIdentifiers;
 import at.peppol.transport.MessageMetadata;
 import at.peppol.transport.MessageMetadataHelper;
-import at.peppol.transport.lime.Identifiers;
+import at.peppol.transport.lime.CLimeIdentifiers;
 import at.peppol.transport.lime.server.exception.MessageIdReusedException;
 import at.peppol.transport.lime.server.exception.RecipientUnreachableException;
 import at.peppol.transport.lime.server.storage.LimeStorage;
@@ -116,7 +117,7 @@ public class LimeService {
   private static final String FAULT_UNKNOWN_ENDPOINT = "The endpoint is not known";
   private static final String FAULT_SERVER_ERROR = "ServerError";
   private static final String SERVICENAME = LimeService.class.getAnnotation (WebService.class).serviceName ();
-  private static final QName QNAME_PAGEIDENTIFIER = new QName (Identifiers.NAMESPACE_LIME, Identifiers.PAGEIDENTIFIER);
+  private static final QName QNAME_PAGEIDENTIFIER = new QName (CLimeIdentifiers.NAMESPACE_LIME, CLimeIdentifiers.PAGEIDENTIFIER);
   private static final Logger s_aLogger = LoggerFactory.getLogger (LimeService.class);
 
   private static final ObjectFactory s_aObjFactory = new ObjectFactory ();
@@ -137,12 +138,12 @@ public class LimeService {
     final List <Element> aReferenceParameters = new ArrayList <Element> ();
 
     // Channel ID
-    Element aElement = aDummyDoc.createElementNS (Identifiers.NAMESPACE_TRANSPORT_IDS, Identifiers.CHANNELID);
+    Element aElement = aDummyDoc.createElementNS (CTransportIdentifiers.NAMESPACE_TRANSPORT_IDS, CLimeIdentifiers.CHANNELID);
     aElement.appendChild (aDummyDoc.createTextNode (sChannelID));
     aReferenceParameters.add (aElement);
 
     // Message ID
-    aElement = aDummyDoc.createElementNS (Identifiers.NAMESPACE_TRANSPORT_IDS, Identifiers.MESSAGEID);
+    aElement = aDummyDoc.createElementNS (CTransportIdentifiers.NAMESPACE_TRANSPORT_IDS, CLimeIdentifiers.MESSAGEID);
     aElement.appendChild (aDummyDoc.createTextNode (sMessageID));
     aReferenceParameters.add (aElement);
 
@@ -329,10 +330,10 @@ public class LimeService {
 
         final IMessageMetadata aRealMetadata = new MessageMetadata (aMetadata.getMessageID (),
                                                                     aMetadata.getChannelID (),
-                                                                    Identifiers.MESSAGEUNDELIVERABLE_SENDER,
+                                                                    CLimeIdentifiers.MESSAGEUNDELIVERABLE_SENDER,
                                                                     aMetadata.getSenderID (),
-                                                                    Identifiers.MESSAGEUNDELIVERABLE_DOCUMENT,
-                                                                    Identifiers.MESSAGEUNDELIVERABLE_PROCESS);
+                                                                    CLimeIdentifiers.MESSAGEUNDELIVERABLE_DOCUMENT,
+                                                                    CLimeIdentifiers.MESSAGEUNDELIVERABLE_PROCESS);
 
         final Document aDocument = XMLFactory.newDocument ();
         final Marshaller aMarshaller = JAXBContextCache.getInstance ()
