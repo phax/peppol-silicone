@@ -56,7 +56,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import at.peppol.transport.lime.Identifiers;
+import at.peppol.transport.CTransportIdentifiers;
 
 /**
  * @author Ravnholt<br>
@@ -134,7 +134,7 @@ public class SoapResponseHeaderHandler implements SOAPHandler <SOAPMessageContex
       final NamedNodeMap attributes = childNode.getAttributes ();
       if (attributes != null) {
         for (int a = 0; a < attributes.getLength (); a++) {
-          if (attributes.item (a).getLocalName ().equals (Identifiers.SCHEME_ATTR)) {
+          if (attributes.item (a).getLocalName ().equals (CTransportIdentifiers.SCHEME_ATTR)) {
             soapElement.setAttribute (attributes.item (a).getLocalName (), attributes.item (a).getNodeValue ());
           }
         }

@@ -50,37 +50,24 @@ import at.peppol.commons.identifier.ReadonlyProcessIdentifier;
  *         PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable
-public final class Identifiers {
+public final class CLimeIdentifiers {
   public static final String NAMESPACE_LIME = org.busdox.transport.lime._1.ObjectFactory.class.getPackage ()
                                                                                               .getAnnotation (XmlSchema.class)
                                                                                               .namespace ();
-  public static final String NAMESPACE_TRANSPORT_IDS = org.busdox.transport.identifiers._1.ObjectFactory.class.getPackage ()
-                                                                                                              .getAnnotation (XmlSchema.class)
-                                                                                                              .namespace ();
   public static final String MESSAGEID = "MessageIdentifier";
   public static final String CHANNELID = "ChannelIdentifier";
   public static final String PAGEIDENTIFIER = "PageIdentifier";
-  public static final String SERVICENAME = "wstransferService";
   public static final String SENDERID = "SenderIdentifier";
   public static final String RECIPIENTID = "RecipientIdentifier";
   public static final String DOCUMENTID = "DocumentIdentifier";
   public static final String PROCESSID = "ProcessIdentifier";
-  public static final String SCHEME_ATTR = "scheme";
-  public static final String BUSDOX_NO_PROCESS = CIdentifier.DEFAULT_PROCESS_IDENTIFIER_NOPROCESS;
   public static final String BUSDOX_PROCID_TRANSPORT = "busdox-procid-transport";
 
   public static final ReadonlyParticipantIdentifier MESSAGEUNDELIVERABLE_SENDER = new ReadonlyParticipantIdentifier ("busdox-actorid-transport",
                                                                                                                      "busdox:sender");
+  public static final ReadonlyDocumentIdentifier MESSAGEUNDELIVERABLE_DOCUMENT = ReadonlyDocumentIdentifier.createWithDefaultScheme ("http://busdox.org/transport/lime/1.0/::MessageUndeliverable");
+  public static final ReadonlyProcessIdentifier MESSAGEUNDELIVERABLE_PROCESS = new ReadonlyProcessIdentifier (BUSDOX_PROCID_TRANSPORT,
+                                                                                                              CIdentifier.DEFAULT_PROCESS_IDENTIFIER_NOPROCESS);
 
-  private static final String MESSAGEUNDELIVERABLE_DOCUMENT_SCHEME = CIdentifier.DEFAULT_DOCUMENT_IDENTIFIER_SCHEME;
-  private static final String MESSAGEUNDELIVERABLE_DOCUMENT_VALUE = "http://busdox.org/transport/lime/1.0/::MessageUndeliverable";
-  public static final ReadonlyDocumentIdentifier MESSAGEUNDELIVERABLE_DOCUMENT = new ReadonlyDocumentIdentifier (MESSAGEUNDELIVERABLE_DOCUMENT_SCHEME,
-                                                                                                                 MESSAGEUNDELIVERABLE_DOCUMENT_VALUE);
-
-  private static final String MESSAGEUNDELIVERABLE_PROCESS_SCHEME = "busdox-procid-transport";
-  private static final String MESSAGEUNDELIVERABLE_PROCESS_VALUE = CIdentifier.DEFAULT_PROCESS_IDENTIFIER_NOPROCESS;
-  public static final ReadonlyProcessIdentifier MESSAGEUNDELIVERABLE_PROCESS = new ReadonlyProcessIdentifier (MESSAGEUNDELIVERABLE_PROCESS_SCHEME,
-                                                                                                              MESSAGEUNDELIVERABLE_PROCESS_VALUE);
-
-  private Identifiers () {}
+  private CLimeIdentifiers () {}
 }

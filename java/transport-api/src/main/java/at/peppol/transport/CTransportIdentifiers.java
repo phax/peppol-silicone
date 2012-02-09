@@ -44,10 +44,11 @@ import javax.xml.bind.annotation.XmlSchema;
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable
-public final class Identifiers {
+public final class CTransportIdentifiers {
   public static final String NAMESPACE_TRANSPORT_IDS = org.busdox.transport.identifiers._1.ObjectFactory.class.getPackage ()
                                                                                                               .getAnnotation (XmlSchema.class)
                                                                                                               .namespace ();
+  public static final String SCHEME_ATTR = "scheme";
 
-  private Identifiers () {}
+  private CTransportIdentifiers () {}
 }

@@ -51,16 +51,15 @@ import org.w3._2009._02.ws_tra.Resource;
 import org.w3._2009._02.ws_tra.ResourceCreated;
 import org.w3c.dom.Element;
 
-import at.peppol.commons.identifier.SimpleProcessIdentifier;
 import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
 import at.peppol.commons.wsaddr.W3CEndpointReferenceUtils;
 import at.peppol.transport.IMessageMetadata;
 import at.peppol.transport.MessageMetadata;
 import at.peppol.transport.MessageMetadataHelper;
+import at.peppol.transport.lime.CLimeIdentifiers;
 import at.peppol.transport.lime.IEndpointReference;
 import at.peppol.transport.lime.IMessage;
 import at.peppol.transport.lime.IOutbox;
-import at.peppol.transport.lime.Identifiers;
 import at.peppol.transport.lime.MessageException;
 
 import com.phloc.commons.string.StringHelper;
@@ -102,10 +101,10 @@ public final class Outbox implements IOutbox {
     final EndpointReferenceWithMessageID ret = new EndpointReferenceWithMessageID ();
     ret.setAddress (W3CEndpointReferenceUtils.getAddress (aEndpointReference));
     for (final Element e : W3CEndpointReferenceUtils.getReferenceParameters (aEndpointReference)) {
-      if (Identifiers.CHANNELID.equals (e.getLocalName ()))
+      if (CLimeIdentifiers.CHANNELID.equals (e.getLocalName ()))
         ret.setChannelID (e.getTextContent ());
       else
-        if (Identifiers.MESSAGEID.equals (e.getLocalName ()))
+        if (CLimeIdentifiers.MESSAGEID.equals (e.getLocalName ()))
           ret.setMessageID (e.getTextContent ());
         else
           s_aLogger.warn ("EndpointReference contains illegal element " + e.getLocalName ());
@@ -130,8 +129,7 @@ public final class Outbox implements IOutbox {
                                                               aMessage.getDocumentType (),
                                                               aMessage.getProcessType () != null
                                                                                                 ? aMessage.getProcessType ()
-                                                                                                : new SimpleProcessIdentifier (Identifiers.BUSDOX_PROCID_TRANSPORT,
-                                                                                                                               Identifiers.BUSDOX_NO_PROCESS));
+                                                                                                : CLimeIdentifiers.MESSAGEUNDELIVERABLE_PROCESS);
 
       // Create "create" port
       Resource aPort = LimeHelper.createServicePort (aEndpointReference.getAddress (), aCredentials);

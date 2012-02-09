@@ -83,7 +83,7 @@ public final class MessageMetadataHelper {
   private static final QName QNAME_DOCUMENTID;
   private static final QName QNAME_PROCESSID;
   // Must match the attribute name used in ParticipantIdentifierType etc.
-  private static final QName QNAME_SCHEME = new QName (null, "scheme");
+  private static final QName QNAME_SCHEME = new QName (null, CTransportIdentifiers.SCHEME_ATTR);
 
   static {
     final ObjectFactory aIdentifierObjFactory = new ObjectFactory ();
@@ -118,7 +118,7 @@ public final class MessageMetadataHelper {
     // Set headers direct, without a handler
     final ObjectFactory aObjFactory = new ObjectFactory ();
     final Document aDoc = XMLFactory.newDocument ();
-    final Element eRoot = (Element) aDoc.appendChild (aDoc.createElementNS (Identifiers.NAMESPACE_TRANSPORT_IDS,
+    final Element eRoot = (Element) aDoc.appendChild (aDoc.createElementNS (CTransportIdentifiers.NAMESPACE_TRANSPORT_IDS,
                                                                             "Headers"));
     Marshaller aMarshaller;
 

@@ -57,7 +57,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import at.peppol.commons.wsaddr.W3CEndpointReferenceUtils;
-import at.peppol.transport.lime.Identifiers;
+import at.peppol.transport.CTransportIdentifiers;
+import at.peppol.transport.lime.CLimeIdentifiers;
 
 import com.phloc.commons.jaxb.JAXBContextCache;
 import com.phloc.commons.jaxb.JAXBMarshallerUtils;
@@ -114,7 +115,7 @@ public final class MessagePage {
     JAXBMarshallerUtils.setSunNamespacePrefixMapper (marshaller, new NamespacePrefixMapper () {
       @Override
       public String getPreferredPrefix (final String namespaceUri, final String suggestion, final boolean requirePrefix) {
-        if (Identifiers.NAMESPACE_LIME.equalsIgnoreCase (namespaceUri))
+        if (CLimeIdentifiers.NAMESPACE_LIME.equalsIgnoreCase (namespaceUri))
           return "peppol";
         return suggestion;
       }
@@ -134,12 +135,12 @@ public final class MessagePage {
     final List <Element> aReferenceParameters = new ArrayList <Element> ();
 
     // Page identifier
-    Element aElement = aDummyDoc.createElementNS (Identifiers.NAMESPACE_LIME, Identifiers.PAGEIDENTIFIER);
+    Element aElement = aDummyDoc.createElementNS (CLimeIdentifiers.NAMESPACE_LIME, CLimeIdentifiers.PAGEIDENTIFIER);
     aElement.appendChild (aDummyDoc.createTextNode (Integer.toString (nCurPageNum + 1)));
     aReferenceParameters.add (aElement);
 
     // Channel ID
-    aElement = aDummyDoc.createElementNS (Identifiers.NAMESPACE_TRANSPORT_IDS, Identifiers.CHANNELID);
+    aElement = aDummyDoc.createElementNS (CTransportIdentifiers.NAMESPACE_TRANSPORT_IDS, CLimeIdentifiers.CHANNELID);
     aElement.appendChild (aDummyDoc.createTextNode (sChannelID));
     aReferenceParameters.add (aElement);
 
@@ -166,10 +167,10 @@ public final class MessagePage {
 
       final List <Element> referenceParametersType = new ArrayList <Element> ();
       final Document aDummyDoc = XMLFactory.newDocument ();
-      Element element = aDummyDoc.createElementNS (Identifiers.NAMESPACE_TRANSPORT_IDS, Identifiers.CHANNELID);
+      Element element = aDummyDoc.createElementNS (CTransportIdentifiers.NAMESPACE_TRANSPORT_IDS, CLimeIdentifiers.CHANNELID);
       element.appendChild (aDummyDoc.createTextNode (channelID));
       referenceParametersType.add (element);
-      element = aDummyDoc.createElementNS (Identifiers.NAMESPACE_TRANSPORT_IDS, Identifiers.MESSAGEID);
+      element = aDummyDoc.createElementNS (CTransportIdentifiers.NAMESPACE_TRANSPORT_IDS, CLimeIdentifiers.MESSAGEID);
       element.appendChild (aDummyDoc.createTextNode (messageID));
       referenceParametersType.add (element);
       final W3CEndpointReference endpointReferenceType = W3CEndpointReferenceUtils.createEndpointReference (endpoint,
