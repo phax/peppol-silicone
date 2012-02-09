@@ -73,11 +73,9 @@ public final class AccessPointX509TrustManager implements X509TrustManager {
    *        A Collection(Set) of Names accepted.
    * @param aAcceptedRootCertificate
    *        Represents a Certificate.
-   * @throws Exception
-   *         Throws an Exception.
    */
   public AccessPointX509TrustManager (final Set <String> aAcceptedCommonNames,
-                                      final X509Certificate aAcceptedRootCertificate) throws Exception {
+                                      final X509Certificate aAcceptedRootCertificate) {
 
     m_aRootCertificate = aAcceptedRootCertificate;
     m_aCommonNames = aAcceptedCommonNames;

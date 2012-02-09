@@ -126,7 +126,7 @@ public final class Outbox implements IOutbox {
       final IMessageMetadata aMetadata = new MessageMetadata (null,
                                                               aEndpointReference.getChannelID (),
                                                               aMessage.getSender (),
-                                                              aMessage.getReciever (),
+                                                              aMessage.getReceiver (),
                                                               aMessage.getDocumentType (),
                                                               aMessage.getProcessType () != null
                                                                                                 ? aMessage.getProcessType ()
@@ -134,7 +134,7 @@ public final class Outbox implements IOutbox {
                                                                                                                                Identifiers.BUSDOX_NO_PROCESS));
 
       // Create "create" port
-      Resource aPort = LimeHelper.getServicePort (aEndpointReference.getAddress (), aCredentials);
+      Resource aPort = LimeHelper.createServicePort (aEndpointReference.getAddress (), aCredentials);
       List <Header> aHeaders = MessageMetadataHelper.createHeadersFromMetadata (aMetadata);
       ((WSBindingProvider) aPort).setOutboundHeaders (aHeaders);
 
@@ -145,7 +145,7 @@ public final class Outbox implements IOutbox {
       final EndpointReferenceWithMessageID aEndpointDoc = _createEndpointReferenceDocument (createResponse);
 
       // Create "put" port
-      aPort = LimeHelper.getServicePort (aEndpointDoc.getAddress (), aCredentials);
+      aPort = LimeHelper.createServicePort (aEndpointDoc.getAddress (), aCredentials);
       aHeaders = MessageMetadataHelper.createHeadersFromMetadata (aEndpointDoc);
       ((WSBindingProvider) aPort).setOutboundHeaders (aHeaders);
 

@@ -43,81 +43,23 @@ import javax.xml.ws.Binding;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.handler.Handler;
 
-import org.busdox.transport.identifiers._1.DocumentIdentifierType;
-import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
-import org.busdox.transport.identifiers._1.ProcessIdentifierType;
 import org.w3c.dom.Element;
-
-import at.peppol.busdox.identifier.IReadonlyDocumentIdentifier;
-import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
-import at.peppol.busdox.identifier.IReadonlyProcessIdentifier;
-import at.peppol.commons.identifier.SimpleDocumentIdentifier;
-import at.peppol.commons.identifier.SimpleParticipantIdentifier;
-import at.peppol.commons.identifier.SimpleProcessIdentifier;
 
 /**
  * @author Ravnholt<br>
  *         PEPPOL.AT, BRZ, Philip Helger
  */
-@Deprecated
-public class SoapHeaderMapper {
+public final class SoapHeaderMapper {
   private SoapHeaderMapper () {}
 
-  public static void setupHandlerChain (final BindingProvider bindingProvider,
-                                        final String channelID,
-                                        final String messageID,
-                                        final List <Element> referenceParameters) {
-    setupHandlerChain (bindingProvider, null, null, null, null, channelID, messageID, referenceParameters);
-  }
-
-  public static void setupHandlerChain (final BindingProvider bindingProvider,
-                                        final String channelID,
-                                        final String messageID) {
-    setupHandlerChain (bindingProvider, null, null, null, null, channelID, messageID, null);
-  }
-
-  private static void setupHandlerChain (final BindingProvider bindingProvider,
-                                         final IReadonlyParticipantIdentifier sender,
-                                         final IReadonlyParticipantIdentifier receiver,
-                                         final IReadonlyDocumentIdentifier documentType,
-                                         final IReadonlyProcessIdentifier processType,
-                                         final String channelID,
-                                         final String messageID,
-                                         final List <Element> referenceParameters) {
-    final Binding binding = bindingProvider.getBinding ();
+  public static void setupHandlerChain (final BindingProvider aBP,
+                                        final String sChannelID,
+                                        final String sMessageID,
+                                        final List <Element> aReferenceParameters) {
+    final Binding aBinding = aBP.getBinding ();
     @SuppressWarnings ("rawtypes")
-    final List <Handler> handlerList = binding.getHandlerChain ();
-    handlerList.add (_createSoapHeaderHandler (sender,
-                                               receiver,
-                                               documentType,
-                                               processType,
-                                               channelID,
-                                               messageID,
-                                               referenceParameters));
-    binding.setHandlerChain (handlerList);
-  }
-
-  private static SoapHeaderHandler _createSoapHeaderHandler (final IReadonlyParticipantIdentifier sender,
-                                                             final IReadonlyParticipantIdentifier recipient,
-                                                             final IReadonlyDocumentIdentifier documentType,
-                                                             final IReadonlyProcessIdentifier processType,
-                                                             final String channelID,
-                                                             final String messageID,
-                                                             final List <Element> referenceParameters) {
-    if (documentType != null) {
-      final DocumentIdentifierType headerDocumentType = new SimpleDocumentIdentifier (documentType);
-      final ParticipantIdentifierType headerRecipient = new SimpleParticipantIdentifier (recipient);
-      final ParticipantIdentifierType headerSender = new SimpleParticipantIdentifier (sender);
-      final ProcessIdentifierType headerProcessInformation = new SimpleProcessIdentifier (processType);
-
-      return new SoapHeaderHandler (headerSender,
-                                    headerRecipient,
-                                    headerDocumentType,
-                                    headerProcessInformation,
-                                    channelID,
-                                    messageID,
-                                    referenceParameters);
-    }
-    return new SoapHeaderHandler (null, null, null, null, channelID, messageID, referenceParameters);
+    final List <Handler> handlerList = aBinding.getHandlerChain ();
+    handlerList.add (new SoapHeaderHandler (sChannelID, sMessageID, aReferenceParameters));
+    aBinding.setHandlerChain (handlerList);
   }
 }

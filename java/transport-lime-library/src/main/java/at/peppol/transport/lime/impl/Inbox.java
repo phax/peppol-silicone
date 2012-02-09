@@ -121,11 +121,9 @@ public class Inbox implements IInbox {
     _validateCredentials (aCredentials);
     try {
       // get a specifc message
-      final Resource aPort = LimeHelper.getServicePort (aMessageReference.getEndpointReference ().getAddress (),
+      final Resource aPort = LimeHelper.createServicePort (aMessageReference.getEndpointReference ().getAddress (),
                                                         aCredentials);
-      SoapHeaderMapper.setupHandlerChain ((BindingProvider) aPort,
-                                          aMessageReference.getEndpointReference ().getChannelID (),
-                                          aMessageReference.getMessageID ());
+      SoapHeaderMapper.setupHandlerChain ((BindingProvider) aPort, aMessageReference.getEndpointReference ().getChannelID (), aMessageReference.getMessageID (), null);
 
       // no body required
       final GetResponse aGetResponse = aPort.get (null);
@@ -152,11 +150,9 @@ public class Inbox implements IInbox {
     _validateCredentials (aCredentials);
     try {
       // Delete a specific message
-      final Resource aPort = LimeHelper.getServicePort (aMessageReference.getEndpointReference ().getAddress (),
+      final Resource aPort = LimeHelper.createServicePort (aMessageReference.getEndpointReference ().getAddress (),
                                                         aCredentials);
-      SoapHeaderMapper.setupHandlerChain ((BindingProvider) aPort,
-                                          aMessageReference.getEndpointReference ().getChannelID (),
-                                          aMessageReference.getMessageID ());
+      SoapHeaderMapper.setupHandlerChain ((BindingProvider) aPort, aMessageReference.getEndpointReference ().getChannelID (), aMessageReference.getMessageID (), null);
       aPort.delete (null);
     }
     catch (final Exception e) {
@@ -194,7 +190,7 @@ public class Inbox implements IInbox {
                                                                                   JAXBException,
                                                                                   DOMException {
     // Get a message list
-    final Resource aPort = LimeHelper.getServicePort (aEndpointReference.getAddress (), aCredentials);
+    final Resource aPort = LimeHelper.createServicePort (aEndpointReference.getAddress (), aCredentials);
     SoapHeaderMapper.setupHandlerChain ((BindingProvider) aPort, null, null, aReferenceParameters);
     final GetResponse aGetResponse = aPort.get (null);
 
@@ -236,7 +232,7 @@ public class Inbox implements IInbox {
                                                                         .get (JAXWSProperties.INBOUND_HEADER_LIST_PROPERTY);
     final IMessageMetadata aMetadata = MessageMetadataHelper.createMetadataFromHeaders (aHeaderList);
     message.setSender (aMetadata.getSenderID ());
-    message.setReciever (aMetadata.getRecipientID ());
+    message.setReceiver (aMetadata.getRecipientID ());
     message.setDocumentType (aMetadata.getDocumentTypeID ());
     message.setProcessType (aMetadata.getProcessID ());
   }

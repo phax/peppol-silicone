@@ -267,7 +267,7 @@ public final class MainLimeClient {
     message.setDocument (_loadXMLFromFile (xmlFilename));
     message.setDocumentType (new SimpleDocumentIdentifier (documentID));
     message.setSender (new SimpleParticipantIdentifier (senderID));
-    message.setReciever (new SimpleParticipantIdentifier (receiverID));
+    message.setReceiver (new SimpleParticipantIdentifier (receiverID));
     message.setProcessType (new SimpleProcessIdentifier (processID));
     return message;
   }

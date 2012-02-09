@@ -58,9 +58,9 @@ public interface IMessage {
 
   void setSender (IParticipantIdentifier sender);
 
-  IParticipantIdentifier getReciever ();
+  IParticipantIdentifier getReceiver ();
 
-  void setReciever (IParticipantIdentifier reciever);
+  void setReceiver (IParticipantIdentifier receiver);
 
   IDocumentIdentifier getDocumentType ();
 
