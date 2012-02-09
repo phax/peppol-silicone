@@ -76,7 +76,8 @@ import at.peppol.transport.lime.impl.Message;
 import at.peppol.transport.lime.impl.MessageReference;
 import at.peppol.transport.lime.impl.Outbox;
 
-import com.phloc.commons.io.resource.FileSystemResource;
+import com.phloc.commons.io.IReadableResource;
+import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.commons.xml.serialize.XMLReader;
 
 /**
@@ -97,7 +98,7 @@ public final class MainLimeClient {
 
     final String apUrl2 = "http://localhost:8091/limeService";
     // any xml will do
-    final String xmlFile = "src/test/resources/xml/CENBII-Order-maximal.xml";
+    final IReadableResource xmlFile = new ClassPathResource ("xml/CENBII-Order-maximal.xml");
 
     _testSend (apUrl2, xmlFile, SENDER, RECEIVER);
     if (false)
@@ -116,7 +117,7 @@ public final class MainLimeClient {
   }
 
   private static void _testMessageUndeliverable (final String apUrl,
-                                                 final String xmlFilename,
+                                                 final IReadableResource xml,
                                                  final IReadonlyParticipantIdentifier senderID,
                                                  final IReadonlyParticipantIdentifier receiverID) throws Exception {
     final IReadonlyParticipantIdentifier unFindable = new SimpleParticipantIdentifier (receiverID.getScheme (),
@@ -128,7 +129,7 @@ public final class MainLimeClient {
     endpointReference.setChannelID (channelID);
 
     try {
-      final IMessage message = _createSampleMessage (xmlFilename, senderID, unFindable, DOCID, PROCESS);
+      final IMessage message = _createSampleMessage (xml, senderID, unFindable, DOCID, PROCESS);
       _testSendMessage (message, endpointReference);
     }
     catch (final Exception e) {
@@ -142,7 +143,7 @@ public final class MainLimeClient {
   }
 
   private static String _testSend (final String apUrl,
-                                   final String xmlFilename,
+                                   final IReadableResource xml,
                                    final IReadonlyParticipantIdentifier senderID,
                                    final IReadonlyParticipantIdentifier receiverID) throws Exception {
     final String channelID = senderID.getValue ();
@@ -150,7 +151,7 @@ public final class MainLimeClient {
     endpointReference.setAddress (apUrl);
     endpointReference.setChannelID (channelID);
 
-    final IMessage message = _createSampleMessage (xmlFilename, senderID, receiverID, DOCID, PROCESS);
+    final IMessage message = _createSampleMessage (xml, senderID, receiverID, DOCID, PROCESS);
     final String messageID = _testSendMessage (message, endpointReference);
     return messageID;
   }
@@ -254,17 +255,17 @@ public final class MainLimeClient {
     }
   }
 
-  private static Document _loadXMLFromFile (final String filename) throws SAXException {
-    return XMLReader.readXMLDOM (new FileSystemResource (filename));
+  private static Document _loadXML (final IReadableResource xml) throws SAXException {
+    return XMLReader.readXMLDOM (xml);
   }
 
-  private static IMessage _createSampleMessage (final String xmlFilename,
+  private static IMessage _createSampleMessage (final IReadableResource xml,
                                                 final IReadonlyParticipantIdentifier senderID,
                                                 final IReadonlyParticipantIdentifier receiverID,
                                                 final IReadonlyDocumentIdentifier documentID,
                                                 final IReadonlyProcessIdentifier processID) throws SAXException {
     final IMessage message = new Message ();
-    message.setDocument (_loadXMLFromFile (xmlFilename));
+    message.setDocument (_loadXML (xml));
     message.setDocumentType (new SimpleDocumentIdentifier (documentID));
     message.setSender (new SimpleParticipantIdentifier (senderID));
     message.setReceiver (new SimpleParticipantIdentifier (receiverID));
