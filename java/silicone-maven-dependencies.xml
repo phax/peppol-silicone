@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<root>
+  <project artifactid="peppol-commons-busdox">
+    <isDependentOf>
+      <item artifactid="peppol-commons-peppol" />
+      <item artifactid="peppol-sml-client-apps" />
+      <item artifactid="peppol-sml-client-library" />
+      <item artifactid="peppol-sml-server-library" />
+      <item artifactid="peppol-sml-webapp" />
+      <item artifactid="peppol-sml-webapp-standalone" />
+      <item artifactid="peppol-smp-client-console" />
+      <item artifactid="peppol-smp-client-library" />
+      <item artifactid="peppol-smp-webapp" />
+      <item artifactid="peppol-transport-api" />
+      <item artifactid="peppol-transport-lime-client" />
+      <item artifactid="peppol-transport-lime-library" />
+      <item artifactid="peppol-transport-lime-server" />
+      <item artifactid="peppol-transport-start-client" />
+      <item artifactid="peppol-transport-start-filereceiver" />
+      <item artifactid="peppol-transport-start-server" />
+    </isDependentOf>
+  </project>
+  <project artifactid="peppol-commons-cenbii">
+    <isDependentOf>
+      <item artifactid="peppol-validation-rules" />
+      <item artifactid="peppol-visualization" />
+    </isDependentOf>
+  </project>
+  <project artifactid="peppol-commons-jpa">
+    <isDependentOf>
+      <item artifactid="peppol-sml-server-library" />
+      <item artifactid="peppol-sml-webapp" />
+      <item artifactid="peppol-sml-webapp-standalone" />
+      <item artifactid="peppol-smp-webapp" />
+    </isDependentOf>
+  </project>
+  <project artifactid="peppol-validation-schematron">
+    <isDependentOf>
+      <item artifactid="maven-schematron2xslt-plugin" />
+      <item artifactid="peppol-validation-rules" />
+    </isDependentOf>
+  </project>
+  <project artifactid="maven-schematron2xslt-plugin">
+    <dependsOn>
+      <item artifactid="peppol-validation-schematron" />
+    </dependsOn>
+  </project>
+  <project artifactid="peppol-commons-peppol">
+    <dependsOn>
+      <item artifactid="peppol-commons-busdox" />
+    </dependsOn>
+    <isDependentOf>
+      <item artifactid="peppol-sml-client-apps" />
+      <item artifactid="peppol-sml-client-library" />
+      <item artifactid="peppol-sml-server-library" />
+      <item artifactid="peppol-sml-webapp" />
+      <item artifactid="peppol-sml-webapp-standalone" />
+      <item artifactid="peppol-smp-client-console" />
+      <item artifactid="peppol-smp-client-library" />
+      <item artifactid="peppol-smp-webapp" />
+      <item artifactid="peppol-transport-api" />
+      <item artifactid="peppol-transport-lime-client" />
+      <item artifactid="peppol-transport-lime-library" />
+      <item artifactid="peppol-transport-lime-server" />
+      <item artifactid="peppol-transport-start-client" />
+      <item artifactid="peppol-transport-start-filereceiver" />
+      <item artifactid="peppol-transport-start-server" />
+    </isDependentOf>
+  </project>
+  <project artifactid="peppol-visualization">
+    <dependsOn>
+      <item artifactid="peppol-commons-cenbii" />
+    </dependsOn>
+  </project>
+  <project artifactid="peppol-sml-client-library">
+    <dependsOn>
+      <item artifactid="peppol-commons-busdox" />
+      <item artifactid="peppol-commons-peppol" />
+    </dependsOn>
+    <isDependentOf>
+      <item artifactid="peppol-sml-client-apps" />
+      <item artifactid="peppol-smp-webapp" />
+    </isDependentOf>
+  </project>
+  <project artifactid="peppol-smp-client-library">
+    <dependsOn>
+      <item artifactid="peppol-commons-busdox" />
+      <item artifactid="peppol-commons-peppol" />
+    </dependsOn>
+    <isDependentOf>
+      <item artifactid="peppol-smp-client-console" />
+      <item artifactid="peppol-transport-lime-server" />
+      <item artifactid="peppol-transport-start-client" />
+      <item artifactid="peppol-transport-start-server" />
+    </isDependentOf>
+  </project>
+  <project artifactid="peppol-transport-api">
+    <dependsOn>
+      <item artifactid="peppol-commons-busdox" />
+      <item artifactid="peppol-commons-peppol" />
+    </dependsOn>
+    <isDependentOf>
+      <item artifactid="peppol-transport-lime-client" />
+      <item artifactid="peppol-transport-lime-library" />
+      <item artifactid="peppol-transport-lime-server" />
+      <item artifactid="peppol-transport-start-client" />
+      <item artifactid="peppol-transport-start-filereceiver" />
+      <item artifactid="peppol-transport-start-server" />
+    </isDependentOf>
+  </project>
+  <project artifactid="peppol-validation-rules">
+    <dependsOn>
+      <item artifactid="peppol-commons-cenbii" />
+      <item artifactid="peppol-validation-schematron" />
+    </dependsOn>
+  </project>
+  <project artifactid="peppol-sml-client-apps">
+    <dependsOn>
+      <item artifactid="peppol-commons-busdox" />
+      <item artifactid="peppol-commons-peppol" />
+      <item artifactid="peppol-sml-client-library" />
+    </dependsOn>
+  </project>
+  <project artifactid="peppol-sml-server-library">
+    <dependsOn>
+      <item artifactid="peppol-commons-busdox" />
+      <item artifactid="peppol-commons-jpa" />
+      <item artifactid="peppol-commons-peppol" />
+    </dependsOn>
+    <isDependentOf>
+      <item artifactid="peppol-sml-webapp" />
+      <item artifactid="peppol-sml-webapp-standalone" />
+    </isDependentOf>
+  </project>
+  <project artifactid="peppol-smp-client-console">
+    <dependsOn>
+      <item artifactid="peppol-commons-busdox" />
+      <item artifactid="peppol-commons-peppol" />
+      <item artifactid="peppol-smp-client-library" />
+    </dependsOn>
+  </project>
+  <project artifactid="peppol-transport-lime-library">
+    <dependsOn>
+      <item artifactid="peppol-commons-busdox" />
+      <item artifactid="peppol-commons-peppol" />
+      <item artifactid="peppol-transport-api" />
+    </dependsOn>
+    <isDependentOf>
+      <item artifactid="peppol-transport-lime-client" />
+      <item artifactid="peppol-transport-lime-server" />
+    </isDependentOf>
+  </project>
+  <project artifactid="peppol-transport-start-filereceiver">
+    <dependsOn>
+      <item artifactid="peppol-commons-busdox" />
+      <item artifactid="peppol-commons-peppol" />
+      <item artifactid="peppol-transport-api" />
+    </dependsOn>
+    <isDependentOf>
+      <item artifactid="peppol-transport-start-server" />
+    </isDependentOf>
+  </project>
+  <project artifactid="peppol-sml-webapp">
+    <dependsOn>
+      <item artifactid="peppol-commons-busdox" />
+      <item artifactid="peppol-commons-jpa" />
+      <item artifactid="peppol-commons-peppol" />
+      <item artifactid="peppol-sml-server-library" />
+    </dependsOn>
+  </project>
+  <project artifactid="peppol-sml-webapp-standalone">
+    <dependsOn>
+      <item artifactid="peppol-commons-busdox" />
+      <item artifactid="peppol-commons-jpa" />
+      <item artifactid="peppol-commons-peppol" />
+      <item artifactid="peppol-sml-server-library" />
+    </dependsOn>
+  </project>
+  <project artifactid="peppol-smp-webapp">
+    <dependsOn>
+      <item artifactid="peppol-commons-busdox" />
+      <item artifactid="peppol-commons-jpa" />
+      <item artifactid="peppol-commons-peppol" />
+      <item artifactid="peppol-sml-client-library" />
+    </dependsOn>
+  </project>
+  <project artifactid="peppol-transport-lime-client">
+    <dependsOn>
+      <item artifactid="peppol-commons-busdox" />
+      <item artifactid="peppol-commons-peppol" />
+      <item artifactid="peppol-transport-api" />
+      <item artifactid="peppol-transport-lime-library" />
+    </dependsOn>
+  </project>
+  <project artifactid="peppol-transport-start-client">
+    <dependsOn>
+      <item artifactid="peppol-commons-busdox" />
+      <item artifactid="peppol-commons-peppol" />
+      <item artifactid="peppol-smp-client-library" />
+      <item artifactid="peppol-transport-api" />
+    </dependsOn>
+    <isDependentOf>
+      <item artifactid="peppol-transport-lime-server" />
+      <item artifactid="peppol-transport-start-server" />
+    </isDependentOf>
+  </project>
+  <project artifactid="peppol-transport-lime-server">
+    <dependsOn>
+      <item artifactid="peppol-commons-busdox" />
+      <item artifactid="peppol-commons-peppol" />
+      <item artifactid="peppol-smp-client-library" />
+      <item artifactid="peppol-transport-api" />
+      <item artifactid="peppol-transport-lime-library" />
+      <item artifactid="peppol-transport-start-client" />
+    </dependsOn>
+  </project>
+  <project artifactid="peppol-transport-start-server">
+    <dependsOn>
+      <item artifactid="peppol-commons-busdox" />
+      <item artifactid="peppol-commons-peppol" />
+      <item artifactid="peppol-smp-client-library" />
+      <item artifactid="peppol-transport-api" />
+      <item artifactid="peppol-transport-start-client" />
+      <item artifactid="peppol-transport-start-filereceiver" />
+    </dependsOn>
+  </project>
+</root>
