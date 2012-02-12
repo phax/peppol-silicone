@@ -16,12 +16,6 @@
   </scm>
   
   <dependencies>
-    <dependency>
-      <groupId>com.sun.xml.bind</groupId>
-      <artifactId>jaxb-impl</artifactId>
-      <version>2.2.5-b10</version>
-      <scope>provided</scope>
-    </dependency>
   </dependencies>
 
   <build>
@@ -143,7 +137,7 @@
            -->
           <dependency>
             <groupId>com.sun.xml.bind</groupId>
-            <artifactId>jaxb-impl</artifactId>
+            <artifactId>jaxb-xjc</artifactId>
             <version>2.2.4-1</version>
           </dependency>
           <!-- Required for correct entity resolving in paths with blanks! -->
