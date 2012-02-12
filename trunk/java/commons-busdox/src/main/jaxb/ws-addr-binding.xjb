@@ -43,7 +43,7 @@
           xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://java.sun.com/xml/ns/jaxb http://java.sun.com/xml/ns/jaxb/bindingschema_2_0.xsd"
-          version="2.1">
+          version="1.0">
   <!-- See http://jaxb.java.net/nonav/2.2.3u1/docs/vendorCustomizations.html for details -->
   <bindings scd="x-schema::wsa" if-exists="true">
     <schemaBindings map="false" />
