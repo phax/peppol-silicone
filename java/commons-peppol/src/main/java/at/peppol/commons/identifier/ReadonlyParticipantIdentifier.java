@@ -61,22 +61,22 @@ import com.phloc.commons.string.ToStringGenerator;
  * {@link #hashCode()} where its base class does not. So be careful when mixing
  * this class and its base class!<br>
  * For a mutable version, please check {@link SimpleParticipantIdentifier}.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable
 public final class ReadonlyParticipantIdentifier extends ParticipantIdentifierType {
-  private static final Logger log = LoggerFactory.getLogger (ReadonlyParticipantIdentifier.class);
+  private static final Logger s_aLogger = LoggerFactory.getLogger (ReadonlyParticipantIdentifier.class);
 
   public ReadonlyParticipantIdentifier (@Nonnull final IReadonlyIdentifier aIdentifier) {
     this (aIdentifier.getScheme (), aIdentifier.getValue ());
   }
 
-  public ReadonlyParticipantIdentifier (@Nonnull final String sScheme, @Nullable final String sValue) {
+  public ReadonlyParticipantIdentifier (@Nullable final String sScheme, @Nullable final String sValue) {
     // Explicitly use the super methods, as the methods of this class throw an
     // exception!
     if (!IdentifierUtils.isValidParticipantIdentifierScheme (sScheme))
-      log.warn ("The identifier scheme '" + sScheme + "' seems to be invalid!");
+      s_aLogger.warn ("The identifier scheme '" + sScheme + "' seems to be invalid!");
     super.setScheme (sScheme);
     super.setValue (sValue);
   }
@@ -108,7 +108,7 @@ public final class ReadonlyParticipantIdentifier extends ParticipantIdentifierTy
   /**
    * Note: this method does compare case sensitive!!!! Otherwise the required
    * semantics of #equals would not be fulfilled!
-   *
+   * 
    * @see IdentifierUtils#areIdentifiersEqual(at.peppol.busdox.identifier.IReadonlyParticipantIdentifier,
    *      at.peppol.busdox.identifier.IReadonlyParticipantIdentifier)
    */

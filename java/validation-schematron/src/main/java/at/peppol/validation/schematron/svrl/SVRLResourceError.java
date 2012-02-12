@@ -16,6 +16,8 @@
  */
 package at.peppol.validation.schematron.svrl;
 
+import java.util.Locale;
+
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.error.EErrorLevel;
@@ -28,7 +30,7 @@ import com.phloc.commons.string.ToStringGenerator;
 /**
  * Special SVRL resource error that contains the Schematron &quot;test&quot; as
  * well.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public class SVRLResourceError extends ResourceError {
@@ -36,7 +38,7 @@ public class SVRLResourceError extends ResourceError {
 
   /**
    * Constructor.
-   *
+   * 
    * @param aLocation
    *        Location where the error occurred. May not be <code>null</code>.
    * @param eErrorLevel
@@ -72,7 +74,7 @@ public class SVRLResourceError extends ResourceError {
     if (StringHelper.hasText (sLocation))
       ret += ' ' + sLocation;
     ret += "; Test=" + m_sTest;
-    ret += "; Message=" + getErrorText (null);
+    ret += "; Message=" + getErrorText (Locale.US);
     return ret;
   }
 
