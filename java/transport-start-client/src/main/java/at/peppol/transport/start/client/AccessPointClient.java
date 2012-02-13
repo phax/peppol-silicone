@@ -62,11 +62,12 @@ import at.peppol.transport.IMessageMetadata;
 import at.peppol.transport.MessageMetadataHelper;
 import at.peppol.transport.cert.AccessPointX509TrustManager;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.random.VerySecureRandom;
 import com.phloc.commons.state.ESuccess;
+import com.phloc.commons.string.StringHelper;
 import com.sun.xml.ws.api.message.Header;
 import com.sun.xml.ws.developer.WSBindingProvider;
-
 
 /**
  * The accesspointClient class aims to hold all the processes required for
@@ -108,20 +109,27 @@ public final class AccessPointClient {
    * address.
    * 
    * @param sAddress
-   *        the address of the webservice.
+   *        the address of the receiving side.
    * @return the port.
    */
   @Nullable
-  public static Resource createPort (final String sAddress) {
+  public static Resource createPort (@Nonnull @Nonempty final String sAddress) {
+    if (StringHelper.hasNoText (sAddress))
+      throw new IllegalArgumentException ("Address may not be empty!");
+
     try {
+      // Host name verifier
       HttpsURLConnection.setDefaultHostnameVerifier (new HostnameVerifierAlwaysTrue ());
-      s_aLogger.debug (">> Set HostVerifier");
+      if (s_aLogger.isDebugEnabled ())
+        s_aLogger.debug (">> Set HostVerifier");
+
+      // SSL socket factory
       _setupCertificateTrustManager ();
-      s_aLogger.debug (">> Set CertificateTrustManager");
+      if (s_aLogger.isDebugEnabled ())
+        s_aLogger.debug (">> Set CertificateTrustManager");
 
       final AccessPointService aService = new AccessPointService ();
       final Resource aPort = aService.getResourceBindingPort ();
-
       final Map <String, Object> aRequestContext = ((BindingProvider) aPort).getRequestContext ();
       aRequestContext.put (BindingProvider.ENDPOINT_ADDRESS_PROPERTY, sAddress);
       return aPort;
@@ -146,7 +154,16 @@ public final class AccessPointClient {
    * @return {@link ESuccess}.
    */
   @Nonnull
-  public static ESuccess send (final Resource aPort, final IMessageMetadata aMetadata, final Create aBody) {
+  public static ESuccess send (@Nonnull final Resource aPort,
+                               @Nonnull final IMessageMetadata aMetadata,
+                               @Nonnull final Create aBody) {
+    if (aPort == null)
+      throw new NullPointerException ("port");
+    if (aMetadata == null)
+      throw new NullPointerException ("metadata");
+    if (aBody == null)
+      throw new NullPointerException ("body");
+
     s_aLogger.info ("Ready for sending message\n" + MessageMetadataHelper.getDebugInfo (aMetadata));
     try {
       // Assign the headers
@@ -190,12 +207,33 @@ public final class AccessPointClient {
     return send (aPort, aMetadata, aBody);
   }
 
+  /**
+   * Send an XML document via START to the destination AP.
+   * 
+   * @param sAddressURL
+   *        The absolute URL of the receiving AP. Must include the service name!
+   * @param aMetadata
+   *        The metadata of the document to send. May not be <code>null</code>.
+   * @param aXMLDoc
+   *        The XML document to be transmitted as the payload. May not be
+   *        <code>null</code> and must contain a document element!
+   * @return {@link ESuccess#SUCCESS} if sending succeeded,
+   *         {@link ESuccess#FAILURE} otherwise. In case of a failure check the
+   *         log-file.
+   */
   @Nonnull
   public static ESuccess send (@Nonnull final String sAddressURL,
                                @Nonnull final IMessageMetadata aMetadata,
-                               @Nonnull final Document aXMLDocument) {
+                               @Nonnull final Document aXMLDoc) {
+    if (aXMLDoc == null)
+      throw new NullPointerException ("XMLDocument");
+
+    // Check if a document-element is present
+    if (aXMLDoc.getDocumentElement () == null)
+      throw new IllegalArgumentException ("Passed XML node does not belong to a Document that has a DocumentElement!");
+
     final Create aCreateBody = new Create ();
-    aCreateBody.getAny ().add (aXMLDocument.getDocumentElement ());
+    aCreateBody.getAny ().add (aXMLDoc.getDocumentElement ());
     return send (sAddressURL, aMetadata, aCreateBody);
   }
 }
