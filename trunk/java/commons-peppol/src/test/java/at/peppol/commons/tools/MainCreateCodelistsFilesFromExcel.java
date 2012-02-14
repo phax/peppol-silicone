@@ -44,8 +44,9 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -106,8 +107,8 @@ import com.sun.codemodel.JVar;
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public final class CreateCodelistsFilesFromExcel {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (CreateCodelistsFilesFromExcel.class);
+public final class MainCreateCodelistsFilesFromExcel {
+  private static final Logger s_aLogger = LoggerFactory.getLogger (MainCreateCodelistsFilesFromExcel.class);
   private static final Version CODELIST_VERSION = new Version (1, 0, 2);
   private static final String EXCEL_FILE = "src/main/codelists/PEPPOL Code Lists 1.0.2.xls";
   private static final String SHEET_PARTICIPANT = "Participant";
@@ -202,10 +203,10 @@ public final class CreateCodelistsFilesFromExcel {
       }
 
       // fields
-      final JFieldVar fSchemeID = jEnum.field (JMod.PRIVATE, String.class, "m_sSchemeID");
-      final JFieldVar fSchemeAgency = jEnum.field (JMod.PRIVATE, String.class, "m_sSchemeAgency");
-      final JFieldVar fISO6523 = jEnum.field (JMod.PRIVATE, String.class, "m_sISO6523");
-      final JFieldVar fDeprecated = jEnum.field (JMod.PRIVATE, boolean.class, "m_bDeprecated");
+      final JFieldVar fSchemeID = jEnum.field (JMod.PRIVATE | JMod.FINAL, String.class, "m_sSchemeID");
+      final JFieldVar fSchemeAgency = jEnum.field (JMod.PRIVATE | JMod.FINAL, String.class, "m_sSchemeAgency");
+      final JFieldVar fISO6523 = jEnum.field (JMod.PRIVATE | JMod.FINAL, String.class, "m_sISO6523");
+      final JFieldVar fDeprecated = jEnum.field (JMod.PRIVATE | JMod.FINAL, boolean.class, "m_bDeprecated");
 
       // Constructor
       final JMethod jCtor = jEnum.constructor (JMod.PRIVATE);
@@ -304,6 +305,8 @@ public final class CreateCodelistsFilesFromExcel {
                                          ._implements (IPredefinedDocumentIdentifier.class);
       s_jEnumPredefinedDoc.javadoc ().add ("This file is generated. Do NOT edit!");
 
+      final Set <String> aAllShortcutNames = new HashSet <String> ();
+
       // Add all enum constants
       for (final Row aRow : aCodeList.getSimpleCodeList ().getRow ()) {
         final String sDocID = GenericodeUtils.getRowValue (aRow, "docid");
@@ -328,18 +331,25 @@ public final class CreateCodelistsFilesFromExcel {
         jEnumConst.javadoc ().add (sDocID);
 
         // Also create a shortcut for more readable names
+        final String sShortcutName = CodeGenerationUtils.createShortcutDocumentTypeIDName (aDocIDParts);
+        if (!aAllShortcutNames.add (sShortcutName))
+          throw new IllegalStateException ("The shortcut name " +
+                                           sShortcutName +
+                                           " is already used. Please update the algorithm!");
         s_jEnumPredefinedDoc.field (JMod.PUBLIC | JMod.STATIC | JMod.FINAL,
                                     s_jEnumPredefinedDoc,
-                                    _createShortcutDocumentTypeIDName (aDocIDParts),
+                                    sShortcutName,
                                     jEnumConst);
       }
 
       // fields
-      final JFieldVar fParts = s_jEnumPredefinedDoc.field (JMod.PRIVATE,
+      final JFieldVar fParts = s_jEnumPredefinedDoc.field (JMod.PRIVATE | JMod.FINAL,
                                                            IPEPPOLDocumentIdentifierParts.class,
                                                            "m_aParts");
-      final JFieldVar fID = s_jEnumPredefinedDoc.field (JMod.PRIVATE, String.class, "m_sID");
-      final JFieldVar fCommonName = s_jEnumPredefinedDoc.field (JMod.PRIVATE, String.class, "m_sCommonName");
+      final JFieldVar fID = s_jEnumPredefinedDoc.field (JMod.PRIVATE | JMod.FINAL, String.class, "m_sID");
+      final JFieldVar fCommonName = s_jEnumPredefinedDoc.field (JMod.PRIVATE | JMod.FINAL,
+                                                                String.class,
+                                                                "m_sCommonName");
 
       // Constructor
       final JMethod jCtor = s_jEnumPredefinedDoc.constructor (JMod.PRIVATE);
@@ -419,36 +429,6 @@ public final class CreateCodelistsFilesFromExcel {
     }
   }
 
-  private static final String SKIP_TRANSACTION_PREFIX = "urn:www.cenbii.eu:transaction:biicoretrdm";
-  private static final String SKIP_EXTENSION_PREFIX = "urn:www.peppol.eu:bis:peppol";
-
-  @Nonnull
-  @Nonempty
-  private static String _createShortcutDocumentTypeIDName (@Nonnull final IPEPPOLDocumentIdentifierParts aDocIDParts) {
-    // Create a shortcut constant with a more readable name!
-    String sTransactionID = "";
-    if (aDocIDParts.getTransactionID ().startsWith (SKIP_TRANSACTION_PREFIX)) {
-      sTransactionID = "_T" + aDocIDParts.getTransactionID ().substring (SKIP_TRANSACTION_PREFIX.length ());
-      final int nIndex = sTransactionID.indexOf (':');
-      if (nIndex >= 0)
-        sTransactionID = sTransactionID.substring (0, nIndex);
-    }
-
-    String sExtensionID = "";
-    for (final String sCurExtensionID : aDocIDParts.getExtensionIDs ())
-      if (sCurExtensionID.startsWith (SKIP_EXTENSION_PREFIX)) {
-        sExtensionID = "_BIS" + sCurExtensionID.substring (SKIP_EXTENSION_PREFIX.length ());
-        final int nIndex = sExtensionID.indexOf (':');
-        if (nIndex >= 0) {
-          // Also skip the previous character like "a"
-          sExtensionID = sExtensionID.substring (0, nIndex - 1);
-        }
-        break;
-      }
-
-    return aDocIDParts.getLocalName ().toUpperCase (Locale.US) + sTransactionID + sExtensionID;
-  }
-
   private static void _emitProcessIdentifier (final Sheet aProcessSheet) throws URISyntaxException,
                                                                         FileNotFoundException,
                                                                         UnsupportedEncodingException {
@@ -497,25 +477,39 @@ public final class CreateCodelistsFilesFromExcel {
       jEnum.javadoc ().add ("This file is generated. Do NOT edit!");
 
       // enum constants
+      final Set <String> aAllShortcutNames = new HashSet <String> ();
       for (final Row aRow : aCodeList.getSimpleCodeList ().getRow ()) {
         final String sID = GenericodeUtils.getRowValue (aRow, "id");
         final String sBISID = GenericodeUtils.getRowValue (aRow, "bisid");
-        final String sDocIDs = GenericodeUtils.getRowValue (aRow, "docids");
+        final String sDocTypeIDs = GenericodeUtils.getRowValue (aRow, "docids");
 
         final JEnumConstant jEnumConst = jEnum.enumConstant (RegExHelper.makeIdentifier (sID));
         jEnumConst.arg (JExpr.lit (sID));
         jEnumConst.arg (JExpr.lit (sBISID));
         final JArray jArray = JExpr.newArray (s_jEnumPredefinedDoc);
-        for (final String sDocID : RegExHelper.splitToList (sDocIDs, "\n"))
-          jArray.add (s_jEnumPredefinedDoc.staticRef (RegExHelper.makeIdentifier (sDocID)));
+        for (final String sDocTypeID : RegExHelper.splitToList (sDocTypeIDs, "\n")) {
+          // Use the short name for better readability
+          final String sIdentifier = true
+                                         ? CodeGenerationUtils.createShortcutDocumentTypeIDName (PEPPOLDocumentIdentifierParts.extractFromString (sDocTypeID))
+                                         : RegExHelper.makeIdentifier (sDocTypeID);
+          jArray.add (s_jEnumPredefinedDoc.staticRef (sIdentifier));
+        }
         jEnumConst.arg (jArray);
         jEnumConst.javadoc ().add (sID);
+
+        // Emit shortcut name for better readability
+        final String sShortcutName = CodeGenerationUtils.createShortcutBISIDName (sBISID);
+        if (!aAllShortcutNames.add (sShortcutName))
+          throw new IllegalStateException ("The BIS ID shortcut '" +
+                                           sShortcutName +
+                                           "' is already used - please review the algorithm!");
+        jEnum.field (JMod.PUBLIC | JMod.STATIC | JMod.FINAL, jEnum, sShortcutName, jEnumConst);
       }
 
       // fields
-      final JFieldVar fID = jEnum.field (JMod.PRIVATE, String.class, "m_sID");
-      final JFieldVar fBISID = jEnum.field (JMod.PRIVATE, String.class, "m_sBSIID");
-      final JFieldVar fDocIDs = jEnum.field (JMod.PRIVATE, s_jEnumPredefinedDoc.array (), "m_aDocIDs");
+      final JFieldVar fID = jEnum.field (JMod.PRIVATE | JMod.FINAL, String.class, "m_sID");
+      final JFieldVar fBISID = jEnum.field (JMod.PRIVATE | JMod.FINAL, String.class, "m_sBISID");
+      final JFieldVar fDocIDs = jEnum.field (JMod.PRIVATE | JMod.FINAL, s_jEnumPredefinedDoc.array (), "m_aDocIDs");
 
       // Constructor
       final JMethod jCtor = jEnum.constructor (JMod.PRIVATE);

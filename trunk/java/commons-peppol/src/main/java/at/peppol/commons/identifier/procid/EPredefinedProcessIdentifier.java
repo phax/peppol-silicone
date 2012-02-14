@@ -62,28 +62,32 @@ public enum EPredefinedProcessIdentifier
      * urn:www.cenbii.eu:profile:bii01:ver1.0
      * 
      */
-    urn_www_cenbii_eu_profile_bii01_ver1_0("urn:www.cenbii.eu:profile:bii01:ver1.0", "urn:www.peppol.eu:bis:peppol1a:ver1.0", new EPredefinedDocumentIdentifier[] {EPredefinedDocumentIdentifier.urn_oasis_names_specification_ubl_schema_schema_xsd_Catalogue_2__Catalogue__urn_www_cenbii_eu_transaction_biicoretrdm019_ver1_0__urn_www_peppol_eu_bis_peppol1a_ver1_0__2_0, EPredefinedDocumentIdentifier.urn_oasis_names_specification_ubl_schema_xsd_ApplicationResponse_2__ApplicationResponse__urn_www_cenbii_eu_transaction_biicoretrdm057_ver1_0__urn_www_peppol_eu_bis_peppol1a_ver1_0__2_0, EPredefinedDocumentIdentifier.urn_oasis_names_specification_ubl_schema_xsd_ApplicationResponse_2__ApplicationResponse__urn_www_cenbii_eu_transaction_biicoretrdm058_ver1_0__urn_www_peppol_eu_bis_peppol1a_ver1_0__2_0 }),
+    urn_www_cenbii_eu_profile_bii01_ver1_0("urn:www.cenbii.eu:profile:bii01:ver1.0", "urn:www.peppol.eu:bis:peppol1a:ver1.0", new EPredefinedDocumentIdentifier[] {EPredefinedDocumentIdentifier.CATALOGUE_T019_BIS1A, EPredefinedDocumentIdentifier.APPLICATIONRESPONSE_T057_BIS1A, EPredefinedDocumentIdentifier.APPLICATIONRESPONSE_T058_BIS1A }),
 
     /**
      * urn:www.cenbii.eu:profile:bii03:ver1.0
      * 
      */
-    urn_www_cenbii_eu_profile_bii03_ver1_0("urn:www.cenbii.eu:profile:bii03:ver1.0", "urn:www.peppol.eu:bis:peppol3a:ver1.0", new EPredefinedDocumentIdentifier[] {EPredefinedDocumentIdentifier.urn_oasis_names_specification_ubl_schema_xsd_Order_2__Order__urn_www_cenbii_eu_transaction_biicoretrdm001_ver1_0__urn_www_peppol_eu_bis_peppol3a_ver1_0__2_0 }),
+    urn_www_cenbii_eu_profile_bii03_ver1_0("urn:www.cenbii.eu:profile:bii03:ver1.0", "urn:www.peppol.eu:bis:peppol3a:ver1.0", new EPredefinedDocumentIdentifier[] {EPredefinedDocumentIdentifier.ORDER_T001_BIS3A }),
 
     /**
      * urn:www.cenbii.eu:profile:bii04:ver1.0
      * 
      */
-    urn_www_cenbii_eu_profile_bii04_ver1_0("urn:www.cenbii.eu:profile:bii04:ver1.0", "urn:www.peppol.eu:bis:peppol4a:ver1.0", new EPredefinedDocumentIdentifier[] {EPredefinedDocumentIdentifier.urn_oasis_names_specification_ubl_schema_xsd_Invoice_2__Invoice__urn_www_cenbii_eu_transaction_biicoretrdm010_ver1_0__urn_www_peppol_eu_bis_peppol4a_ver1_0__2_0 }),
+    urn_www_cenbii_eu_profile_bii04_ver1_0("urn:www.cenbii.eu:profile:bii04:ver1.0", "urn:www.peppol.eu:bis:peppol4a:ver1.0", new EPredefinedDocumentIdentifier[] {EPredefinedDocumentIdentifier.INVOICE_T010_BIS4A }),
 
     /**
      * urn:www.cenbii.eu:profile:bii06:ver1.0
      * 
      */
-    urn_www_cenbii_eu_profile_bii06_ver1_0("urn:www.cenbii.eu:profile:bii06:ver1.0", "urn:www.peppol.eu:bis:peppol6a:ver1.0", new EPredefinedDocumentIdentifier[] {EPredefinedDocumentIdentifier.urn_oasis_names_specification_ubl_schema_xsd_Order_2__Order__urn_www_cenbii_eu_transaction_biicoretrdm001_ver1_0__urn_www_peppol_eu_bis_peppol6a_ver1_0__2_0, EPredefinedDocumentIdentifier.urn_oasis_names_specification_ubl_schema_xsd_OrderResponseSimple_2__OrderResponseSimple__urn_www_cenbii_eu_transaction_biicoretrdm002_ver1_0__urn_www_peppol_eu_bis_peppol6a_ver1_0__2_0, EPredefinedDocumentIdentifier.urn_oasis_names_specification_ubl_schema_xsd_OrderResponseSimple_2__OrderResponseSimple__urn_www_cenbii_eu_transaction_biicoretrdm003_ver1_0__urn_www_peppol_eu_bis_peppol6a_ver1_0__2_0, EPredefinedDocumentIdentifier.urn_oasis_names_specification_ubl_schema_xsd_Invoice_2__Invoice__urn_www_cenbii_eu_transaction_biicoretrdm010_ver1_0__urn_www_peppol_eu_bis_peppol6a_ver1_0__2_0, EPredefinedDocumentIdentifier.urn_oasis_names_specification_ubl_schema_xsd_CreditNote_2__CreditNote__urn_www_cenbii_eu_transaction_biicoretrdm014_ver1_0__urn_www_peppol_eu_bis_peppol6a_ver1_0__2_0, EPredefinedDocumentIdentifier.urn_oasis_names_specification_ubl_schema_xsd_Invoice_2__Invoice__urn_www_cenbii_eu_transaction_biicoretrdm015_ver1_0__urn_www_peppol_eu_bis_peppol6a_ver1_0__2_0 });
-    private String m_sID;
-    private String m_sBSIID;
-    private EPredefinedDocumentIdentifier[] m_aDocIDs;
+    urn_www_cenbii_eu_profile_bii06_ver1_0("urn:www.cenbii.eu:profile:bii06:ver1.0", "urn:www.peppol.eu:bis:peppol6a:ver1.0", new EPredefinedDocumentIdentifier[] {EPredefinedDocumentIdentifier.ORDER_T001_BIS6A, EPredefinedDocumentIdentifier.ORDERRESPONSESIMPLE_T002_BIS6A, EPredefinedDocumentIdentifier.ORDERRESPONSESIMPLE_T003_BIS6A, EPredefinedDocumentIdentifier.INVOICE_T010_BIS6A, EPredefinedDocumentIdentifier.CREDITNOTE_T014_BIS6A, EPredefinedDocumentIdentifier.INVOICE_T015_BIS6A });
+    public final static EPredefinedProcessIdentifier BIS1A = EPredefinedProcessIdentifier.urn_www_cenbii_eu_profile_bii01_ver1_0;
+    public final static EPredefinedProcessIdentifier BIS3A = EPredefinedProcessIdentifier.urn_www_cenbii_eu_profile_bii03_ver1_0;
+    public final static EPredefinedProcessIdentifier BIS4A = EPredefinedProcessIdentifier.urn_www_cenbii_eu_profile_bii04_ver1_0;
+    public final static EPredefinedProcessIdentifier BIS6A = EPredefinedProcessIdentifier.urn_www_cenbii_eu_profile_bii06_ver1_0;
+    private final String m_sID;
+    private final String m_sBISID;
+    private final EPredefinedDocumentIdentifier[] m_aDocIDs;
 
     private EPredefinedProcessIdentifier(
         @Nonnull
@@ -96,7 +100,7 @@ public enum EPredefinedProcessIdentifier
         @Nonempty
         final EPredefinedDocumentIdentifier[] aDocIDs) {
         m_sID = sID;
-        m_sBSIID = sBISID;
+        m_sBISID = sBISID;
         m_aDocIDs = aDocIDs;
     }
 
@@ -115,7 +119,7 @@ public enum EPredefinedProcessIdentifier
     @Nonnull
     @Nonempty
     public String getBISID() {
-        return m_sBSIID;
+        return m_sBISID;
     }
 
     @Nonnull
