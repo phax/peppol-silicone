@@ -79,10 +79,10 @@ public enum EPredefinedIdentifierIssuingAgency
     IBAN("IBAN", "SOCIETY FOR WORLDWIDE INTERBANK FINANCIAL, TELECOMMUNICATION S.W.I.F.T", "9918", false),
     AT_KUR("AT:KUR", "Kennziffer des Unternehmensregisters", "9919", false),
     ES_VAT("ES:VAT", "Agencia Espa\u00f1ola de Administraci\u00f3n Tributaria", "9920", false);
-    private String m_sSchemeID;
-    private String m_sSchemeAgency;
-    private String m_sISO6523;
-    private boolean m_bDeprecated;
+    private final String m_sSchemeID;
+    private final String m_sSchemeAgency;
+    private final String m_sISO6523;
+    private final boolean m_bDeprecated;
 
     private EPredefinedIdentifierIssuingAgency(
         @Nonnull

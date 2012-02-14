@@ -177,7 +177,7 @@ public final class PEPPOLDocumentIdentifierParts implements IPEPPOLDocumentIdent
    * customization ID can be further detailed into
    * <code>&lt;transactionId>:#&lt;extensionId>[#&lt;extensionId>]</code>
    * 
-   * @param sDocID
+   * @param sDocTypeID
    *        The document identifier value to be split. May neither be
    *        <code>null</code> nor empty.
    * @return The non-<code>null</code> PEPPOL identifier parts
@@ -186,9 +186,9 @@ public final class PEPPOLDocumentIdentifierParts implements IPEPPOLDocumentIdent
    *         specifications
    */
   @Nonnull
-  public static IPEPPOLDocumentIdentifierParts extractFromString (@Nonnull @Nonempty final String sDocID) {
+  public static IPEPPOLDocumentIdentifierParts extractFromString (@Nonnull @Nonempty final String sDocTypeID) {
     // Extract the main 3 elements (root namespace, local name and sub-type)
-    final IBusdoxDocumentIdentifierParts aBusdoxParts = BusdoxDocumentIdentifierParts.extractFromString (sDocID);
+    final IBusdoxDocumentIdentifierParts aBusdoxParts = BusdoxDocumentIdentifierParts.extractFromString (sDocTypeID);
 
     // Now start splitting the sub-type identifier
     final String sSubTypeIdentifier = aBusdoxParts.getSubTypeIdentifier ();
