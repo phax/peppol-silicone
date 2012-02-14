@@ -45,6 +45,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -129,11 +130,14 @@ public final class CreateCodelistsFilesFromExcel {
   private static void _emitIdentifierIssuingAgency (final Sheet aParticipantSheet) throws URISyntaxException,
                                                                                   FileNotFoundException,
                                                                                   UnsupportedEncodingException {
+    // Read excel file
     final ExcelReadOptions aReadOptions = new ExcelReadOptions ().setLinesToSkip (1).setLineIndexShortName (0);
     aReadOptions.addColumn (0, "schemeid", UseType.REQUIRED, "string", true);
     aReadOptions.addColumn (1, "iso6523", UseType.REQUIRED, "string", true);
     aReadOptions.addColumn (2, "schemeagency", UseType.OPTIONAL, "string", false);
     aReadOptions.addColumn (3, "deprecated", UseType.REQUIRED, "boolean", false);
+
+    // Convert to GeneriCode
     final CodeListDocument aCodeList = ExcelSheetToCodeList.convertToSimpleCodeList (aParticipantSheet,
                                                                                      aReadOptions,
                                                                                      "PeppolIdentifierIssuingAgencies",
@@ -143,7 +147,7 @@ public final class CreateCodelistsFilesFromExcel {
                                                                                      null);
     _writeGenericodeFile (aCodeList, RESULT_DIRECTORY + "PeppolIdentifierIssuingAgencies.gc");
 
-    // Save as XML
+    // Save data also as XML
     final IMicroDocument aDoc = new MicroDocument ();
     aDoc.appendComment ("This file was automatically generated. Do NOT edit!");
     final IMicroElement eRoot = aDoc.appendElement ("root");
@@ -262,6 +266,7 @@ public final class CreateCodelistsFilesFromExcel {
   private static void _emitDocumentIdentifiers (final Sheet aDocumentSheet) throws URISyntaxException,
                                                                            FileNotFoundException,
                                                                            UnsupportedEncodingException {
+    // Create GeneriCode file
     final ExcelReadOptions aReadOptions = new ExcelReadOptions ().setLinesToSkip (1).setLineIndexShortName (0);
     aReadOptions.addColumn (0, "name", UseType.OPTIONAL, "string", false);
     aReadOptions.addColumn (1, "docid", UseType.REQUIRED, "string", true);
@@ -321,6 +326,12 @@ public final class CreateCodelistsFilesFromExcel {
                              .arg (JExpr.lit (aDocIDParts.getVersion ())));
         jEnumConst.arg (JExpr.lit (sName));
         jEnumConst.javadoc ().add (sDocID);
+
+        // Also create a shortcut for more readable names
+        s_jEnumPredefinedDoc.field (JMod.PUBLIC | JMod.STATIC | JMod.FINAL,
+                                    s_jEnumPredefinedDoc,
+                                    _createShortcutDocumentTypeIDName (aDocIDParts),
+                                    jEnumConst);
       }
 
       // fields
@@ -406,6 +417,36 @@ public final class CreateCodelistsFilesFromExcel {
     catch (final Exception ex) {
       s_aLogger.warn ("Failed to create source", ex);
     }
+  }
+
+  private static final String SKIP_TRANSACTION_PREFIX = "urn:www.cenbii.eu:transaction:biicoretrdm";
+  private static final String SKIP_EXTENSION_PREFIX = "urn:www.peppol.eu:bis:peppol";
+
+  @Nonnull
+  @Nonempty
+  private static String _createShortcutDocumentTypeIDName (@Nonnull final IPEPPOLDocumentIdentifierParts aDocIDParts) {
+    // Create a shortcut constant with a more readable name!
+    String sTransactionID = "";
+    if (aDocIDParts.getTransactionID ().startsWith (SKIP_TRANSACTION_PREFIX)) {
+      sTransactionID = "_T" + aDocIDParts.getTransactionID ().substring (SKIP_TRANSACTION_PREFIX.length ());
+      final int nIndex = sTransactionID.indexOf (':');
+      if (nIndex >= 0)
+        sTransactionID = sTransactionID.substring (0, nIndex);
+    }
+
+    String sExtensionID = "";
+    for (final String sCurExtensionID : aDocIDParts.getExtensionIDs ())
+      if (sCurExtensionID.startsWith (SKIP_EXTENSION_PREFIX)) {
+        sExtensionID = "_BIS" + sCurExtensionID.substring (SKIP_EXTENSION_PREFIX.length ());
+        final int nIndex = sExtensionID.indexOf (':');
+        if (nIndex >= 0) {
+          // Also skip the previous character like "a"
+          sExtensionID = sExtensionID.substring (0, nIndex - 1);
+        }
+        break;
+      }
+
+    return aDocIDParts.getLocalName ().toUpperCase (Locale.US) + sTransactionID + sExtensionID;
   }
 
   private static void _emitProcessIdentifier (final Sheet aProcessSheet) throws URISyntaxException,

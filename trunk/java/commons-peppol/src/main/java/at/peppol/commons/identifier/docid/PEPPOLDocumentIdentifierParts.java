@@ -42,7 +42,6 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
-
 import at.peppol.busdox.identifier.BusdoxDocumentIdentifierParts;
 import at.peppol.busdox.identifier.IBusdoxDocumentIdentifierParts;
 
@@ -54,7 +53,7 @@ import com.phloc.commons.string.StringHelper;
 /**
  * A standalone wrapper class for the {@link IPEPPOLDocumentIdentifierParts}
  * interface.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable
@@ -66,7 +65,7 @@ public final class PEPPOLDocumentIdentifierParts implements IPEPPOLDocumentIdent
 
   /**
    * Build the BusDox sub type identifier from the PEPPOL specific components.
-   *
+   * 
    * @param sTransactionID
    *        Transaction ID
    * @param aExtensionIDs
@@ -170,6 +169,22 @@ public final class PEPPOLDocumentIdentifierParts implements IPEPPOLDocumentIdent
     return m_aBusdoxParts.getAsDocumentIdentifierValue ();
   }
 
+  /**
+   * Extract the PEPPOL document identifier elements from the passed document
+   * identifier value. The different of the PEPPOL document identifier parts to
+   * the BusDox document identifier parts is, that the PEPPOL subtype identifier
+   * is further defined as <code>&lt;customization id>::&lt;version></code>. The
+   * customization ID can be further detailed into
+   * <code>&lt;transactionId>:#&lt;extensionId>[#&lt;extensionId>]</code>
+   * 
+   * @param sDocID
+   *        The document identifier value to be split. May neither be
+   *        <code>null</code> nor empty.
+   * @return The non-<code>null</code> PEPPOL identifier parts
+   * @throws IllegalArgumentException
+   *         if the passed document identifier value does not match the
+   *         specifications
+   */
   @Nonnull
   public static IPEPPOLDocumentIdentifierParts extractFromString (@Nonnull @Nonempty final String sDocID) {
     // Extract the main 3 elements (root namespace, local name and sub-type)
@@ -196,12 +211,10 @@ public final class PEPPOLDocumentIdentifierParts implements IPEPPOLDocumentIdent
       throw new IllegalArgumentException ("The sub type identifier '" +
                                           sSubTypeIdentifier +
                                           "' is missing the separation between transaction ID and the extensions!");
+
     final String sTransactionID = aCustomizationIDs[0];
     final String sExtensionIDs = aCustomizationIDs[1];
-
-    return new PEPPOLDocumentIdentifierParts (aBusdoxParts,
-                                              sTransactionID,
-                                              StringHelper.explode (EXTENSION_SEPARATOR, sExtensionIDs),
-                                              sVersion);
+    final List <String> aExtensionIDs = StringHelper.explode (EXTENSION_SEPARATOR, sExtensionIDs);
+    return new PEPPOLDocumentIdentifierParts (aBusdoxParts, sTransactionID, aExtensionIDs, sVersion);
   }
 }
