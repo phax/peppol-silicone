@@ -40,7 +40,7 @@ package at.peppol.busdox.identifier;
 /**
  * A standalone wrapper class for the {@link IBusdoxDocumentIdentifierParts}
  * interface. The implementation is immutable.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class BusdoxDocumentIdentifierParts implements IBusdoxDocumentIdentifierParts {
@@ -50,7 +50,7 @@ public final class BusdoxDocumentIdentifierParts implements IBusdoxDocumentIdent
 
   /**
    * Constructor.
-   *
+   * 
    * @param sRootNS
    *        The root namespace. May neither be <code>null</code> nor empty
    * @param sLocalName
@@ -87,7 +87,7 @@ public final class BusdoxDocumentIdentifierParts implements IBusdoxDocumentIdent
   /**
    * Convert an {@link IBusdoxDocumentIdentifierParts} object to a full document
    * identifier value (without a scheme!)
-   *
+   * 
    * @param aParts
    *        The object to be converted. May not be <code>null</code>.
    * @return The assembled document identifier value. Never <code>null</code>
@@ -107,8 +107,10 @@ public final class BusdoxDocumentIdentifierParts implements IBusdoxDocumentIdent
 
   /**
    * Split an existing document identifier value (without the scheme) into the
-   * different part.s
-   *
+   * different parts.<br>
+   * A document identifier value has the following layout:<br>
+   * <root NS>::<document element local name>[##<sub type identifier>]
+   * 
    * @param sDocID
    *        The document identifier value to be split. May neither be
    *        <code>null</code> nor empty.
@@ -119,8 +121,6 @@ public final class BusdoxDocumentIdentifierParts implements IBusdoxDocumentIdent
   public static IBusdoxDocumentIdentifierParts extractFromString (final String sDocID) {
     if (sDocID == null || sDocID.length () == 0)
       throw new IllegalArgumentException ("The passed document identifier value may not be empty!");
-    // Document identifier:
-    // <root NS>::<document element local name>[##<sub type identifier>]
     final String [] aMain = sDocID.split (SUBTYPE_SEPARATOR, 2);
     final String [] aFirst = aMain[0].split (NAMESPACE_SEPARATOR, 2);
     if (aFirst.length < 2)
