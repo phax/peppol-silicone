@@ -90,6 +90,7 @@ import com.phloc.commons.xml.serialize.XMLWriterSettings;
 import com.phloc.genericode.Genericode10Marshaller;
 import com.phloc.genericode.excel.ExcelReadOptions;
 import com.phloc.genericode.excel.ExcelSheetToCodeList;
+import com.sun.codemodel.CodeWriter;
 import com.sun.codemodel.JArray;
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JDefinedClass;
@@ -100,6 +101,7 @@ import com.sun.codemodel.JInvocation;
 import com.sun.codemodel.JMethod;
 import com.sun.codemodel.JMod;
 import com.sun.codemodel.JVar;
+import com.sun.codemodel.writer.FileCodeWriter;
 
 /**
  * Utility class to create the Genericode files from the Excel code list. Also
@@ -586,6 +588,9 @@ public final class MainCreateCodelistsFilesFromExcel {
     _emitProcessIdentifier (aProcessSheet);
 
     // Write all Java source files
-    s_aCodeModel.build (new File ("src/main/java"));
+    final CodeWriter aWriter = new FileCodeWriter (new File ("src/main/java"), CCharset.CHARSET_UTF_8);
+    s_aCodeModel.build (aWriter);
+
+    s_aLogger.info ("Done creating code");
   }
 }

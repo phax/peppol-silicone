@@ -111,21 +111,21 @@ public final class BusdoxDocumentIdentifierParts implements IBusdoxDocumentIdent
    * A document identifier value has the following layout:<br>
    * <root NS>::<document element local name>[##<sub type identifier>]
    * 
-   * @param sDocID
+   * @param sDocTypeID
    *        The document identifier value to be split. May neither be
    *        <code>null</code> nor empty.
    * @return The non-<code>null</code> object containing the different pieces.
    * @throws IllegalArgumentException
    *         if parsing fails
    */
-  public static IBusdoxDocumentIdentifierParts extractFromString (final String sDocID) {
-    if (sDocID == null || sDocID.length () == 0)
+  public static IBusdoxDocumentIdentifierParts extractFromString (final String sDocTypeID) {
+    if (sDocTypeID == null || sDocTypeID.length () == 0)
       throw new IllegalArgumentException ("The passed document identifier value may not be empty!");
-    final String [] aMain = sDocID.split (SUBTYPE_SEPARATOR, 2);
+    final String [] aMain = sDocTypeID.split (SUBTYPE_SEPARATOR, 2);
     final String [] aFirst = aMain[0].split (NAMESPACE_SEPARATOR, 2);
     if (aFirst.length < 2)
       throw new IllegalArgumentException ("The document identifier '" +
-                                          sDocID +
+                                          sDocTypeID +
                                           "' is missing the separation between root namespace and local name!");
     return new BusdoxDocumentIdentifierParts (aFirst[0], aFirst[1], aMain.length == 1 ? null : aMain[1]);
   }
