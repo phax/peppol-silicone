@@ -9,5 +9,35 @@ You must have a JRE 1.6.x installed. This software has not yet been tested with 
 The software provided by this project makes heavy use of the Java Metro libraries. Currently the version Metro 2.1.1 from http://netro.dev.java.net/2.1.1 is required. Download the ZIP file and extract it locally to perform further steps.
 The rest of the configuration depends on the application server you are using.
 
-== Setup for Tomcat ==
+== Setup for Tomcat 6.x ==
 
+Copy the following files (without the directory structure of the ZIP file) into your Tomcat endorsed directory (you may need to create this directory; it is e.g. {{{/products/tomcat/endorsed}}}):
+  * metro/lib/webservices-api.jar
+
+Alternatively you can also copy the webservice-api.jar into the endorsed directory of your JRE but beware of the side effects as this affects all applications running on this JRE and this is probably not intended.
+
+Copy the following files into your Tomcat lib directory ({{{${catalina.lib.home}}}})
+  * metro/lib/stax-api.jar
+  * metro/lib/webservices-extra.jar
+  * metro/lib/webservices-extra-api.jar
+  * metro/lib/webservices-rt.jar
+  * metro/lib/webservices-tools.jar
+
+Ensure that the endorsed libraries are loaded by Tomcat:
+  * Define the following system property on Tomcat start: {{{java.endorsed.dirs=/products/tomcat/endorsed}}} (see the [http://tomcat.apache.org/tomcat-6.0-doc/class-loader-howto.html Tomcat 6 Classloader How-To])
+
+Finally Tomcat must be restarted to make the changes work.
+
+= Deployment =
+
+For Metro compatibility please make sure that none of the following files resides in your web applications WEB-INF/lib directory because they are provided by the application server:
+  * servlet-api.jar
+  * jsp-api.jar
+  * stax-api.jar
+  * webservices-api.jar
+  * webservices-extra.jar
+  * webservices-extra-api.jar
+  * webservices-rt.jar
+  * webservices-tools.jar
+
+==> That's the reason why all org.glassfish.metro artifacts in the project pom.xml files are marked with the scope {{{provided}}}.
