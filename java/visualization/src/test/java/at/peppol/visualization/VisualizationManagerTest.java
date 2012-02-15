@@ -43,27 +43,24 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 
 import at.peppol.commons.cenbii.profiles.ETransaction;
-import at.peppol.visualization.EVisualizationArtefact;
-import at.peppol.visualization.VisualizationManager;
 
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.resource.ClassPathResource;
 
-
 /**
  * Test class for class {@link VisualizationManager}.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class VisualizationManagerTest {
   @Test
-  public void testInvoices () {
-    // For all test invoices
-    for (final String sFilename : CVisualizationTestFiles.TEST_INVOICES) {
-      final IReadableResource aRes = new ClassPathResource ("/test-invoices/" + sFilename);
+  public void testCreditNotes () {
+    // For all test orders
+    for (final String sFilename : CVisualizationTestFiles.TEST_CREDITNOTES) {
+      final IReadableResource aRes = new ClassPathResource ("/test-creditnotes/" + sFilename);
 
-      // For all invoice visualizations
-      for (final EVisualizationArtefact eArtefact : EVisualizationArtefact.getAllArtefactsOfTransaction (ETransaction.T10)) {
+      // For all order visualizations
+      for (final EVisualizationArtefact eArtefact : EVisualizationArtefact.getAllArtefactsOfTransaction (ETransaction.T14)) {
         final Document aDoc = VisualizationManager.visualizeToDOMDocument (eArtefact, aRes);
         assertNotNull (aDoc);
       }
@@ -78,6 +75,20 @@ public final class VisualizationManagerTest {
 
       // For all order visualizations
       for (final EVisualizationArtefact eArtefact : EVisualizationArtefact.getAllArtefactsOfTransaction (ETransaction.T01)) {
+        final Document aDoc = VisualizationManager.visualizeToDOMDocument (eArtefact, aRes);
+        assertNotNull (aDoc);
+      }
+    }
+  }
+
+  @Test
+  public void testInvoices () {
+    // For all test invoices
+    for (final String sFilename : CVisualizationTestFiles.TEST_INVOICES) {
+      final IReadableResource aRes = new ClassPathResource ("/test-invoices/" + sFilename);
+
+      // For all invoice visualizations
+      for (final EVisualizationArtefact eArtefact : EVisualizationArtefact.getAllArtefactsOfTransaction (ETransaction.T10)) {
         final Document aDoc = VisualizationManager.visualizeToDOMDocument (eArtefact, aRes);
         assertNotNull (aDoc);
       }

@@ -45,11 +45,13 @@ import com.phloc.commons.collections.ContainerHelper;
 
 /**
  * Contains a list of the visualization test files.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable
 public final class CVisualizationTestFiles {
+  public static final List <String> TEST_CREDITNOTES = ContainerHelper.newUnmodifiableList ("BII05 TRDM014 example is.xml",
+                                                                                            "Copy of BII05 TRDM014 example is.xml");
   public static final List <String> TEST_ORDERS = ContainerHelper.newUnmodifiableList ("ADVORD_03_03_00_Order_v2p2.xml",
                                                                                        "BII03 Order example 01.xml",
                                                                                        "PEPPOL BIS-3a-FULL.xml",
