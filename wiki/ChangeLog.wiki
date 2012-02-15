@@ -7,11 +7,14 @@ This is a bugfix release. No main feature extensions are planned.
 Performed changes so far:
   * Fixed errors indicated by FindBugs
   * Improved source comments and added some informational annotations
+  * Added easier readable constants in EPredefinedDocumentIdentifier and EPredefinedProcessIdentifier
+  * Added visualization of Credit Notes
 
 = v2.2.0 (2012-02-09, initial release, all components) =
 
 The main target of this release is to have an easy transition from the previous repository on JoinUp.
 All package names are now starting with "at.peppol" instead of "eu.peppol" but the classes itself haven't been renamed, so a simple "Organize imports" (in Eclipse) should do the trick.
+All components were released except the visualization component, as it requires some additional coding.
 
 Functional improvements:
   * LIME client and server were updated, so that they are using the correct START client compared to Joinup
@@ -21,3 +24,5 @@ Functional improvements:
   * A potential memory leak in the SMP (PostRegistrationFilter) has been resolved
   * Some missing transaction rollbacks in the SMP server have been resolved
   * The endpoint address of the START AP is now read from the configServer.properties configuration file to be more flexible
+
+[eof]
