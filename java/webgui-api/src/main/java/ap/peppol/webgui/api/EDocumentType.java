@@ -37,8 +37,37 @@
  */
 package ap.peppol.webgui.api;
 
-public enum EDocumentType {
-  CATALOGUE,
-  ORDER,
-  INVOICE;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.id.IHasID;
+import com.phloc.commons.lang.EnumHelper;
+
+/**
+ * Represents the different document types that are handled.
+ * 
+ * @author philip
+ */
+public enum EDocumentType implements IHasID <String> {
+  CATALOGUE ("catalogue"),
+  ORDER ("order"),
+  INVOICE ("invoice");
+
+  private String m_sID;
+
+  private EDocumentType (@Nonnull @Nonempty final String sID) {
+    m_sID = sID;
+  }
+
+  @Nonnull
+  @Nonempty
+  public String getID () {
+    return m_sID;
+  }
+
+  @Nullable
+  public static EDocumentType getFromIDOrNull (@Nullable final String sID) {
+    return EnumHelper.getFromIDOrNull (EDocumentType.class, sID);
+  }
 }

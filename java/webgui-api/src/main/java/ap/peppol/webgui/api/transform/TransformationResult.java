@@ -38,6 +38,7 @@
 package ap.peppol.webgui.api.transform;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.Immutable;
 import javax.xml.bind.annotation.XmlSchema;
 
 import org.w3c.dom.Node;
@@ -45,6 +46,13 @@ import org.w3c.dom.Node;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.microdom.IMicroNode;
 
+/**
+ * Represents an aggregated transformation result object. It contains the result
+ * object + a type descriptor.
+ * 
+ * @author philip
+ */
+@Immutable
 public final class TransformationResult {
   private final ETransformationResultType m_eResultType;
   private final Object m_aResultObj;
