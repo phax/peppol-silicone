@@ -49,16 +49,14 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import at.peppol.commons.cenbii.profiles.ETransaction;
-import at.peppol.visualization.EVisualizationArtefact;
 
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.io.IReadableResource;
 
-
 /**
  * Test class for class {@link EVisualizationArtefact}.
- *
+ * 
  * @author philip
  */
 public final class EVisualizationArtefactTest {
@@ -83,7 +81,7 @@ public final class EVisualizationArtefactTest {
     // The known transaction
     final Set <ETransaction> aTransactions = EVisualizationArtefact.getAllSupportedTransactions ();
     assertNotNull (aTransactions);
-    assertEquals (2, aTransactions.size ());
+    assertEquals (3, aTransactions.size ());
     for (final ETransaction eTransaction : aTransactions)
       assertFalse (ContainerHelper.isEmpty (EVisualizationArtefact.getAllArtefactsOfTransaction (eTransaction)));
   }

@@ -54,15 +54,15 @@ import com.phloc.commons.id.IHasID;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.resource.ClassPathResource;
 
-
 /**
  * Contains the available visualization artefacts.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public enum EVisualizationArtefact implements IHasID <String> {
   ORDER_PEPPOL1 (ETransaction.T01, "peppol1"),
-  INVOICE_PEPPOL1 (ETransaction.T10, "peppol1");
+  INVOICE_PEPPOL1 (ETransaction.T10, "peppol1"),
+  CREDITNOTE_PEPPOL1 (ETransaction.T14, "peppol1");
 
   private ETransaction m_eTransaction;
   private String m_sBaseDir;
@@ -145,7 +145,7 @@ public enum EVisualizationArtefact implements IHasID <String> {
 
   /**
    * Get all visualization artefacts that match the specified transaction.
-   *
+   * 
    * @param eTransaction
    *        The transaction to be queried. May be <code>null</code>.
    * @return A non-<code>null</code> set with all matching artefacts.
