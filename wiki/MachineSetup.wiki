@@ -28,6 +28,20 @@ Ensure that the endorsed libraries are loaded by Tomcat:
 
 Finally Tomcat must be restarted to make the changes work.
 
+== Setup for Jetty 7.x == 
+
+Metro is handled as a separate "option" in Jetty. Assuming your Jetty installation is in {{{/opt/jetty}}} you need to do the following:
+  * Create a new directory {{{/opt/jetty/lib/metro}}}
+
+Copy the following files into the created directory ({{{/opt/jetty/lib/metro}}})
+  * metro/lib/webservices-rt.jar
+
+Than modify {{{/opt/jetty/start.ini}}} and add {{{metro}}} to the "OPTIONS": {{{OPTIONS=Server,jsp,jmx,resources,websocket,ext,plus,annotations,metro}}}
+
+Finally a Jetty restart is required.
+
+Important note: the name of the directory created under {{{/opt/jetty/lib}}} must match the name of the option you add!
+
 = Deployment =
 
 For Metro compatibility please make sure that none of the following files resides in your web applications WEB-INF/lib directory because they are provided by the application server:
