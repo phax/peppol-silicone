@@ -10,3 +10,7 @@ body { /* for static navbar */
 .nav-header {
   font-size: 120% !important;
 }
+
+.pdaf_invisible_button {
+  visibility: hidden;
+}
