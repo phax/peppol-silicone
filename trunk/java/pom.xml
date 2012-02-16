@@ -102,6 +102,10 @@
     <module>transport-lime-library</module>
     <module>transport-lime-client</module>
     <module>transport-lime-server</module>
+
+    <!-- Web GUI -->
+    <module>webgui-api</module>
+    <module>webgui-webapp</module>
   </modules>
 
   <!-- Specific build configurations (=profiles) -->
