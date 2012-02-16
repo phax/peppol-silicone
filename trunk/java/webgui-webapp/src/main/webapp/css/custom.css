@@ -1,0 +1,12 @@
+body { /* for static navbar */
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+
+.sidebar-nav {
+  padding: 9px 0;
+}
+
+.nav-header {
+  font-size: 120% !important;
+}
