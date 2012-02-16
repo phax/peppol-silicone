@@ -4,7 +4,9 @@ import at.peppol.webgui.app.layout.DefaultLayout;
 
 import com.phloc.commons.annotations.IsSPIImplementation;
 import com.phloc.commons.locale.LocaleCache;
+import com.phloc.html.EHTMLVersion;
 import com.phloc.webbasics.app.WebLocaleManager;
+import com.phloc.webbasics.app.WebSettings;
 import com.phloc.webbasics.spi.IApplicationStartupListenerSPI;
 
 /**
@@ -21,6 +23,8 @@ public final class WebGuiStartupListener implements IApplicationStartupListenerS
    * Called once when the web application starts up.
    */
   public void onStartup () {
+    WebSettings.setHTMLVersion (EHTMLVersion.HTML5);
+
     // Setup locales
     WebLocaleManager.registerLocale (LocaleCache.get ("en", "GB"));
     WebLocaleManager.setDefaultLocale (LocaleCache.get ("en", "GB"));
