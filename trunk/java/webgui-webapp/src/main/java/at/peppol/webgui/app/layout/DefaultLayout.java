@@ -21,10 +21,10 @@ import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.webbasics.app.LinkUtils;
 import com.phloc.webbasics.app.html.IAreaContentProvider;
 import com.phloc.webbasics.app.html.LayoutManager;
-import com.phloc.webbasics.ui.bootstrap.BootstrapButton;
 import com.phloc.webbasics.ui.bootstrap.BootstrapContentLayout;
 import com.phloc.webbasics.ui.bootstrap.BootstrapContentRow;
 import com.phloc.webbasics.ui.bootstrap.BootstrapHeroUnit;
+import com.phloc.webbasics.ui.bootstrap.BootstrapLinkButton;
 import com.phloc.webbasics.ui.bootstrap.BootstrapNav;
 import com.phloc.webbasics.ui.bootstrap.BootstrapNavbar;
 import com.phloc.webbasics.ui.bootstrap.BootstrapSidebarNav;
@@ -81,11 +81,11 @@ public final class DefaultLayout {
         final HCNodeList aContent = new HCNodeList ();
         aContent.addChild (new BootstrapHeroUnit (new HCH1 ("PEPPOL Post Award Web GUI"),
                                                   new HCP ("This is a template for a simple marketing or informational website. It includes a large callout called the hero unit and three supporting pieces of content. Use it as a starting point to create something more unique."),
-                                                  new BootstrapButton (LinkUtils.getHomeLink ()).setType (EBootstrapButtonType.PRIMARY)
-                                                                                                .setSize (EBootstrapButtonSize.LARGE)
-                                                                                                .addChildren (new HCTextNode ("Learn more "),
-                                                                                                              new HCEntityNode (EHTMLEntity.raquo,
-                                                                                                                                " "))));
+                                                  new BootstrapLinkButton (LinkUtils.getHomeLink ()).setType (EBootstrapButtonType.PRIMARY)
+                                                                                                    .setSize (EBootstrapButtonSize.LARGE)
+                                                                                                    .addChildren (new HCTextNode ("Learn more "),
+                                                                                                                  new HCEntityNode (EHTMLEntity.raquo,
+                                                                                                                                    " "))));
         final BootstrapContentRow aContentRow = new BootstrapContentRow ().addColumn (EBootstrapSpan.SPAN2, aSidebar)
                                                                           .addColumn (EBootstrapSpan.SPAN10, aContent);
         final IHCNode aFooter = new HCP ().addChildren (HCEntityNode.newCopy (),
