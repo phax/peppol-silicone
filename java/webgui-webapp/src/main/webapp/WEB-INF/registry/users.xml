@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!--
+This file contains all application users incl. their plaintext passwords. 
+-->
+<mapping>
+  <map key="admin" value="password"/>
+</mapping>
