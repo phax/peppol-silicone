@@ -23,6 +23,7 @@ import com.phloc.webbasics.app.html.IAreaContentProvider;
 import com.phloc.webbasics.app.html.LayoutManager;
 import com.phloc.webbasics.ui.bootstrap.BootstrapButton;
 import com.phloc.webbasics.ui.bootstrap.BootstrapContentLayout;
+import com.phloc.webbasics.ui.bootstrap.BootstrapContentRow;
 import com.phloc.webbasics.ui.bootstrap.BootstrapHeroUnit;
 import com.phloc.webbasics.ui.bootstrap.BootstrapNav;
 import com.phloc.webbasics.ui.bootstrap.BootstrapNavbar;
@@ -80,20 +81,19 @@ public final class DefaultLayout {
         final HCNodeList aContent = new HCNodeList ();
         aContent.addChild (new BootstrapHeroUnit (new HCH1 ("PEPPOL Post Award Web GUI"),
                                                   new HCP ("This is a template for a simple marketing or informational website. It includes a large callout called the hero unit and three supporting pieces of content. Use it as a starting point to create something more unique."),
-                                                  new BootstrapButton ().setType (EBootstrapButtonType.PRIMARY)
-                                                                        .setSize (EBootstrapButtonSize.LARGE)
-                                                                        .addChildren (new HCTextNode ("Learn more "),
-                                                                                      new HCEntityNode (EHTMLEntity.raquo,
-                                                                                                        " "))));
-
+                                                  new BootstrapButton (LinkUtils.getHomeLink ()).setType (EBootstrapButtonType.PRIMARY)
+                                                                                                .setSize (EBootstrapButtonSize.LARGE)
+                                                                                                .addChildren (new HCTextNode ("Learn more "),
+                                                                                                              new HCEntityNode (EHTMLEntity.raquo,
+                                                                                                                                " "))));
+        final BootstrapContentRow aContentRow = new BootstrapContentRow ().addColumn (EBootstrapSpan.SPAN2, aSidebar)
+                                                                          .addColumn (EBootstrapSpan.SPAN10, aContent);
         final IHCNode aFooter = new HCP ().addChildren (HCEntityNode.newCopy (),
                                                         new HCTextNode (" "),
                                                         new HCA (new SimpleURL ("http://www.peppol.eu")).setTarget (HCA_Target.BLANK)
                                                                                                         .addChild ("PEPPOL"),
                                                         new HCTextNode (" " + PDTFactory.getCurrentYear ()));
-        return new BootstrapContentLayout ().addColumn (EBootstrapSpan.SPAN2, aSidebar)
-                                            .addColumn (EBootstrapSpan.SPAN10, aContent)
-                                            .setFooter (aFooter);
+        return new BootstrapContentLayout ().setContent (aContentRow).setFooter (aFooter);
       }
     });
   }
