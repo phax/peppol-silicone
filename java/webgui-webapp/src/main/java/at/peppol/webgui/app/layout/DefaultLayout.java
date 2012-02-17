@@ -44,6 +44,7 @@ public final class DefaultLayout {
         aNav.addItem ("Home", LinkUtils.getHomeLink (), true);
         aNav.addItem ("About", LinkUtils.getHomeLink (), false);
         aNav.addItem ("Contact", LinkUtils.getHomeLink (), false);
+        aNav.addItem ("Logout", LinkUtils.getServletURL ("/logout"), false);
 
         final BootstrapNavbar x = new BootstrapNavbar (true);
         x.setBrand ("PAWG", LinkUtils.getHomeLink ());
