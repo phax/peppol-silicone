@@ -4,10 +4,10 @@ import java.util.Locale;
 
 import javax.annotation.concurrent.Immutable;
 
-import com.phloc.commons.url.SimpleURL;
+import at.peppol.webgui.app.CWebGui;
+
 import com.phloc.css.CCSS;
 import com.phloc.css.property.CCSSProperties;
-import com.phloc.datetime.PDTFactory;
 import com.phloc.html.entities.EHTMLEntity;
 import com.phloc.html.hc.IHCNode;
 import com.phloc.html.hc.html.HCA;
@@ -46,11 +46,12 @@ public final class DefaultLayout {
         aNav.addItem ("Contact", LinkUtils.getHomeLink (), false);
         aNav.addItem ("Logout", LinkUtils.getServletURL ("/logout"), false);
 
-        final BootstrapNavbar x = new BootstrapNavbar (true);
-        x.setBrand ("PAWG", LinkUtils.getHomeLink ());
-        x.setNav (aNav);
-        x.addTextContent (new HCP ("Logged in as ").addChild (new HCA (LinkUtils.getHomeLink ()).addChild ("Philip")));
-        return x;
+        // Build navbar
+        final BootstrapNavbar aNavBar = new BootstrapNavbar (true);
+        aNavBar.setBrand (CWebGui.WEBGUI_PRODUCTNAME, LinkUtils.getHomeLink ());
+        aNavBar.setNav (aNav);
+        aNavBar.addTextContent (new HCP ("Logged in as ").addChild (new HCA (LinkUtils.getHomeLink ()).addChild ("Philip")));
+        return aNavBar;
       }
     });
 
@@ -75,9 +76,9 @@ public final class DefaultLayout {
         aNav.addItem ("My profile", LinkUtils.getHomeLink ());
         aNav.addItem ("Customers", LinkUtils.getHomeLink ());
         aNav.addItem ("Suppliers", LinkUtils.getHomeLink ());
-        aNav.addItem (new HCA (new SimpleURL ("http://www.peppol.eu")).setTarget (HCA_Target.BLANK)
-                                                                      .addStyle (CCSSProperties.MARGIN_TOP.newValue (CCSS.em (3)))
-                                                                      .addChild (new HCImg (LinkUtils.getContextAwareURI ("img/peppol_logo.png"))));
+        aNav.addItem (new HCA (CWebGui.URL_PEPPOL).setTarget (HCA_Target.BLANK)
+                                                  .addStyle (CCSSProperties.MARGIN_TOP.newValue (CCSS.em (3)))
+                                                  .addChild (new HCImg (LinkUtils.getContextAwareURI ("img/peppol_logo.png"))));
         final BootstrapSidebarNav aSidebar = new BootstrapSidebarNav ().setNav (aNav);
         final HCNodeList aContent = new HCNodeList ();
         aContent.addChild (new BootstrapHeroUnit (new HCH1 ("PEPPOL Post Award Web GUI"),
@@ -87,14 +88,11 @@ public final class DefaultLayout {
                                                                                                     .addChildren (new HCTextNode ("Learn more "),
                                                                                                                   new HCEntityNode (EHTMLEntity.raquo,
                                                                                                                                     " "))));
+
+        // Build the main content row with sidebar and content area
         final BootstrapContentRow aContentRow = new BootstrapContentRow ().addColumn (EBootstrapSpan.SPAN2, aSidebar)
                                                                           .addColumn (EBootstrapSpan.SPAN10, aContent);
-        final IHCNode aFooter = new HCP ().addChildren (HCEntityNode.newCopy (),
-                                                        new HCTextNode (" "),
-                                                        new HCA (new SimpleURL ("http://www.peppol.eu")).setTarget (HCA_Target.BLANK)
-                                                                                                        .addChild ("PEPPOL"),
-                                                        new HCTextNode (" " + PDTFactory.getCurrentYear ()));
-        return new BootstrapContentLayout ().setContent (aContentRow).setFooter (aFooter);
+        return new BootstrapContentLayout ().setContent (aContentRow).setFooter (Footer.createFooter ());
       }
     });
   }
