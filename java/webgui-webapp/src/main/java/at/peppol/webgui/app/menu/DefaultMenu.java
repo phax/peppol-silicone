@@ -35,19 +35,26 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.webgui.app.login;
+package at.peppol.webgui.app.menu;
 
-import com.phloc.webbasics.app.html.IHTMLProvider;
-import com.phloc.webbasics.app.security.LoginManager;
+import at.peppol.webgui.page.PageHome;
+
+import com.phloc.webbasics.app.menu.MenuTree;
 
 /**
- * Override the default LoginManager referenced from the login servlet filter
+ * This class is responsible for creating the default menu structure.
  * 
  * @author philip
  */
-public final class WebGuiLoginManager extends LoginManager {
-  @Override
-  protected IHTMLProvider createLoginScreen (final boolean bLoginError) {
-    return new WebGuiLoginHTML (bLoginError);
+public final class DefaultMenu {
+  private DefaultMenu () {}
+
+  public static void createDefaultMenu () {
+    final MenuTree aMenu = MenuTree.getInstance ();
+
+    aMenu.createRootItem (new PageHome (CMenuItems.MENU_HOME));
+
+    // Default menu item
+    aMenu.setDefaultMenuItem (CMenuItems.MENU_HOME);
   }
 }

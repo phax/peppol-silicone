@@ -35,56 +35,40 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.webgui.app.layout;
+package at.peppol.webgui.page;
 
 import java.util.Locale;
 
-import javax.annotation.concurrent.Immutable;
+import javax.annotation.Nonnull;
 
-import at.peppol.webgui.app.CWebGui;
-
+import com.phloc.html.entities.EHTMLEntity;
 import com.phloc.html.hc.IHCNode;
-import com.phloc.html.hc.html.HCA;
+import com.phloc.html.hc.html.HCH1;
 import com.phloc.html.hc.html.HCP;
+import com.phloc.html.hc.impl.HCEntityNode;
+import com.phloc.html.hc.impl.HCNodeList;
+import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.webbasics.app.LinkUtils;
-import com.phloc.webbasics.app.html.IAreaContentProvider;
-import com.phloc.webbasics.app.html.LayoutManager;
-import com.phloc.webbasics.ui.bootstrap.BootstrapContentLayout;
-import com.phloc.webbasics.ui.bootstrap.BootstrapNav;
-import com.phloc.webbasics.ui.bootstrap.BootstrapNavbar;
+import com.phloc.webbasics.app.page.AbstractPage;
+import com.phloc.webbasics.ui.bootstrap.BootstrapHeroUnit;
+import com.phloc.webbasics.ui.bootstrap.BootstrapLinkButton;
+import com.phloc.webbasics.ui.bootstrap.EBootstrapButtonSize;
+import com.phloc.webbasics.ui.bootstrap.EBootstrapButtonType;
 
-@Immutable
-public final class DefaultLayout {
-  private DefaultLayout () {}
+public final class PageHome extends AbstractPage {
+  public PageHome (final String sID) {
+    super (sID, "Home");
+  }
 
-  public static void createDefaultLayout () {
-    // 1. Navbar
-    LayoutManager.registerAreaContentProvider ("navbar", new IAreaContentProvider () {
-      public IHCNode getContent (final Locale aDisplayLocale) {
-        final BootstrapNav aNav = new BootstrapNav ();
-        aNav.addItem ("Home", LinkUtils.getHomeLink (), true);
-        /* TODO start change */
-        aNav.addItem ("About", LinkUtils.getHomeLink (), false);
-        aNav.addItem ("Contact", LinkUtils.getHomeLink (), false);
-        /* end change */
-        aNav.addItem ("Logout", LinkUtils.getServletURL (CWebGui.SERVLET_LOGOUT), false);
-
-        // Build navbar
-        final BootstrapNavbar aNavBar = new BootstrapNavbar (true);
-        aNavBar.setBrand (CWebGui.WEBGUI_PRODUCTNAME, LinkUtils.getHomeLink ());
-        aNavBar.setNav (aNav);
-        aNavBar.addTextContent (new HCP ("Logged in as ").addChild (new HCA (LinkUtils.getHomeLink ()).addChild ("Philip")));
-        return aNavBar;
-      }
-    });
-
-    // 2. Rest
-    LayoutManager.registerAreaContentProvider ("rest", new IAreaContentProvider () {
-      public IHCNode getContent (final Locale aDisplayLocale) {
-        // Content and footer
-        return new BootstrapContentLayout ().setContent (Content.createContent (aDisplayLocale))
-                                            .setFooter (Footer.createFooter ());
-      }
-    });
+  public IHCNode getContent (@Nonnull final Locale aDisplayLocale) {
+    final HCNodeList ret = new HCNodeList ();
+    ret.addChild (new BootstrapHeroUnit (new HCH1 ("PEPPOL Post Award Web GUI"),
+                                         new HCP ("This is a template for a simple marketing or informational website. It includes a large callout called the hero unit and three supporting pieces of content. Use it as a starting point to create something more unique."),
+                                         new BootstrapLinkButton (LinkUtils.getHomeLink ()).setType (EBootstrapButtonType.PRIMARY)
+                                                                                           .setSize (EBootstrapButtonSize.LARGE)
+                                                                                           .addChildren (new HCTextNode ("Learn more "),
+                                                                                                         new HCEntityNode (EHTMLEntity.raquo,
+                                                                                                                           " "))));
+    return ret;
   }
 }
