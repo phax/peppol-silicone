@@ -35,19 +35,19 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.webgui.app.login;
+package at.peppol.webgui.app.menu;
 
-import com.phloc.webbasics.app.html.IHTMLProvider;
-import com.phloc.webbasics.app.security.LoginManager;
+import javax.annotation.concurrent.Immutable;
 
 /**
- * Override the default LoginManager referenced from the login servlet filter
+ * Contains all available menu item IDs.
  * 
  * @author philip
  */
-public final class WebGuiLoginManager extends LoginManager {
-  @Override
-  protected IHTMLProvider createLoginScreen (final boolean bLoginError) {
-    return new WebGuiLoginHTML (bLoginError);
-  }
+@Immutable
+public final class CMenuItems {
+  /** Menu item IDs */
+  public static final String MENU_HOME = "home";
+
+  private CMenuItems () {}
 }
