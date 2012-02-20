@@ -48,6 +48,7 @@ import javax.annotation.concurrent.ThreadSafe;
 
 import at.peppol.transport.IMessageMetadata;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
 
@@ -59,6 +60,7 @@ import com.phloc.commons.string.StringHelper;
  */
 @ThreadSafe
 public final class ResourceMemoryStore {
+  /** Memory efficient singleton holder */
   private static final class SingletonHolder {
     static final ResourceMemoryStore s_aInstance = new ResourceMemoryStore ();
   }
@@ -66,18 +68,32 @@ public final class ResourceMemoryStore {
   private final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
   private final Map <String, IMessageMetadata> m_aResourceMap = new HashMap <String, IMessageMetadata> ();
 
+  /** Avoid instantiation */
   private ResourceMemoryStore () {}
 
+  /**
+   * @return Singleton {@link ResourceMemoryStore} instance. Never
+   *         <code>null</code>.
+   */
   @Nonnull
   public static ResourceMemoryStore getInstance () {
     return SingletonHolder.s_aInstance;
   }
 
-  public boolean isStored (final String sMessageID, final String sURLStr) {
+  @Nonnull
+  private static String _getKey (@Nonnull @Nonempty final String sMessageID, @Nonnull @Nonempty final String sURLStr) {
+    if (StringHelper.hasNoText (sMessageID))
+      throw new IllegalArgumentException ("messageID");
+    if (StringHelper.hasNoText (sURLStr))
+      throw new IllegalArgumentException ("urlStr");
+    return sMessageID + sURLStr;
+  }
+
+  public boolean isStored (@Nonnull @Nonempty final String sMessageID, @Nonnull @Nonempty final String sURLStr) {
     m_aRWLock.readLock ().lock ();
     try {
-      final String key = _getKey (sMessageID, sURLStr);
-      return m_aResourceMap.containsKey (key);
+      final String sKey = _getKey (sMessageID, sURLStr);
+      return m_aResourceMap.containsKey (sKey);
     }
     finally {
       m_aRWLock.readLock ().unlock ();
@@ -85,13 +101,18 @@ public final class ResourceMemoryStore {
   }
 
   @Nonnull
-  public EChange createResource (final String sMessageID, final String sURLStr, final IMessageMetadata soapHeader) {
+  public EChange createResource (@Nonnull @Nonempty final String sMessageID,
+                                 @Nonnull @Nonempty final String sURLStr,
+                                 @Nonnull final IMessageMetadata aMetadata) {
+    if (aMetadata == null)
+      throw new NullPointerException ("metadata");
+
     m_aRWLock.writeLock ().lock ();
     try {
-      final String key = _getKey (sMessageID, sURLStr);
-      if (m_aResourceMap.containsKey (key))
+      final String sKey = _getKey (sMessageID, sURLStr);
+      if (m_aResourceMap.containsKey (sKey))
         return EChange.UNCHANGED;
-      m_aResourceMap.put (key, soapHeader);
+      m_aResourceMap.put (sKey, aMetadata);
       return EChange.CHANGED;
     }
     finally {
@@ -100,23 +121,15 @@ public final class ResourceMemoryStore {
   }
 
   @Nullable
-  public IMessageMetadata getMessage (final String sMessageID, final String sURLStr) {
+  public IMessageMetadata getMessage (@Nonnull @Nonempty final String sMessageID,
+                                      @Nonnull @Nonempty final String sURLStr) {
     m_aRWLock.readLock ().lock ();
     try {
-      final String key = _getKey (sMessageID, sURLStr);
-      return m_aResourceMap.get (key);
+      final String sKey = _getKey (sMessageID, sURLStr);
+      return m_aResourceMap.get (sKey);
     }
     finally {
       m_aRWLock.readLock ().unlock ();
     }
-  }
-
-  @Nonnull
-  private static String _getKey (@Nonnull final String sMessageID, @Nonnull final String sURLStr) {
-    if (StringHelper.hasNoText (sMessageID))
-      throw new IllegalArgumentException ("messageID");
-    if (StringHelper.hasNoText (sURLStr))
-      throw new IllegalArgumentException ("urlStr");
-    return sMessageID + sURLStr;
   }
 }
