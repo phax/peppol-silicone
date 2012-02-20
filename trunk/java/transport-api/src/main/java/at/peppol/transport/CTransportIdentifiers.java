@@ -49,6 +49,7 @@ public final class CTransportIdentifiers {
                                                                                                               .getAnnotation (XmlSchema.class)
                                                                                                               .namespace ();
   public static final String SCHEME_ATTR = "scheme";
+  public static final String ELEMENT_HEADERS = "Headers";
 
   private CTransportIdentifiers () {}
 }

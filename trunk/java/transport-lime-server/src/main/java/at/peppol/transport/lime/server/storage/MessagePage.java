@@ -40,6 +40,7 @@ package at.peppol.transport.lime.server.storage;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -150,52 +151,55 @@ public final class MessagePage {
     aPageList.setNextPageIdentifier (aNextPageIdentifier);
   }
 
-  private static void _addPageListEntries (final int fromMsg,
-                                           final int toMsg,
-                                           final String [] messageIDs,
-                                           final LimeStorage channel,
-                                           final String channelID,
-                                           final String endpoint,
-                                           final PageListType pageList) {
-    pageList.setEntryList (s_aObjFactory.createEntryListType ());
+  private static void _addPageListEntries (final int nFromMsg,
+                                           final int nToMsg,
+                                           final String [] aMessageIDs,
+                                           final LimeStorage aChannel,
+                                           final String sChannelID,
+                                           final String sEndpoint,
+                                           final PageListType aPageList) {
+    aPageList.setEntryList (s_aObjFactory.createEntryListType ());
 
-    for (int i = fromMsg; i <= toMsg; i++) {
-      final String messageID = messageIDs[i];
-      final Entry entry = s_aObjFactory.createEntry ();
-      entry.setSize (Long.valueOf (channel.getSize (channelID, messageID)));
-      entry.setCreationTime (channel.getCreationTime (channelID, messageID));
+    for (int i = nFromMsg; i <= nToMsg; i++) {
+      final String sMessageID = aMessageIDs[i];
+      final Entry aEntry = s_aObjFactory.createEntry ();
+      aEntry.setSize (Long.valueOf (aChannel.getSize (sChannelID, sMessageID)));
+      aEntry.setCreationTime (aChannel.getCreationTime (sChannelID, sMessageID));
 
-      final List <Element> referenceParametersType = new ArrayList <Element> ();
+      final List <Element> aReferenceParametersType = new ArrayList <Element> ();
       final Document aDummyDoc = XMLFactory.newDocument ();
-      Element element = aDummyDoc.createElementNS (CTransportIdentifiers.NAMESPACE_TRANSPORT_IDS, CLimeIdentifiers.CHANNELID);
-      element.appendChild (aDummyDoc.createTextNode (channelID));
-      referenceParametersType.add (element);
-      element = aDummyDoc.createElementNS (CTransportIdentifiers.NAMESPACE_TRANSPORT_IDS, CLimeIdentifiers.MESSAGEID);
-      element.appendChild (aDummyDoc.createTextNode (messageID));
-      referenceParametersType.add (element);
-      final W3CEndpointReference endpointReferenceType = W3CEndpointReferenceUtils.createEndpointReference (endpoint,
-                                                                                                            referenceParametersType);
-      entry.setEndpointReference (endpointReferenceType);
-      pageList.getEntryList ().getEntry ().add (entry);
+      Element aElement = aDummyDoc.createElementNS (CTransportIdentifiers.NAMESPACE_TRANSPORT_IDS,
+                                                    CLimeIdentifiers.CHANNELID);
+      aElement.appendChild (aDummyDoc.createTextNode (sChannelID));
+      aReferenceParametersType.add (aElement);
+
+      aElement = aDummyDoc.createElementNS (CTransportIdentifiers.NAMESPACE_TRANSPORT_IDS, CLimeIdentifiers.MESSAGEID);
+      aElement.appendChild (aDummyDoc.createTextNode (sMessageID));
+      aReferenceParametersType.add (aElement);
+
+      final W3CEndpointReference endpointReferenceType = W3CEndpointReferenceUtils.createEndpointReference (sEndpoint,
+                                                                                                            aReferenceParametersType);
+      aEntry.setEndpointReference (endpointReferenceType);
+      aPageList.getEntryList ().getEntry ().add (aEntry);
     }
   }
 
   @Nullable
-  private static Document _createPageListDocument (final String [] messageIDs,
+  private static Document _createPageListDocument (final String [] aMessageIDs,
                                                    final int nPageSize,
                                                    final int nPageNum,
-                                                   final LimeStorage channel,
-                                                   final String channelID,
-                                                   final String endpoint) throws JAXBException {
+                                                   final LimeStorage aChannel,
+                                                   final String sChannelID,
+                                                   final String sEndpoint) throws JAXBException {
     Document pageListDocument = null;
-    if (messageIDs.length > 0 && (messageIDs.length / nPageSize) >= nPageNum) {
+    if (aMessageIDs.length > 0 && (aMessageIDs.length / nPageSize) >= nPageNum) {
 
-      s_aLogger.info ("Messages in inbox: " + messageIDs.length);
+      s_aLogger.info ("Messages in inbox: " + aMessageIDs.length);
 
-      pageListDocument = _getPageListDocument (nPageNum, nPageSize, messageIDs, channel, channelID, endpoint);
+      pageListDocument = _getPageListDocument (nPageNum, nPageSize, aMessageIDs, aChannel, sChannelID, sEndpoint);
 
       s_aLogger.info ("Page List created. MessageIDs=" +
-                      messageIDs.length +
+                      aMessageIDs.length +
                       " pageSize=" +
                       nPageSize +
                       " pageNum=" +
@@ -203,7 +207,7 @@ public final class MessagePage {
     }
     else {
       s_aLogger.info ("Page List not created. MessageIDs=" +
-                      messageIDs.length +
+                      aMessageIDs.length +
                       " pageSize=" +
                       nPageSize +
                       " pageNum=" +
@@ -212,7 +216,8 @@ public final class MessagePage {
     return pageListDocument;
   }
 
-  private static String _xmlToString (final Node node) {
-    return XMLWriter.getNodeAsString (node, XMLWriterSettings.SUGGESTED_XML_SETTINGS);
+  @Nullable
+  private static String _xmlToString (@Nonnull final Node aNode) {
+    return XMLWriter.getNodeAsString (aNode, XMLWriterSettings.SUGGESTED_XML_SETTINGS);
   }
 }

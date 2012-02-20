@@ -79,13 +79,14 @@ import org.w3._2009._02.ws_tra.PutResponse;
 import org.w3._2009._02.ws_tra.ResourceCreated;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 import at.peppol.commons.sml.ESML;
 import at.peppol.commons.wsaddr.W3CEndpointReferenceUtils;
 import at.peppol.smp.client.SMPServiceCaller;
-import at.peppol.transport.IMessageMetadata;
 import at.peppol.transport.CTransportIdentifiers;
+import at.peppol.transport.IMessageMetadata;
 import at.peppol.transport.MessageMetadata;
 import at.peppol.transport.MessageMetadataHelper;
 import at.peppol.transport.lime.CLimeIdentifiers;
@@ -96,6 +97,7 @@ import at.peppol.transport.lime.server.storage.MessagePage;
 import at.peppol.transport.start.client.AccessPointClient;
 
 import com.phloc.commons.CGlobal;
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.jaxb.JAXBContextCache;
 import com.phloc.commons.string.StringHelper;
@@ -117,7 +119,8 @@ public class LimeService {
   private static final String FAULT_UNKNOWN_ENDPOINT = "The endpoint is not known";
   private static final String FAULT_SERVER_ERROR = "ServerError";
   private static final String SERVICENAME = LimeService.class.getAnnotation (WebService.class).serviceName ();
-  private static final QName QNAME_PAGEIDENTIFIER = new QName (CLimeIdentifiers.NAMESPACE_LIME, CLimeIdentifiers.PAGEIDENTIFIER);
+  private static final QName QNAME_PAGEIDENTIFIER = new QName (CLimeIdentifiers.NAMESPACE_LIME,
+                                                               CLimeIdentifiers.PAGEIDENTIFIER);
   private static final Logger s_aLogger = LoggerFactory.getLogger (LimeService.class);
 
   private static final ObjectFactory s_aObjFactory = new ObjectFactory ();
@@ -131,14 +134,15 @@ public class LimeService {
   }
 
   @Nonnull
-  private static W3CEndpointReference _createW3CEndpointReference (final String sOurAPURL,
-                                                                   final String sChannelID,
-                                                                   final String sMessageID) {
+  private static W3CEndpointReference _createW3CEndpointReference (@Nonnull final String sOurAPURL,
+                                                                   @Nonnull final String sChannelID,
+                                                                   @Nonnull final String sMessageID) {
     final Document aDummyDoc = XMLFactory.newDocument ();
     final List <Element> aReferenceParameters = new ArrayList <Element> ();
 
     // Channel ID
-    Element aElement = aDummyDoc.createElementNS (CTransportIdentifiers.NAMESPACE_TRANSPORT_IDS, CLimeIdentifiers.CHANNELID);
+    Element aElement = aDummyDoc.createElementNS (CTransportIdentifiers.NAMESPACE_TRANSPORT_IDS,
+                                                  CLimeIdentifiers.CHANNELID);
     aElement.appendChild (aDummyDoc.createTextNode (sChannelID));
     aReferenceParameters.add (aElement);
 
@@ -151,9 +155,9 @@ public class LimeService {
   }
 
   @Nonnull
-  private static CreateResponse _createCreateResponse (final String sOurAPURL,
-                                                       final String sChannelID,
-                                                       final String sMessageID) {
+  private static CreateResponse _createCreateResponse (@Nonnull final String sOurAPURL,
+                                                       @Nonnull final String sChannelID,
+                                                       @Nonnull final String sMessageID) {
     final W3CEndpointReference w3CEndpointReference = _createW3CEndpointReference (sOurAPURL, sChannelID, sMessageID);
 
     final CreateResponse ret = new CreateResponse ();
@@ -178,8 +182,9 @@ public class LimeService {
   public CreateResponse create (@Nullable final Create body) {
     // Create a new unique messageID
     final String sMessageID = "uuid:" + UUID.randomUUID ().toString ();
-    IMessageMetadata aMetadata = null;
     final String sOurAPURL = _getOurAPURL ();
+
+    IMessageMetadata aMetadata = null;
 
     try {
       // Grabs the list of headers from the SOAP message
@@ -187,7 +192,9 @@ public class LimeService {
       aMetadata = MessageMetadataHelper.createMetadataFromHeadersWithCustomMessageID (aHeaderList, sMessageID);
 
       if (ResourceMemoryStore.getInstance ().createResource (sMessageID, sOurAPURL, aMetadata).isUnchanged ())
-        throw new MessageIdReusedException ("Message id '" + sMessageID + "' is reused");
+        throw new MessageIdReusedException ("Message id '" +
+                                            sMessageID +
+                                            "' is reused by this LIME service. Seems like we have a problem with the UUID generator");
     }
     catch (final Exception ex) {
       throw _createSoapFault (FAULT_SERVER_ERROR, ex);
@@ -380,6 +387,8 @@ public class LimeService {
 
   @Nonnull
   private String _getOurAPURL () {
+    // FIXME read this from the configuration file for easily correct handling
+    // of the endpoint URL
     final ServletRequest servletRequest = (ServletRequest) webServiceContext.getMessageContext ()
                                                                             .get (MessageContext.SERVLET_REQUEST);
     final String contextPath = ((ServletContext) webServiceContext.getMessageContext ()
@@ -394,8 +403,8 @@ public class LimeService {
     return thisAccessPointURLstr + SERVICENAME;
   }
 
-  private void _addPageListToResponse (final String sStorageRoot,
-                                       final String sPageNumber,
+  private void _addPageListToResponse (@Nonnull @Nonempty final String sStorageRoot,
+                                       @Nullable final String sPageNumber,
                                        final String sChannelID,
                                        final GetResponse aGetResponse) throws Exception {
     final String sOwnAPURL = _getOurAPURL ();
@@ -408,20 +417,20 @@ public class LimeService {
       aGetResponse.getAny ().add (aDocument.getDocumentElement ());
   }
 
-  private static void _logRequest (final String action,
-                                   final String ownUrl,
-                                   final IMessageMetadata aMetadata,
-                                   final String nextUrl) {
+  private static void _logRequest (@Nullable final String sAction,
+                                   @Nullable final String sOwnUrl,
+                                   @Nonnull final IMessageMetadata aMetadata,
+                                   @Nullable final String sReceiverID) {
     final String s = "REQUEST start--------------------------------------------------" +
                      CGlobal.LINE_SEPARATOR +
                      "Action: " +
-                     action +
+                     sAction +
                      CGlobal.LINE_SEPARATOR +
                      "Own URL: " +
-                     ownUrl +
+                     sOwnUrl +
                      CGlobal.LINE_SEPARATOR +
                      "Sending to : " +
-                     nextUrl +
+                     sReceiverID +
                      CGlobal.LINE_SEPARATOR +
                      "Messsage ID: " +
                      aMetadata.getMessageID () +
@@ -463,39 +472,49 @@ public class LimeService {
     AccessPointClient.send (sStartAPEndpointAddress, aMetadata, createBody);
   }
 
-  private void _sendToInbox (final IMessageMetadata aMetadata, final Put body) throws RecipientUnreachableException {
+  private void _sendToInbox (@Nonnull final IMessageMetadata aMetadata, @Nonnull final Put aBody) throws RecipientUnreachableException {
     final String sStorageChannelID = aMetadata.getRecipientID ().getValue ();
     if (sStorageChannelID == null)
       throw new RecipientUnreachableException ("Unknown recipient at LIME-AP: " + aMetadata.getRecipientID ());
 
+    // Extract the message ID from the incoming message SOAP headers
     final HeaderList aHeaderList = _getInboundHeaderList ();
-    final String messageID = MessageMetadataHelper.getMessageID (aHeaderList);
+    final String sMessageID = MessageMetadataHelper.getMessageID (aHeaderList);
 
     s_aLogger.info ("Recipient: " + aMetadata.getRecipientID () + "; ChannelID: " + sStorageChannelID);
 
     try {
-      final List <Object> objects = body.getAny ();
-      if (ContainerHelper.getSize (objects) == 1) {
-        final Element element = (Element) ContainerHelper.getFirstElement (objects);
-        final Document document = element.getOwnerDocument ();
+      final List <Object> aObjects = aBody.getAny ();
+      if (ContainerHelper.getSize (aObjects) == 1) {
+        final Node aElement = (Node) ContainerHelper.getFirstElement (aObjects);
+        final Document aDocument = aElement.getOwnerDocument ();
         final Document metadataDocument = MessageMetadataHelper.createHeadersDocument (aMetadata);
 
         final String sStorageRoot = ((ServletContext) webServiceContext.getMessageContext ()
                                                                        .get (MessageContext.SERVLET_CONTEXT)).getRealPath ("/");
-        new LimeStorage (sStorageRoot).saveDocument (sStorageChannelID, messageID, metadataDocument, document);
+        new LimeStorage (sStorageRoot).saveDocument (sStorageChannelID, sMessageID, metadataDocument, aDocument);
       }
     }
     catch (final Exception ex) {
-      s_aLogger.error (null, ex);
+      s_aLogger.error ("Failed to handle incoming LIME document", ex);
       throw new RecipientUnreachableException (ex);
     }
   }
 
+  @Nullable
   private static String _getAccessPointUrl (final ParticipantIdentifierType aRecipientId,
                                             final DocumentIdentifierType aDocumentID,
                                             final ProcessIdentifierType aProcessID) throws Exception {
-    return new SMPServiceCaller (aRecipientId, ESML.PRODUCTION).getEndpointAddress (aRecipientId,
-                                                                                    aDocumentID,
-                                                                                    aProcessID);
+    final String ret = new SMPServiceCaller (aRecipientId, ESML.PRODUCTION).getEndpointAddress (aRecipientId,
+                                                                                                aDocumentID,
+                                                                                                aProcessID);
+    if (ret == null)
+      s_aLogger.warn ("Failed to resolve AP endpoint url for recipient " +
+                      aRecipientId +
+                      ", document type " +
+                      aDocumentID +
+                      " and process " +
+                      aProcessID);
+    return ret;
   }
 }
