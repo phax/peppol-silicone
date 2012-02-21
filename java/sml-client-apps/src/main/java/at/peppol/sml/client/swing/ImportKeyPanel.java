@@ -93,7 +93,7 @@ final class ImportKeyPanel extends JPanel implements ActionListener {
     m_aTFPassword.setText (AppProperties.getInstance ().getKeyStorePassword ());
   }
 
-  public void save () {
+  public void saveData () {
     MainFrame.setKeyStore (m_aTFPath.getText (), m_aTFPassword.getText ());
   }
 

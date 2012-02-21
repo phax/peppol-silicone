@@ -37,63 +37,53 @@
  */
 package at.peppol.sml.client.swing;
 
-import java.util.Vector;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import javax.swing.BorderFactory;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
+import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
-import net.miginfocom.layout.AC;
-import net.miginfocom.layout.LC;
 import net.miginfocom.swing.MigLayout;
-import at.peppol.commons.sml.ESML;
-import at.peppol.commons.sml.ISMLInfo;
-import at.peppol.sml.client.swing.utils.SMLInfoNameComparator;
-import at.peppol.sml.client.swing.utils.WrappedSMLInfo;
-
-import com.phloc.commons.collections.ContainerHelper;
+import at.peppol.sml.client.ESMLAction;
 
 /**
- * Configuration Panel
+ * Content action panel
  * 
  * @author PEPPOL.AT, BRZ, Jakob Frohnwieser
  */
-final class ConfigPanel extends JPanel {
-  private final JComboBox m_aCBSMLHost;
-  private final JTextField m_aTFSMPID;
+final class MainContentPanelAction extends JPanel {
+  public MainContentPanelAction (final MainFrame aMainFrame) {
+    setLayout (new MigLayout ("fill,insets 0"));
 
-  public ConfigPanel () {
-    setLayout (new MigLayout (new LC ().fill (), new AC ().size ("label").gap ().align ("left"), new AC ()));
-    // setPreferredSize (new Dimension (450, 100));
-    setBorder (BorderFactory.createTitledBorder ("Client Configuration"));
+    final ActionPanel aActionPanel = new ActionPanel ();
 
-    final Vector <ISMLInfo> aSMLHosts = new Vector <ISMLInfo> ();
-    for (final ESML eSml : ContainerHelper.getSorted (ESML.values (), new SMLInfoNameComparator ()))
-      aSMLHosts.add (new WrappedSMLInfo (eSml));
+    final JButton aBtnSettings = new JButton ("<< Settings");
+    aBtnSettings.addActionListener (new ActionListener () {
+      public void actionPerformed (final ActionEvent e) {
+        aMainFrame.setContent (EMainPanel.CONFIG_PANELS);
+        MainStatusBar.setStatus ("");
+      }
+    });
 
-    final JLabel aLabelHost = new JLabel ("SML Hostname: ");
-    m_aCBSMLHost = new JComboBox (aSMLHosts);
+    final JButton aBtnAction = new JButton ("Execute action");
+    aBtnAction.addActionListener (new ActionListener () {
+      public void actionPerformed (final ActionEvent e) {
+        final ESMLAction eAction = aActionPanel.getSelectedAction ();
+        MainStatusBar.setStatus ("Executing action " + eAction + ".");
 
-    final JLabel aLabelSMPID = new JLabel ("SMP ID: ");
-    m_aTFSMPID = new JTextField (15);
+        try {
+          aActionPanel.executeAction ();
+          MainStatusBar.setStatus ("Executed action " + eAction + ".");
+        }
+        catch (final Exception ex) {
+          MainStatusBar.setStatus ("Error executing action" + eAction + ".");
+          throw new RuntimeException ("Error executing action " + eAction + ": " + ex);
+        }
+      }
+    });
 
-    add (aLabelHost);
-    add (m_aCBSMLHost, "width 100%,wrap");
-    add (aLabelSMPID);
-    add (m_aTFSMPID, "width 100%,wrap");
-
-    loadData ();
-  }
-
-  public void loadData () {
-    m_aCBSMLHost.setSelectedItem (AppProperties.getInstance ().getSMLInfo ());
-    m_aTFSMPID.setText (AppProperties.getInstance ().getSMPID ());
-  }
-
-  public void saveData () {
-    AppProperties.getInstance ().setSMLInfo ((ISMLInfo) m_aCBSMLHost.getSelectedItem ());
-    AppProperties.getInstance ().setSMPID (m_aTFSMPID.getText ());
+    add (aActionPanel, "dock north");
+    add (aBtnSettings, "gaptop 20, split 2");
+    add (aBtnAction, "gaptop 20, dock east");
   }
 }

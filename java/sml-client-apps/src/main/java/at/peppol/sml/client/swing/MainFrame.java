@@ -64,11 +64,6 @@ import com.phloc.commons.string.StringHelper;
  * @author PEPPOL.AT, BRZ, Jakob Frohnwieser
  */
 final class MainFrame extends JFrame {
-  public static enum EPanel {
-    CONFIG_PANELS,
-    ACTION_PANEL;
-  }
-
   private static final int FRAME_WIDTH = 530;
   private static final int FRAME_HEIGHT = 360;
 
@@ -93,7 +88,7 @@ final class MainFrame extends JFrame {
     m_aStatusBar = new MainStatusBar ();
 
     m_aContentPanel = new JPanel (new MigLayout (new LC ().fill ().insets ("0")));
-    setContent (EPanel.CONFIG_PANELS);
+    setContent (EMainPanel.CONFIG_PANELS);
 
     add (m_aContentPanel, "width 100%,wrap");
     add (m_aStatusBar, "dock south");
@@ -101,21 +96,20 @@ final class MainFrame extends JFrame {
     pack ();
   }
 
-  public void setContent (@Nonnull final EPanel ePanel) {
-    final MainContentPanel cp = new MainContentPanel (this);
-    cp.setLayout (new MigLayout ("fill,insets 0"));
-
-    switch (ePanel) {
+  public void setContent (@Nonnull final EMainPanel eMainPanel) {
+    JPanel aPanel;
+    switch (eMainPanel) {
       case CONFIG_PANELS:
-        cp.setConfigPanels ();
+        aPanel = new MainContentPanelConfig (this);
         break;
       case ACTION_PANEL:
-        cp.setActionPanel ();
+        aPanel = new MainContentPanelAction (this);
         break;
+      default:
+        throw new IllegalStateException ();
     }
-
     m_aContentPanel.removeAll ();
-    m_aContentPanel.add (cp, "width 100%");
+    m_aContentPanel.add (aPanel, "width 100%");
     m_aContentPanel.updateUI ();
   }
 
