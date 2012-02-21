@@ -91,6 +91,17 @@ public enum ESMLAction {
 
   @Override
   public String toString () {
-    return m_eObjectType.getName () + " " + m_eCommand.getName ();
+    final StringBuilder aMsg = new StringBuilder (m_eObjectType.getName ()).append (' ').append (m_eCommand.getName ());
+    if (m_aParams.length > 0) {
+      aMsg.append (" (");
+      int nIndex = 0;
+      for (final SMLActionParameter x : m_aParams) {
+        if (++nIndex > 1)
+          aMsg.append (", ");
+        aMsg.append (x.getDescription ());
+      }
+      aMsg.append (')');
+    }
+    return aMsg.toString ();
   }
 }

@@ -40,7 +40,6 @@ package at.peppol.sml.client.swing;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Locale;
 import java.util.Vector;
 
 import javax.annotation.Nonnull;
@@ -55,6 +54,7 @@ import javax.swing.JTextField;
 import net.miginfocom.swing.MigLayout;
 import at.peppol.sml.client.ESMLAction;
 
+import com.phloc.commons.system.SystemHelper;
 import com.phloc.datetime.PDTFactory;
 import com.phloc.datetime.format.PDTToString;
 
@@ -80,12 +80,11 @@ final class ActionPanel extends JPanel {
     m_aCBAction = new JComboBox (aActions);
     m_aCBAction.addActionListener (new ActionListener () {
       public void actionPerformed (final ActionEvent e) {
-        final ESMLAction eAction = (ESMLAction) m_aCBAction.getSelectedItem ();
+        final ESMLAction eAction = getSelectedAction ();
         final int nParams = eAction.getRequiredParameters ();
-
+        m_aTFParams.setEnabled (nParams > 0);
         if (nParams == 0) {
           MainStatusBar.setStatus ("No parameters required.");
-          m_aTFParams.setEditable (false);
         }
         else {
           final StringBuilder aMsg = new StringBuilder (nParams + " paramters are required: ");
@@ -97,18 +96,18 @@ final class ActionPanel extends JPanel {
           }
 
           MainStatusBar.setStatus (aMsg.toString ());
-          m_aTFParams.setEditable (true);
         }
       }
     });
 
     m_aTFParams = new JTextField ();
+    m_aTFParams.setEnabled (getSelectedAction ().getRequiredParameters () > 0);
 
     m_aTAOut = new JTextArea ();
     m_aTAOut.setLineWrap (true);
     m_aTAOut.setWrapStyleWord (true);
     // The height is relevant
-    m_aTAOut.setSize (new Dimension (0, 100));
+    m_aTAOut.setSize (new Dimension (0, 150));
     final JScrollPane aSPOut = new JScrollPane ();
     aSPOut.setMinimumSize (m_aTAOut.getSize ());
     aSPOut.setAutoscrolls (true);
@@ -121,7 +120,7 @@ final class ActionPanel extends JPanel {
     add (m_aTFParams, "width 100%,wrap");
 
     add (new JLabel ("Response: "), "aligny top");
-    add (aSPOut, "width 100%,wrap");
+    add (aSPOut, "width 100%,dock south,wrap");
 
     MainStatusBar.setStatus ("Ready.");
   }
@@ -132,9 +131,9 @@ final class ActionPanel extends JPanel {
   }
 
   public void executeAction () {
-    final String sResult = MainFrame.performAction (getSelectedAction (), m_aTFParams.getText ());
+    final String sResult = GuiSMLController.performAction (getSelectedAction (), m_aTFParams.getText ());
     final String sMsg = '[' +
-                        PDTToString.getAsString (PDTFactory.getCurrentLocalTime (), Locale.US) +
+                        PDTToString.getAsString (PDTFactory.getCurrentLocalTime (), SystemHelper.getSystemLocale ()) +
                         "] " +
                         sResult +
                         "\n";

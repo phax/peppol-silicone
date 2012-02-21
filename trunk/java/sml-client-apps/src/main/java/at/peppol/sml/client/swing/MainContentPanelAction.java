@@ -83,7 +83,7 @@ final class MainContentPanelAction extends JPanel {
     });
 
     add (aActionPanel, "dock north");
-    add (aBtnSettings, "gaptop 20, split 2");
-    add (aBtnAction, "gaptop 20, dock east");
+    add (aBtnSettings, "split 2");
+    add (aBtnAction, "dock east");
   }
 }
