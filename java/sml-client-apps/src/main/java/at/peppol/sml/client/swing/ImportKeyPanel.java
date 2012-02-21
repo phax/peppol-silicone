@@ -48,7 +48,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.filechooser.FileFilter;
+
+import at.peppol.sml.client.swing.utils.FileFilterJKS;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -56,73 +57,64 @@ import net.miginfocom.swing.MigLayout;
  * @author PEPPOL.AT, BRZ, Jakob Frohnwieser
  */
 public class ImportKeyPanel extends JPanel implements ActionListener {
-  private final MainFrame mainFrame;
-  private JTextField tfPath, tfPassword;
-  private JButton bBrowse;
+  private final MainFrame m_aMainFrame;
+  private JTextField m_aTFPath;
+  private JTextField m_aTFPassword;
+  private JButton m_aBtnBrowse;
 
   public ImportKeyPanel (final MainFrame aMainFrame) {
-    this.mainFrame = aMainFrame;
-    init ();
+    m_aMainFrame = aMainFrame;
+    _init ();
 
     aMainFrame.displayStatus ("");
   }
 
-  private void init () {
+  private void _init () {
     setLayout (new MigLayout ("fill", "[label][left]", ""));
     // setPreferredSize (mainFrame.getContentPanelDimension ());
     setBorder (BorderFactory.createTitledBorder ("Import Key"));
 
     final JLabel lPath = new JLabel ("Path to key store: ");
     lPath.setAlignmentX (RIGHT_ALIGNMENT);
-    tfPath = new JTextField (30);
+    m_aTFPath = new JTextField (30);
     final JLabel lPassword = new JLabel ("Key store password: ");
-    tfPassword = new JPasswordField (15);
-    bBrowse = new JButton ("Browse");
-    bBrowse.addActionListener (this);
+    m_aTFPassword = new JPasswordField (15);
+    m_aBtnBrowse = new JButton ("Browse");
+    m_aBtnBrowse.addActionListener (this);
 
     add (lPath);
-    add (tfPath, "width 100%");
-    add (bBrowse, "right,wrap");
+    add (m_aTFPath, "width 100%");
+    add (m_aBtnBrowse, "right,wrap");
     add (lPassword);
-    add (tfPassword, "span 2,width 100%,wrap");
+    add (m_aTFPassword, "span 2,width 100%,wrap");
 
     load ();
   }
 
   public void actionPerformed (final ActionEvent e) {
-    if (e.getActionCommand ().equals (bBrowse.getText ())) {
-      getPath ();
+    if (e.getActionCommand ().equals (m_aBtnBrowse.getText ())) {
+      _getPath ();
     }
   }
 
   public void load () {
-    tfPath.setText (AppProperties.getInstance ().getKeyStorePath ());
-    tfPassword.setText (AppProperties.getInstance ().getKeyStorePassword ());
+    m_aTFPath.setText (AppProperties.getInstance ().getKeyStorePath ());
+    m_aTFPassword.setText (AppProperties.getInstance ().getKeyStorePassword ());
   }
 
   public void save () {
-    mainFrame.setKeyStore (tfPath.getText (), tfPassword.getText ());
+    m_aMainFrame.setKeyStore (m_aTFPath.getText (), m_aTFPassword.getText ());
   }
 
-  private void getPath () {
+  private void _getPath () {
     final JFileChooser fileChooser = new JFileChooser ();
     fileChooser.setAcceptAllFileFilterUsed (false);
-    fileChooser.setFileFilter (new FileFilter () {
-      @Override
-      public boolean accept (final File f) {
-        return f.isDirectory () || f.getName ().matches (".*\\.(jks)");
-      }
-
-      @Override
-      public String getDescription () {
-        return "Java Keystores (*.jks)";
-      }
-    });
+    fileChooser.setFileFilter (new FileFilterJKS ());
 
     fileChooser.showOpenDialog (null);
 
     final File file = fileChooser.getSelectedFile ();
     if (file != null)
-      tfPath.setText (file.getAbsolutePath ());
+      m_aTFPath.setText (file.getAbsolutePath ());
   }
 }

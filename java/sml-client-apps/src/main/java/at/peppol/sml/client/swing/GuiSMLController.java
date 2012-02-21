@@ -40,6 +40,9 @@ package at.peppol.sml.client.swing;
 import java.net.URL;
 import java.util.UUID;
 
+import javax.annotation.Nonnull;
+import javax.annotation.concurrent.NotThreadSafe;
+
 import org.busdox.servicemetadata.locator._1.ServiceMetadataPublisherServiceType;
 import org.busdox.servicemetadata.managebusinessidentifierservice._1.BadRequestFault;
 import org.busdox.servicemetadata.managebusinessidentifierservice._1.InternalErrorFault;
@@ -52,36 +55,36 @@ import at.peppol.sml.client.ESMLObjectType;
 import at.peppol.sml.client.console.ManageParticipantsClient;
 import at.peppol.sml.client.console.ManageSMPClient;
 
-
 /**
  * @author PEPPOL.AT, BRZ, Jakob Frohnwieser
  */
+@NotThreadSafe
 public class GuiSMLController {
-  private static ManageSMPClient manageServiceMetadataClient;
-  private static ManageParticipantsClient manageParticipantIdentifierClient;
-  private static URL manageParticipantIdentifierEndpointAddress;
-  private static URL manageServiceMetadataEndpointAddress;
-  private static String smpID;
+  private static ManageSMPClient s_aSMPClient;
+  private static ManageParticipantsClient s_aParticipantClient;
+  private static URL s_aParticipantEndpointAddress;
+  private static URL s_aSMPClientEndpointAddress;
+  private static String s_sSMPID;
 
   public GuiSMLController () {}
 
-  public String handleCommand (final ESMLAction action, final String [] args) {
+  public String handleCommand (@Nonnull final ESMLAction eAction, final String [] args) {
     try {
-      switch (action.getCommand ()) {
+      switch (eAction.getCommand ()) {
         case CREATE:
-          return create (action.getObjectType (), args);
+          return _create (eAction.getObjectType (), args);
         case UPDATE:
-          return update (action.getObjectType (), args);
+          return _update (eAction.getObjectType (), args);
         case DELETE:
-          return delete (action.getObjectType (), args);
+          return _delete (eAction.getObjectType (), args);
         case READ:
-          return read (action.getObjectType (), args);
+          return _read (eAction.getObjectType (), args);
         case LIST:
-          return list (action.getObjectType (), args);
+          return _list (eAction.getObjectType (), args);
         case PREPARETOMIGRATE:
-          return prepareToMigrate (action.getObjectType (), args);
+          return _prepareToMigrate (eAction.getObjectType (), args);
         case MIGRATE:
-          return migrate (action.getObjectType (), args);
+          return _migrate (eAction.getObjectType (), args);
       }
     }
     catch (final Exception e) {
@@ -93,37 +96,37 @@ public class GuiSMLController {
     return "UNKOWN COMMAND GIVEN";
   }
 
-  private static String create (final ESMLObjectType eObject, final String [] args) throws Exception {
+  private static String _create (final ESMLObjectType eObject, final String [] args) throws Exception {
     if (args.length < 2) {
       return "Invalid number of args to create a new object.";
     }
 
     switch (eObject) {
       case PARTICIPANT:
-        getMPClient ().create (smpID, args, 0);
-        return "PARTICIPANT FOR SMP: " + smpID + " CREATED";
+        _getParticipantClient ().create (s_sSMPID, args, 0);
+        return "PARTICIPANT FOR SMP: " + s_sSMPID + " CREATED";
       case METADATA:
-        getSMClient ().create (smpID, args, 0);
-        return "METADATA FOR SMP: " + smpID + " CREATED";
+        _getSMPClient ().create (s_sSMPID, args, 0);
+        return "METADATA FOR SMP: " + s_sSMPID + " CREATED";
     }
 
     return "CANNOT DO CREATE ON " + eObject;
   }
 
-  private static String update (final ESMLObjectType eObject, final String [] args) throws Exception {
+  private static String _update (final ESMLObjectType eObject, final String [] args) throws Exception {
     if (args.length < 2) {
       return "Invalid number of args to update an object.";
     }
 
     switch (eObject) {
       case METADATA:
-        getSMClient ().update (smpID, args, 0);
-        return "METADATA FOR SMP " + smpID + " UPDATED";
+        _getSMPClient ().update (s_sSMPID, args, 0);
+        return "METADATA FOR SMP " + s_sSMPID + " UPDATED";
     }
     return "CANNOT DO UPDATE ON " + eObject;
   }
 
-  private static String delete (final ESMLObjectType eObject, final String [] args) throws Exception {
+  private static String _delete (final ESMLObjectType eObject, final String [] args) throws Exception {
     if (args.length < 2 && eObject.getName ().equals ("participant")) {
       return "Invalid number of args to delete.";
     }
@@ -134,24 +137,24 @@ public class GuiSMLController {
 
     switch (eObject) {
       case PARTICIPANT:
-        getMPClient ().delete (args, 0);
+        _getParticipantClient ().delete (args, 0);
         return "PARTICIPANT DELETED";
       case METADATA:
-        getSMClient ().delete (smpID, args, 0);
-        return "METADATA FOR SMP " + smpID + " DELETED";
+        _getSMPClient ().delete (s_sSMPID, args, 0);
+        return "METADATA FOR SMP " + s_sSMPID + " DELETED";
     }
     return "CANNOT DO DELETE ON " + eObject;
   }
 
-  private static String read (final ESMLObjectType eObject, final String [] args) throws Exception {
+  private static String _read (final ESMLObjectType eObject, final String [] args) throws Exception {
     if (args.length < 0) {
       return "Invalid number of args to list.";
     }
     switch (eObject) {
       case METADATA:
-        final ServiceMetadataPublisherServiceType aSMP = getSMClient ().read (smpID, args, 0);
+        final ServiceMetadataPublisherServiceType aSMP = _getSMPClient ().read (s_sSMPID, args, 0);
         return "METADATA FOR SMP " +
-               smpID +
+               s_sSMPID +
                " READ: physical address=" +
                aSMP.getPublisherEndpoint ().getPhysicalAddress () +
                "; logical address=" +
@@ -160,16 +163,16 @@ public class GuiSMLController {
     return "CANNOT DO READ ON " + eObject;
   }
 
-  private static String list (final ESMLObjectType eObject, final String [] args) throws Exception {
+  private static String _list (final ESMLObjectType eObject, final String [] args) throws Exception {
     switch (eObject) {
       case PARTICIPANT:
-        getMPClient ().list (smpID, args, 0);
-        return "PARTICIPANT FOR SMP: " + smpID + " LISTED";
+        _getParticipantClient ().list (s_sSMPID, args, 0);
+        return "PARTICIPANT FOR SMP: " + s_sSMPID + " LISTED";
     }
     return "CANNOT DO LIST ON " + eObject;
   }
 
-  private static String prepareToMigrate (final ESMLObjectType eObject, final String [] args) throws BadRequestFault,
+  private static String _prepareToMigrate (final ESMLObjectType eObject, final String [] args) throws BadRequestFault,
                                                                                              InternalErrorFault,
                                                                                              NotFoundFault,
                                                                                              UnauthorizedFault {
@@ -179,13 +182,13 @@ public class GuiSMLController {
 
     switch (eObject) {
       case PARTICIPANT:
-        final UUID aUUID = getMPClient ().prepareToMigrate (smpID, args, 0);
-        return "PARTICIPANT FOR SMP: " + smpID + " PREPARED TO MIGRATE. Migration code = " + aUUID;
+        final UUID aUUID = _getParticipantClient ().prepareToMigrate (s_sSMPID, args, 0);
+        return "PARTICIPANT FOR SMP: " + s_sSMPID + " PREPARED TO MIGRATE. Migration code = " + aUUID;
     }
     return "CANNOT DO PREPARETOMIGRATE ON " + eObject;
   }
 
-  private static String migrate (final ESMLObjectType eObject, final String [] args) throws BadRequestFault,
+  private static String _migrate (final ESMLObjectType eObject, final String [] args) throws BadRequestFault,
                                                                                     InternalErrorFault,
                                                                                     NotFoundFault,
                                                                                     UnauthorizedFault {
@@ -195,52 +198,52 @@ public class GuiSMLController {
 
     switch (eObject) {
       case PARTICIPANT:
-        getMPClient ().migrate (smpID, args, 0);
-        return "PARTICIPANT FOR SMP: " + smpID + " MIGRATED";
+        _getParticipantClient ().migrate (s_sSMPID, args, 0);
+        return "PARTICIPANT FOR SMP: " + s_sSMPID + " MIGRATED";
     }
     return "CANNOT DO MIGRATE ON " + eObject;
   }
 
-  private static ManageSMPClient getSMClient () {
-    if (manageServiceMetadataClient == null)
-      manageServiceMetadataClient = new ManageSMPClient (manageServiceMetadataEndpointAddress);
-    return manageServiceMetadataClient;
+  private static ManageSMPClient _getSMPClient () {
+    if (s_aSMPClient == null)
+      s_aSMPClient = new ManageSMPClient (s_aSMPClientEndpointAddress);
+    return s_aSMPClient;
   }
 
-  private static ManageParticipantsClient getMPClient () {
-    if (manageParticipantIdentifierClient == null)
-      manageParticipantIdentifierClient = new ManageParticipantsClient (manageParticipantIdentifierEndpointAddress);
-    return manageParticipantIdentifierClient;
-  }
-
-  /**
-   * @return the m_aManageParticipantIdentifierEndpointAddress
-   */
-  public URL getManageParticipantIdentifierEndpointAddress () {
-    return manageParticipantIdentifierEndpointAddress;
+  private static ManageParticipantsClient _getParticipantClient () {
+    if (s_aParticipantClient == null)
+      s_aParticipantClient = new ManageParticipantsClient (s_aParticipantEndpointAddress);
+    return s_aParticipantClient;
   }
 
   /**
-   * @return the m_aManageServiceMetadataEndpointAddress
+   * @return the manageParticipantIdentifierEndpointAddress
    */
-  public URL getManageServiceMetadataEndpointAddress () {
-    return manageServiceMetadataEndpointAddress;
+  public static URL getManageParticipantIdentifierEndpointAddress () {
+    return s_aParticipantEndpointAddress;
+  }
+
+  /**
+   * @return the manageServiceMetadataEndpointAddress
+   */
+  public static URL getManageServiceMetadataEndpointAddress () {
+    return s_aSMPClientEndpointAddress;
   }
 
   /**
    * @param aSML
    *        the sHost to set
    */
-  public void setManageServiceMetadataEndpointAddress (final ISMLInfo aSML) {
-    manageParticipantIdentifierEndpointAddress = aSML.getManageParticipantIdentifierEndpointAddress ();
-    manageServiceMetadataEndpointAddress = aSML.getManageServiceMetaDataEndpointAddress ();
+  public static void setSMLInfo (final ISMLInfo aSML) {
+    s_aParticipantEndpointAddress = aSML.getManageParticipantIdentifierEndpointAddress ();
+    s_aSMPClientEndpointAddress = aSML.getManageServiceMetaDataEndpointAddress ();
   }
 
   /**
-   * @param sSmpID
+   * @param sSMPID
    *        the smpID to set
    */
-  public void setSmpID (final String sSmpID) {
-    smpID = sSmpID;
+  public static void setSMPID (final String sSMPID) {
+    s_sSMPID = sSMPID;
   }
 }

@@ -35,36 +35,26 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.sml.client.swing;
+package at.peppol.sml.client.swing.utils;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.SystemColor;
+import javax.annotation.Nonnull;
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import at.peppol.commons.sml.ESML;
+import at.peppol.commons.sml.SimpleSMLInfo;
 
 /**
- * @author PEPPOL.AT, BRZ, Jakob Frohnwieser
+ * Wrapper around an {@link ESML} for a nicer toString :(
+ * 
+ * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public class StatusBar extends JPanel {
-  private JLabel m_aLabelMessage;
-
-  public StatusBar () {
-    _init ();
+public final class WrappedSMLInfo extends SimpleSMLInfo {
+  public WrappedSMLInfo (@Nonnull final ESML eSML) {
+    super (eSML);
   }
 
-  private void _init () {
-    setLayout (new BorderLayout ());
-    setPreferredSize (new Dimension (10, 23));
-
-    m_aLabelMessage = new JLabel ();
-    add (m_aLabelMessage, BorderLayout.WEST);
-
-    setBackground (SystemColor.control);
-  }
-
-  public void showMessage (final String message) {
-    m_aLabelMessage.setText (message);
+  @Override
+  public String toString () {
+    return getManagementHostName () +
+           (requiresClientCertificate () ? " (requires client certificate)" : " (only for BRZ internal usage)");
   }
 }
