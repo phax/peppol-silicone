@@ -84,10 +84,10 @@ final class ConfigPanelConfig extends JPanel {
     add (aLabelSMPID);
     add (m_aTFSMPID, "width 100%,wrap");
 
-    loadData ();
+    initData ();
   }
 
-  public void loadData () {
+  public void initData () {
     m_aCBSMLHost.setSelectedItem (AppProperties.getInstance ().getSMLInfo ());
     m_aTFSMPID.setText (AppProperties.getInstance ().getSMPID ());
   }

@@ -37,16 +37,21 @@
  */
 package at.peppol.sml.client;
 
+import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
+
+import com.phloc.commons.annotations.Nonempty;
 
 @Immutable
 public final class SMLActionParameter {
   private final String m_sDescription;
 
-  public SMLActionParameter (final String sDescription) {
+  public SMLActionParameter (@Nonnull @Nonempty final String sDescription) {
     m_sDescription = sDescription;
   }
 
+  @Nonnull
+  @Nonempty
   public String getDescription () {
     return m_sDescription;
   }

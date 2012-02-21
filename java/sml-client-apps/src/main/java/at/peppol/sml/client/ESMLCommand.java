@@ -37,9 +37,15 @@
  */
 package at.peppol.sml.client;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.string.StringHelper;
+
 /**
  * Enum with all client commands.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public enum ESMLCommand {
@@ -53,18 +59,22 @@ public enum ESMLCommand {
 
   private String m_sName;
 
-  private ESMLCommand (final String sName) {
+  private ESMLCommand (@Nonnull @Nonempty final String sName) {
     m_sName = sName;
   }
 
+  @Nonnull
+  @Nonempty
   public String getName () {
     return m_sName;
   }
 
-  public static ESMLCommand getFromNameOrNull (final String sName) {
-    for (final ESMLCommand eCC : values ())
-      if (eCC.getName ().equalsIgnoreCase (sName))
-        return eCC;
+  @Nullable
+  public static ESMLCommand getFromNameOrNull (@Nullable final String sName) {
+    if (StringHelper.hasText (sName))
+      for (final ESMLCommand eCC : values ())
+        if (eCC.getName ().equalsIgnoreCase (sName))
+          return eCC;
     return null;
   }
 }

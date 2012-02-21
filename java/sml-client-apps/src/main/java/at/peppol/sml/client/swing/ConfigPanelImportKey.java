@@ -55,7 +55,7 @@ import at.peppol.sml.client.swing.utils.FileFilterJKS;
 /**
  * @author PEPPOL.AT, BRZ, Jakob Frohnwieser
  */
-final class ConfigPanelImportKey extends JPanel implements ActionListener {
+final class ConfigPanelImportKey extends JPanel {
   private final JTextField m_aTFPath;
   private final JTextField m_aTFPassword;
   private final JButton m_aBtnBrowse;
@@ -71,7 +71,17 @@ final class ConfigPanelImportKey extends JPanel implements ActionListener {
     final JLabel lPassword = new JLabel ("Key store password: ");
     m_aTFPassword = new JPasswordField (15);
     m_aBtnBrowse = new JButton ("Browse");
-    m_aBtnBrowse.addActionListener (this);
+    m_aBtnBrowse.addActionListener (new ActionListener () {
+      public void actionPerformed (final ActionEvent e) {
+        final JFileChooser aFileChooser = new JFileChooser ();
+        aFileChooser.setAcceptAllFileFilterUsed (false);
+        aFileChooser.setFileFilter (new FileFilterJKS ());
+        aFileChooser.showOpenDialog (null);
+        final File aSelectedFile = aFileChooser.getSelectedFile ();
+        if (aSelectedFile != null)
+          m_aTFPath.setText (aSelectedFile.getAbsolutePath ());
+      }
+    });
 
     add (lPath);
     add (m_aTFPath, "width 100%");
@@ -79,33 +89,15 @@ final class ConfigPanelImportKey extends JPanel implements ActionListener {
     add (lPassword);
     add (m_aTFPassword, "span 2,width 100%,wrap");
 
-    loadData ();
+    initData ();
   }
 
-  public void actionPerformed (final ActionEvent e) {
-    if (e.getActionCommand ().equals (m_aBtnBrowse.getText ())) {
-      _getPath ();
-    }
-  }
-
-  public void loadData () {
+  public void initData () {
     m_aTFPath.setText (AppProperties.getInstance ().getKeyStorePath ());
     m_aTFPassword.setText (AppProperties.getInstance ().getKeyStorePassword ());
   }
 
   public void saveData () {
     MainFrame.setKeyStore (m_aTFPath.getText (), m_aTFPassword.getText ());
-  }
-
-  private void _getPath () {
-    final JFileChooser fileChooser = new JFileChooser ();
-    fileChooser.setAcceptAllFileFilterUsed (false);
-    fileChooser.setFileFilter (new FileFilterJKS ());
-
-    fileChooser.showOpenDialog (null);
-
-    final File file = fileChooser.getSelectedFile ();
-    if (file != null)
-      m_aTFPath.setText (file.getAbsolutePath ());
   }
 }
