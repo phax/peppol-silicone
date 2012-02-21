@@ -88,7 +88,7 @@ final class MainFrame extends JFrame {
     m_aStatusBar = new MainStatusBar ();
 
     m_aContentPanel = new JPanel (new MigLayout (new LC ().fill ().insets ("0")));
-    setContent (EMainPanel.CONFIG_PANELS);
+    setConfigContent ();
 
     add (m_aContentPanel, "width 100%,wrap");
     add (m_aStatusBar, "dock south");
@@ -96,20 +96,15 @@ final class MainFrame extends JFrame {
     pack ();
   }
 
-  public void setContent (@Nonnull final EMainPanel eMainPanel) {
-    JPanel aPanel;
-    switch (eMainPanel) {
-      case CONFIG_PANELS:
-        aPanel = new MainContentPanelConfig (this);
-        break;
-      case ACTION_PANEL:
-        aPanel = new MainContentPanelAction (this);
-        break;
-      default:
-        throw new IllegalStateException ();
-    }
+  public void setConfigContent () {
     m_aContentPanel.removeAll ();
-    m_aContentPanel.add (aPanel, "width 100%");
+    m_aContentPanel.add (new MainContentPanelConfig (this), "width 100%");
+    m_aContentPanel.updateUI ();
+  }
+
+  public void setActionContent () {
+    m_aContentPanel.removeAll ();
+    m_aContentPanel.add (new MainContentPanelAction (this), "width 100%");
     m_aContentPanel.updateUI ();
   }
 
@@ -133,7 +128,7 @@ final class MainFrame extends JFrame {
       HttpsURLConnection.setDefaultSSLSocketFactory (aSSLCtx.getSocketFactory ());
     }
     catch (final Exception ex) {
-      MainStatusBar.setStatus (ex.getMessage ());
+      MainStatusBar.setStatusError (ex.getMessage ());
     }
   }
 
@@ -142,17 +137,15 @@ final class MainFrame extends JFrame {
 
     final AppProperties aAP = AppProperties.getInstance ();
     if (aAP.getSMLInfo () == null) {
-      MainStatusBar.setStatus ("Error.");
+      MainStatusBar.setStatusError ("No SML Hostname set");
       return "No SML Hostname set.";
     }
-    GuiSMLController.setSMLInfo (aAP.getSMLInfo ());
 
     if (StringHelper.hasNoText (aAP.getSMPID ())) {
-      MainStatusBar.setStatus ("Error.");
+      MainStatusBar.setStatusError ("No SMP ID set");
       return "No SMP ID set.";
     }
-    GuiSMLController.setSMPID (aAP.getSMPID ());
 
-    return GuiSMLController.handleCommand (eAction, aParams);
+    return GuiSMLController.handleCommand (aAP.getSMLInfo (), aAP.getSMPID (), eAction, aParams);
   }
 }

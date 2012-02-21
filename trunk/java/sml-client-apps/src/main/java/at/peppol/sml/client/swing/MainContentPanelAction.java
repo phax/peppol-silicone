@@ -60,7 +60,7 @@ final class MainContentPanelAction extends JPanel {
     final JButton aBtnSettings = new JButton ("<< Settings");
     aBtnSettings.addActionListener (new ActionListener () {
       public void actionPerformed (final ActionEvent e) {
-        aMainFrame.setContent (EMainPanel.CONFIG_PANELS);
+        aMainFrame.setConfigContent ();
         MainStatusBar.setStatus ("");
       }
     });
@@ -76,7 +76,7 @@ final class MainContentPanelAction extends JPanel {
           MainStatusBar.setStatus ("Executed action " + eAction + ".");
         }
         catch (final Exception ex) {
-          MainStatusBar.setStatus ("Error executing action" + eAction + ".");
+          MainStatusBar.setStatusError ("Error executing action" + eAction + ".");
           throw new RuntimeException ("Error executing action " + eAction + ": " + ex);
         }
       }

@@ -47,6 +47,7 @@ import at.peppol.commons.sml.ISMLInfo;
 import at.peppol.sml.client.swing.utils.WrappedSMLInfo;
 
 import com.phloc.commons.state.ESuccess;
+import com.phloc.commons.string.StringHelper;
 
 final class AppProperties {
   private static final class SingletonHolder {
@@ -61,7 +62,7 @@ final class AppProperties {
   private String m_sSMPID;
   private String m_sKeyStorePath;
   private String m_sKeyStorePassword;
-  private File m_aPropertiesPath = new File (DEFAULT_PROPERTIES_PATH, DEFAULT_PROPERTIES_NAME);
+  private File m_aPropertiesFile = new File (DEFAULT_PROPERTIES_PATH, DEFAULT_PROPERTIES_NAME);
   private final PropertiesReader m_aPropsReader = new PropertiesReader ();
   private boolean m_bPropertiesEnabled = DEFAULT_PROPERTIES_ENABLED;
 
@@ -74,7 +75,7 @@ final class AppProperties {
 
   @Nonnull
   public ESuccess readProperties () {
-    if (m_aPropsReader.readProperties (m_aPropertiesPath).isFailure ())
+    if (m_aPropsReader.readProperties (m_aPropertiesFile).isFailure ())
       return ESuccess.FAILURE;
     m_aSMLInfo = null;
     final String sHostName = m_aPropsReader.getHostname ();
@@ -92,12 +93,12 @@ final class AppProperties {
   @Nonnull
   public ESuccess writeProperties () {
     if (m_aSMLInfo == null)
-      throw new IllegalStateException ("No SML hostname set.");
+      return ESuccess.FAILURE;
     m_aPropsReader.setHostName (m_aSMLInfo.getManagementHostName ());
     m_aPropsReader.setSMPID (m_sSMPID);
     m_aPropsReader.setKeyStorePath (m_sKeyStorePath);
     m_aPropsReader.setKeyStorePassword (m_sKeyStorePassword);
-    return m_aPropsReader.writeProperties (m_aPropertiesPath);
+    return m_aPropsReader.writeProperties (m_aPropertiesFile);
   }
 
   public void setSMLInfo (final ISMLInfo aSMLInfo) {
@@ -133,12 +134,13 @@ final class AppProperties {
     return m_sKeyStorePassword;
   }
 
-  public File getPropertiesPath () {
-    return m_aPropertiesPath;
+  @Nonnull
+  public File getPropertiesFilename () {
+    return m_aPropertiesFile;
   }
 
-  public void setPropertiesPath (final String sPropertiesPath) {
-    m_aPropertiesPath = new File (sPropertiesPath);
+  public void setPropertiesFilename (final String sPropertiesPath) {
+    m_aPropertiesFile = new File (sPropertiesPath);
   }
 
   public boolean isPropertiesEnabled () {
@@ -154,5 +156,12 @@ final class AppProperties {
     setSMPID ("");
     setKeyStorePath (null);
     setKeyStorePassword (null);
+  }
+
+  public boolean areAllSet () {
+    return getSMLInfo () != null &&
+           StringHelper.hasText (getSMPID ()) &&
+           StringHelper.hasText (getKeyStorePath ()) &&
+           StringHelper.hasText (getKeyStorePassword ());
   }
 }

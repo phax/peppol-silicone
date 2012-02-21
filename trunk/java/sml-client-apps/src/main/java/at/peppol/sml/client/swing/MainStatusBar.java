@@ -37,12 +37,13 @@
  */
 package at.peppol.sml.client.swing;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.SystemColor;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.BevelBorder;
+
+import net.miginfocom.swing.MigLayout;
 
 /**
  * @author PEPPOL.AT, BRZ, Jakob Frohnwieser
@@ -53,15 +54,19 @@ final class MainStatusBar extends JPanel {
   private final JLabel m_aLabelMessage;
 
   public MainStatusBar () {
-    setLayout (new BorderLayout ());
+    setLayout (new MigLayout ());
     setPreferredSize (new Dimension (10, 23));
+    setBorder (new BevelBorder (BevelBorder.LOWERED));
     m_aLabelMessage = new JLabel ();
-    add (m_aLabelMessage, BorderLayout.WEST);
-    setBackground (SystemColor.control);
+    add (m_aLabelMessage, "width 100%");
     s_aInstance = this;
   }
 
   public static void setStatus (final String sMessage) {
     s_aInstance.m_aLabelMessage.setText (sMessage);
+  }
+
+  public static void setStatusError (final String sMessage) {
+    setStatus ("Error: " + sMessage);
   }
 }

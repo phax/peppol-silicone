@@ -41,6 +41,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import net.miginfocom.swing.MigLayout;
@@ -68,14 +69,25 @@ final class MainContentPanelConfig extends JPanel {
         m_aConfigPanel.saveData ();
         m_aImportKeyPanel.saveData ();
         m_aPropertiesPanel.saveData ();
-        aMainFrame.setContent (EMainPanel.ACTION_PANEL);
-        MainStatusBar.setStatus ("Configuration saved");
+        MainStatusBar.setStatus ("Setting saved");
+
+        if (AppProperties.getInstance ().areAllSet ()) {
+          // Switch to action panel
+          aMainFrame.setActionContent ();
+        }
+        else {
+          // Not all fields are set
+          JOptionPane.showMessageDialog (aMainFrame,
+                                         "Not all fields are filled. Please ensure that SML, SMP-ID and keystore parameters are set!",
+                                         "Error",
+                                         JOptionPane.ERROR_MESSAGE);
+          MainStatusBar.setStatusError ("Not all fields are filled.");
+        }
       }
     });
     add (aBtnNext, "gapright 20,align right,wrap");
 
-    m_aConfigPanel.loadData ();
-    m_aImportKeyPanel.loadData ();
-    m_aPropertiesPanel.loadData ();
+    m_aConfigPanel.initData ();
+    m_aImportKeyPanel.initData ();
   }
 }

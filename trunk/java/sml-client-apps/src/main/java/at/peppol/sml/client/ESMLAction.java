@@ -44,15 +44,15 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
 public enum ESMLAction {
-  A1 (ESMLObjectType.PARTICIPANT, ESMLCommand.CREATE, new SMLActionParameter ("identifier value"), new SMLActionParameter ("identifier scheme")),
-  A2 (ESMLObjectType.PARTICIPANT, ESMLCommand.DELETE, new SMLActionParameter ("identifier value"), new SMLActionParameter ("identifier scheme")),
-  A3 (ESMLObjectType.PARTICIPANT, ESMLCommand.LIST),
-  A4 (ESMLObjectType.PARTICIPANT, ESMLCommand.PREPARETOMIGRATE, new SMLActionParameter ("identifier value"), new SMLActionParameter ("identifier scheme")),
-  A5 (ESMLObjectType.PARTICIPANT, ESMLCommand.MIGRATE, new SMLActionParameter ("identifier value"), new SMLActionParameter ("identifier scheme"), new SMLActionParameter ("migration code")),
-  A6 (ESMLObjectType.METADATA, ESMLCommand.CREATE, new SMLActionParameter ("physical address"), new SMLActionParameter ("logical address")),
-  A7 (ESMLObjectType.METADATA, ESMLCommand.UPDATE, new SMLActionParameter ("physical address"), new SMLActionParameter ("logical address")),
-  A8 (ESMLObjectType.METADATA, ESMLCommand.DELETE),
-  A9 (ESMLObjectType.METADATA, ESMLCommand.READ);
+  PARTICIPANT_CREATE (ESMLObjectType.PARTICIPANT, ESMLCommand.CREATE, new SMLActionParameter ("identifier value"), new SMLActionParameter ("identifier scheme")),
+  PARTICIPANT_DELETE (ESMLObjectType.PARTICIPANT, ESMLCommand.DELETE, new SMLActionParameter ("identifier value"), new SMLActionParameter ("identifier scheme")),
+  PARTICIPANT_LIST (ESMLObjectType.PARTICIPANT, ESMLCommand.LIST),
+  PARTICIPANT_PREPARETOMIGRATE (ESMLObjectType.PARTICIPANT, ESMLCommand.PREPARETOMIGRATE, new SMLActionParameter ("identifier value"), new SMLActionParameter ("identifier scheme")),
+  PARTICIPANT_MIGRATE (ESMLObjectType.PARTICIPANT, ESMLCommand.MIGRATE, new SMLActionParameter ("identifier value"), new SMLActionParameter ("identifier scheme"), new SMLActionParameter ("migration code")),
+  SMP_CREATE (ESMLObjectType.METADATA, ESMLCommand.CREATE, new SMLActionParameter ("physical address (IP-address)"), new SMLActionParameter ("logical address (http://...)")),
+  SMP_UPDATE (ESMLObjectType.METADATA, ESMLCommand.UPDATE, new SMLActionParameter ("physical address (IP-address)"), new SMLActionParameter ("logical address (http://...)")),
+  SMP_DELETE (ESMLObjectType.METADATA, ESMLCommand.DELETE),
+  SMP_LIST (ESMLObjectType.METADATA, ESMLCommand.READ);
 
   private ESMLObjectType m_eObjectType;
   private ESMLCommand m_eCommand;

@@ -44,16 +44,14 @@ import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import org.busdox.servicemetadata.locator._1.ServiceMetadataPublisherServiceType;
-import org.busdox.servicemetadata.managebusinessidentifierservice._1.BadRequestFault;
-import org.busdox.servicemetadata.managebusinessidentifierservice._1.InternalErrorFault;
-import org.busdox.servicemetadata.managebusinessidentifierservice._1.NotFoundFault;
-import org.busdox.servicemetadata.managebusinessidentifierservice._1.UnauthorizedFault;
 
 import at.peppol.commons.sml.ISMLInfo;
 import at.peppol.sml.client.ESMLAction;
 import at.peppol.sml.client.ESMLObjectType;
 import at.peppol.sml.client.console.ManageParticipantsClient;
 import at.peppol.sml.client.console.ManageSMPClient;
+
+import com.phloc.commons.annotations.Nonempty;
 
 /**
  * @author PEPPOL.AT, BRZ, Jakob Frohnwieser
@@ -68,7 +66,28 @@ final class GuiSMLController {
 
   private GuiSMLController () {}
 
-  public static String handleCommand (@Nonnull final ESMLAction eAction, final String [] aArgs) {
+  private static ManageSMPClient _getSMPClient () {
+    if (s_aSMPClient == null)
+      s_aSMPClient = new ManageSMPClient (s_aSMPClientEndpointAddress);
+    return s_aSMPClient;
+  }
+
+  private static ManageParticipantsClient _getParticipantClient () {
+    if (s_aParticipantClient == null)
+      s_aParticipantClient = new ManageParticipantsClient (s_aParticipantEndpointAddress);
+    return s_aParticipantClient;
+  }
+
+  public static String handleCommand (@Nonnull final ISMLInfo aSML,
+                                      @Nonnull @Nonempty final String sSMPID,
+                                      @Nonnull final ESMLAction eAction,
+                                      @Nonnull final String [] aArgs) {
+    s_aSMPClient = null;
+    s_aParticipantClient = null;
+    s_aParticipantEndpointAddress = aSML.getManageParticipantIdentifierEndpointAddress ();
+    s_aSMPClientEndpointAddress = aSML.getManageServiceMetaDataEndpointAddress ();
+    s_sSMPID = sSMPID;
+
     try {
       switch (eAction.getCommand ()) {
         case CREATE:
@@ -90,16 +109,15 @@ final class GuiSMLController {
     catch (final Exception e) {
       e.printStackTrace ();
 
-      return "AN ERROR OCCURED:\n  " + e.getMessage ();
+      return "AN INTERNAL ERROR OCCURED:\n  " + e.getMessage ();
     }
 
     return "UNKOWN COMMAND GIVEN";
   }
 
   private static String _create (final ESMLObjectType eObject, final String [] args) throws Exception {
-    if (args.length < 2) {
+    if (args.length < 2)
       return "Invalid number of args to create a new object.";
-    }
 
     switch (eObject) {
       case PARTICIPANT:
@@ -114,9 +132,8 @@ final class GuiSMLController {
   }
 
   private static String _update (final ESMLObjectType eObject, final String [] args) throws Exception {
-    if (args.length < 2) {
+    if (args.length < 2)
       return "Invalid number of args to update an object.";
-    }
 
     switch (eObject) {
       case METADATA:
@@ -127,13 +144,8 @@ final class GuiSMLController {
   }
 
   private static String _delete (final ESMLObjectType eObject, final String [] args) throws Exception {
-    if (args.length < 2 && eObject.getName ().equals ("participant")) {
+    if (args.length < 2 && eObject.getName ().equals ("participant"))
       return "Invalid number of args to delete.";
-    }
-    else
-      if (args.length < 0 && eObject.getName ().equals ("metadata")) {
-        return "Invalid number of args to delete.";
-      }
 
     switch (eObject) {
       case PARTICIPANT:
@@ -147,9 +159,6 @@ final class GuiSMLController {
   }
 
   private static String _read (final ESMLObjectType eObject, final String [] args) throws Exception {
-    if (args.length < 0) {
-      return "Invalid number of args to list.";
-    }
     switch (eObject) {
       case METADATA:
         final ServiceMetadataPublisherServiceType aSMP = _getSMPClient ().read (s_sSMPID, args, 0);
@@ -172,13 +181,9 @@ final class GuiSMLController {
     return "CANNOT DO LIST ON " + eObject;
   }
 
-  private static String _prepareToMigrate (final ESMLObjectType eObject, final String [] args) throws BadRequestFault,
-                                                                                              InternalErrorFault,
-                                                                                              NotFoundFault,
-                                                                                              UnauthorizedFault {
-    if (args.length < 2) {
+  private static String _prepareToMigrate (final ESMLObjectType eObject, final String [] args) throws Exception {
+    if (args.length < 2)
       return "Invalid number of args to prepare to migrate.";
-    }
 
     switch (eObject) {
       case PARTICIPANT:
@@ -188,13 +193,9 @@ final class GuiSMLController {
     return "CANNOT DO PREPARETOMIGRATE ON " + eObject;
   }
 
-  private static String _migrate (final ESMLObjectType eObject, final String [] args) throws BadRequestFault,
-                                                                                     InternalErrorFault,
-                                                                                     NotFoundFault,
-                                                                                     UnauthorizedFault {
-    if (args.length < 3) {
+  private static String _migrate (final ESMLObjectType eObject, final String [] args) throws Exception {
+    if (args.length < 3)
       return "Invalid number of args to prepare to migrate.";
-    }
 
     switch (eObject) {
       case PARTICIPANT:
@@ -202,48 +203,5 @@ final class GuiSMLController {
         return "PARTICIPANT FOR SMP: " + s_sSMPID + " MIGRATED";
     }
     return "CANNOT DO MIGRATE ON " + eObject;
-  }
-
-  private static ManageSMPClient _getSMPClient () {
-    if (s_aSMPClient == null)
-      s_aSMPClient = new ManageSMPClient (s_aSMPClientEndpointAddress);
-    return s_aSMPClient;
-  }
-
-  private static ManageParticipantsClient _getParticipantClient () {
-    if (s_aParticipantClient == null)
-      s_aParticipantClient = new ManageParticipantsClient (s_aParticipantEndpointAddress);
-    return s_aParticipantClient;
-  }
-
-  /**
-   * @return the manageParticipantIdentifierEndpointAddress
-   */
-  public static URL getManageParticipantIdentifierEndpointAddress () {
-    return s_aParticipantEndpointAddress;
-  }
-
-  /**
-   * @return the manageServiceMetadataEndpointAddress
-   */
-  public static URL getManageServiceMetadataEndpointAddress () {
-    return s_aSMPClientEndpointAddress;
-  }
-
-  /**
-   * @param aSML
-   *        the sHost to set
-   */
-  public static void setSMLInfo (final ISMLInfo aSML) {
-    s_aParticipantEndpointAddress = aSML.getManageParticipantIdentifierEndpointAddress ();
-    s_aSMPClientEndpointAddress = aSML.getManageServiceMetaDataEndpointAddress ();
-  }
-
-  /**
-   * @param sSMPID
-   *        the smpID to set
-   */
-  public static void setSMPID (final String sSMPID) {
-    s_sSMPID = sSMPID;
   }
 }
