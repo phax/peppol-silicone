@@ -46,8 +46,8 @@ public class SwingMain {
   public static void main (final String [] args) {
     try {
       UIManager.setLookAndFeel (UIManager.getSystemLookAndFeelClassName ());
-      final MainFrame gui = new MainFrame ();
-      gui.setVisible (true);
+      final MainFrame aMainFrame = new MainFrame ();
+      aMainFrame.setVisible (true);
     }
     catch (final Exception e) {
       System.err.println ("Error showing mainframe");

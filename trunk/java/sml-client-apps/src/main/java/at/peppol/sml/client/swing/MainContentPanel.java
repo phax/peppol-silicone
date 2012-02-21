@@ -44,12 +44,16 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import net.miginfocom.layout.AC;
+import net.miginfocom.layout.LC;
 import net.miginfocom.swing.MigLayout;
+import at.peppol.sml.client.ESMLAction;
 import at.peppol.sml.client.swing.MainFrame.EPanel;
 import at.peppol.sml.client.swing.utils.FileFilterProperties;
 
@@ -58,13 +62,13 @@ import at.peppol.sml.client.swing.utils.FileFilterProperties;
  * 
  * @author PEPPOL.AT, BRZ, Jakob Frohnwieser
  */
-public class MainContentPanel extends JPanel implements ActionListener, ItemListener {
+final class MainContentPanel extends JPanel {
   private final MainFrame m_aMainFrame;
   private JButton m_aBtnNext, m_aBtnSettings, m_aBtnAction, m_aBtnBrowse;
   private ConfigPanel m_aConfigPanel;
   private ImportKeyPanel m_aImportKeyPanel;
   private ActionPanel m_aActionPanel;
-  private JTextField m_aTFPath;
+  private JTextField m_aTFPropertiesPath;
   private Checkbox m_aCBEnable;
 
   public MainContentPanel (final MainFrame aMainFrame) {
@@ -72,21 +76,71 @@ public class MainContentPanel extends JPanel implements ActionListener, ItemList
     setLayout (new MigLayout ("debug,insets 0,fill"));
   }
 
-  public void init () {
+  private void _init () {
     // insets 0 important to avoid control resizing
     m_aBtnNext = new JButton ("Next  >");
-    m_aBtnNext.addActionListener (this);
+    m_aBtnNext.addActionListener (new ActionListener () {
+      public void actionPerformed (final ActionEvent e) {
+        if (m_aConfigPanel != null)
+          m_aConfigPanel.saveData ();
+        if (m_aImportKeyPanel != null)
+          m_aImportKeyPanel.save ();
+
+        AppProperties.getInstance ().setPropertiesPath (m_aTFPropertiesPath.getText ());
+
+        if (m_aCBEnable.getState ())
+          AppProperties.getInstance ().writeProperties ();
+
+        m_aMainFrame.setContent (EPanel.ACTION_PANEL);
+        MainStatusBar.setStatus ("Configuration saved");
+      }
+    });
     m_aBtnAction = new JButton ("Execute");
-    m_aBtnAction.addActionListener (this);
+    m_aBtnAction.addActionListener (new ActionListener () {
+      public void actionPerformed (final ActionEvent e) {
+        final ESMLAction eAction = m_aActionPanel.getSelectedAction ();
+        MainStatusBar.setStatus ("Executing action " + eAction + ".");
+
+        try {
+          m_aActionPanel.executeAction ();
+          MainStatusBar.setStatus ("Executed action " + eAction + ".");
+        }
+        catch (final Exception ex) {
+          MainStatusBar.setStatus ("Error executing action" + eAction + ".");
+          throw new RuntimeException ("Error executing action " + eAction + ": " + ex);
+        }
+      }
+    });
     m_aBtnSettings = new JButton ("<  Settings");
-    m_aBtnSettings.addActionListener (this);
+    m_aBtnSettings.addActionListener (new ActionListener () {
+      public void actionPerformed (final ActionEvent e) {
+        m_aMainFrame.setContent (EPanel.CONFIG_PANELS);
+        MainStatusBar.setStatus ("");
+      }
+    });
 
     m_aCBEnable = new Checkbox ("Use properties: ", AppProperties.getInstance ().isPropertiesEnabled ());
-    m_aCBEnable.addItemListener (this);
-
-    m_aTFPath = new JTextField (30);
+    m_aCBEnable.addItemListener (new ItemListener () {
+      public void itemStateChanged (final ItemEvent e) {
+        _setPropertiesEnabled (m_aCBEnable.getState ());
+      }
+    });
+    m_aTFPropertiesPath = new JTextField (30);
     m_aBtnBrowse = new JButton ("Browse");
-    m_aBtnBrowse.addActionListener (this);
+    m_aBtnBrowse.addActionListener (new ActionListener () {
+      public void actionPerformed (final ActionEvent e) {
+        final JFileChooser fileChooser = new JFileChooser ();
+        fileChooser.setAcceptAllFileFilterUsed (false);
+        fileChooser.setFileFilter (new FileFilterProperties ());
+        fileChooser.showOpenDialog (null);
+        final File aSelectedFile = fileChooser.getSelectedFile ();
+        if (aSelectedFile != null) {
+          m_aTFPropertiesPath.setText (aSelectedFile.getAbsolutePath ());
+          AppProperties.getInstance ().setPropertiesPath (aSelectedFile.getAbsolutePath ());
+          _loadFileData ();
+        }
+      }
+    });
 
     if (m_aConfigPanel != null || m_aImportKeyPanel != null) {
       if (m_aConfigPanel != null)
@@ -95,10 +149,17 @@ public class MainContentPanel extends JPanel implements ActionListener, ItemList
       if (m_aImportKeyPanel != null)
         add (m_aImportKeyPanel, "width 100%,wrap");
 
-      add (m_aCBEnable, "gaptop 15, split 3");
-      add (m_aTFPath, "gaptop 15, width 100%, split 2");
-      add (m_aBtnBrowse, "gaptop 15, right, wrap");
-      add (m_aBtnNext, "gaptop 20, align right, wrap");
+      final JPanel aPropsPanel = new JPanel ();
+      aPropsPanel.setLayout (new MigLayout (new LC ().fill (),
+                                            new AC ().size ("label").gap ().align ("left"),
+                                            new AC ()));
+      aPropsPanel.setBorder (BorderFactory.createTitledBorder ("Client properties"));
+      aPropsPanel.add (m_aCBEnable);
+      aPropsPanel.add (m_aTFPropertiesPath, "width 100%");
+      aPropsPanel.add (m_aBtnBrowse, "right, wrap");
+      add (aPropsPanel, "width 100%,wrap");
+
+      add (m_aBtnNext, "gapright 20,align right,wrap");
 
       _setPropertiesEnabled (AppProperties.getInstance ().isPropertiesEnabled ());
     }
@@ -110,122 +171,53 @@ public class MainContentPanel extends JPanel implements ActionListener, ItemList
     }
 
     if (m_aConfigPanel != null)
-      m_aConfigPanel.load ();
+      m_aConfigPanel.loadData ();
     if (m_aImportKeyPanel != null)
-      m_aImportKeyPanel.load ();
+      m_aImportKeyPanel.loadData ();
 
-    m_aTFPath.setText (AppProperties.getInstance ().getPropertiesPath ().getPath ());
+    m_aTFPropertiesPath.setText (AppProperties.getInstance ().getPropertiesPath ().getPath ());
   }
 
-  @Override
-  public void actionPerformed (final ActionEvent e) {
-    if (e.getActionCommand ().equals (m_aBtnNext.getText ()))
-      _save ();
-    if (e.getActionCommand ().equals (m_aBtnAction.getText ()))
-      _executeAction ();
-    if (e.getActionCommand ().equals (m_aBtnSettings.getText ()))
-      _openSettings ();
-    if (e.getActionCommand ().equals (m_aBtnBrowse.getText ()))
-      _getPath ();
-  }
-
-  @Override
-  public void itemStateChanged (final ItemEvent e) {
-    if (m_aCBEnable.getState ()) {
-      _setPropertiesEnabled (true);
-    }
-    else {
-      _setPropertiesEnabled (false);
-    }
-  }
-
-  private void _load () {
-    AppProperties.getInstance ().readProperties ();
-
-    if (m_aConfigPanel != null)
-      m_aConfigPanel.load ();
-    if (m_aImportKeyPanel != null)
-      m_aImportKeyPanel.load ();
-
-    m_aTFPath.setText (AppProperties.getInstance ().getPropertiesPath ().getPath ());
-  }
-
-  private void _save () {
-    if (m_aConfigPanel != null)
-      m_aConfigPanel.save ();
-    if (m_aImportKeyPanel != null)
-      m_aImportKeyPanel.save ();
-
-    AppProperties.getInstance ().setPropertiesPath (m_aTFPath.getText ());
-
-    if (m_aCBEnable.getState ())
-      AppProperties.getInstance ().writeProperties ();
-
-    m_aMainFrame.setContent (EPanel.ACTION_PANEL);
-    m_aMainFrame.displayStatus ("Data saved");
-  }
-
-  private void _executeAction () {
-    m_aMainFrame.displayStatus ("Executed action.");
-
-    try {
-      m_aActionPanel.executeAction ();
-      m_aMainFrame.displayStatus ("Ready.");
-    }
-    catch (final Exception e) {
-      m_aMainFrame.displayStatus ("Error.");
-      throw new RuntimeException ("Error executing action: " + e);
-    }
-  }
-
-  private void _openSettings () {
-    m_aMainFrame.setContent (EPanel.CONFIG_PANELS);
-    m_aMainFrame.displayStatus ("Ready.");
-  }
-
-  public void setConfigPanels () {
-    m_aConfigPanel = new ConfigPanel (m_aMainFrame);
-    m_aImportKeyPanel = new ImportKeyPanel (m_aMainFrame);
-  }
-
-  public void setActionPanel () {
-    m_aActionPanel = new ActionPanel (m_aMainFrame);
-  }
-
-  private void _getPath () {
-    final JFileChooser fileChooser = new JFileChooser ();
-    fileChooser.setAcceptAllFileFilterUsed (false);
-    fileChooser.setFileFilter (new FileFilterProperties ());
-
-    fileChooser.showOpenDialog (null);
-
-    final File file = fileChooser.getSelectedFile ();
-    if (file != null) {
-      m_aTFPath.setText (file.getAbsolutePath ());
-
-      AppProperties.getInstance ().setPropertiesPath (file.getAbsolutePath ());
-      _load ();
-    }
-  }
-
-  private void _setPropertiesEnabled (final boolean enabled) {
-    m_aTFPath.setEditable (enabled);
-    m_aBtnBrowse.setEnabled (enabled);
-
-    AppProperties.getInstance ().setPropertiesEnabled (enabled);
-
-    if (enabled)
-      _load ();
-    else
-      _clean ();
-  }
-
-  private void _clean () {
+  private void _clearData () {
     AppProperties.getInstance ().clear ();
 
     if (m_aConfigPanel != null)
-      m_aConfigPanel.load ();
+      m_aConfigPanel.loadData ();
     if (m_aImportKeyPanel != null)
-      m_aImportKeyPanel.load ();
+      m_aImportKeyPanel.loadData ();
+  }
+
+  private void _loadFileData () {
+    AppProperties.getInstance ().readProperties ();
+
+    if (m_aConfigPanel != null)
+      m_aConfigPanel.loadData ();
+    if (m_aImportKeyPanel != null)
+      m_aImportKeyPanel.loadData ();
+
+    m_aTFPropertiesPath.setText (AppProperties.getInstance ().getPropertiesPath ().getPath ());
+  }
+
+  public void setConfigPanels () {
+    m_aConfigPanel = new ConfigPanel ();
+    m_aImportKeyPanel = new ImportKeyPanel ();
+    _init ();
+  }
+
+  public void setActionPanel () {
+    m_aActionPanel = new ActionPanel ();
+    _init ();
+  }
+
+  private void _setPropertiesEnabled (final boolean bEnabled) {
+    m_aTFPropertiesPath.setEditable (bEnabled);
+    m_aBtnBrowse.setEnabled (bEnabled);
+
+    AppProperties.getInstance ().setPropertiesEnabled (bEnabled);
+
+    if (bEnabled)
+      _loadFileData ();
+    else
+      _clearData ();
   }
 }

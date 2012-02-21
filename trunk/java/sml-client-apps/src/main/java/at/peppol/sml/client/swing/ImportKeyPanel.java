@@ -49,27 +49,18 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import at.peppol.sml.client.swing.utils.FileFilterJKS;
-
 import net.miginfocom.swing.MigLayout;
+import at.peppol.sml.client.swing.utils.FileFilterJKS;
 
 /**
  * @author PEPPOL.AT, BRZ, Jakob Frohnwieser
  */
-public class ImportKeyPanel extends JPanel implements ActionListener {
-  private final MainFrame m_aMainFrame;
-  private JTextField m_aTFPath;
-  private JTextField m_aTFPassword;
-  private JButton m_aBtnBrowse;
+final class ImportKeyPanel extends JPanel implements ActionListener {
+  private final JTextField m_aTFPath;
+  private final JTextField m_aTFPassword;
+  private final JButton m_aBtnBrowse;
 
-  public ImportKeyPanel (final MainFrame aMainFrame) {
-    m_aMainFrame = aMainFrame;
-    _init ();
-
-    aMainFrame.displayStatus ("");
-  }
-
-  private void _init () {
+  public ImportKeyPanel () {
     setLayout (new MigLayout ("fill", "[label][left]", ""));
     // setPreferredSize (mainFrame.getContentPanelDimension ());
     setBorder (BorderFactory.createTitledBorder ("Import Key"));
@@ -88,7 +79,7 @@ public class ImportKeyPanel extends JPanel implements ActionListener {
     add (lPassword);
     add (m_aTFPassword, "span 2,width 100%,wrap");
 
-    load ();
+    loadData ();
   }
 
   public void actionPerformed (final ActionEvent e) {
@@ -97,13 +88,13 @@ public class ImportKeyPanel extends JPanel implements ActionListener {
     }
   }
 
-  public void load () {
+  public void loadData () {
     m_aTFPath.setText (AppProperties.getInstance ().getKeyStorePath ());
     m_aTFPassword.setText (AppProperties.getInstance ().getKeyStorePassword ());
   }
 
   public void save () {
-    m_aMainFrame.setKeyStore (m_aTFPath.getText (), m_aTFPassword.getText ());
+    MainFrame.setKeyStore (m_aTFPath.getText (), m_aTFPassword.getText ());
   }
 
   private void _getPath () {

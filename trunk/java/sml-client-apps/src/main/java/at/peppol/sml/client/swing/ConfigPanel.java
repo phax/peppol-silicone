@@ -60,7 +60,7 @@ import com.phloc.commons.compare.AbstractComparator;
  * 
  * @author PEPPOL.AT, BRZ, Jakob Frohnwieser
  */
-public class ConfigPanel extends JPanel {
+final class ConfigPanel extends JPanel {
   /**
    * Comparator for {@link ESML} objects, where the public ones (with client
    * certificate) come first, and the others later on.
@@ -78,45 +78,39 @@ public class ConfigPanel extends JPanel {
     }
   }
 
-  private JComboBox m_aCBHost;
-  private JTextField m_aTFID;
+  private final JComboBox m_aCBSMLHost;
+  private final JTextField m_aTFSMPID;
 
-  public ConfigPanel (final MainFrame aMainFrame) {
-    _init ();
-
-    aMainFrame.displayStatus ("");
-  }
-
-  private void _init () {
+  public ConfigPanel () {
     setLayout (new MigLayout (new LC ().fill (), new AC ().size ("label").gap ().align ("left"), new AC ()));
     // setPreferredSize (new Dimension (450, 100));
     setBorder (BorderFactory.createTitledBorder ("Client Configuration"));
 
-    final Vector <WrappedSMLInfo> vHost = new Vector <WrappedSMLInfo> ();
+    final Vector <ISMLInfo> aSMLHosts = new Vector <ISMLInfo> ();
     for (final ESML eSml : ContainerHelper.getSorted (ESML.values (), new ISMLInfoNameComparator ()))
-      vHost.add (new WrappedSMLInfo (eSml));
+      aSMLHosts.add (new WrappedSMLInfo (eSml));
 
-    final JLabel lHost = new JLabel ("SML Hostname: ");
-    m_aCBHost = new JComboBox (vHost);
+    final JLabel aLabelHost = new JLabel ("SML Hostname: ");
+    m_aCBSMLHost = new JComboBox (aSMLHosts);
 
-    final JLabel lId = new JLabel ("SMP ID: ");
-    m_aTFID = new JTextField (15);
+    final JLabel aLabelSMPID = new JLabel ("SMP ID: ");
+    m_aTFSMPID = new JTextField (15);
 
-    add (lHost);
-    add (m_aCBHost, "width 100%,wrap");
-    add (lId);
-    add (m_aTFID, "width 100%,wrap");
+    add (aLabelHost);
+    add (m_aCBSMLHost, "width 100%,wrap");
+    add (aLabelSMPID);
+    add (m_aTFSMPID, "width 100%,wrap");
 
-    load ();
+    loadData ();
   }
 
-  public void load () {
-    m_aCBHost.setSelectedItem (AppProperties.getInstance ().getSMLInfo ());
-    m_aTFID.setText (AppProperties.getInstance ().getSMPID ());
+  public void loadData () {
+    m_aCBSMLHost.setSelectedItem (AppProperties.getInstance ().getSMLInfo ());
+    m_aTFSMPID.setText (AppProperties.getInstance ().getSMPID ());
   }
 
-  public void save () {
-    AppProperties.getInstance ().setSMLInfo ((ISMLInfo) m_aCBHost.getSelectedItem ());
-    AppProperties.getInstance ().setSMPID (m_aTFID.getText ());
+  public void saveData () {
+    AppProperties.getInstance ().setSMLInfo ((ISMLInfo) m_aCBSMLHost.getSelectedItem ());
+    AppProperties.getInstance ().setSMPID (m_aTFSMPID.getText ());
   }
 }

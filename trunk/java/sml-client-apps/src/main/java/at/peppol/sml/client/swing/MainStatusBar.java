@@ -47,24 +47,21 @@ import javax.swing.JPanel;
 /**
  * @author PEPPOL.AT, BRZ, Jakob Frohnwieser
  */
-public class StatusBar extends JPanel {
-  private JLabel m_aLabelMessage;
+final class MainStatusBar extends JPanel {
+  private static MainStatusBar s_aInstance;
 
-  public StatusBar () {
-    _init ();
-  }
+  private final JLabel m_aLabelMessage;
 
-  private void _init () {
+  public MainStatusBar () {
     setLayout (new BorderLayout ());
     setPreferredSize (new Dimension (10, 23));
-
     m_aLabelMessage = new JLabel ();
     add (m_aLabelMessage, BorderLayout.WEST);
-
     setBackground (SystemColor.control);
+    s_aInstance = this;
   }
 
-  public void showMessage (final String message) {
-    m_aLabelMessage.setText (message);
+  public static void setStatus (final String sMessage) {
+    s_aInstance.m_aLabelMessage.setText (sMessage);
   }
 }

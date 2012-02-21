@@ -63,18 +63,14 @@ import com.phloc.datetime.format.PDTToString;
  * 
  * @author PEPPOL.AT, BRZ, Jakob Frohnwieser
  */
-public class ActionPanel extends JPanel implements ActionListener {
-  private final MainFrame m_aMainFrame;
+final class ActionPanel extends JPanel {
   private JComboBox m_aCBAction;
   private JTextField m_aTFParams;
   private JTextArea m_aTAOut;
-  private JScrollPane m_aSPOut;
 
-  public ActionPanel (final MainFrame aMainFrame) {
-    m_aMainFrame = aMainFrame;
+  public ActionPanel () {
     _init ();
-
-    aMainFrame.displayStatus ("Ready.");
+    MainStatusBar.setStatus ("Ready.");
   }
 
   private void _init () {
@@ -82,12 +78,34 @@ public class ActionPanel extends JPanel implements ActionListener {
     setPreferredSize (new Dimension (450, 100));
     setBorder (BorderFactory.createTitledBorder ("Command Parameters"));
 
-    final Vector <ESMLAction> vAction = new Vector <ESMLAction> ();
+    final Vector <ESMLAction> aActions = new Vector <ESMLAction> ();
     for (final ESMLAction eA : ESMLAction.values ())
-      vAction.add (eA);
+      aActions.add (eA);
 
-    m_aCBAction = new JComboBox (vAction);
-    m_aCBAction.addActionListener (this);
+    m_aCBAction = new JComboBox (aActions);
+    m_aCBAction.addActionListener (new ActionListener () {
+      public void actionPerformed (final ActionEvent e) {
+        final ESMLAction eAction = (ESMLAction) m_aCBAction.getSelectedItem ();
+        final int nParams = eAction.getRequiredParameters ();
+
+        if (nParams == 0) {
+          MainStatusBar.setStatus ("No parameters required.");
+          m_aTFParams.setEditable (false);
+        }
+        else {
+          final StringBuilder aMsg = new StringBuilder (nParams + " paramters are required: ");
+          int nIndex = 0;
+          for (final String sDescription : eAction.getRequiredParameterDescriptions ()) {
+            if (++nIndex > 1)
+              aMsg.append (", ");
+            aMsg.append (sDescription);
+          }
+
+          MainStatusBar.setStatus (aMsg.toString ());
+          m_aTFParams.setEditable (true);
+        }
+      }
+    });
 
     m_aTFParams = new JTextField ();
 
@@ -96,10 +114,10 @@ public class ActionPanel extends JPanel implements ActionListener {
     m_aTAOut.setWrapStyleWord (true);
     // The height is relevant
     m_aTAOut.setSize (new Dimension (0, 100));
-    m_aSPOut = new JScrollPane ();
-    m_aSPOut.setMinimumSize (m_aTAOut.getSize ());
-    m_aSPOut.setAutoscrolls (true);
-    m_aSPOut.getViewport ().add (m_aTAOut);
+    final JScrollPane aSPOut = new JScrollPane ();
+    aSPOut.setMinimumSize (m_aTAOut.getSize ());
+    aSPOut.setAutoscrolls (true);
+    aSPOut.getViewport ().add (m_aTAOut);
 
     add (new JLabel ("Action: "), "aligny top");
     add (m_aCBAction, "width 100%,wrap");
@@ -108,44 +126,21 @@ public class ActionPanel extends JPanel implements ActionListener {
     add (m_aTFParams, "width 100%,wrap");
 
     add (new JLabel ("Response: "), "aligny top");
-    add (m_aSPOut, "width 100%,wrap");
-  }
-
-  public void executeAction () {
-    final String sResult = m_aMainFrame.performAction ((ESMLAction) m_aCBAction.getSelectedItem (),
-                                                       m_aTFParams.getText ());
-    final String out = "[" + _getCurrentDate () + "] " + sResult + "\n";
-
-    m_aTAOut.append (out);
+    add (aSPOut, "width 100%,wrap");
   }
 
   @Nonnull
-  private static String _getCurrentDate () {
-    return PDTToString.getAsString (PDTFactory.getCurrentLocalTime (), Locale.US);
+  public ESMLAction getSelectedAction () {
+    return (ESMLAction) m_aCBAction.getSelectedItem ();
   }
 
-  @Override
-  public void actionPerformed (final ActionEvent e) {
-    if (e.getActionCommand ().toString ().equals (m_aCBAction.getActionCommand ())) {
-      final ESMLAction eAction = (ESMLAction) m_aCBAction.getSelectedItem ();
-      final int nParams = eAction.getRequiredParameters ();
-
-      if (nParams == 0) {
-        m_aMainFrame.displayStatus ("No parameters required.");
-        m_aTFParams.setEditable (false);
-      }
-      else {
-        final StringBuilder aMsg = new StringBuilder (nParams + " paramters are required: ");
-        int nIndex = 0;
-        for (final String sDescription : eAction.getRequiredParameterDescriptions ()) {
-          if (++nIndex > 1)
-            aMsg.append (", ");
-          aMsg.append (sDescription);
-        }
-
-        m_aMainFrame.displayStatus (aMsg.toString ());
-        m_aTFParams.setEditable (true);
-      }
-    }
+  public void executeAction () {
+    final String sResult = MainFrame.performAction (getSelectedAction (), m_aTFParams.getText ());
+    final String sMsg = '[' +
+                        PDTToString.getAsString (PDTFactory.getCurrentLocalTime (), Locale.US) +
+                        "] " +
+                        sResult +
+                        "\n";
+    m_aTAOut.append (sMsg);
   }
 }
