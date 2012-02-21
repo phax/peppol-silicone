@@ -39,104 +39,70 @@ package at.peppol.sml.client.swing;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
 import java.security.KeyStore;
 
+import javax.annotation.Nonnull;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.swing.JFrame;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
 import net.miginfocom.swing.MigLayout;
-
 import at.peppol.commons.security.DoNothingTrustManager;
 import at.peppol.commons.security.KeyStoreUtils;
-import at.peppol.commons.sml.ESML;
-import at.peppol.commons.sml.ISMLInfo;
 import at.peppol.sml.client.ESMLAction;
 
 import com.phloc.commons.random.VerySecureRandom;
 import com.phloc.commons.string.StringHelper;
 
-
 /**
  * @author PEPPOL.AT, BRZ, Jakob Frohnwieser
  */
-public class MainFrame extends JFrame implements ActionListener {
+public class MainFrame extends JFrame {
   public static enum EPanel {
     CONFIG_PANELS,
     ACTION_PANEL;
   }
 
   private static final int FRAME_WIDTH = 530;
-  private static final int FRAME_HEIGHT = 330;
-  private static final String DEFAULT_PROPERTIES_PATH = ".";
-  private static final String DEFAULT_PROPERTIES_NAME = "config.properties";
-  private static final boolean DEFAULT_PROPERTIES_ENABLED = true;
+  private static final int FRAME_HEIGHT = 360;
 
-  private JMenuItem configMenuItem, actionMenuItem;
-  private StatusBar statusBar;
-  private ISMLInfo smlHost;
-  private String smpId;
-  private String keyStorePath;
-  private String keyStorePwd;
-  private File propertiesPath = new File (DEFAULT_PROPERTIES_PATH, DEFAULT_PROPERTIES_NAME);
-  private JPanel contentPanel;
-  private final PropertiesReader pReader;
-  private boolean propertiesEnabled = DEFAULT_PROPERTIES_ENABLED;
+  private final StatusBar m_aStatusBar;
+  private final JPanel m_aContentPanel;
 
   public MainFrame () {
-    pReader = new PropertiesReader ();
-    init ();
-  }
-
-  private void init () {
     setTitle ("PEPPOL SML Client");
 
     final Dimension screenSize = Toolkit.getDefaultToolkit ().getScreenSize ();
     setLocation ((screenSize.width - FRAME_WIDTH) / 2, (screenSize.height - FRAME_HEIGHT) / 2);
     setPreferredSize (new Dimension (FRAME_WIDTH, FRAME_HEIGHT));
     setMinimumSize (new Dimension (FRAME_WIDTH, FRAME_HEIGHT));
-
     setDefaultCloseOperation (EXIT_ON_CLOSE);
     setLayout (new MigLayout ("fillx,wrap", "[fill,left]", "[][fill][grow, fill][]"));
 
-    statusBar = new StatusBar ();
+    m_aStatusBar = new StatusBar ();
 
-    contentPanel = new JPanel (new MigLayout ("fill,insets 0"));
+    m_aContentPanel = new JPanel (new MigLayout ("fill,insets 0"));
     setContent (EPanel.CONFIG_PANELS);
 
-    add (contentPanel, "width 100%,wrap");
-    add (statusBar, "dock south");
+    add (m_aContentPanel, "width 100%,wrap");
+    add (m_aStatusBar, "dock south");
 
     pack ();
   }
 
   public void displayStatus (final String message) {
-    statusBar.showMessage (message);
+    m_aStatusBar.showMessage (message);
   }
 
-  @Override
-  public void actionPerformed (final ActionEvent e) {
-    if (e.getActionCommand ().equals (configMenuItem.getText ())) {
-      setContent (EPanel.CONFIG_PANELS);
-    }
-    if (e.getActionCommand ().equals (actionMenuItem.getText ())) {
-      setContent (EPanel.ACTION_PANEL);
-    }
-  }
-
-  public void setContent (final EPanel panel) {
-    contentPanel.removeAll ();
-    final ContentPanel cp = new ContentPanel (this);
+  public void setContent (@Nonnull final EPanel ePanel) {
+    m_aContentPanel.removeAll ();
+    final MainContentPanel cp = new MainContentPanel (this);
     cp.setLayout (new MigLayout ("fill,insets 0"));
 
-    switch (panel) {
+    switch (ePanel) {
       case CONFIG_PANELS:
         cp.setConfigPanels ();
         break;
@@ -146,61 +112,13 @@ public class MainFrame extends JFrame implements ActionListener {
     }
 
     cp.init ();
-    contentPanel.add (cp, "width 100%");
-    contentPanel.updateUI ();
-  }
-
-  public void setSmlHost (final ISMLInfo host) {
-    this.smlHost = host;
-  }
-
-  public ISMLInfo getSmlHost () {
-    return smlHost;
-  }
-
-  public void setSmpId (final String id) {
-    this.smpId = id;
-  }
-
-  public String getSmpId () {
-    return smpId;
-  }
-
-  public void setKeyStorePath (final String sKeyStorePath) {
-    this.keyStorePath = sKeyStorePath;
-  }
-
-  public void setKeyStorePwd (final String sKeyStorePwd) {
-    this.keyStorePwd = sKeyStorePwd;
-  }
-
-  public String getKeyStorePath () {
-    return keyStorePath;
-  }
-
-  public String getKeyStorePwd () {
-    return keyStorePwd;
-  }
-
-  public File getPropertiesPath () {
-    return propertiesPath;
-  }
-
-  public void setPropertiesPath (final String sPropertiesPath) {
-    this.propertiesPath = new File (sPropertiesPath);
-  }
-
-  public boolean isPropertiesEnabled () {
-    return propertiesEnabled;
-  }
-
-  public void setPropertiesEnabled (final boolean bPropertiesEnabled) {
-    this.propertiesEnabled = bPropertiesEnabled;
+    m_aContentPanel.add (cp, "width 100%");
+    m_aContentPanel.updateUI ();
   }
 
   public void setKeyStore (final String path, final String password) {
-    keyStorePath = path;
-    keyStorePwd = password;
+    AppProperties.getInstance ().setKeyStorePath (path);
+    AppProperties.getInstance ().setKeyStorePassword (password);
 
     try {
       // Main key storage
@@ -223,61 +141,23 @@ public class MainFrame extends JFrame implements ActionListener {
   }
 
   public String performAction (final ESMLAction action, final String parameter) {
-    final String [] params = parameter.split (" ");
+    final String [] aParams = parameter.split (" ");
 
-    GuiSMLController ctrl;
-    ctrl = new GuiSMLController ();
+    final GuiSMLController ctrl = new GuiSMLController ();
 
-    if (smlHost == null) {
+    final AppProperties aAP = AppProperties.getInstance ();
+    if (aAP.getSMLInfo () == null) {
       displayStatus ("Error.");
       return "No SML Hostname set.";
     }
-    ctrl.setManageServiceMetadataEndpointAddress (smlHost);
+    ctrl.setManageServiceMetadataEndpointAddress (aAP.getSMLInfo ());
 
-    if (StringHelper.hasNoText (smpId)) {
+    if (StringHelper.hasNoText (aAP.getSMPID ())) {
       displayStatus ("Error.");
       return "No SMP ID set.";
     }
-    ctrl.setSmpID (smpId);
+    ctrl.setSmpID (aAP.getSMPID ());
 
-    return ctrl.handleCommand (action, params);
-  }
-
-  public void readProperties () {
-    if (pReader.readProperties (propertiesPath)) {
-      smlHost = null;
-      final String sHostName = pReader.getHostname ();
-      for (final ESML eSML : ESML.values ())
-        if (eSML.getManagementHostName ().equals (sHostName)) {
-          smlHost = new WrappedSMLInfo (eSML);
-          break;
-        }
-      smpId = pReader.getSmpId ();
-      keyStorePath = pReader.getKeyStorePath ();
-      keyStorePwd = pReader.getKeyStorePwd ();
-
-      displayStatus ("Loaded properties file.");
-    }
-    else {
-      displayStatus ("Cannot load properties file.");
-    }
-  }
-
-  public void writeProperties () {
-    if (smlHost == null) {
-      displayStatus ("No hostname set.");
-      throw new NullPointerException ("No hostname set.");
-    }
-    pReader.setHostname (smlHost.getManagementHostName ());
-    pReader.setSmpId (smpId);
-    pReader.setKeyStorePath (keyStorePath);
-    pReader.setKeyStorePwd (keyStorePwd);
-
-    if (pReader.writeProperties (propertiesPath)) {
-      displayStatus ("Properties wrote successfully.");
-    }
-    else {
-      displayStatus ("Cannot write properties file.");
-    }
+    return ctrl.handleCommand (action, aParams);
   }
 }

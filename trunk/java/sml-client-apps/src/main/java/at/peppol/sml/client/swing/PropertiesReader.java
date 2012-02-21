@@ -46,32 +46,19 @@ import java.util.Properties;
 /**
  * @author PEPPOL.AT, BRZ, Jakob Frohnwieser
  */
-public class PropertiesReader {
+final class PropertiesReader {
   private static final String KEY_HOSTNNAME = "hostname";
   private static final String KEY_SMP_ID = "smp_id";
   private static final String KEY_KEYSTORE_PATH = "keystore_path";
   private static final String KEY_KEYSTORE_PASSWORD = "keystore_password";
 
-  private File propertiesPath;
-  private Properties properties;
+  private Properties m_aProperties;
 
-  public boolean readProperties (final File path) {
-    this.propertiesPath = path;
-
-    return readProperties ();
-  }
-
-  public boolean writeProperties (final File path) {
-    this.propertiesPath = path;
-
-    return writeProperties ();
-  }
-
-  private boolean readProperties () {
+  public boolean readProperties (final File aPath) {
     try {
-      properties = new Properties ();
-      if (propertiesPath != null && propertiesPath.exists ())
-        properties.load (new FileInputStream (propertiesPath));
+      m_aProperties = new Properties ();
+      if (aPath != null && aPath.exists ())
+        m_aProperties.load (new FileInputStream (aPath));
 
       return true;
     }
@@ -82,50 +69,48 @@ public class PropertiesReader {
     return false;
   }
 
-  private boolean writeProperties () {
-    if (properties != null) {
+  public boolean writeProperties (final File aPath) {
+    if (m_aProperties != null) {
       try {
-        properties.store (new FileOutputStream (propertiesPath), "PEPPOL SML Client properties file\n");
-
+        m_aProperties.store (new FileOutputStream (aPath), "PEPPOL SML Client properties file\n");
         return true;
       }
       catch (final IOException e) {
         e.printStackTrace ();
       }
     }
-
     return false;
   }
 
   public String getHostname () {
-    return properties.getProperty (KEY_HOSTNNAME);
+    return m_aProperties.getProperty (KEY_HOSTNNAME);
   }
 
   public String getSmpId () {
-    return properties.getProperty (KEY_SMP_ID);
+    return m_aProperties.getProperty (KEY_SMP_ID);
   }
 
   public String getKeyStorePath () {
-    return properties.getProperty (KEY_KEYSTORE_PATH);
+    return m_aProperties.getProperty (KEY_KEYSTORE_PATH);
   }
 
   public String getKeyStorePwd () {
-    return properties.getProperty (KEY_KEYSTORE_PASSWORD);
+    return m_aProperties.getProperty (KEY_KEYSTORE_PASSWORD);
   }
 
   public void setHostname (final String hostname) {
-    properties.setProperty (KEY_HOSTNNAME, hostname);
+    m_aProperties.setProperty (KEY_HOSTNNAME, hostname);
   }
 
   public void setSmpId (final String smpID) {
-    properties.setProperty (KEY_SMP_ID, smpID);
+    m_aProperties.setProperty (KEY_SMP_ID, smpID);
   }
 
   public void setKeyStorePath (final String keyStorePath) {
-    properties.setProperty (KEY_KEYSTORE_PATH, keyStorePath);
+    m_aProperties.setProperty (KEY_KEYSTORE_PATH, keyStorePath);
   }
 
   public void setKeyStorePwd (final String keyStorePwd) {
-    properties.setProperty (KEY_KEYSTORE_PASSWORD, keyStorePwd);
+    m_aProperties.setProperty (KEY_KEYSTORE_PASSWORD, keyStorePwd);
   }
 }

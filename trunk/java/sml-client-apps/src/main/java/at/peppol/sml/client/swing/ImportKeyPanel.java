@@ -96,8 +96,8 @@ public class ImportKeyPanel extends JPanel implements ActionListener {
   }
 
   public void load () {
-    tfPath.setText (mainFrame.getKeyStorePath ());
-    tfPassword.setText (mainFrame.getKeyStorePwd ());
+    tfPath.setText (AppProperties.getInstance ().getKeyStorePath ());
+    tfPassword.setText (AppProperties.getInstance ().getKeyStorePassword ());
   }
 
   public void save () {

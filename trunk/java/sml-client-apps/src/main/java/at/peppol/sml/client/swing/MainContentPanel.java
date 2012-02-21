@@ -50,16 +50,15 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
 
-import at.peppol.sml.client.swing.MainFrame.EPanel;
-
 import net.miginfocom.swing.MigLayout;
+import at.peppol.sml.client.swing.MainFrame.EPanel;
 
 /**
  * Content Panel
- *
+ * 
  * @author PEPPOL.AT, BRZ, Jakob Frohnwieser
  */
-public class ContentPanel extends JPanel implements ActionListener, ItemListener {
+public class MainContentPanel extends JPanel implements ActionListener, ItemListener {
   private final MainFrame mainFrame;
   private JButton bNext, bSettings, bAction, bBrowse;
   private ConfigPanel configPanel;
@@ -68,7 +67,7 @@ public class ContentPanel extends JPanel implements ActionListener, ItemListener
   private JTextField tfPath;
   private Checkbox cbEnable;
 
-  public ContentPanel (final MainFrame aMainFrame) {
+  public MainContentPanel (final MainFrame aMainFrame) {
     this.mainFrame = aMainFrame;
     setLayout (new MigLayout ("debug,insets 0,fill"));
   }
@@ -82,7 +81,7 @@ public class ContentPanel extends JPanel implements ActionListener, ItemListener
     bSettings = new JButton ("<  Settings");
     bSettings.addActionListener (this);
 
-    cbEnable = new Checkbox ("Use properties: ", mainFrame.isPropertiesEnabled ());
+    cbEnable = new Checkbox ("Use properties: ", AppProperties.getInstance ().isPropertiesEnabled ());
     cbEnable.addItemListener (this);
 
     tfPath = new JTextField (30);
@@ -101,7 +100,7 @@ public class ContentPanel extends JPanel implements ActionListener, ItemListener
       add (bBrowse, "gaptop 15, right, wrap");
       add (bNext, "gaptop 20, align right, wrap");
 
-      setPropertiesEnabled (mainFrame.isPropertiesEnabled ());
+      setPropertiesEnabled (AppProperties.getInstance ().isPropertiesEnabled ());
     }
 
     if (actionPanel != null) {
@@ -115,7 +114,7 @@ public class ContentPanel extends JPanel implements ActionListener, ItemListener
     if (importKeyPanel != null)
       importKeyPanel.load ();
 
-    tfPath.setText (mainFrame.getPropertiesPath ().getPath ());
+    tfPath.setText (AppProperties.getInstance ().getPropertiesPath ().getPath ());
   }
 
   @Override
@@ -142,14 +141,14 @@ public class ContentPanel extends JPanel implements ActionListener, ItemListener
   }
 
   private void load () {
-    mainFrame.readProperties ();
+    AppProperties.getInstance ().readProperties ();
 
     if (configPanel != null)
       configPanel.load ();
     if (importKeyPanel != null)
       importKeyPanel.load ();
 
-    tfPath.setText (mainFrame.getPropertiesPath ().getPath ());
+    tfPath.setText (AppProperties.getInstance ().getPropertiesPath ().getPath ());
   }
 
   private void save () {
@@ -158,10 +157,10 @@ public class ContentPanel extends JPanel implements ActionListener, ItemListener
     if (importKeyPanel != null)
       importKeyPanel.save ();
 
-    mainFrame.setPropertiesPath (tfPath.getText ());
+    AppProperties.getInstance ().setPropertiesPath (tfPath.getText ());
 
     if (cbEnable.getState ())
-      mainFrame.writeProperties ();
+      AppProperties.getInstance ().writeProperties ();
 
     mainFrame.setContent (EPanel.ACTION_PANEL);
     mainFrame.displayStatus ("Data saved");
@@ -215,7 +214,7 @@ public class ContentPanel extends JPanel implements ActionListener, ItemListener
     if (file != null) {
       tfPath.setText (file.getAbsolutePath ());
 
-      mainFrame.setPropertiesPath (file.getAbsolutePath ());
+      AppProperties.getInstance ().setPropertiesPath (file.getAbsolutePath ());
       load ();
     }
   }
@@ -224,7 +223,7 @@ public class ContentPanel extends JPanel implements ActionListener, ItemListener
     tfPath.setEditable (enabled);
     bBrowse.setEnabled (enabled);
 
-    mainFrame.setPropertiesEnabled (enabled);
+    AppProperties.getInstance ().setPropertiesEnabled (enabled);
 
     if (enabled)
       load ();
@@ -233,10 +232,7 @@ public class ContentPanel extends JPanel implements ActionListener, ItemListener
   }
 
   private void clean () {
-    mainFrame.setSmlHost (null);
-    mainFrame.setSmpId ("");
-    mainFrame.setKeyStorePath ("");
-    mainFrame.setKeyStorePwd ("");
+    AppProperties.getInstance ().clear ();
 
     if (configPanel != null)
       configPanel.load ();
