@@ -51,15 +51,22 @@ import com.phloc.commons.string.ToStringGenerator;
 /**
  * Use instances of this class if you're not happy with the {@link ESML}
  * enumeration value but need an instance of {@link ISMLInfo}.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable
-public final class SimpleSMLInfo implements ISMLInfo {
+public class SimpleSMLInfo implements ISMLInfo {
   private final String m_sDNSZone;
   private final String m_sManagementHostName;
   private final String m_sManagementServiceURL;
   private final boolean m_bRequiresClientCertficate;
+
+  public SimpleSMLInfo (@Nonnull final ISMLInfo aSMLInfo) {
+    this (aSMLInfo.getDNSZone (),
+          aSMLInfo.getManagementHostName (),
+          aSMLInfo.getManagementServiceURL (),
+          aSMLInfo.requiresClientCertificate ());
+  }
 
   public SimpleSMLInfo (@Nonnull @Nonempty final String sDNSZone,
                         @Nonnull @Nonempty final String sManagementHostName,
@@ -132,7 +139,7 @@ public final class SimpleSMLInfo implements ISMLInfo {
   public boolean equals (final Object o) {
     if (o == this)
       return true;
-    if (!(o instanceof SimpleSMLInfo))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
     final SimpleSMLInfo rhs = (SimpleSMLInfo) o;
     return m_sDNSZone.equals (rhs.m_sDNSZone) &&

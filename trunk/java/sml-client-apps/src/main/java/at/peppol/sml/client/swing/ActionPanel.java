@@ -40,9 +40,10 @@ package at.peppol.sml.client.swing;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Calendar;
+import java.util.Locale;
 import java.util.Vector;
 
+import javax.annotation.Nonnull;
 import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -52,32 +53,31 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import net.miginfocom.swing.MigLayout;
-
 import at.peppol.sml.client.ESMLAction;
 
-import com.phloc.commons.string.StringHelper;
-
+import com.phloc.datetime.PDTFactory;
+import com.phloc.datetime.format.PDTToString;
 
 /**
  * Action Panel
- *
+ * 
  * @author PEPPOL.AT, BRZ, Jakob Frohnwieser
  */
 public class ActionPanel extends JPanel implements ActionListener {
-  private final MainFrame mainFrame;
-  private JComboBox cbAction;
-  private JTextField tfParams;
-  private JTextArea taOut;
-  private JScrollPane spOut;
+  private final MainFrame m_aMainFrame;
+  private JComboBox m_aCBAction;
+  private JTextField m_aTFParams;
+  private JTextArea m_aTAOut;
+  private JScrollPane m_aSPOut;
 
   public ActionPanel (final MainFrame aMainFrame) {
-    this.mainFrame = aMainFrame;
-    init ();
+    m_aMainFrame = aMainFrame;
+    _init ();
 
     aMainFrame.displayStatus ("Ready.");
   }
 
-  private void init () {
+  private void _init () {
     setLayout (new MigLayout ("", "[label][left]", ""));
     setPreferredSize (new Dimension (450, 100));
     setBorder (BorderFactory.createTitledBorder ("Command Parameters"));
@@ -86,59 +86,56 @@ public class ActionPanel extends JPanel implements ActionListener {
     for (final ESMLAction eA : ESMLAction.values ())
       vAction.add (eA);
 
-    cbAction = new JComboBox (vAction);
-    cbAction.addActionListener (this);
+    m_aCBAction = new JComboBox (vAction);
+    m_aCBAction.addActionListener (this);
 
-    tfParams = new JTextField ();
+    m_aTFParams = new JTextField ();
 
-    taOut = new JTextArea ();
-    taOut.setLineWrap (true);
-    taOut.setWrapStyleWord (true);
+    m_aTAOut = new JTextArea ();
+    m_aTAOut.setLineWrap (true);
+    m_aTAOut.setWrapStyleWord (true);
     // The height is relevant
-    taOut.setSize (new Dimension (0, 100));
-    spOut = new JScrollPane ();
-    spOut.setMinimumSize (taOut.getSize ());
-    spOut.setAutoscrolls (true);
-    spOut.getViewport ().add (taOut);
+    m_aTAOut.setSize (new Dimension (0, 100));
+    m_aSPOut = new JScrollPane ();
+    m_aSPOut.setMinimumSize (m_aTAOut.getSize ());
+    m_aSPOut.setAutoscrolls (true);
+    m_aSPOut.getViewport ().add (m_aTAOut);
 
     add (new JLabel ("Action: "), "aligny top");
-    add (cbAction, "width 100%,wrap");
+    add (m_aCBAction, "width 100%,wrap");
 
     add (new JLabel ("Params: "), "aligny top");
-    add (tfParams, "width 100%,wrap");
+    add (m_aTFParams, "width 100%,wrap");
 
     add (new JLabel ("Response: "), "aligny top");
-    add (spOut, "width 100%,wrap");
+    add (m_aSPOut, "width 100%,wrap");
   }
 
   public void executeAction () {
-    final String sResult = mainFrame.performAction ((ESMLAction) cbAction.getSelectedItem (), tfParams.getText ());
-    final String out = "[" + getDate () + "] " + sResult + "\n";
+    final String sResult = m_aMainFrame.performAction ((ESMLAction) m_aCBAction.getSelectedItem (),
+                                                       m_aTFParams.getText ());
+    final String out = "[" + _getCurrentDate () + "] " + sResult + "\n";
 
-    taOut.append (out);
+    m_aTAOut.append (out);
   }
 
-  private static String getDate () {
-    final Calendar cal = Calendar.getInstance ();
-    return StringHelper.leadingZero (cal.get (Calendar.HOUR_OF_DAY), 2) +
-           ":" +
-           StringHelper.leadingZero (cal.get (Calendar.MINUTE), 2) +
-           ":" +
-           StringHelper.leadingZero (cal.get (Calendar.SECOND), 2);
+  @Nonnull
+  private static String _getCurrentDate () {
+    return PDTToString.getAsString (PDTFactory.getCurrentLocalTime (), Locale.US);
   }
 
   @Override
   public void actionPerformed (final ActionEvent e) {
-    if (e.getActionCommand ().toString ().equals (cbAction.getActionCommand ())) {
-      final ESMLAction eAction = (ESMLAction) cbAction.getSelectedItem ();
-      final int params = eAction.getRequiredParameters ();
+    if (e.getActionCommand ().toString ().equals (m_aCBAction.getActionCommand ())) {
+      final ESMLAction eAction = (ESMLAction) m_aCBAction.getSelectedItem ();
+      final int nParams = eAction.getRequiredParameters ();
 
-      if (params == 0) {
-        mainFrame.displayStatus ("No parameters required.");
-        tfParams.setEditable (false);
+      if (nParams == 0) {
+        m_aMainFrame.displayStatus ("No parameters required.");
+        m_aTFParams.setEditable (false);
       }
       else {
-        final StringBuilder aMsg = new StringBuilder (params + " paramters are required: ");
+        final StringBuilder aMsg = new StringBuilder (nParams + " paramters are required: ");
         int nIndex = 0;
         for (final String sDescription : eAction.getRequiredParameterDescriptions ()) {
           if (++nIndex > 1)
@@ -146,8 +143,8 @@ public class ActionPanel extends JPanel implements ActionListener {
           aMsg.append (sDescription);
         }
 
-        mainFrame.displayStatus (aMsg.toString ());
-        tfParams.setEditable (true);
+        m_aMainFrame.displayStatus (aMsg.toString ());
+        m_aTFParams.setEditable (true);
       }
     }
   }

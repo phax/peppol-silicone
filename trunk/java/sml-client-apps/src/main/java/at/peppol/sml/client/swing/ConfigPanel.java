@@ -50,6 +50,7 @@ import net.miginfocom.layout.LC;
 import net.miginfocom.swing.MigLayout;
 import at.peppol.commons.sml.ESML;
 import at.peppol.commons.sml.ISMLInfo;
+import at.peppol.sml.client.swing.utils.WrappedSMLInfo;
 
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.compare.AbstractComparator;
@@ -66,56 +67,56 @@ public class ConfigPanel extends JPanel {
    * 
    * @author PEPPOL.AT, BRZ, Philip Helger
    */
-  private static final class ESMLNameComparator extends AbstractComparator <ESML> {
-    public ESMLNameComparator () {}
+  private static final class ISMLInfoNameComparator extends AbstractComparator <ISMLInfo> {
+    public ISMLInfoNameComparator () {}
 
     @Override
-    protected int mainCompare (final ESML eSML1, final ESML eSML2) {
+    protected int mainCompare (final ISMLInfo eSML1, final ISMLInfo eSML2) {
       final boolean b1 = eSML1.requiresClientCertificate ();
       final boolean b2 = eSML2.requiresClientCertificate ();
       return b1 != b2 ? (b1 ? -1 : +1) : eSML1.getManagementHostName ().compareTo (eSML2.getManagementHostName ());
     }
   }
 
-  private JComboBox cbHost;
-  private JTextField tfId;
+  private JComboBox m_aCBHost;
+  private JTextField m_aTFID;
 
   public ConfigPanel (final MainFrame aMainFrame) {
-    init ();
+    _init ();
 
     aMainFrame.displayStatus ("");
   }
 
-  private void init () {
+  private void _init () {
     setLayout (new MigLayout (new LC ().fill (), new AC ().size ("label").gap ().align ("left"), new AC ()));
     // setPreferredSize (new Dimension (450, 100));
     setBorder (BorderFactory.createTitledBorder ("Client Configuration"));
 
     final Vector <WrappedSMLInfo> vHost = new Vector <WrappedSMLInfo> ();
-    for (final ESML eSml : ContainerHelper.getSorted (ESML.values (), new ESMLNameComparator ()))
+    for (final ESML eSml : ContainerHelper.getSorted (ESML.values (), new ISMLInfoNameComparator ()))
       vHost.add (new WrappedSMLInfo (eSml));
 
     final JLabel lHost = new JLabel ("SML Hostname: ");
-    cbHost = new JComboBox (vHost);
+    m_aCBHost = new JComboBox (vHost);
 
     final JLabel lId = new JLabel ("SMP ID: ");
-    tfId = new JTextField (15);
+    m_aTFID = new JTextField (15);
 
     add (lHost);
-    add (cbHost, "width 100%,wrap");
+    add (m_aCBHost, "width 100%,wrap");
     add (lId);
-    add (tfId, "width 100%,wrap");
+    add (m_aTFID, "width 100%,wrap");
 
     load ();
   }
 
   public void load () {
-    cbHost.setSelectedItem (AppProperties.getInstance ().getSMLInfo ());
-    tfId.setText (AppProperties.getInstance ().getSMPID ());
+    m_aCBHost.setSelectedItem (AppProperties.getInstance ().getSMLInfo ());
+    m_aTFID.setText (AppProperties.getInstance ().getSMPID ());
   }
 
   public void save () {
-    AppProperties.getInstance ().setSMLInfo ((ISMLInfo) cbHost.getSelectedItem ());
-    AppProperties.getInstance ().setSMPID (tfId.getText ());
+    AppProperties.getInstance ().setSMLInfo ((ISMLInfo) m_aCBHost.getSelectedItem ());
+    AppProperties.getInstance ().setSMPID (m_aTFID.getText ());
   }
 }

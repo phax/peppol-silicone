@@ -49,6 +49,8 @@ import javax.net.ssl.TrustManager;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import net.miginfocom.layout.AC;
+import net.miginfocom.layout.LC;
 import net.miginfocom.swing.MigLayout;
 import at.peppol.commons.security.DoNothingTrustManager;
 import at.peppol.commons.security.KeyStoreUtils;
@@ -69,8 +71,8 @@ public class MainFrame extends JFrame {
   private static final int FRAME_WIDTH = 530;
   private static final int FRAME_HEIGHT = 360;
 
-  private final StatusBar m_aStatusBar;
   private final JPanel m_aContentPanel;
+  private final StatusBar m_aStatusBar;
 
   public MainFrame () {
     setTitle ("PEPPOL SML Client");
@@ -80,7 +82,12 @@ public class MainFrame extends JFrame {
     setPreferredSize (new Dimension (FRAME_WIDTH, FRAME_HEIGHT));
     setMinimumSize (new Dimension (FRAME_WIDTH, FRAME_HEIGHT));
     setDefaultCloseOperation (EXIT_ON_CLOSE);
-    setLayout (new MigLayout ("fillx,wrap", "[fill,left]", "[][fill][grow, fill][]"));
+    setLayout (new MigLayout (new LC ().fillX ().wrap (), new AC ().fill ().align ("left"), new AC ().gap ()
+                                                                                                     .fill ()
+                                                                                                     .gap ()
+                                                                                                     .grow ()
+                                                                                                     .fill ()
+                                                                                                     .gap ()));
 
     m_aStatusBar = new StatusBar ();
 
@@ -150,13 +157,13 @@ public class MainFrame extends JFrame {
       displayStatus ("Error.");
       return "No SML Hostname set.";
     }
-    ctrl.setManageServiceMetadataEndpointAddress (aAP.getSMLInfo ());
+    GuiSMLController.setSMLInfo (aAP.getSMLInfo ());
 
     if (StringHelper.hasNoText (aAP.getSMPID ())) {
       displayStatus ("Error.");
       return "No SMP ID set.";
     }
-    ctrl.setSmpID (aAP.getSMPID ());
+    GuiSMLController.setSMPID (aAP.getSMPID ());
 
     return ctrl.handleCommand (action, aParams);
   }

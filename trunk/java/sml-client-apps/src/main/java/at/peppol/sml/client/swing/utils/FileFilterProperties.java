@@ -35,36 +35,20 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.sml.client.swing;
+package at.peppol.sml.client.swing.utils;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.SystemColor;
+import java.io.File;
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.filechooser.FileFilter;
 
-/**
- * @author PEPPOL.AT, BRZ, Jakob Frohnwieser
- */
-public class StatusBar extends JPanel {
-  private JLabel m_aLabelMessage;
-
-  public StatusBar () {
-    _init ();
+public final class FileFilterProperties extends FileFilter {
+  @Override
+  public boolean accept (final File f) {
+    return f.isDirectory () || f.getName ().matches (".*\\.properties");
   }
 
-  private void _init () {
-    setLayout (new BorderLayout ());
-    setPreferredSize (new Dimension (10, 23));
-
-    m_aLabelMessage = new JLabel ();
-    add (m_aLabelMessage, BorderLayout.WEST);
-
-    setBackground (SystemColor.control);
-  }
-
-  public void showMessage (final String message) {
-    m_aLabelMessage.setText (message);
+  @Override
+  public String getDescription () {
+    return "Properties files (*.properties)";
   }
 }

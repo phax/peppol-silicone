@@ -86,7 +86,7 @@ final class PropertiesReader {
     return m_aProperties.getProperty (KEY_HOSTNNAME);
   }
 
-  public String getSmpId () {
+  public String getSMPID () {
     return m_aProperties.getProperty (KEY_SMP_ID);
   }
 
@@ -94,23 +94,23 @@ final class PropertiesReader {
     return m_aProperties.getProperty (KEY_KEYSTORE_PATH);
   }
 
-  public String getKeyStorePwd () {
+  public String getKeyStorePassword () {
     return m_aProperties.getProperty (KEY_KEYSTORE_PASSWORD);
   }
 
-  public void setHostname (final String hostname) {
-    m_aProperties.setProperty (KEY_HOSTNNAME, hostname);
+  public void setHostName (final String sHostName) {
+    m_aProperties.setProperty (KEY_HOSTNNAME, sHostName);
   }
 
-  public void setSmpId (final String smpID) {
-    m_aProperties.setProperty (KEY_SMP_ID, smpID);
+  public void setSMPID (final String sSMPID) {
+    m_aProperties.setProperty (KEY_SMP_ID, sSMPID);
   }
 
-  public void setKeyStorePath (final String keyStorePath) {
-    m_aProperties.setProperty (KEY_KEYSTORE_PATH, keyStorePath);
+  public void setKeyStorePath (final String sKeyStorePath) {
+    m_aProperties.setProperty (KEY_KEYSTORE_PATH, sKeyStorePath);
   }
 
-  public void setKeyStorePwd (final String keyStorePwd) {
-    m_aProperties.setProperty (KEY_KEYSTORE_PASSWORD, keyStorePwd);
+  public void setKeyStorePassword (final String sKeyStorePassword) {
+    m_aProperties.setProperty (KEY_KEYSTORE_PASSWORD, sKeyStorePassword);
   }
 }

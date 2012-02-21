@@ -35,75 +35,20 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.sml.client.swing;
+package at.peppol.sml.client.swing.utils;
 
-import java.net.URL;
+import java.io.File;
 
-import at.peppol.commons.sml.ESML;
-import at.peppol.commons.sml.ISMLInfo;
+import javax.swing.filechooser.FileFilter;
 
-import com.phloc.commons.hash.HashCodeGenerator;
-
-
-/**
- * Wrapper around an {@link ESML} for a nicer toString :(
- *
- * @author PEPPOL.AT, BRZ, Philip Helger
- */
-public final class WrappedSMLInfo implements ISMLInfo {
-  private final ESML m_eSML;
-
-  public WrappedSMLInfo (final ESML eSML) {
-    m_eSML = eSML;
-  }
-
-  public String getDNSZone () {
-    return m_eSML.getDNSZone ();
-  }
-
-  public String getPublisherDNSName () {
-    return m_eSML.getPublisherDNSName ();
-  }
-
-  public String getManagementHostName () {
-    return m_eSML.getManagementHostName ();
-  }
-
-  public String getManagementServiceURL () {
-    return m_eSML.getManagementServiceURL ();
-  }
-
-  public URL getManageServiceMetaDataEndpointAddress () {
-    return m_eSML.getManageServiceMetaDataEndpointAddress ();
-  }
-
-  public URL getManageParticipantIdentifierEndpointAddress () {
-
-    return m_eSML.getManageParticipantIdentifierEndpointAddress ();
-  }
-
-  public boolean requiresClientCertificate () {
-    return m_eSML.requiresClientCertificate ();
+public final class FileFilterJKS extends FileFilter {
+  @Override
+  public boolean accept (final File f) {
+    return f.isDirectory () || f.getName ().matches (".*\\.jks");
   }
 
   @Override
-  public boolean equals (final Object o) {
-    if (o == this)
-      return true;
-    if (!(o instanceof WrappedSMLInfo))
-      return false;
-    final WrappedSMLInfo rhs = (WrappedSMLInfo) o;
-    return m_eSML.equals (rhs.m_eSML);
-  }
-
-  @Override
-  public int hashCode () {
-    return new HashCodeGenerator (this).append (m_eSML).getHashCode ();
-  }
-
-  @Override
-  public String toString () {
-    return getManagementHostName () +
-           (requiresClientCertificate () ? " (requires client certificate)" : " (only for BRZ internal usage)");
+  public String getDescription () {
+    return "Java Keystores (*.jks)";
   }
 }
