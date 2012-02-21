@@ -43,7 +43,7 @@ import at.peppol.commons.sml.ESML;
 import at.peppol.commons.sml.SimpleSMLInfo;
 
 /**
- * Wrapper around an {@link ESML} for a nicer toString :(
+ * Wrapper around an {@link SimpleSMLInfo} for a nicer toString :(
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
@@ -55,6 +55,6 @@ public final class WrappedSMLInfo extends SimpleSMLInfo {
   @Override
   public String toString () {
     return getManagementHostName () +
-           (requiresClientCertificate () ? " (requires client certificate)" : " (only for BRZ internal usage)");
+           (requiresClientCertificate () ? " (requires client certificate)" : " (only for SML operator internal usage)");
   }
 }

@@ -59,32 +59,32 @@ import at.peppol.sml.client.console.ManageSMPClient;
  * @author PEPPOL.AT, BRZ, Jakob Frohnwieser
  */
 @NotThreadSafe
-public class GuiSMLController {
+final class GuiSMLController {
   private static ManageSMPClient s_aSMPClient;
   private static ManageParticipantsClient s_aParticipantClient;
   private static URL s_aParticipantEndpointAddress;
   private static URL s_aSMPClientEndpointAddress;
   private static String s_sSMPID;
 
-  public GuiSMLController () {}
+  private GuiSMLController () {}
 
-  public String handleCommand (@Nonnull final ESMLAction eAction, final String [] args) {
+  public static String handleCommand (@Nonnull final ESMLAction eAction, final String [] aArgs) {
     try {
       switch (eAction.getCommand ()) {
         case CREATE:
-          return _create (eAction.getObjectType (), args);
+          return _create (eAction.getObjectType (), aArgs);
         case UPDATE:
-          return _update (eAction.getObjectType (), args);
+          return _update (eAction.getObjectType (), aArgs);
         case DELETE:
-          return _delete (eAction.getObjectType (), args);
+          return _delete (eAction.getObjectType (), aArgs);
         case READ:
-          return _read (eAction.getObjectType (), args);
+          return _read (eAction.getObjectType (), aArgs);
         case LIST:
-          return _list (eAction.getObjectType (), args);
+          return _list (eAction.getObjectType (), aArgs);
         case PREPARETOMIGRATE:
-          return _prepareToMigrate (eAction.getObjectType (), args);
+          return _prepareToMigrate (eAction.getObjectType (), aArgs);
         case MIGRATE:
-          return _migrate (eAction.getObjectType (), args);
+          return _migrate (eAction.getObjectType (), aArgs);
       }
     }
     catch (final Exception e) {
@@ -173,9 +173,9 @@ public class GuiSMLController {
   }
 
   private static String _prepareToMigrate (final ESMLObjectType eObject, final String [] args) throws BadRequestFault,
-                                                                                             InternalErrorFault,
-                                                                                             NotFoundFault,
-                                                                                             UnauthorizedFault {
+                                                                                              InternalErrorFault,
+                                                                                              NotFoundFault,
+                                                                                              UnauthorizedFault {
     if (args.length < 2) {
       return "Invalid number of args to prepare to migrate.";
     }
@@ -189,9 +189,9 @@ public class GuiSMLController {
   }
 
   private static String _migrate (final ESMLObjectType eObject, final String [] args) throws BadRequestFault,
-                                                                                    InternalErrorFault,
-                                                                                    NotFoundFault,
-                                                                                    UnauthorizedFault {
+                                                                                     InternalErrorFault,
+                                                                                     NotFoundFault,
+                                                                                     UnauthorizedFault {
     if (args.length < 3) {
       return "Invalid number of args to prepare to migrate.";
     }

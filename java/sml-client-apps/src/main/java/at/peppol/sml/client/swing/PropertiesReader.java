@@ -43,6 +43,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+import javax.annotation.Nonnull;
+
+import com.phloc.commons.state.ESuccess;
+
 /**
  * @author PEPPOL.AT, BRZ, Jakob Frohnwieser
  */
@@ -54,32 +58,34 @@ final class PropertiesReader {
 
   private Properties m_aProperties;
 
-  public boolean readProperties (final File aPath) {
+  @Nonnull
+  public ESuccess readProperties (final File aPath) {
     try {
       m_aProperties = new Properties ();
       if (aPath != null && aPath.exists ())
         m_aProperties.load (new FileInputStream (aPath));
 
-      return true;
+      return ESuccess.SUCCESS;
     }
     catch (final IOException e) {
       e.printStackTrace ();
     }
 
-    return false;
+    return ESuccess.FAILURE;
   }
 
-  public boolean writeProperties (final File aPath) {
+  @Nonnull
+  public ESuccess writeProperties (final File aPath) {
     if (m_aProperties != null) {
       try {
         m_aProperties.store (new FileOutputStream (aPath), "PEPPOL SML Client properties file\n");
-        return true;
+        return ESuccess.SUCCESS;
       }
       catch (final IOException e) {
         e.printStackTrace ();
       }
     }
-    return false;
+    return ESuccess.FAILURE;
   }
 
   public String getHostname () {

@@ -48,7 +48,7 @@ import at.peppol.sml.client.swing.utils.WrappedSMLInfo;
 
 import com.phloc.commons.state.ESuccess;
 
-public final class AppProperties {
+final class AppProperties {
   private static final class SingletonHolder {
     static final AppProperties s_aInstance = new AppProperties ();
   }
@@ -74,7 +74,7 @@ public final class AppProperties {
 
   @Nonnull
   public ESuccess readProperties () {
-    if (!m_aPropsReader.readProperties (m_aPropertiesPath))
+    if (m_aPropsReader.readProperties (m_aPropertiesPath).isFailure ())
       return ESuccess.FAILURE;
     m_aSMLInfo = null;
     final String sHostName = m_aPropsReader.getHostname ();
@@ -97,7 +97,7 @@ public final class AppProperties {
     m_aPropsReader.setSMPID (m_sSMPID);
     m_aPropsReader.setKeyStorePath (m_sKeyStorePath);
     m_aPropsReader.setKeyStorePassword (m_sKeyStorePassword);
-    return ESuccess.valueOf (m_aPropsReader.writeProperties (m_aPropertiesPath));
+    return m_aPropsReader.writeProperties (m_aPropertiesPath);
   }
 
   public void setSMLInfo (final ISMLInfo aSMLInfo) {

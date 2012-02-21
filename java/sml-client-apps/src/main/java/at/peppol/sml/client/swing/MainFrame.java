@@ -57,12 +57,13 @@ import at.peppol.commons.security.KeyStoreUtils;
 import at.peppol.sml.client.ESMLAction;
 
 import com.phloc.commons.random.VerySecureRandom;
+import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
 
 /**
  * @author PEPPOL.AT, BRZ, Jakob Frohnwieser
  */
-public class MainFrame extends JFrame {
+final class MainFrame extends JFrame {
   public static enum EPanel {
     CONFIG_PANELS,
     ACTION_PANEL;
@@ -72,7 +73,7 @@ public class MainFrame extends JFrame {
   private static final int FRAME_HEIGHT = 360;
 
   private final JPanel m_aContentPanel;
-  private final StatusBar m_aStatusBar;
+  private final MainStatusBar m_aStatusBar;
 
   public MainFrame () {
     setTitle ("PEPPOL SML Client");
@@ -89,9 +90,9 @@ public class MainFrame extends JFrame {
                                                                                                      .fill ()
                                                                                                      .gap ()));
 
-    m_aStatusBar = new StatusBar ();
+    m_aStatusBar = new MainStatusBar ();
 
-    m_aContentPanel = new JPanel (new MigLayout ("fill,insets 0"));
+    m_aContentPanel = new JPanel (new MigLayout (new LC ().fill ().insets ("0")));
     setContent (EPanel.CONFIG_PANELS);
 
     add (m_aContentPanel, "width 100%,wrap");
@@ -100,12 +101,7 @@ public class MainFrame extends JFrame {
     pack ();
   }
 
-  public void displayStatus (final String message) {
-    m_aStatusBar.showMessage (message);
-  }
-
   public void setContent (@Nonnull final EPanel ePanel) {
-    m_aContentPanel.removeAll ();
     final MainContentPanel cp = new MainContentPanel (this);
     cp.setLayout (new MigLayout ("fill,insets 0"));
 
@@ -118,22 +114,22 @@ public class MainFrame extends JFrame {
         break;
     }
 
-    cp.init ();
+    m_aContentPanel.removeAll ();
     m_aContentPanel.add (cp, "width 100%");
     m_aContentPanel.updateUI ();
   }
 
-  public void setKeyStore (final String path, final String password) {
-    AppProperties.getInstance ().setKeyStorePath (path);
-    AppProperties.getInstance ().setKeyStorePassword (password);
+  public static void setKeyStore (final String sKeyStorePath, final String sKeystorePassword) {
+    AppProperties.getInstance ().setKeyStorePath (sKeyStorePath);
+    AppProperties.getInstance ().setKeyStorePassword (sKeystorePassword);
 
     try {
       // Main key storage
-      final KeyStore aKeyStore = KeyStoreUtils.loadKeyStoreFromFile (path, password);
+      final KeyStore aKeyStore = KeyStoreUtils.loadKeyStoreFromFile (sKeyStorePath, sKeystorePassword);
 
       // Key manager
       final KeyManagerFactory aKeyManagerFactory = KeyManagerFactory.getInstance ("SunX509");
-      aKeyManagerFactory.init (aKeyStore, password.toCharArray ());
+      aKeyManagerFactory.init (aKeyStore, sKeystorePassword.toCharArray ());
 
       // Assign key manager and empty trust manager to SSL context
       final SSLContext aSSLCtx = SSLContext.getInstance ("TLS");
@@ -143,28 +139,26 @@ public class MainFrame extends JFrame {
       HttpsURLConnection.setDefaultSSLSocketFactory (aSSLCtx.getSocketFactory ());
     }
     catch (final Exception ex) {
-      displayStatus (ex.getMessage ());
+      MainStatusBar.setStatus (ex.getMessage ());
     }
   }
 
-  public String performAction (final ESMLAction action, final String parameter) {
-    final String [] aParams = parameter.split (" ");
-
-    final GuiSMLController ctrl = new GuiSMLController ();
+  public static String performAction (@Nonnull final ESMLAction eAction, final String sParameter) {
+    final String [] aParams = RegExHelper.split (sParameter, "[ \t]+");
 
     final AppProperties aAP = AppProperties.getInstance ();
     if (aAP.getSMLInfo () == null) {
-      displayStatus ("Error.");
+      MainStatusBar.setStatus ("Error.");
       return "No SML Hostname set.";
     }
     GuiSMLController.setSMLInfo (aAP.getSMLInfo ());
 
     if (StringHelper.hasNoText (aAP.getSMPID ())) {
-      displayStatus ("Error.");
+      MainStatusBar.setStatus ("Error.");
       return "No SMP ID set.";
     }
     GuiSMLController.setSMPID (aAP.getSMPID ());
 
-    return ctrl.handleCommand (action, aParams);
+    return GuiSMLController.handleCommand (eAction, aParams);
   }
 }
