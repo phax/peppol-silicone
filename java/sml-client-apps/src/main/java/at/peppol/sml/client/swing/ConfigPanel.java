@@ -45,25 +45,25 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import net.miginfocom.layout.AC;
+import net.miginfocom.layout.LC;
 import net.miginfocom.swing.MigLayout;
-
 import at.peppol.commons.sml.ESML;
 import at.peppol.commons.sml.ISMLInfo;
 
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.compare.AbstractComparator;
 
-
 /**
  * Configuration Panel
- *
+ * 
  * @author PEPPOL.AT, BRZ, Jakob Frohnwieser
  */
 public class ConfigPanel extends JPanel {
   /**
    * Comparator for {@link ESML} objects, where the public ones (with client
    * certificate) come first, and the others later on.
-   *
+   * 
    * @author PEPPOL.AT, BRZ, Philip Helger
    */
   private static final class ESMLNameComparator extends AbstractComparator <ESML> {
@@ -77,19 +77,17 @@ public class ConfigPanel extends JPanel {
     }
   }
 
-  private final MainFrame mainFrame;
   private JComboBox cbHost;
   private JTextField tfId;
 
   public ConfigPanel (final MainFrame aMainFrame) {
-    this.mainFrame = aMainFrame;
     init ();
 
     aMainFrame.displayStatus ("");
   }
 
   private void init () {
-    setLayout (new MigLayout ("fill", "[label][left]", ""));
+    setLayout (new MigLayout (new LC ().fill (), new AC ().size ("label").gap ().align ("left"), new AC ()));
     // setPreferredSize (new Dimension (450, 100));
     setBorder (BorderFactory.createTitledBorder ("Client Configuration"));
 
@@ -112,12 +110,12 @@ public class ConfigPanel extends JPanel {
   }
 
   public void load () {
-    cbHost.setSelectedItem (mainFrame.getSmlHost ());
-    tfId.setText (mainFrame.getSmpId ());
+    cbHost.setSelectedItem (AppProperties.getInstance ().getSMLInfo ());
+    tfId.setText (AppProperties.getInstance ().getSMPID ());
   }
 
   public void save () {
-    mainFrame.setSmlHost ((ISMLInfo) cbHost.getSelectedItem ());
-    mainFrame.setSmpId (tfId.getText ());
+    AppProperties.getInstance ().setSMLInfo ((ISMLInfo) cbHost.getSelectedItem ());
+    AppProperties.getInstance ().setSMPID (tfId.getText ());
   }
 }

@@ -50,7 +50,7 @@ public class SwingMain {
       gui.setVisible (true);
     }
     catch (final Exception e) {
-      System.err.println ("Error setting look and feel:");
+      System.err.println ("Error showing mainframe");
       e.printStackTrace ();
     }
   }
