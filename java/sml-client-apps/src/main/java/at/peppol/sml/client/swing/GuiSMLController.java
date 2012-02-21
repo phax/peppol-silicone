@@ -52,6 +52,8 @@ import at.peppol.sml.client.console.ManageParticipantsClient;
 import at.peppol.sml.client.console.ManageSMPClient;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.regex.RegExHelper;
+import com.phloc.commons.string.StringHelper;
 
 /**
  * @author PEPPOL.AT, BRZ, Jakob Frohnwieser
@@ -78,10 +80,10 @@ final class GuiSMLController {
     return s_aParticipantClient;
   }
 
-  public static String handleCommand (@Nonnull final ISMLInfo aSML,
-                                      @Nonnull @Nonempty final String sSMPID,
-                                      @Nonnull final ESMLAction eAction,
-                                      @Nonnull final String [] aArgs) {
+  private static String _handleCommand (@Nonnull final ISMLInfo aSML,
+                                        @Nonnull @Nonempty final String sSMPID,
+                                        @Nonnull final ESMLAction eAction,
+                                        @Nonnull final String [] aArgs) {
     s_aSMPClient = null;
     s_aParticipantClient = null;
     s_aParticipantEndpointAddress = aSML.getManageParticipantIdentifierEndpointAddress ();
@@ -203,5 +205,22 @@ final class GuiSMLController {
         return "PARTICIPANT FOR SMP: " + s_sSMPID + " MIGRATED";
     }
     return "CANNOT DO MIGRATE ON " + eObject;
+  }
+
+  public static String performAction (@Nonnull final ESMLAction eAction, final String sParameter) {
+    final String [] aParams = RegExHelper.split (sParameter, "[ \t]+");
+
+    final AppProperties aAP = AppProperties.getInstance ();
+    if (aAP.getSMLInfo () == null) {
+      MainStatusBar.setStatusError ("No SML Hostname set");
+      return "No SML Hostname set.";
+    }
+
+    if (StringHelper.hasNoText (aAP.getSMPID ())) {
+      MainStatusBar.setStatusError ("No SMP ID set");
+      return "No SMP ID set.";
+    }
+
+    return _handleCommand (aAP.getSMLInfo (), aAP.getSMPID (), eAction, aParams);
   }
 }

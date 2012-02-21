@@ -41,7 +41,6 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.security.KeyStore;
 
-import javax.annotation.Nonnull;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
@@ -54,11 +53,8 @@ import net.miginfocom.layout.LC;
 import net.miginfocom.swing.MigLayout;
 import at.peppol.commons.security.DoNothingTrustManager;
 import at.peppol.commons.security.KeyStoreUtils;
-import at.peppol.sml.client.ESMLAction;
 
 import com.phloc.commons.random.VerySecureRandom;
-import com.phloc.commons.regex.RegExHelper;
-import com.phloc.commons.string.StringHelper;
 
 /**
  * @author PEPPOL.AT, BRZ, Jakob Frohnwieser
@@ -130,22 +126,5 @@ final class MainFrame extends JFrame {
     catch (final Exception ex) {
       MainStatusBar.setStatusError (ex.getMessage ());
     }
-  }
-
-  public static String performAction (@Nonnull final ESMLAction eAction, final String sParameter) {
-    final String [] aParams = RegExHelper.split (sParameter, "[ \t]+");
-
-    final AppProperties aAP = AppProperties.getInstance ();
-    if (aAP.getSMLInfo () == null) {
-      MainStatusBar.setStatusError ("No SML Hostname set");
-      return "No SML Hostname set.";
-    }
-
-    if (StringHelper.hasNoText (aAP.getSMPID ())) {
-      MainStatusBar.setStatusError ("No SMP ID set");
-      return "No SMP ID set.";
-    }
-
-    return GuiSMLController.handleCommand (aAP.getSMLInfo (), aAP.getSMPID (), eAction, aParams);
   }
 }
