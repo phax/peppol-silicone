@@ -37,63 +37,75 @@
  */
 package at.peppol.sml.client.swing;
 
-import java.util.Vector;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.BorderFactory;
-import javax.swing.JComboBox;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import net.miginfocom.layout.AC;
-import net.miginfocom.layout.LC;
 import net.miginfocom.swing.MigLayout;
-import at.peppol.commons.sml.ESML;
-import at.peppol.commons.sml.ISMLInfo;
-import at.peppol.sml.client.swing.utils.SMLInfoNameComparator;
-import at.peppol.sml.client.swing.utils.WrappedSMLInfo;
-
-import com.phloc.commons.collections.ContainerHelper;
+import at.peppol.sml.client.swing.utils.FileFilterJKS;
 
 /**
- * Configuration Panel
- * 
  * @author PEPPOL.AT, BRZ, Jakob Frohnwieser
  */
-final class ConfigPanel extends JPanel {
-  private final JComboBox m_aCBSMLHost;
-  private final JTextField m_aTFSMPID;
+final class ConfigPanelImportKey extends JPanel implements ActionListener {
+  private final JTextField m_aTFPath;
+  private final JTextField m_aTFPassword;
+  private final JButton m_aBtnBrowse;
 
-  public ConfigPanel () {
-    setLayout (new MigLayout (new LC ().fill (), new AC ().size ("label").gap ().align ("left"), new AC ()));
-    // setPreferredSize (new Dimension (450, 100));
-    setBorder (BorderFactory.createTitledBorder ("Client Configuration"));
+  public ConfigPanelImportKey () {
+    setLayout (new MigLayout ("fill", "[label][left]", ""));
+    // setPreferredSize (mainFrame.getContentPanelDimension ());
+    setBorder (BorderFactory.createTitledBorder ("Import Key"));
 
-    final Vector <ISMLInfo> aSMLHosts = new Vector <ISMLInfo> ();
-    for (final ESML eSml : ContainerHelper.getSorted (ESML.values (), new SMLInfoNameComparator ()))
-      aSMLHosts.add (new WrappedSMLInfo (eSml));
+    final JLabel lPath = new JLabel ("Path to key store: ");
+    lPath.setAlignmentX (RIGHT_ALIGNMENT);
+    m_aTFPath = new JTextField (30);
+    final JLabel lPassword = new JLabel ("Key store password: ");
+    m_aTFPassword = new JPasswordField (15);
+    m_aBtnBrowse = new JButton ("Browse");
+    m_aBtnBrowse.addActionListener (this);
 
-    final JLabel aLabelHost = new JLabel ("SML Hostname: ");
-    m_aCBSMLHost = new JComboBox (aSMLHosts);
-
-    final JLabel aLabelSMPID = new JLabel ("SMP ID: ");
-    m_aTFSMPID = new JTextField (15);
-
-    add (aLabelHost);
-    add (m_aCBSMLHost, "width 100%,wrap");
-    add (aLabelSMPID);
-    add (m_aTFSMPID, "width 100%,wrap");
+    add (lPath);
+    add (m_aTFPath, "width 100%");
+    add (m_aBtnBrowse, "right,wrap");
+    add (lPassword);
+    add (m_aTFPassword, "span 2,width 100%,wrap");
 
     loadData ();
   }
 
+  public void actionPerformed (final ActionEvent e) {
+    if (e.getActionCommand ().equals (m_aBtnBrowse.getText ())) {
+      _getPath ();
+    }
+  }
+
   public void loadData () {
-    m_aCBSMLHost.setSelectedItem (AppProperties.getInstance ().getSMLInfo ());
-    m_aTFSMPID.setText (AppProperties.getInstance ().getSMPID ());
+    m_aTFPath.setText (AppProperties.getInstance ().getKeyStorePath ());
+    m_aTFPassword.setText (AppProperties.getInstance ().getKeyStorePassword ());
   }
 
   public void saveData () {
-    AppProperties.getInstance ().setSMLInfo ((ISMLInfo) m_aCBSMLHost.getSelectedItem ());
-    AppProperties.getInstance ().setSMPID (m_aTFSMPID.getText ());
+    MainFrame.setKeyStore (m_aTFPath.getText (), m_aTFPassword.getText ());
+  }
+
+  private void _getPath () {
+    final JFileChooser fileChooser = new JFileChooser ();
+    fileChooser.setAcceptAllFileFilterUsed (false);
+    fileChooser.setFileFilter (new FileFilterJKS ());
+
+    fileChooser.showOpenDialog (null);
+
+    final File file = fileChooser.getSelectedFile ();
+    if (file != null)
+      m_aTFPath.setText (file.getAbsolutePath ());
   }
 }
