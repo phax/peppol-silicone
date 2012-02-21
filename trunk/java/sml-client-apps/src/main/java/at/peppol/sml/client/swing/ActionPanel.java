@@ -64,16 +64,11 @@ import com.phloc.datetime.format.PDTToString;
  * @author PEPPOL.AT, BRZ, Jakob Frohnwieser
  */
 final class ActionPanel extends JPanel {
-  private JComboBox m_aCBAction;
-  private JTextField m_aTFParams;
-  private JTextArea m_aTAOut;
+  private final JComboBox m_aCBAction;
+  private final JTextField m_aTFParams;
+  private final JTextArea m_aTAOut;
 
   public ActionPanel () {
-    _init ();
-    MainStatusBar.setStatus ("Ready.");
-  }
-
-  private void _init () {
     setLayout (new MigLayout ("", "[label][left]", ""));
     setPreferredSize (new Dimension (450, 100));
     setBorder (BorderFactory.createTitledBorder ("Command Parameters"));
@@ -127,6 +122,8 @@ final class ActionPanel extends JPanel {
 
     add (new JLabel ("Response: "), "aligny top");
     add (aSPOut, "width 100%,wrap");
+
+    MainStatusBar.setStatus ("Ready.");
   }
 
   @Nonnull
