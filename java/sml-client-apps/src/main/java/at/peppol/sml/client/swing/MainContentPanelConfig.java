@@ -37,23 +37,13 @@
  */
 package at.peppol.sml.client.swing;
 
-import java.awt.Checkbox;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.io.File;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
-import net.miginfocom.layout.AC;
-import net.miginfocom.layout.LC;
 import net.miginfocom.swing.MigLayout;
-import at.peppol.sml.client.swing.utils.FileFilterProperties;
 
 /**
  * Content Panel
@@ -61,54 +51,15 @@ import at.peppol.sml.client.swing.utils.FileFilterProperties;
  * @author PEPPOL.AT, BRZ, Jakob Frohnwieser
  */
 final class MainContentPanelConfig extends JPanel {
-  private final ConfigPanel m_aConfigPanel;
-  private final ImportKeyPanel m_aImportKeyPanel;
-
-  private final Checkbox m_aCBEnable;
-  private final JTextField m_aTFPropertiesPath;
-  private JButton m_aBtnBrowse;
+  private final ConfigPanelConfig m_aConfigPanel = new ConfigPanelConfig ();
+  private final ConfigPanelImportKey m_aImportKeyPanel = new ConfigPanelImportKey ();
+  private final ConfigPanelProperties m_aPropertiesPanel = new ConfigPanelProperties ();
 
   public MainContentPanelConfig (final MainFrame aMainFrame) {
     setLayout (new MigLayout ("fill,insets 0"));
-
-    m_aConfigPanel = new ConfigPanel ();
-    m_aImportKeyPanel = new ImportKeyPanel ();
-
-    m_aCBEnable = new Checkbox ("Use properties: ", AppProperties.getInstance ().isPropertiesEnabled ());
-    m_aCBEnable.addItemListener (new ItemListener () {
-      public void itemStateChanged (final ItemEvent e) {
-        _setPropertiesEnabled (m_aCBEnable.getState ());
-      }
-    });
-    m_aTFPropertiesPath = new JTextField (30);
-
     add (m_aConfigPanel, "width 100%, wrap");
     add (m_aImportKeyPanel, "width 100%,wrap");
-
-    // Client properties file path
-    final JButton m_aBtnBrowse = new JButton ("Browse");
-    m_aBtnBrowse.addActionListener (new ActionListener () {
-      public void actionPerformed (final ActionEvent e) {
-        final JFileChooser fileChooser = new JFileChooser ();
-        fileChooser.setAcceptAllFileFilterUsed (false);
-        fileChooser.setFileFilter (new FileFilterProperties ());
-        fileChooser.showOpenDialog (null);
-        final File aSelectedFile = fileChooser.getSelectedFile ();
-        if (aSelectedFile != null) {
-          m_aTFPropertiesPath.setText (aSelectedFile.getAbsolutePath ());
-          AppProperties.getInstance ().setPropertiesPath (aSelectedFile.getAbsolutePath ());
-          _loadFileData ();
-        }
-      }
-    });
-
-    final JPanel aPropsPanel = new JPanel ();
-    aPropsPanel.setLayout (new MigLayout (new LC ().fill (), new AC ().size ("label").gap ().align ("left"), new AC ()));
-    aPropsPanel.setBorder (BorderFactory.createTitledBorder ("Client properties"));
-    aPropsPanel.add (m_aCBEnable);
-    aPropsPanel.add (m_aTFPropertiesPath, "width 100%");
-    aPropsPanel.add (m_aBtnBrowse, "right, wrap");
-    add (aPropsPanel, "width 100%,wrap");
+    add (m_aPropertiesPanel, "width 100%,wrap");
 
     // Next button
     final JButton aBtnNext = new JButton ("Next >>");
@@ -116,42 +67,15 @@ final class MainContentPanelConfig extends JPanel {
       public void actionPerformed (final ActionEvent e) {
         m_aConfigPanel.saveData ();
         m_aImportKeyPanel.saveData ();
-        AppProperties.getInstance ().setPropertiesPath (m_aTFPropertiesPath.getText ());
-        if (m_aCBEnable.getState ())
-          AppProperties.getInstance ().writeProperties ();
+        m_aPropertiesPanel.saveData ();
         aMainFrame.setContent (EMainPanel.ACTION_PANEL);
         MainStatusBar.setStatus ("Configuration saved");
       }
     });
     add (aBtnNext, "gapright 20,align right,wrap");
 
-    _setPropertiesEnabled (AppProperties.getInstance ().isPropertiesEnabled ());
-
     m_aConfigPanel.loadData ();
     m_aImportKeyPanel.loadData ();
-    m_aTFPropertiesPath.setText (AppProperties.getInstance ().getPropertiesPath ().getPath ());
-  }
-
-  private void _loadFileData () {
-    AppProperties.getInstance ().readProperties ();
-
-    m_aConfigPanel.loadData ();
-    m_aImportKeyPanel.loadData ();
-    m_aTFPropertiesPath.setText (AppProperties.getInstance ().getPropertiesPath ().getPath ());
-  }
-
-  private void _setPropertiesEnabled (final boolean bEnabled) {
-    m_aTFPropertiesPath.setEditable (bEnabled);
-    m_aBtnBrowse.setEnabled (bEnabled);
-
-    AppProperties.getInstance ().setPropertiesEnabled (bEnabled);
-
-    if (bEnabled)
-      _loadFileData ();
-    else {
-      AppProperties.getInstance ().clear ();
-      m_aConfigPanel.loadData ();
-      m_aImportKeyPanel.loadData ();
-    }
+    m_aPropertiesPanel.loadData ();
   }
 }
