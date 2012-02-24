@@ -9,6 +9,7 @@ Performed changes so far:
   * Improved source comments and added some informational annotations
   * Added easier readable constants in EPredefinedDocumentIdentifier and EPredefinedProcessIdentifier
   * Added visualization of Credit Notes
+  * Improved the SML Client Swing GUI to be more easily usable
 
 = v2.2.0 (2012-02-09, initial release, all components) =
 
