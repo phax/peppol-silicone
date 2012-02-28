@@ -53,12 +53,12 @@
     <dependency>
       <groupId>com.sun.jersey</groupId>
       <artifactId>jersey-server</artifactId>
-      <version>1.11</version>
+      <version>1.12</version>
     </dependency>
     <dependency>
       <groupId>com.sun.jersey</groupId>
       <artifactId>jersey-servlet</artifactId>
-      <version>1.11</version>
+      <version>1.12</version>
     </dependency>
     <!-- You may replace MySQL in production with something else -->
     <dependency>
