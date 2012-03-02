@@ -46,7 +46,7 @@
   </Annotation>
   <Identification>
     <ShortName>PeppolIdentifierIssuingAgencies</ShortName>
-    <Version>1.0.2</Version>
+    <Version>1.1</Version>
     <CanonicalUri>urn:peppol.eu:names:identifier:issuingagencies</CanonicalUri>
     <CanonicalVersionUri>urn:peppol.eu:names:identifier:issuingagencies-1.0</CanonicalVersionUri>
   </Identification>
@@ -66,6 +66,10 @@
     <Column Id="deprecated" Use="required">
       <ShortName>Deprecated</ShortName>
       <Data Type="boolean" />
+    </Column>
+    <Column Id="since" Use="required">
+      <ShortName>Since</ShortName>
+      <Data Type="string" />
     </Column>
     <Key Id="schemeidKey">
       <ShortName>Scheme ID</ShortName>
@@ -90,6 +94,9 @@
       <Value ColumnRef="deprecated">
         <SimpleValue>false</SimpleValue>
       </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.0.0</SimpleValue>
+      </Value>
     </Row>
     <Row>
       <Value ColumnRef="schemeid">
@@ -103,6 +110,9 @@
       </Value>
       <Value ColumnRef="deprecated">
         <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.0.0</SimpleValue>
       </Value>
     </Row>
     <Row>
@@ -118,6 +128,9 @@
       <Value ColumnRef="deprecated">
         <SimpleValue>false</SimpleValue>
       </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.0.0</SimpleValue>
+      </Value>
     </Row>
     <Row>
       <Value ColumnRef="schemeid">
@@ -131,6 +144,9 @@
       </Value>
       <Value ColumnRef="deprecated">
         <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.0.0</SimpleValue>
       </Value>
     </Row>
     <Row>
@@ -146,6 +162,9 @@
       <Value ColumnRef="deprecated">
         <SimpleValue>false</SimpleValue>
       </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.0.0</SimpleValue>
+      </Value>
     </Row>
     <Row>
       <Value ColumnRef="schemeid">
@@ -159,6 +178,9 @@
       </Value>
       <Value ColumnRef="deprecated">
         <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.0.0</SimpleValue>
       </Value>
     </Row>
     <Row>
@@ -174,6 +196,9 @@
       <Value ColumnRef="deprecated">
         <SimpleValue>false</SimpleValue>
       </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.0.0</SimpleValue>
+      </Value>
     </Row>
     <Row>
       <Value ColumnRef="schemeid">
@@ -187,6 +212,9 @@
       </Value>
       <Value ColumnRef="deprecated">
         <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.0.0</SimpleValue>
       </Value>
     </Row>
     <Row>
@@ -202,6 +230,9 @@
       <Value ColumnRef="deprecated">
         <SimpleValue>false</SimpleValue>
       </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.0.0</SimpleValue>
+      </Value>
     </Row>
     <Row>
       <Value ColumnRef="schemeid">
@@ -215,6 +246,9 @@
       </Value>
       <Value ColumnRef="deprecated">
         <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.0.0</SimpleValue>
       </Value>
     </Row>
     <Row>
@@ -230,6 +264,9 @@
       <Value ColumnRef="deprecated">
         <SimpleValue>false</SimpleValue>
       </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.0.0</SimpleValue>
+      </Value>
     </Row>
     <Row>
       <Value ColumnRef="schemeid">
@@ -243,6 +280,9 @@
       </Value>
       <Value ColumnRef="deprecated">
         <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.0.0</SimpleValue>
       </Value>
     </Row>
     <Row>
@@ -258,6 +298,9 @@
       <Value ColumnRef="deprecated">
         <SimpleValue>false</SimpleValue>
       </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.0.0</SimpleValue>
+      </Value>
     </Row>
     <Row>
       <Value ColumnRef="schemeid">
@@ -271,6 +314,9 @@
       </Value>
       <Value ColumnRef="deprecated">
         <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.0.0</SimpleValue>
       </Value>
     </Row>
     <Row>
@@ -286,6 +332,9 @@
       <Value ColumnRef="deprecated">
         <SimpleValue>false</SimpleValue>
       </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.0.0</SimpleValue>
+      </Value>
     </Row>
     <Row>
       <Value ColumnRef="schemeid">
@@ -300,6 +349,9 @@
       <Value ColumnRef="deprecated">
         <SimpleValue>false</SimpleValue>
       </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.0.0</SimpleValue>
+      </Value>
     </Row>
     <Row>
       <Value ColumnRef="schemeid">
@@ -312,7 +364,10 @@
         <SimpleValue>Enhetsregisteret ved Bronnoysundregisterne</SimpleValue>
       </Value>
       <Value ColumnRef="deprecated">
-        <SimpleValue>false</SimpleValue>
+        <SimpleValue>true</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.0.0</SimpleValue>
       </Value>
     </Row>
     <Row>
@@ -324,6 +379,9 @@
       </Value>
       <Value ColumnRef="deprecated">
         <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.0.0</SimpleValue>
       </Value>
     </Row>
     <Row>
@@ -337,7 +395,10 @@
         <SimpleValue>National ministries of Economy</SimpleValue>
       </Value>
       <Value ColumnRef="deprecated">
-        <SimpleValue>false</SimpleValue>
+        <SimpleValue>true</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.0.0</SimpleValue>
       </Value>
     </Row>
     <Row>
@@ -353,6 +414,9 @@
       <Value ColumnRef="deprecated">
         <SimpleValue>false</SimpleValue>
       </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.0.0</SimpleValue>
+      </Value>
     </Row>
     <Row>
       <Value ColumnRef="schemeid">
@@ -366,6 +430,9 @@
       </Value>
       <Value ColumnRef="deprecated">
         <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.0.0</SimpleValue>
       </Value>
     </Row>
     <Row>
@@ -381,6 +448,9 @@
       <Value ColumnRef="deprecated">
         <SimpleValue>false</SimpleValue>
       </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.0.0</SimpleValue>
+      </Value>
     </Row>
     <Row>
       <Value ColumnRef="schemeid">
@@ -394,6 +464,9 @@
       </Value>
       <Value ColumnRef="deprecated">
         <SimpleValue>true</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.0.0</SimpleValue>
       </Value>
     </Row>
     <Row>
@@ -409,6 +482,9 @@
       <Value ColumnRef="deprecated">
         <SimpleValue>false</SimpleValue>
       </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.0.0</SimpleValue>
+      </Value>
     </Row>
     <Row>
       <Value ColumnRef="schemeid">
@@ -422,6 +498,9 @@
       </Value>
       <Value ColumnRef="deprecated">
         <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.0.1</SimpleValue>
       </Value>
     </Row>
     <Row>
@@ -437,6 +516,9 @@
       <Value ColumnRef="deprecated">
         <SimpleValue>false</SimpleValue>
       </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.0.2</SimpleValue>
+      </Value>
     </Row>
     <Row>
       <Value ColumnRef="schemeid">
@@ -450,6 +532,655 @@
       </Value>
       <Value ColumnRef="deprecated">
         <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.0.2</SimpleValue>
+      </Value>
+    </Row>
+    <Row>
+      <Value ColumnRef="schemeid">
+        <SimpleValue>IT:IPA</SimpleValue>
+      </Value>
+      <Value ColumnRef="iso6523">
+        <SimpleValue>9921</SimpleValue>
+      </Value>
+      <Value ColumnRef="schemeagency">
+        <SimpleValue>Indice delle Pubbliche Amministrazioni</SimpleValue>
+      </Value>
+      <Value ColumnRef="deprecated">
+        <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.1.0</SimpleValue>
+      </Value>
+    </Row>
+    <Row>
+      <Value ColumnRef="schemeid">
+        <SimpleValue>AD:VAT</SimpleValue>
+      </Value>
+      <Value ColumnRef="iso6523">
+        <SimpleValue>9922</SimpleValue>
+      </Value>
+      <Value ColumnRef="schemeagency">
+        <SimpleValue>Andorra VAT number</SimpleValue>
+      </Value>
+      <Value ColumnRef="deprecated">
+        <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.1.0</SimpleValue>
+      </Value>
+    </Row>
+    <Row>
+      <Value ColumnRef="schemeid">
+        <SimpleValue>AL:VAT</SimpleValue>
+      </Value>
+      <Value ColumnRef="iso6523">
+        <SimpleValue>9923</SimpleValue>
+      </Value>
+      <Value ColumnRef="schemeagency">
+        <SimpleValue>Albania VAT number</SimpleValue>
+      </Value>
+      <Value ColumnRef="deprecated">
+        <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.1.0</SimpleValue>
+      </Value>
+    </Row>
+    <Row>
+      <Value ColumnRef="schemeid">
+        <SimpleValue>BA:VAT</SimpleValue>
+      </Value>
+      <Value ColumnRef="iso6523">
+        <SimpleValue>9924</SimpleValue>
+      </Value>
+      <Value ColumnRef="schemeagency">
+        <SimpleValue>Bosnia and Herzegovina VAT number</SimpleValue>
+      </Value>
+      <Value ColumnRef="deprecated">
+        <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.1.0</SimpleValue>
+      </Value>
+    </Row>
+    <Row>
+      <Value ColumnRef="schemeid">
+        <SimpleValue>BE:VAT</SimpleValue>
+      </Value>
+      <Value ColumnRef="iso6523">
+        <SimpleValue>9925</SimpleValue>
+      </Value>
+      <Value ColumnRef="schemeagency">
+        <SimpleValue>Belgium VAT number</SimpleValue>
+      </Value>
+      <Value ColumnRef="deprecated">
+        <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.1.0</SimpleValue>
+      </Value>
+    </Row>
+    <Row>
+      <Value ColumnRef="schemeid">
+        <SimpleValue>BG:VAT</SimpleValue>
+      </Value>
+      <Value ColumnRef="iso6523">
+        <SimpleValue>9926</SimpleValue>
+      </Value>
+      <Value ColumnRef="schemeagency">
+        <SimpleValue>Bulgaria VAT number</SimpleValue>
+      </Value>
+      <Value ColumnRef="deprecated">
+        <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.1.0</SimpleValue>
+      </Value>
+    </Row>
+    <Row>
+      <Value ColumnRef="schemeid">
+        <SimpleValue>BY:VAT</SimpleValue>
+      </Value>
+      <Value ColumnRef="iso6523">
+        <SimpleValue>9927</SimpleValue>
+      </Value>
+      <Value ColumnRef="schemeagency">
+        <SimpleValue>Belarus VAT number</SimpleValue>
+      </Value>
+      <Value ColumnRef="deprecated">
+        <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.1.0</SimpleValue>
+      </Value>
+    </Row>
+    <Row>
+      <Value ColumnRef="schemeid">
+        <SimpleValue>CH:VAT</SimpleValue>
+      </Value>
+      <Value ColumnRef="iso6523">
+        <SimpleValue>9928</SimpleValue>
+      </Value>
+      <Value ColumnRef="schemeagency">
+        <SimpleValue>Switzerland VAT number</SimpleValue>
+      </Value>
+      <Value ColumnRef="deprecated">
+        <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.1.0</SimpleValue>
+      </Value>
+    </Row>
+    <Row>
+      <Value ColumnRef="schemeid">
+        <SimpleValue>CY:VAT</SimpleValue>
+      </Value>
+      <Value ColumnRef="iso6523">
+        <SimpleValue>9929</SimpleValue>
+      </Value>
+      <Value ColumnRef="schemeagency">
+        <SimpleValue>Cyprus VAT number</SimpleValue>
+      </Value>
+      <Value ColumnRef="deprecated">
+        <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.1.0</SimpleValue>
+      </Value>
+    </Row>
+    <Row>
+      <Value ColumnRef="schemeid">
+        <SimpleValue>CZ:VAT</SimpleValue>
+      </Value>
+      <Value ColumnRef="iso6523">
+        <SimpleValue>9930</SimpleValue>
+      </Value>
+      <Value ColumnRef="schemeagency">
+        <SimpleValue>Czech Republic VAT number</SimpleValue>
+      </Value>
+      <Value ColumnRef="deprecated">
+        <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.1.0</SimpleValue>
+      </Value>
+    </Row>
+    <Row>
+      <Value ColumnRef="schemeid">
+        <SimpleValue>DE:VAT</SimpleValue>
+      </Value>
+      <Value ColumnRef="iso6523">
+        <SimpleValue>9931</SimpleValue>
+      </Value>
+      <Value ColumnRef="schemeagency">
+        <SimpleValue>Germany VAT number</SimpleValue>
+      </Value>
+      <Value ColumnRef="deprecated">
+        <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.1.0</SimpleValue>
+      </Value>
+    </Row>
+    <Row>
+      <Value ColumnRef="schemeid">
+        <SimpleValue>EE:VAT</SimpleValue>
+      </Value>
+      <Value ColumnRef="iso6523">
+        <SimpleValue>9932</SimpleValue>
+      </Value>
+      <Value ColumnRef="schemeagency">
+        <SimpleValue>Estonia VAT number</SimpleValue>
+      </Value>
+      <Value ColumnRef="deprecated">
+        <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.1.0</SimpleValue>
+      </Value>
+    </Row>
+    <Row>
+      <Value ColumnRef="schemeid">
+        <SimpleValue>GB:VAT</SimpleValue>
+      </Value>
+      <Value ColumnRef="iso6523">
+        <SimpleValue>9933</SimpleValue>
+      </Value>
+      <Value ColumnRef="schemeagency">
+        <SimpleValue>United Kingdom VAT number</SimpleValue>
+      </Value>
+      <Value ColumnRef="deprecated">
+        <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.1.0</SimpleValue>
+      </Value>
+    </Row>
+    <Row>
+      <Value ColumnRef="schemeid">
+        <SimpleValue>GR:VAT</SimpleValue>
+      </Value>
+      <Value ColumnRef="iso6523">
+        <SimpleValue>9934</SimpleValue>
+      </Value>
+      <Value ColumnRef="schemeagency">
+        <SimpleValue>Greece VAT number</SimpleValue>
+      </Value>
+      <Value ColumnRef="deprecated">
+        <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.1.0</SimpleValue>
+      </Value>
+    </Row>
+    <Row>
+      <Value ColumnRef="schemeid">
+        <SimpleValue>HR:VAT</SimpleValue>
+      </Value>
+      <Value ColumnRef="iso6523">
+        <SimpleValue>9935</SimpleValue>
+      </Value>
+      <Value ColumnRef="schemeagency">
+        <SimpleValue>Croatia VAT number</SimpleValue>
+      </Value>
+      <Value ColumnRef="deprecated">
+        <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.1.0</SimpleValue>
+      </Value>
+    </Row>
+    <Row>
+      <Value ColumnRef="schemeid">
+        <SimpleValue>IE:VAT</SimpleValue>
+      </Value>
+      <Value ColumnRef="iso6523">
+        <SimpleValue>9936</SimpleValue>
+      </Value>
+      <Value ColumnRef="schemeagency">
+        <SimpleValue>Ireland VAT number</SimpleValue>
+      </Value>
+      <Value ColumnRef="deprecated">
+        <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.1.0</SimpleValue>
+      </Value>
+    </Row>
+    <Row>
+      <Value ColumnRef="schemeid">
+        <SimpleValue>KZ:VAT</SimpleValue>
+      </Value>
+      <Value ColumnRef="iso6523">
+        <SimpleValue>9937</SimpleValue>
+      </Value>
+      <Value ColumnRef="schemeagency">
+        <SimpleValue>Kazakhstan VAT number</SimpleValue>
+      </Value>
+      <Value ColumnRef="deprecated">
+        <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.1.0</SimpleValue>
+      </Value>
+    </Row>
+    <Row>
+      <Value ColumnRef="schemeid">
+        <SimpleValue>LI:VAT</SimpleValue>
+      </Value>
+      <Value ColumnRef="iso6523">
+        <SimpleValue>9938</SimpleValue>
+      </Value>
+      <Value ColumnRef="schemeagency">
+        <SimpleValue>Liechtenstein VAT number</SimpleValue>
+      </Value>
+      <Value ColumnRef="deprecated">
+        <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.1.0</SimpleValue>
+      </Value>
+    </Row>
+    <Row>
+      <Value ColumnRef="schemeid">
+        <SimpleValue>LT:VAT</SimpleValue>
+      </Value>
+      <Value ColumnRef="iso6523">
+        <SimpleValue>9939</SimpleValue>
+      </Value>
+      <Value ColumnRef="schemeagency">
+        <SimpleValue>Lithuania VAT number</SimpleValue>
+      </Value>
+      <Value ColumnRef="deprecated">
+        <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.1.0</SimpleValue>
+      </Value>
+    </Row>
+    <Row>
+      <Value ColumnRef="schemeid">
+        <SimpleValue>LU:VAT</SimpleValue>
+      </Value>
+      <Value ColumnRef="iso6523">
+        <SimpleValue>9940</SimpleValue>
+      </Value>
+      <Value ColumnRef="schemeagency">
+        <SimpleValue>Luxemburg VAT number</SimpleValue>
+      </Value>
+      <Value ColumnRef="deprecated">
+        <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.1.0</SimpleValue>
+      </Value>
+    </Row>
+    <Row>
+      <Value ColumnRef="schemeid">
+        <SimpleValue>LV:VAT</SimpleValue>
+      </Value>
+      <Value ColumnRef="iso6523">
+        <SimpleValue>9941</SimpleValue>
+      </Value>
+      <Value ColumnRef="schemeagency">
+        <SimpleValue>Latvia VAT number</SimpleValue>
+      </Value>
+      <Value ColumnRef="deprecated">
+        <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.1.0</SimpleValue>
+      </Value>
+    </Row>
+    <Row>
+      <Value ColumnRef="schemeid">
+        <SimpleValue>MC:VAT</SimpleValue>
+      </Value>
+      <Value ColumnRef="iso6523">
+        <SimpleValue>9942</SimpleValue>
+      </Value>
+      <Value ColumnRef="schemeagency">
+        <SimpleValue>Monaco VAT number</SimpleValue>
+      </Value>
+      <Value ColumnRef="deprecated">
+        <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.1.0</SimpleValue>
+      </Value>
+    </Row>
+    <Row>
+      <Value ColumnRef="schemeid">
+        <SimpleValue>MD:VAT</SimpleValue>
+      </Value>
+      <Value ColumnRef="iso6523">
+        <SimpleValue>9943</SimpleValue>
+      </Value>
+      <Value ColumnRef="schemeagency">
+        <SimpleValue>Moldova, Republic of VAT number</SimpleValue>
+      </Value>
+      <Value ColumnRef="deprecated">
+        <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.1.0</SimpleValue>
+      </Value>
+    </Row>
+    <Row>
+      <Value ColumnRef="schemeid">
+        <SimpleValue>ME:VAT</SimpleValue>
+      </Value>
+      <Value ColumnRef="iso6523">
+        <SimpleValue>9944</SimpleValue>
+      </Value>
+      <Value ColumnRef="schemeagency">
+        <SimpleValue>Montenegro VAT number</SimpleValue>
+      </Value>
+      <Value ColumnRef="deprecated">
+        <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.1.0</SimpleValue>
+      </Value>
+    </Row>
+    <Row>
+      <Value ColumnRef="schemeid">
+        <SimpleValue>MK:VAT</SimpleValue>
+      </Value>
+      <Value ColumnRef="iso6523">
+        <SimpleValue>9945</SimpleValue>
+      </Value>
+      <Value ColumnRef="schemeagency">
+        <SimpleValue>Macedonia, the former Yugoslav Republic of VAT number</SimpleValue>
+      </Value>
+      <Value ColumnRef="deprecated">
+        <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.1.0</SimpleValue>
+      </Value>
+    </Row>
+    <Row>
+      <Value ColumnRef="schemeid">
+        <SimpleValue>MT:VAT</SimpleValue>
+      </Value>
+      <Value ColumnRef="iso6523">
+        <SimpleValue>9946</SimpleValue>
+      </Value>
+      <Value ColumnRef="schemeagency">
+        <SimpleValue>Malta VAT number</SimpleValue>
+      </Value>
+      <Value ColumnRef="deprecated">
+        <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.1.0</SimpleValue>
+      </Value>
+    </Row>
+    <Row>
+      <Value ColumnRef="schemeid">
+        <SimpleValue>NL:VAT</SimpleValue>
+      </Value>
+      <Value ColumnRef="iso6523">
+        <SimpleValue>9947</SimpleValue>
+      </Value>
+      <Value ColumnRef="schemeagency">
+        <SimpleValue>Netherlands VAT number</SimpleValue>
+      </Value>
+      <Value ColumnRef="deprecated">
+        <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.1.0</SimpleValue>
+      </Value>
+    </Row>
+    <Row>
+      <Value ColumnRef="schemeid">
+        <SimpleValue>PL:VAT</SimpleValue>
+      </Value>
+      <Value ColumnRef="iso6523">
+        <SimpleValue>9948</SimpleValue>
+      </Value>
+      <Value ColumnRef="schemeagency">
+        <SimpleValue>Poland VAT number</SimpleValue>
+      </Value>
+      <Value ColumnRef="deprecated">
+        <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.1.0</SimpleValue>
+      </Value>
+    </Row>
+    <Row>
+      <Value ColumnRef="schemeid">
+        <SimpleValue>PT:VAT</SimpleValue>
+      </Value>
+      <Value ColumnRef="iso6523">
+        <SimpleValue>9949</SimpleValue>
+      </Value>
+      <Value ColumnRef="schemeagency">
+        <SimpleValue>Portugal VAT number</SimpleValue>
+      </Value>
+      <Value ColumnRef="deprecated">
+        <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.1.0</SimpleValue>
+      </Value>
+    </Row>
+    <Row>
+      <Value ColumnRef="schemeid">
+        <SimpleValue>RO:VAT</SimpleValue>
+      </Value>
+      <Value ColumnRef="iso6523">
+        <SimpleValue>9950</SimpleValue>
+      </Value>
+      <Value ColumnRef="schemeagency">
+        <SimpleValue>Romania VAT number</SimpleValue>
+      </Value>
+      <Value ColumnRef="deprecated">
+        <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.1.0</SimpleValue>
+      </Value>
+    </Row>
+    <Row>
+      <Value ColumnRef="schemeid">
+        <SimpleValue>RS:VAT</SimpleValue>
+      </Value>
+      <Value ColumnRef="iso6523">
+        <SimpleValue>9951</SimpleValue>
+      </Value>
+      <Value ColumnRef="schemeagency">
+        <SimpleValue>Serbia VAT number</SimpleValue>
+      </Value>
+      <Value ColumnRef="deprecated">
+        <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.1.0</SimpleValue>
+      </Value>
+    </Row>
+    <Row>
+      <Value ColumnRef="schemeid">
+        <SimpleValue>RU:VAT</SimpleValue>
+      </Value>
+      <Value ColumnRef="iso6523">
+        <SimpleValue>9952</SimpleValue>
+      </Value>
+      <Value ColumnRef="schemeagency">
+        <SimpleValue>Russian Federation VAT number</SimpleValue>
+      </Value>
+      <Value ColumnRef="deprecated">
+        <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.1.0</SimpleValue>
+      </Value>
+    </Row>
+    <Row>
+      <Value ColumnRef="schemeid">
+        <SimpleValue>SI:VAT</SimpleValue>
+      </Value>
+      <Value ColumnRef="iso6523">
+        <SimpleValue>9953</SimpleValue>
+      </Value>
+      <Value ColumnRef="schemeagency">
+        <SimpleValue>Solvenia VAT number</SimpleValue>
+      </Value>
+      <Value ColumnRef="deprecated">
+        <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.1.0</SimpleValue>
+      </Value>
+    </Row>
+    <Row>
+      <Value ColumnRef="schemeid">
+        <SimpleValue>SK:VAT</SimpleValue>
+      </Value>
+      <Value ColumnRef="iso6523">
+        <SimpleValue>9954</SimpleValue>
+      </Value>
+      <Value ColumnRef="schemeagency">
+        <SimpleValue>Slovakia VAT number</SimpleValue>
+      </Value>
+      <Value ColumnRef="deprecated">
+        <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.1.0</SimpleValue>
+      </Value>
+    </Row>
+    <Row>
+      <Value ColumnRef="schemeid">
+        <SimpleValue>SM:VAT</SimpleValue>
+      </Value>
+      <Value ColumnRef="iso6523">
+        <SimpleValue>9955</SimpleValue>
+      </Value>
+      <Value ColumnRef="schemeagency">
+        <SimpleValue>San Marino VAT number</SimpleValue>
+      </Value>
+      <Value ColumnRef="deprecated">
+        <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.1.0</SimpleValue>
+      </Value>
+    </Row>
+    <Row>
+      <Value ColumnRef="schemeid">
+        <SimpleValue>TR:VAT</SimpleValue>
+      </Value>
+      <Value ColumnRef="iso6523">
+        <SimpleValue>9956</SimpleValue>
+      </Value>
+      <Value ColumnRef="schemeagency">
+        <SimpleValue>Turkey VAT number</SimpleValue>
+      </Value>
+      <Value ColumnRef="deprecated">
+        <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.1.0</SimpleValue>
+      </Value>
+    </Row>
+    <Row>
+      <Value ColumnRef="schemeid">
+        <SimpleValue>UA:VAT</SimpleValue>
+      </Value>
+      <Value ColumnRef="iso6523">
+        <SimpleValue>9957</SimpleValue>
+      </Value>
+      <Value ColumnRef="schemeagency">
+        <SimpleValue>Ukraine VAT number</SimpleValue>
+      </Value>
+      <Value ColumnRef="deprecated">
+        <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.1.0</SimpleValue>
+      </Value>
+    </Row>
+    <Row>
+      <Value ColumnRef="schemeid">
+        <SimpleValue>VA:VAT</SimpleValue>
+      </Value>
+      <Value ColumnRef="iso6523">
+        <SimpleValue>9958</SimpleValue>
+      </Value>
+      <Value ColumnRef="schemeagency">
+        <SimpleValue>Holy See (Vatican City State) VAT number</SimpleValue>
+      </Value>
+      <Value ColumnRef="deprecated">
+        <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.1.0</SimpleValue>
       </Value>
     </Row>
   </SimpleCodeList>
