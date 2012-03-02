@@ -46,7 +46,7 @@
   </Annotation>
   <Identification>
     <ShortName>PeppolProcessIdentifier</ShortName>
-    <Version>1.0.2</Version>
+    <Version>1.1</Version>
     <CanonicalUri>urn:peppol.eu:names:identifier:process</CanonicalUri>
     <CanonicalVersionUri>urn:peppol.eu:names:identifier:process-1.0</CanonicalVersionUri>
   </Identification>
@@ -63,8 +63,12 @@
       <ShortName>PEPPOL BIS</ShortName>
       <Data Type="string" />
     </Column>
-    <Column Id="docids" Use="optional">
+    <Column Id="docids" Use="required">
       <ShortName>Document identifiers</ShortName>
+      <Data Type="string" />
+    </Column>
+    <Column Id="since" Use="required">
+      <ShortName>Since</ShortName>
       <Data Type="string" />
     </Column>
     <Key Id="nameKey">
@@ -96,6 +100,9 @@
 urn:oasis:names:specification:ubl:schema:xsd:ApplicationResponse-2::ApplicationResponse##urn:www.cenbii.eu:transaction:biicoretrdm057:ver1.0:#urn:www.peppol.eu:bis:peppol1a:ver1.0::2.0
 urn:oasis:names:specification:ubl:schema:xsd:ApplicationResponse-2::ApplicationResponse##urn:www.cenbii.eu:transaction:biicoretrdm058:ver1.0:#urn:www.peppol.eu:bis:peppol1a:ver1.0::2.0</SimpleValue>
       </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.0.0</SimpleValue>
+      </Value>
     </Row>
     <Row>
       <Value ColumnRef="name">
@@ -110,6 +117,9 @@ urn:oasis:names:specification:ubl:schema:xsd:ApplicationResponse-2::ApplicationR
       <Value ColumnRef="docids">
         <SimpleValue>urn:oasis:names:specification:ubl:schema:xsd:Order-2::Order##urn:www.cenbii.eu:transaction:biicoretrdm001:ver1.0:#urn:www.peppol.eu:bis:peppol3a:ver1.0::2.0</SimpleValue>
       </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.0.0</SimpleValue>
+      </Value>
     </Row>
     <Row>
       <Value ColumnRef="name">
@@ -123,6 +133,28 @@ urn:oasis:names:specification:ubl:schema:xsd:ApplicationResponse-2::ApplicationR
       </Value>
       <Value ColumnRef="docids">
         <SimpleValue>urn:oasis:names:specification:ubl:schema:xsd:Invoice-2::Invoice##urn:www.cenbii.eu:transaction:biicoretrdm010:ver1.0:#urn:www.peppol.eu:bis:peppol4a:ver1.0::2.0</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.0.0</SimpleValue>
+      </Value>
+    </Row>
+    <Row>
+      <Value ColumnRef="name">
+        <SimpleValue>BII05 - Billing</SimpleValue>
+      </Value>
+      <Value ColumnRef="id">
+        <SimpleValue>urn:www.cenbii.eu:profile:bii05:ver1.0</SimpleValue>
+      </Value>
+      <Value ColumnRef="bisid">
+        <SimpleValue>urn:www.peppol.eu:bis:peppol5a:ver1.0</SimpleValue>
+      </Value>
+      <Value ColumnRef="docids">
+        <SimpleValue>urn:oasis:names:specification:ubl:schema:xsd:Invoice-2::Invoice##urn:www.cenbii.eu:transaction:biicoretrdm010:ver1.0:#urn:www.peppol.eu:bis:peppol5a:ver1.0::2.0
+urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2::CreditNote##urn:www.cenbii.eu:transaction:biicoretrdm014:ver1.0:#urn:www.peppol.eu:bis:peppol5a:ver1.0::2.0
+urn:oasis:names:specification:ubl:schema:xsd:Invoice-2::Invoice##urn:www.cenbii.eu:transaction:biicoretrdm015:ver1.0:#urn:www.peppol.eu:bis:peppol5a:ver1.0::2.0</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.1.0</SimpleValue>
       </Value>
     </Row>
     <Row>
@@ -142,6 +174,9 @@ urn:oasis:names:specification:ubl:schema:xsd:OrderResponseSimple-2::OrderRespons
 urn:oasis:names:specification:ubl:schema:xsd:Invoice-2::Invoice##urn:www.cenbii.eu:transaction:biicoretrdm010:ver1.0:#urn:www.peppol.eu:bis:peppol6a:ver1.0::2.0
 urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2::CreditNote##urn:www.cenbii.eu:transaction:biicoretrdm014:ver1.0:#urn:www.peppol.eu:bis:peppol6a:ver1.0::2.0
 urn:oasis:names:specification:ubl:schema:xsd:Invoice-2::Invoice##urn:www.cenbii.eu:transaction:biicoretrdm015:ver1.0:#urn:www.peppol.eu:bis:peppol6a:ver1.0::2.0</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.0.0</SimpleValue>
       </Value>
     </Row>
   </SimpleCodeList>

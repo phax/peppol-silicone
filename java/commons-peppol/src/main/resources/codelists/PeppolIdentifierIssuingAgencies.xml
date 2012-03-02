@@ -39,32 +39,70 @@
 
 -->
 <!--This file was automatically generated. Do NOT edit!-->
-<root version="1.0.2">
-  <issuingAgency schemeid="FR:SIRET" agencyname="Institut National de la Statistique et des Etudes Economiques, (I.N.S.E.E.)" iso6523="0002" />
-  <issuingAgency schemeid="SE:ORGNR" agencyname="The National Tax Board" iso6523="0007" />
-  <issuingAgency schemeid="FI:OVT" agencyname="National Board of Taxes, (Verohallitus)" iso6523="0037" />
-  <issuingAgency schemeid="DUNS" agencyname="Dun and Bradstreet Ltd" iso6523="0060" />
-  <issuingAgency schemeid="GLN" agencyname="EAN International" iso6523="0088" />
-  <issuingAgency schemeid="DK:P" agencyname="Danish Chamber of Commerce" iso6523="0096" />
-  <issuingAgency schemeid="IT:FTI" agencyname="FTI - Ediforum Italia" iso6523="0097" />
-  <issuingAgency schemeid="IT:SIA" agencyname="SIA-Società Interbancaria per l&#39;Automazione S.p.A." iso6523="0135" />
-  <issuingAgency schemeid="IT:SECETI" agencyname="Servizi Centralizzati SECETI S.p.A." iso6523="0142" />
-  <issuingAgency schemeid="DK:CPR" agencyname="Danish Ministry of the Interior and Health" iso6523="9901" />
-  <issuingAgency schemeid="DK:CVR" agencyname="The Danish Commerce and Companies Agency" iso6523="9902" />
-  <issuingAgency schemeid="DK:SE" agencyname="Danish Ministry of Taxation, Central Customs and Tax Administration" iso6523="9904" />
-  <issuingAgency schemeid="DK:VANS" agencyname="Danish VANS providers" iso6523="9905" />
-  <issuingAgency schemeid="IT:VAT" agencyname="Ufficio responsabile gestione partite IVA" iso6523="9906" />
-  <issuingAgency schemeid="IT:CF" agencyname="TAX Authority" iso6523="9907" />
-  <issuingAgency schemeid="NO:ORGNR" agencyname="Enhetsregisteret ved Bronnoysundregisterne" iso6523="9908" />
-  <issuingAgency schemeid="NO:VAT" agencyname="Enhetsregisteret ved Bronnoysundregisterne" iso6523="9909" />
-  <issuingAgency schemeid="HU:VAT" iso6523="9910" />
-  <issuingAgency schemeid="EU:VAT" agencyname="National ministries of Economy" iso6523="9912" />
-  <issuingAgency schemeid="EU:REID" agencyname="Business Registers Network" iso6523="9913" />
-  <issuingAgency schemeid="AT:VAT" agencyname="Österreichische Umsatzsteuer-Identifikationsnummer" iso6523="9914" />
-  <issuingAgency schemeid="AT:GOV" agencyname="Österreichisches Verwaltungs bzw. Organisationskennzeichen" iso6523="9915" />
-  <issuingAgency schemeid="AT:CID" agencyname="Firmenidentifikationsnummer der Statistik Austria" iso6523="9916" deprecated="true" />
-  <issuingAgency schemeid="IS:KT" agencyname="Icelandic National Registry" iso6523="9917" />
-  <issuingAgency schemeid="IBAN" agencyname="SOCIETY FOR WORLDWIDE INTERBANK FINANCIAL, TELECOMMUNICATION S.W.I.F.T" iso6523="9918" />
-  <issuingAgency schemeid="AT:KUR" agencyname="Kennziffer des Unternehmensregisters" iso6523="9919" />
-  <issuingAgency schemeid="ES:VAT" agencyname="Agencia Española de Administración Tributaria" iso6523="9920" />
+<root version="1.1">
+  <issuingAgency schemeid="FR:SIRET" agencyname="Institut National de la Statistique et des Etudes Economiques, (I.N.S.E.E.)" iso6523="0002" since="1.0.0" />
+  <issuingAgency schemeid="SE:ORGNR" agencyname="The National Tax Board" iso6523="0007" since="1.0.0" />
+  <issuingAgency schemeid="FI:OVT" agencyname="National Board of Taxes, (Verohallitus)" iso6523="0037" since="1.0.0" />
+  <issuingAgency schemeid="DUNS" agencyname="Dun and Bradstreet Ltd" iso6523="0060" since="1.0.0" />
+  <issuingAgency schemeid="GLN" agencyname="EAN International" iso6523="0088" since="1.0.0" />
+  <issuingAgency schemeid="DK:P" agencyname="Danish Chamber of Commerce" iso6523="0096" since="1.0.0" />
+  <issuingAgency schemeid="IT:FTI" agencyname="FTI - Ediforum Italia" iso6523="0097" since="1.0.0" />
+  <issuingAgency schemeid="IT:SIA" agencyname="SIA-Società Interbancaria per l&#39;Automazione S.p.A." iso6523="0135" since="1.0.0" />
+  <issuingAgency schemeid="IT:SECETI" agencyname="Servizi Centralizzati SECETI S.p.A." iso6523="0142" since="1.0.0" />
+  <issuingAgency schemeid="DK:CPR" agencyname="Danish Ministry of the Interior and Health" iso6523="9901" since="1.0.0" />
+  <issuingAgency schemeid="DK:CVR" agencyname="The Danish Commerce and Companies Agency" iso6523="9902" since="1.0.0" />
+  <issuingAgency schemeid="DK:SE" agencyname="Danish Ministry of Taxation, Central Customs and Tax Administration" iso6523="9904" since="1.0.0" />
+  <issuingAgency schemeid="DK:VANS" agencyname="Danish VANS providers" iso6523="9905" since="1.0.0" />
+  <issuingAgency schemeid="IT:VAT" agencyname="Ufficio responsabile gestione partite IVA" iso6523="9906" since="1.0.0" />
+  <issuingAgency schemeid="IT:CF" agencyname="TAX Authority" iso6523="9907" since="1.0.0" />
+  <issuingAgency schemeid="NO:ORGNR" agencyname="Enhetsregisteret ved Bronnoysundregisterne" iso6523="9908" since="1.0.0" />
+  <issuingAgency schemeid="NO:VAT" agencyname="Enhetsregisteret ved Bronnoysundregisterne" iso6523="9909" deprecated="true" since="1.0.0" />
+  <issuingAgency schemeid="HU:VAT" iso6523="9910" since="1.0.0" />
+  <issuingAgency schemeid="EU:VAT" agencyname="National ministries of Economy" iso6523="9912" deprecated="true" since="1.0.0" />
+  <issuingAgency schemeid="EU:REID" agencyname="Business Registers Network" iso6523="9913" since="1.0.0" />
+  <issuingAgency schemeid="AT:VAT" agencyname="Österreichische Umsatzsteuer-Identifikationsnummer" iso6523="9914" since="1.0.0" />
+  <issuingAgency schemeid="AT:GOV" agencyname="Österreichisches Verwaltungs bzw. Organisationskennzeichen" iso6523="9915" since="1.0.0" />
+  <issuingAgency schemeid="AT:CID" agencyname="Firmenidentifikationsnummer der Statistik Austria" iso6523="9916" deprecated="true" since="1.0.0" />
+  <issuingAgency schemeid="IS:KT" agencyname="Icelandic National Registry" iso6523="9917" since="1.0.0" />
+  <issuingAgency schemeid="IBAN" agencyname="SOCIETY FOR WORLDWIDE INTERBANK FINANCIAL, TELECOMMUNICATION S.W.I.F.T" iso6523="9918" since="1.0.1" />
+  <issuingAgency schemeid="AT:KUR" agencyname="Kennziffer des Unternehmensregisters" iso6523="9919" since="1.0.2" />
+  <issuingAgency schemeid="ES:VAT" agencyname="Agencia Española de Administración Tributaria" iso6523="9920" since="1.0.2" />
+  <issuingAgency schemeid="IT:IPA" agencyname="Indice delle Pubbliche Amministrazioni" iso6523="9921" since="1.1.0" />
+  <issuingAgency schemeid="AD:VAT" agencyname="Andorra VAT number" iso6523="9922" since="1.1.0" />
+  <issuingAgency schemeid="AL:VAT" agencyname="Albania VAT number" iso6523="9923" since="1.1.0" />
+  <issuingAgency schemeid="BA:VAT" agencyname="Bosnia and Herzegovina VAT number" iso6523="9924" since="1.1.0" />
+  <issuingAgency schemeid="BE:VAT" agencyname="Belgium VAT number" iso6523="9925" since="1.1.0" />
+  <issuingAgency schemeid="BG:VAT" agencyname="Bulgaria VAT number" iso6523="9926" since="1.1.0" />
+  <issuingAgency schemeid="BY:VAT" agencyname="Belarus VAT number" iso6523="9927" since="1.1.0" />
+  <issuingAgency schemeid="CH:VAT" agencyname="Switzerland VAT number" iso6523="9928" since="1.1.0" />
+  <issuingAgency schemeid="CY:VAT" agencyname="Cyprus VAT number" iso6523="9929" since="1.1.0" />
+  <issuingAgency schemeid="CZ:VAT" agencyname="Czech Republic VAT number" iso6523="9930" since="1.1.0" />
+  <issuingAgency schemeid="DE:VAT" agencyname="Germany VAT number" iso6523="9931" since="1.1.0" />
+  <issuingAgency schemeid="EE:VAT" agencyname="Estonia VAT number" iso6523="9932" since="1.1.0" />
+  <issuingAgency schemeid="GB:VAT" agencyname="United Kingdom VAT number" iso6523="9933" since="1.1.0" />
+  <issuingAgency schemeid="GR:VAT" agencyname="Greece VAT number" iso6523="9934" since="1.1.0" />
+  <issuingAgency schemeid="HR:VAT" agencyname="Croatia VAT number" iso6523="9935" since="1.1.0" />
+  <issuingAgency schemeid="IE:VAT" agencyname="Ireland VAT number" iso6523="9936" since="1.1.0" />
+  <issuingAgency schemeid="KZ:VAT" agencyname="Kazakhstan VAT number" iso6523="9937" since="1.1.0" />
+  <issuingAgency schemeid="LI:VAT" agencyname="Liechtenstein VAT number" iso6523="9938" since="1.1.0" />
+  <issuingAgency schemeid="LT:VAT" agencyname="Lithuania VAT number" iso6523="9939" since="1.1.0" />
+  <issuingAgency schemeid="LU:VAT" agencyname="Luxemburg VAT number" iso6523="9940" since="1.1.0" />
+  <issuingAgency schemeid="LV:VAT" agencyname="Latvia VAT number" iso6523="9941" since="1.1.0" />
+  <issuingAgency schemeid="MC:VAT" agencyname="Monaco VAT number" iso6523="9942" since="1.1.0" />
+  <issuingAgency schemeid="MD:VAT" agencyname="Moldova, Republic of VAT number" iso6523="9943" since="1.1.0" />
+  <issuingAgency schemeid="ME:VAT" agencyname="Montenegro VAT number" iso6523="9944" since="1.1.0" />
+  <issuingAgency schemeid="MK:VAT" agencyname="Macedonia, the former Yugoslav Republic of VAT number" iso6523="9945" since="1.1.0" />
+  <issuingAgency schemeid="MT:VAT" agencyname="Malta VAT number" iso6523="9946" since="1.1.0" />
+  <issuingAgency schemeid="NL:VAT" agencyname="Netherlands VAT number" iso6523="9947" since="1.1.0" />
+  <issuingAgency schemeid="PL:VAT" agencyname="Poland VAT number" iso6523="9948" since="1.1.0" />
+  <issuingAgency schemeid="PT:VAT" agencyname="Portugal VAT number" iso6523="9949" since="1.1.0" />
+  <issuingAgency schemeid="RO:VAT" agencyname="Romania VAT number" iso6523="9950" since="1.1.0" />
+  <issuingAgency schemeid="RS:VAT" agencyname="Serbia VAT number" iso6523="9951" since="1.1.0" />
+  <issuingAgency schemeid="RU:VAT" agencyname="Russian Federation VAT number" iso6523="9952" since="1.1.0" />
+  <issuingAgency schemeid="SI:VAT" agencyname="Solvenia VAT number" iso6523="9953" since="1.1.0" />
+  <issuingAgency schemeid="SK:VAT" agencyname="Slovakia VAT number" iso6523="9954" since="1.1.0" />
+  <issuingAgency schemeid="SM:VAT" agencyname="San Marino VAT number" iso6523="9955" since="1.1.0" />
+  <issuingAgency schemeid="TR:VAT" agencyname="Turkey VAT number" iso6523="9956" since="1.1.0" />
+  <issuingAgency schemeid="UA:VAT" agencyname="Ukraine VAT number" iso6523="9957" since="1.1.0" />
+  <issuingAgency schemeid="VA:VAT" agencyname="Holy See (Vatican City State) VAT number" iso6523="9958" since="1.1.0" />
 </root>

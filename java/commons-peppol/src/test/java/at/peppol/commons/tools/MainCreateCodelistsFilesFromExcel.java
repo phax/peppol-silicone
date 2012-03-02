@@ -38,9 +38,8 @@
 package at.peppol.commons.tools;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -76,6 +75,7 @@ import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.io.IReadableResource;
+import com.phloc.commons.io.file.FileUtils;
 import com.phloc.commons.io.file.SimpleFileIO;
 import com.phloc.commons.io.resource.FileSystemResource;
 import com.phloc.commons.microdom.IMicroDocument;
@@ -111,8 +111,8 @@ import com.sun.codemodel.writer.FileCodeWriter;
  */
 public final class MainCreateCodelistsFilesFromExcel {
   private static final Logger s_aLogger = LoggerFactory.getLogger (MainCreateCodelistsFilesFromExcel.class);
-  private static final Version CODELIST_VERSION = new Version (1, 0, 2);
-  private static final String EXCEL_FILE = "src/main/codelists/PEPPOL Code Lists 1.0.2.xls";
+  private static final Version CODELIST_VERSION = new Version (1, 1, 0);
+  private static final String EXCEL_FILE = "src/main/codelists/PEPPOL Code Lists 1.1.0 DRAFT.xls";
   private static final String SHEET_PARTICIPANT = "Participant";
   private static final String SHEET_DOCUMENT = "Document";
   private static final String SHEET_PROCESS = "Process";
@@ -120,18 +120,17 @@ public final class MainCreateCodelistsFilesFromExcel {
   private static final JCodeModel s_aCodeModel = new JCodeModel ();
   private static JDefinedClass s_jEnumPredefinedDoc;
 
-  private static void _writeGenericodeFile (final CodeListDocument aCodeList, final String sFileName) throws FileNotFoundException {
+  private static void _writeGenericodeFile (@Nonnull final CodeListDocument aCodeList, @Nonnull final String sFilename) {
     final Document aDoc = Genericode10Marshaller.writeCodeList (aCodeList);
     if (aDoc == null)
       throw new IllegalStateException ("Failed to serialize code list");
-    final FileOutputStream aFOS = new FileOutputStream (sFileName);
-    if (XMLWriter.writeToStream (aDoc, aFOS, XMLWriterSettings.DEFAULT_XML_SETTINGS).isFailure ())
-      throw new IllegalStateException ("Failed to write file " + sFileName);
-    s_aLogger.info ("Wrote Genericode file " + sFileName);
+    final OutputStream aFOS = FileUtils.getOutputStream (sFilename);
+    if (XMLWriter.writeToStream (aDoc, aFOS, XMLWriterSettings.SUGGESTED_XML_SETTINGS).isFailure ())
+      throw new IllegalStateException ("Failed to write file " + sFilename);
+    s_aLogger.info ("Wrote Genericode file " + sFilename);
   }
 
   private static void _emitIdentifierIssuingAgency (final Sheet aParticipantSheet) throws URISyntaxException,
-                                                                                  FileNotFoundException,
                                                                                   UnsupportedEncodingException {
     // Read excel file
     final ExcelReadOptions aReadOptions = new ExcelReadOptions ().setLinesToSkip (1).setLineIndexShortName (0);
@@ -139,6 +138,7 @@ public final class MainCreateCodelistsFilesFromExcel {
     aReadOptions.addColumn (1, "iso6523", UseType.REQUIRED, "string", true);
     aReadOptions.addColumn (2, "schemeagency", UseType.OPTIONAL, "string", false);
     aReadOptions.addColumn (3, "deprecated", UseType.REQUIRED, "boolean", false);
+    aReadOptions.addColumn (4, "since", UseType.REQUIRED, "string", false);
 
     // Convert to GeneriCode
     final CodeListDocument aCodeList = ExcelSheetToCodeList.convertToSimpleCodeList (aParticipantSheet,
@@ -161,6 +161,7 @@ public final class MainCreateCodelistsFilesFromExcel {
       final String sISO6523 = GenericodeUtils.getRowValue (aRow, "iso6523");
       final String sDeprecated = GenericodeUtils.getRowValue (aRow, "deprecated");
       final boolean bDeprecated = StringHelper.parseBool (sDeprecated, false);
+      final String sSince = GenericodeUtils.getRowValue (aRow, "since");
 
       final IMicroElement eAgency = eRoot.appendElement ("issuingAgency");
       eAgency.setAttribute ("schemeid", sCode);
@@ -168,6 +169,7 @@ public final class MainCreateCodelistsFilesFromExcel {
       eAgency.setAttribute ("iso6523", sISO6523);
       if (bDeprecated)
         eAgency.setAttribute ("deprecated", Boolean.TRUE.toString ());
+      eAgency.setAttribute ("since", sSince);
     }
     final String sXML = MicroWriter.getXMLString (aDoc);
     SimpleFileIO.writeFile (new File (RESULT_DIRECTORY + "PeppolIdentifierIssuingAgencies.xml"),
@@ -187,6 +189,7 @@ public final class MainCreateCodelistsFilesFromExcel {
         final String sISO6523 = GenericodeUtils.getRowValue (aRow, "iso6523");
         final String sDeprecated = GenericodeUtils.getRowValue (aRow, "deprecated");
         final boolean bDeprecated = StringHelper.parseBool (sDeprecated, false);
+        final String sSince = GenericodeUtils.getRowValue (aRow, "since");
 
         if (StringHelper.hasNoText (sSchemeID))
           throw new IllegalArgumentException ("schemeID");
@@ -202,6 +205,8 @@ public final class MainCreateCodelistsFilesFromExcel {
         jEnumConst.arg (sAgency == null ? JExpr._null () : JExpr.lit (sAgency));
         jEnumConst.arg (JExpr.lit (sISO6523));
         jEnumConst.arg (bDeprecated ? JExpr.TRUE : JExpr.FALSE);
+        jEnumConst.arg (JExpr._new (s_aCodeModel.ref (Version.class)).arg (JExpr.lit (sSince)));
+        jEnumConst.javadoc ().add ("@since code list " + sSince);
       }
 
       // fields
@@ -209,6 +214,7 @@ public final class MainCreateCodelistsFilesFromExcel {
       final JFieldVar fSchemeAgency = jEnum.field (JMod.PRIVATE | JMod.FINAL, String.class, "m_sSchemeAgency");
       final JFieldVar fISO6523 = jEnum.field (JMod.PRIVATE | JMod.FINAL, String.class, "m_sISO6523");
       final JFieldVar fDeprecated = jEnum.field (JMod.PRIVATE | JMod.FINAL, boolean.class, "m_bDeprecated");
+      final JFieldVar fSince = jEnum.field (JMod.PRIVATE | JMod.FINAL, Version.class, "m_aSince");
 
       // Constructor
       final JMethod jCtor = jEnum.constructor (JMod.PRIVATE);
@@ -221,26 +227,33 @@ public final class MainCreateCodelistsFilesFromExcel {
       jISO6523.annotate (Nonnull.class);
       jISO6523.annotate (Nonempty.class);
       final JVar jDeprecated = jCtor.param (JMod.FINAL, boolean.class, "bDeprecated");
+      final JVar jSince = jCtor.param (JMod.FINAL, Version.class, "aSince");
+      jSince.annotate (Nonnull.class);
       jCtor.body ()
            .assign (fSchemeID, jSchemeID)
            .assign (fSchemeAgency, jSchemeAgency)
            .assign (fISO6523, jISO6523)
-           .assign (fDeprecated, jDeprecated);
+           .assign (fDeprecated, jDeprecated)
+           .assign (fSince, jSince);
 
+      // public String getSchemeID ()
       JMethod m = jEnum.method (JMod.PUBLIC, String.class, "getSchemeID");
       m.annotate (Nonnull.class);
       m.annotate (Nonempty.class);
       m.body ()._return (fSchemeID);
 
+      // public String getSchemeAgency ()
       m = jEnum.method (JMod.PUBLIC, String.class, "getSchemeAgency");
       m.annotate (Nullable.class);
       m.body ()._return (fSchemeAgency);
 
+      // public String getISO6523Code ()
       m = jEnum.method (JMod.PUBLIC, String.class, "getISO6523Code");
       m.annotate (Nonnull.class);
       m.annotate (Nonempty.class);
       m.body ()._return (fISO6523);
 
+      // public String createIdentifierValue (String)
       final JMethod mCreateIdentifierValue = jEnum.method (JMod.PUBLIC, String.class, "createIdentifierValue");
       mCreateIdentifierValue.annotate (Nonnull.class);
       mCreateIdentifierValue.annotate (Nonempty.class);
@@ -249,6 +262,7 @@ public final class MainCreateCodelistsFilesFromExcel {
       jValue.annotate (Nonempty.class);
       mCreateIdentifierValue.body ()._return (fISO6523.plus (JExpr.lit (":")).plus (jValue));
 
+      // public SimpleParticipantIdentifier createIdentifierValue (String)
       m = jEnum.method (JMod.PUBLIC, SimpleParticipantIdentifier.class, "createParticipantIdentifier");
       m.annotate (Nonnull.class);
       jValue = m.param (JMod.FINAL, String.class, "sIdentifier");
@@ -258,8 +272,14 @@ public final class MainCreateCodelistsFilesFromExcel {
                                      .staticInvoke ("createWithDefaultScheme")
                                      .arg (JExpr.invoke (mCreateIdentifierValue).arg (jValue)));
 
+      // public boolean isDeprecated ()
       m = jEnum.method (JMod.PUBLIC, boolean.class, "isDeprecated");
       m.body ()._return (fDeprecated);
+
+      // public Version getSince ()
+      m = jEnum.method (JMod.PUBLIC, Version.class, "getSince");
+      m.annotate (Nonnull.class);
+      m.body ()._return (fSince);
     }
     catch (final Exception ex) {
       s_aLogger.warn ("Failed to create source", ex);
@@ -267,13 +287,12 @@ public final class MainCreateCodelistsFilesFromExcel {
   }
 
   private static void _emitDocumentIdentifiers (final Sheet aDocumentSheet) throws URISyntaxException,
-                                                                           FileNotFoundException,
                                                                            UnsupportedEncodingException {
     // Create GeneriCode file
     final ExcelReadOptions aReadOptions = new ExcelReadOptions ().setLinesToSkip (1).setLineIndexShortName (0);
     aReadOptions.addColumn (0, "name", UseType.OPTIONAL, "string", false);
     aReadOptions.addColumn (1, "docid", UseType.REQUIRED, "string", true);
-    aReadOptions.addColumn (2, "specurl", UseType.OPTIONAL, "string", false);
+    aReadOptions.addColumn (2, "since", UseType.REQUIRED, "string", false);
     final CodeListDocument aCodeList = ExcelSheetToCodeList.convertToSimpleCodeList (aDocumentSheet,
                                                                                      aReadOptions,
                                                                                      "PeppolDocumentIdentifier",
@@ -291,10 +310,12 @@ public final class MainCreateCodelistsFilesFromExcel {
     for (final Row aRow : aCodeList.getSimpleCodeList ().getRow ()) {
       final String sDocID = GenericodeUtils.getRowValue (aRow, "docid");
       final String sName = GenericodeUtils.getRowValue (aRow, "name");
+      final String sSince = GenericodeUtils.getRowValue (aRow, "since");
 
       final IMicroElement eAgency = eRoot.appendElement ("document");
       eAgency.setAttribute ("id", sDocID);
       eAgency.setAttribute ("name", sName);
+      eAgency.setAttribute ("since", sSince);
     }
     final String sXML = MicroWriter.getXMLString (aDoc);
     SimpleFileIO.writeFile (new File (RESULT_DIRECTORY + "PeppolDocumentIdentifier.xml"),
@@ -313,6 +334,7 @@ public final class MainCreateCodelistsFilesFromExcel {
       for (final Row aRow : aCodeList.getSimpleCodeList ().getRow ()) {
         final String sDocID = GenericodeUtils.getRowValue (aRow, "docid");
         final String sName = GenericodeUtils.getRowValue (aRow, "name");
+        final String sSince = GenericodeUtils.getRowValue (aRow, "since");
 
         // Split ID in it's pieces
         final IPEPPOLDocumentIdentifierParts aDocIDParts = PEPPOLDocumentIdentifierParts.extractFromString (sDocID);
@@ -330,7 +352,9 @@ public final class MainCreateCodelistsFilesFromExcel {
                              .arg (jExtensions)
                              .arg (JExpr.lit (aDocIDParts.getVersion ())));
         jEnumConst.arg (JExpr.lit (sName));
+        jEnumConst.arg (JExpr._new (s_aCodeModel.ref (Version.class)).arg (JExpr.lit (sSince)));
         jEnumConst.javadoc ().add (sDocID);
+        jEnumConst.javadoc ().add ("\n@since code list " + sSince);
 
         // Also create a shortcut for more readable names
         final String sShortcutName = CodeGenerationUtils.createShortcutDocumentTypeIDName (aDocIDParts);
@@ -352,6 +376,7 @@ public final class MainCreateCodelistsFilesFromExcel {
       final JFieldVar fCommonName = s_jEnumPredefinedDoc.field (JMod.PRIVATE | JMod.FINAL,
                                                                 String.class,
                                                                 "m_sCommonName");
+      final JFieldVar fSince = s_jEnumPredefinedDoc.field (JMod.PRIVATE | JMod.FINAL, Version.class, "m_aSince");
 
       // Constructor
       final JMethod jCtor = s_jEnumPredefinedDoc.constructor (JMod.PRIVATE);
@@ -360,41 +385,51 @@ public final class MainCreateCodelistsFilesFromExcel {
       final JVar jCommonName = jCtor.param (JMod.FINAL, String.class, "sCommonName");
       jCommonName.annotate (Nonnull.class);
       jCommonName.annotate (Nonempty.class);
+      final JVar jSince = jCtor.param (JMod.FINAL, Version.class, "aSince");
+      jSince.annotate (Nonnull.class);
       jCtor.body ()
            .assign (fParts, jParts)
            .assign (fCommonName, jCommonName)
-           .assign (fID, fParts.invoke ("getAsDocumentIdentifierValue"));
+           .assign (fID, fParts.invoke ("getAsDocumentIdentifierValue"))
+           .assign (fSince, jSince);
 
+      // public String getScheme ()
       JMethod m = s_jEnumPredefinedDoc.method (JMod.PUBLIC, String.class, "getScheme");
       m.annotate (Nonnull.class);
       m.annotate (Nonempty.class);
       m.body ()._return (s_aCodeModel.ref (CIdentifier.class).staticRef ("DEFAULT_DOCUMENT_IDENTIFIER_SCHEME"));
 
+      // public String getValue ()
       m = s_jEnumPredefinedDoc.method (JMod.PUBLIC, String.class, "getValue");
       m.annotate (Nonnull.class);
       m.annotate (Nonempty.class);
       m.body ()._return (fID);
 
+      // public String getRootNS ()
       m = s_jEnumPredefinedDoc.method (JMod.PUBLIC, String.class, "getRootNS");
       m.annotate (Nonnull.class);
       m.annotate (Nonempty.class);
       m.body ()._return (fParts.invoke (m.name ()));
 
+      // public String getLocalName ()
       m = s_jEnumPredefinedDoc.method (JMod.PUBLIC, String.class, "getLocalName");
       m.annotate (Nonnull.class);
       m.annotate (Nonempty.class);
       m.body ()._return (fParts.invoke (m.name ()));
 
+      // public String getSubTypeIdentifier ()
       m = s_jEnumPredefinedDoc.method (JMod.PUBLIC, String.class, "getSubTypeIdentifier");
       m.annotate (Nonnull.class);
       m.annotate (Nonempty.class);
       m.body ()._return (fParts.invoke (m.name ()));
 
+      // public String getTransactionID ()
       m = s_jEnumPredefinedDoc.method (JMod.PUBLIC, String.class, "getTransactionID");
       m.annotate (Nonnull.class);
       m.annotate (Nonempty.class);
       m.body ()._return (fParts.invoke (m.name ()));
 
+      // public List<String> getExtensionIDs ()
       m = s_jEnumPredefinedDoc.method (JMod.PUBLIC,
                                        s_aCodeModel.ref (List.class).narrow (String.class),
                                        "getExtensionIDs");
@@ -402,29 +437,39 @@ public final class MainCreateCodelistsFilesFromExcel {
       m.annotate (ReturnsMutableCopy.class);
       m.body ()._return (fParts.invoke (m.name ()));
 
+      // public String getAsUBLCustomizationID ()
       m = s_jEnumPredefinedDoc.method (JMod.PUBLIC, String.class, "getAsUBLCustomizationID");
       m.annotate (Nonnull.class);
       m.annotate (Nonempty.class);
       m.body ()._return (fParts.invoke (m.name ()));
 
+      // public String getVersion ()
       m = s_jEnumPredefinedDoc.method (JMod.PUBLIC, String.class, "getVersion");
       m.annotate (Nonnull.class);
       m.annotate (Nonempty.class);
       m.body ()._return (fParts.invoke (m.name ()));
 
+      // public String getCommonName ()
       m = s_jEnumPredefinedDoc.method (JMod.PUBLIC, String.class, "getCommonName");
       m.annotate (Nonnull.class);
       m.annotate (Nonempty.class);
       m.body ()._return (fCommonName);
 
+      // public String getAsDocumentIdentifierValue ()
       m = s_jEnumPredefinedDoc.method (JMod.PUBLIC, String.class, "getAsDocumentIdentifierValue");
       m.annotate (Nonnull.class);
       m.annotate (Nonempty.class);
       m.body ()._return (fID);
 
+      // public SimpleDocumentIdentifier getAsDocumentIdentifier ()
       m = s_jEnumPredefinedDoc.method (JMod.PUBLIC, SimpleDocumentIdentifier.class, "getAsDocumentIdentifier");
       m.annotate (Nonnull.class);
       m.body ()._return (JExpr._new (s_aCodeModel.ref (SimpleDocumentIdentifier.class)).arg (JExpr._this ()));
+
+      // public Version getSince ()
+      m = s_jEnumPredefinedDoc.method (JMod.PUBLIC, Version.class, "getSince");
+      m.annotate (Nonnull.class);
+      m.body ()._return (fSince);
     }
     catch (final Exception ex) {
       s_aLogger.warn ("Failed to create source", ex);
@@ -432,13 +477,13 @@ public final class MainCreateCodelistsFilesFromExcel {
   }
 
   private static void _emitProcessIdentifier (final Sheet aProcessSheet) throws URISyntaxException,
-                                                                        FileNotFoundException,
                                                                         UnsupportedEncodingException {
     final ExcelReadOptions aReadOptions = new ExcelReadOptions ().setLinesToSkip (1).setLineIndexShortName (0);
     aReadOptions.addColumn (0, "name", UseType.REQUIRED, "string", true);
     aReadOptions.addColumn (1, "id", UseType.REQUIRED, "string", true);
     aReadOptions.addColumn (2, "bisid", UseType.REQUIRED, "string", true);
-    aReadOptions.addColumn (3, "docids", UseType.OPTIONAL, "string", false);
+    aReadOptions.addColumn (3, "docids", UseType.REQUIRED, "string", false);
+    aReadOptions.addColumn (4, "since", UseType.REQUIRED, "string", false);
     final CodeListDocument aCodeList = ExcelSheetToCodeList.convertToSimpleCodeList (aProcessSheet,
                                                                                      aReadOptions,
                                                                                      "PeppolProcessIdentifier",
@@ -458,14 +503,16 @@ public final class MainCreateCodelistsFilesFromExcel {
       final String sBISID = GenericodeUtils.getRowValue (aRow, "bisid");
       final String sDocIDs = GenericodeUtils.getRowValue (aRow, "docids");
       // Split the document identifier string into a list of single strings,
-      // and
-      // check if each of them is a valid predefined document identifier
+      // and check if each of them is a valid predefined document identifier
       final List <String> aDocIDs = RegExHelper.splitToList (sDocIDs, "\n");
+      final String sSince = GenericodeUtils.getRowValue (aRow, "since");
+
       final IMicroElement eAgency = eRoot.appendElement ("process");
       eAgency.setAttribute ("id", sID);
       eAgency.setAttribute ("bisid", sBISID);
       for (final String sDocID : aDocIDs)
         eAgency.appendElement ("document").setAttribute ("id", sDocID);
+      eAgency.setAttribute ("since", sSince);
     }
     final String sXML = MicroWriter.getXMLString (aDoc);
     SimpleFileIO.writeFile (new File (RESULT_DIRECTORY + "PeppolProcessIdentifier.xml"),
@@ -484,6 +531,7 @@ public final class MainCreateCodelistsFilesFromExcel {
         final String sID = GenericodeUtils.getRowValue (aRow, "id");
         final String sBISID = GenericodeUtils.getRowValue (aRow, "bisid");
         final String sDocTypeIDs = GenericodeUtils.getRowValue (aRow, "docids");
+        final String sSince = GenericodeUtils.getRowValue (aRow, "since");
 
         final JEnumConstant jEnumConst = jEnum.enumConstant (RegExHelper.makeIdentifier (sID));
         jEnumConst.arg (JExpr.lit (sID));
@@ -497,7 +545,9 @@ public final class MainCreateCodelistsFilesFromExcel {
           jArray.add (s_jEnumPredefinedDoc.staticRef (sIdentifier));
         }
         jEnumConst.arg (jArray);
+        jEnumConst.arg (JExpr._new (s_aCodeModel.ref (Version.class)).arg (JExpr.lit (sSince)));
         jEnumConst.javadoc ().add (sID);
+        jEnumConst.javadoc ().add ("\n@since code list " + sSince);
 
         // Emit shortcut name for better readability
         final String sShortcutName = CodeGenerationUtils.createShortcutBISIDName (sBISID);
@@ -512,6 +562,7 @@ public final class MainCreateCodelistsFilesFromExcel {
       final JFieldVar fID = jEnum.field (JMod.PRIVATE | JMod.FINAL, String.class, "m_sID");
       final JFieldVar fBISID = jEnum.field (JMod.PRIVATE | JMod.FINAL, String.class, "m_sBISID");
       final JFieldVar fDocIDs = jEnum.field (JMod.PRIVATE | JMod.FINAL, s_jEnumPredefinedDoc.array (), "m_aDocIDs");
+      final JFieldVar fSince = jEnum.field (JMod.PRIVATE | JMod.FINAL, Version.class, "m_aSince");
 
       // Constructor
       final JMethod jCtor = jEnum.constructor (JMod.PRIVATE);
@@ -524,23 +575,29 @@ public final class MainCreateCodelistsFilesFromExcel {
       final JVar jDocIDs = jCtor.param (JMod.FINAL, s_jEnumPredefinedDoc.array (), "aDocIDs");
       jDocIDs.annotate (Nonnull.class);
       jDocIDs.annotate (Nonempty.class);
-      jCtor.body ().assign (fID, jID).assign (fBISID, jBISID).assign (fDocIDs, jDocIDs);
+      final JVar jSince = jCtor.param (JMod.FINAL, Version.class, "aSince");
+      jSince.annotate (Nonnull.class);
+      jCtor.body ().assign (fID, jID).assign (fBISID, jBISID).assign (fDocIDs, jDocIDs).assign (fSince, jSince);
 
+      // public String getScheme ()
       JMethod m = jEnum.method (JMod.PUBLIC, String.class, "getScheme");
       m.annotate (Nonnull.class);
       m.annotate (Nonempty.class);
       m.body ()._return (s_aCodeModel.ref (CIdentifier.class).staticRef ("DEFAULT_PROCESS_IDENTIFIER_SCHEME"));
 
+      // public String getValue ()
       m = jEnum.method (JMod.PUBLIC, String.class, "getValue");
       m.annotate (Nonnull.class);
       m.annotate (Nonempty.class);
       m.body ()._return (fID);
 
+      // public String getBISID ()
       m = jEnum.method (JMod.PUBLIC, String.class, "getBISID");
       m.annotate (Nonnull.class);
       m.annotate (Nonempty.class);
       m.body ()._return (fBISID);
 
+      // public List<IPredefinedDocumentIdentifier> getDocumentIdentifiers ()
       m = jEnum.method (JMod.PUBLIC,
                         s_aCodeModel.ref (List.class).narrow (s_aCodeModel.ref (IPredefinedDocumentIdentifier.class)
                                                                           .wildcard ()),
@@ -549,9 +606,15 @@ public final class MainCreateCodelistsFilesFromExcel {
       m.annotate (ReturnsMutableCopy.class);
       m.body ()._return (s_aCodeModel.ref (ContainerHelper.class).staticInvoke ("newList").arg (fDocIDs));
 
+      // public SimpleProcessIdentifier getAsProcessIdentifier ()
       m = jEnum.method (JMod.PUBLIC, SimpleProcessIdentifier.class, "getAsProcessIdentifier");
       m.annotate (Nonnull.class);
       m.body ()._return (JExpr._new (s_aCodeModel.ref (SimpleProcessIdentifier.class)).arg (JExpr._this ()));
+
+      // public Version getSince ()
+      m = jEnum.method (JMod.PUBLIC, Version.class, "getSince");
+      m.annotate (Nonnull.class);
+      m.body ()._return (fSince);
     }
     catch (final Exception ex) {
       s_aLogger.warn ("Failed to create source", ex);
