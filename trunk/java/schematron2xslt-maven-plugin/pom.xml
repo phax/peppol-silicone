@@ -11,6 +11,10 @@
   <packaging>maven-plugin</packaging>
   <name>schematron2xslt-maven-plugin</name>
 
+  <description>
+    Schematron plugin used to compile Schematron schemas to XSLT scripts.
+  </description>
+
   <scm>
     <connection>scm:svn:http://peppol-silicone.googlecode.com/svn/trunk/java/schematron2xslt-maven-plugin</connection>
     <developerConnection>scm:svn:https://peppol-silicone.googlecode.com/svn/trunk/java/schematron2xslt-maven-plugin</developerConnection>
@@ -37,7 +41,21 @@
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-utils</artifactId>
+    </dependency>
   </dependencies>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.codehaus.plexus</groupId>
+        <artifactId>plexus-utils</artifactId>
+        <version>1.5.1</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <build>
     <plugins>
@@ -47,6 +65,14 @@
         <configuration>
           <goalPrefix>schematron2xslt</goalPrefix>
         </configuration>
+        <executions>
+          <execution>
+            <id>generated-helpmojo</id>
+            <goals>
+              <goal>helpmojo</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
