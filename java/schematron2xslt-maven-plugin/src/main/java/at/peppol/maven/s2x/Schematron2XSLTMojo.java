@@ -17,27 +17,28 @@
 
 package at.peppol.maven.s2x;
 
-import java.io.File;
-import java.io.FileOutputStream;
-
-import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.project.MavenProject;
-
 import at.peppol.validation.schematron.xslt.ISchematronXSLTProvider;
 import at.peppol.validation.schematron.xslt.SchematronResourceSCHCache;
-
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.file.FilenameHelper;
 import com.phloc.commons.io.resource.FileSystemResource;
 import com.phloc.commons.xml.serialize.XMLWriter;
 import com.phloc.commons.xml.serialize.XMLWriterSettings;
+import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.util.DirectoryScanner;
+
+import java.io.File;
+import java.io.FileOutputStream;
 
 
 /**
+ * Converts one or more Schematron schema files into XSLT scripts.
+ * 
  * @goal convert
  * @phase generate-resources
- * @description Convert one or more XVML files into Schematron files
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class Schematron2XSLTMojo extends AbstractMojo {
@@ -59,12 +60,38 @@ public final class Schematron2XSLTMojo extends AbstractMojo {
   private File m_aSchematronDirectory;
 
   /**
-   * The file extension of the Schematron files.
+   * The file extension of the Schematron files. Files that match the extension
+   * will be converted. Only files in the schematronDirectory will be
+   * considered, not those in subdirectories. The default value is ".sch".
+   * <p>
+   * This parameter cannot be used in combination with schematronPattern. If
+   * neither is specified, schematronExtension will be used with its default
+   * value.
    * 
-   * @parameter property="schematronExtension"
-   *            expression="${schematronExtension}" default-value=".sch"
+   * @parameter expression="${schematronExtension}"
+   * 
+   *            Plugin developers note: the default value is not specified using
+   *            the parameter annotation because otherwise the plugin cannot
+   *            detect whether or not a value for this parameter was specified.
    */
-  private String m_sSchematronExtension;
+  private String schematronExtension;
+
+  /**
+   * A pattern for the Schematron files. Can contain Ant-style wildcards and
+   * double wildcards. All files that match the pattern will be converted. Files
+   * in the schematronDirectory and its subdirectories will be considered.
+   * <p>
+   * This parameter cannot be used in combination with schematronExtension. If
+   * neither is specified, schematronExtension will be used with its default
+   * value.
+   * 
+   * @parameter expression="${schematronPattern}"
+   * 
+   *            Plugin developers note: the default value is not specified using
+   *            the parameter annotation because otherwise the plugin cannot
+   *            detect whether or not a value for this parameter was specified.
+   */
+  private String schematronPattern;
 
   /**
    * The directory where the XSLT files will be saved.
@@ -97,8 +124,13 @@ public final class Schematron2XSLTMojo extends AbstractMojo {
   }
 
   public void setSchematronExtension (final String sExt) {
-    m_sSchematronExtension = sExt;
+    schematronExtension = sExt;
     getLog ().debug ("Setting Schematron file extension to '" + sExt + "'");
+  }
+
+  public void setSchematronPattern(final String sPattern) {
+    schematronPattern = sPattern;
+    getLog ().debug ("Setting Schematron pattern to '" + sPattern + "'");
   }
 
   public void setXsltDirectory (final File aDir) {
@@ -121,17 +153,31 @@ public final class Schematron2XSLTMojo extends AbstractMojo {
       getLog ().debug ("Ignoring existing Schematron files");
   }
 
-  public void execute () throws MojoExecutionException {
+  public void execute () throws MojoExecutionException, MojoFailureException {
     if (m_aSchematronDirectory == null)
       throw new MojoExecutionException ("No Schematron directory specified!");
     if (m_aSchematronDirectory.exists () && !m_aSchematronDirectory.isDirectory ())
       throw new MojoExecutionException ("The specified Schematron directory " +
                                         m_aSchematronDirectory +
                                         " is not a directory!");
-    if (m_sSchematronExtension == null ||
-        m_sSchematronExtension.length () == 0 ||
-        !m_sSchematronExtension.startsWith ("."))
-      throw new MojoExecutionException ("The Schematron extension '" + m_sSchematronExtension + "' is invalid!");
+    boolean schematronExtensionSpecified = schematronExtension != null
+      && !schematronExtension.isEmpty();
+    boolean schematronPatternSpecified = schematronPattern != null && !schematronPattern.isEmpty();
+    if (schematronExtensionSpecified && schematronPatternSpecified) {
+      throw new MojoExecutionException("Schematron extension ('" + schematronExtension
+        + "') and Schematron pattern ('" + schematronPattern + "') were both specified!");
+    }
+    if (schematronExtensionSpecified && !schematronExtension.startsWith("."))
+      throw new MojoExecutionException("The Schematron extension '" + schematronExtension
+        + "' is invalid!");
+    if (!schematronExtensionSpecified && !schematronPatternSpecified) {
+      schematronPattern = "*.sch";
+      getLog().debug("Neither schematronExtension nor schematronPattern were specified");
+    }
+    if (schematronExtensionSpecified) {
+      schematronPattern = "*" + schematronExtension;
+    }
+    getLog().debug("Using schematronPattern '" + schematronPattern + "'");
     if (m_aXSLTDirectory == null)
       throw new MojoExecutionException ("No XSLT directory specified!");
     if (m_aXSLTDirectory.exists () && !m_aXSLTDirectory.isDirectory ())
@@ -142,42 +188,60 @@ public final class Schematron2XSLTMojo extends AbstractMojo {
     if (!m_aXSLTDirectory.exists () && !m_aXSLTDirectory.mkdirs ())
       throw new MojoExecutionException ("Failed to create the XSLT directory " + m_aXSLTDirectory);
 
-    // for all Schematron files in the Schematron directory
-    final File [] aFiles = m_aSchematronDirectory.listFiles ();
-    if (aFiles != null)
-      for (int i = 0; i < aFiles.length; ++i) {
-        final File aFile = aFiles[i];
-        if (aFile.isFile () && aFile.getName ().endsWith (m_sSchematronExtension)) {
-          getLog ().info ("Converting Schematron file " + aFile.getName ());
+    // for all Schematron files that match the pattern
+    DirectoryScanner scanner = new DirectoryScanner();
+    scanner.setBasedir(m_aSchematronDirectory);
+    scanner.setIncludes(new String[] { schematronPattern });
+    scanner.setCaseSensitive(true);
+    scanner.scan();
+    String[] filenames = scanner.getIncludedFiles();
+    if (filenames != null) {
+      for (String filename : filenames) {
+        final File aFile = new File(m_aSchematronDirectory, filename);
 
-          // 1. The Schematron resource
-          final IReadableResource aSchematronResource = new FileSystemResource (aFile);
+        // 1. build XSLT file name (outputdir + localpath with new extension)
+        final File aXSLTFile = new File (m_aXSLTDirectory, FilenameHelper.getWithoutExtension (filename) +
+                                                           m_sXSLTExtension);
 
-          // 2. build XSLT file name (dir + basename + extension)
-          final File aXSLTFile = new File (m_aXSLTDirectory, FilenameHelper.getWithoutExtension (aFile.getName ()) +
-                                                             m_sXSLTExtension);
+        getLog().info(
+          "Converting Schematron file '" + aFile.getPath() + "' to XSLT file '" + aXSLTFile.getPath() + "'");
 
-          // 3. Check if the XSLT file already exists
-          if (aXSLTFile.exists () && !m_bOverwriteWithoutQuestion) {
-            // 3.1 Not overwriting the existing file
-            getLog ().debug ("Skipping XSLT file " + aXSLTFile.getName () + " because it already exists!");
-          }
-          else {
-            // 3.2 Okay, write the XSLT file
-            getLog ().debug ("Writing XSLT file " + aXSLTFile.getName ());
-            try {
-              final ISchematronXSLTProvider aPreprocessor = SchematronResourceSCHCache.createSchematronXSLTProvider (aSchematronResource,
-                                                                                                                     null,
-                                                                                                                     null);
+        // 2. The Schematron resource
+        final IReadableResource aSchematronResource = new FileSystemResource (aFile);
+
+        // 3. Check if the XSLT file already exists
+        if (aXSLTFile.exists () && !m_bOverwriteWithoutQuestion) {
+          // 3.1 Not overwriting the existing file
+          getLog ().debug ("Skipping XSLT file '" + aXSLTFile.getPath() + "' because it already exists!");
+        }
+        else {
+          // 3.2 Okay, write the XSLT file
+          try {
+            final ISchematronXSLTProvider aPreprocessor = SchematronResourceSCHCache.createSchematronXSLTProvider (aSchematronResource,
+                                                                                                                   null,
+                                                                                                                   null);
+            if (aPreprocessor!=null) {
               XMLWriter.writeToStream (aPreprocessor.getXSLTDocument (),
                                        new FileOutputStream (aXSLTFile),
                                        XMLWriterSettings.DEFAULT_XML_SETTINGS);
             }
-            catch (final Exception ex) {
-              getLog ().error ("Failed to convert " + aFile.getName () + " to XSLT!", ex);
+            else {
+              String message =
+                "Failed to convert '" + aFile.getPath() + "': the Schematron resource is invalid";
+              getLog().error(message);
+              throw new MojoFailureException(message);
             }
+          }
+          catch (MojoFailureException up) {
+            throw up;
+          }
+          catch (final Exception ex) {
+            String message = "Failed to convert '" + aFile.getPath () + "' to XSLT file '" + aXSLTFile.getPath() + "'";
+            getLog ().error (message, ex);
+            throw new MojoFailureException(message, ex);
           }
         }
       }
+    }
   }
 }
