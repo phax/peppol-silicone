@@ -71,18 +71,16 @@ import org.w3c.dom.Element;
 import at.peppol.commons.identifier.SimpleDocumentIdentifier;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 import at.peppol.commons.identifier.SimpleProcessIdentifier;
+import at.peppol.commons.identifier.docid.EPredefinedDocumentIdentifier;
 import at.peppol.commons.sml.ESML;
 import at.peppol.commons.sml.ISMLInfo;
 import at.peppol.commons.utils.ExtensionConverter;
 import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
 import at.peppol.commons.utils.ReadonlyUsernamePWCredentials;
-import at.peppol.smp.client.SMPServiceCaller;
-import at.peppol.smp.client.UserId;
 import at.peppol.smp.client.exception.NotFoundException;
 import at.peppol.smp.client.exception.UnauthorizedException;
 
 import com.phloc.commons.annotations.DevelopersNote;
-
 
 /**
  * @author PEPPOL.AT, BRZ, Philip Helger
@@ -288,7 +286,18 @@ public final class ClientTest {
     final SignedServiceMetadataType aMetadata = SMPServiceCaller.getServiceRegistrationByDNS (SML_INFO,
                                                                                               aServiceGroupID,
                                                                                               aDocumentTypeID);
+    assertNotNull (aMetadata);
+  }
 
+  @Ignore
+  @Test
+  @DevelopersNote ("Requires DNS enabled; Used as the example in the SMP guideline")
+  public void getByDNSTestForDocs () throws Exception {
+    final ParticipantIdentifierType aServiceGroupID = SimpleParticipantIdentifier.createWithDefaultScheme ("0088:5798000000001");
+    final DocumentIdentifierType aDocumentTypeID = EPredefinedDocumentIdentifier.urn_oasis_names_specification_ubl_schema_xsd_Invoice_2__Invoice__urn_www_cenbii_eu_transaction_biicoretrdm010_ver1_0__urn_www_peppol_eu_bis_peppol4a_ver1_0__2_0.getAsDocumentIdentifier ();
+    final SignedServiceMetadataType aMetadata = SMPServiceCaller.getServiceRegistrationByDNS (ESML.DEVELOPMENT_LOCAL,
+                                                                                              aServiceGroupID,
+                                                                                              aDocumentTypeID);
     assertNotNull (aMetadata);
   }
 
