@@ -16,7 +16,7 @@ Copy the following files (without the directory structure of the ZIP file) into 
 
 Alternatively you can also copy the webservice-api.jar into the endorsed directory of your JRE but beware of the side effects as this affects all applications running on this JRE and this is probably not intended.
 
-Copy the following files into your Tomcat lib directory ({{{${catalina.lib.home}}}})
+Copy the following files into your Tomcat lib directory ({{{${catalina.lib.home}}}} - e.g. {{{/products/tomcat/lib}}})
   * metro/lib/stax-api.jar
   * metro/lib/webservices-extra.jar
   * metro/lib/webservices-extra-api.jar
