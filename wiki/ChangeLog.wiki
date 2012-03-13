@@ -11,7 +11,8 @@ Performed changes so far:
   * Added visualization of Credit Notes
   * Improved the SML Client Swing GUI to be more easily usable
   * Updated Jersey (REST libs) from 1.11 to 1.12
-  * Updated phloc-commons to 3.4.5
+  * Updated phloc-commons to 3.4.6
+  * Improved schematron2xslt Maven plugin thanks to Maarten van Schouwen
 
 = v2.2.0 (2012-02-09, initial release, all components) =
 
