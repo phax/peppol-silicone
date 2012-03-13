@@ -9,7 +9,7 @@ You must have a JRE 1.6.x installed. This software has not yet been tested with 
 The software provided by this project makes heavy use of the Java Metro libraries. Currently the version Metro 2.1.1 from http://netro.dev.java.net/2.1.1 is required. Download the ZIP file and extract it locally to perform further steps.
 The rest of the configuration depends on the application server you are using.
 
-== Setup for Tomcat 6.x ==
+== Setup for Tomcat 6.x and 7.x ==
 
 Copy the following files (without the directory structure of the ZIP file) into your Tomcat endorsed directory (you may need to create this directory; it is e.g. {{{/products/tomcat/endorsed}}}):
   * metro/lib/webservices-api.jar
@@ -24,7 +24,7 @@ Copy the following files into your Tomcat lib directory ({{{${catalina.lib.home}
   * metro/lib/webservices-tools.jar
 
 Ensure that the endorsed libraries are loaded by Tomcat:
-  * Define the following system property on Tomcat start: {{{java.endorsed.dirs=/products/tomcat/endorsed}}} (see the [http://tomcat.apache.org/tomcat-6.0-doc/class-loader-howto.html Tomcat 6 Classloader How-To])
+  * Define the following system property on Tomcat start: {{{java.endorsed.dirs=/products/tomcat/endorsed}}} (see the [http://tomcat.apache.org/tomcat-6.0-doc/class-loader-howto.html Tomcat 6 Classloader How-To] - works for Tomcat 7 too)
 
 Finally Tomcat must be restarted to make the changes work.
 
