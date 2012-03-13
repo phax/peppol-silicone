@@ -62,7 +62,10 @@
     <servlet-name>accessPointService</servlet-name>
     <url-pattern>/accessPointService</url-pattern>
   </servlet-mapping>
-  
+
+  <!-- Enable this ONLY if you are using a Tomcat directly via https. When used after
+       an Apache httpd, the httpd should handle and terminate the SSL connection -->
+<!--   
   <security-constraint>
     <display-name>SSL transport for accessPointService</display-name>
     <web-resource-collection>
@@ -77,7 +80,8 @@
       <transport-guarantee>CONFIDENTIAL</transport-guarantee>
     </user-data-constraint>
   </security-constraint>
-  
+-->
+
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
