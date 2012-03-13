@@ -42,15 +42,28 @@ import java.util.TimeZone;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.phloc.commons.exceptions.InitializationException;
+
 /**
  * This class is used for setting the timezone so that dates saved to the
  * database are always in UTC.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class TimeZoneCorrector implements ServletContextListener {
+  private static final Logger s_aLogger = LoggerFactory.getLogger (TimeZoneCorrector.class);
+
   public void contextInitialized (final ServletContextEvent aServletContextEvent) {
-    TimeZone.setDefault (TimeZone.getTimeZone ("UTC"));
+    try {
+      TimeZone.setDefault (TimeZone.getTimeZone ("UTC"));
+    }
+    catch (final Throwable t) {
+      s_aLogger.error ("Failed to set default time zone!", t);
+      throw new InitializationException ("Failed to set default time zone!", t);
+    }
   }
 
   public void contextDestroyed (final ServletContextEvent aServletContextEvent) {

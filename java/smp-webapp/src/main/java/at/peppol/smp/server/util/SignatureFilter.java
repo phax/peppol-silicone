@@ -74,6 +74,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -82,13 +84,13 @@ import org.xml.sax.InputSource;
 import at.peppol.commons.security.KeyStoreUtils;
 import at.peppol.commons.utils.ConfigFile;
 
+import com.phloc.commons.exceptions.InitializationException;
 import com.phloc.commons.io.streams.NonBlockingByteArrayInputStream;
 import com.phloc.commons.io.streams.NonBlockingByteArrayOutputStream;
 import com.sun.jersey.spi.container.ContainerRequest;
 import com.sun.jersey.spi.container.ContainerResponse;
 import com.sun.jersey.spi.container.ContainerResponseFilter;
 import com.sun.jersey.spi.container.ContainerResponseWriter;
-
 
 /**
  * This class adds a XML DSIG to successful GET's for SignedServiceMetadata
@@ -97,6 +99,7 @@ import com.sun.jersey.spi.container.ContainerResponseWriter;
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class SignatureFilter implements ContainerResponseFilter {
+  private static final Logger s_aLogger = LoggerFactory.getLogger (SignatureFilter.class);
 
   private KeyStore.PrivateKeyEntry m_aKeyEntry;
   private X509Certificate m_aCert;
@@ -122,8 +125,9 @@ public final class SignatureFilter implements ContainerResponseFilter {
 
       m_aCert = (X509Certificate) m_aKeyEntry.getCertificate ();
     }
-    catch (final Exception e) {
-      throw new ExceptionInInitializerError (e);
+    catch (final Throwable t) {
+      s_aLogger.error ("Error in constructor of SignatureFilter", t);
+      throw new InitializationException ("Error in constructor of SignatureFilter", t);
     }
   }
 
