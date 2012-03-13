@@ -45,20 +45,18 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import at.peppol.commons.identifier.actorid.IdentifierIssuingAgencyManager;
-
 import com.phloc.commons.state.ETriState;
 
 /**
  * Test class for class {@link IdentifierIssuingAgencyManager}.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class IdentifierIssuingAgencyManagerTest {
   @Test
   public void testAll () {
     assertNotNull (IdentifierIssuingAgencyManager.getAllAgencies ());
-    assertEquals (27, IdentifierIssuingAgencyManager.getAllAgencies ().size ());
+    assertEquals (65, IdentifierIssuingAgencyManager.getAllAgencies ().size ());
 
     // test valid
     assertNotNull (IdentifierIssuingAgencyManager.getAgencyOfISO6523Code ("0088"));
