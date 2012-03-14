@@ -64,11 +64,17 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j
     <init-param>
       <description>Vaadin application class to start</description>
       <param-name>application</param-name>
-      <param-value>at.peppol.webgui.app.PawgApplication</param-value>
+      <param-value>at.peppol.webgui.app.PawgApp</param-value>
     </init-param>
   </servlet>
   <servlet-mapping>
     <servlet-name>PawgServlet</servlet-name>
     <url-pattern>/*</url-pattern>
   </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>/img/*</url-pattern>
+</servlet-mapping>
+
 </web-app>
