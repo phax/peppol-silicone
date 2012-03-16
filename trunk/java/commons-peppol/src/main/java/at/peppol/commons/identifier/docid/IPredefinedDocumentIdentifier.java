@@ -37,6 +37,8 @@
  */
 package at.peppol.commons.identifier.docid;
 
+import at.peppol.busdox.identifier.IReadonlyDocumentIdentifier;
+
 /**
  * Base interface for predefined document identifiers.
  * 
@@ -46,6 +48,7 @@ package at.peppol.commons.identifier.docid;
 @Deprecated
 public interface IPredefinedDocumentIdentifier extends
                                               IPredefinedDocumentTypeIdentifier,
+                                              IReadonlyDocumentIdentifier,
                                               IPEPPOLDocumentIdentifierParts {
   /* empty */
 }

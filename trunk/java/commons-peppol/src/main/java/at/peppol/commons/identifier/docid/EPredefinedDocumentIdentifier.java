@@ -393,6 +393,11 @@ public enum EPredefinedDocumentIdentifier implements IPredefinedDocumentIdentifi
   }
 
   @Nonnull
+  public SimpleDocumentIdentifier getAsDocumentIdentifier () {
+    return getAsDocumentTypeIdentifier ();
+  }
+
+  @Nonnull
   public SimpleDocumentIdentifier getAsDocumentTypeIdentifier () {
     return new SimpleDocumentIdentifier (this);
   }
