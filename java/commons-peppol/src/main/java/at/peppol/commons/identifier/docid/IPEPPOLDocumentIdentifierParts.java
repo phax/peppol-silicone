@@ -41,8 +41,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-
-import at.peppol.busdox.identifier.IBusdoxDocumentIdentifierParts;
+import at.peppol.busdox.identifier.IBusdoxDocumentTypeIdentifierParts;
 
 import com.phloc.commons.annotations.Nonempty;
 
@@ -52,10 +51,10 @@ import com.phloc.commons.annotations.Nonempty;
  * <code>&lt;customization id>::&lt;version></code> even more detailed the
  * customization ID can be split further:
  * <code>&lt;transactionId>:#&lt;extensionId>[#&lt;extensionId>]::&lt;version></code>
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public interface IPEPPOLDocumentIdentifierParts extends IBusdoxDocumentIdentifierParts {
+public interface IPEPPOLDocumentIdentifierParts extends IBusdoxDocumentTypeIdentifierParts {
   /**
    * Separates the transaction ID from the extensions
    */

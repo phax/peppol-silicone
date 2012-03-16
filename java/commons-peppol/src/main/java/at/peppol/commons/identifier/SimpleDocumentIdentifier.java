@@ -44,10 +44,6 @@ import org.busdox.transport.identifiers._1.DocumentIdentifierType;
 
 import at.peppol.busdox.identifier.IReadonlyIdentifier;
 
-import com.phloc.commons.compare.EqualsUtils;
-import com.phloc.commons.hash.HashCodeGenerator;
-import com.phloc.commons.string.ToStringGenerator;
-
 /**
  * This is a sanity class around the {@link DocumentIdentifierType} class with
  * easier construction and some sanity access methods. It may be used in all
@@ -55,57 +51,23 @@ import com.phloc.commons.string.ToStringGenerator;
  * Important note: this class implements {@link #equals(Object)} and
  * {@link #hashCode()} where its base class does not. So be careful when mixing
  * this class and its base class!
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
+ * @deprecated Use {@link SimpleDocumentTypeIdentifier} instead
  */
-public class SimpleDocumentIdentifier extends DocumentIdentifierType {
+@Deprecated
+public class SimpleDocumentIdentifier extends SimpleDocumentTypeIdentifier {
   public SimpleDocumentIdentifier (@Nonnull final IReadonlyIdentifier aIdentifier) {
-    this (aIdentifier.getScheme (), aIdentifier.getValue ());
+    super (aIdentifier);
   }
 
   public SimpleDocumentIdentifier (@Nullable final String sScheme, @Nullable final String sValue) {
-    setScheme (sScheme);
-    setValue (sValue);
-  }
-
-  @Nonnull
-  public String getURIEncoded () {
-    return IdentifierUtils.getIdentifierURIEncoded (this);
-  }
-
-  @Nonnull
-  public String getURIPercentEncoded () {
-    return IdentifierUtils.getIdentifierURIPercentEncoded (this);
-  }
-
-  /*
-   * Note: this method does compare case sensitive!!!! Otherwise the required
-   * semantics of #equals would not be fulfilled!
-   * @see IdentifierUtils#areIdentifiersEqual(IIdentifier,IIdentifier)
-   */
-  @Override
-  public boolean equals (final Object o) {
-    if (o == this)
-      return true;
-    if (o == null || !getClass ().equals (o.getClass ()))
-      return false;
-    final SimpleDocumentIdentifier rhs = (SimpleDocumentIdentifier) o;
-    return EqualsUtils.nullSafeEquals (scheme, rhs.scheme) && EqualsUtils.nullSafeEquals (value, rhs.value);
-  }
-
-  @Override
-  public int hashCode () {
-    return new HashCodeGenerator (this).append (scheme).append (value).getHashCode ();
-  }
-
-  @Override
-  public String toString () {
-    return new ToStringGenerator (this).append ("scheme", scheme).append ("value", value).toString ();
+    super (sScheme, sValue);
   }
 
   @Nonnull
   public static SimpleDocumentIdentifier createWithDefaultScheme (@Nullable final String sValue) {
-    return new SimpleDocumentIdentifier (CIdentifier.DEFAULT_DOCUMENT_IDENTIFIER_SCHEME, sValue);
+    return new SimpleDocumentIdentifier (CIdentifier.DEFAULT_DOCUMENT_TYPE_IDENTIFIER_SCHEME, sValue);
   }
 
   @Nonnull

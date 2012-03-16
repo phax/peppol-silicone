@@ -43,67 +43,64 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-import at.peppol.busdox.identifier.BusdoxDocumentIdentifierParts;
-import at.peppol.busdox.identifier.IBusdoxDocumentIdentifierParts;
-
 /**
- * Test class for class {@link BusdoxDocumentIdentifierParts}.
- *
+ * Test class for class {@link BusdoxDocumentTypeIdentifierParts}.
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public final class BusdoxDocumentIdentifierPartsTest {
+public final class BusdoxDocumentTypeIdentifierPartsTest {
   @Test
   public void testExtract () {
-    IBusdoxDocumentIdentifierParts aParts = BusdoxDocumentIdentifierParts.extractFromString ("urn:www.peppol.eu:schema:xsd:CatalogueTemplate-1::CatalogueTemplate##urn:www.cenbii.eu:transaction:biicoretrdm993:ver0.1:#urn:www.peppol.eu:bis:peppol993a:ver1.0::0.1");
+    IBusdoxDocumentTypeIdentifierParts aParts = BusdoxDocumentTypeIdentifierParts.extractFromString ("urn:www.peppol.eu:schema:xsd:CatalogueTemplate-1::CatalogueTemplate##urn:www.cenbii.eu:transaction:biicoretrdm993:ver0.1:#urn:www.peppol.eu:bis:peppol993a:ver1.0::0.1");
 
     // With sub-type
-    aParts = BusdoxDocumentIdentifierParts.extractFromString ("root::local##subtype");
+    aParts = BusdoxDocumentTypeIdentifierParts.extractFromString ("root::local##subtype");
     assertEquals ("root", aParts.getRootNS ());
     assertEquals ("local", aParts.getLocalName ());
     assertEquals ("subtype", aParts.getSubTypeIdentifier ());
-    assertEquals ("root::local##subtype", aParts.getAsDocumentIdentifierValue ());
+    assertEquals ("root::local##subtype", aParts.getAsDocumentTypeIdentifierValue ());
 
     // Without sub-type
-    aParts = BusdoxDocumentIdentifierParts.extractFromString ("root::local");
+    aParts = BusdoxDocumentTypeIdentifierParts.extractFromString ("root::local");
     assertEquals ("root", aParts.getRootNS ());
     assertEquals ("local", aParts.getLocalName ());
     assertNull (aParts.getSubTypeIdentifier ());
-    assertEquals ("root::local", aParts.getAsDocumentIdentifierValue ());
+    assertEquals ("root::local", aParts.getAsDocumentTypeIdentifierValue ());
   }
 
   @Test
   public void testInvalid () {
     try {
       // Empty namespace not allowed
-      new BusdoxDocumentIdentifierParts ("", "local", null);
+      new BusdoxDocumentTypeIdentifierParts ("", "local", null);
       fail ();
     }
     catch (final IllegalArgumentException ex) {}
 
     try {
       // Empty local name not allowed
-      new BusdoxDocumentIdentifierParts ("rootns", "", null);
+      new BusdoxDocumentTypeIdentifierParts ("rootns", "", null);
       fail ();
     }
     catch (final IllegalArgumentException ex) {}
 
     try {
       // Empty String is not allowed
-      BusdoxDocumentIdentifierParts.extractFromString ("");
+      BusdoxDocumentTypeIdentifierParts.extractFromString ("");
       fail ();
     }
     catch (final IllegalArgumentException ex) {}
 
     try {
       // No local name present
-      BusdoxDocumentIdentifierParts.extractFromString ("root#subtype");
+      BusdoxDocumentTypeIdentifierParts.extractFromString ("root#subtype");
       fail ();
     }
     catch (final IllegalArgumentException ex) {}
 
     try {
       // null not allowed
-      BusdoxDocumentIdentifierParts.getAsDocumentIdentifierValue (null);
+      BusdoxDocumentTypeIdentifierParts.getAsDocumentTypeIdentifierValue (null);
       fail ();
     }
     catch (final NullPointerException ex) {}

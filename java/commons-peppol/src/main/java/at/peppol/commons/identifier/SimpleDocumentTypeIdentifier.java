@@ -39,54 +39,33 @@ package at.peppol.commons.identifier;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.concurrent.Immutable;
 
 import org.busdox.transport.identifiers._1.DocumentIdentifierType;
 
 import at.peppol.busdox.identifier.IReadonlyIdentifier;
 
-import com.phloc.commons.annotations.UnsupportedOperation;
 import com.phloc.commons.compare.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
- * This is an immutable sanity class around the {@link DocumentIdentifierType}
- * class with easier construction and some sanity access methods. It may be used
- * in all places where {@link DocumentIdentifierType} objects are required.<br>
+ * This is a sanity class around the {@link DocumentIdentifierType} class with
+ * easier construction and some sanity access methods. It may be used in all
+ * places where {@link DocumentIdentifierType} objects are required.<br>
  * Important note: this class implements {@link #equals(Object)} and
  * {@link #hashCode()} where its base class does not. So be careful when mixing
- * this class and its base class!<br>
- * For a mutable version, please check {@link SimpleDocumentIdentifier}.
+ * this class and its base class!
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-@Immutable
-@Deprecated
-public final class ReadonlyDocumentIdentifier extends DocumentIdentifierType {
-  public ReadonlyDocumentIdentifier (@Nonnull final IReadonlyIdentifier aIdentifier) {
+public class SimpleDocumentTypeIdentifier extends DocumentIdentifierType {
+  public SimpleDocumentTypeIdentifier (@Nonnull final IReadonlyIdentifier aIdentifier) {
     this (aIdentifier.getScheme (), aIdentifier.getValue ());
   }
 
-  public ReadonlyDocumentIdentifier (@Nullable final String sScheme, @Nullable final String sValue) {
-    // Explicitly use the super methods, as the methods of this class throw an
-    // exception!
-    super.setScheme (sScheme);
-    super.setValue (sValue);
-  }
-
-  @Override
-  @UnsupportedOperation
-  public void setValue (final String sValue) {
-    // This is how we make things read-only :)
-    throw new UnsupportedOperationException ("setValue is forbidden on this class!");
-  }
-
-  @Override
-  @UnsupportedOperation
-  public void setScheme (final String sScheme) {
-    // This is how we make things read-only :)
-    throw new UnsupportedOperationException ("setScheme is forbidden on this class!");
+  public SimpleDocumentTypeIdentifier (@Nullable final String sScheme, @Nullable final String sValue) {
+    setScheme (sScheme);
+    setValue (sValue);
   }
 
   @Nonnull
@@ -108,9 +87,9 @@ public final class ReadonlyDocumentIdentifier extends DocumentIdentifierType {
   public boolean equals (final Object o) {
     if (o == this)
       return true;
-    if (!(o instanceof ReadonlyDocumentIdentifier))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
-    final ReadonlyDocumentIdentifier rhs = (ReadonlyDocumentIdentifier) o;
+    final SimpleDocumentTypeIdentifier rhs = (SimpleDocumentTypeIdentifier) o;
     return EqualsUtils.nullSafeEquals (scheme, rhs.scheme) && EqualsUtils.nullSafeEquals (value, rhs.value);
   }
 
@@ -124,16 +103,13 @@ public final class ReadonlyDocumentIdentifier extends DocumentIdentifierType {
     return new ToStringGenerator (this).append ("scheme", scheme).append ("value", value).toString ();
   }
 
-  /**
-   * Create a document type identifier with the common scheme as defined by
-   * {@link CIdentifier#DEFAULT_DOCUMENT_TYPE_IDENTIFIER_SCHEME}
-   * 
-   * @param sValue
-   *        The document type identifier value
-   * @return The readonly document identifier
-   */
   @Nonnull
-  public static ReadonlyDocumentIdentifier createWithDefaultScheme (@Nullable final String sValue) {
-    return new ReadonlyDocumentIdentifier (CIdentifier.DEFAULT_DOCUMENT_TYPE_IDENTIFIER_SCHEME, sValue);
+  public static SimpleDocumentTypeIdentifier createWithDefaultScheme (@Nullable final String sValue) {
+    return new SimpleDocumentTypeIdentifier (CIdentifier.DEFAULT_DOCUMENT_TYPE_IDENTIFIER_SCHEME, sValue);
+  }
+
+  @Nonnull
+  public static SimpleDocumentTypeIdentifier createFromURIPart (@Nonnull final String sURIPart) {
+    return IdentifierUtils.createDocumentTypeIdentifierFromURIPart (sURIPart);
   }
 }

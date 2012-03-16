@@ -35,15 +35,42 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.busdox.identifier;
+package at.peppol.commons.identifier.docid;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
+
+import at.peppol.commons.identifier.CIdentifier;
+
+import com.phloc.commons.string.StringHelper;
 
 /**
- * Marker-interface that is specific for document identifiers.
+ * Test class for class {@link EPredefinedDocumentTypeIdentifier}.
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
- * @deprecated Use {@link IDocumentTypeIdentifier} instead
  */
-@Deprecated
-public interface IDocumentIdentifier extends IDocumentTypeIdentifier, IReadonlyDocumentIdentifier {
-  /* empty */
+public final class EPredefinedDocumentTypeIdentifierTest {
+  @Test
+  public void testAll () {
+    for (final EPredefinedDocumentTypeIdentifier e : EPredefinedDocumentTypeIdentifier.values ()) {
+      assertEquals (CIdentifier.DEFAULT_DOCUMENT_TYPE_IDENTIFIER_SCHEME, e.getScheme ());
+      assertTrue (StringHelper.hasText (e.getValue ()));
+      assertTrue (StringHelper.hasText (e.getRootNS ()));
+      assertTrue (StringHelper.hasText (e.getLocalName ()));
+      assertTrue (StringHelper.hasText (e.getSubTypeIdentifier ()));
+      assertTrue (StringHelper.hasText (e.getTransactionID ()));
+      assertNotNull (e.getExtensionIDs ());
+      assertFalse (e.getExtensionIDs ().isEmpty ());
+      assertTrue (StringHelper.hasText (e.getAsUBLCustomizationID ()));
+      assertTrue (StringHelper.hasText (e.getVersion ()));
+      assertTrue (StringHelper.hasText (e.getCommonName ()));
+      assertEquals (e.getAsDocumentTypeIdentifierValue (), e.getValue ());
+      assertSame (e, EPredefinedDocumentTypeIdentifier.valueOf (e.name ()));
+    }
+  }
 }

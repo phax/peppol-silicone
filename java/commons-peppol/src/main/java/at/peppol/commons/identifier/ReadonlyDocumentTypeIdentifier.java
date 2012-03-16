@@ -57,18 +57,17 @@ import com.phloc.commons.string.ToStringGenerator;
  * Important note: this class implements {@link #equals(Object)} and
  * {@link #hashCode()} where its base class does not. So be careful when mixing
  * this class and its base class!<br>
- * For a mutable version, please check {@link SimpleDocumentIdentifier}.
+ * For a mutable version, please check {@link SimpleDocumentTypeIdentifier}.
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable
-@Deprecated
-public final class ReadonlyDocumentIdentifier extends DocumentIdentifierType {
-  public ReadonlyDocumentIdentifier (@Nonnull final IReadonlyIdentifier aIdentifier) {
+public final class ReadonlyDocumentTypeIdentifier extends DocumentIdentifierType {
+  public ReadonlyDocumentTypeIdentifier (@Nonnull final IReadonlyIdentifier aIdentifier) {
     this (aIdentifier.getScheme (), aIdentifier.getValue ());
   }
 
-  public ReadonlyDocumentIdentifier (@Nullable final String sScheme, @Nullable final String sValue) {
+  public ReadonlyDocumentTypeIdentifier (@Nullable final String sScheme, @Nullable final String sValue) {
     // Explicitly use the super methods, as the methods of this class throw an
     // exception!
     super.setScheme (sScheme);
@@ -108,9 +107,9 @@ public final class ReadonlyDocumentIdentifier extends DocumentIdentifierType {
   public boolean equals (final Object o) {
     if (o == this)
       return true;
-    if (!(o instanceof ReadonlyDocumentIdentifier))
+    if (!(o instanceof ReadonlyDocumentTypeIdentifier))
       return false;
-    final ReadonlyDocumentIdentifier rhs = (ReadonlyDocumentIdentifier) o;
+    final ReadonlyDocumentTypeIdentifier rhs = (ReadonlyDocumentTypeIdentifier) o;
     return EqualsUtils.nullSafeEquals (scheme, rhs.scheme) && EqualsUtils.nullSafeEquals (value, rhs.value);
   }
 
@@ -133,7 +132,7 @@ public final class ReadonlyDocumentIdentifier extends DocumentIdentifierType {
    * @return The readonly document identifier
    */
   @Nonnull
-  public static ReadonlyDocumentIdentifier createWithDefaultScheme (@Nullable final String sValue) {
-    return new ReadonlyDocumentIdentifier (CIdentifier.DEFAULT_DOCUMENT_TYPE_IDENTIFIER_SCHEME, sValue);
+  public static ReadonlyDocumentTypeIdentifier createWithDefaultScheme (@Nullable final String sValue) {
+    return new ReadonlyDocumentTypeIdentifier (CIdentifier.DEFAULT_DOCUMENT_TYPE_IDENTIFIER_SCHEME, sValue);
   }
 }

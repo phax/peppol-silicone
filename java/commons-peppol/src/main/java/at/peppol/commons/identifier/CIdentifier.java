@@ -44,7 +44,7 @@ import com.phloc.commons.exceptions.InitializationException;
 
 /**
  * Constants on BUSDOX identifiers used in PEPPOL.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable
@@ -72,7 +72,7 @@ public final class CIdentifier {
    * within the code-list.<br>
    * Please note that this is a change to the PEPPOL Common definitions chapter
    * 3.4!
-   *
+   * 
    * @see at.peppol.commons.identifier.actorid.IdentifierIssuingAgencyManager
    */
   public static final String DEFAULT_PARTICIPANT_IDENTIFIER_SCHEME = "iso6523-actorid-upis";
@@ -81,7 +81,14 @@ public final class CIdentifier {
    * The default document identifier scheme.<br>
    * See PEPPOL Common definitions chapter 3.5
    */
-  public static final String DEFAULT_DOCUMENT_IDENTIFIER_SCHEME = "busdox-docid-qns";
+  public static final String DEFAULT_DOCUMENT_TYPE_IDENTIFIER_SCHEME = "busdox-docid-qns";
+
+  /**
+   * The default document identifier scheme.<br>
+   * See PEPPOL Common definitions chapter 3.5
+   */
+  @Deprecated
+  public static final String DEFAULT_DOCUMENT_IDENTIFIER_SCHEME = DEFAULT_DOCUMENT_TYPE_IDENTIFIER_SCHEME;
 
   /**
    * The default process identifier scheme.<br>

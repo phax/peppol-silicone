@@ -56,6 +56,8 @@
       <inheritance:implements>at.peppol.busdox.identifier.IParticipantIdentifier</inheritance:implements>
     </bindings> 
     <bindings node="//xs:complexType[@name='DocumentIdentifierType']">
+      <!-- This is only temporay, because IDocumentIdentifier derives from IDocumentTypeIdentifier.
+           Once the old interface gets removed, replace this interface with IDocumentTypeIdentifier -->
       <inheritance:implements>at.peppol.busdox.identifier.IDocumentIdentifier</inheritance:implements>
     </bindings> 
     <bindings node="//xs:complexType[@name='ProcessIdentifierType']">

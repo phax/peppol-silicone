@@ -47,7 +47,7 @@ import javax.xml.bind.DatatypeConverter;
 /**
  * This class is used for converting between XML time elements and Java Date
  * objects.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class DateAdapter {
@@ -56,11 +56,13 @@ public final class DateAdapter {
 
   private DateAdapter () {}
 
+  // never null
   public static Date parseDate (final String sDate) {
     final Calendar aCal = DatatypeConverter.parseDate (sDate);
     return aCal.getTime ();
   }
 
+  // date may not be null
   public static String printDate (final Date aDate) {
     final Calendar aCal = new GregorianCalendar (TIMEZONE_UTC);
     aCal.setTime (aDate);

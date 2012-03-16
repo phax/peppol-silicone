@@ -35,44 +35,44 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.commons.identifier.docid;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
-
-import at.peppol.commons.identifier.CIdentifier;
-import at.peppol.commons.identifier.docid.EPredefinedDocumentIdentifier;
-
-import com.phloc.commons.string.StringHelper;
-
+package at.peppol.busdox.identifier;
 
 /**
- * Test class for class {@link EPredefinedDocumentIdentifier}.
- *
+ * Contains all the different fields of a document type identifier for BusDox.
+ * Note: it is important to note, that the PEPPOL specification separates the
+ * sub type identifier more clearly!
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public final class EPredefinedDocumentIdentifierTest {
-  @Test
-  public void testAll () {
-    for (final EPredefinedDocumentIdentifier e : EPredefinedDocumentIdentifier.values ()) {
-      assertEquals (CIdentifier.DEFAULT_DOCUMENT_IDENTIFIER_SCHEME, e.getScheme ());
-      assertTrue (StringHelper.hasText (e.getValue ()));
-      assertTrue (StringHelper.hasText (e.getRootNS ()));
-      assertTrue (StringHelper.hasText (e.getLocalName ()));
-      assertTrue (StringHelper.hasText (e.getSubTypeIdentifier ()));
-      assertTrue (StringHelper.hasText (e.getTransactionID ()));
-      assertNotNull (e.getExtensionIDs ());
-      assertFalse (e.getExtensionIDs ().isEmpty ());
-      assertTrue (StringHelper.hasText (e.getAsUBLCustomizationID ()));
-      assertTrue (StringHelper.hasText (e.getVersion ()));
-      assertTrue (StringHelper.hasText (e.getCommonName ()));
-      assertEquals (e.getAsDocumentIdentifierValue (), e.getValue ());
-      assertSame (e, EPredefinedDocumentIdentifier.valueOf (e.name ()));
-    }
-  }
+public interface IBusdoxDocumentTypeIdentifierParts {
+  /**
+   * Separator between namespace and local name
+   */
+  String NAMESPACE_SEPARATOR = "::";
+
+  /**
+   * Separator between namespace elements and the optional subtype
+   */
+  String SUBTYPE_SEPARATOR = "##";
+
+  /**
+   * @return The root namespace. Never <code>null</code> nor empty.
+   */
+  String getRootNS ();
+
+  /**
+   * @return The document element local name. Never <code>null</code> nor empty.
+   */
+  String getLocalName ();
+
+  /**
+   * @return The optional sub type identifier. May be <code>null</code>.
+   */
+  String getSubTypeIdentifier ();
+
+  /**
+   * @return The parts assembled into a complete document identifier value.
+   *         Never <code>null</code> nor empty.
+   */
+  String getAsDocumentTypeIdentifierValue ();
 }

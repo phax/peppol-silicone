@@ -45,12 +45,9 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import at.peppol.commons.identifier.docid.EPredefinedDocumentIdentifier;
-import at.peppol.commons.identifier.docid.PredefinedDocumentIdentifierManager;
-
 /**
  * Test class for class {@link PredefinedDocumentIdentifierManager}.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class PredefinedDocumentIdentifierManagerTest {
@@ -65,7 +62,7 @@ public final class PredefinedDocumentIdentifierManagerTest {
     assertFalse (PredefinedDocumentIdentifierManager.containsDocumentIdentifierWithID ("urn:oasis:names:specification:ubl:schema:xsd:Order-2::Order##urn:www.cenbii.eu:transaction:biicoretrdm001:ver1.0:#urn:www.peppol.eu:bis:peppol3a:ver1.0::2.0a"));
 
     // all enum ones must be contained
-    for (final EPredefinedDocumentIdentifier eDocID : EPredefinedDocumentIdentifier.values ()) {
+    for (final EPredefinedDocumentTypeIdentifier eDocID : EPredefinedDocumentTypeIdentifier.values ()) {
       assertSame (eDocID, PredefinedDocumentIdentifierManager.getDocumentIdentifierOfID (eDocID.getValue ()));
       assertTrue (PredefinedDocumentIdentifierManager.containsDocumentIdentifierWithID (eDocID.getValue ()));
     }
