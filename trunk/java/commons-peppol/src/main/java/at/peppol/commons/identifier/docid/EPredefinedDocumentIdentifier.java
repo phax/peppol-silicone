@@ -39,252 +39,360 @@
 package at.peppol.commons.identifier.docid;
 
 import java.util.List;
+
 import javax.annotation.Nonnull;
+
 import at.peppol.commons.identifier.CIdentifier;
 import at.peppol.commons.identifier.SimpleDocumentIdentifier;
+
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.version.Version;
 
-
 /**
  * This file is generated. Do NOT edit!
  * 
+ * @deprecated Use {@link EPredefinedDocumentTypeIdentifier} instead
  */
-public enum EPredefinedDocumentIdentifier
-    implements IPredefinedDocumentIdentifier
-{
+@Deprecated
+public enum EPredefinedDocumentIdentifier implements IPredefinedDocumentIdentifier {
 
+  /**
+   * urn:www.peppol.eu:schema:xsd:VirtualCompanyDossier-1::VirtualCompanyDossier
+   * ##urn:www.cenbii.eu:transaction:biicoretrdm991:ver0.1:#urn:www.peppol.eu:
+   * bis:peppol991a:ver1.0::0.1
+   * 
+   * @since code list 1.0.0
+   */
+  urn_www_peppol_eu_schema_xsd_VirtualCompanyDossier_1__VirtualCompanyDossier__urn_www_cenbii_eu_transaction_biicoretrdm991_ver0_1__urn_www_peppol_eu_bis_peppol991a_ver1_0__0_1 (new PEPPOLDocumentIdentifierParts ("urn:www.peppol.eu:schema:xsd:VirtualCompanyDossier-1",
+                                                                                                                                                                                                                     "VirtualCompanyDossier",
+                                                                                                                                                                                                                     "urn:www.cenbii.eu:transaction:biicoretrdm991:ver0.1",
+                                                                                                                                                                                                                     ContainerHelper.newList ("urn:www.peppol.eu:bis:peppol991a:ver1.0"),
+                                                                                                                                                                                                                     "0.1"), "Virtual Company Dossier", new Version ("1.0.0")),
 
-    /**
-     * urn:www.peppol.eu:schema:xsd:VirtualCompanyDossier-1::VirtualCompanyDossier##urn:www.cenbii.eu:transaction:biicoretrdm991:ver0.1:#urn:www.peppol.eu:bis:peppol991a:ver1.0::0.1
-     * @since code list 1.0.0
-     * 
-     */
-    urn_www_peppol_eu_schema_xsd_VirtualCompanyDossier_1__VirtualCompanyDossier__urn_www_cenbii_eu_transaction_biicoretrdm991_ver0_1__urn_www_peppol_eu_bis_peppol991a_ver1_0__0_1(new PEPPOLDocumentIdentifierParts("urn:www.peppol.eu:schema:xsd:VirtualCompanyDossier-1", "VirtualCompanyDossier", "urn:www.cenbii.eu:transaction:biicoretrdm991:ver0.1", ContainerHelper.newList("urn:www.peppol.eu:bis:peppol991a:ver1.0"), "0.1"), "Virtual Company Dossier", new Version("1.0.0")),
+  /**
+   * urn:www.peppol.eu:schema:xsd:VirtualCompanyDossierPackage-1::
+   * VirtualCompanyDossierPackage
+   * ##urn:www.cenbii.eu:transaction:biicoretrdm992:ver0
+   * .1:#urn:www.peppol.eu:bis:peppol992a:ver1.0::0.1
+   * 
+   * @since code list 1.0.0
+   */
+  urn_www_peppol_eu_schema_xsd_VirtualCompanyDossierPackage_1__VirtualCompanyDossierPackage__urn_www_cenbii_eu_transaction_biicoretrdm992_ver0_1__urn_www_peppol_eu_bis_peppol992a_ver1_0__0_1 (new PEPPOLDocumentIdentifierParts ("urn:www.peppol.eu:schema:xsd:VirtualCompanyDossierPackage-1",
+                                                                                                                                                                                                                                   "VirtualCompanyDossierPackage",
+                                                                                                                                                                                                                                   "urn:www.cenbii.eu:transaction:biicoretrdm992:ver0.1",
+                                                                                                                                                                                                                                   ContainerHelper.newList ("urn:www.peppol.eu:bis:peppol992a:ver1.0"),
+                                                                                                                                                                                                                                   "0.1"), "Virtual Company Dossier Package", new Version ("1.0.0")),
 
-    /**
-     * urn:www.peppol.eu:schema:xsd:VirtualCompanyDossierPackage-1::VirtualCompanyDossierPackage##urn:www.cenbii.eu:transaction:biicoretrdm992:ver0.1:#urn:www.peppol.eu:bis:peppol992a:ver1.0::0.1
-     * @since code list 1.0.0
-     * 
-     */
-    urn_www_peppol_eu_schema_xsd_VirtualCompanyDossierPackage_1__VirtualCompanyDossierPackage__urn_www_cenbii_eu_transaction_biicoretrdm992_ver0_1__urn_www_peppol_eu_bis_peppol992a_ver1_0__0_1(new PEPPOLDocumentIdentifierParts("urn:www.peppol.eu:schema:xsd:VirtualCompanyDossierPackage-1", "VirtualCompanyDossierPackage", "urn:www.cenbii.eu:transaction:biicoretrdm992:ver0.1", ContainerHelper.newList("urn:www.peppol.eu:bis:peppol992a:ver1.0"), "0.1"), "Virtual Company Dossier Package", new Version("1.0.0")),
+  /**
+   * urn:www.peppol.eu:schema:xsd:CatalogueTemplate-1::CatalogueTemplate##urn:
+   * www.cenbii.eu:transaction:biicoretrdm993:ver0.1:#urn:www.peppol.eu:bis:
+   * peppol993a:ver1.0::0.1
+   * 
+   * @since code list 1.0.0
+   */
+  urn_www_peppol_eu_schema_xsd_CatalogueTemplate_1__CatalogueTemplate__urn_www_cenbii_eu_transaction_biicoretrdm993_ver0_1__urn_www_peppol_eu_bis_peppol993a_ver1_0__0_1 (new PEPPOLDocumentIdentifierParts ("urn:www.peppol.eu:schema:xsd:CatalogueTemplate-1",
+                                                                                                                                                                                                             "CatalogueTemplate",
+                                                                                                                                                                                                             "urn:www.cenbii.eu:transaction:biicoretrdm993:ver0.1",
+                                                                                                                                                                                                             ContainerHelper.newList ("urn:www.peppol.eu:bis:peppol993a:ver1.0"),
+                                                                                                                                                                                                             "0.1"), "Catalogue Template", new Version ("1.0.0")),
 
-    /**
-     * urn:www.peppol.eu:schema:xsd:CatalogueTemplate-1::CatalogueTemplate##urn:www.cenbii.eu:transaction:biicoretrdm993:ver0.1:#urn:www.peppol.eu:bis:peppol993a:ver1.0::0.1
-     * @since code list 1.0.0
-     * 
-     */
-    urn_www_peppol_eu_schema_xsd_CatalogueTemplate_1__CatalogueTemplate__urn_www_cenbii_eu_transaction_biicoretrdm993_ver0_1__urn_www_peppol_eu_bis_peppol993a_ver1_0__0_1(new PEPPOLDocumentIdentifierParts("urn:www.peppol.eu:schema:xsd:CatalogueTemplate-1", "CatalogueTemplate", "urn:www.cenbii.eu:transaction:biicoretrdm993:ver0.1", ContainerHelper.newList("urn:www.peppol.eu:bis:peppol993a:ver1.0"), "0.1"), "Catalogue Template", new Version("1.0.0")),
+  /**
+   * urn:oasis:names:specification:ubl:schema:schema:xsd:Catalogue-2::Catalogue#
+   * #urn:www.cenbii.eu:transaction:biicoretrdm019:ver1.0:#urn:www.peppol.eu:bis
+   * :peppol1a:ver1.0::2.0
+   * 
+   * @since code list 1.0.0
+   */
+  urn_oasis_names_specification_ubl_schema_schema_xsd_Catalogue_2__Catalogue__urn_www_cenbii_eu_transaction_biicoretrdm019_ver1_0__urn_www_peppol_eu_bis_peppol1a_ver1_0__2_0 (new PEPPOLDocumentIdentifierParts ("urn:oasis:names:specification:ubl:schema:schema:xsd:Catalogue-2",
+                                                                                                                                                                                                                  "Catalogue",
+                                                                                                                                                                                                                  "urn:www.cenbii.eu:transaction:biicoretrdm019:ver1.0",
+                                                                                                                                                                                                                  ContainerHelper.newList ("urn:www.peppol.eu:bis:peppol1a:ver1.0"),
+                                                                                                                                                                                                                  "2.0"), "PEPPOL Catalogue profile", new Version ("1.0.0")),
 
-    /**
-     * urn:oasis:names:specification:ubl:schema:schema:xsd:Catalogue-2::Catalogue##urn:www.cenbii.eu:transaction:biicoretrdm019:ver1.0:#urn:www.peppol.eu:bis:peppol1a:ver1.0::2.0
-     * @since code list 1.0.0
-     * 
-     */
-    urn_oasis_names_specification_ubl_schema_schema_xsd_Catalogue_2__Catalogue__urn_www_cenbii_eu_transaction_biicoretrdm019_ver1_0__urn_www_peppol_eu_bis_peppol1a_ver1_0__2_0(new PEPPOLDocumentIdentifierParts("urn:oasis:names:specification:ubl:schema:schema:xsd:Catalogue-2", "Catalogue", "urn:www.cenbii.eu:transaction:biicoretrdm019:ver1.0", ContainerHelper.newList("urn:www.peppol.eu:bis:peppol1a:ver1.0"), "2.0"), "PEPPOL Catalogue profile", new Version("1.0.0")),
+  /**
+   * urn:oasis:names:specification:ubl:schema:xsd:ApplicationResponse-2::
+   * ApplicationResponse
+   * ##urn:www.cenbii.eu:transaction:biicoretrdm057:ver1.0:#urn
+   * :www.peppol.eu:bis:peppol1a:ver1.0::2.0
+   * 
+   * @since code list 1.0.0
+   */
+  urn_oasis_names_specification_ubl_schema_xsd_ApplicationResponse_2__ApplicationResponse__urn_www_cenbii_eu_transaction_biicoretrdm057_ver1_0__urn_www_peppol_eu_bis_peppol1a_ver1_0__2_0 (new PEPPOLDocumentIdentifierParts ("urn:oasis:names:specification:ubl:schema:xsd:ApplicationResponse-2",
+                                                                                                                                                                                                                               "ApplicationResponse",
+                                                                                                                                                                                                                               "urn:www.cenbii.eu:transaction:biicoretrdm057:ver1.0",
+                                                                                                                                                                                                                               ContainerHelper.newList ("urn:www.peppol.eu:bis:peppol1a:ver1.0"),
+                                                                                                                                                                                                                               "2.0"), "PEPPOL Catalogue profile", new Version ("1.0.0")),
 
-    /**
-     * urn:oasis:names:specification:ubl:schema:xsd:ApplicationResponse-2::ApplicationResponse##urn:www.cenbii.eu:transaction:biicoretrdm057:ver1.0:#urn:www.peppol.eu:bis:peppol1a:ver1.0::2.0
-     * @since code list 1.0.0
-     * 
-     */
-    urn_oasis_names_specification_ubl_schema_xsd_ApplicationResponse_2__ApplicationResponse__urn_www_cenbii_eu_transaction_biicoretrdm057_ver1_0__urn_www_peppol_eu_bis_peppol1a_ver1_0__2_0(new PEPPOLDocumentIdentifierParts("urn:oasis:names:specification:ubl:schema:xsd:ApplicationResponse-2", "ApplicationResponse", "urn:www.cenbii.eu:transaction:biicoretrdm057:ver1.0", ContainerHelper.newList("urn:www.peppol.eu:bis:peppol1a:ver1.0"), "2.0"), "PEPPOL Catalogue profile", new Version("1.0.0")),
+  /**
+   * urn:oasis:names:specification:ubl:schema:xsd:ApplicationResponse-2::
+   * ApplicationResponse
+   * ##urn:www.cenbii.eu:transaction:biicoretrdm058:ver1.0:#urn
+   * :www.peppol.eu:bis:peppol1a:ver1.0::2.0
+   * 
+   * @since code list 1.0.0
+   */
+  urn_oasis_names_specification_ubl_schema_xsd_ApplicationResponse_2__ApplicationResponse__urn_www_cenbii_eu_transaction_biicoretrdm058_ver1_0__urn_www_peppol_eu_bis_peppol1a_ver1_0__2_0 (new PEPPOLDocumentIdentifierParts ("urn:oasis:names:specification:ubl:schema:xsd:ApplicationResponse-2",
+                                                                                                                                                                                                                               "ApplicationResponse",
+                                                                                                                                                                                                                               "urn:www.cenbii.eu:transaction:biicoretrdm058:ver1.0",
+                                                                                                                                                                                                                               ContainerHelper.newList ("urn:www.peppol.eu:bis:peppol1a:ver1.0"),
+                                                                                                                                                                                                                               "2.0"), "PEPPOL Catalogue profile", new Version ("1.0.0")),
 
-    /**
-     * urn:oasis:names:specification:ubl:schema:xsd:ApplicationResponse-2::ApplicationResponse##urn:www.cenbii.eu:transaction:biicoretrdm058:ver1.0:#urn:www.peppol.eu:bis:peppol1a:ver1.0::2.0
-     * @since code list 1.0.0
-     * 
-     */
-    urn_oasis_names_specification_ubl_schema_xsd_ApplicationResponse_2__ApplicationResponse__urn_www_cenbii_eu_transaction_biicoretrdm058_ver1_0__urn_www_peppol_eu_bis_peppol1a_ver1_0__2_0(new PEPPOLDocumentIdentifierParts("urn:oasis:names:specification:ubl:schema:xsd:ApplicationResponse-2", "ApplicationResponse", "urn:www.cenbii.eu:transaction:biicoretrdm058:ver1.0", ContainerHelper.newList("urn:www.peppol.eu:bis:peppol1a:ver1.0"), "2.0"), "PEPPOL Catalogue profile", new Version("1.0.0")),
+  /**
+   * urn:oasis:names:specification:ubl:schema:xsd:Order-2::Order##urn:www.cenbii
+   * .eu:transaction:biicoretrdm001:ver1.0:#urn:www.peppol.eu:bis:peppol3a:ver1
+   * .0::2.0
+   * 
+   * @since code list 1.0.0
+   */
+  urn_oasis_names_specification_ubl_schema_xsd_Order_2__Order__urn_www_cenbii_eu_transaction_biicoretrdm001_ver1_0__urn_www_peppol_eu_bis_peppol3a_ver1_0__2_0 (new PEPPOLDocumentIdentifierParts ("urn:oasis:names:specification:ubl:schema:xsd:Order-2",
+                                                                                                                                                                                                   "Order",
+                                                                                                                                                                                                   "urn:www.cenbii.eu:transaction:biicoretrdm001:ver1.0",
+                                                                                                                                                                                                   ContainerHelper.newList ("urn:www.peppol.eu:bis:peppol3a:ver1.0"),
+                                                                                                                                                                                                   "2.0"), "PEPPOL Order profile", new Version ("1.0.0")),
 
-    /**
-     * urn:oasis:names:specification:ubl:schema:xsd:Order-2::Order##urn:www.cenbii.eu:transaction:biicoretrdm001:ver1.0:#urn:www.peppol.eu:bis:peppol3a:ver1.0::2.0
-     * @since code list 1.0.0
-     * 
-     */
-    urn_oasis_names_specification_ubl_schema_xsd_Order_2__Order__urn_www_cenbii_eu_transaction_biicoretrdm001_ver1_0__urn_www_peppol_eu_bis_peppol3a_ver1_0__2_0(new PEPPOLDocumentIdentifierParts("urn:oasis:names:specification:ubl:schema:xsd:Order-2", "Order", "urn:www.cenbii.eu:transaction:biicoretrdm001:ver1.0", ContainerHelper.newList("urn:www.peppol.eu:bis:peppol3a:ver1.0"), "2.0"), "PEPPOL Order profile", new Version("1.0.0")),
+  /**
+   * urn:oasis:names:specification:ubl:schema:xsd:Invoice-2::Invoice##urn:www.
+   * cenbii
+   * .eu:transaction:biicoretrdm010:ver1.0:#urn:www.peppol.eu:bis:peppol4a:
+   * ver1.0::2.0
+   * 
+   * @since code list 1.0.0
+   */
+  urn_oasis_names_specification_ubl_schema_xsd_Invoice_2__Invoice__urn_www_cenbii_eu_transaction_biicoretrdm010_ver1_0__urn_www_peppol_eu_bis_peppol4a_ver1_0__2_0 (new PEPPOLDocumentIdentifierParts ("urn:oasis:names:specification:ubl:schema:xsd:Invoice-2",
+                                                                                                                                                                                                       "Invoice",
+                                                                                                                                                                                                       "urn:www.cenbii.eu:transaction:biicoretrdm010:ver1.0",
+                                                                                                                                                                                                       ContainerHelper.newList ("urn:www.peppol.eu:bis:peppol4a:ver1.0"),
+                                                                                                                                                                                                       "2.0"), "PEPPOL Invoice profile", new Version ("1.0.0")),
 
-    /**
-     * urn:oasis:names:specification:ubl:schema:xsd:Invoice-2::Invoice##urn:www.cenbii.eu:transaction:biicoretrdm010:ver1.0:#urn:www.peppol.eu:bis:peppol4a:ver1.0::2.0
-     * @since code list 1.0.0
-     * 
-     */
-    urn_oasis_names_specification_ubl_schema_xsd_Invoice_2__Invoice__urn_www_cenbii_eu_transaction_biicoretrdm010_ver1_0__urn_www_peppol_eu_bis_peppol4a_ver1_0__2_0(new PEPPOLDocumentIdentifierParts("urn:oasis:names:specification:ubl:schema:xsd:Invoice-2", "Invoice", "urn:www.cenbii.eu:transaction:biicoretrdm010:ver1.0", ContainerHelper.newList("urn:www.peppol.eu:bis:peppol4a:ver1.0"), "2.0"), "PEPPOL Invoice profile", new Version("1.0.0")),
+  /**
+   * urn:oasis:names:specification:ubl:schema:xsd:Invoice-2::Invoice##urn:www.
+   * cenbii
+   * .eu:transaction:biicoretrdm010:ver1.0:#urn:www.peppol.eu:bis:peppol5a:
+   * ver1.0::2.0
+   * 
+   * @since code list 1.1.0
+   */
+  urn_oasis_names_specification_ubl_schema_xsd_Invoice_2__Invoice__urn_www_cenbii_eu_transaction_biicoretrdm010_ver1_0__urn_www_peppol_eu_bis_peppol5a_ver1_0__2_0 (new PEPPOLDocumentIdentifierParts ("urn:oasis:names:specification:ubl:schema:xsd:Invoice-2",
+                                                                                                                                                                                                       "Invoice",
+                                                                                                                                                                                                       "urn:www.cenbii.eu:transaction:biicoretrdm010:ver1.0",
+                                                                                                                                                                                                       ContainerHelper.newList ("urn:www.peppol.eu:bis:peppol5a:ver1.0"),
+                                                                                                                                                                                                       "2.0"), "PEPPOL Billing profile", new Version ("1.1.0")),
 
-    /**
-     * urn:oasis:names:specification:ubl:schema:xsd:Invoice-2::Invoice##urn:www.cenbii.eu:transaction:biicoretrdm010:ver1.0:#urn:www.peppol.eu:bis:peppol5a:ver1.0::2.0
-     * @since code list 1.1.0
-     * 
-     */
-    urn_oasis_names_specification_ubl_schema_xsd_Invoice_2__Invoice__urn_www_cenbii_eu_transaction_biicoretrdm010_ver1_0__urn_www_peppol_eu_bis_peppol5a_ver1_0__2_0(new PEPPOLDocumentIdentifierParts("urn:oasis:names:specification:ubl:schema:xsd:Invoice-2", "Invoice", "urn:www.cenbii.eu:transaction:biicoretrdm010:ver1.0", ContainerHelper.newList("urn:www.peppol.eu:bis:peppol5a:ver1.0"), "2.0"), "PEPPOL Billing profile", new Version("1.1.0")),
+  /**
+   * urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2::CreditNote##urn:
+   * www.cenbii.eu:transaction:biicoretrdm014:ver1.0:#urn:www.peppol.eu:bis:
+   * peppol5a:ver1.0::2.0
+   * 
+   * @since code list 1.1.0
+   */
+  urn_oasis_names_specification_ubl_schema_xsd_CreditNote_2__CreditNote__urn_www_cenbii_eu_transaction_biicoretrdm014_ver1_0__urn_www_peppol_eu_bis_peppol5a_ver1_0__2_0 (new PEPPOLDocumentIdentifierParts ("urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2",
+                                                                                                                                                                                                             "CreditNote",
+                                                                                                                                                                                                             "urn:www.cenbii.eu:transaction:biicoretrdm014:ver1.0",
+                                                                                                                                                                                                             ContainerHelper.newList ("urn:www.peppol.eu:bis:peppol5a:ver1.0"),
+                                                                                                                                                                                                             "2.0"), "PEPPOL Billing profile", new Version ("1.1.0")),
 
-    /**
-     * urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2::CreditNote##urn:www.cenbii.eu:transaction:biicoretrdm014:ver1.0:#urn:www.peppol.eu:bis:peppol5a:ver1.0::2.0
-     * @since code list 1.1.0
-     * 
-     */
-    urn_oasis_names_specification_ubl_schema_xsd_CreditNote_2__CreditNote__urn_www_cenbii_eu_transaction_biicoretrdm014_ver1_0__urn_www_peppol_eu_bis_peppol5a_ver1_0__2_0(new PEPPOLDocumentIdentifierParts("urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2", "CreditNote", "urn:www.cenbii.eu:transaction:biicoretrdm014:ver1.0", ContainerHelper.newList("urn:www.peppol.eu:bis:peppol5a:ver1.0"), "2.0"), "PEPPOL Billing profile", new Version("1.1.0")),
+  /**
+   * urn:oasis:names:specification:ubl:schema:xsd:Invoice-2::Invoice##urn:www.
+   * cenbii
+   * .eu:transaction:biicoretrdm015:ver1.0:#urn:www.peppol.eu:bis:peppol5a:
+   * ver1.0::2.0
+   * 
+   * @since code list 1.1.0
+   */
+  urn_oasis_names_specification_ubl_schema_xsd_Invoice_2__Invoice__urn_www_cenbii_eu_transaction_biicoretrdm015_ver1_0__urn_www_peppol_eu_bis_peppol5a_ver1_0__2_0 (new PEPPOLDocumentIdentifierParts ("urn:oasis:names:specification:ubl:schema:xsd:Invoice-2",
+                                                                                                                                                                                                       "Invoice",
+                                                                                                                                                                                                       "urn:www.cenbii.eu:transaction:biicoretrdm015:ver1.0",
+                                                                                                                                                                                                       ContainerHelper.newList ("urn:www.peppol.eu:bis:peppol5a:ver1.0"),
+                                                                                                                                                                                                       "2.0"), "PEPPOL Billing profile", new Version ("1.1.0")),
 
-    /**
-     * urn:oasis:names:specification:ubl:schema:xsd:Invoice-2::Invoice##urn:www.cenbii.eu:transaction:biicoretrdm015:ver1.0:#urn:www.peppol.eu:bis:peppol5a:ver1.0::2.0
-     * @since code list 1.1.0
-     * 
-     */
-    urn_oasis_names_specification_ubl_schema_xsd_Invoice_2__Invoice__urn_www_cenbii_eu_transaction_biicoretrdm015_ver1_0__urn_www_peppol_eu_bis_peppol5a_ver1_0__2_0(new PEPPOLDocumentIdentifierParts("urn:oasis:names:specification:ubl:schema:xsd:Invoice-2", "Invoice", "urn:www.cenbii.eu:transaction:biicoretrdm015:ver1.0", ContainerHelper.newList("urn:www.peppol.eu:bis:peppol5a:ver1.0"), "2.0"), "PEPPOL Billing profile", new Version("1.1.0")),
+  /**
+   * urn:oasis:names:specification:ubl:schema:xsd:Order-2::Order##urn:www.cenbii
+   * .eu:transaction:biicoretrdm001:ver1.0:#urn:www.peppol.eu:bis:peppol6a:ver1
+   * .0::2.0
+   * 
+   * @since code list 1.0.0
+   */
+  urn_oasis_names_specification_ubl_schema_xsd_Order_2__Order__urn_www_cenbii_eu_transaction_biicoretrdm001_ver1_0__urn_www_peppol_eu_bis_peppol6a_ver1_0__2_0 (new PEPPOLDocumentIdentifierParts ("urn:oasis:names:specification:ubl:schema:xsd:Order-2",
+                                                                                                                                                                                                   "Order",
+                                                                                                                                                                                                   "urn:www.cenbii.eu:transaction:biicoretrdm001:ver1.0",
+                                                                                                                                                                                                   ContainerHelper.newList ("urn:www.peppol.eu:bis:peppol6a:ver1.0"),
+                                                                                                                                                                                                   "2.0"), "PEPPOL Procurement profile", new Version ("1.0.0")),
 
-    /**
-     * urn:oasis:names:specification:ubl:schema:xsd:Order-2::Order##urn:www.cenbii.eu:transaction:biicoretrdm001:ver1.0:#urn:www.peppol.eu:bis:peppol6a:ver1.0::2.0
-     * @since code list 1.0.0
-     * 
-     */
-    urn_oasis_names_specification_ubl_schema_xsd_Order_2__Order__urn_www_cenbii_eu_transaction_biicoretrdm001_ver1_0__urn_www_peppol_eu_bis_peppol6a_ver1_0__2_0(new PEPPOLDocumentIdentifierParts("urn:oasis:names:specification:ubl:schema:xsd:Order-2", "Order", "urn:www.cenbii.eu:transaction:biicoretrdm001:ver1.0", ContainerHelper.newList("urn:www.peppol.eu:bis:peppol6a:ver1.0"), "2.0"), "PEPPOL Procurement profile", new Version("1.0.0")),
+  /**
+   * urn:oasis:names:specification:ubl:schema:xsd:OrderResponseSimple-2::
+   * OrderResponseSimple
+   * ##urn:www.cenbii.eu:transaction:biicoretrdm002:ver1.0:#urn
+   * :www.peppol.eu:bis:peppol6a:ver1.0::2.0
+   * 
+   * @since code list 1.0.0
+   */
+  urn_oasis_names_specification_ubl_schema_xsd_OrderResponseSimple_2__OrderResponseSimple__urn_www_cenbii_eu_transaction_biicoretrdm002_ver1_0__urn_www_peppol_eu_bis_peppol6a_ver1_0__2_0 (new PEPPOLDocumentIdentifierParts ("urn:oasis:names:specification:ubl:schema:xsd:OrderResponseSimple-2",
+                                                                                                                                                                                                                               "OrderResponseSimple",
+                                                                                                                                                                                                                               "urn:www.cenbii.eu:transaction:biicoretrdm002:ver1.0",
+                                                                                                                                                                                                                               ContainerHelper.newList ("urn:www.peppol.eu:bis:peppol6a:ver1.0"),
+                                                                                                                                                                                                                               "2.0"), "PEPPOL Procurement profile", new Version ("1.0.0")),
 
-    /**
-     * urn:oasis:names:specification:ubl:schema:xsd:OrderResponseSimple-2::OrderResponseSimple##urn:www.cenbii.eu:transaction:biicoretrdm002:ver1.0:#urn:www.peppol.eu:bis:peppol6a:ver1.0::2.0
-     * @since code list 1.0.0
-     * 
-     */
-    urn_oasis_names_specification_ubl_schema_xsd_OrderResponseSimple_2__OrderResponseSimple__urn_www_cenbii_eu_transaction_biicoretrdm002_ver1_0__urn_www_peppol_eu_bis_peppol6a_ver1_0__2_0(new PEPPOLDocumentIdentifierParts("urn:oasis:names:specification:ubl:schema:xsd:OrderResponseSimple-2", "OrderResponseSimple", "urn:www.cenbii.eu:transaction:biicoretrdm002:ver1.0", ContainerHelper.newList("urn:www.peppol.eu:bis:peppol6a:ver1.0"), "2.0"), "PEPPOL Procurement profile", new Version("1.0.0")),
+  /**
+   * urn:oasis:names:specification:ubl:schema:xsd:OrderResponseSimple-2::
+   * OrderResponseSimple
+   * ##urn:www.cenbii.eu:transaction:biicoretrdm003:ver1.0:#urn
+   * :www.peppol.eu:bis:peppol6a:ver1.0::2.0
+   * 
+   * @since code list 1.0.0
+   */
+  urn_oasis_names_specification_ubl_schema_xsd_OrderResponseSimple_2__OrderResponseSimple__urn_www_cenbii_eu_transaction_biicoretrdm003_ver1_0__urn_www_peppol_eu_bis_peppol6a_ver1_0__2_0 (new PEPPOLDocumentIdentifierParts ("urn:oasis:names:specification:ubl:schema:xsd:OrderResponseSimple-2",
+                                                                                                                                                                                                                               "OrderResponseSimple",
+                                                                                                                                                                                                                               "urn:www.cenbii.eu:transaction:biicoretrdm003:ver1.0",
+                                                                                                                                                                                                                               ContainerHelper.newList ("urn:www.peppol.eu:bis:peppol6a:ver1.0"),
+                                                                                                                                                                                                                               "2.0"), "PEPPOL Procurement profile", new Version ("1.0.0")),
 
-    /**
-     * urn:oasis:names:specification:ubl:schema:xsd:OrderResponseSimple-2::OrderResponseSimple##urn:www.cenbii.eu:transaction:biicoretrdm003:ver1.0:#urn:www.peppol.eu:bis:peppol6a:ver1.0::2.0
-     * @since code list 1.0.0
-     * 
-     */
-    urn_oasis_names_specification_ubl_schema_xsd_OrderResponseSimple_2__OrderResponseSimple__urn_www_cenbii_eu_transaction_biicoretrdm003_ver1_0__urn_www_peppol_eu_bis_peppol6a_ver1_0__2_0(new PEPPOLDocumentIdentifierParts("urn:oasis:names:specification:ubl:schema:xsd:OrderResponseSimple-2", "OrderResponseSimple", "urn:www.cenbii.eu:transaction:biicoretrdm003:ver1.0", ContainerHelper.newList("urn:www.peppol.eu:bis:peppol6a:ver1.0"), "2.0"), "PEPPOL Procurement profile", new Version("1.0.0")),
+  /**
+   * urn:oasis:names:specification:ubl:schema:xsd:Invoice-2::Invoice##urn:www.
+   * cenbii
+   * .eu:transaction:biicoretrdm010:ver1.0:#urn:www.peppol.eu:bis:peppol6a:
+   * ver1.0::2.0
+   * 
+   * @since code list 1.0.0
+   */
+  urn_oasis_names_specification_ubl_schema_xsd_Invoice_2__Invoice__urn_www_cenbii_eu_transaction_biicoretrdm010_ver1_0__urn_www_peppol_eu_bis_peppol6a_ver1_0__2_0 (new PEPPOLDocumentIdentifierParts ("urn:oasis:names:specification:ubl:schema:xsd:Invoice-2",
+                                                                                                                                                                                                       "Invoice",
+                                                                                                                                                                                                       "urn:www.cenbii.eu:transaction:biicoretrdm010:ver1.0",
+                                                                                                                                                                                                       ContainerHelper.newList ("urn:www.peppol.eu:bis:peppol6a:ver1.0"),
+                                                                                                                                                                                                       "2.0"), "PEPPOL Procurement profile", new Version ("1.0.0")),
 
-    /**
-     * urn:oasis:names:specification:ubl:schema:xsd:Invoice-2::Invoice##urn:www.cenbii.eu:transaction:biicoretrdm010:ver1.0:#urn:www.peppol.eu:bis:peppol6a:ver1.0::2.0
-     * @since code list 1.0.0
-     * 
-     */
-    urn_oasis_names_specification_ubl_schema_xsd_Invoice_2__Invoice__urn_www_cenbii_eu_transaction_biicoretrdm010_ver1_0__urn_www_peppol_eu_bis_peppol6a_ver1_0__2_0(new PEPPOLDocumentIdentifierParts("urn:oasis:names:specification:ubl:schema:xsd:Invoice-2", "Invoice", "urn:www.cenbii.eu:transaction:biicoretrdm010:ver1.0", ContainerHelper.newList("urn:www.peppol.eu:bis:peppol6a:ver1.0"), "2.0"), "PEPPOL Procurement profile", new Version("1.0.0")),
+  /**
+   * urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2::CreditNote##urn:
+   * www.cenbii.eu:transaction:biicoretrdm014:ver1.0:#urn:www.peppol.eu:bis:
+   * peppol6a:ver1.0::2.0
+   * 
+   * @since code list 1.0.0
+   */
+  urn_oasis_names_specification_ubl_schema_xsd_CreditNote_2__CreditNote__urn_www_cenbii_eu_transaction_biicoretrdm014_ver1_0__urn_www_peppol_eu_bis_peppol6a_ver1_0__2_0 (new PEPPOLDocumentIdentifierParts ("urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2",
+                                                                                                                                                                                                             "CreditNote",
+                                                                                                                                                                                                             "urn:www.cenbii.eu:transaction:biicoretrdm014:ver1.0",
+                                                                                                                                                                                                             ContainerHelper.newList ("urn:www.peppol.eu:bis:peppol6a:ver1.0"),
+                                                                                                                                                                                                             "2.0"), "PEPPOL Procurement profile", new Version ("1.0.0")),
 
-    /**
-     * urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2::CreditNote##urn:www.cenbii.eu:transaction:biicoretrdm014:ver1.0:#urn:www.peppol.eu:bis:peppol6a:ver1.0::2.0
-     * @since code list 1.0.0
-     * 
-     */
-    urn_oasis_names_specification_ubl_schema_xsd_CreditNote_2__CreditNote__urn_www_cenbii_eu_transaction_biicoretrdm014_ver1_0__urn_www_peppol_eu_bis_peppol6a_ver1_0__2_0(new PEPPOLDocumentIdentifierParts("urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2", "CreditNote", "urn:www.cenbii.eu:transaction:biicoretrdm014:ver1.0", ContainerHelper.newList("urn:www.peppol.eu:bis:peppol6a:ver1.0"), "2.0"), "PEPPOL Procurement profile", new Version("1.0.0")),
+  /**
+   * urn:oasis:names:specification:ubl:schema:xsd:Invoice-2::Invoice##urn:www.
+   * cenbii
+   * .eu:transaction:biicoretrdm015:ver1.0:#urn:www.peppol.eu:bis:peppol6a:
+   * ver1.0::2.0
+   * 
+   * @since code list 1.0.0
+   */
+  urn_oasis_names_specification_ubl_schema_xsd_Invoice_2__Invoice__urn_www_cenbii_eu_transaction_biicoretrdm015_ver1_0__urn_www_peppol_eu_bis_peppol6a_ver1_0__2_0 (new PEPPOLDocumentIdentifierParts ("urn:oasis:names:specification:ubl:schema:xsd:Invoice-2",
+                                                                                                                                                                                                       "Invoice",
+                                                                                                                                                                                                       "urn:www.cenbii.eu:transaction:biicoretrdm015:ver1.0",
+                                                                                                                                                                                                       ContainerHelper.newList ("urn:www.peppol.eu:bis:peppol6a:ver1.0"),
+                                                                                                                                                                                                       "2.0"), "PEPPOL Procurement profile", new Version ("1.0.0"));
+  public final static EPredefinedDocumentIdentifier VIRTUALCOMPANYDOSSIER_T991_BIS991A = EPredefinedDocumentIdentifier.urn_www_peppol_eu_schema_xsd_VirtualCompanyDossier_1__VirtualCompanyDossier__urn_www_cenbii_eu_transaction_biicoretrdm991_ver0_1__urn_www_peppol_eu_bis_peppol991a_ver1_0__0_1;
+  public final static EPredefinedDocumentIdentifier VIRTUALCOMPANYDOSSIERPACKAGE_T992_BIS992A = EPredefinedDocumentIdentifier.urn_www_peppol_eu_schema_xsd_VirtualCompanyDossierPackage_1__VirtualCompanyDossierPackage__urn_www_cenbii_eu_transaction_biicoretrdm992_ver0_1__urn_www_peppol_eu_bis_peppol992a_ver1_0__0_1;
+  public final static EPredefinedDocumentIdentifier CATALOGUETEMPLATE_T993_BIS993A = EPredefinedDocumentIdentifier.urn_www_peppol_eu_schema_xsd_CatalogueTemplate_1__CatalogueTemplate__urn_www_cenbii_eu_transaction_biicoretrdm993_ver0_1__urn_www_peppol_eu_bis_peppol993a_ver1_0__0_1;
+  public final static EPredefinedDocumentIdentifier CATALOGUE_T019_BIS1A = EPredefinedDocumentIdentifier.urn_oasis_names_specification_ubl_schema_schema_xsd_Catalogue_2__Catalogue__urn_www_cenbii_eu_transaction_biicoretrdm019_ver1_0__urn_www_peppol_eu_bis_peppol1a_ver1_0__2_0;
+  public final static EPredefinedDocumentIdentifier APPLICATIONRESPONSE_T057_BIS1A = EPredefinedDocumentIdentifier.urn_oasis_names_specification_ubl_schema_xsd_ApplicationResponse_2__ApplicationResponse__urn_www_cenbii_eu_transaction_biicoretrdm057_ver1_0__urn_www_peppol_eu_bis_peppol1a_ver1_0__2_0;
+  public final static EPredefinedDocumentIdentifier APPLICATIONRESPONSE_T058_BIS1A = EPredefinedDocumentIdentifier.urn_oasis_names_specification_ubl_schema_xsd_ApplicationResponse_2__ApplicationResponse__urn_www_cenbii_eu_transaction_biicoretrdm058_ver1_0__urn_www_peppol_eu_bis_peppol1a_ver1_0__2_0;
+  public final static EPredefinedDocumentIdentifier ORDER_T001_BIS3A = EPredefinedDocumentIdentifier.urn_oasis_names_specification_ubl_schema_xsd_Order_2__Order__urn_www_cenbii_eu_transaction_biicoretrdm001_ver1_0__urn_www_peppol_eu_bis_peppol3a_ver1_0__2_0;
+  public final static EPredefinedDocumentIdentifier INVOICE_T010_BIS4A = EPredefinedDocumentIdentifier.urn_oasis_names_specification_ubl_schema_xsd_Invoice_2__Invoice__urn_www_cenbii_eu_transaction_biicoretrdm010_ver1_0__urn_www_peppol_eu_bis_peppol4a_ver1_0__2_0;
+  public final static EPredefinedDocumentIdentifier INVOICE_T010_BIS5A = EPredefinedDocumentIdentifier.urn_oasis_names_specification_ubl_schema_xsd_Invoice_2__Invoice__urn_www_cenbii_eu_transaction_biicoretrdm010_ver1_0__urn_www_peppol_eu_bis_peppol5a_ver1_0__2_0;
+  public final static EPredefinedDocumentIdentifier CREDITNOTE_T014_BIS5A = EPredefinedDocumentIdentifier.urn_oasis_names_specification_ubl_schema_xsd_CreditNote_2__CreditNote__urn_www_cenbii_eu_transaction_biicoretrdm014_ver1_0__urn_www_peppol_eu_bis_peppol5a_ver1_0__2_0;
+  public final static EPredefinedDocumentIdentifier INVOICE_T015_BIS5A = EPredefinedDocumentIdentifier.urn_oasis_names_specification_ubl_schema_xsd_Invoice_2__Invoice__urn_www_cenbii_eu_transaction_biicoretrdm015_ver1_0__urn_www_peppol_eu_bis_peppol5a_ver1_0__2_0;
+  public final static EPredefinedDocumentIdentifier ORDER_T001_BIS6A = EPredefinedDocumentIdentifier.urn_oasis_names_specification_ubl_schema_xsd_Order_2__Order__urn_www_cenbii_eu_transaction_biicoretrdm001_ver1_0__urn_www_peppol_eu_bis_peppol6a_ver1_0__2_0;
+  public final static EPredefinedDocumentIdentifier ORDERRESPONSESIMPLE_T002_BIS6A = EPredefinedDocumentIdentifier.urn_oasis_names_specification_ubl_schema_xsd_OrderResponseSimple_2__OrderResponseSimple__urn_www_cenbii_eu_transaction_biicoretrdm002_ver1_0__urn_www_peppol_eu_bis_peppol6a_ver1_0__2_0;
+  public final static EPredefinedDocumentIdentifier ORDERRESPONSESIMPLE_T003_BIS6A = EPredefinedDocumentIdentifier.urn_oasis_names_specification_ubl_schema_xsd_OrderResponseSimple_2__OrderResponseSimple__urn_www_cenbii_eu_transaction_biicoretrdm003_ver1_0__urn_www_peppol_eu_bis_peppol6a_ver1_0__2_0;
+  public final static EPredefinedDocumentIdentifier INVOICE_T010_BIS6A = EPredefinedDocumentIdentifier.urn_oasis_names_specification_ubl_schema_xsd_Invoice_2__Invoice__urn_www_cenbii_eu_transaction_biicoretrdm010_ver1_0__urn_www_peppol_eu_bis_peppol6a_ver1_0__2_0;
+  public final static EPredefinedDocumentIdentifier CREDITNOTE_T014_BIS6A = EPredefinedDocumentIdentifier.urn_oasis_names_specification_ubl_schema_xsd_CreditNote_2__CreditNote__urn_www_cenbii_eu_transaction_biicoretrdm014_ver1_0__urn_www_peppol_eu_bis_peppol6a_ver1_0__2_0;
+  public final static EPredefinedDocumentIdentifier INVOICE_T015_BIS6A = EPredefinedDocumentIdentifier.urn_oasis_names_specification_ubl_schema_xsd_Invoice_2__Invoice__urn_www_cenbii_eu_transaction_biicoretrdm015_ver1_0__urn_www_peppol_eu_bis_peppol6a_ver1_0__2_0;
+  private final IPEPPOLDocumentIdentifierParts m_aParts;
+  private final String m_sID;
+  private final String m_sCommonName;
+  private final Version m_aSince;
 
-    /**
-     * urn:oasis:names:specification:ubl:schema:xsd:Invoice-2::Invoice##urn:www.cenbii.eu:transaction:biicoretrdm015:ver1.0:#urn:www.peppol.eu:bis:peppol6a:ver1.0::2.0
-     * @since code list 1.0.0
-     * 
-     */
-    urn_oasis_names_specification_ubl_schema_xsd_Invoice_2__Invoice__urn_www_cenbii_eu_transaction_biicoretrdm015_ver1_0__urn_www_peppol_eu_bis_peppol6a_ver1_0__2_0(new PEPPOLDocumentIdentifierParts("urn:oasis:names:specification:ubl:schema:xsd:Invoice-2", "Invoice", "urn:www.cenbii.eu:transaction:biicoretrdm015:ver1.0", ContainerHelper.newList("urn:www.peppol.eu:bis:peppol6a:ver1.0"), "2.0"), "PEPPOL Procurement profile", new Version("1.0.0"));
-    public final static EPredefinedDocumentIdentifier VIRTUALCOMPANYDOSSIER_T991_BIS991A = EPredefinedDocumentIdentifier.urn_www_peppol_eu_schema_xsd_VirtualCompanyDossier_1__VirtualCompanyDossier__urn_www_cenbii_eu_transaction_biicoretrdm991_ver0_1__urn_www_peppol_eu_bis_peppol991a_ver1_0__0_1;
-    public final static EPredefinedDocumentIdentifier VIRTUALCOMPANYDOSSIERPACKAGE_T992_BIS992A = EPredefinedDocumentIdentifier.urn_www_peppol_eu_schema_xsd_VirtualCompanyDossierPackage_1__VirtualCompanyDossierPackage__urn_www_cenbii_eu_transaction_biicoretrdm992_ver0_1__urn_www_peppol_eu_bis_peppol992a_ver1_0__0_1;
-    public final static EPredefinedDocumentIdentifier CATALOGUETEMPLATE_T993_BIS993A = EPredefinedDocumentIdentifier.urn_www_peppol_eu_schema_xsd_CatalogueTemplate_1__CatalogueTemplate__urn_www_cenbii_eu_transaction_biicoretrdm993_ver0_1__urn_www_peppol_eu_bis_peppol993a_ver1_0__0_1;
-    public final static EPredefinedDocumentIdentifier CATALOGUE_T019_BIS1A = EPredefinedDocumentIdentifier.urn_oasis_names_specification_ubl_schema_schema_xsd_Catalogue_2__Catalogue__urn_www_cenbii_eu_transaction_biicoretrdm019_ver1_0__urn_www_peppol_eu_bis_peppol1a_ver1_0__2_0;
-    public final static EPredefinedDocumentIdentifier APPLICATIONRESPONSE_T057_BIS1A = EPredefinedDocumentIdentifier.urn_oasis_names_specification_ubl_schema_xsd_ApplicationResponse_2__ApplicationResponse__urn_www_cenbii_eu_transaction_biicoretrdm057_ver1_0__urn_www_peppol_eu_bis_peppol1a_ver1_0__2_0;
-    public final static EPredefinedDocumentIdentifier APPLICATIONRESPONSE_T058_BIS1A = EPredefinedDocumentIdentifier.urn_oasis_names_specification_ubl_schema_xsd_ApplicationResponse_2__ApplicationResponse__urn_www_cenbii_eu_transaction_biicoretrdm058_ver1_0__urn_www_peppol_eu_bis_peppol1a_ver1_0__2_0;
-    public final static EPredefinedDocumentIdentifier ORDER_T001_BIS3A = EPredefinedDocumentIdentifier.urn_oasis_names_specification_ubl_schema_xsd_Order_2__Order__urn_www_cenbii_eu_transaction_biicoretrdm001_ver1_0__urn_www_peppol_eu_bis_peppol3a_ver1_0__2_0;
-    public final static EPredefinedDocumentIdentifier INVOICE_T010_BIS4A = EPredefinedDocumentIdentifier.urn_oasis_names_specification_ubl_schema_xsd_Invoice_2__Invoice__urn_www_cenbii_eu_transaction_biicoretrdm010_ver1_0__urn_www_peppol_eu_bis_peppol4a_ver1_0__2_0;
-    public final static EPredefinedDocumentIdentifier INVOICE_T010_BIS5A = EPredefinedDocumentIdentifier.urn_oasis_names_specification_ubl_schema_xsd_Invoice_2__Invoice__urn_www_cenbii_eu_transaction_biicoretrdm010_ver1_0__urn_www_peppol_eu_bis_peppol5a_ver1_0__2_0;
-    public final static EPredefinedDocumentIdentifier CREDITNOTE_T014_BIS5A = EPredefinedDocumentIdentifier.urn_oasis_names_specification_ubl_schema_xsd_CreditNote_2__CreditNote__urn_www_cenbii_eu_transaction_biicoretrdm014_ver1_0__urn_www_peppol_eu_bis_peppol5a_ver1_0__2_0;
-    public final static EPredefinedDocumentIdentifier INVOICE_T015_BIS5A = EPredefinedDocumentIdentifier.urn_oasis_names_specification_ubl_schema_xsd_Invoice_2__Invoice__urn_www_cenbii_eu_transaction_biicoretrdm015_ver1_0__urn_www_peppol_eu_bis_peppol5a_ver1_0__2_0;
-    public final static EPredefinedDocumentIdentifier ORDER_T001_BIS6A = EPredefinedDocumentIdentifier.urn_oasis_names_specification_ubl_schema_xsd_Order_2__Order__urn_www_cenbii_eu_transaction_biicoretrdm001_ver1_0__urn_www_peppol_eu_bis_peppol6a_ver1_0__2_0;
-    public final static EPredefinedDocumentIdentifier ORDERRESPONSESIMPLE_T002_BIS6A = EPredefinedDocumentIdentifier.urn_oasis_names_specification_ubl_schema_xsd_OrderResponseSimple_2__OrderResponseSimple__urn_www_cenbii_eu_transaction_biicoretrdm002_ver1_0__urn_www_peppol_eu_bis_peppol6a_ver1_0__2_0;
-    public final static EPredefinedDocumentIdentifier ORDERRESPONSESIMPLE_T003_BIS6A = EPredefinedDocumentIdentifier.urn_oasis_names_specification_ubl_schema_xsd_OrderResponseSimple_2__OrderResponseSimple__urn_www_cenbii_eu_transaction_biicoretrdm003_ver1_0__urn_www_peppol_eu_bis_peppol6a_ver1_0__2_0;
-    public final static EPredefinedDocumentIdentifier INVOICE_T010_BIS6A = EPredefinedDocumentIdentifier.urn_oasis_names_specification_ubl_schema_xsd_Invoice_2__Invoice__urn_www_cenbii_eu_transaction_biicoretrdm010_ver1_0__urn_www_peppol_eu_bis_peppol6a_ver1_0__2_0;
-    public final static EPredefinedDocumentIdentifier CREDITNOTE_T014_BIS6A = EPredefinedDocumentIdentifier.urn_oasis_names_specification_ubl_schema_xsd_CreditNote_2__CreditNote__urn_www_cenbii_eu_transaction_biicoretrdm014_ver1_0__urn_www_peppol_eu_bis_peppol6a_ver1_0__2_0;
-    public final static EPredefinedDocumentIdentifier INVOICE_T015_BIS6A = EPredefinedDocumentIdentifier.urn_oasis_names_specification_ubl_schema_xsd_Invoice_2__Invoice__urn_www_cenbii_eu_transaction_biicoretrdm015_ver1_0__urn_www_peppol_eu_bis_peppol6a_ver1_0__2_0;
-    private final IPEPPOLDocumentIdentifierParts m_aParts;
-    private final String m_sID;
-    private final String m_sCommonName;
-    private final Version m_aSince;
+  private EPredefinedDocumentIdentifier (@Nonnull final IPEPPOLDocumentIdentifierParts aParts,
+                                         @Nonnull @Nonempty final String sCommonName,
+                                         @Nonnull final Version aSince) {
+    m_aParts = aParts;
+    m_sCommonName = sCommonName;
+    m_sID = m_aParts.getAsDocumentTypeIdentifierValue ();
+    m_aSince = aSince;
+  }
 
-    private EPredefinedDocumentIdentifier(
-        @Nonnull
-        final IPEPPOLDocumentIdentifierParts aParts,
-        @Nonnull
-        @Nonempty
-        final String sCommonName,
-        @Nonnull
-        final Version aSince) {
-        m_aParts = aParts;
-        m_sCommonName = sCommonName;
-        m_sID = m_aParts.getAsDocumentIdentifierValue();
-        m_aSince = aSince;
-    }
+  @Nonnull
+  @Nonempty
+  public String getScheme () {
+    return CIdentifier.DEFAULT_DOCUMENT_IDENTIFIER_SCHEME;
+  }
 
-    @Nonnull
-    @Nonempty
-    public String getScheme() {
-        return CIdentifier.DEFAULT_DOCUMENT_IDENTIFIER_SCHEME;
-    }
+  @Nonnull
+  @Nonempty
+  public String getValue () {
+    return m_sID;
+  }
 
-    @Nonnull
-    @Nonempty
-    public String getValue() {
-        return m_sID;
-    }
+  @Nonnull
+  @Nonempty
+  public String getRootNS () {
+    return m_aParts.getRootNS ();
+  }
 
-    @Nonnull
-    @Nonempty
-    public String getRootNS() {
-        return m_aParts.getRootNS();
-    }
+  @Nonnull
+  @Nonempty
+  public String getLocalName () {
+    return m_aParts.getLocalName ();
+  }
 
-    @Nonnull
-    @Nonempty
-    public String getLocalName() {
-        return m_aParts.getLocalName();
-    }
+  @Nonnull
+  @Nonempty
+  public String getSubTypeIdentifier () {
+    return m_aParts.getSubTypeIdentifier ();
+  }
 
-    @Nonnull
-    @Nonempty
-    public String getSubTypeIdentifier() {
-        return m_aParts.getSubTypeIdentifier();
-    }
+  @Nonnull
+  @Nonempty
+  public String getTransactionID () {
+    return m_aParts.getTransactionID ();
+  }
 
-    @Nonnull
-    @Nonempty
-    public String getTransactionID() {
-        return m_aParts.getTransactionID();
-    }
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <String> getExtensionIDs () {
+    return m_aParts.getExtensionIDs ();
+  }
 
-    @Nonnull
-    @ReturnsMutableCopy
-    public List<String> getExtensionIDs() {
-        return m_aParts.getExtensionIDs();
-    }
+  @Nonnull
+  @Nonempty
+  public String getAsUBLCustomizationID () {
+    return m_aParts.getAsUBLCustomizationID ();
+  }
 
-    @Nonnull
-    @Nonempty
-    public String getAsUBLCustomizationID() {
-        return m_aParts.getAsUBLCustomizationID();
-    }
+  @Nonnull
+  @Nonempty
+  public String getVersion () {
+    return m_aParts.getVersion ();
+  }
 
-    @Nonnull
-    @Nonempty
-    public String getVersion() {
-        return m_aParts.getVersion();
-    }
+  @Nonnull
+  @Nonempty
+  public String getCommonName () {
+    return m_sCommonName;
+  }
 
-    @Nonnull
-    @Nonempty
-    public String getCommonName() {
-        return m_sCommonName;
-    }
+  @Nonnull
+  @Nonempty
+  public String getAsDocumentTypeIdentifierValue () {
+    return m_sID;
+  }
 
-    @Nonnull
-    @Nonempty
-    public String getAsDocumentIdentifierValue() {
-        return m_sID;
-    }
+  @Nonnull
+  public SimpleDocumentIdentifier getAsDocumentTypeIdentifier () {
+    return new SimpleDocumentIdentifier (this);
+  }
 
-    @Nonnull
-    public SimpleDocumentIdentifier getAsDocumentIdentifier() {
-        return new SimpleDocumentIdentifier(this);
-    }
-
-    @Nonnull
-    public Version getSince() {
-        return m_aSince;
-    }
+  @Nonnull
+  public Version getSince () {
+    return m_aSince;
+  }
 
 }

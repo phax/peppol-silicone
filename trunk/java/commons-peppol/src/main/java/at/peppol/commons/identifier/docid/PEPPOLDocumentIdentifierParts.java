@@ -42,8 +42,8 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
-import at.peppol.busdox.identifier.BusdoxDocumentIdentifierParts;
-import at.peppol.busdox.identifier.IBusdoxDocumentIdentifierParts;
+import at.peppol.busdox.identifier.BusdoxDocumentTypeIdentifierParts;
+import at.peppol.busdox.identifier.IBusdoxDocumentTypeIdentifierParts;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.collections.ContainerHelper;
@@ -58,7 +58,7 @@ import com.phloc.commons.string.StringHelper;
  */
 @Immutable
 public final class PEPPOLDocumentIdentifierParts implements IPEPPOLDocumentIdentifierParts {
-  private final IBusdoxDocumentIdentifierParts m_aBusdoxParts;
+  private final IBusdoxDocumentTypeIdentifierParts m_aBusdoxParts;
   private final String m_sTransactionID;
   private final List <String> m_aExtensionIDs;
   private final String m_sVersion;
@@ -85,7 +85,7 @@ public final class PEPPOLDocumentIdentifierParts implements IPEPPOLDocumentIdent
            sVersion;
   }
 
-  private PEPPOLDocumentIdentifierParts (@Nonnull final IBusdoxDocumentIdentifierParts aBusdoxParts,
+  private PEPPOLDocumentIdentifierParts (@Nonnull final IBusdoxDocumentTypeIdentifierParts aBusdoxParts,
                                          @Nonnull @Nonempty final String sTransactionID,
                                          @Nonnull @Nonempty final List <String> aExtensionIDs,
                                          @Nonnull @Nonempty final String sVersion) {
@@ -110,9 +110,9 @@ public final class PEPPOLDocumentIdentifierParts implements IPEPPOLDocumentIdent
                                         @Nonnull @Nonempty final String sTransactionID,
                                         @Nonnull @Nonempty final List <String> aExtensionIDs,
                                         @Nonnull @Nonempty final String sVersion) {
-    this (new BusdoxDocumentIdentifierParts (sRootNS, sLocalName, _buildSubTypeIdentifier (sTransactionID,
-                                                                                           aExtensionIDs,
-                                                                                           sVersion)),
+    this (new BusdoxDocumentTypeIdentifierParts (sRootNS, sLocalName, _buildSubTypeIdentifier (sTransactionID,
+                                                                                               aExtensionIDs,
+                                                                                               sVersion)),
           sTransactionID,
           aExtensionIDs,
           sVersion);
@@ -165,8 +165,15 @@ public final class PEPPOLDocumentIdentifierParts implements IPEPPOLDocumentIdent
 
   @Nonnull
   @Nonempty
+  @Deprecated
   public String getAsDocumentIdentifierValue () {
-    return m_aBusdoxParts.getAsDocumentIdentifierValue ();
+    return getAsDocumentTypeIdentifierValue ();
+  }
+
+  @Nonnull
+  @Nonempty
+  public String getAsDocumentTypeIdentifierValue () {
+    return m_aBusdoxParts.getAsDocumentTypeIdentifierValue ();
   }
 
   /**
@@ -188,7 +195,7 @@ public final class PEPPOLDocumentIdentifierParts implements IPEPPOLDocumentIdent
   @Nonnull
   public static IPEPPOLDocumentIdentifierParts extractFromString (@Nonnull @Nonempty final String sDocTypeID) {
     // Extract the main 3 elements (root namespace, local name and sub-type)
-    final IBusdoxDocumentIdentifierParts aBusdoxParts = BusdoxDocumentIdentifierParts.extractFromString (sDocTypeID);
+    final IBusdoxDocumentTypeIdentifierParts aBusdoxParts = BusdoxDocumentTypeIdentifierParts.extractFromString (sDocTypeID);
 
     // Now start splitting the sub-type identifier
     final String sSubTypeIdentifier = aBusdoxParts.getSubTypeIdentifier ();

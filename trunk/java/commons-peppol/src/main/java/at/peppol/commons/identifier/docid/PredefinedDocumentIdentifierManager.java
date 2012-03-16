@@ -52,14 +52,13 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.annotations.ReturnsImmutableObject;
 
-
 /**
  * This class manages the predefined PEPPOL document identifiers the
  * <b>busdox-docid-qns</b> scheme.<br>
  * This class provides sanity methods around
- * {@link EPredefinedDocumentIdentifier} which would be to bogus to generate
+ * {@link EPredefinedDocumentTypeIdentifier} which would be to bogus to generate
  * them.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable
@@ -68,7 +67,7 @@ public final class PredefinedDocumentIdentifierManager {
 
   static {
     // Add all predefined document identifier
-    for (final EPredefinedDocumentIdentifier eDocID : EPredefinedDocumentIdentifier.values ())
+    for (final EPredefinedDocumentTypeIdentifier eDocID : EPredefinedDocumentTypeIdentifier.values ())
       s_aCodes.put (eDocID.getValue (), eDocID);
   }
 
@@ -91,7 +90,7 @@ public final class PredefinedDocumentIdentifierManager {
   /**
    * Find the document identifier with the given ID. This search is done case
    * insensitive.
-   *
+   * 
    * @param sDocIDValue
    *        The value to search. Without any identifier scheme! May be
    *        <code>null</code>.
@@ -110,7 +109,7 @@ public final class PredefinedDocumentIdentifierManager {
 
   /**
    * Check if a document identifier with the given ID exists.
-   *
+   * 
    * @param sDocIDValue
    *        The value to search. Without any identifier scheme! May be
    *        <code>null</code>.

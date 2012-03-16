@@ -44,13 +44,7 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-import at.peppol.commons.identifier.CIdentifier;
-import at.peppol.commons.identifier.IdentifierUtils;
-import at.peppol.commons.identifier.SimpleDocumentIdentifier;
-import at.peppol.commons.identifier.SimpleParticipantIdentifier;
-import at.peppol.commons.identifier.SimpleProcessIdentifier;
 import at.peppol.commons.identifier.actorid.EPredefinedIdentifierIssuingAgency;
-
 
 /**
  * Test class for class {@link IdentifierUtils}.
@@ -119,10 +113,10 @@ public final class IdentifierUtilsTest {
 
   @Test
   public void testAreIdentifiersEqualDocumentIdentifier () {
-    final SimpleDocumentIdentifier aDI1 = SimpleDocumentIdentifier.createWithDefaultScheme ("urn:doc:anydoc");
-    final SimpleDocumentIdentifier aDI2 = SimpleDocumentIdentifier.createWithDefaultScheme ("urn:doc:anydoc");
-    final SimpleDocumentIdentifier aDI3a = SimpleDocumentIdentifier.createWithDefaultScheme ("urn:doc:anyotherdoc");
-    final SimpleDocumentIdentifier aDI3b = new SimpleDocumentIdentifier ("my-docid-test", "urn:doc:anyotherdoc");
+    final SimpleDocumentTypeIdentifier aDI1 = SimpleDocumentTypeIdentifier.createWithDefaultScheme ("urn:doc:anydoc");
+    final SimpleDocumentTypeIdentifier aDI2 = SimpleDocumentTypeIdentifier.createWithDefaultScheme ("urn:doc:anydoc");
+    final SimpleDocumentTypeIdentifier aDI3a = SimpleDocumentTypeIdentifier.createWithDefaultScheme ("urn:doc:anyotherdoc");
+    final SimpleDocumentTypeIdentifier aDI3b = new SimpleDocumentTypeIdentifier ("my-docid-test", "urn:doc:anyotherdoc");
     assertTrue (IdentifierUtils.areIdentifiersEqual (aDI1, aDI1));
     assertTrue (IdentifierUtils.areIdentifiersEqual (aDI1, aDI2));
     assertTrue (IdentifierUtils.areIdentifiersEqual (aDI2, aDI1));
@@ -186,7 +180,7 @@ public final class IdentifierUtilsTest {
     final SimpleParticipantIdentifier aPI = SimpleParticipantIdentifier.createWithDefaultScheme ("0088:123abc");
     assertEquals ("iso6523-actorid-upis::0088:123abc", IdentifierUtils.getIdentifierURIEncoded (aPI));
 
-    final SimpleDocumentIdentifier aDI = SimpleDocumentIdentifier.createWithDefaultScheme ("urn:doc:anydoc");
+    final SimpleDocumentTypeIdentifier aDI = SimpleDocumentTypeIdentifier.createWithDefaultScheme ("urn:doc:anydoc");
     assertEquals ("busdox-docid-qns::urn:doc:anydoc", IdentifierUtils.getIdentifierURIEncoded (aDI));
 
     try {

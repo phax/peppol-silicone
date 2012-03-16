@@ -41,35 +41,12 @@ package at.peppol.busdox.identifier;
  * Contains all the different fields of a document identifier for BusDox. Note:
  * it is important to note, that the PEPPOL specification separates the sub type
  * identifier more clearly!
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
+ * @deprecated Use {@link IBusdoxDocumentTypeIdentifierParts} instead
  */
-public interface IBusdoxDocumentIdentifierParts {
-  /**
-   * Separator between namespace and local name
-   */
-  String NAMESPACE_SEPARATOR = "::";
-
-  /**
-   * Separator between namespace elements and the optional subtype
-   */
-  String SUBTYPE_SEPARATOR = "##";
-
-  /**
-   * @return The root namespace. Never <code>null</code> nor empty.
-   */
-  String getRootNS ();
-
-  /**
-   * @return The document element local name. Never <code>null</code> nor empty.
-   */
-  String getLocalName ();
-
-  /**
-   * @return The optional sub type identifier. May be <code>null</code>.
-   */
-  String getSubTypeIdentifier ();
-
+@Deprecated
+public interface IBusdoxDocumentIdentifierParts extends IBusdoxDocumentTypeIdentifierParts {
   /**
    * @return The parts assembled into a complete document identifier value.
    *         Never <code>null</code> nor empty.

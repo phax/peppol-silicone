@@ -38,12 +38,10 @@
 package at.peppol.busdox.identifier;
 
 /**
- * Marker-interface that is specific for document identifiers.
+ * Marker-interface that is specific for document type identifiers.
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
- * @deprecated Use {@link IDocumentTypeIdentifier} instead
  */
-@Deprecated
-public interface IDocumentIdentifier extends IDocumentTypeIdentifier, IReadonlyDocumentIdentifier {
+public interface IDocumentTypeIdentifier extends IIdentifier, IReadonlyDocumentTypeIdentifier {
   /* empty */
 }

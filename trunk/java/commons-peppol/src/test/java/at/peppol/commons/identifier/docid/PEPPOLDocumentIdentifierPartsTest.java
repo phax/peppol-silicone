@@ -43,19 +43,15 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-import at.peppol.commons.identifier.docid.EPredefinedDocumentIdentifier;
-import at.peppol.commons.identifier.docid.IPEPPOLDocumentIdentifierParts;
-import at.peppol.commons.identifier.docid.PEPPOLDocumentIdentifierParts;
-
 /**
  * Test class for class {@link PEPPOLDocumentIdentifierParts}.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class PEPPOLDocumentIdentifierPartsTest {
   @Test
   public void testPredefined () {
-    for (final EPredefinedDocumentIdentifier e : EPredefinedDocumentIdentifier.values ()) {
+    for (final EPredefinedDocumentTypeIdentifier e : EPredefinedDocumentTypeIdentifier.values ()) {
       final IPEPPOLDocumentIdentifierParts aParts = PEPPOLDocumentIdentifierParts.extractFromString (e.getValue ());
       assertNotNull (aParts);
 

@@ -43,8 +43,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
-
-import at.peppol.busdox.identifier.IReadonlyDocumentIdentifier;
+import at.peppol.busdox.identifier.IReadonlyDocumentTypeIdentifier;
 import at.peppol.busdox.identifier.IReadonlyIdentifier;
 import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
 import at.peppol.busdox.identifier.IReadonlyProcessIdentifier;
@@ -54,10 +53,9 @@ import com.phloc.commons.compare.EqualsUtils;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
 
-
 /**
  * This class contains several identifier related utility methods.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable
@@ -71,7 +69,7 @@ public final class IdentifierUtils {
    * insensitive!<br>
    * This limitation is important, because the participant identifier scheme is
    * directly encoded into the SML DNS name record.
-   *
+   * 
    * @param sScheme
    *        The scheme to check.
    * @return <code>true</code> if the passed scheme is a valid participant
@@ -87,7 +85,7 @@ public final class IdentifierUtils {
   /**
    * According to the specification, two participant identifiers are equal if
    * their parts are equal case insensitive.
-   *
+   * 
    * @param sIdentifierValue1
    *        First identifier value to compare. May be <code>null</code>.
    * @param sIdentifierValue2
@@ -104,7 +102,7 @@ public final class IdentifierUtils {
   /**
    * According to the specification, two document identifiers are equal if their
    * parts are equal case sensitive.
-   *
+   * 
    * @param sIdentifierValue1
    *        First identifier value to compare. May be <code>null</code>.
    * @param sIdentifierValue2
@@ -121,7 +119,7 @@ public final class IdentifierUtils {
   /**
    * According to the specification, two process identifiers are equal if their
    * parts are equal case sensitive.
-   *
+   * 
    * @param sIdentifierValue1
    *        First identifier value to compare. May be <code>null</code>.
    * @param sIdentifierValue2
@@ -138,7 +136,7 @@ public final class IdentifierUtils {
   /**
    * According to the specification, two participant identifiers are equal if
    * their parts are equal case insensitive.
-   *
+   * 
    * @param aIdentifier1
    *        First identifier to compare. May not be null.
    * @param aIdentifier2
@@ -161,7 +159,7 @@ public final class IdentifierUtils {
   /**
    * According to the specification, two document identifiers are equal if their
    * parts are equal case sensitive.
-   *
+   * 
    * @param aIdentifier1
    *        First identifier to compare. May not be null.
    * @param aIdentifier2
@@ -169,8 +167,8 @@ public final class IdentifierUtils {
    * @return <code>true</code> if the identifiers are equal, <code>false</code>
    *         otherwise.
    */
-  public static boolean areIdentifiersEqual (@Nonnull final IReadonlyDocumentIdentifier aIdentifier1,
-                                             @Nonnull final IReadonlyDocumentIdentifier aIdentifier2) {
+  public static boolean areIdentifiersEqual (@Nonnull final IReadonlyDocumentTypeIdentifier aIdentifier1,
+                                             @Nonnull final IReadonlyDocumentTypeIdentifier aIdentifier2) {
     if (aIdentifier1 == null)
       throw new NullPointerException ("identifier1");
     if (aIdentifier2 == null)
@@ -184,7 +182,7 @@ public final class IdentifierUtils {
   /**
    * According to the specification, two process identifiers are equal if their
    * parts are equal case sensitive.
-   *
+   * 
    * @param aIdentifier1
    *        First identifier to compare. May not be null.
    * @param aIdentifier2
@@ -206,7 +204,7 @@ public final class IdentifierUtils {
 
   /**
    * Get the identifier suitable for an URI but NOT percent encoded.
-   *
+   * 
    * @param aIdentifier
    *        The identifier to be encoded. May not be <code>null</code>.
    * @return The URI encoded participant identifier (scheme::value). Never
@@ -215,6 +213,9 @@ public final class IdentifierUtils {
    */
   @Nonnull
   public static String getIdentifierURIEncoded (@Nonnull final IReadonlyIdentifier aIdentifier) {
+    if (aIdentifier == null)
+      throw new NullPointerException ("identifier");
+
     final String sScheme = aIdentifier.getScheme ();
     if (StringHelper.hasNoText (sScheme))
       throw new IllegalArgumentException ("Passed identifier has an empty scheme: " + aIdentifier);
@@ -229,7 +230,7 @@ public final class IdentifierUtils {
 
   /**
    * Get the identifier suitable for an URI and percent encoded.
-   *
+   * 
    * @param aIdentifier
    *        The identifier to be encoded. May not be <code>null</code>.
    * @return Never <code>null</code>.
@@ -241,14 +242,20 @@ public final class IdentifierUtils {
   /**
    * Take the passed URI part and try to convert it back to a document
    * identifier. The URI part must have the layout <code>scheme::value</code>
-   *
+   * 
    * @param sURIPart
    *        The URI part to be scanned. May not be <code>null</code> if a
    *        correct result is expected.
    * @return The document identifier matching the passed URI part
+   * @throws IllegalArgumentException
+   *         If the passed identifier is not a valid URI encoded identifier
    */
   @Nonnull
+  @Deprecated
   public static SimpleDocumentIdentifier createDocumentIdentifierFromURIPart (@Nonnull final String sURIPart) {
+    if (sURIPart == null)
+      throw new NullPointerException ("URIPart");
+
     final String [] aSplitted = RegExHelper.split (sURIPart, CIdentifier.URL_SCHEME_VALUE_SEPARATOR, 2);
     if (aSplitted.length != 2)
       throw new IllegalArgumentException ("Document identifier '" +
@@ -260,16 +267,47 @@ public final class IdentifierUtils {
   }
 
   /**
+   * Take the passed URI part and try to convert it back to a document
+   * identifier. The URI part must have the layout <code>scheme::value</code>
+   * 
+   * @param sURIPart
+   *        The URI part to be scanned. May not be <code>null</code> if a
+   *        correct result is expected.
+   * @return The document identifier matching the passed URI part
+   * @throws IllegalArgumentException
+   *         If the passed identifier is not a valid URI encoded identifier
+   */
+  @Nonnull
+  public static SimpleDocumentTypeIdentifier createDocumentTypeIdentifierFromURIPart (@Nonnull final String sURIPart) {
+    if (sURIPart == null)
+      throw new NullPointerException ("URIPart");
+
+    final String [] aSplitted = RegExHelper.split (sURIPart, CIdentifier.URL_SCHEME_VALUE_SEPARATOR, 2);
+    if (aSplitted.length != 2)
+      throw new IllegalArgumentException ("Document type identifier '" +
+                                          sURIPart +
+                                          "' did not include correct delimiter: " +
+                                          CIdentifier.URL_SCHEME_VALUE_SEPARATOR);
+
+    return new SimpleDocumentTypeIdentifier (aSplitted[0], aSplitted[1]);
+  }
+
+  /**
    * Take the passed URI part and try to convert it back to a participant
    * identifier. The URI part must have the layout <code>scheme::value</code>
-   *
+   * 
    * @param sURIPart
    *        The URI part to be scanned. May not be <code>null</code> if a
    *        correct result is expected.
    * @return The participant identifier matching the passed URI part
+   * @throws IllegalArgumentException
+   *         If the passed identifier is not a valid URI encoded identifier
    */
   @Nonnull
   public static SimpleParticipantIdentifier createParticipantIdentifierFromURIPart (@Nonnull final String sURIPart) {
+    if (sURIPart == null)
+      throw new NullPointerException ("URIPart");
+
     final String [] aSplitted = RegExHelper.split (sURIPart, CIdentifier.URL_SCHEME_VALUE_SEPARATOR, 2);
     if (aSplitted.length != 2)
       throw new IllegalArgumentException ("Participant identifier '" +
@@ -283,14 +321,19 @@ public final class IdentifierUtils {
   /**
    * Take the passed URI part and try to convert it back to a process
    * identifier. The URI part must have the layout <code>scheme::value</code>
-   *
+   * 
    * @param sURIPart
    *        The URI part to be scanned. May not be <code>null</code> if a
    *        correct result is expected.
    * @return The process identifier matching the passed URI part
+   * @throws IllegalArgumentException
+   *         If the passed identifier is not a valid URI encoded identifier
    */
   @Nonnull
   public static SimpleProcessIdentifier createProcessIdentifierFromURIPart (@Nonnull final String sURIPart) {
+    if (sURIPart == null)
+      throw new NullPointerException ("URIPart");
+
     final String [] aSplitted = RegExHelper.split (sURIPart, CIdentifier.URL_SCHEME_VALUE_SEPARATOR, 2);
     if (aSplitted.length != 2)
       throw new IllegalArgumentException ("Process identifier '" +
@@ -301,6 +344,14 @@ public final class IdentifierUtils {
     return new SimpleProcessIdentifier (aSplitted[0], aSplitted[1]);
   }
 
+  /**
+   * Central method for unifying participant identifier values for storage in a
+   * DB, as participant identifier values need to be handled case-insensitive.
+   * 
+   * @param sValue
+   *        The DB identifier value to unify. May be <code>null</code>.
+   * @return <code>null</code> if the passed value is <code>null</code>
+   */
   @Nullable
   public static String getUnifiedParticipantDBValue (@Nullable final String sValue) {
     return sValue == null ? null : sValue.toLowerCase (Locale.US);

@@ -43,42 +43,40 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-import at.peppol.commons.identifier.SimpleDocumentIdentifier;
-
 import com.phloc.commons.mock.PhlocTestUtils;
 
 /**
- * Test class for class {@link SimpleDocumentIdentifier}.
- *
+ * Test class for class {@link SimpleDocumentTypeIdentifier}.
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public final class SimpleDocumentIdentifierTest {
+public final class SimpleDocumentTypeIdentifierTest {
   @Test
   public void testCtor () {
-    SimpleDocumentIdentifier aID = new SimpleDocumentIdentifier ("scheme", "value");
+    SimpleDocumentTypeIdentifier aID = new SimpleDocumentTypeIdentifier ("scheme", "value");
     assertEquals ("scheme", aID.getScheme ());
     assertEquals ("value", aID.getValue ());
-    aID = new SimpleDocumentIdentifier (null, "value");
+    aID = new SimpleDocumentTypeIdentifier (null, "value");
     assertNull (aID.getScheme ());
     assertEquals ("value", aID.getValue ());
-    aID = new SimpleDocumentIdentifier ("scheme", null);
+    aID = new SimpleDocumentTypeIdentifier ("scheme", null);
     assertEquals ("scheme", aID.getScheme ());
     assertNull (aID.getValue ());
-    aID = new SimpleDocumentIdentifier (null, null);
+    aID = new SimpleDocumentTypeIdentifier (null, null);
     assertNull (aID.getScheme ());
     assertNull (aID.getValue ());
 
-    aID = new SimpleDocumentIdentifier ("scheme", "value");
-    final SimpleDocumentIdentifier aID2 = new SimpleDocumentIdentifier (aID);
+    aID = new SimpleDocumentTypeIdentifier ("scheme", "value");
+    final SimpleDocumentTypeIdentifier aID2 = new SimpleDocumentTypeIdentifier (aID);
     assertEquals ("scheme", aID2.getScheme ());
     assertEquals ("value", aID2.getValue ());
   }
 
   @Test
   public void testBasicMethods () {
-    final SimpleDocumentIdentifier aID1 = new SimpleDocumentIdentifier ("scheme", "value");
-    final SimpleDocumentIdentifier aID2 = new SimpleDocumentIdentifier ("scheme", "value");
-    final SimpleDocumentIdentifier aID3 = new SimpleDocumentIdentifier ("scheme2", "value");
+    final SimpleDocumentTypeIdentifier aID1 = new SimpleDocumentTypeIdentifier ("scheme", "value");
+    final SimpleDocumentTypeIdentifier aID2 = new SimpleDocumentTypeIdentifier ("scheme", "value");
+    final SimpleDocumentTypeIdentifier aID3 = new SimpleDocumentTypeIdentifier ("scheme2", "value");
     PhlocTestUtils.testDefaultImplementationWithEqualContentObject (aID1, aID2);
     PhlocTestUtils.testDefaultImplementationWithDifferentContentObject (aID1, aID3);
     PhlocTestUtils.testDefaultImplementationWithDifferentContentObject (aID2, aID3);
@@ -86,15 +84,15 @@ public final class SimpleDocumentIdentifierTest {
 
   @Test
   public void testURIStuff () {
-    final SimpleDocumentIdentifier aID1 = new SimpleDocumentIdentifier ("scheme1", "value1");
+    final SimpleDocumentTypeIdentifier aID1 = new SimpleDocumentTypeIdentifier ("scheme1", "value1");
     assertEquals ("scheme1::value1", aID1.getURIEncoded ());
     assertEquals ("scheme1%3A%3Avalue1", aID1.getURIPercentEncoded ());
-    final SimpleDocumentIdentifier aID2 = SimpleDocumentIdentifier.createFromURIPart ("scheme1::value1");
+    final SimpleDocumentTypeIdentifier aID2 = SimpleDocumentTypeIdentifier.createFromURIPart ("scheme1::value1");
     assertEquals (aID1, aID2);
 
     try {
       // No separator
-      SimpleDocumentIdentifier.createFromURIPart ("scheme1");
+      SimpleDocumentTypeIdentifier.createFromURIPart ("scheme1");
       fail ();
     }
     catch (final IllegalArgumentException ex) {}

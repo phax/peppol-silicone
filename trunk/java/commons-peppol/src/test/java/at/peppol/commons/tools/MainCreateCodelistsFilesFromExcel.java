@@ -62,6 +62,7 @@ import org.w3c.dom.Document;
 
 import at.peppol.commons.identifier.CIdentifier;
 import at.peppol.commons.identifier.SimpleDocumentIdentifier;
+import at.peppol.commons.identifier.SimpleDocumentTypeIdentifier;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 import at.peppol.commons.identifier.SimpleProcessIdentifier;
 import at.peppol.commons.identifier.actorid.IIdentifierIssuingAgency;
@@ -109,10 +110,11 @@ import com.sun.codemodel.writer.FileCodeWriter;
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
+@SuppressWarnings ("deprecation")
 public final class MainCreateCodelistsFilesFromExcel {
   private static final Logger s_aLogger = LoggerFactory.getLogger (MainCreateCodelistsFilesFromExcel.class);
   private static final Version CODELIST_VERSION = new Version (1, 1, 0);
-  private static final String EXCEL_FILE = "src/main/codelists/PEPPOL Code Lists 1.1.0 DRAFT.xls";
+  private static final String EXCEL_FILE = "src/main/codelists/PEPPOL Code Lists 1.1.0.xls";
   private static final String SHEET_PARTICIPANT = "Participant";
   private static final String SHEET_DOCUMENT = "Document";
   private static final String SHEET_PROCESS = "Process";
@@ -295,12 +297,12 @@ public final class MainCreateCodelistsFilesFromExcel {
     aReadOptions.addColumn (2, "since", UseType.REQUIRED, "string", false);
     final CodeListDocument aCodeList = ExcelSheetToCodeList.convertToSimpleCodeList (aDocumentSheet,
                                                                                      aReadOptions,
-                                                                                     "PeppolDocumentIdentifier",
+                                                                                     "PeppolDocumentTypeIdentifier",
                                                                                      CODELIST_VERSION.getAsString (),
                                                                                      new URI ("urn:peppol.eu:names:identifier:document"),
                                                                                      new URI ("urn:peppol.eu:names:identifier:document-1.0"),
                                                                                      null);
-    _writeGenericodeFile (aCodeList, RESULT_DIRECTORY + "PeppolDocumentIdentifier.gc");
+    _writeGenericodeFile (aCodeList, RESULT_DIRECTORY + "PeppolDocumentTypeIdentifier.gc");
 
     // Save as XML
     final IMicroDocument aDoc = new MicroDocument ();
@@ -318,13 +320,13 @@ public final class MainCreateCodelistsFilesFromExcel {
       eAgency.setAttribute ("since", sSince);
     }
     final String sXML = MicroWriter.getXMLString (aDoc);
-    SimpleFileIO.writeFile (new File (RESULT_DIRECTORY + "PeppolDocumentIdentifier.xml"),
+    SimpleFileIO.writeFile (new File (RESULT_DIRECTORY + "PeppolDocumentTypeIdentifier.xml"),
                             sXML.getBytes (CCharset.CHARSET_UTF_8));
 
     // Create Java source
     try {
       s_jEnumPredefinedDoc = s_aCodeModel._package ("at.peppol.commons.identifier.docid")
-                                         ._enum ("EPredefinedDocumentIdentifier")
+                                         ._enum ("EPredefinedDocumentTypeIdentifier")
                                          ._implements (IPredefinedDocumentIdentifier.class);
       s_jEnumPredefinedDoc.javadoc ().add ("This file is generated. Do NOT edit!");
 
@@ -390,14 +392,14 @@ public final class MainCreateCodelistsFilesFromExcel {
       jCtor.body ()
            .assign (fParts, jParts)
            .assign (fCommonName, jCommonName)
-           .assign (fID, fParts.invoke ("getAsDocumentIdentifierValue"))
+           .assign (fID, fParts.invoke ("getAsDocumentTypeIdentifierValue"))
            .assign (fSince, jSince);
 
       // public String getScheme ()
       JMethod m = s_jEnumPredefinedDoc.method (JMod.PUBLIC, String.class, "getScheme");
       m.annotate (Nonnull.class);
       m.annotate (Nonempty.class);
-      m.body ()._return (s_aCodeModel.ref (CIdentifier.class).staticRef ("DEFAULT_DOCUMENT_IDENTIFIER_SCHEME"));
+      m.body ()._return (s_aCodeModel.ref (CIdentifier.class).staticRef ("DEFAULT_DOCUMENT_TYPE_IDENTIFIER_SCHEME"));
 
       // public String getValue ()
       m = s_jEnumPredefinedDoc.method (JMod.PUBLIC, String.class, "getValue");
@@ -457,14 +459,27 @@ public final class MainCreateCodelistsFilesFromExcel {
 
       // public String getAsDocumentIdentifierValue ()
       m = s_jEnumPredefinedDoc.method (JMod.PUBLIC, String.class, "getAsDocumentIdentifierValue");
+      m.annotate (Deprecated.class);
+      m.annotate (Nonnull.class);
+      m.annotate (Nonempty.class);
+      m.body ()._return (fID);
+
+      // public String getAsDocumentTypeIdentifierValue ()
+      m = s_jEnumPredefinedDoc.method (JMod.PUBLIC, String.class, "getAsDocumentTypeIdentifierValue");
       m.annotate (Nonnull.class);
       m.annotate (Nonempty.class);
       m.body ()._return (fID);
 
       // public SimpleDocumentIdentifier getAsDocumentIdentifier ()
       m = s_jEnumPredefinedDoc.method (JMod.PUBLIC, SimpleDocumentIdentifier.class, "getAsDocumentIdentifier");
+      m.annotate (Deprecated.class);
       m.annotate (Nonnull.class);
       m.body ()._return (JExpr._new (s_aCodeModel.ref (SimpleDocumentIdentifier.class)).arg (JExpr._this ()));
+
+      // public SimpleDocumentTypeIdentifier getAsDocumentTypeIdentifier ()
+      m = s_jEnumPredefinedDoc.method (JMod.PUBLIC, SimpleDocumentTypeIdentifier.class, "getAsDocumentTypeIdentifier");
+      m.annotate (Nonnull.class);
+      m.body ()._return (JExpr._new (s_aCodeModel.ref (SimpleDocumentTypeIdentifier.class)).arg (JExpr._this ()));
 
       // public Version getSince ()
       m = s_jEnumPredefinedDoc.method (JMod.PUBLIC, Version.class, "getSince");

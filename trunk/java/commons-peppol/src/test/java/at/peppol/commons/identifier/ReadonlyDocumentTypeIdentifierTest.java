@@ -42,42 +42,40 @@ import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
-import at.peppol.commons.identifier.ReadonlyDocumentIdentifier;
-
 import com.phloc.commons.mock.PhlocTestUtils;
 
 /**
- * Test class for class {@link ReadonlyDocumentIdentifier}.
- *
+ * Test class for class {@link ReadonlyDocumentTypeIdentifier}.
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public final class ReadonlyDocumentIdentifierTest {
+public final class ReadonlyDocumentTypeIdentifierTest {
   @Test
   public void testCtor () {
-    ReadonlyDocumentIdentifier aID = new ReadonlyDocumentIdentifier ("scheme", "value");
+    ReadonlyDocumentTypeIdentifier aID = new ReadonlyDocumentTypeIdentifier ("scheme", "value");
     assertEquals ("scheme", aID.getScheme ());
     assertEquals ("value", aID.getValue ());
-    aID = new ReadonlyDocumentIdentifier (null, "value");
+    aID = new ReadonlyDocumentTypeIdentifier (null, "value");
     assertNull (aID.getScheme ());
     assertEquals ("value", aID.getValue ());
-    aID = new ReadonlyDocumentIdentifier ("scheme", null);
+    aID = new ReadonlyDocumentTypeIdentifier ("scheme", null);
     assertEquals ("scheme", aID.getScheme ());
     assertNull (aID.getValue ());
-    aID = new ReadonlyDocumentIdentifier (null, null);
+    aID = new ReadonlyDocumentTypeIdentifier (null, null);
     assertNull (aID.getScheme ());
     assertNull (aID.getValue ());
 
-    aID = new ReadonlyDocumentIdentifier ("scheme", "value");
-    final ReadonlyDocumentIdentifier aID2 = new ReadonlyDocumentIdentifier (aID);
+    aID = new ReadonlyDocumentTypeIdentifier ("scheme", "value");
+    final ReadonlyDocumentTypeIdentifier aID2 = new ReadonlyDocumentTypeIdentifier (aID);
     assertEquals ("scheme", aID2.getScheme ());
     assertEquals ("value", aID2.getValue ());
   }
 
   @Test
   public void testBasicMethods () {
-    final ReadonlyDocumentIdentifier aID1 = new ReadonlyDocumentIdentifier ("scheme", "value");
-    final ReadonlyDocumentIdentifier aID2 = new ReadonlyDocumentIdentifier ("scheme", "value");
-    final ReadonlyDocumentIdentifier aID3 = new ReadonlyDocumentIdentifier ("scheme2", "value");
+    final ReadonlyDocumentTypeIdentifier aID1 = new ReadonlyDocumentTypeIdentifier ("scheme", "value");
+    final ReadonlyDocumentTypeIdentifier aID2 = new ReadonlyDocumentTypeIdentifier ("scheme", "value");
+    final ReadonlyDocumentTypeIdentifier aID3 = new ReadonlyDocumentTypeIdentifier ("scheme2", "value");
     PhlocTestUtils.testDefaultImplementationWithEqualContentObject (aID1, aID2);
     PhlocTestUtils.testDefaultImplementationWithDifferentContentObject (aID1, aID3);
     PhlocTestUtils.testDefaultImplementationWithDifferentContentObject (aID2, aID3);
@@ -85,7 +83,7 @@ public final class ReadonlyDocumentIdentifierTest {
 
   @Test
   public void testURIStuff () {
-    final ReadonlyDocumentIdentifier aID1 = new ReadonlyDocumentIdentifier ("scheme1", "value1");
+    final ReadonlyDocumentTypeIdentifier aID1 = new ReadonlyDocumentTypeIdentifier ("scheme1", "value1");
     assertEquals ("scheme1::value1", aID1.getURIEncoded ());
     assertEquals ("scheme1%3A%3Avalue1", aID1.getURIPercentEncoded ());
   }

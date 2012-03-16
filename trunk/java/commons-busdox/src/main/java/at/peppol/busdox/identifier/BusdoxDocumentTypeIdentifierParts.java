@@ -42,10 +42,8 @@ package at.peppol.busdox.identifier;
  * interface. The implementation is immutable.
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
- * @deprecated Use {@link BusdoxDocumentTypeIdentifierParts} instead
  */
-@Deprecated
-public final class BusdoxDocumentIdentifierParts implements IBusdoxDocumentIdentifierParts {
+public final class BusdoxDocumentTypeIdentifierParts implements IBusdoxDocumentTypeIdentifierParts {
   private final String m_sRootNS;
   private final String m_sLocalName;
   private final String m_sSubTypeIdentifier;
@@ -60,7 +58,9 @@ public final class BusdoxDocumentIdentifierParts implements IBusdoxDocumentIdent
    * @param sSubTypeIdentifier
    *        The sub-type identifier. May be <code>null</code>.
    */
-  public BusdoxDocumentIdentifierParts (final String sRootNS, final String sLocalName, final String sSubTypeIdentifier) {
+  public BusdoxDocumentTypeIdentifierParts (final String sRootNS,
+                                            final String sLocalName,
+                                            final String sSubTypeIdentifier) {
     if (sRootNS == null || sRootNS.length () == 0)
       throw new IllegalArgumentException ("rootNS is empty");
     if (sLocalName == null || sLocalName.length () == 0)
@@ -82,24 +82,20 @@ public final class BusdoxDocumentIdentifierParts implements IBusdoxDocumentIdent
     return m_sSubTypeIdentifier;
   }
 
-  public String getAsDocumentIdentifierValue () {
-    return getAsDocumentTypeIdentifierValue ();
-  }
-
   public String getAsDocumentTypeIdentifierValue () {
-    return getAsDocumentIdentifierValue (this);
+    return getAsDocumentTypeIdentifierValue (this);
   }
 
   /**
-   * Convert an {@link IBusdoxDocumentIdentifierParts} object to a full document
-   * identifier value (without a scheme!)
+   * Convert an {@link IBusdoxDocumentTypeIdentifierParts} object to a full
+   * document identifier value (without a scheme!)
    * 
    * @param aParts
    *        The object to be converted. May not be <code>null</code>.
    * @return The assembled document identifier value. Never <code>null</code>
    *         nor empty.
    */
-  public static String getAsDocumentIdentifierValue (final IBusdoxDocumentIdentifierParts aParts) {
+  public static String getAsDocumentTypeIdentifierValue (final IBusdoxDocumentTypeIdentifierParts aParts) {
     if (aParts == null)
       throw new NullPointerException ("parts");
 
@@ -124,7 +120,7 @@ public final class BusdoxDocumentIdentifierParts implements IBusdoxDocumentIdent
    * @throws IllegalArgumentException
    *         if parsing fails
    */
-  public static IBusdoxDocumentIdentifierParts extractFromString (final String sDocTypeID) {
+  public static IBusdoxDocumentTypeIdentifierParts extractFromString (final String sDocTypeID) {
     if (sDocTypeID == null || sDocTypeID.length () == 0)
       throw new IllegalArgumentException ("The passed document identifier value may not be empty!");
     final String [] aMain = sDocTypeID.split (SUBTYPE_SEPARATOR, 2);
@@ -133,6 +129,6 @@ public final class BusdoxDocumentIdentifierParts implements IBusdoxDocumentIdent
       throw new IllegalArgumentException ("The document identifier '" +
                                           sDocTypeID +
                                           "' is missing the separation between root namespace and local name!");
-    return new BusdoxDocumentIdentifierParts (aFirst[0], aFirst[1], aMain.length == 1 ? null : aMain[1]);
+    return new BusdoxDocumentTypeIdentifierParts (aFirst[0], aFirst[1], aMain.length == 1 ? null : aMain[1]);
   }
 }
