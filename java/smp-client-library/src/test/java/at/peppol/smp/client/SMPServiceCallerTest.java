@@ -43,14 +43,13 @@ import java.security.cert.X509Certificate;
 
 import org.junit.Test;
 
-import at.peppol.busdox.identifier.IReadonlyDocumentIdentifier;
+import at.peppol.busdox.identifier.IReadonlyDocumentTypeIdentifier;
 import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
 import at.peppol.busdox.identifier.IReadonlyProcessIdentifier;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
-import at.peppol.commons.identifier.docid.EPredefinedDocumentIdentifier;
+import at.peppol.commons.identifier.docid.EPredefinedDocumentTypeIdentifier;
 import at.peppol.commons.identifier.procid.EPredefinedProcessIdentifier;
 import at.peppol.commons.sml.ESML;
-import at.peppol.smp.client.SMPServiceCaller;
 
 /**
  * Test class for class {@link SMPServiceCaller}.
@@ -58,7 +57,7 @@ import at.peppol.smp.client.SMPServiceCaller;
  * @author philip
  */
 public final class SMPServiceCallerTest {
-  private static IReadonlyDocumentIdentifier DOCUMENT_INVOICE = EPredefinedDocumentIdentifier.urn_oasis_names_specification_ubl_schema_xsd_Invoice_2__Invoice__urn_www_cenbii_eu_transaction_biicoretrdm010_ver1_0__urn_www_peppol_eu_bis_peppol4a_ver1_0__2_0;
+  private static IReadonlyDocumentTypeIdentifier DOCUMENT_INVOICE = EPredefinedDocumentTypeIdentifier.INVOICE_T010_BIS4A;
   private static IReadonlyProcessIdentifier PROCESS_BII04 = EPredefinedProcessIdentifier.urn_www_cenbii_eu_profile_bii04_ver1_0;
 
   private static IReadonlyParticipantIdentifier alfa1lab = SimpleParticipantIdentifier.createWithDefaultScheme ("9902:DK28158815");

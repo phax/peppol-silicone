@@ -56,7 +56,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import at.peppol.commons.identifier.IdentifierUtils;
-import at.peppol.commons.identifier.SimpleDocumentIdentifier;
+import at.peppol.commons.identifier.SimpleDocumentTypeIdentifier;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 import at.peppol.commons.identifier.SimpleProcessIdentifier;
 
@@ -200,8 +200,8 @@ public final class MessageMetadataHelper {
   @Nullable
   private static DocumentIdentifierType _getDocumentTypeID (@Nonnull final HeaderList aHeaderList) {
     final Header hDocumentID = aHeaderList.get (QNAME_DOCUMENTID, false);
-    return hDocumentID == null ? null : new SimpleDocumentIdentifier (hDocumentID.getAttribute (QNAME_SCHEME),
-                                                                      hDocumentID.getStringContent ());
+    return hDocumentID == null ? null : new SimpleDocumentTypeIdentifier (hDocumentID.getAttribute (QNAME_SCHEME),
+                                                                          hDocumentID.getStringContent ());
   }
 
   @Nullable

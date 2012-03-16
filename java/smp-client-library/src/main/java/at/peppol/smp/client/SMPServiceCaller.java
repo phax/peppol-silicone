@@ -64,7 +64,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3._2000._09.xmldsig.X509DataType;
 
-import at.peppol.busdox.identifier.IReadonlyDocumentIdentifier;
+import at.peppol.busdox.identifier.IReadonlyDocumentTypeIdentifier;
 import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
 import at.peppol.busdox.identifier.IReadonlyProcessIdentifier;
 import at.peppol.commons.identifier.IdentifierUtils;
@@ -85,7 +85,6 @@ import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.WebResource.Builder;
-
 
 /**
  * This class is used for calling the SMP REST interface.
@@ -288,7 +287,7 @@ public final class SMPServiceCaller {
    *         The request was not well formed.
    */
   public SignedServiceMetadataType getServiceRegistration (@Nonnull final IReadonlyParticipantIdentifier aServiceGroupID,
-                                                           @Nonnull final IReadonlyDocumentIdentifier aDocumentTypeID) throws Exception {
+                                                           @Nonnull final IReadonlyDocumentTypeIdentifier aDocumentTypeID) throws Exception {
     final String path = IdentifierUtils.getIdentifierURIPercentEncoded (aServiceGroupID) +
                         "/services/" +
                         IdentifierUtils.getIdentifierURIPercentEncoded (aDocumentTypeID);
@@ -299,7 +298,7 @@ public final class SMPServiceCaller {
 
   @Nullable
   public EndpointType getEndpoint (@Nonnull final IReadonlyParticipantIdentifier aServiceGroupID,
-                                   @Nonnull final IReadonlyDocumentIdentifier aDocumentTypeID,
+                                   @Nonnull final IReadonlyDocumentTypeIdentifier aDocumentTypeID,
                                    @Nonnull final IReadonlyProcessIdentifier aProcessID) throws Exception {
     // Get meta data for participant/documentType
     final SignedServiceMetadataType aSignedServiceMetadata = getServiceRegistration (aServiceGroupID, aDocumentTypeID);
@@ -327,7 +326,7 @@ public final class SMPServiceCaller {
 
   @Nullable
   public String getEndpointAddress (@Nonnull final IReadonlyParticipantIdentifier aServiceGroupID,
-                                    @Nonnull final IReadonlyDocumentIdentifier aDocumentTypeID,
+                                    @Nonnull final IReadonlyDocumentTypeIdentifier aDocumentTypeID,
                                     @Nonnull final IReadonlyProcessIdentifier aProcessID) throws Exception {
     final EndpointType aEndpoint = getEndpoint (aServiceGroupID, aDocumentTypeID, aProcessID);
     return aEndpoint == null ? null : W3CEndpointReferenceUtils.getAddress (aEndpoint.getEndpointReference ());
@@ -335,7 +334,7 @@ public final class SMPServiceCaller {
 
   @Nullable
   public String getEndpointCertificateString (@Nonnull final IReadonlyParticipantIdentifier aServiceGroupID,
-                                              @Nonnull final IReadonlyDocumentIdentifier aDocumentTypeID,
+                                              @Nonnull final IReadonlyDocumentTypeIdentifier aDocumentTypeID,
                                               @Nonnull final IReadonlyProcessIdentifier aProcessID) throws Exception {
 
     final EndpointType aEndpoint = getEndpoint (aServiceGroupID, aDocumentTypeID, aProcessID);
@@ -359,7 +358,7 @@ public final class SMPServiceCaller {
 
   @Nullable
   public X509Certificate getEndpointCertificate (@Nonnull final IReadonlyParticipantIdentifier aServiceGroupID,
-                                                 @Nonnull final IReadonlyDocumentIdentifier aDocumentTypeID,
+                                                 @Nonnull final IReadonlyDocumentTypeIdentifier aDocumentTypeID,
                                                  @Nonnull final IReadonlyProcessIdentifier aProcessID) throws Exception {
 
     final String sCertString = getEndpointCertificateString (aServiceGroupID, aDocumentTypeID, aProcessID);
@@ -388,7 +387,7 @@ public final class SMPServiceCaller {
                                        final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
     final ServiceInformationType serviceInformation = aServiceMetadata.getServiceInformation ();
     final IReadonlyParticipantIdentifier aServiceGroupID = serviceInformation.getParticipantIdentifier ();
-    final IReadonlyDocumentIdentifier aDocumentTypeID = serviceInformation.getDocumentIdentifier ();
+    final IReadonlyDocumentTypeIdentifier aDocumentTypeID = serviceInformation.getDocumentIdentifier ();
 
     final WebResource aFullResource = m_aWebResource.path (IdentifierUtils.getIdentifierURIPercentEncoded (aServiceGroupID) +
                                                            "/services/" +
@@ -417,7 +416,7 @@ public final class SMPServiceCaller {
    *         The request was not well formed.
    */
   public void deleteServiceRegistration (final IReadonlyParticipantIdentifier aServiceGroupID,
-                                         final IReadonlyDocumentIdentifier aDocumentTypeID,
+                                         final IReadonlyDocumentTypeIdentifier aDocumentTypeID,
                                          final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
     final WebResource aFullResource = m_aWebResource.path (IdentifierUtils.getIdentifierURIPercentEncoded (aServiceGroupID) +
                                                            "/services/" +
@@ -689,7 +688,7 @@ public final class SMPServiceCaller {
    */
   public static SignedServiceMetadataType getServiceRegistrationByDNS (final ISMLInfo aSMLInfo,
                                                                        final IReadonlyParticipantIdentifier aServiceGroupID,
-                                                                       final IReadonlyDocumentIdentifier aDocumentTypeID) throws Exception {
+                                                                       final IReadonlyDocumentTypeIdentifier aDocumentTypeID) throws Exception {
     final String sFullPath = _convertServiceGroupToURI (aSMLInfo, aServiceGroupID) +
                              "/" +
                              IdentifierUtils.getIdentifierURIPercentEncoded (aServiceGroupID) +

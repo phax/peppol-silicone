@@ -53,15 +53,15 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import at.peppol.busdox.CBusDox;
-import at.peppol.busdox.identifier.IReadonlyDocumentIdentifier;
+import at.peppol.busdox.identifier.IReadonlyDocumentTypeIdentifier;
 import at.peppol.busdox.identifier.IReadonlyIdentifier;
 import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
 import at.peppol.busdox.identifier.IReadonlyProcessIdentifier;
 import at.peppol.commons.identifier.ReadonlyParticipantIdentifier;
-import at.peppol.commons.identifier.SimpleDocumentIdentifier;
+import at.peppol.commons.identifier.SimpleDocumentTypeIdentifier;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 import at.peppol.commons.identifier.SimpleProcessIdentifier;
-import at.peppol.commons.identifier.docid.EPredefinedDocumentIdentifier;
+import at.peppol.commons.identifier.docid.EPredefinedDocumentTypeIdentifier;
 import at.peppol.commons.identifier.procid.EPredefinedProcessIdentifier;
 import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
 import at.peppol.commons.utils.UsernamePWCredentials;
@@ -89,8 +89,8 @@ public final class MainLimeClient {
   private static boolean s_bLeaveMessages = false;
   private static final IReadonlyParticipantIdentifier SENDER = ReadonlyParticipantIdentifier.createWithDefaultScheme ("9914:atu415427xx");
   private static final IReadonlyParticipantIdentifier RECEIVER = ReadonlyParticipantIdentifier.createWithDefaultScheme ("9914:iwannatest");
-  private static final IReadonlyDocumentIdentifier DOCID = EPredefinedDocumentIdentifier.urn_oasis_names_specification_ubl_schema_xsd_Order_2__Order__urn_www_cenbii_eu_transaction_biicoretrdm001_ver1_0__urn_www_peppol_eu_bis_peppol6a_ver1_0__2_0;
-  private static final IReadonlyProcessIdentifier PROCESS = EPredefinedProcessIdentifier.urn_www_cenbii_eu_profile_bii06_ver1_0;
+  private static final IReadonlyDocumentTypeIdentifier DOCID = EPredefinedDocumentTypeIdentifier.ORDER_T001_BIS6A;
+  private static final IReadonlyProcessIdentifier PROCESS = EPredefinedProcessIdentifier.BIS6A;
 
   public static void main (final String [] args) throws Exception {
     if (false)
@@ -262,11 +262,11 @@ public final class MainLimeClient {
   private static IMessage _createSampleMessage (final IReadableResource xml,
                                                 final IReadonlyParticipantIdentifier senderID,
                                                 final IReadonlyParticipantIdentifier receiverID,
-                                                final IReadonlyDocumentIdentifier documentID,
+                                                final IReadonlyDocumentTypeIdentifier documentID,
                                                 final IReadonlyProcessIdentifier processID) throws SAXException {
     final IMessage message = new Message ();
     message.setDocument (_loadXML (xml));
-    message.setDocumentType (new SimpleDocumentIdentifier (documentID));
+    message.setDocumentType (new SimpleDocumentTypeIdentifier (documentID));
     message.setSender (new SimpleParticipantIdentifier (senderID));
     message.setReceiver (new SimpleParticipantIdentifier (receiverID));
     message.setProcessType (new SimpleProcessIdentifier (processID));

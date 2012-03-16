@@ -41,7 +41,7 @@ import javax.annotation.concurrent.Immutable;
 import javax.xml.bind.annotation.XmlSchema;
 
 import at.peppol.commons.identifier.CIdentifier;
-import at.peppol.commons.identifier.ReadonlyDocumentIdentifier;
+import at.peppol.commons.identifier.ReadonlyDocumentTypeIdentifier;
 import at.peppol.commons.identifier.ReadonlyParticipantIdentifier;
 import at.peppol.commons.identifier.ReadonlyProcessIdentifier;
 
@@ -65,7 +65,7 @@ public final class CLimeIdentifiers {
 
   public static final ReadonlyParticipantIdentifier MESSAGEUNDELIVERABLE_SENDER = new ReadonlyParticipantIdentifier ("busdox-actorid-transport",
                                                                                                                      "busdox:sender");
-  public static final ReadonlyDocumentIdentifier MESSAGEUNDELIVERABLE_DOCUMENT = ReadonlyDocumentIdentifier.createWithDefaultScheme ("http://busdox.org/transport/lime/1.0/::MessageUndeliverable");
+  public static final ReadonlyDocumentTypeIdentifier MESSAGEUNDELIVERABLE_DOCUMENT = ReadonlyDocumentTypeIdentifier.createWithDefaultScheme ("http://busdox.org/transport/lime/1.0/::MessageUndeliverable");
   public static final ReadonlyProcessIdentifier MESSAGEUNDELIVERABLE_PROCESS = new ReadonlyProcessIdentifier (BUSDOX_PROCID_TRANSPORT,
                                                                                                               CIdentifier.DEFAULT_PROCESS_IDENTIFIER_NOPROCESS);
 

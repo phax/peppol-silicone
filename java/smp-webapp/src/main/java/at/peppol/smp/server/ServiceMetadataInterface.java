@@ -68,11 +68,10 @@ import at.peppol.smp.server.util.RequestHelper;
 
 import com.sun.jersey.api.NotFoundException;
 
-
 /**
  * This class implements the REST interface for getting SignedServiceMetadata's.
  * PUT and DELETE are also implemented.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Path ("/{ServiceGroupId}/services/{DocumentTypeId}")
@@ -95,7 +94,7 @@ public final class ServiceMetadataInterface {
     try {
       final ObjectFactory aObjFactory = new ObjectFactory ();
       final ParticipantIdentifierType aServiceGroupID = SimpleParticipantIdentifier.createFromURIPart (sServiceGroupID);
-      final DocumentIdentifierType aDocTypeID = IdentifierUtils.createDocumentIdentifierFromURIPart (sDocumentTypeID);
+      final DocumentIdentifierType aDocTypeID = IdentifierUtils.createDocumentTypeIdentifierFromURIPart (sDocumentTypeID);
       final IDataManager aDataManager = DataManagerFactory.getInstance ();
 
       // First check for redirection, then for actual service
@@ -139,7 +138,7 @@ public final class ServiceMetadataInterface {
         return Response.status (Status.BAD_REQUEST).build ();
       }
 
-      final DocumentIdentifierType aDocTypeId = IdentifierUtils.createDocumentIdentifierFromURIPart (sDocumentTypeId);
+      final DocumentIdentifierType aDocTypeId = IdentifierUtils.createDocumentTypeIdentifierFromURIPart (sDocumentTypeId);
       if (!IdentifierUtils.areIdentifiersEqual (aServiceInformationType.getDocumentIdentifier (), aDocTypeId)) {
         s_aLogger.info ("Save service metadata was called with bad parameters. serviceInfo:" +
                         aServiceInformationType.getDocumentIdentifier () +
@@ -176,7 +175,7 @@ public final class ServiceMetadataInterface {
 
     try {
       final ParticipantIdentifierType aServiceGroupId = SimpleParticipantIdentifier.createFromURIPart (sServiceGroupId);
-      final DocumentIdentifierType aDocTypeId = IdentifierUtils.createDocumentIdentifierFromURIPart (sDocumentTypeId);
+      final DocumentIdentifierType aDocTypeId = IdentifierUtils.createDocumentTypeIdentifierFromURIPart (sDocumentTypeId);
 
       final IDataManager aDataManager = DataManagerFactory.getInstance ();
       aDataManager.deleteService (aServiceGroupId, aDocTypeId, RequestHelper.getAuth (headers));
