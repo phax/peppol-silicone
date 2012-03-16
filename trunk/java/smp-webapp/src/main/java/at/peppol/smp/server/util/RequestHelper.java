@@ -47,7 +47,6 @@ import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
 import at.peppol.commons.utils.ReadonlyUsernamePWCredentials;
 import at.peppol.smp.server.exception.UnauthorizedException;
 
-
 /**
  * This class is used for retrieving the HTTP BASIC AUTH header from the HTTP
  * Authorization Header.
@@ -59,8 +58,8 @@ public final class RequestHelper {
   private RequestHelper () {}
 
   @Nonnull
-  public static IReadonlyUsernamePWCredentials getAuth (final HttpHeaders headers) throws UnauthorizedException {
-    final List <String> h = headers.getRequestHeader ("Authorization");
+  public static IReadonlyUsernamePWCredentials getAuth (@Nonnull final HttpHeaders headers) throws UnauthorizedException {
+    final List <String> h = headers.getRequestHeader (HttpHeaders.AUTHORIZATION);
     if (h == null || h.isEmpty ())
       throw new UnauthorizedException ("Missing required HTTP header for Authorization");
 
