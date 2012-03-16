@@ -16,6 +16,7 @@ Performed changes so far:
   * Improved logging in SMP startup to find keystore configuration errors more easily
   * Fixed error in transport-start-filereceiver SPI configuration file
   * Renamed all "DocumentIdentifier" APIs to "DocumentTypeIdentifier" as this is the correct terminus. The old methods got deprecated and will be removed in v2.3.0
+  * SMP: Deprecated CompleteServiceGroupInterface.deleteServiceGroup because it has the exact same semantics as ServiceGroupInterface.deleteServiceGroup
 
 = v2.2.0 (2012-02-09, initial release, all components) =
 
