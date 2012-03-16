@@ -70,11 +70,10 @@ import at.peppol.smp.server.util.RequestHelper;
 
 import com.sun.jersey.api.NotFoundException;
 
-
 /**
  * This class implements the REST interface for getting ServiceGroup's. PUT and
  * DELETE are also implemented.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Path ("/{ServiceGroupId}")
@@ -183,7 +182,6 @@ public final class ServiceGroupInterface {
     ParticipantIdentifierType aServiceGroupID = null;
     try {
       aServiceGroupID = SimpleParticipantIdentifier.createFromURIPart (sServiceGroupId);
-      s_aLogger.info ("Failed to parse participant identifier '" + sServiceGroupId + "'");
     }
     catch (final IllegalArgumentException ex) {
       // Invalid identifier
