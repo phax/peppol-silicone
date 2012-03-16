@@ -46,25 +46,25 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 /**
- * Test class for class {@link PredefinedDocumentIdentifierManager}.
+ * Test class for class {@link PredefinedDocumentTypeIdentifierManager}.
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public final class PredefinedDocumentIdentifierManagerTest {
+public final class PredefinedDocumentTypeIdentifierManagerTest {
   @Test
   public void testAll () {
-    assertNotNull (PredefinedDocumentIdentifierManager.getAllDocumentIdentifiers ());
+    assertNotNull (PredefinedDocumentTypeIdentifierManager.getAllDocumentTypeIdentifiers ());
 
-    assertNotNull (PredefinedDocumentIdentifierManager.getDocumentIdentifierOfID ("urn:oasis:names:specification:ubl:schema:xsd:Order-2::Order##urn:www.cenbii.eu:transaction:biicoretrdm001:ver1.0:#urn:www.peppol.eu:bis:peppol3a:ver1.0::2.0"));
-    assertNull (PredefinedDocumentIdentifierManager.getDocumentIdentifierOfID ("urn:oasis:names:specification:ubl:schema:xsd:Order-2::Order##urn:www.cenbii.eu:transaction:biicoretrdm001:ver1.0:#urn:www.peppol.eu:bis:peppol3a:ver1.0::2.0a"));
+    assertNotNull (PredefinedDocumentTypeIdentifierManager.getDocumentTypeIdentifierOfID ("urn:oasis:names:specification:ubl:schema:xsd:Order-2::Order##urn:www.cenbii.eu:transaction:biicoretrdm001:ver1.0:#urn:www.peppol.eu:bis:peppol3a:ver1.0::2.0"));
+    assertNull (PredefinedDocumentTypeIdentifierManager.getDocumentTypeIdentifierOfID ("urn:oasis:names:specification:ubl:schema:xsd:Order-2::Order##urn:www.cenbii.eu:transaction:biicoretrdm001:ver1.0:#urn:www.peppol.eu:bis:peppol3a:ver1.0::2.0a"));
 
-    assertTrue (PredefinedDocumentIdentifierManager.containsDocumentIdentifierWithID ("urn:oasis:names:specification:ubl:schema:xsd:Order-2::Order##urn:www.cenbii.eu:transaction:biicoretrdm001:ver1.0:#urn:www.peppol.eu:bis:peppol3a:ver1.0::2.0"));
-    assertFalse (PredefinedDocumentIdentifierManager.containsDocumentIdentifierWithID ("urn:oasis:names:specification:ubl:schema:xsd:Order-2::Order##urn:www.cenbii.eu:transaction:biicoretrdm001:ver1.0:#urn:www.peppol.eu:bis:peppol3a:ver1.0::2.0a"));
+    assertTrue (PredefinedDocumentTypeIdentifierManager.containsDocumentTypeIdentifierWithID ("urn:oasis:names:specification:ubl:schema:xsd:Order-2::Order##urn:www.cenbii.eu:transaction:biicoretrdm001:ver1.0:#urn:www.peppol.eu:bis:peppol3a:ver1.0::2.0"));
+    assertFalse (PredefinedDocumentTypeIdentifierManager.containsDocumentTypeIdentifierWithID ("urn:oasis:names:specification:ubl:schema:xsd:Order-2::Order##urn:www.cenbii.eu:transaction:biicoretrdm001:ver1.0:#urn:www.peppol.eu:bis:peppol3a:ver1.0::2.0a"));
 
     // all enum ones must be contained
     for (final EPredefinedDocumentTypeIdentifier eDocID : EPredefinedDocumentTypeIdentifier.values ()) {
-      assertSame (eDocID, PredefinedDocumentIdentifierManager.getDocumentIdentifierOfID (eDocID.getValue ()));
-      assertTrue (PredefinedDocumentIdentifierManager.containsDocumentIdentifierWithID (eDocID.getValue ()));
+      assertSame (eDocID, PredefinedDocumentTypeIdentifierManager.getDocumentTypeIdentifierOfID (eDocID.getValue ()));
+      assertTrue (PredefinedDocumentTypeIdentifierManager.containsDocumentTypeIdentifierWithID (eDocID.getValue ()));
     }
   }
 }

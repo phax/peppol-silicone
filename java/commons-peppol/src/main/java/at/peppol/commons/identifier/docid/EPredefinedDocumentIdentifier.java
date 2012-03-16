@@ -51,7 +51,7 @@ import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.version.Version;
 
 /**
- * This file is generated. Do NOT edit!
+ * This file is NOT maintained - do NOT use.
  * 
  * @deprecated Use {@link EPredefinedDocumentTypeIdentifier} instead
  */
@@ -377,6 +377,13 @@ public enum EPredefinedDocumentIdentifier implements IPredefinedDocumentIdentifi
   @Nonempty
   public String getCommonName () {
     return m_sCommonName;
+  }
+
+  @Nonnull
+  @Nonempty
+  @Deprecated
+  public String getAsDocumentIdentifierValue () {
+    return getAsDocumentTypeIdentifierValue ();
   }
 
   @Nonnull

@@ -38,10 +38,15 @@
 package at.peppol.commons.identifier.docid;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
+
+import at.peppol.commons.identifier.IdentifierUtils;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
@@ -57,13 +62,20 @@ import com.phloc.commons.annotations.ReturnsImmutableObject;
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable
-@Deprecated
-public final class PredefinedDocumentIdentifierManager {
+public final class PredefinedDocumentTypeIdentifierManager {
+  private static final Map <String, IPredefinedDocumentTypeIdentifier> s_aCodes = new HashMap <String, IPredefinedDocumentTypeIdentifier> ();
+
+  static {
+    // Add all predefined document identifier
+    for (final EPredefinedDocumentTypeIdentifier eDocID : EPredefinedDocumentTypeIdentifier.values ())
+      s_aCodes.put (eDocID.getValue (), eDocID);
+  }
+
   @PresentForCodeCoverage
   @SuppressWarnings ("unused")
-  private static final PredefinedDocumentIdentifierManager s_aInstance = new PredefinedDocumentIdentifierManager ();
+  private static final PredefinedDocumentTypeIdentifierManager s_aInstance = new PredefinedDocumentTypeIdentifierManager ();
 
-  private PredefinedDocumentIdentifierManager () {}
+  private PredefinedDocumentTypeIdentifierManager () {}
 
   /**
    * @return A non-modifiable list of all PEPPOL document identifiers.
@@ -71,34 +83,40 @@ public final class PredefinedDocumentIdentifierManager {
   @Nonnull
   @Nonempty
   @ReturnsImmutableObject
-  public static Collection <IPredefinedDocumentTypeIdentifier> getAllDocumentIdentifiers () {
-    return PredefinedDocumentTypeIdentifierManager.getAllDocumentTypeIdentifiers ();
+  public static Collection <IPredefinedDocumentTypeIdentifier> getAllDocumentTypeIdentifiers () {
+    return Collections.unmodifiableCollection (s_aCodes.values ());
   }
 
   /**
    * Find the document identifier with the given ID. This search is done case
    * insensitive.
    * 
-   * @param sDocIDValue
+   * @param sDocTypeIDValue
    *        The value to search. Without any identifier scheme! May be
    *        <code>null</code>.
    * @return <code>null</code> if no such document identifier exists.
    */
   @Nullable
-  public static IPredefinedDocumentTypeIdentifier getDocumentIdentifierOfID (@Nullable final String sDocIDValue) {
-    return PredefinedDocumentTypeIdentifierManager.getDocumentTypeIdentifierOfID (sDocIDValue);
+  public static IPredefinedDocumentTypeIdentifier getDocumentTypeIdentifierOfID (@Nullable final String sDocTypeIDValue) {
+    if (sDocTypeIDValue != null)
+      for (final Map.Entry <String, IPredefinedDocumentTypeIdentifier> aEntry : s_aCodes.entrySet ()) {
+        // Use case insensitive identifier value comparison
+        if (IdentifierUtils.areDocumentIdentifierValuesEqual (sDocTypeIDValue, aEntry.getKey ()))
+          return aEntry.getValue ();
+      }
+    return null;
   }
 
   /**
    * Check if a document identifier with the given ID exists.
    * 
-   * @param sDocIDValue
+   * @param sDocTypeIDValue
    *        The value to search. Without any identifier scheme! May be
    *        <code>null</code>.
    * @return <code>true</code> if such a document identifier exists,
    *         <code>false</code> otherwise.
    */
-  public static boolean containsDocumentIdentifierWithID (@Nullable final String sDocIDValue) {
-    return getDocumentIdentifierOfID (sDocIDValue) != null;
+  public static boolean containsDocumentTypeIdentifierWithID (@Nullable final String sDocTypeIDValue) {
+    return getDocumentTypeIdentifierOfID (sDocTypeIDValue) != null;
   }
 }

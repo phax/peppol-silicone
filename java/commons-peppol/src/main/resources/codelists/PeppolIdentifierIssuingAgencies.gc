@@ -602,27 +602,10 @@
     </Row>
     <Row>
       <Value ColumnRef="schemeid">
-        <SimpleValue>BY:VAT</SimpleValue>
-      </Value>
-      <Value ColumnRef="iso6523">
-        <SimpleValue>9927</SimpleValue>
-      </Value>
-      <Value ColumnRef="schemeagency">
-        <SimpleValue>Belarus VAT number</SimpleValue>
-      </Value>
-      <Value ColumnRef="deprecated">
-        <SimpleValue>false</SimpleValue>
-      </Value>
-      <Value ColumnRef="since">
-        <SimpleValue>1.1.0</SimpleValue>
-      </Value>
-    </Row>
-    <Row>
-      <Value ColumnRef="schemeid">
         <SimpleValue>CH:VAT</SimpleValue>
       </Value>
       <Value ColumnRef="iso6523">
-        <SimpleValue>9928</SimpleValue>
+        <SimpleValue>9927</SimpleValue>
       </Value>
       <Value ColumnRef="schemeagency">
         <SimpleValue>Switzerland VAT number</SimpleValue>
@@ -639,7 +622,7 @@
         <SimpleValue>CY:VAT</SimpleValue>
       </Value>
       <Value ColumnRef="iso6523">
-        <SimpleValue>9929</SimpleValue>
+        <SimpleValue>9928</SimpleValue>
       </Value>
       <Value ColumnRef="schemeagency">
         <SimpleValue>Cyprus VAT number</SimpleValue>
@@ -656,7 +639,7 @@
         <SimpleValue>CZ:VAT</SimpleValue>
       </Value>
       <Value ColumnRef="iso6523">
-        <SimpleValue>9930</SimpleValue>
+        <SimpleValue>9929</SimpleValue>
       </Value>
       <Value ColumnRef="schemeagency">
         <SimpleValue>Czech Republic VAT number</SimpleValue>
@@ -673,7 +656,7 @@
         <SimpleValue>DE:VAT</SimpleValue>
       </Value>
       <Value ColumnRef="iso6523">
-        <SimpleValue>9931</SimpleValue>
+        <SimpleValue>9930</SimpleValue>
       </Value>
       <Value ColumnRef="schemeagency">
         <SimpleValue>Germany VAT number</SimpleValue>
@@ -690,7 +673,7 @@
         <SimpleValue>EE:VAT</SimpleValue>
       </Value>
       <Value ColumnRef="iso6523">
-        <SimpleValue>9932</SimpleValue>
+        <SimpleValue>9931</SimpleValue>
       </Value>
       <Value ColumnRef="schemeagency">
         <SimpleValue>Estonia VAT number</SimpleValue>
@@ -707,7 +690,7 @@
         <SimpleValue>GB:VAT</SimpleValue>
       </Value>
       <Value ColumnRef="iso6523">
-        <SimpleValue>9933</SimpleValue>
+        <SimpleValue>9932</SimpleValue>
       </Value>
       <Value ColumnRef="schemeagency">
         <SimpleValue>United Kingdom VAT number</SimpleValue>
@@ -724,7 +707,7 @@
         <SimpleValue>GR:VAT</SimpleValue>
       </Value>
       <Value ColumnRef="iso6523">
-        <SimpleValue>9934</SimpleValue>
+        <SimpleValue>9933</SimpleValue>
       </Value>
       <Value ColumnRef="schemeagency">
         <SimpleValue>Greece VAT number</SimpleValue>
@@ -741,7 +724,7 @@
         <SimpleValue>HR:VAT</SimpleValue>
       </Value>
       <Value ColumnRef="iso6523">
-        <SimpleValue>9935</SimpleValue>
+        <SimpleValue>9934</SimpleValue>
       </Value>
       <Value ColumnRef="schemeagency">
         <SimpleValue>Croatia VAT number</SimpleValue>
@@ -758,7 +741,7 @@
         <SimpleValue>IE:VAT</SimpleValue>
       </Value>
       <Value ColumnRef="iso6523">
-        <SimpleValue>9936</SimpleValue>
+        <SimpleValue>9935</SimpleValue>
       </Value>
       <Value ColumnRef="schemeagency">
         <SimpleValue>Ireland VAT number</SimpleValue>
@@ -775,7 +758,7 @@
         <SimpleValue>LI:VAT</SimpleValue>
       </Value>
       <Value ColumnRef="iso6523">
-        <SimpleValue>9938</SimpleValue>
+        <SimpleValue>9936</SimpleValue>
       </Value>
       <Value ColumnRef="schemeagency">
         <SimpleValue>Liechtenstein VAT number</SimpleValue>
@@ -792,7 +775,7 @@
         <SimpleValue>LT:VAT</SimpleValue>
       </Value>
       <Value ColumnRef="iso6523">
-        <SimpleValue>9939</SimpleValue>
+        <SimpleValue>9937</SimpleValue>
       </Value>
       <Value ColumnRef="schemeagency">
         <SimpleValue>Lithuania VAT number</SimpleValue>
@@ -809,7 +792,7 @@
         <SimpleValue>LU:VAT</SimpleValue>
       </Value>
       <Value ColumnRef="iso6523">
-        <SimpleValue>9940</SimpleValue>
+        <SimpleValue>9938</SimpleValue>
       </Value>
       <Value ColumnRef="schemeagency">
         <SimpleValue>Luxemburg VAT number</SimpleValue>
@@ -826,7 +809,7 @@
         <SimpleValue>LV:VAT</SimpleValue>
       </Value>
       <Value ColumnRef="iso6523">
-        <SimpleValue>9941</SimpleValue>
+        <SimpleValue>9939</SimpleValue>
       </Value>
       <Value ColumnRef="schemeagency">
         <SimpleValue>Latvia VAT number</SimpleValue>
@@ -843,7 +826,7 @@
         <SimpleValue>MC:VAT</SimpleValue>
       </Value>
       <Value ColumnRef="iso6523">
-        <SimpleValue>9942</SimpleValue>
+        <SimpleValue>9940</SimpleValue>
       </Value>
       <Value ColumnRef="schemeagency">
         <SimpleValue>Monaco VAT number</SimpleValue>
@@ -857,27 +840,10 @@
     </Row>
     <Row>
       <Value ColumnRef="schemeid">
-        <SimpleValue>MD:VAT</SimpleValue>
-      </Value>
-      <Value ColumnRef="iso6523">
-        <SimpleValue>9943</SimpleValue>
-      </Value>
-      <Value ColumnRef="schemeagency">
-        <SimpleValue>Moldova, Republic of VAT number</SimpleValue>
-      </Value>
-      <Value ColumnRef="deprecated">
-        <SimpleValue>false</SimpleValue>
-      </Value>
-      <Value ColumnRef="since">
-        <SimpleValue>1.1.0</SimpleValue>
-      </Value>
-    </Row>
-    <Row>
-      <Value ColumnRef="schemeid">
         <SimpleValue>ME:VAT</SimpleValue>
       </Value>
       <Value ColumnRef="iso6523">
-        <SimpleValue>9944</SimpleValue>
+        <SimpleValue>9941</SimpleValue>
       </Value>
       <Value ColumnRef="schemeagency">
         <SimpleValue>Montenegro VAT number</SimpleValue>
@@ -894,7 +860,7 @@
         <SimpleValue>MK:VAT</SimpleValue>
       </Value>
       <Value ColumnRef="iso6523">
-        <SimpleValue>9945</SimpleValue>
+        <SimpleValue>9942</SimpleValue>
       </Value>
       <Value ColumnRef="schemeagency">
         <SimpleValue>Macedonia, the former Yugoslav Republic of VAT number</SimpleValue>
@@ -911,7 +877,7 @@
         <SimpleValue>MT:VAT</SimpleValue>
       </Value>
       <Value ColumnRef="iso6523">
-        <SimpleValue>9946</SimpleValue>
+        <SimpleValue>9943</SimpleValue>
       </Value>
       <Value ColumnRef="schemeagency">
         <SimpleValue>Malta VAT number</SimpleValue>
@@ -928,7 +894,7 @@
         <SimpleValue>NL:VAT</SimpleValue>
       </Value>
       <Value ColumnRef="iso6523">
-        <SimpleValue>9947</SimpleValue>
+        <SimpleValue>9944</SimpleValue>
       </Value>
       <Value ColumnRef="schemeagency">
         <SimpleValue>Netherlands VAT number</SimpleValue>
@@ -945,7 +911,7 @@
         <SimpleValue>PL:VAT</SimpleValue>
       </Value>
       <Value ColumnRef="iso6523">
-        <SimpleValue>9948</SimpleValue>
+        <SimpleValue>9945</SimpleValue>
       </Value>
       <Value ColumnRef="schemeagency">
         <SimpleValue>Poland VAT number</SimpleValue>
@@ -962,7 +928,7 @@
         <SimpleValue>PT:VAT</SimpleValue>
       </Value>
       <Value ColumnRef="iso6523">
-        <SimpleValue>9949</SimpleValue>
+        <SimpleValue>9946</SimpleValue>
       </Value>
       <Value ColumnRef="schemeagency">
         <SimpleValue>Portugal VAT number</SimpleValue>
@@ -979,7 +945,7 @@
         <SimpleValue>RO:VAT</SimpleValue>
       </Value>
       <Value ColumnRef="iso6523">
-        <SimpleValue>9950</SimpleValue>
+        <SimpleValue>9947</SimpleValue>
       </Value>
       <Value ColumnRef="schemeagency">
         <SimpleValue>Romania VAT number</SimpleValue>
@@ -996,7 +962,7 @@
         <SimpleValue>RS:VAT</SimpleValue>
       </Value>
       <Value ColumnRef="iso6523">
-        <SimpleValue>9951</SimpleValue>
+        <SimpleValue>9948</SimpleValue>
       </Value>
       <Value ColumnRef="schemeagency">
         <SimpleValue>Serbia VAT number</SimpleValue>
@@ -1010,27 +976,10 @@
     </Row>
     <Row>
       <Value ColumnRef="schemeid">
-        <SimpleValue>RU:VAT</SimpleValue>
-      </Value>
-      <Value ColumnRef="iso6523">
-        <SimpleValue>9952</SimpleValue>
-      </Value>
-      <Value ColumnRef="schemeagency">
-        <SimpleValue>Russian Federation VAT number</SimpleValue>
-      </Value>
-      <Value ColumnRef="deprecated">
-        <SimpleValue>false</SimpleValue>
-      </Value>
-      <Value ColumnRef="since">
-        <SimpleValue>1.1.0</SimpleValue>
-      </Value>
-    </Row>
-    <Row>
-      <Value ColumnRef="schemeid">
         <SimpleValue>SI:VAT</SimpleValue>
       </Value>
       <Value ColumnRef="iso6523">
-        <SimpleValue>9953</SimpleValue>
+        <SimpleValue>9949</SimpleValue>
       </Value>
       <Value ColumnRef="schemeagency">
         <SimpleValue>Slovenia VAT number</SimpleValue>
@@ -1047,7 +996,7 @@
         <SimpleValue>SK:VAT</SimpleValue>
       </Value>
       <Value ColumnRef="iso6523">
-        <SimpleValue>9954</SimpleValue>
+        <SimpleValue>9950</SimpleValue>
       </Value>
       <Value ColumnRef="schemeagency">
         <SimpleValue>Slovakia VAT number</SimpleValue>
@@ -1064,7 +1013,7 @@
         <SimpleValue>SM:VAT</SimpleValue>
       </Value>
       <Value ColumnRef="iso6523">
-        <SimpleValue>9955</SimpleValue>
+        <SimpleValue>9951</SimpleValue>
       </Value>
       <Value ColumnRef="schemeagency">
         <SimpleValue>San Marino VAT number</SimpleValue>
@@ -1081,7 +1030,7 @@
         <SimpleValue>TR:VAT</SimpleValue>
       </Value>
       <Value ColumnRef="iso6523">
-        <SimpleValue>9956</SimpleValue>
+        <SimpleValue>9952</SimpleValue>
       </Value>
       <Value ColumnRef="schemeagency">
         <SimpleValue>Turkey VAT number</SimpleValue>
@@ -1095,64 +1044,13 @@
     </Row>
     <Row>
       <Value ColumnRef="schemeid">
-        <SimpleValue>UA:VAT</SimpleValue>
-      </Value>
-      <Value ColumnRef="iso6523">
-        <SimpleValue>9957</SimpleValue>
-      </Value>
-      <Value ColumnRef="schemeagency">
-        <SimpleValue>Ukraine VAT number</SimpleValue>
-      </Value>
-      <Value ColumnRef="deprecated">
-        <SimpleValue>false</SimpleValue>
-      </Value>
-      <Value ColumnRef="since">
-        <SimpleValue>1.1.0</SimpleValue>
-      </Value>
-    </Row>
-    <Row>
-      <Value ColumnRef="schemeid">
         <SimpleValue>VA:VAT</SimpleValue>
       </Value>
       <Value ColumnRef="iso6523">
-        <SimpleValue>9958</SimpleValue>
+        <SimpleValue>9953</SimpleValue>
       </Value>
       <Value ColumnRef="schemeagency">
         <SimpleValue>Holy See (Vatican City State) VAT number</SimpleValue>
-      </Value>
-      <Value ColumnRef="deprecated">
-        <SimpleValue>false</SimpleValue>
-      </Value>
-      <Value ColumnRef="since">
-        <SimpleValue>1.1.0</SimpleValue>
-      </Value>
-    </Row>
-    <Row>
-      <Value ColumnRef="schemeid">
-        <SimpleValue>AM:VAT</SimpleValue>
-      </Value>
-      <Value ColumnRef="iso6523">
-        <SimpleValue>9959</SimpleValue>
-      </Value>
-      <Value ColumnRef="schemeagency">
-        <SimpleValue>Armenia VAT number</SimpleValue>
-      </Value>
-      <Value ColumnRef="deprecated">
-        <SimpleValue>false</SimpleValue>
-      </Value>
-      <Value ColumnRef="since">
-        <SimpleValue>1.1.0</SimpleValue>
-      </Value>
-    </Row>
-    <Row>
-      <Value ColumnRef="schemeid">
-        <SimpleValue>AZ:VAT</SimpleValue>
-      </Value>
-      <Value ColumnRef="iso6523">
-        <SimpleValue>9960</SimpleValue>
-      </Value>
-      <Value ColumnRef="schemeagency">
-        <SimpleValue>Azerbaijan VAT number</SimpleValue>
       </Value>
       <Value ColumnRef="deprecated">
         <SimpleValue>false</SimpleValue>

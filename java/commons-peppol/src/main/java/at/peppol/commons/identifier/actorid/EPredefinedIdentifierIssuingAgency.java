@@ -219,199 +219,163 @@ public enum EPredefinedIdentifierIssuingAgency
      * @since code list 1.1.0
      * 
      */
-    BY_VAT("BY:VAT", "Belarus VAT number", "9927", false, new Version("1.1.0")),
+    CH_VAT("CH:VAT", "Switzerland VAT number", "9927", false, new Version("1.1.0")),
 
     /**
      * @since code list 1.1.0
      * 
      */
-    CH_VAT("CH:VAT", "Switzerland VAT number", "9928", false, new Version("1.1.0")),
+    CY_VAT("CY:VAT", "Cyprus VAT number", "9928", false, new Version("1.1.0")),
 
     /**
      * @since code list 1.1.0
      * 
      */
-    CY_VAT("CY:VAT", "Cyprus VAT number", "9929", false, new Version("1.1.0")),
+    CZ_VAT("CZ:VAT", "Czech Republic VAT number", "9929", false, new Version("1.1.0")),
 
     /**
      * @since code list 1.1.0
      * 
      */
-    CZ_VAT("CZ:VAT", "Czech Republic VAT number", "9930", false, new Version("1.1.0")),
+    DE_VAT("DE:VAT", "Germany VAT number", "9930", false, new Version("1.1.0")),
 
     /**
      * @since code list 1.1.0
      * 
      */
-    DE_VAT("DE:VAT", "Germany VAT number", "9931", false, new Version("1.1.0")),
+    EE_VAT("EE:VAT", "Estonia VAT number", "9931", false, new Version("1.1.0")),
 
     /**
      * @since code list 1.1.0
      * 
      */
-    EE_VAT("EE:VAT", "Estonia VAT number", "9932", false, new Version("1.1.0")),
+    GB_VAT("GB:VAT", "United Kingdom VAT number", "9932", false, new Version("1.1.0")),
 
     /**
      * @since code list 1.1.0
      * 
      */
-    GB_VAT("GB:VAT", "United Kingdom VAT number", "9933", false, new Version("1.1.0")),
+    GR_VAT("GR:VAT", "Greece VAT number", "9933", false, new Version("1.1.0")),
 
     /**
      * @since code list 1.1.0
      * 
      */
-    GR_VAT("GR:VAT", "Greece VAT number", "9934", false, new Version("1.1.0")),
+    HR_VAT("HR:VAT", "Croatia VAT number", "9934", false, new Version("1.1.0")),
 
     /**
      * @since code list 1.1.0
      * 
      */
-    HR_VAT("HR:VAT", "Croatia VAT number", "9935", false, new Version("1.1.0")),
+    IE_VAT("IE:VAT", "Ireland VAT number", "9935", false, new Version("1.1.0")),
 
     /**
      * @since code list 1.1.0
      * 
      */
-    IE_VAT("IE:VAT", "Ireland VAT number", "9936", false, new Version("1.1.0")),
+    LI_VAT("LI:VAT", "Liechtenstein VAT number", "9936", false, new Version("1.1.0")),
 
     /**
      * @since code list 1.1.0
      * 
      */
-    LI_VAT("LI:VAT", "Liechtenstein VAT number", "9938", false, new Version("1.1.0")),
+    LT_VAT("LT:VAT", "Lithuania VAT number", "9937", false, new Version("1.1.0")),
 
     /**
      * @since code list 1.1.0
      * 
      */
-    LT_VAT("LT:VAT", "Lithuania VAT number", "9939", false, new Version("1.1.0")),
+    LU_VAT("LU:VAT", "Luxemburg VAT number", "9938", false, new Version("1.1.0")),
 
     /**
      * @since code list 1.1.0
      * 
      */
-    LU_VAT("LU:VAT", "Luxemburg VAT number", "9940", false, new Version("1.1.0")),
+    LV_VAT("LV:VAT", "Latvia VAT number", "9939", false, new Version("1.1.0")),
 
     /**
      * @since code list 1.1.0
      * 
      */
-    LV_VAT("LV:VAT", "Latvia VAT number", "9941", false, new Version("1.1.0")),
+    MC_VAT("MC:VAT", "Monaco VAT number", "9940", false, new Version("1.1.0")),
 
     /**
      * @since code list 1.1.0
      * 
      */
-    MC_VAT("MC:VAT", "Monaco VAT number", "9942", false, new Version("1.1.0")),
+    ME_VAT("ME:VAT", "Montenegro VAT number", "9941", false, new Version("1.1.0")),
 
     /**
      * @since code list 1.1.0
      * 
      */
-    MD_VAT("MD:VAT", "Moldova, Republic of VAT number", "9943", false, new Version("1.1.0")),
+    MK_VAT("MK:VAT", "Macedonia, the former Yugoslav Republic of VAT number", "9942", false, new Version("1.1.0")),
 
     /**
      * @since code list 1.1.0
      * 
      */
-    ME_VAT("ME:VAT", "Montenegro VAT number", "9944", false, new Version("1.1.0")),
+    MT_VAT("MT:VAT", "Malta VAT number", "9943", false, new Version("1.1.0")),
 
     /**
      * @since code list 1.1.0
      * 
      */
-    MK_VAT("MK:VAT", "Macedonia, the former Yugoslav Republic of VAT number", "9945", false, new Version("1.1.0")),
+    NL_VAT("NL:VAT", "Netherlands VAT number", "9944", false, new Version("1.1.0")),
 
     /**
      * @since code list 1.1.0
      * 
      */
-    MT_VAT("MT:VAT", "Malta VAT number", "9946", false, new Version("1.1.0")),
+    PL_VAT("PL:VAT", "Poland VAT number", "9945", false, new Version("1.1.0")),
 
     /**
      * @since code list 1.1.0
      * 
      */
-    NL_VAT("NL:VAT", "Netherlands VAT number", "9947", false, new Version("1.1.0")),
+    PT_VAT("PT:VAT", "Portugal VAT number", "9946", false, new Version("1.1.0")),
 
     /**
      * @since code list 1.1.0
      * 
      */
-    PL_VAT("PL:VAT", "Poland VAT number", "9948", false, new Version("1.1.0")),
+    RO_VAT("RO:VAT", "Romania VAT number", "9947", false, new Version("1.1.0")),
 
     /**
      * @since code list 1.1.0
      * 
      */
-    PT_VAT("PT:VAT", "Portugal VAT number", "9949", false, new Version("1.1.0")),
+    RS_VAT("RS:VAT", "Serbia VAT number", "9948", false, new Version("1.1.0")),
 
     /**
      * @since code list 1.1.0
      * 
      */
-    RO_VAT("RO:VAT", "Romania VAT number", "9950", false, new Version("1.1.0")),
+    SI_VAT("SI:VAT", "Slovenia VAT number", "9949", false, new Version("1.1.0")),
 
     /**
      * @since code list 1.1.0
      * 
      */
-    RS_VAT("RS:VAT", "Serbia VAT number", "9951", false, new Version("1.1.0")),
+    SK_VAT("SK:VAT", "Slovakia VAT number", "9950", false, new Version("1.1.0")),
 
     /**
      * @since code list 1.1.0
      * 
      */
-    RU_VAT("RU:VAT", "Russian Federation VAT number", "9952", false, new Version("1.1.0")),
+    SM_VAT("SM:VAT", "San Marino VAT number", "9951", false, new Version("1.1.0")),
 
     /**
      * @since code list 1.1.0
      * 
      */
-    SI_VAT("SI:VAT", "Slovenia VAT number", "9953", false, new Version("1.1.0")),
+    TR_VAT("TR:VAT", "Turkey VAT number", "9952", false, new Version("1.1.0")),
 
     /**
      * @since code list 1.1.0
      * 
      */
-    SK_VAT("SK:VAT", "Slovakia VAT number", "9954", false, new Version("1.1.0")),
-
-    /**
-     * @since code list 1.1.0
-     * 
-     */
-    SM_VAT("SM:VAT", "San Marino VAT number", "9955", false, new Version("1.1.0")),
-
-    /**
-     * @since code list 1.1.0
-     * 
-     */
-    TR_VAT("TR:VAT", "Turkey VAT number", "9956", false, new Version("1.1.0")),
-
-    /**
-     * @since code list 1.1.0
-     * 
-     */
-    UA_VAT("UA:VAT", "Ukraine VAT number", "9957", false, new Version("1.1.0")),
-
-    /**
-     * @since code list 1.1.0
-     * 
-     */
-    VA_VAT("VA:VAT", "Holy See (Vatican City State) VAT number", "9958", false, new Version("1.1.0")),
-
-    /**
-     * @since code list 1.1.0
-     * 
-     */
-    AM_VAT("AM:VAT", "Armenia VAT number", "9959", false, new Version("1.1.0")),
-
-    /**
-     * @since code list 1.1.0
-     * 
-     */
-    AZ_VAT("AZ:VAT", "Azerbaijan VAT number", "9960", false, new Version("1.1.0"));
+    VA_VAT("VA:VAT", "Holy See (Vatican City State) VAT number", "9953", false, new Version("1.1.0"));
     private final String m_sSchemeID;
     private final String m_sSchemeAgency;
     private final String m_sISO6523;
