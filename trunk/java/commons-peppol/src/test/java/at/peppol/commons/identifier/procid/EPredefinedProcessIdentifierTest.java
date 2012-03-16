@@ -46,14 +46,12 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import at.peppol.commons.identifier.CIdentifier;
-import at.peppol.commons.identifier.procid.EPredefinedProcessIdentifier;
 
 import com.phloc.commons.string.StringHelper;
 
-
 /**
  * Test class for class {@link EPredefinedProcessIdentifier}.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class EPredefinedProcessIdentifierTest {
@@ -63,8 +61,8 @@ public final class EPredefinedProcessIdentifierTest {
       assertEquals (CIdentifier.DEFAULT_PROCESS_IDENTIFIER_SCHEME, e.getScheme ());
       assertTrue (StringHelper.hasText (e.getValue ()));
       assertTrue (StringHelper.hasText (e.getBISID ()));
-      assertNotNull (e.getDocumentIdentifiers ());
-      assertFalse (e.getDocumentIdentifiers ().isEmpty ());
+      assertNotNull (e.getDocumentTypeIdentifiers ());
+      assertFalse (e.getDocumentTypeIdentifiers ().isEmpty ());
       assertSame (e, EPredefinedProcessIdentifier.valueOf (e.name ()));
     }
   }

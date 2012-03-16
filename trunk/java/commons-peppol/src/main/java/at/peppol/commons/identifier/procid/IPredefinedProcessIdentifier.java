@@ -41,14 +41,12 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-
 import at.peppol.busdox.identifier.IReadonlyProcessIdentifier;
-import at.peppol.commons.identifier.docid.IPredefinedDocumentIdentifier;
-
+import at.peppol.commons.identifier.docid.IPredefinedDocumentTypeIdentifier;
 
 /**
  * Base interface for predefined process identifiers.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public interface IPredefinedProcessIdentifier extends IReadonlyProcessIdentifier {
@@ -62,5 +60,12 @@ public interface IPredefinedProcessIdentifier extends IReadonlyProcessIdentifier
    * @return A list of all document identifiers that are valid in this scenario
    */
   @Nonnull
-  List <? extends IPredefinedDocumentIdentifier> getDocumentIdentifiers ();
+  @Deprecated
+  List <? extends IPredefinedDocumentTypeIdentifier> getDocumentIdentifiers ();
+
+  /**
+   * @return A list of all document identifiers that are valid in this scenario
+   */
+  @Nonnull
+  List <? extends IPredefinedDocumentTypeIdentifier> getDocumentTypeIdentifiers ();
 }

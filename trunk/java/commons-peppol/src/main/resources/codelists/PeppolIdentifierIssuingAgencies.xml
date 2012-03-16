@@ -34,37 +34,31 @@
   <issuingAgency schemeid="BA:VAT" agencyname="Bosnia and Herzegovina VAT number" iso6523="9924" since="1.1.0" />
   <issuingAgency schemeid="BE:VAT" agencyname="Belgium VAT number" iso6523="9925" since="1.1.0" />
   <issuingAgency schemeid="BG:VAT" agencyname="Bulgaria VAT number" iso6523="9926" since="1.1.0" />
-  <issuingAgency schemeid="BY:VAT" agencyname="Belarus VAT number" iso6523="9927" since="1.1.0" />
-  <issuingAgency schemeid="CH:VAT" agencyname="Switzerland VAT number" iso6523="9928" since="1.1.0" />
-  <issuingAgency schemeid="CY:VAT" agencyname="Cyprus VAT number" iso6523="9929" since="1.1.0" />
-  <issuingAgency schemeid="CZ:VAT" agencyname="Czech Republic VAT number" iso6523="9930" since="1.1.0" />
-  <issuingAgency schemeid="DE:VAT" agencyname="Germany VAT number" iso6523="9931" since="1.1.0" />
-  <issuingAgency schemeid="EE:VAT" agencyname="Estonia VAT number" iso6523="9932" since="1.1.0" />
-  <issuingAgency schemeid="GB:VAT" agencyname="United Kingdom VAT number" iso6523="9933" since="1.1.0" />
-  <issuingAgency schemeid="GR:VAT" agencyname="Greece VAT number" iso6523="9934" since="1.1.0" />
-  <issuingAgency schemeid="HR:VAT" agencyname="Croatia VAT number" iso6523="9935" since="1.1.0" />
-  <issuingAgency schemeid="IE:VAT" agencyname="Ireland VAT number" iso6523="9936" since="1.1.0" />
-  <issuingAgency schemeid="LI:VAT" agencyname="Liechtenstein VAT number" iso6523="9938" since="1.1.0" />
-  <issuingAgency schemeid="LT:VAT" agencyname="Lithuania VAT number" iso6523="9939" since="1.1.0" />
-  <issuingAgency schemeid="LU:VAT" agencyname="Luxemburg VAT number" iso6523="9940" since="1.1.0" />
-  <issuingAgency schemeid="LV:VAT" agencyname="Latvia VAT number" iso6523="9941" since="1.1.0" />
-  <issuingAgency schemeid="MC:VAT" agencyname="Monaco VAT number" iso6523="9942" since="1.1.0" />
-  <issuingAgency schemeid="MD:VAT" agencyname="Moldova, Republic of VAT number" iso6523="9943" since="1.1.0" />
-  <issuingAgency schemeid="ME:VAT" agencyname="Montenegro VAT number" iso6523="9944" since="1.1.0" />
-  <issuingAgency schemeid="MK:VAT" agencyname="Macedonia, the former Yugoslav Republic of VAT number" iso6523="9945" since="1.1.0" />
-  <issuingAgency schemeid="MT:VAT" agencyname="Malta VAT number" iso6523="9946" since="1.1.0" />
-  <issuingAgency schemeid="NL:VAT" agencyname="Netherlands VAT number" iso6523="9947" since="1.1.0" />
-  <issuingAgency schemeid="PL:VAT" agencyname="Poland VAT number" iso6523="9948" since="1.1.0" />
-  <issuingAgency schemeid="PT:VAT" agencyname="Portugal VAT number" iso6523="9949" since="1.1.0" />
-  <issuingAgency schemeid="RO:VAT" agencyname="Romania VAT number" iso6523="9950" since="1.1.0" />
-  <issuingAgency schemeid="RS:VAT" agencyname="Serbia VAT number" iso6523="9951" since="1.1.0" />
-  <issuingAgency schemeid="RU:VAT" agencyname="Russian Federation VAT number" iso6523="9952" since="1.1.0" />
-  <issuingAgency schemeid="SI:VAT" agencyname="Slovenia VAT number" iso6523="9953" since="1.1.0" />
-  <issuingAgency schemeid="SK:VAT" agencyname="Slovakia VAT number" iso6523="9954" since="1.1.0" />
-  <issuingAgency schemeid="SM:VAT" agencyname="San Marino VAT number" iso6523="9955" since="1.1.0" />
-  <issuingAgency schemeid="TR:VAT" agencyname="Turkey VAT number" iso6523="9956" since="1.1.0" />
-  <issuingAgency schemeid="UA:VAT" agencyname="Ukraine VAT number" iso6523="9957" since="1.1.0" />
-  <issuingAgency schemeid="VA:VAT" agencyname="Holy See (Vatican City State) VAT number" iso6523="9958" since="1.1.0" />
-  <issuingAgency schemeid="AM:VAT" agencyname="Armenia VAT number" iso6523="9959" since="1.1.0" />
-  <issuingAgency schemeid="AZ:VAT" agencyname="Azerbaijan VAT number" iso6523="9960" since="1.1.0" />
+  <issuingAgency schemeid="CH:VAT" agencyname="Switzerland VAT number" iso6523="9927" since="1.1.0" />
+  <issuingAgency schemeid="CY:VAT" agencyname="Cyprus VAT number" iso6523="9928" since="1.1.0" />
+  <issuingAgency schemeid="CZ:VAT" agencyname="Czech Republic VAT number" iso6523="9929" since="1.1.0" />
+  <issuingAgency schemeid="DE:VAT" agencyname="Germany VAT number" iso6523="9930" since="1.1.0" />
+  <issuingAgency schemeid="EE:VAT" agencyname="Estonia VAT number" iso6523="9931" since="1.1.0" />
+  <issuingAgency schemeid="GB:VAT" agencyname="United Kingdom VAT number" iso6523="9932" since="1.1.0" />
+  <issuingAgency schemeid="GR:VAT" agencyname="Greece VAT number" iso6523="9933" since="1.1.0" />
+  <issuingAgency schemeid="HR:VAT" agencyname="Croatia VAT number" iso6523="9934" since="1.1.0" />
+  <issuingAgency schemeid="IE:VAT" agencyname="Ireland VAT number" iso6523="9935" since="1.1.0" />
+  <issuingAgency schemeid="LI:VAT" agencyname="Liechtenstein VAT number" iso6523="9936" since="1.1.0" />
+  <issuingAgency schemeid="LT:VAT" agencyname="Lithuania VAT number" iso6523="9937" since="1.1.0" />
+  <issuingAgency schemeid="LU:VAT" agencyname="Luxemburg VAT number" iso6523="9938" since="1.1.0" />
+  <issuingAgency schemeid="LV:VAT" agencyname="Latvia VAT number" iso6523="9939" since="1.1.0" />
+  <issuingAgency schemeid="MC:VAT" agencyname="Monaco VAT number" iso6523="9940" since="1.1.0" />
+  <issuingAgency schemeid="ME:VAT" agencyname="Montenegro VAT number" iso6523="9941" since="1.1.0" />
+  <issuingAgency schemeid="MK:VAT" agencyname="Macedonia, the former Yugoslav Republic of VAT number" iso6523="9942" since="1.1.0" />
+  <issuingAgency schemeid="MT:VAT" agencyname="Malta VAT number" iso6523="9943" since="1.1.0" />
+  <issuingAgency schemeid="NL:VAT" agencyname="Netherlands VAT number" iso6523="9944" since="1.1.0" />
+  <issuingAgency schemeid="PL:VAT" agencyname="Poland VAT number" iso6523="9945" since="1.1.0" />
+  <issuingAgency schemeid="PT:VAT" agencyname="Portugal VAT number" iso6523="9946" since="1.1.0" />
+  <issuingAgency schemeid="RO:VAT" agencyname="Romania VAT number" iso6523="9947" since="1.1.0" />
+  <issuingAgency schemeid="RS:VAT" agencyname="Serbia VAT number" iso6523="9948" since="1.1.0" />
+  <issuingAgency schemeid="SI:VAT" agencyname="Slovenia VAT number" iso6523="9949" since="1.1.0" />
+  <issuingAgency schemeid="SK:VAT" agencyname="Slovakia VAT number" iso6523="9950" since="1.1.0" />
+  <issuingAgency schemeid="SM:VAT" agencyname="San Marino VAT number" iso6523="9951" since="1.1.0" />
+  <issuingAgency schemeid="TR:VAT" agencyname="Turkey VAT number" iso6523="9952" since="1.1.0" />
+  <issuingAgency schemeid="VA:VAT" agencyname="Holy See (Vatican City State) VAT number" iso6523="9953" since="1.1.0" />
 </root>

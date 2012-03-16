@@ -44,12 +44,9 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import at.peppol.commons.identifier.procid.IPredefinedProcessIdentifier;
-import at.peppol.commons.identifier.procid.PredefinedProcessIdentifierManager;
-
 /**
  * Test class for class {@link PredefinedProcessIdentifierManager}.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class PredefinedProcessIdentifierManagerTest {
@@ -58,7 +55,7 @@ public final class PredefinedProcessIdentifierManagerTest {
     assertNotNull (PredefinedProcessIdentifierManager.getAllProcessIdentifiers ());
     final IPredefinedProcessIdentifier aPPI = PredefinedProcessIdentifierManager.getProcessIdentifierOfID ("urn:www.cenbii.eu:profile:bii01:ver1.0");
     assertNotNull (aPPI);
-    assertFalse (aPPI.getDocumentIdentifiers ().isEmpty ());
+    assertFalse (aPPI.getDocumentTypeIdentifiers ().isEmpty ());
     assertNull (PredefinedProcessIdentifierManager.getProcessIdentifierOfID ("urn:www.cenbii.eu:profile:bii01:ver1.0a"));
     assertTrue (PredefinedProcessIdentifierManager.containsProcessIdentifierWithID ("urn:www.cenbii.eu:profile:bii01:ver1.0"));
     assertFalse (PredefinedProcessIdentifierManager.containsProcessIdentifierWithID ("urn:www.cenbii.eu:profile:bii01:ver1.0a"));

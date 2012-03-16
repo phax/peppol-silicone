@@ -37,15 +37,20 @@
  */
 package at.peppol.commons.identifier.docid;
 
+import javax.annotation.Nullable;
+
+import at.peppol.busdox.identifier.IReadonlyDocumentTypeIdentifier;
+
 /**
  * Base interface for predefined document identifiers.
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
- * @deprecated Use {@link IPredefinedDocumentTypeIdentifier} instead
  */
-@Deprecated
-public interface IPredefinedDocumentIdentifier extends
-                                              IPredefinedDocumentTypeIdentifier,
-                                              IPEPPOLDocumentIdentifierParts {
-  /* empty */
+public interface IPredefinedDocumentTypeIdentifier extends IReadonlyDocumentTypeIdentifier, IPEPPOLDocumentTypeIdentifierParts {
+  /**
+   * @return The common name under which a document is known. This is e.g.
+   *         "Order" or "Invoice".
+   */
+  @Nullable
+  String getCommonName ();
 }

@@ -66,9 +66,9 @@ import at.peppol.commons.identifier.SimpleDocumentTypeIdentifier;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 import at.peppol.commons.identifier.SimpleProcessIdentifier;
 import at.peppol.commons.identifier.actorid.IIdentifierIssuingAgency;
-import at.peppol.commons.identifier.docid.IPEPPOLDocumentIdentifierParts;
-import at.peppol.commons.identifier.docid.IPredefinedDocumentIdentifier;
-import at.peppol.commons.identifier.docid.PEPPOLDocumentIdentifierParts;
+import at.peppol.commons.identifier.docid.IPEPPOLDocumentTypeIdentifierParts;
+import at.peppol.commons.identifier.docid.IPredefinedDocumentTypeIdentifier;
+import at.peppol.commons.identifier.docid.PEPPOLDocumentTypeIdentifierParts;
 import at.peppol.commons.identifier.procid.IPredefinedProcessIdentifier;
 
 import com.phloc.commons.annotations.Nonempty;
@@ -327,7 +327,7 @@ public final class MainCreateCodelistsFilesFromExcel {
     try {
       s_jEnumPredefinedDoc = s_aCodeModel._package ("at.peppol.commons.identifier.docid")
                                          ._enum ("EPredefinedDocumentTypeIdentifier")
-                                         ._implements (IPredefinedDocumentIdentifier.class);
+                                         ._implements (IPredefinedDocumentTypeIdentifier.class);
       s_jEnumPredefinedDoc.javadoc ().add ("This file is generated. Do NOT edit!");
 
       final Set <String> aAllShortcutNames = new HashSet <String> ();
@@ -339,7 +339,7 @@ public final class MainCreateCodelistsFilesFromExcel {
         final String sSince = GenericodeUtils.getRowValue (aRow, "since");
 
         // Split ID in it's pieces
-        final IPEPPOLDocumentIdentifierParts aDocIDParts = PEPPOLDocumentIdentifierParts.extractFromString (sDocID);
+        final IPEPPOLDocumentTypeIdentifierParts aDocIDParts = PEPPOLDocumentTypeIdentifierParts.extractFromString (sDocID);
 
         // Assemble extensions
         final JInvocation jExtensions = s_aCodeModel.ref (ContainerHelper.class).staticInvoke ("newList");
@@ -347,7 +347,7 @@ public final class MainCreateCodelistsFilesFromExcel {
           jExtensions.arg (JExpr.lit (sExtensionID));
 
         final JEnumConstant jEnumConst = s_jEnumPredefinedDoc.enumConstant (RegExHelper.makeIdentifier (sDocID));
-        jEnumConst.arg (JExpr._new (s_aCodeModel.ref (PEPPOLDocumentIdentifierParts.class))
+        jEnumConst.arg (JExpr._new (s_aCodeModel.ref (PEPPOLDocumentTypeIdentifierParts.class))
                              .arg (JExpr.lit (aDocIDParts.getRootNS ()))
                              .arg (JExpr.lit (aDocIDParts.getLocalName ()))
                              .arg (JExpr.lit (aDocIDParts.getTransactionID ()))
@@ -372,7 +372,7 @@ public final class MainCreateCodelistsFilesFromExcel {
 
       // fields
       final JFieldVar fParts = s_jEnumPredefinedDoc.field (JMod.PRIVATE | JMod.FINAL,
-                                                           IPEPPOLDocumentIdentifierParts.class,
+                                                           IPEPPOLDocumentTypeIdentifierParts.class,
                                                            "m_aParts");
       final JFieldVar fID = s_jEnumPredefinedDoc.field (JMod.PRIVATE | JMod.FINAL, String.class, "m_sID");
       final JFieldVar fCommonName = s_jEnumPredefinedDoc.field (JMod.PRIVATE | JMod.FINAL,
@@ -382,7 +382,7 @@ public final class MainCreateCodelistsFilesFromExcel {
 
       // Constructor
       final JMethod jCtor = s_jEnumPredefinedDoc.constructor (JMod.PRIVATE);
-      final JVar jParts = jCtor.param (JMod.FINAL, IPEPPOLDocumentIdentifierParts.class, "aParts");
+      final JVar jParts = jCtor.param (JMod.FINAL, IPEPPOLDocumentTypeIdentifierParts.class, "aParts");
       jParts.annotate (Nonnull.class);
       final JVar jCommonName = jCtor.param (JMod.FINAL, String.class, "sCommonName");
       jCommonName.annotate (Nonnull.class);
@@ -555,7 +555,7 @@ public final class MainCreateCodelistsFilesFromExcel {
         for (final String sDocTypeID : RegExHelper.splitToList (sDocTypeIDs, "\n")) {
           // Use the short name for better readability
           final String sIdentifier = true
-                                         ? CodeGenerationUtils.createShortcutDocumentTypeIDName (PEPPOLDocumentIdentifierParts.extractFromString (sDocTypeID))
+                                         ? CodeGenerationUtils.createShortcutDocumentTypeIDName (PEPPOLDocumentTypeIdentifierParts.extractFromString (sDocTypeID))
                                          : RegExHelper.makeIdentifier (sDocTypeID);
           jArray.add (s_jEnumPredefinedDoc.staticRef (sIdentifier));
         }
@@ -612,11 +612,23 @@ public final class MainCreateCodelistsFilesFromExcel {
       m.annotate (Nonempty.class);
       m.body ()._return (fBISID);
 
-      // public List<IPredefinedDocumentIdentifier> getDocumentIdentifiers ()
+      // public List<? extends IPredefinedDocumentIdentifier>
+      // getDocumentIdentifiers ()
       m = jEnum.method (JMod.PUBLIC,
-                        s_aCodeModel.ref (List.class).narrow (s_aCodeModel.ref (IPredefinedDocumentIdentifier.class)
-                                                                          .wildcard ()),
+                        s_aCodeModel.ref (List.class)
+                                    .narrow (s_aCodeModel.ref (IPredefinedDocumentTypeIdentifier.class).wildcard ()),
                         "getDocumentIdentifiers");
+      m.annotate (Deprecated.class);
+      m.annotate (Nonnull.class);
+      m.annotate (ReturnsMutableCopy.class);
+      m.body ()._return (s_aCodeModel.ref (ContainerHelper.class).staticInvoke ("newList").arg (fDocIDs));
+
+      // public List<? extends IPredefinedDocumentTypeIdentifier>
+      // getDocumentTypeIdentifiers ()
+      m = jEnum.method (JMod.PUBLIC,
+                        s_aCodeModel.ref (List.class)
+                                    .narrow (s_aCodeModel.ref (IPredefinedDocumentTypeIdentifier.class).wildcard ()),
+                        "getDocumentTypeIdentifiers");
       m.annotate (Nonnull.class);
       m.annotate (ReturnsMutableCopy.class);
       m.body ()._return (s_aCodeModel.ref (ContainerHelper.class).staticInvoke ("newList").arg (fDocIDs));

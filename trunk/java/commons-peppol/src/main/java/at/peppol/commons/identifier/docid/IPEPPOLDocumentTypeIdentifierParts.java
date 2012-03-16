@@ -37,15 +37,64 @@
  */
 package at.peppol.commons.identifier.docid;
 
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
+import at.peppol.busdox.identifier.IBusdoxDocumentTypeIdentifierParts;
+
+import com.phloc.commons.annotations.Nonempty;
+
 /**
- * Base interface for predefined document identifiers.
+ * Contains all the different fields of a document identifier for PEPPOL. Note:
+ * the sub type identifier is specified in more detail than in BusDox:
+ * <code>&lt;customization id>::&lt;version></code> even more detailed the
+ * customization ID can be split further:
+ * <code>&lt;transactionId>:#&lt;extensionId>[#&lt;extensionId>]::&lt;version></code>
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
- * @deprecated Use {@link IPredefinedDocumentTypeIdentifier} instead
  */
-@Deprecated
-public interface IPredefinedDocumentIdentifier extends
-                                              IPredefinedDocumentTypeIdentifier,
-                                              IPEPPOLDocumentIdentifierParts {
-  /* empty */
+public interface IPEPPOLDocumentTypeIdentifierParts extends IBusdoxDocumentTypeIdentifierParts {
+  /**
+   * Separates the transaction ID from the extensions
+   */
+  String TRANSACTIONID_SEPARATOR = ":#";
+
+  /**
+   * Separates the different extensions from each other
+   */
+  String EXTENSION_SEPARATOR = "#";
+
+  /**
+   * Separates the customization ID from the version
+   */
+  String VERSION_SEPARATOR = "::";
+
+  /**
+   * @return The transaction ID
+   */
+  @Nonnull
+  @Nonempty
+  String getTransactionID ();
+
+  /**
+   * @return The contained extension IDs
+   */
+  @Nonnull
+  @Nonempty
+  List <String> getExtensionIDs ();
+
+  /**
+   * @return The version number
+   */
+  @Nonnull
+  @Nonempty
+  String getVersion ();
+
+  /**
+   * @return transaction ID + extension IDs (no version number)
+   */
+  @Nonnull
+  @Nonempty
+  String getAsUBLCustomizationID ();
 }
