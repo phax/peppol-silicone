@@ -68,10 +68,10 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.w3c.dom.Element;
 
-import at.peppol.commons.identifier.SimpleDocumentIdentifier;
+import at.peppol.commons.identifier.SimpleDocumentTypeIdentifier;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 import at.peppol.commons.identifier.SimpleProcessIdentifier;
-import at.peppol.commons.identifier.docid.EPredefinedDocumentIdentifier;
+import at.peppol.commons.identifier.docid.EPredefinedDocumentTypeIdentifier;
 import at.peppol.commons.sml.ESML;
 import at.peppol.commons.sml.ISMLInfo;
 import at.peppol.commons.utils.ExtensionConverter;
@@ -129,7 +129,7 @@ public final class ClientTest {
     final String sParticipantID = "0088:5798000099988";
 
     final ParticipantIdentifierType aServiceGroupID = SimpleParticipantIdentifier.createWithDefaultScheme (sParticipantID);
-    final DocumentIdentifierType aDocumentTypeID = SimpleDocumentIdentifier.createWithDefaultScheme (TEST_DOCUMENT);
+    final DocumentIdentifierType aDocumentTypeID = SimpleDocumentTypeIdentifier.createWithDefaultScheme (TEST_DOCUMENT);
 
     final SMPServiceCaller aClient = new SMPServiceCaller (SMP_URI);
     aClient.getServiceRegistration (aServiceGroupID, aDocumentTypeID);
@@ -210,7 +210,7 @@ public final class ClientTest {
     _createSaveServiceGroup (aClient, SMP_CREDENTIALS);
 
     final ParticipantIdentifierType aServiceGroupID = SimpleParticipantIdentifier.createWithDefaultScheme (TEST_BUSINESS_IDENTIFIER);
-    final DocumentIdentifierType aDocumentID = SimpleDocumentIdentifier.createWithDefaultScheme (TEST_DOCUMENT);
+    final DocumentIdentifierType aDocumentID = SimpleDocumentTypeIdentifier.createWithDefaultScheme (TEST_DOCUMENT);
     final ProcessIdentifierType aProcessID = SimpleProcessIdentifier.createWithDefaultScheme (TEST_PROCESS);
 
     final ObjectFactory aObjFactory = new ObjectFactory ();
@@ -278,7 +278,7 @@ public final class ClientTest {
     final String sDocumentID = "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2::InvoiceDisputeDisputeInvoice##UBL-2.0";
 
     final ParticipantIdentifierType aServiceGroupID = SimpleParticipantIdentifier.createWithDefaultScheme (sParticipantID);
-    final DocumentIdentifierType aDocumentTypeID = SimpleDocumentIdentifier.createWithDefaultScheme (sDocumentID);
+    final DocumentIdentifierType aDocumentTypeID = SimpleDocumentTypeIdentifier.createWithDefaultScheme (sDocumentID);
 
     final ServiceGroupType aGroup = SMPServiceCaller.getServiceGroupByDNS (SML_INFO, aServiceGroupID);
     assertNotNull (aGroup);
@@ -294,7 +294,7 @@ public final class ClientTest {
   @DevelopersNote ("Requires DNS enabled; Used as the example in the SMP guideline")
   public void getByDNSTestForDocs () throws Exception {
     final ParticipantIdentifierType aServiceGroupID = SimpleParticipantIdentifier.createWithDefaultScheme ("0088:5798000000001");
-    final DocumentIdentifierType aDocumentTypeID = EPredefinedDocumentIdentifier.urn_oasis_names_specification_ubl_schema_xsd_Invoice_2__Invoice__urn_www_cenbii_eu_transaction_biicoretrdm010_ver1_0__urn_www_peppol_eu_bis_peppol4a_ver1_0__2_0.getAsDocumentIdentifier ();
+    final DocumentIdentifierType aDocumentTypeID = EPredefinedDocumentTypeIdentifier.INVOICE_T010_BIS4A.getAsDocumentTypeIdentifier ();
     final SignedServiceMetadataType aMetadata = SMPServiceCaller.getServiceRegistrationByDNS (ESML.DEVELOPMENT_LOCAL,
                                                                                               aServiceGroupID,
                                                                                               aDocumentTypeID);
@@ -309,7 +309,7 @@ public final class ClientTest {
     final String sDocumentID = "urn:oasis:names:specification:ubl:schema:xsd:SubmitCatalogue-2::SubmitCatalogue##UBL-2.0";
 
     final ParticipantIdentifierType aServiceGroupID = SimpleParticipantIdentifier.createWithDefaultScheme (sParticipantID);
-    final DocumentIdentifierType aDocumentTypeID = SimpleDocumentIdentifier.createWithDefaultScheme (sDocumentID);
+    final DocumentIdentifierType aDocumentTypeID = SimpleDocumentTypeIdentifier.createWithDefaultScheme (sDocumentID);
 
     final SignedServiceMetadataType aMetadata = SMPServiceCaller.getServiceRegistrationByDNS (SML_INFO,
                                                                                               aServiceGroupID,

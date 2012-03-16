@@ -45,17 +45,16 @@ import org.busdox.transport.identifiers._1.DocumentIdentifierType;
 import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 import org.busdox.transport.identifiers._1.ProcessIdentifierType;
 
-import at.peppol.busdox.identifier.IReadonlyDocumentIdentifier;
+import at.peppol.busdox.identifier.IReadonlyDocumentTypeIdentifier;
 import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
 import at.peppol.busdox.identifier.IReadonlyProcessIdentifier;
-import at.peppol.commons.identifier.SimpleDocumentIdentifier;
+import at.peppol.commons.identifier.SimpleDocumentTypeIdentifier;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 import at.peppol.commons.identifier.SimpleProcessIdentifier;
 
 import com.phloc.commons.compare.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
-
 
 /**
  * A MessageMetadata object is used to storage the message addressing data
@@ -78,7 +77,7 @@ public final class MessageMetadata implements IMessageMetadata {
   private final SimpleParticipantIdentifier m_aRecipientID;
 
   /** Document identifier value. */
-  private final SimpleDocumentIdentifier m_aDocumentTypeID;
+  private final SimpleDocumentTypeIdentifier m_aDocumentTypeID;
 
   /** Process identifier value. */
   private final SimpleProcessIdentifier m_aProcessID;
@@ -104,13 +103,13 @@ public final class MessageMetadata implements IMessageMetadata {
                           @Nullable final String sChannelID,
                           @Nonnull final IReadonlyParticipantIdentifier aSenderID,
                           @Nonnull final IReadonlyParticipantIdentifier aRecipientID,
-                          @Nonnull final IReadonlyDocumentIdentifier aDocumentTypeID,
+                          @Nonnull final IReadonlyDocumentTypeIdentifier aDocumentTypeID,
                           @Nonnull final IReadonlyProcessIdentifier aProcessID) {
     m_sMessageID = sMessageID;
     m_sChannelID = sChannelID;
     m_aSenderID = new SimpleParticipantIdentifier (aSenderID);
     m_aRecipientID = new SimpleParticipantIdentifier (aRecipientID);
-    m_aDocumentTypeID = new SimpleDocumentIdentifier (aDocumentTypeID);
+    m_aDocumentTypeID = new SimpleDocumentTypeIdentifier (aDocumentTypeID);
     m_aProcessID = new SimpleProcessIdentifier (aProcessID);
   }
 

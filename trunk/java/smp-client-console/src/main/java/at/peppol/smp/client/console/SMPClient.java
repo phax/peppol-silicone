@@ -67,7 +67,7 @@ import org.busdox.transport.identifiers._1.ProcessIdentifierType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.peppol.commons.identifier.SimpleDocumentIdentifier;
+import at.peppol.commons.identifier.SimpleDocumentTypeIdentifier;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 import at.peppol.commons.identifier.SimpleProcessIdentifier;
 import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
@@ -79,10 +79,9 @@ import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.io.file.SimpleFileIO;
 import com.phloc.commons.lang.CGStringHelper;
 
-
 /**
  * SMP commandline client
- *
+ * 
  * @author Itella
  */
 public final class SMPClient {
@@ -287,7 +286,7 @@ public final class SMPClient {
 
   private void delDocument () {
     final ParticipantIdentifierType aPI = SimpleParticipantIdentifier.createWithDefaultScheme (m_sParticipantID);
-    final DocumentIdentifierType documentIdentifier = SimpleDocumentIdentifier.createWithDefaultScheme (m_sDocumentType);
+    final DocumentIdentifierType documentIdentifier = SimpleDocumentTypeIdentifier.createWithDefaultScheme (m_sDocumentType);
     final SMPServiceCaller client = new SMPServiceCaller (m_aSMPAddress);
     final IReadonlyUsernamePWCredentials smpCreds = new ReadonlyUsernamePWCredentials (m_sSMPUsername, m_sSMPPassword);
     try {
@@ -301,7 +300,7 @@ public final class SMPClient {
   private void addDocument () {
     final ProcessIdentifierType processIdentifier = SimpleProcessIdentifier.createWithDefaultScheme (m_sProcessID);
     final ParticipantIdentifierType bi = SimpleParticipantIdentifier.createWithDefaultScheme (m_sParticipantID);
-    final DocumentIdentifierType documentIdentifier = SimpleDocumentIdentifier.createWithDefaultScheme (m_sDocumentType);
+    final DocumentIdentifierType documentIdentifier = SimpleDocumentTypeIdentifier.createWithDefaultScheme (m_sDocumentType);
     final IReadonlyUsernamePWCredentials smpCreds = new ReadonlyUsernamePWCredentials (m_sSMPUsername, m_sSMPPassword);
     final SMPServiceCaller client = new SMPServiceCaller (m_aSMPAddress);
     final W3CEndpointReferenceBuilder builder = new W3CEndpointReferenceBuilder ();

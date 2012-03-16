@@ -18,7 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
-import at.peppol.commons.identifier.SimpleDocumentIdentifier;
+import at.peppol.commons.identifier.SimpleDocumentTypeIdentifier;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 import at.peppol.commons.identifier.SimpleProcessIdentifier;
 import at.peppol.transport.IMessageMetadata;
@@ -89,7 +89,7 @@ public final class StressTest {
 
     final ParticipantIdentifierType aSender = SimpleParticipantIdentifier.createWithDefaultScheme (senderValue);
     final ParticipantIdentifierType aRecipient = SimpleParticipantIdentifier.createWithDefaultScheme (recipientValue);
-    final DocumentIdentifierType aDocumentType = SimpleDocumentIdentifier.createWithDefaultScheme (documentIdValue);
+    final DocumentIdentifierType aDocumentType = SimpleDocumentTypeIdentifier.createWithDefaultScheme (documentIdValue);
     final ProcessIdentifierType aProcessIdentifierType = SimpleProcessIdentifier.createWithDefaultScheme (processIdValue);
     final String sMessageID = "uuid:" + UUID.randomUUID ().toString ();
 

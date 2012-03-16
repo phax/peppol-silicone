@@ -41,7 +41,7 @@ import java.util.Date;
 
 import org.w3c.dom.Document;
 
-import at.peppol.busdox.identifier.IDocumentIdentifier;
+import at.peppol.busdox.identifier.IDocumentTypeIdentifier;
 import at.peppol.busdox.identifier.IParticipantIdentifier;
 import at.peppol.busdox.identifier.IProcessIdentifier;
 
@@ -62,9 +62,9 @@ public interface IMessage {
 
   void setReceiver (IParticipantIdentifier receiver);
 
-  IDocumentIdentifier getDocumentType ();
+  IDocumentTypeIdentifier getDocumentType ();
 
-  void setDocumentType (IDocumentIdentifier documentType);
+  void setDocumentType (IDocumentTypeIdentifier documentType);
 
   Document getDocument ();
 

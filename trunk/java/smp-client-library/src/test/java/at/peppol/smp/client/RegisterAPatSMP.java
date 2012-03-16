@@ -20,16 +20,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
-import at.peppol.commons.identifier.docid.EPredefinedDocumentIdentifier;
+import at.peppol.commons.identifier.docid.EPredefinedDocumentTypeIdentifier;
 import at.peppol.commons.identifier.procid.EPredefinedProcessIdentifier;
 import at.peppol.commons.sml.ESML;
 import at.peppol.commons.sml.ISMLInfo;
 import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
 import at.peppol.commons.utils.UsernamePWCredentials;
-import at.peppol.smp.client.SMPServiceCaller;
 
 import com.phloc.commons.state.ESuccess;
-
 
 public final class RegisterAPatSMP {
   public static final Logger s_aLogger = LoggerFactory.getLogger (RegisterAPatSMP.class);
@@ -62,7 +60,7 @@ public final class RegisterAPatSMP {
   private static final boolean AP_REQUIRE_BUSSINES_LEVEL_SIGNATURE = false;
 
   // Document type to be registered (e.g. invoice T10)
-  private static final EPredefinedDocumentIdentifier DOCTYPE = EPredefinedDocumentIdentifier.urn_oasis_names_specification_ubl_schema_xsd_Invoice_2__Invoice__urn_www_cenbii_eu_transaction_biicoretrdm010_ver1_0__urn_www_peppol_eu_bis_peppol4a_ver1_0__2_0;
+  private static final EPredefinedDocumentTypeIdentifier DOCTYPE = EPredefinedDocumentTypeIdentifier.INVOICE_T010_BIS4A;
 
   // Process type to be registered (e.g. BIS4A)
   private static final EPredefinedProcessIdentifier PROCTYPE = EPredefinedProcessIdentifier.urn_www_cenbii_eu_profile_bii04_ver1_0;
@@ -76,7 +74,7 @@ public final class RegisterAPatSMP {
   @Nonnull
   private static ESuccess _registerRecipient (@Nonnull final ISMLInfo aSMLInfo,
                                               @Nonnull final ParticipantIdentifierType aParticipantID,
-                                              @Nonnull final EPredefinedDocumentIdentifier eDocumentID,
+                                              @Nonnull final EPredefinedDocumentTypeIdentifier eDocumentID,
                                               @Nonnull final EPredefinedProcessIdentifier eProcessID,
                                               @Nonnull final Date aStartDate,
                                               @Nonnull final Date aEndDate,
@@ -129,7 +127,7 @@ public final class RegisterAPatSMP {
             }
             aProcessList.getProcess ().add (aProcess);
           }
-          aServiceInformation.setDocumentIdentifier (eDocumentID.getAsDocumentIdentifier ());
+          aServiceInformation.setDocumentIdentifier (eDocumentID.getAsDocumentTypeIdentifier ());
           aServiceInformation.setParticipantIdentifier (aParticipantID);
           aServiceInformation.setProcessList (aProcessList);
         }

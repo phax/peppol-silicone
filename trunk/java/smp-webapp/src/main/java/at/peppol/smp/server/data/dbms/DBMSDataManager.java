@@ -290,7 +290,7 @@ public final class DBMSDataManager extends AbstractJPAEnabledManager implements 
                                                                     .getResultList ();
 
       for (final DBServiceMetadata aService : aServices)
-        ret.add (aService.getId ().asDocumentIdentifier ());
+        ret.add (aService.getId ().asDocumentTypeIdentifier ());
 
       aTransaction.commit ();
     }
@@ -518,7 +518,7 @@ public final class DBMSDataManager extends AbstractJPAEnabledManager implements 
     final ParticipantIdentifierType businessIdType = serviceMetadataDB.getId ().asParticipantIdentifier ();
     final ExtensionType extension = ExtensionConverter.convert (serviceMetadataDB.getExtension ());
 
-    final DocumentIdentifierType documentIdentifier = serviceMetadataDB.getId ().asDocumentIdentifier ();
+    final DocumentIdentifierType documentIdentifier = serviceMetadataDB.getId ().asDocumentTypeIdentifier ();
 
     final ServiceInformationType serviceInformationType = m_aObjFactory.createServiceInformationType ();
     serviceInformationType.setParticipantIdentifier (businessIdType);
@@ -576,7 +576,7 @@ public final class DBMSDataManager extends AbstractJPAEnabledManager implements 
       final DBProcessID aDBProcessID = new DBProcessID ();
       aDBProcessID.setProcessIdentifier (aProcess.getProcessIdentifier ());
       aDBProcessID.setBusinessIdentifier (aDBServiceMetadata.getId ().asParticipantIdentifier ());
-      aDBProcessID.setDocumentIdentifier (aDBServiceMetadata.getId ().asDocumentIdentifier ());
+      aDBProcessID.setDocumentIdentifier (aDBServiceMetadata.getId ().asDocumentTypeIdentifier ());
 
       final DBProcess aDBProcess = new DBProcess ();
       aDBProcess.setId (aDBProcessID);
@@ -587,7 +587,7 @@ public final class DBMSDataManager extends AbstractJPAEnabledManager implements 
         aDBEndpointID.setTransportProfile (aEndpoint.getTransportProfile ());
         aDBEndpointID.setEndpointReference (W3CEndpointReferenceUtils.getAddress (aEndpoint.getEndpointReference ()));
         aDBEndpointID.setBusinessIdentifier (aDBServiceMetadata.getId ().asParticipantIdentifier ());
-        aDBEndpointID.setDocumentIdentifier (aDBServiceMetadata.getId ().asDocumentIdentifier ());
+        aDBEndpointID.setDocumentIdentifier (aDBServiceMetadata.getId ().asDocumentTypeIdentifier ());
         aDBEndpointID.setProcessIdentifier (aProcess.getProcessIdentifier ());
 
         final DBEndpoint aDBEndpoint = new DBEndpoint ();

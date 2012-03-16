@@ -64,22 +64,19 @@ import org.junit.internal.AssumptionViolatedException;
 
 import at.peppol.commons.identifier.CIdentifier;
 import at.peppol.commons.identifier.IdentifierUtils;
-import at.peppol.commons.identifier.SimpleDocumentIdentifier;
+import at.peppol.commons.identifier.SimpleDocumentTypeIdentifier;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 import at.peppol.commons.identifier.SimpleProcessIdentifier;
 import at.peppol.commons.utils.ExtensionConverter;
 import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
 import at.peppol.commons.utils.ReadonlyUsernamePWCredentials;
 import at.peppol.commons.wsaddr.W3CEndpointReferenceUtils;
-import at.peppol.smp.server.data.dbms.DBMSDataManager;
-import at.peppol.smp.server.data.dbms.SMPJPAWrapper;
 import at.peppol.smp.server.exception.UnauthorizedException;
 import at.peppol.smp.server.exception.UnknownUserException;
 import at.peppol.smp.server.hook.DoNothingRegistrationHook;
 
 import com.phloc.commons.annotations.DevelopersNote;
 import com.sun.jersey.api.NotFoundException;
-
 
 /**
  * @author PEPPOL.AT, BRZ, Philip Helger
@@ -88,7 +85,7 @@ import com.sun.jersey.api.NotFoundException;
 @DevelopersNote ("You need to adjust your local META-INF/persistence.xml file to run this test")
 public class DBMSDataManagerTest {
   private static final String PARTICIPANT_IDENTIFIER_SCHEME = CIdentifier.DEFAULT_PARTICIPANT_IDENTIFIER_SCHEME;
-  private static final String DOCUMENT_SCHEME = CIdentifier.DEFAULT_DOCUMENT_IDENTIFIER_SCHEME;
+  private static final String DOCUMENT_SCHEME = CIdentifier.DEFAULT_DOCUMENT_TYPE_IDENTIFIER_SCHEME;
   private static final String PROCESS_SCHEME = "http://busdox.org/processIdentifiers/1.0/UBL/CENBII/1.0/";
 
   private static final String PARTICIPANT_IDENTIFIER1 = "0010:599900000000A";
@@ -113,7 +110,8 @@ public class DBMSDataManagerTest {
 
   private static final ParticipantIdentifierType PARTY_ID = SimpleParticipantIdentifier.createWithDefaultScheme (PARTICIPANT_IDENTIFIER1);
   private static final ParticipantIdentifierType SERVICEGROUP_ID = PARTY_ID;
-  private static final DocumentIdentifierType DOCTYPE_ID = new SimpleDocumentIdentifier (DOCUMENT_SCHEME, TEST_DOCUMENT);
+  private static final DocumentIdentifierType DOCTYPE_ID = new SimpleDocumentTypeIdentifier (DOCUMENT_SCHEME,
+                                                                                             TEST_DOCUMENT);
   private static final IReadonlyUsernamePWCredentials CREDENTIALS = new ReadonlyUsernamePWCredentials (USERNAME,
                                                                                                        PASSWORD);
 

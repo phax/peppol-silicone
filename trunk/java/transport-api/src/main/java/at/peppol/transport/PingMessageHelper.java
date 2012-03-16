@@ -42,14 +42,13 @@ import javax.annotation.concurrent.Immutable;
 
 import at.peppol.commons.identifier.CIdentifier;
 import at.peppol.commons.identifier.IdentifierUtils;
-import at.peppol.commons.identifier.ReadonlyDocumentIdentifier;
+import at.peppol.commons.identifier.ReadonlyDocumentTypeIdentifier;
 import at.peppol.commons.identifier.ReadonlyParticipantIdentifier;
 import at.peppol.commons.identifier.ReadonlyProcessIdentifier;
 
-
 /**
  * This file contains the PING message specific codes
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable
@@ -62,10 +61,10 @@ public final class PingMessageHelper {
   public static final String PING_RECIPIENT_VALUE = "busdox:recipient";
   public static final ReadonlyParticipantIdentifier PING_RECIPIENT = new ReadonlyParticipantIdentifier (PING_RECIPIENT_SCHEME,
                                                                                                         PING_RECIPIENT_VALUE);
-  public static final String PING_DOCUMENT_SCHEME = CIdentifier.DEFAULT_DOCUMENT_IDENTIFIER_SCHEME;
+  public static final String PING_DOCUMENT_SCHEME = CIdentifier.DEFAULT_DOCUMENT_TYPE_IDENTIFIER_SCHEME;
   public static final String PING_DOCUMENT_VALUE = "busdox:ping";
-  public static final ReadonlyDocumentIdentifier PING_DOCUMENT = new ReadonlyDocumentIdentifier (PING_DOCUMENT_SCHEME,
-                                                                                                 PING_DOCUMENT_VALUE);
+  public static final ReadonlyDocumentTypeIdentifier PING_DOCUMENT = new ReadonlyDocumentTypeIdentifier (PING_DOCUMENT_SCHEME,
+                                                                                                         PING_DOCUMENT_VALUE);
   public static final String PING_PROCESS_SCHEME = "busdox-procid-transport";
   public static final String PING_PROCESS_VALUE = CIdentifier.DEFAULT_PROCESS_IDENTIFIER_NOPROCESS;
   public static final ReadonlyProcessIdentifier PING_PROCESS = new ReadonlyProcessIdentifier (PING_PROCESS_SCHEME,

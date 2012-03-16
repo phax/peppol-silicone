@@ -42,7 +42,7 @@ import java.util.UUID;
 
 import org.w3c.dom.Document;
 
-import at.peppol.busdox.identifier.IDocumentIdentifier;
+import at.peppol.busdox.identifier.IDocumentTypeIdentifier;
 import at.peppol.busdox.identifier.IParticipantIdentifier;
 import at.peppol.busdox.identifier.IProcessIdentifier;
 import at.peppol.transport.lime.IMessage;
@@ -58,7 +58,7 @@ public class Message implements IMessage {
   private Document m_aDocument;
   private IParticipantIdentifier m_aSender;
   private IParticipantIdentifier m_aReceiver;
-  private IDocumentIdentifier m_aDocumentType;
+  private IDocumentTypeIdentifier m_aDocumentType;
   private IProcessIdentifier m_aProcessType;
 
   public Message () {
@@ -102,20 +102,20 @@ public class Message implements IMessage {
     m_aReceiver = reciever;
   }
 
-  public IDocumentIdentifier getDocumentType () {
+  public IDocumentTypeIdentifier getDocumentType () {
     return m_aDocumentType;
   }
 
-  public void setDocumentType (final IDocumentIdentifier documentType) {
-    m_aDocumentType = documentType;
+  public void setDocumentType (final IDocumentTypeIdentifier aDocumentType) {
+    m_aDocumentType = aDocumentType;
   }
 
   public IProcessIdentifier getProcessType () {
     return m_aProcessType;
   }
 
-  public void setProcessType (final IProcessIdentifier processType) {
-    m_aProcessType = processType;
+  public void setProcessType (final IProcessIdentifier aProcessType) {
+    m_aProcessType = aProcessType;
   }
 
   @Override

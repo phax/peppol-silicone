@@ -43,21 +43,17 @@ import javax.xml.bind.JAXBException;
 
 import org.junit.Test;
 
-import at.peppol.commons.identifier.SimpleDocumentIdentifier;
+import at.peppol.commons.identifier.SimpleDocumentTypeIdentifier;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 import at.peppol.commons.identifier.SimpleProcessIdentifier;
-import at.peppol.transport.IMessageMetadata;
-import at.peppol.transport.MessageMetadata;
-import at.peppol.transport.MessageMetadataHelper;
 
 import com.phloc.commons.mock.PhlocTestUtils;
 import com.sun.xml.ws.api.message.Header;
 import com.sun.xml.ws.api.message.HeaderList;
 
-
 /**
  * Test class for class {@link MessageMetadataHelper}.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class MessageMetadataHelperTest {
@@ -76,13 +72,13 @@ public final class MessageMetadataHelperTest {
                                        "chid",
                                        SimpleParticipantIdentifier.createWithDefaultScheme ("sender"),
                                        SimpleParticipantIdentifier.createWithDefaultScheme ("receiver"),
-                                       SimpleDocumentIdentifier.createWithDefaultScheme ("doc"),
+                                       SimpleDocumentTypeIdentifier.createWithDefaultScheme ("doc"),
                                        SimpleProcessIdentifier.createWithDefaultScheme ("proc")));
     _testMarshal (new MessageMetadata (null,
                                        null,
                                        SimpleParticipantIdentifier.createWithDefaultScheme ("sender"),
                                        SimpleParticipantIdentifier.createWithDefaultScheme ("receiver"),
-                                       SimpleDocumentIdentifier.createWithDefaultScheme ("doc"),
+                                       SimpleDocumentTypeIdentifier.createWithDefaultScheme ("doc"),
                                        SimpleProcessIdentifier.createWithDefaultScheme ("proc")));
   }
 }

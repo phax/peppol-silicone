@@ -42,16 +42,17 @@ import java.io.Serializable;
 import javax.annotation.Nonnull;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.Transient;
 
 import org.busdox.transport.identifiers._1.DocumentIdentifierType;
 import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 import org.busdox.transport.identifiers._1.ProcessIdentifierType;
 
-import at.peppol.busdox.identifier.IReadonlyDocumentIdentifier;
+import at.peppol.busdox.identifier.IReadonlyDocumentTypeIdentifier;
 import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
 import at.peppol.busdox.identifier.IReadonlyProcessIdentifier;
 import at.peppol.commons.identifier.IdentifierUtils;
-import at.peppol.commons.identifier.SimpleDocumentIdentifier;
+import at.peppol.commons.identifier.SimpleDocumentTypeIdentifier;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 import at.peppol.commons.identifier.SimpleProcessIdentifier;
 
@@ -70,8 +71,8 @@ public class DBProcessID implements Serializable {
   private String m_sProcessIdentifier;
   private String m_sBusinessIdentifierScheme;
   private String m_sBusinessIdentifier;
-  private String m_sDocumentIdentifierScheme;
-  private String m_sDocumentIdentifier;
+  private String m_sDocumentTypeIdentifierScheme;
+  private String m_sDocumentTypeIdentifier;
 
   public DBProcessID () {}
 
@@ -123,37 +124,40 @@ public class DBProcessID implements Serializable {
 
   @Column (name = "documentIdentifier", nullable = false, length = 256)
   public String getDocumentIdentifier () {
-    return m_sDocumentIdentifier;
+    return m_sDocumentTypeIdentifier;
   }
 
   public void setDocumentIdentifier (final String documentIdentifier) {
-    m_sDocumentIdentifier = documentIdentifier;
+    m_sDocumentTypeIdentifier = documentIdentifier;
   }
 
   @Column (name = "documentIdentifierScheme", nullable = false, length = 256)
   public String getDocumentIdentifierScheme () {
-    return m_sDocumentIdentifierScheme;
+    return m_sDocumentTypeIdentifierScheme;
   }
 
   public void setDocumentIdentifierScheme (final String documentIdentifierScheme) {
-    m_sDocumentIdentifierScheme = documentIdentifierScheme;
+    m_sDocumentTypeIdentifierScheme = documentIdentifierScheme;
   }
 
-  public void setDocumentIdentifier (final IReadonlyDocumentIdentifier aDocumentID) {
+  public void setDocumentIdentifier (final IReadonlyDocumentTypeIdentifier aDocumentID) {
     setDocumentIdentifierScheme (aDocumentID.getScheme ());
     setDocumentIdentifier (aDocumentID.getValue ());
   }
 
+  @Transient
   @Nonnull
   public ParticipantIdentifierType asBusinessIdentifier () {
     return new SimpleParticipantIdentifier (m_sBusinessIdentifierScheme, m_sBusinessIdentifier);
   }
 
+  @Transient
   @Nonnull
-  public DocumentIdentifierType asDocumentIdentifier () {
-    return new SimpleDocumentIdentifier (m_sDocumentIdentifierScheme, m_sDocumentIdentifier);
+  public DocumentIdentifierType asDocumentTypeIdentifier () {
+    return new SimpleDocumentTypeIdentifier (m_sDocumentTypeIdentifierScheme, m_sDocumentTypeIdentifier);
   }
 
+  @Transient
   @Nonnull
   public ProcessIdentifierType asProcessIdentifier () {
     return new SimpleProcessIdentifier (m_sProcessIdentifierType, m_sProcessIdentifier);
@@ -168,8 +172,8 @@ public class DBProcessID implements Serializable {
     final DBProcessID rhs = (DBProcessID) other;
     return EqualsUtils.nullSafeEquals (m_sBusinessIdentifierScheme, rhs.m_sBusinessIdentifierScheme) &&
            EqualsUtils.nullSafeEquals (m_sBusinessIdentifier, rhs.m_sBusinessIdentifier) &&
-           EqualsUtils.nullSafeEquals (m_sDocumentIdentifierScheme, rhs.m_sDocumentIdentifierScheme) &&
-           EqualsUtils.nullSafeEquals (m_sDocumentIdentifier, rhs.m_sDocumentIdentifier) &&
+           EqualsUtils.nullSafeEquals (m_sDocumentTypeIdentifierScheme, rhs.m_sDocumentTypeIdentifierScheme) &&
+           EqualsUtils.nullSafeEquals (m_sDocumentTypeIdentifier, rhs.m_sDocumentTypeIdentifier) &&
            EqualsUtils.nullSafeEquals (m_sProcessIdentifierType, rhs.m_sProcessIdentifierType) &&
            EqualsUtils.nullSafeEquals (m_sProcessIdentifier, rhs.m_sProcessIdentifier);
   }
@@ -178,8 +182,8 @@ public class DBProcessID implements Serializable {
   public int hashCode () {
     return new HashCodeGenerator (this).append (m_sBusinessIdentifierScheme)
                                        .append (m_sBusinessIdentifier)
-                                       .append (m_sDocumentIdentifierScheme)
-                                       .append (m_sDocumentIdentifier)
+                                       .append (m_sDocumentTypeIdentifierScheme)
+                                       .append (m_sDocumentTypeIdentifier)
                                        .append (m_sProcessIdentifierType)
                                        .append (m_sProcessIdentifier)
                                        .getHashCode ();
@@ -189,8 +193,8 @@ public class DBProcessID implements Serializable {
   public String toString () {
     return new ToStringGenerator (this).append ("biScheme", m_sBusinessIdentifierScheme)
                                        .append ("biValue", m_sBusinessIdentifier)
-                                       .append ("diScheme", m_sDocumentIdentifierScheme)
-                                       .append ("diValue", m_sDocumentIdentifier)
+                                       .append ("diScheme", m_sDocumentTypeIdentifierScheme)
+                                       .append ("diValue", m_sDocumentTypeIdentifier)
                                        .append ("piScheme", m_sProcessIdentifierType)
                                        .append ("piValue", m_sProcessIdentifier)
                                        .toString ();
