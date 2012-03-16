@@ -48,6 +48,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 import javax.xml.bind.JAXBElement;
 
@@ -70,14 +71,13 @@ import at.peppol.smp.server.util.RequestHelper;
 
 import com.sun.jersey.api.NotFoundException;
 
-
 /**
  * This class implements a REST frontend for getting the ServiceGroup as well as
  * all the corresponding ServiceMetadata's given a service group id. This
  * interface is not part of the official specification. The interface makes it
  * much faster to fetch the complete data about a service group and its service
  * metadata. The interface is used by the registration web site.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Path ("/complete/{ServiceGroupId}")
@@ -140,11 +140,22 @@ public final class CompleteServiceGroupInterface {
   }
 
   @DELETE
+  @Deprecated
   public Response deleteServiceGroup (@PathParam ("ServiceGroupId") final String sServiceGroupId) {
-    s_aLogger.info ("DELETE /complete/" + sServiceGroupId);
-    try {
-      final ParticipantIdentifierType aServiceGroupID = SimpleParticipantIdentifier.createFromURIPart (sServiceGroupId);
+    s_aLogger.warn ("This API is deprecated. Please use the DELETE version without the \"/complete/\" prefix!");
 
+    s_aLogger.info ("DELETE /complete/" + sServiceGroupId);
+    ParticipantIdentifierType aServiceGroupID = null;
+    try {
+      aServiceGroupID = SimpleParticipantIdentifier.createFromURIPart (sServiceGroupId);
+    }
+    catch (final IllegalArgumentException ex) {
+      // Invalid identifier
+      s_aLogger.info ("Failed to parse participant identifier '" + sServiceGroupId + "'");
+      return Response.status (Status.BAD_REQUEST).build ();
+    }
+
+    try {
       final IDataManager aDataManager = DataManagerFactory.getInstance ();
       aDataManager.deleteServiceGroup (aServiceGroupID, RequestHelper.getAuth (headers));
 
