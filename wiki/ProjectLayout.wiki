@@ -1,4 +1,4 @@
-#summary Source projects and there meanings
+#summary Source projects and there dependencies
 
 = Contained projects and their meaning =
 
