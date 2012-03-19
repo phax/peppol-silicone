@@ -7,9 +7,9 @@ Short outline of the contained source projects and how they relate to each other
 == SML, SMP, START and LIME ==
 
 ===Library artefacts:===
-  * commons-busdox = BusDox specification stuff. Auto-generated code for WSDL and XSds
+  * commons-busdox = [http://www.oasis-open.org/committees/bdx/ BusDox] specification stuff. Auto-generated code for WSDL and XSSs
   * commons-peppol = PEPPOL specific implementation of BusDox with the predefined semantics
-  * commons-jpa = Base library for JPA2 handling with EclipseLink
+  * commons-jpa = Base library for JPA2 handling with [http://www.eclipse.org/eclipselink/ EclipseLink]
   * sml-server-library = Library containing most of the SML code for reuse in the main SML and the standalone SML
   * transport-api = Base library for LIME and START also containing the SPI interface for START receivers
 
@@ -37,14 +37,14 @@ http://peppol-silicone.googlecode.com/svn/trunk/docs/imgs/dependencies_infrastru
 
 ===Library artefacts:===
   * commons-cenbii = Contains the CEN BII profile, transaction and collaboration definitions
-  * validation-schematron = A generic Schematron validation library based on Saxon
+  * validation-schematron = A generic [http://www.schematron.com Schematron] validation library based on Saxon
 
 ===Production artefacts:===
   * visualization = Default visualization XSLTs for the different document type
   * validation-rules = The business rules as precompiled Schematron-XSLTs plus the assignment to the different validation layers
 
 ===Utility artefacts:===
-  * schematron2xslt-maven-plugin = A Maven 2/3 plugin that converts Schematron files to XSLT files at compile time
+  * schematron2xslt-maven-plugin = A [http://maven.apache.org Maven 2/3] plugin that converts Schematron files to XSLT files at compile time
 
 ===Project dependencies:===
 http://peppol-silicone.googlecode.com/svn/trunk/docs/imgs/dependencies_validation.png
