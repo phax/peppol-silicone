@@ -2,20 +2,26 @@
 
 = Introduction =
 
-Explanation of the separate sub-porojects:
+Short outline of the contained source porjects
 
-= Details =
+== SML, SMP, START and LIME ==
+
+Library artefacts:
+  * commons-busdox = BusDox specification stuff. Auto-generated code for WSDL and XSds
+  * commons-peppol = PEPPOL specific implementation of BusDox with the predefined semantics
+  * commons-jpa = Base library for JPA2 handling with EclipseLink
+  * sml-server-library = Library containing most of the SML code for reuse in the main SML and the standalone SML
+  * transport-api = Base library for LIME and START also containing the SPI interface for START receivers
 
 Production artefacts:
-  * Automatic links to other wiki pages
-  * sml-webapp = SML server
-  * sml-client-library = SML client
-  * smp-webapp = SMP server
-  * smp-client-library = SMP client
-  * transport-start-client = START client
-  * transport-start-server = START server
-  * transport-lime-library = LIME client (note: transport-lime-client is only a proof-of-concept application using the LIME client)
-  * transport-lime-server = LIME server
+  * sml-webapp = SML server (web application)
+  * sml-client-library = SML client (library)
+  * smp-webapp = SMP server (web application)
+  * smp-client-library = SMP client (library)
+  * transport-start-server = START server (web application)
+  * transport-start-client = START client (library)
+  * transport-lime-server = LIME server (web application)
+  * transport-lime-library = LIME client (library)
 
 Utility artefacts:
   * sml-webapp-standalone = a standalone SML server for testing without DNS
@@ -23,3 +29,16 @@ Utility artefacts:
   * smp-client-console = console application to access the SMP
   * transport-start-receiver = an example handler for incoming documents on the START server - to be replaced in production environments
   * transport-lime-client = example application using the LIME library to send a document via LIME
+
+== Validation and visualization ==
+
+Library artefacts:
+  * commons-cenbii = Contains the CEN BII profile, transaction and collaboration definitions
+  * validation-schematron = A generic Schematron validation library based on Saxon
+
+Production artefacts:
+  * visualization = Default visualization XSLTs for the different document type
+  * validation-rules = The business rules as precompiled Schematron-XSLTs plus the assignment to the different validation layers
+
+Utility artefacts:
+  * schematron2xslt-maven-plugin = A Maven 2/3 plugin that converts Schematron files to XSLT files at compile time
