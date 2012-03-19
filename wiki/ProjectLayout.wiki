@@ -30,6 +30,9 @@ Utility artefacts:
   * transport-start-receiver = an example handler for incoming documents on the START server - to be replaced in production environments
   * transport-lime-client = example application using the LIME library to send a document via LIME
 
+Project dependencies:
+http://peppol-silicone.googlecode.com/svn/trunk/docs/imgs/dependencies_infrastructure.png
+
 == Validation and visualization ==
 
 Library artefacts:
@@ -42,3 +45,6 @@ Production artefacts:
 
 Utility artefacts:
   * schematron2xslt-maven-plugin = A Maven 2/3 plugin that converts Schematron files to XSLT files at compile time
+
+Project dependencies:
+http://peppol-silicone.googlecode.com/svn/trunk/docs/imgs/dependencies_validation.png
