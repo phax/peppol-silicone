@@ -1,6 +1,6 @@
-#summary Source projects and there dependencies
+#summary Source projects and there meanings
 
-= Introduction =
+= Contained projects and their meaning =
 
 Short outline of the contained source porjects
 
