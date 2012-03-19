@@ -17,6 +17,7 @@ Performed changes so far:
   * Fixed error in transport-start-filereceiver SPI configuration file
   * Renamed all "DocumentIdentifier" APIs to "DocumentTypeIdentifier" as this is the correct terminus. The old methods got deprecated and will be removed in v2.3.0
   * SMP: Deprecated CompleteServiceGroupInterface.deleteServiceGroup because it has the exact same semantics as ServiceGroupInterface.deleteServiceGroup
+  * LIME projects now also use the Metro libraries instead of JAX-WS directly to improve interoperability with deployed START Access Points. Thanks to Giannis for identifying the issue - was a tricky one.
 
 = v2.2.0 (2012-02-09, initial release, all components) =
 
