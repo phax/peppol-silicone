@@ -1,0 +1,25 @@
+#summary Source projects and there dependencies
+
+= Introduction =
+
+Explanation of the separate sub-porojects:
+
+= Details =
+
+Production artefacts:
+  * Automatic links to other wiki pages
+  * sml-webapp = SML server
+  * sml-client-library = SML client
+  * smp-webapp = SMP server
+  * smp-client-library = SMP client
+  * transport-start-client = START client
+  * transport-start-server = START server
+  * transport-lime-library = LIME client (note: transport-lime-client is only a proof-of-concept application using the LIME client)
+  * transport-lime-server = LIME server
+
+Utility artefacts:
+  * sml-webapp-standalone = a standalone SML server for testing without DNS
+  * sml-client-apps = console and Swing GUI to do SML client actions
+  * smp-client-console = console application to access the SMP
+  * transport-start-receiver = an example handler for incoming documents on the START server - to be replaced in production environments
+  * transport-lime-client = example application using the LIME library to send a document via LIME
