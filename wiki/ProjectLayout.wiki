@@ -8,7 +8,7 @@ Short outline of the contained source projects and how they relate to each other
 
 ===Library artefacts:===
   * commons-busdox = [http://www.oasis-open.org/committees/bdx/ BusDox] specification stuff. Auto-generated code for WSDL and XSSs
-  * commons-peppol = PEPPOL specific implementation of BusDox with the predefined semantics
+  * commons-peppol = PEPPOL specific implementation of [http://www.oasis-open.org/committees/bdx/ BusDox] with the predefined semantics
   * commons-jpa = Base library for JPA2 handling with [http://www.eclipse.org/eclipselink/ EclipseLink]
   * sml-server-library = Library containing most of the SML code for reuse in the main SML and the standalone SML
   * transport-api = Base library for LIME and START also containing the SPI interface for START receivers
