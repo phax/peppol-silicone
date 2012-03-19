@@ -6,14 +6,14 @@ Short outline of the contained source porjects
 
 == SML, SMP, START and LIME ==
 
-Library artefacts:
+===Library artefacts:===
   * commons-busdox = BusDox specification stuff. Auto-generated code for WSDL and XSds
   * commons-peppol = PEPPOL specific implementation of BusDox with the predefined semantics
   * commons-jpa = Base library for JPA2 handling with EclipseLink
   * sml-server-library = Library containing most of the SML code for reuse in the main SML and the standalone SML
   * transport-api = Base library for LIME and START also containing the SPI interface for START receivers
 
-Production artefacts:
+===Production artefacts:===
   * sml-webapp = SML server (web application)
   * sml-client-library = SML client (library)
   * smp-webapp = SMP server (web application)
@@ -23,28 +23,28 @@ Production artefacts:
   * transport-lime-server = LIME server (web application)
   * transport-lime-library = LIME client (library)
 
-Utility artefacts:
+===Utility artefacts:===
   * sml-webapp-standalone = a standalone SML server for testing without DNS
   * sml-client-apps = console and Swing GUI to do SML client actions
   * smp-client-console = console application to access the SMP
   * transport-start-receiver = an example handler for incoming documents on the START server - to be replaced in production environments
   * transport-lime-client = example application using the LIME library to send a document via LIME
 
-Project dependencies:
+===Project dependencies:===
 http://peppol-silicone.googlecode.com/svn/trunk/docs/imgs/dependencies_infrastructure.png
 
 == Validation and visualization ==
 
-Library artefacts:
+===Library artefacts:===
   * commons-cenbii = Contains the CEN BII profile, transaction and collaboration definitions
   * validation-schematron = A generic Schematron validation library based on Saxon
 
-Production artefacts:
+===Production artefacts:===
   * visualization = Default visualization XSLTs for the different document type
   * validation-rules = The business rules as precompiled Schematron-XSLTs plus the assignment to the different validation layers
 
-Utility artefacts:
+===Utility artefacts:===
   * schematron2xslt-maven-plugin = A Maven 2/3 plugin that converts Schematron files to XSLT files at compile time
 
-Project dependencies:
+===Project dependencies:===
 http://peppol-silicone.googlecode.com/svn/trunk/docs/imgs/dependencies_validation.png
