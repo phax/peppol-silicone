@@ -141,6 +141,7 @@ public final class MainCreateCodelistsFilesFromExcel {
     aReadOptions.addColumn (2, "schemeagency", UseType.OPTIONAL, "string", false);
     aReadOptions.addColumn (3, "deprecated", UseType.REQUIRED, "boolean", false);
     aReadOptions.addColumn (4, "since", UseType.REQUIRED, "string", false);
+    aReadOptions.addColumn (6, "structure", UseType.OPTIONAL, "string", false);
 
     // Convert to GeneriCode
     final CodeListDocument aCodeList = ExcelSheetToCodeList.convertToSimpleCodeList (aParticipantSheet,
@@ -164,6 +165,7 @@ public final class MainCreateCodelistsFilesFromExcel {
       final String sDeprecated = GenericodeUtils.getRowValue (aRow, "deprecated");
       final boolean bDeprecated = StringHelper.parseBool (sDeprecated, false);
       final String sSince = GenericodeUtils.getRowValue (aRow, "since");
+      final String sStructure = GenericodeUtils.getRowValue (aRow, "structure");
 
       final IMicroElement eAgency = eRoot.appendElement ("issuingAgency");
       eAgency.setAttribute ("schemeid", sCode);
@@ -172,6 +174,11 @@ public final class MainCreateCodelistsFilesFromExcel {
       if (bDeprecated)
         eAgency.setAttribute ("deprecated", Boolean.TRUE.toString ());
       eAgency.setAttribute ("since", sSince);
+
+      if (StringHelper.hasText (sStructure)) {
+        final IMicroElement eStructure = eAgency.appendElement ("structure");
+        eStructure.appendText (sStructure);
+      }
     }
     final String sXML = MicroWriter.getXMLString (aDoc);
     SimpleFileIO.writeFile (new File (RESULT_DIRECTORY + "PeppolIdentifierIssuingAgencies.xml"),
