@@ -347,6 +347,8 @@ public final class IdentifierUtils {
   /**
    * Central method for unifying participant identifier values for storage in a
    * DB, as participant identifier values need to be handled case-insensitive.
+   * This method can be applied both to participant identifier schemes and
+   * business identifier values.
    * 
    * @param sValue
    *        The DB identifier value to unify. May be <code>null</code>.
