@@ -54,10 +54,10 @@ public final class RegistrationHookFactory {
 
   @Nonnull
   public static IRegistrationHook getInstance () {
-    final String regHookName = ConfigFile.getInstance ().getString ("registrationHook.class");
-    final IRegistrationHook ret = GenericReflection.newInstance (regHookName, IRegistrationHook.class);
-    if (ret == null)
-      throw new IllegalStateException ("Failed to create registration hook instance from class " + regHookName);
-    return ret;
+    final String sRegHookName = ConfigFile.getInstance ().getString ("registrationHook.class");
+    final IRegistrationHook aHook = GenericReflection.newInstance (sRegHookName, IRegistrationHook.class);
+    if (aHook == null)
+      throw new IllegalStateException ("Failed to create registration hook instance from class " + sRegHookName);
+    return aHook;
   }
 }

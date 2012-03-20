@@ -94,12 +94,12 @@ public class DBServiceGroupID implements Serializable {
   }
 
   @Override
-  public boolean equals (final Object other) {
-    if (this == other)
+  public boolean equals (final Object o) {
+    if (this == o)
       return true;
-    if (!(other instanceof DBServiceGroupID))
+    if (!(o instanceof DBServiceGroupID))
       return false;
-    final DBServiceGroupID rhs = (DBServiceGroupID) other;
+    final DBServiceGroupID rhs = (DBServiceGroupID) o;
     return EqualsUtils.nullSafeEquals (m_sBusinessIdentifierScheme, rhs.m_sBusinessIdentifierScheme) &&
            EqualsUtils.nullSafeEquals (m_sBusinessIdentifier, rhs.m_sBusinessIdentifier);
   }

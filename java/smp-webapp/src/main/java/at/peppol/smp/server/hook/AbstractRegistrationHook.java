@@ -44,19 +44,19 @@ import javax.annotation.Nullable;
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 abstract class AbstractRegistrationHook implements IRegistrationHook {
-  private static final ThreadLocal <AbstractRegistrationHook> queue = new ThreadLocal <AbstractRegistrationHook> ();
+  private static final ThreadLocal <AbstractRegistrationHook> s_aQueue = new ThreadLocal <AbstractRegistrationHook> ();
 
   @Nonnull
   protected static final ThreadLocal <AbstractRegistrationHook> getQueueInstance () {
-    return queue;
+    return s_aQueue;
   }
 
   @Nullable
   public static final AbstractRegistrationHook getQueue () {
-    return queue.get ();
+    return s_aQueue.get ();
   }
 
   public static final void resetQueue () {
-    queue.set (null);
+    s_aQueue.set (null);
   }
 }

@@ -37,13 +37,11 @@
  */
 package at.peppol.smp.server.exception;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
+import com.phloc.commons.lang.StackTraceHelper;
 import com.phloc.commons.mime.CMimeType;
 
 /**
@@ -52,10 +50,8 @@ import com.phloc.commons.mime.CMimeType;
 @Provider
 public final class RuntimeExceptionMapper implements ExceptionMapper <RuntimeException> {
   public Response toResponse (final RuntimeException ex) {
-    final StringWriter aSW = new StringWriter ();
-    ex.printStackTrace (new PrintWriter (aSW));
-    aSW.flush ();
+    final String sText = StackTraceHelper.getStackAsString (ex);
 
-    return Response.serverError ().entity (aSW.toString ()).type (CMimeType.TEXT_PLAIN.getAsString ()).build ();
+    return Response.serverError ().entity (sText).type (CMimeType.TEXT_PLAIN.getAsString ()).build ();
   }
 }

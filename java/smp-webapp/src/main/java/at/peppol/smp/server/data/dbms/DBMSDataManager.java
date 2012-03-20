@@ -578,7 +578,7 @@ public final class DBMSDataManager extends AbstractJPAEnabledManager implements 
       final DBProcessID aDBProcessID = new DBProcessID ();
       aDBProcessID.setProcessIdentifier (aProcess.getProcessIdentifier ());
       aDBProcessID.setBusinessIdentifier (aDBServiceMetadata.getId ().asParticipantIdentifier ());
-      aDBProcessID.setDocumentIdentifier (aDBServiceMetadata.getId ().asDocumentTypeIdentifier ());
+      aDBProcessID.setDocumentTypeIdentifier (aDBServiceMetadata.getId ().asDocumentTypeIdentifier ());
 
       final DBProcess aDBProcess = new DBProcess ();
       aDBProcess.setId (aDBProcessID);

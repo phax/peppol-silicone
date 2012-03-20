@@ -41,7 +41,7 @@ package at.peppol.smp.server.exception;
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public class UnknownUserException extends RuntimeException {
-  public UnknownUserException (final String sUsername) {
-    super ("Unknown user '" + sUsername + "'");
+  public UnknownUserException (final String sUserName) {
+    super ("Unknown user '" + sUserName + "'");
   }
 }

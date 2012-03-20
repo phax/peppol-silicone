@@ -74,36 +74,28 @@ public class DBServiceMetadataID implements Serializable {
     setBusinessIdentifier (aParticipantID);
   }
 
-  @Column (name = "documentIdentifier", nullable = false, length = 256)
-  public String getDocumentIdentifier () {
-    return m_sDocumentTypeIdentifier;
-  }
-
-  public void setDocumentIdentifier (final String documentIdentifier) {
-    m_sDocumentTypeIdentifier = documentIdentifier;
-  }
-
   @Column (name = "documentIdentifierScheme", nullable = false, length = 256)
   public String getDocumentIdentifierScheme () {
     return m_sDocumentTypeIdentifierScheme;
   }
 
-  public void setDocumentIdentifierScheme (final String documentIdentifierScheme) {
-    m_sDocumentTypeIdentifierScheme = documentIdentifierScheme;
+  public void setDocumentIdentifierScheme (final String sDocumentIdentifierScheme) {
+    m_sDocumentTypeIdentifierScheme = sDocumentIdentifierScheme;
   }
 
-  public void setDocumentTypeIdentifier (@Nonnull final IReadonlyDocumentTypeIdentifier aDI) {
-    setDocumentIdentifierScheme (aDI.getScheme ());
-    setDocumentIdentifier (aDI.getValue ());
+  @Column (name = "documentIdentifier", nullable = false, length = 256)
+  public String getDocumentIdentifier () {
+    return m_sDocumentTypeIdentifier;
   }
 
-  @Column (name = "businessIdentifier", nullable = false, length = 256)
-  public String getBusinessIdentifier () {
-    return m_sBusinessIdentifier;
+  public void setDocumentIdentifier (final String sDocumentIdentifier) {
+    m_sDocumentTypeIdentifier = sDocumentIdentifier;
   }
 
-  public void setBusinessIdentifier (final String businessIdentifier) {
-    m_sBusinessIdentifier = IdentifierUtils.getUnifiedParticipantDBValue (businessIdentifier);
+  @Transient
+  public void setDocumentTypeIdentifier (@Nonnull final IReadonlyDocumentTypeIdentifier aDocTypeID) {
+    setDocumentIdentifierScheme (aDocTypeID.getScheme ());
+    setDocumentIdentifier (aDocTypeID.getValue ());
   }
 
   @Column (name = "businessIdentifierScheme", nullable = false, length = 256)
@@ -111,10 +103,20 @@ public class DBServiceMetadataID implements Serializable {
     return m_sBusinessIdentifierScheme;
   }
 
-  public void setBusinessIdentifierScheme (final String businessIdentifierScheme) {
-    m_sBusinessIdentifierScheme = IdentifierUtils.getUnifiedParticipantDBValue (businessIdentifierScheme);
+  public void setBusinessIdentifierScheme (final String sBusinessIdentifierScheme) {
+    m_sBusinessIdentifierScheme = IdentifierUtils.getUnifiedParticipantDBValue (sBusinessIdentifierScheme);
   }
 
+  @Column (name = "businessIdentifier", nullable = false, length = 256)
+  public String getBusinessIdentifier () {
+    return m_sBusinessIdentifier;
+  }
+
+  public void setBusinessIdentifier (final String sBusinessIdentifier) {
+    m_sBusinessIdentifier = IdentifierUtils.getUnifiedParticipantDBValue (sBusinessIdentifier);
+  }
+
+  @Transient
   public void setBusinessIdentifier (@Nonnull final IReadonlyParticipantIdentifier aPI) {
     setBusinessIdentifierScheme (aPI.getScheme ());
     setBusinessIdentifier (aPI.getValue ());
@@ -133,14 +135,12 @@ public class DBServiceMetadataID implements Serializable {
   }
 
   @Override
-  public boolean equals (final Object other) {
-    if ((this == other))
+  public boolean equals (final Object o) {
+    if (this == o)
       return true;
-    if ((other == null))
+    if (!(o instanceof DBServiceMetadataID))
       return false;
-    if (!(other instanceof DBServiceMetadataID))
-      return false;
-    final DBServiceMetadataID rhs = (DBServiceMetadataID) other;
+    final DBServiceMetadataID rhs = (DBServiceMetadataID) o;
     return EqualsUtils.nullSafeEquals (m_sBusinessIdentifierScheme, rhs.m_sBusinessIdentifierScheme) &&
            EqualsUtils.nullSafeEquals (m_sBusinessIdentifier, rhs.m_sBusinessIdentifier) &&
            EqualsUtils.nullSafeEquals (m_sDocumentTypeIdentifierScheme, rhs.m_sDocumentTypeIdentifierScheme) &&

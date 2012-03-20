@@ -72,8 +72,8 @@ public class PostRegistrationFilter implements Filter {
   private static final class HttpServletResponseWrapperWithStatus extends HttpServletResponseWrapper {
     private int m_nStatus = HttpServletResponse.SC_OK;
 
-    public HttpServletResponseWrapperWithStatus (final HttpServletResponse response) {
-      super (response);
+    public HttpServletResponseWrapperWithStatus (final HttpServletResponse aHttpResponse) {
+      super (aHttpResponse);
     }
 
     @Override

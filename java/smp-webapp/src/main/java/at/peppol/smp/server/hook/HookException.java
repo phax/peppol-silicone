@@ -41,11 +41,11 @@ package at.peppol.smp.server.hook;
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class HookException extends RuntimeException {
-  public HookException (final String msg, final Throwable t) {
-    super (msg, t);
+  public HookException (final String sMsg) {
+    super (sMsg);
   }
 
-  public HookException (final String msg) {
-    super (msg);
+  public HookException (final String sMsg, final Throwable t) {
+    super (sMsg, t);
   }
 }

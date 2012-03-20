@@ -67,7 +67,7 @@ import com.phloc.commons.string.ToStringGenerator;
  */
 @Embeddable
 public class DBProcessID implements Serializable {
-  private String m_sProcessIdentifierType;
+  private String m_sProcessIdentifierScheme;
   private String m_sProcessIdentifier;
   private String m_sBusinessIdentifierScheme;
   private String m_sBusinessIdentifier;
@@ -76,36 +76,28 @@ public class DBProcessID implements Serializable {
 
   public DBProcessID () {}
 
+  @Column (name = "processIdentifierType", nullable = false, length = 256)
+  public String getProcessIdentifierType () {
+    return m_sProcessIdentifierScheme;
+  }
+
+  public void setProcessIdentifierType (final String sProcessIdentifierScheme) {
+    m_sProcessIdentifierScheme = sProcessIdentifierScheme;
+  }
+
   @Column (name = "processIdentifier", nullable = false, length = 256)
   public String getProcessIdentifier () {
     return m_sProcessIdentifier;
   }
 
-  public void setProcessIdentifier (final String processIdentifier) {
-    m_sProcessIdentifier = processIdentifier;
+  public void setProcessIdentifier (final String sProcessIdentifier) {
+    m_sProcessIdentifier = sProcessIdentifier;
   }
 
-  @Column (name = "processIdentifierType", nullable = false, length = 256)
-  public String getProcessIdentifierType () {
-    return m_sProcessIdentifierType;
-  }
-
-  public void setProcessIdentifierType (final String processIdentifierType) {
-    m_sProcessIdentifierType = processIdentifierType;
-  }
-
+  @Transient
   public void setProcessIdentifier (@Nonnull final IReadonlyProcessIdentifier aProcessID) {
     setProcessIdentifierType (aProcessID.getScheme ());
     setProcessIdentifier (aProcessID.getValue ());
-  }
-
-  @Column (name = "businessIdentifier", nullable = false, length = 256)
-  public String getBusinessIdentifier () {
-    return m_sBusinessIdentifier;
-  }
-
-  public void setBusinessIdentifier (final String businessIdentifier) {
-    m_sBusinessIdentifier = IdentifierUtils.getUnifiedParticipantDBValue (businessIdentifier);
   }
 
   @Column (name = "businessIdentifierScheme", nullable = false, length = 256)
@@ -113,22 +105,23 @@ public class DBProcessID implements Serializable {
     return m_sBusinessIdentifierScheme;
   }
 
-  public void setBusinessIdentifierScheme (final String businessIdentifierScheme) {
-    m_sBusinessIdentifierScheme = IdentifierUtils.getUnifiedParticipantDBValue (businessIdentifierScheme);
+  public void setBusinessIdentifierScheme (final String sBusinessIdentifierScheme) {
+    m_sBusinessIdentifierScheme = IdentifierUtils.getUnifiedParticipantDBValue (sBusinessIdentifierScheme);
   }
 
+  @Column (name = "businessIdentifier", nullable = false, length = 256)
+  public String getBusinessIdentifier () {
+    return m_sBusinessIdentifier;
+  }
+
+  public void setBusinessIdentifier (final String sBusinessIdentifier) {
+    m_sBusinessIdentifier = IdentifierUtils.getUnifiedParticipantDBValue (sBusinessIdentifier);
+  }
+
+  @Transient
   public void setBusinessIdentifier (@Nonnull final IReadonlyParticipantIdentifier aBusinessIdentifier) {
     setBusinessIdentifierScheme (aBusinessIdentifier.getScheme ());
     setBusinessIdentifier (aBusinessIdentifier.getValue ());
-  }
-
-  @Column (name = "documentIdentifier", nullable = false, length = 256)
-  public String getDocumentIdentifier () {
-    return m_sDocumentTypeIdentifier;
-  }
-
-  public void setDocumentIdentifier (final String documentIdentifier) {
-    m_sDocumentTypeIdentifier = documentIdentifier;
   }
 
   @Column (name = "documentIdentifierScheme", nullable = false, length = 256)
@@ -136,13 +129,23 @@ public class DBProcessID implements Serializable {
     return m_sDocumentTypeIdentifierScheme;
   }
 
-  public void setDocumentIdentifierScheme (final String documentIdentifierScheme) {
-    m_sDocumentTypeIdentifierScheme = documentIdentifierScheme;
+  public void setDocumentIdentifierScheme (final String sDocumentIdentifierScheme) {
+    m_sDocumentTypeIdentifierScheme = sDocumentIdentifierScheme;
   }
 
-  public void setDocumentIdentifier (final IReadonlyDocumentTypeIdentifier aDocumentID) {
-    setDocumentIdentifierScheme (aDocumentID.getScheme ());
-    setDocumentIdentifier (aDocumentID.getValue ());
+  @Column (name = "documentIdentifier", nullable = false, length = 256)
+  public String getDocumentIdentifier () {
+    return m_sDocumentTypeIdentifier;
+  }
+
+  public void setDocumentIdentifier (final String sDocumentIdentifier) {
+    m_sDocumentTypeIdentifier = sDocumentIdentifier;
+  }
+
+  @Transient
+  public void setDocumentTypeIdentifier (@Nonnull final IReadonlyDocumentTypeIdentifier aDocumentTypeID) {
+    setDocumentIdentifierScheme (aDocumentTypeID.getScheme ());
+    setDocumentIdentifier (aDocumentTypeID.getValue ());
   }
 
   @Transient
@@ -160,7 +163,7 @@ public class DBProcessID implements Serializable {
   @Transient
   @Nonnull
   public ProcessIdentifierType asProcessIdentifier () {
-    return new SimpleProcessIdentifier (m_sProcessIdentifierType, m_sProcessIdentifier);
+    return new SimpleProcessIdentifier (m_sProcessIdentifierScheme, m_sProcessIdentifier);
   }
 
   @Override
@@ -174,7 +177,7 @@ public class DBProcessID implements Serializable {
            EqualsUtils.nullSafeEquals (m_sBusinessIdentifier, rhs.m_sBusinessIdentifier) &&
            EqualsUtils.nullSafeEquals (m_sDocumentTypeIdentifierScheme, rhs.m_sDocumentTypeIdentifierScheme) &&
            EqualsUtils.nullSafeEquals (m_sDocumentTypeIdentifier, rhs.m_sDocumentTypeIdentifier) &&
-           EqualsUtils.nullSafeEquals (m_sProcessIdentifierType, rhs.m_sProcessIdentifierType) &&
+           EqualsUtils.nullSafeEquals (m_sProcessIdentifierScheme, rhs.m_sProcessIdentifierScheme) &&
            EqualsUtils.nullSafeEquals (m_sProcessIdentifier, rhs.m_sProcessIdentifier);
   }
 
@@ -184,7 +187,7 @@ public class DBProcessID implements Serializable {
                                        .append (m_sBusinessIdentifier)
                                        .append (m_sDocumentTypeIdentifierScheme)
                                        .append (m_sDocumentTypeIdentifier)
-                                       .append (m_sProcessIdentifierType)
+                                       .append (m_sProcessIdentifierScheme)
                                        .append (m_sProcessIdentifier)
                                        .getHashCode ();
   }
@@ -195,7 +198,7 @@ public class DBProcessID implements Serializable {
                                        .append ("biValue", m_sBusinessIdentifier)
                                        .append ("diScheme", m_sDocumentTypeIdentifierScheme)
                                        .append ("diValue", m_sDocumentTypeIdentifier)
-                                       .append ("piScheme", m_sProcessIdentifierType)
+                                       .append ("piScheme", m_sProcessIdentifierScheme)
                                        .append ("piValue", m_sProcessIdentifier)
                                        .toString ();
   }
