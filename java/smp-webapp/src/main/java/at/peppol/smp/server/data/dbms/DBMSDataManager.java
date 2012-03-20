@@ -244,6 +244,7 @@ public final class DBMSDataManager extends AbstractJPAEnabledManager implements 
 
       m_aHook.delete (aPI);
 
+      // Check if the service group is existing
       final DBServiceGroupID aDBServiceGroupID = new DBServiceGroupID (aPI);
       final DBServiceGroup aDBServiceGroup = getEntityManager ().find (DBServiceGroup.class, aDBServiceGroupID);
       if (aDBServiceGroup == null) {
@@ -251,6 +252,7 @@ public final class DBMSDataManager extends AbstractJPAEnabledManager implements 
         return;
       }
 
+      // Check the owner ship of the service group
       final DBOwnershipID aDBOwnershipID = new DBOwnershipID (aCredentials.getUsername (), aPI);
       final DBOwnership aDBOwnership = getEntityManager ().find (DBOwnership.class, aDBOwnershipID);
       if (aDBOwnership == null) {

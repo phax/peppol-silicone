@@ -128,13 +128,14 @@ public final class ServiceMetadataInterface {
     try {
       final ServiceInformationType aServiceInformationType = aServiceMetadata.getServiceInformation ();
 
+      // Business identifiers from path (ServiceGroupID) and from service
+      // metadata (body) must equal path
       final ParticipantIdentifierType aServiceGroupId = SimpleParticipantIdentifier.createFromURIPart (sServiceGroupId);
       if (!IdentifierUtils.areIdentifiersEqual (aServiceInformationType.getParticipantIdentifier (), aServiceGroupId)) {
         s_aLogger.info ("Save service metadata was called with bad parameters. serviceInfo:" +
                         aServiceInformationType.getParticipantIdentifier () +
                         " param:" +
                         aServiceGroupId);
-        // Business identifier must equal path
         return Response.status (Status.BAD_REQUEST).build ();
       }
 

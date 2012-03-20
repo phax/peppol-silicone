@@ -54,31 +54,31 @@ import javax.persistence.Table;
 @Entity
 @Table (name = "smp_user")
 public class DBUser implements Serializable {
-  private String m_sUsername;
+  private String m_sUserName;
   private String m_sPassword;
   private Set <DBOwnership> m_aOwnerships = new HashSet <DBOwnership> ();
 
   public DBUser () {}
 
-  public DBUser (final String username, final String password) {
-    m_sUsername = username;
-    m_sPassword = password;
+  public DBUser (final String sUserName, final String sPassword) {
+    m_sUserName = sUserName;
+    m_sPassword = sPassword;
   }
 
-  public DBUser (final String username, final String password, final Set <DBOwnership> ownerships) {
-    m_sUsername = username;
-    m_sPassword = password;
-    m_aOwnerships = ownerships;
+  public DBUser (final String sUserName, final String sPassword, final Set <DBOwnership> aOwnerships) {
+    m_sUserName = sUserName;
+    m_sPassword = sPassword;
+    m_aOwnerships = aOwnerships;
   }
 
   @Id
   @Column (name = "username", unique = true, nullable = false, length = 256)
   public String getUsername () {
-    return m_sUsername;
+    return m_sUserName;
   }
 
-  public void setUsername (final String username) {
-    m_sUsername = username;
+  public void setUsername (final String sUserName) {
+    m_sUserName = sUserName;
   }
 
   @Column (name = "password", nullable = false, length = 256)
@@ -86,8 +86,8 @@ public class DBUser implements Serializable {
     return m_sPassword;
   }
 
-  public void setPassword (final String password) {
-    m_sPassword = password;
+  public void setPassword (final String sPassword) {
+    m_sPassword = sPassword;
   }
 
   @OneToMany (fetch = FetchType.LAZY, mappedBy = "user")
@@ -95,7 +95,7 @@ public class DBUser implements Serializable {
     return m_aOwnerships;
   }
 
-  public void setOwnerships (final Set <DBOwnership> ownerships) {
-    m_aOwnerships = ownerships;
+  public void setOwnerships (final Set <DBOwnership> aOwnerships) {
+    m_aOwnerships = aOwnerships;
   }
 }

@@ -42,6 +42,7 @@ import java.io.Serializable;
 import javax.annotation.Nonnull;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.Transient;
 
 import at.peppol.busdox.identifier.IReadonlyDocumentTypeIdentifier;
 import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
@@ -74,8 +75,8 @@ public class DBEndpointID implements Serializable {
     return m_sBusinessIdentifierScheme;
   }
 
-  public void setBusinessIdentifierScheme (final String businessIdentifierScheme) {
-    m_sBusinessIdentifierScheme = IdentifierUtils.getUnifiedParticipantDBValue (businessIdentifierScheme);
+  public void setBusinessIdentifierScheme (final String sBusinessIdentifierScheme) {
+    m_sBusinessIdentifierScheme = IdentifierUtils.getUnifiedParticipantDBValue (sBusinessIdentifierScheme);
   }
 
   @Column (name = "businessIdentifier", nullable = false, length = 256)
@@ -83,10 +84,11 @@ public class DBEndpointID implements Serializable {
     return m_sBusinessIdentifier;
   }
 
-  public void setBusinessIdentifier (final String businessIdentifier) {
-    m_sBusinessIdentifier = IdentifierUtils.getUnifiedParticipantDBValue (businessIdentifier);
+  public void setBusinessIdentifier (final String sBusinessIdentifier) {
+    m_sBusinessIdentifier = IdentifierUtils.getUnifiedParticipantDBValue (sBusinessIdentifier);
   }
 
+  @Transient
   public void setBusinessIdentifier (@Nonnull final IReadonlyParticipantIdentifier aBusinessIdentifier) {
     setBusinessIdentifierScheme (aBusinessIdentifier.getScheme ());
     setBusinessIdentifier (aBusinessIdentifier.getValue ());
@@ -97,8 +99,8 @@ public class DBEndpointID implements Serializable {
     return m_sProcessIdentifierScheme;
   }
 
-  public void setProcessIdentifierType (final String processIdentifierType) {
-    m_sProcessIdentifierScheme = processIdentifierType;
+  public void setProcessIdentifierType (final String sProcessIdentifierScheme) {
+    m_sProcessIdentifierScheme = sProcessIdentifierScheme;
   }
 
   @Column (name = "processIdentifier", nullable = false, length = 256)
@@ -106,22 +108,14 @@ public class DBEndpointID implements Serializable {
     return m_sProcessIdentifier;
   }
 
-  public void setProcessIdentifier (final String processIdentifier) {
-    m_sProcessIdentifier = processIdentifier;
+  public void setProcessIdentifier (final String sProcessIdentifier) {
+    m_sProcessIdentifier = sProcessIdentifier;
   }
 
-  public void setProcessIdentifier (final IReadonlyProcessIdentifier aProcessID) {
+  @Transient
+  public void setProcessIdentifier (@Nonnull final IReadonlyProcessIdentifier aProcessID) {
     setProcessIdentifierType (aProcessID.getScheme ());
     setProcessIdentifier (aProcessID.getValue ());
-  }
-
-  @Column (name = "documentIdentifier", nullable = false, length = 256)
-  public String getDocumentIdentifier () {
-    return m_sDocumentIdentifier;
-  }
-
-  public void setDocumentIdentifier (final String documentIdentifier) {
-    m_sDocumentIdentifier = documentIdentifier;
   }
 
   @Column (name = "documentIdentifierScheme", nullable = false, length = 256)
@@ -129,13 +123,23 @@ public class DBEndpointID implements Serializable {
     return m_sDocumentIdentifierScheme;
   }
 
-  public void setDocumentIdentifierScheme (final String documentIdentifierScheme) {
-    m_sDocumentIdentifierScheme = documentIdentifierScheme;
+  public void setDocumentIdentifierScheme (final String sDocumentIdentifierScheme) {
+    m_sDocumentIdentifierScheme = sDocumentIdentifierScheme;
   }
 
-  public void setDocumentIdentifier (final IReadonlyDocumentTypeIdentifier aDocumentID) {
-    setDocumentIdentifierScheme (aDocumentID.getScheme ());
-    setDocumentIdentifier (aDocumentID.getValue ());
+  @Column (name = "documentIdentifier", nullable = false, length = 256)
+  public String getDocumentIdentifier () {
+    return m_sDocumentIdentifier;
+  }
+
+  public void setDocumentIdentifier (final String sDocumentIdentifier) {
+    m_sDocumentIdentifier = sDocumentIdentifier;
+  }
+
+  @Transient
+  public void setDocumentIdentifier (@Nonnull final IReadonlyDocumentTypeIdentifier aDocumentTypeID) {
+    setDocumentIdentifierScheme (aDocumentTypeID.getScheme ());
+    setDocumentIdentifier (aDocumentTypeID.getValue ());
   }
 
   @Column (name = "endpointReference", nullable = false, length = 256)
@@ -143,8 +147,8 @@ public class DBEndpointID implements Serializable {
     return m_sEndpointReference;
   }
 
-  public void setEndpointReference (final String endpointReference) {
-    m_sEndpointReference = endpointReference;
+  public void setEndpointReference (final String sEndpointReference) {
+    m_sEndpointReference = sEndpointReference;
   }
 
   @Column (name = "transportProfile", nullable = false, length = 256)
@@ -152,8 +156,8 @@ public class DBEndpointID implements Serializable {
     return m_sTransportProfile;
   }
 
-  public void setTransportProfile (final String transportProfile) {
-    m_sTransportProfile = transportProfile;
+  public void setTransportProfile (final String sTransportProfile) {
+    m_sTransportProfile = sTransportProfile;
   }
 
   @Override

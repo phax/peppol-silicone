@@ -74,44 +74,44 @@ public class DBEndpoint implements Serializable {
 
   public DBEndpoint () {}
 
-  public DBEndpoint (final DBEndpointID id,
-                     final DBProcess process,
-                     final boolean requireBusinessLevelSignature,
-                     final Date serviceExpirationDate,
-                     final String certificate,
-                     final String serviceDescription,
-                     final String technicalContactUrl) {
-    m_aID = id;
-    m_aProcess = process;
-    m_bRequireBusinessLevelSignature = requireBusinessLevelSignature;
-    m_aServiceExpirationDate = serviceExpirationDate;
-    m_sCertificate = certificate;
-    m_sServiceDescription = serviceDescription;
-    m_sTechnicalContactUrl = technicalContactUrl;
+  public DBEndpoint (final DBEndpointID aID,
+                     final DBProcess aProcess,
+                     final boolean bRequireBusinessLevelSignature,
+                     final Date aServiceExpirationDate,
+                     final String sCertificate,
+                     final String sServiceDescription,
+                     final String sTechnicalContactUrl) {
+    m_aID = aID;
+    m_aProcess = aProcess;
+    m_bRequireBusinessLevelSignature = bRequireBusinessLevelSignature;
+    m_aServiceExpirationDate = aServiceExpirationDate;
+    m_sCertificate = sCertificate;
+    m_sServiceDescription = sServiceDescription;
+    m_sTechnicalContactUrl = sTechnicalContactUrl;
   }
 
-  public DBEndpoint (final DBEndpointID id,
-                     final DBProcess process,
-                     final String extension,
-                     final boolean requireBusinessLevelSignature,
-                     final String minimumAuthenticationLevel,
-                     final Date serviceActivationDate,
-                     final Date serviceExpirationDate,
-                     final String certificate,
-                     final String serviceDescription,
-                     final String technicalContactUrl,
-                     final String technicalInformationUrl) {
-    m_aID = id;
-    m_aProcess = process;
-    m_sExtension = extension;
-    m_bRequireBusinessLevelSignature = requireBusinessLevelSignature;
-    m_sMinimumAuthenticationLevel = minimumAuthenticationLevel;
-    m_aServiceActivationDate = serviceActivationDate;
-    m_aServiceExpirationDate = serviceExpirationDate;
-    m_sCertificate = certificate;
-    m_sServiceDescription = serviceDescription;
-    m_sTechnicalContactUrl = technicalContactUrl;
-    m_sTechnicalInformationUrl = technicalInformationUrl;
+  public DBEndpoint (final DBEndpointID aID,
+                     final DBProcess aProcess,
+                     final String sExtension,
+                     final boolean bRequireBusinessLevelSignature,
+                     final String sMinimumAuthenticationLevel,
+                     final Date aServiceActivationDate,
+                     final Date aServiceExpirationDate,
+                     final String sCertificate,
+                     final String sServiceDescription,
+                     final String sTechnicalContactUrl,
+                     final String sTechnicalInformationUrl) {
+    m_aID = aID;
+    m_aProcess = aProcess;
+    m_sExtension = sExtension;
+    m_bRequireBusinessLevelSignature = bRequireBusinessLevelSignature;
+    m_sMinimumAuthenticationLevel = sMinimumAuthenticationLevel;
+    m_aServiceActivationDate = aServiceActivationDate;
+    m_aServiceExpirationDate = aServiceExpirationDate;
+    m_sCertificate = sCertificate;
+    m_sServiceDescription = sServiceDescription;
+    m_sTechnicalContactUrl = sTechnicalContactUrl;
+    m_sTechnicalInformationUrl = sTechnicalInformationUrl;
   }
 
   @EmbeddedId
@@ -119,8 +119,8 @@ public class DBEndpoint implements Serializable {
     return m_aID;
   }
 
-  public void setId (final DBEndpointID id) {
-    m_aID = id;
+  public void setId (final DBEndpointID aID) {
+    m_aID = aID;
   }
 
   @ManyToOne (fetch = FetchType.LAZY)
@@ -158,8 +158,8 @@ public class DBEndpoint implements Serializable {
     return m_aProcess;
   }
 
-  public void setProcess (final DBProcess process) {
-    m_aProcess = process;
+  public void setProcess (final DBProcess aProcess) {
+    m_aProcess = aProcess;
   }
 
   @Lob
@@ -168,8 +168,8 @@ public class DBEndpoint implements Serializable {
     return m_sExtension;
   }
 
-  public void setExtension (final String extension) {
-    m_sExtension = extension;
+  public void setExtension (final String sExtension) {
+    m_sExtension = sExtension;
   }
 
   @Column (name = "requireBusinessLevelSignature", nullable = false)
@@ -177,8 +177,8 @@ public class DBEndpoint implements Serializable {
     return m_bRequireBusinessLevelSignature;
   }
 
-  public void setRequireBusinessLevelSignature (final boolean requireBusinessLevelSignature) {
-    m_bRequireBusinessLevelSignature = requireBusinessLevelSignature;
+  public void setRequireBusinessLevelSignature (final boolean bRequireBusinessLevelSignature) {
+    m_bRequireBusinessLevelSignature = bRequireBusinessLevelSignature;
   }
 
   @Column (name = "minimumAuthenticationLevel", length = 256)
@@ -186,8 +186,8 @@ public class DBEndpoint implements Serializable {
     return m_sMinimumAuthenticationLevel;
   }
 
-  public void setMinimumAuthenticationLevel (final String minimumAuthenticationLevel) {
-    m_sMinimumAuthenticationLevel = minimumAuthenticationLevel;
+  public void setMinimumAuthenticationLevel (final String sMinimumAuthenticationLevel) {
+    m_sMinimumAuthenticationLevel = sMinimumAuthenticationLevel;
   }
 
   @Temporal (TemporalType.TIMESTAMP)
@@ -196,8 +196,8 @@ public class DBEndpoint implements Serializable {
     return m_aServiceActivationDate;
   }
 
-  public void setServiceActivationDate (final Date serviceActivationDate) {
-    m_aServiceActivationDate = serviceActivationDate;
+  public void setServiceActivationDate (final Date aServiceActivationDate) {
+    m_aServiceActivationDate = aServiceActivationDate;
   }
 
   @Temporal (TemporalType.TIMESTAMP)
@@ -206,8 +206,8 @@ public class DBEndpoint implements Serializable {
     return m_aServiceExpirationDate;
   }
 
-  public void setServiceExpirationDate (final Date serviceExpirationDate) {
-    m_aServiceExpirationDate = serviceExpirationDate;
+  public void setServiceExpirationDate (final Date aServiceExpirationDate) {
+    m_aServiceExpirationDate = aServiceExpirationDate;
   }
 
   @Lob
@@ -216,8 +216,8 @@ public class DBEndpoint implements Serializable {
     return m_sCertificate;
   }
 
-  public void setCertificate (final String certificate) {
-    m_sCertificate = certificate;
+  public void setCertificate (final String sCertificate) {
+    m_sCertificate = sCertificate;
   }
 
   @Lob
@@ -226,8 +226,8 @@ public class DBEndpoint implements Serializable {
     return m_sServiceDescription;
   }
 
-  public void setServiceDescription (final String serviceDescription) {
-    m_sServiceDescription = serviceDescription;
+  public void setServiceDescription (final String sServiceDescription) {
+    m_sServiceDescription = sServiceDescription;
   }
 
   @Column (name = "technicalContactUrl", nullable = false, length = 256)
@@ -235,8 +235,8 @@ public class DBEndpoint implements Serializable {
     return m_sTechnicalContactUrl;
   }
 
-  public void setTechnicalContactUrl (final String technicalContactUrl) {
-    m_sTechnicalContactUrl = technicalContactUrl;
+  public void setTechnicalContactUrl (final String sTechnicalContactUrl) {
+    m_sTechnicalContactUrl = sTechnicalContactUrl;
   }
 
   @Column (name = "technicalInformationUrl", length = 256)
@@ -244,7 +244,7 @@ public class DBEndpoint implements Serializable {
     return m_sTechnicalInformationUrl;
   }
 
-  public void setTechnicalInformationUrl (final String technicalInformationUrl) {
-    m_sTechnicalInformationUrl = technicalInformationUrl;
+  public void setTechnicalInformationUrl (final String sTechnicalInformationUrl) {
+    m_sTechnicalInformationUrl = sTechnicalInformationUrl;
   }
 }
