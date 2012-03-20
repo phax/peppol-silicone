@@ -198,7 +198,7 @@ public final class ServiceGroupInterface {
       return Response.ok ().build ();
     }
     catch (final RuntimeException ex) {
-      s_aLogger.error ("Error deleting service " + aServiceGroupID, ex);
+      s_aLogger.error ("Error deleting service group " + aServiceGroupID, ex);
       throw ex;
     }
   }

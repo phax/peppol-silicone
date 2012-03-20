@@ -67,18 +67,18 @@ public class DBServiceGroup implements Serializable {
 
   public DBServiceGroup () {}
 
-  public DBServiceGroup (final DBServiceGroupID id) {
-    m_aID = id;
+  public DBServiceGroup (final DBServiceGroupID aID) {
+    m_aID = aID;
   }
 
-  public DBServiceGroup (final DBServiceGroupID id,
-                         final String extension,
-                         final Set <DBOwnership> ownerships,
-                         final Set <DBServiceMetadata> serviceMetadatas) {
-    m_aID = id;
-    m_sExtension = extension;
-    m_aOwnerships = ownerships;
-    m_aServiceMetadatas = serviceMetadatas;
+  public DBServiceGroup (final DBServiceGroupID aID,
+                         final String sExtension,
+                         final Set <DBOwnership> aOwnerships,
+                         final Set <DBServiceMetadata> aServiceMetadatas) {
+    m_aID = aID;
+    m_sExtension = sExtension;
+    m_aOwnerships = aOwnerships;
+    m_aServiceMetadatas = aServiceMetadatas;
   }
 
   @EmbeddedId
@@ -94,8 +94,8 @@ public class DBServiceGroup implements Serializable {
     return m_aID;
   }
 
-  public void setId (final DBServiceGroupID id) {
-    m_aID = id;
+  public void setId (final DBServiceGroupID aID) {
+    m_aID = aID;
   }
 
   @Lob
@@ -104,8 +104,8 @@ public class DBServiceGroup implements Serializable {
     return m_sExtension;
   }
 
-  public void setExtension (final String extension) {
-    m_sExtension = extension;
+  public void setExtension (final String sExtension) {
+    m_sExtension = sExtension;
   }
 
   @OneToMany (fetch = FetchType.LAZY, mappedBy = "serviceGroup", cascade = { CascadeType.ALL })
@@ -113,8 +113,8 @@ public class DBServiceGroup implements Serializable {
     return m_aOwnerships;
   }
 
-  public void setOwnerships (final Set <DBOwnership> ownerships) {
-    m_aOwnerships = ownerships;
+  public void setOwnerships (final Set <DBOwnership> aOwnerships) {
+    m_aOwnerships = aOwnerships;
   }
 
   @OneToMany (fetch = FetchType.LAZY, mappedBy = "serviceGroup", cascade = { CascadeType.ALL })
@@ -122,7 +122,7 @@ public class DBServiceGroup implements Serializable {
     return m_aServiceMetadatas;
   }
 
-  public void setServiceMetadatas (final Set <DBServiceMetadata> serviceMetadatas) {
-    m_aServiceMetadatas = serviceMetadatas;
+  public void setServiceMetadatas (final Set <DBServiceMetadata> aServiceMetadatas) {
+    m_aServiceMetadatas = aServiceMetadatas;
   }
 }
