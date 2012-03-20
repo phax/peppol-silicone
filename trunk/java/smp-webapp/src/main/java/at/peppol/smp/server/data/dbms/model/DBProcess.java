@@ -68,19 +68,19 @@ public class DBProcess implements Serializable {
 
   public DBProcess () {}
 
-  public DBProcess (final DBProcessID id, final DBServiceMetadata serviceMetadata) {
-    m_aID = id;
-    m_aServiceMetadata = serviceMetadata;
+  public DBProcess (final DBProcessID aID, final DBServiceMetadata aServiceMetadata) {
+    m_aID = aID;
+    m_aServiceMetadata = aServiceMetadata;
   }
 
-  public DBProcess (final DBProcessID id,
-                    final DBServiceMetadata serviceMetadata,
-                    final String extension,
-                    final Set <DBEndpoint> endpoints) {
-    m_aID = id;
-    m_aServiceMetadata = serviceMetadata;
-    m_sExtension = extension;
-    m_aEndpoints = endpoints;
+  public DBProcess (final DBProcessID aID,
+                    final DBServiceMetadata aServiceMetadata,
+                    final String sExtension,
+                    final Set <DBEndpoint> aEndpoints) {
+    m_aID = aID;
+    m_aServiceMetadata = aServiceMetadata;
+    m_sExtension = sExtension;
+    m_aEndpoints = aEndpoints;
   }
 
   @EmbeddedId
@@ -88,8 +88,8 @@ public class DBProcess implements Serializable {
     return m_aID;
   }
 
-  public void setId (final DBProcessID id) {
-    m_aID = id;
+  public void setId (final DBProcessID aID) {
+    m_aID = aID;
   }
 
   @ManyToOne (fetch = FetchType.LAZY)
@@ -117,8 +117,8 @@ public class DBProcess implements Serializable {
     return m_aServiceMetadata;
   }
 
-  public void setServiceMetadata (final DBServiceMetadata serviceMetadata) {
-    m_aServiceMetadata = serviceMetadata;
+  public void setServiceMetadata (final DBServiceMetadata aServiceMetadata) {
+    m_aServiceMetadata = aServiceMetadata;
   }
 
   @Lob
@@ -127,8 +127,8 @@ public class DBProcess implements Serializable {
     return m_sExtension;
   }
 
-  public void setExtension (final String extension) {
-    m_sExtension = extension;
+  public void setExtension (final String sExtension) {
+    m_sExtension = sExtension;
   }
 
   @OneToMany (fetch = FetchType.LAZY, mappedBy = "process", cascade = { CascadeType.ALL })
@@ -136,7 +136,7 @@ public class DBProcess implements Serializable {
     return m_aEndpoints;
   }
 
-  public void setEndpoints (final Set <DBEndpoint> endpoints) {
-    m_aEndpoints = endpoints;
+  public void setEndpoints (final Set <DBEndpoint> aEndpoints) {
+    m_aEndpoints = aEndpoints;
   }
 }

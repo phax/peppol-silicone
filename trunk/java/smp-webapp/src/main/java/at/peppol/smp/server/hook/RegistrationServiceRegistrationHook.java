@@ -95,13 +95,13 @@ public final class RegistrationServiceRegistrationHook extends AbstractRegistrat
     s_aLogger.info ("This SMP has the ID: " + s_sSMPID);
   }
 
-  private static enum MethodType {
+  private static enum EAction {
     CREATE,
     DELETE
   }
 
   private SimpleParticipantIdentifier m_aBusinessIdentifier;
-  private MethodType m_eMethodType;
+  private EAction m_eAction;
 
   public RegistrationServiceRegistrationHook () {
     resetQueue ();
@@ -137,7 +137,7 @@ public final class RegistrationServiceRegistrationHook extends AbstractRegistrat
 
   public void create (final IParticipantIdentifier aPI) throws HookException {
     m_aBusinessIdentifier = new SimpleParticipantIdentifier (aPI);
-    m_eMethodType = MethodType.CREATE;
+    m_eAction = EAction.CREATE;
     s_aLogger.info ("Trying to create business " + m_aBusinessIdentifier + " in Business Identifier Manager Service");
 
     try {
@@ -165,7 +165,7 @@ public final class RegistrationServiceRegistrationHook extends AbstractRegistrat
 
   public void delete (final IParticipantIdentifier aPI) throws HookException {
     m_aBusinessIdentifier = new SimpleParticipantIdentifier (aPI);
-    m_eMethodType = MethodType.DELETE;
+    m_eAction = EAction.DELETE;
     s_aLogger.info ("Trying to delete business " + m_aBusinessIdentifier + " in Business Identifier Manager Service");
 
     try {
@@ -195,14 +195,16 @@ public final class RegistrationServiceRegistrationHook extends AbstractRegistrat
         _setupSSLSocketFactory ();
         final ManageParticipantIdentifierServiceCaller aSMLCaller = new ManageParticipantIdentifierServiceCaller (s_aSMLEndpointURL);
 
-        switch (m_eMethodType) {
+        switch (m_eAction) {
           case CREATE:
+            // Undo create
             s_aLogger.warn ("CREATE failed in database, so deleting " +
                             m_aBusinessIdentifier.getURIEncoded () +
                             " from SML.");
             aSMLCaller.delete (m_aBusinessIdentifier);
             break;
           case DELETE:
+            // Undo delete
             s_aLogger.warn ("DELETE failed in database, so creating " +
                             m_aBusinessIdentifier.getURIEncoded () +
                             " in SML.");

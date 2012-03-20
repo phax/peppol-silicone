@@ -60,20 +60,20 @@ public class DBServiceMetadataRedirection implements Serializable {
 
   public DBServiceMetadataRedirection () {}
 
-  public DBServiceMetadataRedirection (final DBServiceMetadataRedirectionID id,
-                                       final String redirectionUrl,
-                                       final String certificateUid) {
-    this (id, redirectionUrl, null, certificateUid);
+  public DBServiceMetadataRedirection (final DBServiceMetadataRedirectionID aID,
+                                       final String sRedirectionUrl,
+                                       final String sCertificateUid) {
+    this (aID, sRedirectionUrl, null, sCertificateUid);
   }
 
-  public DBServiceMetadataRedirection (final DBServiceMetadataRedirectionID id,
-                                       final String redirectionUrl,
-                                       final String extension,
-                                       final String certificateUid) {
-    m_aID = id;
-    m_sRedirectionUrl = redirectionUrl;
-    m_sExtension = extension;
-    m_sCertificateUid = certificateUid;
+  public DBServiceMetadataRedirection (final DBServiceMetadataRedirectionID aID,
+                                       final String sRedirectionUrl,
+                                       final String sExtension,
+                                       final String sCertificateUid) {
+    m_aID = aID;
+    m_sRedirectionUrl = sRedirectionUrl;
+    m_sExtension = sExtension;
+    m_sCertificateUid = sCertificateUid;
   }
 
   @EmbeddedId
@@ -81,8 +81,8 @@ public class DBServiceMetadataRedirection implements Serializable {
     return m_aID;
   }
 
-  public void setId (final DBServiceMetadataRedirectionID id) {
-    m_aID = id;
+  public void setId (final DBServiceMetadataRedirectionID aID) {
+    m_aID = aID;
   }
 
   @Column (name = "redirectionUrl", nullable = false, length = 256)
@@ -90,8 +90,8 @@ public class DBServiceMetadataRedirection implements Serializable {
     return m_sRedirectionUrl;
   }
 
-  public void setRedirectionUrl (final String redirectionUrl) {
-    m_sRedirectionUrl = redirectionUrl;
+  public void setRedirectionUrl (final String sRedirectionUrl) {
+    m_sRedirectionUrl = sRedirectionUrl;
   }
 
   @Lob
@@ -100,8 +100,8 @@ public class DBServiceMetadataRedirection implements Serializable {
     return m_sExtension;
   }
 
-  public void setExtension (final String extension) {
-    m_sExtension = extension;
+  public void setExtension (final String sExtension) {
+    m_sExtension = sExtension;
   }
 
   @Column (name = "certificateUID", nullable = false, length = 256)
@@ -109,7 +109,7 @@ public class DBServiceMetadataRedirection implements Serializable {
     return m_sCertificateUid;
   }
 
-  public void setCertificateUid (final String certificateUid) {
-    m_sCertificateUid = certificateUid;
+  public void setCertificateUid (final String sCertificateUid) {
+    m_sCertificateUid = sCertificateUid;
   }
 }

@@ -49,7 +49,7 @@ public class UnauthorizedException extends RuntimeException {
     super (e);
   }
 
-  public UnauthorizedException (final String string) {
-    super (string);
+  public UnauthorizedException (final String sMsg) {
+    super (sMsg);
   }
 }

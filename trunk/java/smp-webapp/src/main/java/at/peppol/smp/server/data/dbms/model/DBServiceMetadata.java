@@ -70,19 +70,19 @@ public class DBServiceMetadata implements Serializable {
 
   public DBServiceMetadata () {}
 
-  public DBServiceMetadata (final DBServiceMetadataID id, final DBServiceGroup serviceGroup) {
-    m_aID = id;
-    m_aServiceGroup = serviceGroup;
+  public DBServiceMetadata (final DBServiceMetadataID aID, final DBServiceGroup aServiceGroup) {
+    m_aID = aID;
+    m_aServiceGroup = aServiceGroup;
   }
 
-  public DBServiceMetadata (final DBServiceMetadataID id,
-                            final DBServiceGroup serviceGroup,
-                            final String extension,
-                            final Set <DBProcess> processes) {
-    m_aID = id;
-    m_aServiceGroup = serviceGroup;
-    m_sExtension = extension;
-    m_aProcesses = processes;
+  public DBServiceMetadata (final DBServiceMetadataID aID,
+                            final DBServiceGroup aServiceGroup,
+                            final String sExtension,
+                            final Set <DBProcess> aProcesses) {
+    m_aID = aID;
+    m_aServiceGroup = aServiceGroup;
+    m_sExtension = sExtension;
+    m_aProcesses = aProcesses;
   }
 
   @EmbeddedId
@@ -105,8 +105,8 @@ public class DBServiceMetadata implements Serializable {
     return m_aID;
   }
 
-  public void setId (final DBServiceMetadataID id) {
-    m_aID = id;
+  public void setId (final DBServiceMetadataID aID) {
+    m_aID = aID;
   }
 
   @ManyToOne (fetch = FetchType.LAZY)
@@ -124,8 +124,8 @@ public class DBServiceMetadata implements Serializable {
     return m_aServiceGroup;
   }
 
-  public void setServiceGroup (final DBServiceGroup serviceGroup) {
-    m_aServiceGroup = serviceGroup;
+  public void setServiceGroup (final DBServiceGroup aServiceGroup) {
+    m_aServiceGroup = aServiceGroup;
   }
 
   @Lob
@@ -134,8 +134,8 @@ public class DBServiceMetadata implements Serializable {
     return m_sExtension;
   }
 
-  public void setExtension (final String extension) {
-    m_sExtension = extension;
+  public void setExtension (final String sExtension) {
+    m_sExtension = sExtension;
   }
 
   @OneToMany (fetch = FetchType.LAZY, mappedBy = "serviceMetadata", cascade = { CascadeType.ALL })
@@ -143,7 +143,7 @@ public class DBServiceMetadata implements Serializable {
     return m_aProcesses;
   }
 
-  public void setProcesses (final Set <DBProcess> processes) {
-    m_aProcesses = processes;
+  public void setProcesses (final Set <DBProcess> aProcesses) {
+    m_aProcesses = aProcesses;
   }
 }

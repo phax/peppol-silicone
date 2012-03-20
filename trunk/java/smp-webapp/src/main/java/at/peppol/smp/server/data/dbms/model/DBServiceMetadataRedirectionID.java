@@ -65,20 +65,11 @@ public class DBServiceMetadataRedirectionID implements Serializable {
   public DBServiceMetadataRedirectionID () {}
 
   public DBServiceMetadataRedirectionID (@Nonnull final IReadonlyParticipantIdentifier aPartID,
-                                         @Nonnull final IReadonlyDocumentTypeIdentifier aDocID) {
+                                         @Nonnull final IReadonlyDocumentTypeIdentifier aDocTypeID) {
     setBusinessIdentifierScheme (aPartID.getScheme ());
     setBusinessIdentifier (aPartID.getValue ());
-    setDocumentIdentifierScheme (aDocID.getScheme ());
-    setDocumentIdentifier (aDocID.getValue ());
-  }
-
-  @Column (name = "businessIdentifier", nullable = false, length = 256)
-  public String getBusinessIdentifier () {
-    return m_sBusinessIdentifier;
-  }
-
-  public void setBusinessIdentifier (final String businessIdentifier) {
-    m_sBusinessIdentifier = IdentifierUtils.getUnifiedParticipantDBValue (businessIdentifier);
+    setDocumentIdentifierScheme (aDocTypeID.getScheme ());
+    setDocumentIdentifier (aDocTypeID.getValue ());
   }
 
   @Column (name = "businessIdentifierScheme", nullable = false, length = 256)
@@ -86,17 +77,17 @@ public class DBServiceMetadataRedirectionID implements Serializable {
     return m_sBusinessIdentifierScheme;
   }
 
-  public void setBusinessIdentifierScheme (final String businessIdentifierScheme) {
-    m_sBusinessIdentifierScheme = IdentifierUtils.getUnifiedParticipantDBValue (businessIdentifierScheme);
+  public void setBusinessIdentifierScheme (final String sBusinessIdentifierScheme) {
+    m_sBusinessIdentifierScheme = IdentifierUtils.getUnifiedParticipantDBValue (sBusinessIdentifierScheme);
   }
 
-  @Column (name = "documentIdentifier", nullable = false, length = 256)
-  public String getDocumentIdentifier () {
-    return m_sDocumentTypeIdentifier;
+  @Column (name = "businessIdentifier", nullable = false, length = 256)
+  public String getBusinessIdentifier () {
+    return m_sBusinessIdentifier;
   }
 
-  public void setDocumentIdentifier (final String documentIdentifier) {
-    m_sDocumentTypeIdentifier = documentIdentifier;
+  public void setBusinessIdentifier (final String sBusinessIdentifier) {
+    m_sBusinessIdentifier = IdentifierUtils.getUnifiedParticipantDBValue (sBusinessIdentifier);
   }
 
   @Column (name = "documentIdentifierScheme", nullable = false, length = 256)
@@ -104,8 +95,17 @@ public class DBServiceMetadataRedirectionID implements Serializable {
     return m_sDocumentTypeIdentifierScheme;
   }
 
-  public void setDocumentIdentifierScheme (final String documentIdentifierScheme) {
-    m_sDocumentTypeIdentifierScheme = documentIdentifierScheme;
+  public void setDocumentIdentifierScheme (final String sDocumentIdentifierScheme) {
+    m_sDocumentTypeIdentifierScheme = sDocumentIdentifierScheme;
+  }
+
+  @Column (name = "documentIdentifier", nullable = false, length = 256)
+  public String getDocumentIdentifier () {
+    return m_sDocumentTypeIdentifier;
+  }
+
+  public void setDocumentIdentifier (final String sDocumentIdentifier) {
+    m_sDocumentTypeIdentifier = sDocumentIdentifier;
   }
 
   @Override
