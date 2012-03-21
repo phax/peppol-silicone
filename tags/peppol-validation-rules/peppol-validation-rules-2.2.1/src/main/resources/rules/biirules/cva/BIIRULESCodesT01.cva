@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+        	CVA File T01
+        	Oriol Bausà 
+
+     -->
+<ValueListConstraints xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:qdt="urn:oasis:names:specification:ubl:schema:xsd:QualifiedDatatypes-2" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:cct="urn:oasis:names:specification:ubl:schema:xsd:CoreComponentParameters-2" name="CodesT01" version="Version 0.3" xmlns:udt="urn:un:unece:uncefact:data:draft:UnqualifiedDataTypesSchemaModule:2" xmlns:stat="urn:oasis:names:specification:ubl:schema:xsd:DocumentStatusCode-1.0" xmlns="http://docs.oasis-open.org/codelist/ns/ContextValueAssociation/cd2-1.0/">
+  <ValueLists>
+    <ValueList xml:id="AddressFormatCode" uri="../gc/AddressFormatCode.gc"/>
+    <ValueList xml:id="AllowanceChargeReasonCode" uri="../gc/AllowanceChargeReasonCode.gc"/>
+    <ValueList xml:id="AccountTypeCode" uri="../gc/AccountTypeCode.gc"/>
+    <ValueList xml:id="BinaryObjectMimeCode" uri="../gc/BinaryObjectMimeCode.gc"/>
+    <ValueList xml:id="ChannelCode" uri="../gc/ChannelCode.gc"/>
+    <ValueList xml:id="CurrencyCode" uri="../gc/CurrencyCode.gc"/>
+    <ValueList xml:id="CountryIdentificationCode" uri="../gc/CountryIdentificationCode.gc"/>
+    <ValueList xml:id="DeliveryTermsID" uri="../gc/DeliveryTermsID.gc"/>
+    <ValueList xml:id="DocumentTypeCode" uri="../gc/DocumentTypeCode.gc"/>
+    <ValueList xml:id="DiscrepancyResponseCode" uri="../gc/DiscrepancyResponseCode.gc"/>
+    <ValueList xml:id="ParentDocumentTypeCode" uri="../gc/ParentDocumentTypeCode.gc"/>
+    <ValueList xml:id="PaymentChannelCode" uri="../gc/PaymentChannelCode.gc"/>
+    <ValueList xml:id="PaymentMeansCode" uri="../gc/PaymentMeansCode.gc"/>
+    <ValueList xml:id="ResponseCode" uri="../gc/ResponseCode.gc"/>
+    <ValueList xml:id="StatusCode" uri="../gc/StatusCode.gc"/>
+    <ValueList xml:id="InvoiceTypeCode" uri="../gc/InvoiceTypeCode.gc"/>
+    <ValueList xml:id="TaxTypeCode" uri="../gc/TaxTypeCode.gc"/>
+    <ValueList xml:id="TaxCategoryID" uri="../gc/TaxCategoryID.gc"/>
+    <ValueList xml:id="TaxSchemeID" uri="../gc/TaxSchemeID.gc"/>
+    <ValueList xml:id="TaxExemptionReasonCode" uri="../gc/TaxExemptionReasonCode.gc"/>
+    <ValueList xml:id="UnitOfMeasureCode" uri="../gc/UnitOfMeasureCode.gc"/>
+    <ValueList xml:id="CountrySubentityCode" uri="../gc/CountrySubentityCode.gc"/>
+    <ValueList xml:id="PartyID" uri="../gc/PartyID.gc"/>
+  </ValueLists>
+  <Contexts>
+    <Context mark="fatal" values="CurrencyCode" item="cbc:DocumentCurrencyCode">
+      <Message>[CL-001-001]-DocumentCurrencyCode MUST be coded using ISO code list 4217</Message>
+    </Context>
+    <Context mark="fatal" values="CurrencyCode" item="@currencyID">
+      <Message>[CL-001-002]-currencyID MUST be coded using ISO code list 4217</Message>
+    </Context>
+    <Context mark="fatal" scope="cac:Country" values="CountryIdentificationCode" item="cbc:IdentificationCode">
+      <Message>[CL-001-003]-Country codes MUST be coded using ISO code list 3166-1</Message>
+    </Context>
+    <Context mark="warning" scope="cac:TaxScheme" values="TaxSchemeID" item="cbc:ID">
+      <Message>[CL-001-004]-Tax schemes MUST be coded using UN/ECE 5153 code list</Message>
+    </Context>
+    <Context mark="warning" scope="cac:DeliveryTerms" values="DeliveryTermsID" item="cbc:ID">
+      <Message>[CL-001-005]-Delivery termsID SHOULD be coded using Incoterms 2000 code list</Message>
+    </Context>
+  </Contexts>
+</ValueListConstraints>
