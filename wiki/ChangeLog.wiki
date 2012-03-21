@@ -1,8 +1,12 @@
 #summary The change log of the software components
 
-= v2.2.1 - still in progress =
+= v2.2.2 - in progress =
 
-This is a bugfix release. No main feature extensions are planned.
+Nothing so far :)
+
+= v2.2.1 (2012-03-21, bugfix release) =
+
+This is a bugfix release. No main feature extensions are contained.
 
 Performed changes so far:
 ==All components==
