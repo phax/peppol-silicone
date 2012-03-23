@@ -497,7 +497,7 @@ public class LimeService {
     }
     catch (final Exception ex) {
       s_aLogger.error ("Failed to handle incoming LIME document", ex);
-      throw new RecipientUnreachableException (ex);
+      throw new RecipientUnreachableException ("Failed to handle incoming LIME document", ex);
     }
   }
 
