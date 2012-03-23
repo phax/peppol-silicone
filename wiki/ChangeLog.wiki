@@ -2,7 +2,8 @@
 
 = v2.2.2 - in progress =
 
-Nothing so far :)
+==LIME==
+  * Improved exception handling when handling an incoming document
 
 = v2.2.1 (2012-03-21, bugfix release) =
 
