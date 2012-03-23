@@ -48,4 +48,8 @@ public class RecipientUnreachableException extends Exception {
   public RecipientUnreachableException (final Exception e) {
     super (e);
   }
+
+  public RecipientUnreachableException (final String message, final Exception e) {
+    super (message, e);
+  }
 }
