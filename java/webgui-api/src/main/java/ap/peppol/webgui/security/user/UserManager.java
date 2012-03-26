@@ -1,4 +1,4 @@
-package ap.peppol.webgui.api.user;
+package ap.peppol.webgui.security.user;
 
 import java.util.HashMap;
 import java.util.Locale;

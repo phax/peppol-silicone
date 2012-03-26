@@ -1,4 +1,4 @@
-package ap.peppol.webgui.api.user;
+package ap.peppol.webgui.security.user;
 
 import javax.annotation.concurrent.Immutable;
 
