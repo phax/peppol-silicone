@@ -1,4 +1,4 @@
-package ap.peppol.webgui.api.user;
+package ap.peppol.webgui.security.user;
 
 import java.util.Locale;
 
@@ -7,8 +7,9 @@ import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.id.IHasID;
+import com.phloc.commons.name.IHasDisplayName;
 
-public interface IUser extends IHasID <String> {
+public interface IUser extends IHasID <String>, IHasDisplayName {
   /**
    * @return The email address of the user. Also the login name.
    */

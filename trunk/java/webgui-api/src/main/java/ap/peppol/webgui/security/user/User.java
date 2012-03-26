@@ -1,4 +1,4 @@
-package ap.peppol.webgui.api.user;
+package ap.peppol.webgui.security.user;
 
 import java.util.Locale;
 
@@ -107,5 +107,10 @@ public final class User implements IUser {
 
   public void setDesiredLocale (@Nullable final Locale aDesiredLocale) {
     m_aDesiredLocale = aDesiredLocale;
+  }
+
+  @Nonnull
+  public String getDisplayName () {
+    return StringHelper.concatenateOnDemand (m_sFirstName, " ", m_sLastName);
   }
 }
