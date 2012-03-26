@@ -18,17 +18,24 @@ import com.phloc.commons.string.StringHelper;
 @NotThreadSafe
 public final class User implements IUser {
   private final String m_sID;
-  private String m_sEmailAddress;
+  private final String m_sEmailAddress;
+  private final String m_sPasswordHash;
   private String m_sFirstName;
   private String m_sLastName;
   private Locale m_aDesiredLocale;
-  private String m_sPasswordHash;
 
   /**
    * Create a new user
+   * 
+   * @param sEmailAddress
+   *        Email address of the user. May neither be <code>null</code> nor
+   *        empty.
+   * @param sPasswordHash
+   *        Password hash of the user. May neither be <code>null</code> nor
+   *        empty.
    */
-  public User () {
-    this (GlobalIDFactory.getNewPersistentStringID ());
+  public User (@Nonnull @Nonempty final String sEmailAddress, @Nonnull @Nonempty final String sPasswordHash) {
+    this (GlobalIDFactory.getNewPersistentStringID (), sEmailAddress, sPasswordHash);
   }
 
   /**
@@ -36,11 +43,25 @@ public final class User implements IUser {
    * 
    * @param sID
    *        user ID
+   * @param sEmailAddress
+   *        Email address of the user. May neither be <code>null</code> nor
+   *        empty.
+   * @param sPasswordHash
+   *        Password hash of the user. May neither be <code>null</code> nor
+   *        empty.
    */
-  public User (@Nonnull @Nonempty final String sID) {
+  public User (@Nonnull @Nonempty final String sID,
+               @Nonnull @Nonempty final String sEmailAddress,
+               @Nonnull @Nonempty final String sPasswordHash) {
     if (StringHelper.hasNoText (sID))
       throw new IllegalArgumentException ("ID");
+    if (StringHelper.hasNoText (sEmailAddress))
+      throw new IllegalArgumentException ("emailAddress");
+    if (StringHelper.hasNoText (sPasswordHash))
+      throw new IllegalArgumentException ("passwordHash");
     m_sID = sID;
+    m_sEmailAddress = sEmailAddress;
+    m_sPasswordHash = sPasswordHash;
   }
 
   @Nonnull
@@ -49,13 +70,16 @@ public final class User implements IUser {
     return m_sID;
   }
 
-  @Nullable
+  @Nonnull
+  @Nonempty
   public String getEmailAddress () {
     return m_sEmailAddress;
   }
 
-  public void setEmailAddress (@Nullable final String sEmailAddress) {
-    m_sEmailAddress = sEmailAddress;
+  @Nonnull
+  @Nonempty
+  public String getPasswordHash () {
+    return m_sPasswordHash;
   }
 
   @Nullable
@@ -83,14 +107,5 @@ public final class User implements IUser {
 
   public void setDesiredLocale (@Nullable final Locale aDesiredLocale) {
     m_aDesiredLocale = aDesiredLocale;
-  }
-
-  @Nullable
-  public String getPasswordHash () {
-    return m_sPasswordHash;
-  }
-
-  public void setPasswordHash (@Nullable final String sPasswordHash) {
-    m_sPasswordHash = sPasswordHash;
   }
 }

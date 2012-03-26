@@ -14,7 +14,7 @@ import ap.peppol.webgui.api.CWebGUI;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.messagedigest.MessageDigestGeneratorHelper;
-import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.state.EChange;
 
 /**
  * This class manages the available users.
@@ -30,22 +30,15 @@ public final class UserManager {
 
   @Nonnull
   public IUser createNewUser (@Nonnull @Nonempty final String sEmailAddress,
+                              @Nonnull @Nonempty final String sPlainTextPassword,
                               @Nullable final String sFirstName,
                               @Nullable final String sLastName,
-                              @Nonnull final String sPlainTextPassword,
                               @Nullable final Locale aDesiredLocale) {
-    if (StringHelper.hasNoText (sEmailAddress))
-      throw new IllegalArgumentException ("emailAddress");
-    if (sPlainTextPassword == null)
-      throw new NullPointerException ("plainTextPassword");
-
     // Create user
-    final User aUser = new User ();
-    aUser.setEmailAddress (sEmailAddress);
+    final User aUser = new User (sEmailAddress, createUserPasswordHash (sPlainTextPassword));
     aUser.setFirstName (sFirstName);
     aUser.setLastName (sLastName);
     aUser.setDesiredLocale (aDesiredLocale);
-    aUser.setPasswordHash (createUserPasswordHash (sPlainTextPassword));
 
     m_aRWLock.writeLock ().lock ();
     try {
@@ -69,6 +62,17 @@ public final class UserManager {
     }
   }
 
+  @Nonnull
+  public EChange deleteUser (@Nullable final String sUserID) {
+    m_aRWLock.writeLock ().lock ();
+    try {
+      return EChange.valueOf (m_aUsers.remove (sUserID) != null);
+    }
+    finally {
+      m_aRWLock.writeLock ().unlock ();
+    }
+  }
+
   /**
    * The one and only method to create a message digest hash from a password.
    * 
@@ -79,6 +83,9 @@ public final class UserManager {
   @Nonnull
   @Nonempty
   public static String createUserPasswordHash (@Nonnull final String sPlainTextPassword) {
+    if (sPlainTextPassword == null)
+      throw new NullPointerException ("plainTextPassword");
+
     final byte [] aDigest = MessageDigestGeneratorHelper.getDigest (CUser.USER_PASSWORD_ALGO,
                                                                     sPlainTextPassword,
                                                                     CWebGUI.CHARSET);
