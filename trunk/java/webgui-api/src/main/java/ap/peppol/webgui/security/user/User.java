@@ -7,8 +7,10 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.compare.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.idfactory.GlobalIDFactory;
+import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 
@@ -89,8 +91,12 @@ public final class User implements IUser {
     return m_sFirstName;
   }
 
-  public void setFirstName (@Nullable final String sFirstName) {
+  @Nonnull
+  public EChange setFirstName (@Nullable final String sFirstName) {
+    if (EqualsUtils.nullSafeEquals (sFirstName, m_sFirstName))
+      return EChange.UNCHANGED;
     m_sFirstName = sFirstName;
+    return EChange.CHANGED;
   }
 
   @Nullable
@@ -98,8 +104,12 @@ public final class User implements IUser {
     return m_sLastName;
   }
 
-  public void setLastName (@Nullable final String sLastName) {
+  @Nonnull
+  public EChange setLastName (@Nullable final String sLastName) {
+    if (EqualsUtils.nullSafeEquals (sLastName, m_sLastName))
+      return EChange.UNCHANGED;
     m_sLastName = sLastName;
+    return EChange.CHANGED;
   }
 
   @Nullable
@@ -107,8 +117,12 @@ public final class User implements IUser {
     return m_aDesiredLocale;
   }
 
-  public void setDesiredLocale (@Nullable final Locale aDesiredLocale) {
+  @Nonnull
+  public EChange setDesiredLocale (@Nullable final Locale aDesiredLocale) {
+    if (EqualsUtils.nullSafeEquals (aDesiredLocale, m_aDesiredLocale))
+      return EChange.UNCHANGED;
     m_aDesiredLocale = aDesiredLocale;
+    return EChange.CHANGED;
   }
 
   @Nonnull
