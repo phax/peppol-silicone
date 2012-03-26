@@ -55,6 +55,7 @@ public class LoginWindow extends Window implements Button.ClickListener {
         fl.addComponent(passwordField);
 
         Button loginButton = new Button("Login");
+        loginButton.addStyleName("default");
         loginButton.addListener(this);
         fl.addComponent(loginButton);
 
