@@ -7,8 +7,10 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * This class represents a single user in the system.
@@ -112,5 +114,31 @@ public final class User implements IUser {
   @Nonnull
   public String getDisplayName () {
     return StringHelper.concatenateOnDemand (m_sFirstName, " ", m_sLastName);
+  }
+
+  @Override
+  public boolean equals (final Object o) {
+    if (o == this)
+      return true;
+    if (!(o instanceof User))
+      return false;
+    final User rhs = (User) o;
+    return m_sID.equals (rhs.m_sID);
+  }
+
+  @Override
+  public int hashCode () {
+    return new HashCodeGenerator (this).append (m_sID).getHashCode ();
+  }
+
+  @Override
+  public String toString () {
+    return new ToStringGenerator (this).append ("ID", m_sID)
+                                       .append ("emailAddress", m_sEmailAddress)
+                                       .append ("passwordHash", m_sPasswordHash)
+                                       .append ("firstName", m_sFirstName)
+                                       .append ("lastName", m_sLastName)
+                                       .append ("desiredLocale", m_aDesiredLocale)
+                                       .toString ();
   }
 }
