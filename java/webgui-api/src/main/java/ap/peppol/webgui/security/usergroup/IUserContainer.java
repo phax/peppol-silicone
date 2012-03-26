@@ -1,11 +1,8 @@
 package ap.peppol.webgui.security.usergroup;
 
-import java.util.Collection;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
-
-import ap.peppol.webgui.security.user.IUser;
 
 /**
  * Base read-only interface for objects containing users.
@@ -13,13 +10,6 @@ import ap.peppol.webgui.security.user.IUser;
  * @author philip
  */
 public interface IUserContainer {
-  /**
-   * @return A non-<code>null</code> but maybe empty container of all assigned
-   *         users.
-   */
-  @Nonnull
-  Collection <IUser> getAllAssignedUsers ();
-
   /**
    * @return A non-<code>null</code>but maybe empty set of all assigned user
    *         IDs.

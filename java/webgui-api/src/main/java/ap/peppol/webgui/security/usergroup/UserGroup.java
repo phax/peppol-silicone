@@ -1,16 +1,13 @@
 package ap.peppol.webgui.security.usergroup;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
-import ap.peppol.webgui.security.user.IUser;
-
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.ReturnsImmutableObject;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.idfactory.GlobalIDFactory;
@@ -21,8 +18,8 @@ import com.phloc.commons.string.ToStringGenerator;
 @NotThreadSafe
 public final class UserGroup implements IUserGroup {
   private final String m_sID;
-  private final String m_sName;
-  private final Map <String, IUser> m_aUsers = new HashMap <String, IUser> ();
+  private String m_sName;
+  private final Set <String> m_aUsers = new HashSet <String> ();
 
   public UserGroup (@Nonnull @Nonempty final String sName) {
     this (GlobalIDFactory.getNewPersistentStringID (), sName);
@@ -50,29 +47,36 @@ public final class UserGroup implements IUserGroup {
   }
 
   @Nonnull
-  public Collection <IUser> getAllAssignedUsers () {
-    return ContainerHelper.makeUnmodifiable (m_aUsers.values ());
+  public EChange setDisplayName (@Nonnull @Nonempty final String sName) {
+    if (StringHelper.hasNoText (sName))
+      throw new IllegalArgumentException ("name");
+    if (sName.equals (m_sName))
+      return EChange.UNCHANGED;
+    m_sName = sName;
+    return EChange.CHANGED;
   }
 
   @Nonnull
+  @ReturnsImmutableObject
   public Set <String> getAllAssignedUserIDs () {
-    return ContainerHelper.makeUnmodifiable (m_aUsers.keySet ());
+    return ContainerHelper.makeUnmodifiable (m_aUsers);
   }
 
   public boolean containsUser (final String sUserID) {
-    return m_aUsers.containsKey (sUserID);
+    return m_aUsers.contains (sUserID);
   }
 
   @Nonnull
-  public EChange assignUser (@Nonnull final IUser aUser) {
-    if (aUser == null)
-      throw new NullPointerException ("user");
+  public EChange assignUser (@Nonnull final String sUserID) {
+    if (StringHelper.hasNoText (sUserID))
+      throw new IllegalArgumentException ("userID");
 
-    final String sUserID = aUser.getID ();
-    if (m_aUsers.containsKey (sUserID))
-      return EChange.UNCHANGED;
-    m_aUsers.put (sUserID, aUser);
-    return EChange.CHANGED;
+    return EChange.valueOf (m_aUsers.add (sUserID));
+  }
+
+  @Nonnull
+  public EChange unassignUser (@Nonnull final String sUserID) {
+    return EChange.valueOf (m_aUsers.remove (sUserID));
   }
 
   @Override
