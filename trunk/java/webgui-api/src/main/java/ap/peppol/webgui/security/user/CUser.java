@@ -4,6 +4,11 @@ import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.messagedigest.EMessageDigestAlgorithm;
 
+/**
+ * Constants for user handling
+ * 
+ * @author philip
+ */
 @Immutable
 public final class CUser {
   /** Hashing algorithm to use */

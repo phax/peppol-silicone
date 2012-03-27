@@ -10,6 +10,11 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.state.EChange;
 
+/**
+ * Interface for a user manager
+ * 
+ * @author philip
+ */
 public interface IUserManager {
   /**
    * Create a new user.

@@ -6,10 +6,13 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import ap.peppol.webgui.security.role.IRole;
+import ap.peppol.webgui.security.role.IRoleManager;
 import ap.peppol.webgui.security.role.RoleManager;
 import ap.peppol.webgui.security.user.IUser;
 import ap.peppol.webgui.security.user.IUserManager;
 import ap.peppol.webgui.security.user.UserManager;
+import ap.peppol.webgui.security.usergroup.IUserGroup;
 import ap.peppol.webgui.security.usergroup.IUserGroupManager;
 import ap.peppol.webgui.security.usergroup.UserGroupManager;
 
@@ -24,10 +27,10 @@ import com.phloc.scopes.nonweb.singleton.GlobalSingleton;
  * 
  * @author philip
  */
-public final class AccessManager extends GlobalSingleton implements IUserManager {
+public final class AccessManager extends GlobalSingleton implements IUserManager, IUserGroupManager, IRoleManager {
   private final IUserManager m_aUserMgr;
   private final IUserGroupManager m_aUserGroupMgr;
-  private final RoleManager m_aRoleMgr;
+  private final IRoleManager m_aRoleMgr;
 
   @Deprecated
   @UsedViaReflection
@@ -91,5 +94,91 @@ public final class AccessManager extends GlobalSingleton implements IUserManager
 
   public boolean isUsernamePasswordValid (@Nullable final String sUserID, @Nullable final String sPlainTextPassword) {
     return m_aUserMgr.isUsernamePasswordValid (sUserID, sPlainTextPassword);
+  }
+
+  // UserGroup API
+
+  @Nonnull
+  public IUserGroup createNewUserGroup (@Nonnull @Nonempty final String sName) {
+    return m_aUserGroupMgr.createNewUserGroup (sName);
+  }
+
+  @Nonnull
+  public EChange deleteUserGroup (@Nullable final String sUserGroupID) {
+    return m_aUserGroupMgr.deleteUserGroup (sUserGroupID);
+  }
+
+  @Nullable
+  public IUserGroup getUserGroupOfID (@Nullable final String sUserGroupID) {
+    return m_aUserGroupMgr.getUserGroupOfID (sUserGroupID);
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public Collection <? extends IUserGroup> getAllUserGroups () {
+    return m_aUserGroupMgr.getAllUserGroups ();
+  }
+
+  @Nonnull
+  public EChange renameUserGroup (@Nullable final String sUserGroupID, @Nonnull @Nonempty final String sNewName) {
+    return m_aUserGroupMgr.renameUserGroup (sUserGroupID, sNewName);
+  }
+
+  @Nonnull
+  public EChange assignUserToUserGroup (@Nullable final String sUserGroupID, @Nullable final String sUserID) {
+    return m_aUserGroupMgr.assignUserToUserGroup (sUserGroupID, sUserID);
+  }
+
+  @Nonnull
+  public EChange unassignUserFromUserGroup (@Nullable final String sUserGroupID, @Nullable final String sUserID) {
+    return m_aUserGroupMgr.unassignUserFromUserGroup (sUserGroupID, sUserID);
+  }
+
+  @Nonnull
+  public EChange unassignUserFromAllUserGroups (@Nullable final String sUserID) {
+    return m_aUserGroupMgr.unassignUserFromAllUserGroups (sUserID);
+  }
+
+  @Nonnull
+  public EChange assignRoleToUserGroup (@Nullable final String sUserGroupID, @Nullable final String sRoleID) {
+    return m_aUserGroupMgr.assignRoleToUserGroup (sUserGroupID, sRoleID);
+  }
+
+  @Nonnull
+  public EChange unassignRoleFromUserGroup (@Nullable final String sUserGroupID, @Nullable final String sRoleID) {
+    return m_aUserGroupMgr.unassignRoleFromUserGroup (sUserGroupID, sRoleID);
+  }
+
+  @Nonnull
+  public EChange unassignRoleFromAllUserGroups (@Nullable final String sRoleID) {
+    return m_aUserGroupMgr.unassignRoleFromAllUserGroups (sRoleID);
+  }
+
+  // Role API
+
+  @Nonnull
+  public IRole createNewRole (@Nonnull @Nonempty final String sName) {
+    return m_aRoleMgr.createNewRole (sName);
+  }
+
+  @Nonnull
+  public EChange deleteRole (@Nullable final String sRoleID) {
+    return m_aRoleMgr.deleteRole (sRoleID);
+  }
+
+  @Nullable
+  public IRole getRoleOfID (@Nullable final String sRoleID) {
+    return m_aRoleMgr.getRoleOfID (sRoleID);
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public Collection <? extends IRole> getAllRoles () {
+    return m_aRoleMgr.getAllRoles ();
+  }
+
+  @Nonnull
+  public EChange renameRole (@Nullable final String sRoleID, @Nonnull @Nonempty final String sNewName) {
+    return m_aRoleMgr.renameRole (sRoleID, sNewName);
   }
 }

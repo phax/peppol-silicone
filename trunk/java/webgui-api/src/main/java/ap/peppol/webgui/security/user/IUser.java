@@ -9,6 +9,11 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.id.IHasID;
 import com.phloc.commons.name.IHasDisplayName;
 
+/**
+ * Interface for a single user
+ * 
+ * @author philip
+ */
 public interface IUser extends IHasID <String>, IHasDisplayName {
   /**
    * @return The email address of the user. Also the login name.
