@@ -13,6 +13,7 @@ import javax.annotation.concurrent.ThreadSafe;
 
 import ap.peppol.webgui.api.AbstractManager;
 import ap.peppol.webgui.api.CWebGUI;
+import ap.peppol.webgui.security.CSecurity;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
@@ -185,7 +186,7 @@ public final class UserManager extends AbstractManager implements IUserManager {
     if (sPlainTextPassword == null)
       throw new NullPointerException ("plainTextPassword");
 
-    final byte [] aDigest = MessageDigestGeneratorHelper.getDigest (CUser.USER_PASSWORD_ALGO,
+    final byte [] aDigest = MessageDigestGeneratorHelper.getDigest (CSecurity.USER_PASSWORD_ALGO,
                                                                     sPlainTextPassword,
                                                                     CWebGUI.CHARSET);
     return MessageDigestGeneratorHelper.getHexValueFromDigest (aDigest);
