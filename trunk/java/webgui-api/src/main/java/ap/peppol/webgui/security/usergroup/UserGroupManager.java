@@ -1,5 +1,7 @@
 package ap.peppol.webgui.security.usergroup;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -171,6 +173,22 @@ public final class UserGroupManager extends AbstractManager implements IUserGrou
   }
 
   @Nonnull
+  @ReturnsMutableCopy
+  public Collection <IUserGroup> getAllUserGroupsWithAssignedUser (@Nullable final String sUserID) {
+    m_aRWLock.readLock ().lock ();
+    try {
+      final List <IUserGroup> ret = new ArrayList <IUserGroup> ();
+      for (final IUserGroup aUserGroup : m_aUserGroups.values ())
+        if (aUserGroup.containsUserID (sUserID))
+          ret.add (aUserGroup);
+      return ret;
+    }
+    finally {
+      m_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  @Nonnull
   public EChange assignRoleToUserGroup (@Nullable final String sUserGroupID, @Nullable final String sRoleID) {
     // Resolve user group
     final UserGroup aUserGroup = _internalGetUserGroupOfID (sUserGroupID);
@@ -223,6 +241,22 @@ public final class UserGroupManager extends AbstractManager implements IUserGrou
     }
     finally {
       m_aRWLock.writeLock ().unlock ();
+    }
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public Collection <IUserGroup> getAllUserGroupsWithAssignedRole (@Nullable final String sRoleID) {
+    m_aRWLock.readLock ().lock ();
+    try {
+      final List <IUserGroup> ret = new ArrayList <IUserGroup> ();
+      for (final IUserGroup aUserGroup : m_aUserGroups.values ())
+        if (aUserGroup.containsRoleID (sRoleID))
+          ret.add (aUserGroup);
+      return ret;
+    }
+    finally {
+      m_aRWLock.readLock ().unlock ();
     }
   }
 }

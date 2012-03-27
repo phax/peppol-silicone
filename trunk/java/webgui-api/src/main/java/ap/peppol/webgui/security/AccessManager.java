@@ -144,6 +144,12 @@ public final class AccessManager extends GlobalSingleton implements IUserManager
   }
 
   @Nonnull
+  @ReturnsMutableCopy
+  public Collection <IUserGroup> getAllUserGroupsWithAssignedUser (@Nullable final String sUserID) {
+    return m_aUserGroupMgr.getAllUserGroupsWithAssignedUser (sUserID);
+  }
+
+  @Nonnull
   public EChange assignRoleToUserGroup (@Nullable final String sUserGroupID, @Nullable final String sRoleID) {
     return m_aUserGroupMgr.assignRoleToUserGroup (sUserGroupID, sRoleID);
   }
@@ -156,6 +162,12 @@ public final class AccessManager extends GlobalSingleton implements IUserManager
   @Nonnull
   public EChange unassignRoleFromAllUserGroups (@Nullable final String sRoleID) {
     return m_aUserGroupMgr.unassignRoleFromAllUserGroups (sRoleID);
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public Collection <IUserGroup> getAllUserGroupsWithAssignedRole (@Nullable final String sRoleID) {
+    return m_aUserGroupMgr.getAllUserGroupsWithAssignedRole (sRoleID);
   }
 
   // Role API
@@ -189,5 +201,23 @@ public final class AccessManager extends GlobalSingleton implements IUserManager
   @Nonnull
   public EChange renameRole (@Nullable final String sRoleID, @Nonnull @Nonempty final String sNewName) {
     return m_aRoleMgr.renameRole (sRoleID, sNewName);
+  }
+
+  /**
+   * Check if the passed user ID has the passed role by checking all user group
+   * assignments.,
+   * 
+   * @param sUserID
+   *        User ID
+   * @param sRoleID
+   *        Role ID
+   * @return <code>true</code> if the user is in at least one user group that
+   *         has the assigned role
+   */
+  public boolean hasUserRole (@Nullable final String sUserID, @Nullable final String sRoleID) {
+    for (final IUserGroup aUserGroup : m_aUserGroupMgr.getAllUserGroupsWithAssignedUser (sUserID))
+      if (aUserGroup.containsRoleID (sRoleID))
+        return true;
+    return false;
   }
 }
