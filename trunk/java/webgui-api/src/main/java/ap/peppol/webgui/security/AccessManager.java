@@ -205,14 +205,14 @@ public final class AccessManager extends GlobalSingleton implements IUserManager
 
   /**
    * Check if the passed user ID has the passed role by checking all user group
-   * assignments.,
+   * role assignments of the user.
    * 
    * @param sUserID
-   *        User ID
+   *        User ID to check
    * @param sRoleID
-   *        Role ID
+   *        Role ID to check
    * @return <code>true</code> if the user is in at least one user group that
-   *         has the assigned role
+   *         has the assigned role, <code>false</code> otherwise
    */
   public boolean hasUserRole (@Nullable final String sUserID, @Nullable final String sRoleID) {
     for (final IUserGroup aUserGroup : m_aUserGroupMgr.getAllUserGroupsWithAssignedUser (sUserID))
