@@ -15,11 +15,17 @@ import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 
+/**
+ * Default implementation of the {@link IUserGroup} interface.
+ * 
+ * @author philip
+ */
 @NotThreadSafe
-public final class UserGroup implements IUserGroup {
+final class UserGroup implements IUserGroup {
   private final String m_sID;
   private String m_sName;
-  private final Set <String> m_aUsers = new HashSet <String> ();
+  private final Set <String> m_aUserIDs = new HashSet <String> ();
+  private final Set <String> m_aRoleIDs = new HashSet <String> ();
 
   public UserGroup (@Nonnull @Nonempty final String sName) {
     this (GlobalIDFactory.getNewPersistentStringID (), sName);
@@ -47,7 +53,7 @@ public final class UserGroup implements IUserGroup {
   }
 
   @Nonnull
-  public EChange setDisplayName (@Nonnull @Nonempty final String sName) {
+  EChange setDisplayName (@Nonnull @Nonempty final String sName) {
     if (StringHelper.hasNoText (sName))
       throw new IllegalArgumentException ("name");
     if (sName.equals (m_sName))
@@ -58,25 +64,48 @@ public final class UserGroup implements IUserGroup {
 
   @Nonnull
   @ReturnsImmutableObject
-  public Set <String> getAllAssignedUserIDs () {
-    return ContainerHelper.makeUnmodifiable (m_aUsers);
+  public Set <String> getAllContainedUserIDs () {
+    return ContainerHelper.makeUnmodifiable (m_aUserIDs);
   }
 
-  public boolean containsUser (final String sUserID) {
-    return m_aUsers.contains (sUserID);
+  public boolean containsUserID (final String sUserID) {
+    return m_aUserIDs.contains (sUserID);
   }
 
   @Nonnull
-  public EChange assignUser (@Nonnull final String sUserID) {
+  EChange assignUser (@Nonnull final String sUserID) {
     if (StringHelper.hasNoText (sUserID))
       throw new IllegalArgumentException ("userID");
 
-    return EChange.valueOf (m_aUsers.add (sUserID));
+    return EChange.valueOf (m_aUserIDs.add (sUserID));
   }
 
   @Nonnull
-  public EChange unassignUser (@Nonnull final String sUserID) {
-    return EChange.valueOf (m_aUsers.remove (sUserID));
+  EChange unassignUser (@Nonnull final String sUserID) {
+    return EChange.valueOf (m_aUserIDs.remove (sUserID));
+  }
+
+  @Nonnull
+  @ReturnsImmutableObject
+  public Set <String> getAllContainedRoleIDs () {
+    return ContainerHelper.makeUnmodifiable (m_aRoleIDs);
+  }
+
+  public boolean containsRoleID (final String sRoleID) {
+    return m_aRoleIDs.contains (sRoleID);
+  }
+
+  @Nonnull
+  EChange assignRole (@Nonnull final String sRoleID) {
+    if (StringHelper.hasNoText (sRoleID))
+      throw new IllegalArgumentException ("userID");
+
+    return EChange.valueOf (m_aRoleIDs.add (sRoleID));
+  }
+
+  @Nonnull
+  EChange unassignRole (@Nonnull final String sRoleID) {
+    return EChange.valueOf (m_aRoleIDs.remove (sRoleID));
   }
 
   @Override
@@ -98,7 +127,8 @@ public final class UserGroup implements IUserGroup {
   public String toString () {
     return new ToStringGenerator (this).append ("ID", m_sID)
                                        .append ("name", m_sName)
-                                       .append ("assignedUsers", m_aUsers)
+                                       .append ("assignedUsers", m_aUserIDs)
+                                       .append ("assignedRoles", m_aRoleIDs)
                                        .toString ();
   }
 }
