@@ -23,7 +23,7 @@ import com.phloc.commons.state.EChange;
  * @author philip
  */
 @ThreadSafe
-public final class UserGroupManager extends AbstractManager {
+public final class UserGroupManager extends AbstractManager implements IUserGroupManager {
   private final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
   private final Map <String, UserGroup> m_aUserGroups = new HashMap <String, UserGroup> ();
 

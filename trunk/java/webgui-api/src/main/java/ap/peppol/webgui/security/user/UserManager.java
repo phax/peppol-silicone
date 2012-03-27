@@ -19,6 +19,7 @@ import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.messagedigest.MessageDigestGeneratorHelper;
 import com.phloc.commons.state.EChange;
+import com.phloc.commons.string.StringHelper;
 
 /**
  * This class manages the available users.
@@ -32,29 +33,22 @@ public final class UserManager extends AbstractManager implements IUserManager {
 
   public UserManager () {}
 
-  /**
-   * Create a new user.
-   * 
-   * @param sEmailAddress
-   *        The email address, to be used as the login name. May neither be
-   *        <code>null</code> nor empty.
-   * @param sPlainTextPassword
-   *        The plain text password to be used. May neither be <code>null</code>
-   *        nor empty.
-   * @param sFirstName
-   *        The users first name. May be <code>null</code>.
-   * @param sLastName
-   *        The users last name. May be <code>null</code>.
-   * @param aDesiredLocale
-   *        The users default locale. May be <code>null</code>.
-   * @return The created user and never <code>null</code>.
-   */
-  @Nonnull
+  @Nullable
   public IUser createNewUser (@Nonnull @Nonempty final String sEmailAddress,
                               @Nonnull @Nonempty final String sPlainTextPassword,
                               @Nullable final String sFirstName,
                               @Nullable final String sLastName,
                               @Nullable final Locale aDesiredLocale) {
+    if (StringHelper.hasNoText (sEmailAddress))
+      throw new IllegalArgumentException ("emailAddress");
+    if (StringHelper.hasNoText (sPlainTextPassword))
+      throw new IllegalArgumentException ("plainTextPassword");
+
+    if (getUserOfEmailAddress (sEmailAddress) != null) {
+      // Another user with this email address already exists
+      return null;
+    }
+
     // Create user
     final User aUser = new User (sEmailAddress, createUserPasswordHash (sPlainTextPassword));
     aUser.setFirstName (sFirstName);
@@ -94,6 +88,23 @@ public final class UserManager extends AbstractManager implements IUserManager {
   @Nullable
   public IUser getUserOfID (@Nullable final String sUserID) {
     return _internalGetUserOfID (sUserID);
+  }
+
+  @Nullable
+  public IUser getUserOfEmailAddress (@Nullable final String sEmailAddress) {
+    if (StringHelper.hasNoText (sEmailAddress))
+      return null;
+
+    m_aRWLock.readLock ().lock ();
+    try {
+      for (final User aUser : m_aUsers.values ())
+        if (aUser.getEmailAddress ().equals (sEmailAddress))
+          return aUser;
+      return null;
+    }
+    finally {
+      m_aRWLock.readLock ().unlock ();
+    }
   }
 
   @Nonnull

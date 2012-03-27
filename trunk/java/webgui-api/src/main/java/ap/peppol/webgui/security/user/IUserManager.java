@@ -1,6 +1,6 @@
 package ap.peppol.webgui.security.user;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Locale;
 
 import javax.annotation.Nonnull;
@@ -16,7 +16,8 @@ public interface IUserManager {
    * 
    * @param sEmailAddress
    *        The email address, to be used as the login name. May neither be
-   *        <code>null</code> nor empty.
+   *        <code>null</code> nor empty. This email address must be unique over
+   *        all existing users.
    * @param sPlainTextPassword
    *        The plain text password to be used. May neither be <code>null</code>
    *        nor empty.
@@ -26,9 +27,10 @@ public interface IUserManager {
    *        The users last name. May be <code>null</code>.
    * @param aDesiredLocale
    *        The users default locale. May be <code>null</code>.
-   * @return The created user and never <code>null</code>.
+   * @return The created user or <code>null</code> if another user with the same
+   *         email address is already present.
    */
-  @Nonnull
+  @Nullable
   IUser createNewUser (@Nonnull @Nonempty String sEmailAddress,
                        @Nonnull @Nonempty String sPlainTextPassword,
                        @Nullable String sFirstName,
@@ -81,16 +83,26 @@ public interface IUserManager {
    * Get the user with the specified ID.
    * 
    * @param sUserID
-   *        The user ID to resolve
+   *        The user ID to resolve. May be <code>null</code>.
    * @return <code>null</code> if no such user exists
    */
   @Nullable
   IUser getUserOfID (@Nullable String sUserID);
 
   /**
-   * @return A non-<code>null</code> list of all contained users
+   * Get the user with the specified email address
+   * 
+   * @param sEmailAddress
+   *        The email address to be checked. May be <code>null</code>.
+   * @return <code>null</code> if no such user exists
+   */
+  @Nullable
+  IUser getUserOfEmailAddress (@Nullable String sEmailAddress);
+
+  /**
+   * @return A non-<code>null</code> collection of all contained users
    */
   @Nonnull
   @ReturnsMutableCopy
-  List <? extends IUser> getAllUsers ();
+  Collection <? extends IUser> getAllUsers ();
 }
