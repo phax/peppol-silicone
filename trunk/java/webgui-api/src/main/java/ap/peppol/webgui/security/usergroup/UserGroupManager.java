@@ -36,7 +36,7 @@ public final class UserGroupManager extends AbstractManager {
 
     m_aRWLock.writeLock ().lock ();
     try {
-      // Store in memory
+      // Store
       m_aUserGroups.put (aUserGroup.getID (), aUserGroup);
       markAsChanged ();
     }
@@ -144,6 +144,80 @@ public final class UserGroupManager extends AbstractManager {
     try {
       if (aUserGroup.unassignUser (sUserID).isUnchanged ())
         return EChange.UNCHANGED;
+      markAsChanged ();
+      return EChange.CHANGED;
+    }
+    finally {
+      m_aRWLock.writeLock ().unlock ();
+    }
+  }
+
+  @Nonnull
+  public EChange unassignUserFromAllUserGroups (@Nullable final String sUserID) {
+    m_aRWLock.writeLock ().lock ();
+    try {
+      EChange eChange = EChange.UNCHANGED;
+      for (final UserGroup aUserGroup : m_aUserGroups.values ())
+        eChange = eChange.or (aUserGroup.unassignUser (sUserID));
+      if (eChange.isUnchanged ())
+        return EChange.UNCHANGED;
+
+      markAsChanged ();
+      return EChange.CHANGED;
+    }
+    finally {
+      m_aRWLock.writeLock ().unlock ();
+    }
+  }
+
+  @Nonnull
+  public EChange assignRoleToUserGroup (@Nullable final String sUserGroupID, @Nullable final String sRoleID) {
+    // Resolve user group
+    final UserGroup aUserGroup = _internalGetUserGroupOfID (sUserGroupID);
+    if (aUserGroup == null)
+      return EChange.UNCHANGED;
+
+    m_aRWLock.writeLock ().lock ();
+    try {
+      if (aUserGroup.assignRole (sRoleID).isUnchanged ())
+        return EChange.UNCHANGED;
+      markAsChanged ();
+      return EChange.CHANGED;
+    }
+    finally {
+      m_aRWLock.writeLock ().unlock ();
+    }
+  }
+
+  @Nonnull
+  public EChange unassignRoleFromUserGroup (@Nullable final String sUserGroupID, @Nullable final String sRoleID) {
+    // Resolve user group
+    final UserGroup aUserGroup = _internalGetUserGroupOfID (sUserGroupID);
+    if (aUserGroup == null)
+      return EChange.UNCHANGED;
+
+    m_aRWLock.writeLock ().lock ();
+    try {
+      if (aUserGroup.unassignRole (sRoleID).isUnchanged ())
+        return EChange.UNCHANGED;
+      markAsChanged ();
+      return EChange.CHANGED;
+    }
+    finally {
+      m_aRWLock.writeLock ().unlock ();
+    }
+  }
+
+  @Nonnull
+  public EChange unassignRoleFromAllUserGroups (@Nullable final String sRoleID) {
+    m_aRWLock.writeLock ().lock ();
+    try {
+      EChange eChange = EChange.UNCHANGED;
+      for (final UserGroup aUserGroup : m_aUserGroups.values ())
+        eChange = eChange.or (aUserGroup.unassignRole (sRoleID));
+      if (eChange.isUnchanged ())
+        return EChange.UNCHANGED;
+
       markAsChanged ();
       return EChange.CHANGED;
     }

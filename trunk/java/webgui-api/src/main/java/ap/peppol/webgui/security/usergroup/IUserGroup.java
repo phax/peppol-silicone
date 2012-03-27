@@ -1,5 +1,8 @@
 package ap.peppol.webgui.security.usergroup;
 
+import ap.peppol.webgui.security.role.IRoleContainer;
+import ap.peppol.webgui.security.user.IUserContainer;
+
 import com.phloc.commons.id.IHasID;
 import com.phloc.commons.name.IHasDisplayName;
 
@@ -8,6 +11,6 @@ import com.phloc.commons.name.IHasDisplayName;
  * 
  * @author philip
  */
-public interface IUserGroup extends IHasID <String>, IHasDisplayName, IUserContainer {
+public interface IUserGroup extends IHasID <String>, IHasDisplayName, IUserContainer, IRoleContainer {
   /* empty */
 }

@@ -26,12 +26,29 @@ import com.phloc.commons.state.EChange;
  * @author philip
  */
 @ThreadSafe
-public final class UserManager extends AbstractManager {
+public final class UserManager extends AbstractManager implements IUserManager {
   private final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
   private final Map <String, User> m_aUsers = new HashMap <String, User> ();
 
   public UserManager () {}
 
+  /**
+   * Create a new user.
+   * 
+   * @param sEmailAddress
+   *        The email address, to be used as the login name. May neither be
+   *        <code>null</code> nor empty.
+   * @param sPlainTextPassword
+   *        The plain text password to be used. May neither be <code>null</code>
+   *        nor empty.
+   * @param sFirstName
+   *        The users first name. May be <code>null</code>.
+   * @param sLastName
+   *        The users last name. May be <code>null</code>.
+   * @param aDesiredLocale
+   *        The users default locale. May be <code>null</code>.
+   * @return The created user and never <code>null</code>.
+   */
   @Nonnull
   public IUser createNewUser (@Nonnull @Nonempty final String sEmailAddress,
                               @Nonnull @Nonempty final String sPlainTextPassword,

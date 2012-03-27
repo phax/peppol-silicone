@@ -1,4 +1,4 @@
-package ap.peppol.webgui.security.usergroup;
+package ap.peppol.webgui.security.user;
 
 import java.util.Set;
 
@@ -15,15 +15,15 @@ public interface IUserContainer {
    *         IDs.
    */
   @Nonnull
-  Set <String> getAllAssignedUserIDs ();
+  Set <String> getAllContainedUserIDs ();
 
   /**
-   * Check if the passed user is contained in this group.
+   * Check if the passed user is contained in this container.
    * 
    * @param sUserID
    *        The user ID to check. May be <code>null</code>.
-   * @return <code>true</code> if the user is contained in this group,
+   * @return <code>true</code> if the user is contained in this container,
    *         <code>false</code> otherwise.
    */
-  boolean containsUser (String sUserID);
+  boolean containsUserID (String sUserID);
 }

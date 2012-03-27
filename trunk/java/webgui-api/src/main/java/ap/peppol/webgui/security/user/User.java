@@ -15,12 +15,12 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
- * This class represents a single user in the system.
+ * Default implementation of the {@link IUser} interface.
  * 
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class User implements IUser {
+final class User implements IUser {
   private final String m_sID;
   private final String m_sEmailAddress;
   private final String m_sPasswordHash;
@@ -92,7 +92,7 @@ public final class User implements IUser {
   }
 
   @Nonnull
-  public EChange setFirstName (@Nullable final String sFirstName) {
+  EChange setFirstName (@Nullable final String sFirstName) {
     if (EqualsUtils.nullSafeEquals (sFirstName, m_sFirstName))
       return EChange.UNCHANGED;
     m_sFirstName = sFirstName;
@@ -105,7 +105,7 @@ public final class User implements IUser {
   }
 
   @Nonnull
-  public EChange setLastName (@Nullable final String sLastName) {
+  EChange setLastName (@Nullable final String sLastName) {
     if (EqualsUtils.nullSafeEquals (sLastName, m_sLastName))
       return EChange.UNCHANGED;
     m_sLastName = sLastName;
@@ -118,7 +118,7 @@ public final class User implements IUser {
   }
 
   @Nonnull
-  public EChange setDesiredLocale (@Nullable final Locale aDesiredLocale) {
+  EChange setDesiredLocale (@Nullable final Locale aDesiredLocale) {
     if (EqualsUtils.nullSafeEquals (aDesiredLocale, m_aDesiredLocale))
       return EChange.UNCHANGED;
     m_aDesiredLocale = aDesiredLocale;
