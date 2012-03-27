@@ -1,7 +1,7 @@
 package ap.peppol.webgui.security.role;
 
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -18,12 +18,12 @@ import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.state.EChange;
 
 /**
- * This class manages the available users.
+ * This class manages the available roles.
  * 
  * @author philip
  */
 @ThreadSafe
-public final class RoleManager extends AbstractManager {
+public final class RoleManager extends AbstractManager implements IRoleManager {
   private final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
   private final Map <String, Role> m_aRoles = new HashMap <String, Role> ();
 
@@ -71,7 +71,7 @@ public final class RoleManager extends AbstractManager {
 
   @Nonnull
   @ReturnsMutableCopy
-  public List <? extends IRole> getAllRoles () {
+  public Collection <? extends IRole> getAllRoles () {
     m_aRWLock.readLock ().lock ();
     try {
       return ContainerHelper.newList (m_aRoles.values ());

@@ -9,6 +9,11 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.state.EChange;
 
+/**
+ * Interface for a user group manager
+ * 
+ * @author philip
+ */
 public interface IUserGroupManager {
   /**
    * Create a new user group. The passed name must not be unique over all user
