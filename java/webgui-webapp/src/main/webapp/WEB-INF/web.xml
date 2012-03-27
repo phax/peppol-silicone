@@ -39,9 +39,9 @@
 
 -->
 <!--This file is generated - do NOT edit!-->
-<web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" 
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" 
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
     
   <display-name>PEPPOL Web GUI web site</display-name>
   <description>PEPPOL Web GUI - code.google.com/p/peppol-silicone</description>
@@ -55,9 +55,15 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j
     <param-name>trace</param-name>
     <param-value>false</param-value>
   </context-param>
+  
   <session-config>
     <session-timeout>60</session-timeout>
   </session-config>
+  
+  <listener>
+    <listener-class>at.peppol.webgui.app.ScopeListener</listener-class>
+  </listener>
+  
   <servlet>
     <servlet-name>PawgServlet</servlet-name>
     <servlet-class>com.vaadin.terminal.gwt.server.ApplicationServlet</servlet-class>
@@ -75,6 +81,5 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j
   <servlet-mapping>
     <servlet-name>default</servlet-name>
     <url-pattern>/img/*</url-pattern>
-</servlet-mapping>
-
+  </servlet-mapping>
 </web-app>

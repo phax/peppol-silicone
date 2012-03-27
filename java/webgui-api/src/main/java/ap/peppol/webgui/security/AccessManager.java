@@ -5,6 +5,7 @@ import java.util.Locale;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.ThreadSafe;
 
 import ap.peppol.webgui.security.role.IRole;
 import ap.peppol.webgui.security.role.IRoleManager;
@@ -23,10 +24,13 @@ import com.phloc.commons.state.EChange;
 import com.phloc.scopes.nonweb.singleton.GlobalSingleton;
 
 /**
- * This is the central manager that encapsulates all security manages.
+ * This is the central manager that encapsulates all security manages. This
+ * class is thread-safe under the assumption that the implementing managers are
+ * thread-safe.
  * 
  * @author philip
  */
+@ThreadSafe
 public final class AccessManager extends GlobalSingleton implements IUserManager, IUserGroupManager, IRoleManager {
   private final IUserManager m_aUserMgr;
   private final IUserGroupManager m_aUserGroupMgr;
@@ -163,7 +167,12 @@ public final class AccessManager extends GlobalSingleton implements IUserManager
 
   @Nonnull
   public EChange deleteRole (@Nullable final String sRoleID) {
-    return m_aRoleMgr.deleteRole (sRoleID);
+    if (m_aRoleMgr.deleteRole (sRoleID).isUnchanged ())
+      return EChange.UNCHANGED;
+
+    // Since the role does not exist any more, remove it from all user groups
+    m_aUserGroupMgr.unassignRoleFromAllUserGroups (sRoleID);
+    return EChange.CHANGED;
   }
 
   @Nullable
