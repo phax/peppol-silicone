@@ -1,6 +1,6 @@
 package ap.peppol.webgui.security;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Locale;
 
 import javax.annotation.Nonnull;
@@ -10,6 +10,7 @@ import ap.peppol.webgui.security.role.RoleManager;
 import ap.peppol.webgui.security.user.IUser;
 import ap.peppol.webgui.security.user.IUserManager;
 import ap.peppol.webgui.security.user.UserManager;
+import ap.peppol.webgui.security.usergroup.IUserGroupManager;
 import ap.peppol.webgui.security.usergroup.UserGroupManager;
 
 import com.phloc.commons.annotations.Nonempty;
@@ -25,7 +26,7 @@ import com.phloc.scopes.nonweb.singleton.GlobalSingleton;
  */
 public final class AccessManager extends GlobalSingleton implements IUserManager {
   private final IUserManager m_aUserMgr;
-  private final UserGroupManager m_aUserGroupMgr;
+  private final IUserGroupManager m_aUserGroupMgr;
   private final RoleManager m_aRoleMgr;
 
   @Deprecated
@@ -69,9 +70,14 @@ public final class AccessManager extends GlobalSingleton implements IUserManager
     return m_aUserMgr.getUserOfID (sUserID);
   }
 
+  @Nullable
+  public IUser getUserOfEmailAddress (@Nullable final String sEmailAddress) {
+    return m_aUserMgr.getUserOfEmailAddress (sEmailAddress);
+  }
+
   @Nonnull
   @ReturnsMutableCopy
-  public List <? extends IUser> getAllUsers () {
+  public Collection <? extends IUser> getAllUsers () {
     return m_aUserMgr.getAllUsers ();
   }
 
