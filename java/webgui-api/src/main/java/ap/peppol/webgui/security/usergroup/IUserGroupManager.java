@@ -108,6 +108,18 @@ public interface IUserGroupManager {
   EChange unassignUserFromAllUserGroups (@Nullable String sUserID);
 
   /**
+   * Get a collection of all user groups to which a certain user is assigned to.
+   * 
+   * @param sUserID
+   *        The user ID to search
+   * @return A non-<code>null</code>but may be empty collection with all
+   *         matching user groups.
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  Collection <IUserGroup> getAllUserGroupsWithAssignedUser (@Nullable String sUserID);
+
+  /**
    * Assign the passed role ID to the user group with the passed ID.<br>
    * Note: the role ID must not be checked for consistency
    * 
@@ -144,4 +156,16 @@ public interface IUserGroupManager {
    */
   @Nonnull
   EChange unassignRoleFromAllUserGroups (@Nullable String sRoleID);
+
+  /**
+   * Get a collection of all user groups to which a certain role is assigned to.
+   * 
+   * @param sRoleID
+   *        The role ID to search
+   * @return A non-<code>null</code>but may be empty collection with all
+   *         matching user groups.
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  Collection <IUserGroup> getAllUserGroupsWithAssignedRole (@Nullable String sRoleID);
 }
