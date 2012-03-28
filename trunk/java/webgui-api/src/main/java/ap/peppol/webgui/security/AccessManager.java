@@ -60,6 +60,9 @@ public final class AccessManager extends GlobalSingleton implements IUserManager
     return m_aUserMgr.createNewUser (sEmailAddress, sPlainTextPassword, sFirstName, sLastName, aDesiredLocale);
   }
 
+  /**
+   * Ensure to have a check, that no logged in user is deleted!
+   */
   @Nonnull
   public EChange deleteUser (@Nullable final String sUserID) {
     if (m_aUserMgr.deleteUser (sUserID).isUnchanged ()) {
