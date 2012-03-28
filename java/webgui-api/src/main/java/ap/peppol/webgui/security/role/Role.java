@@ -16,7 +16,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author philip
  */
 @NotThreadSafe
-final class Role implements IRole {
+public final class Role implements IRole {
   private final String m_sID;
   private String m_sName;
 
@@ -41,12 +41,12 @@ final class Role implements IRole {
 
   @Nonnull
   @Nonempty
-  public String getDisplayName () {
+  public String getName () {
     return m_sName;
   }
 
   @Nonnull
-  EChange setDisplayName (@Nonnull @Nonempty final String sName) {
+  EChange setName (@Nonnull @Nonempty final String sName) {
     if (StringHelper.hasNoText (sName))
       throw new IllegalArgumentException ("name");
     if (sName.equals (m_sName))

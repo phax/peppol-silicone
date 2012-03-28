@@ -104,7 +104,7 @@ public final class RoleManager extends AbstractManager implements IRoleManager {
 
     m_aRWLock.writeLock ().lock ();
     try {
-      if (aRole.setDisplayName (sNewName).isUnchanged ())
+      if (aRole.setName (sNewName).isUnchanged ())
         return EChange.UNCHANGED;
       markAsChanged ();
       return EChange.CHANGED;
