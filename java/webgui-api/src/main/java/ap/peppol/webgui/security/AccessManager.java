@@ -33,15 +33,15 @@ import com.phloc.scopes.nonweb.singleton.GlobalSingleton;
 @ThreadSafe
 public final class AccessManager extends GlobalSingleton implements IUserManager, IUserGroupManager, IRoleManager {
   private final IUserManager m_aUserMgr;
-  private final IUserGroupManager m_aUserGroupMgr;
   private final IRoleManager m_aRoleMgr;
+  private final IUserGroupManager m_aUserGroupMgr;
 
   @Deprecated
   @UsedViaReflection
   public AccessManager () {
     m_aUserMgr = new UserManager ();
-    m_aUserGroupMgr = new UserGroupManager ();
     m_aRoleMgr = new RoleManager ();
+    m_aUserGroupMgr = new UserGroupManager (m_aUserMgr, m_aRoleMgr);
   }
 
   @Nonnull
@@ -70,6 +70,10 @@ public final class AccessManager extends GlobalSingleton implements IUserManager
     // If something deleted, remove from all user groups
     m_aUserGroupMgr.unassignUserFromAllUserGroups (sUserID);
     return EChange.CHANGED;
+  }
+
+  public boolean containsUserWithID (@Nullable final String sUserID) {
+    return m_aUserMgr.containsUserWithID (sUserID);
   }
 
   @Nullable
@@ -110,6 +114,10 @@ public final class AccessManager extends GlobalSingleton implements IUserManager
   @Nonnull
   public EChange deleteUserGroup (@Nullable final String sUserGroupID) {
     return m_aUserGroupMgr.deleteUserGroup (sUserGroupID);
+  }
+
+  public boolean containsUserGroupWithID (@Nullable final String sUserGroupID) {
+    return m_aUserGroupMgr.containsUserGroupWithID (sUserGroupID);
   }
 
   @Nullable
@@ -185,6 +193,10 @@ public final class AccessManager extends GlobalSingleton implements IUserManager
     // Since the role does not exist any more, remove it from all user groups
     m_aUserGroupMgr.unassignRoleFromAllUserGroups (sRoleID);
     return EChange.CHANGED;
+  }
+
+  public boolean containsRoleWithID (@Nullable final String sRoleID) {
+    return m_aRoleMgr.containsRoleWithID (sRoleID);
   }
 
   @Nullable

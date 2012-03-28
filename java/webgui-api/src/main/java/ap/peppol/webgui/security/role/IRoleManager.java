@@ -36,6 +36,15 @@ public interface IRoleManager {
   EChange deleteRole (@Nullable String sRoleID);
 
   /**
+   * Check if the role with the specified ID is contained
+   * 
+   * @param sRoleID
+   *        The role ID to be check
+   * @return <code>true</code> if such role exists, <code>false</code> otherwise
+   */
+  boolean containsRoleWithID (@Nullable String sRoleID);
+
+  /**
    * Get the role with the specified ID
    * 
    * @param sRoleID

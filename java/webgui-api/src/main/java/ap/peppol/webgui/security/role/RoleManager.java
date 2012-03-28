@@ -84,6 +84,16 @@ public final class RoleManager extends AbstractManager implements IRoleManager {
     return aRole;
   }
 
+  public boolean containsRoleWithID (@Nullable final String sRoleID) {
+    m_aRWLock.readLock ().lock ();
+    try {
+      return m_aRoles.containsKey (sRoleID);
+    }
+    finally {
+      m_aRWLock.readLock ().unlock ();
+    }
+  }
+
   /**
    * Private locked version returning the implementation class
    * 

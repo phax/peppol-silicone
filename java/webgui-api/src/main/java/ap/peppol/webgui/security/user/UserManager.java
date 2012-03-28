@@ -121,6 +121,16 @@ public final class UserManager extends AbstractManager implements IUserManager {
     return aUser;
   }
 
+  public boolean containsUserWithID (@Nullable final String sUserID) {
+    m_aRWLock.readLock ().lock ();
+    try {
+      return m_aUsers.containsKey (sUserID);
+    }
+    finally {
+      m_aRWLock.readLock ().unlock ();
+    }
+  }
+
   /**
    * Private locked version returning the implementation class
    * 
