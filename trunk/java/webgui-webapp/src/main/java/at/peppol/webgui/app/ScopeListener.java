@@ -21,7 +21,7 @@ public final class ScopeListener implements ServletContextListener, HttpSessionL
   public static final String INIT_PARAMETER_DEBUG = "debug";
   // like Vaadin:
   public static final String INIT_PARAMETER_PRODUCTION = "productionMode";
-  public static final String INIT_PARAMETER_SOTRAGE_BASE = "storage-base";
+  public static final String INIT_PARAMETER_STORAGE_BASE = "storage-base";
 
   @Override
   public void contextInitialized (final ServletContextEvent sce) {
@@ -35,7 +35,7 @@ public final class ScopeListener implements ServletContextListener, HttpSessionL
     GlobalDebug.setProductionModeDirect (bProductionMode);
 
     // Set the storage base
-    StorageIO.initBasePath (aSC.getInitParameter (INIT_PARAMETER_SOTRAGE_BASE));
+    StorageIO.initBasePath (aSC.getInitParameter (INIT_PARAMETER_STORAGE_BASE));
 
     // Init the global context
     WebScopeManager.onGlobalBegin (aSC);
