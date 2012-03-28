@@ -13,18 +13,22 @@ import com.phloc.scopes.web.mgr.WebScopeManager;
  * @author philip
  */
 public final class ScopeListener implements ServletContextListener, HttpSessionListener {
+    @Override
   public void contextInitialized (final ServletContextEvent sce) {
     WebScopeManager.onGlobalBegin (sce.getServletContext ());
   }
 
+    @Override
   public void contextDestroyed (final ServletContextEvent sce) {
     WebScopeManager.onGlobalEnd ();
   }
 
+    @Override
   public void sessionCreated (final HttpSessionEvent se) {
     WebScopeManager.onSessionBegin (se.getSession ());
   }
 
+    @Override
   public void sessionDestroyed (final HttpSessionEvent se) {
     WebScopeManager.onSessionEnd (se.getSession ());
   }

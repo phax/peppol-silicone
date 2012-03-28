@@ -4,6 +4,7 @@
  */
 package at.peppol.webgui.app;
 
+import ap.peppol.webgui.security.user.IUser;
 import com.vaadin.terminal.ClassResource;
 import com.vaadin.terminal.ExternalResource;
 import com.vaadin.terminal.ThemeResource;
@@ -34,41 +35,10 @@ public class MainWindow extends Window {
         VerticalLayout root = new VerticalLayout();
         root.setMargin(false);
         setContent(root);
-
-        // -------- START: Top Bar -----------
-        topBarCSSLayout.setStyleName("toolbar");
-        topBarCSSLayout.setSizeFull();
-        topBarLayout.setMargin(false, true, false, true);
-        topBarLayout.setSizeFull();
-        topBarLayoutLeft  = new HorizontalLayout();
-        topBarLayoutRight = new HorizontalLayout();
+       // createTopBar();
+       // Changed with menuBar -- under testing
+        createMenuBar();
         
-        Label pawgLabel = new Label("PAWG");
-        pawgLabel.setStyleName("h1");
-        pawgLabel.setSizeUndefined();
-        topBarLayoutLeft.addComponent(pawgLabel);
-        
-        HorizontalLayout segBtns = createTopBarButtons();
-        topBarLayoutLeft.addComponent(segBtns);
-        
-        
-        Label loggedInLabel = new Label("Logged in as "+PawgApp.getInstance().user);
-        loggedInLabel.setSizeUndefined();
-        topBarLayoutRight.addComponent(loggedInLabel);
-        topBarLayoutRight.setComponentAlignment(loggedInLabel, Alignment.MIDDLE_RIGHT);
-        topBarLayoutLeft.setComponentAlignment(segBtns, Alignment.MIDDLE_CENTER);
-        topBarLayoutLeft.setSpacing(true);
-        
-        topBarLayout.addComponent(topBarLayoutLeft);
-        topBarLayout.addComponent(topBarLayoutRight);
-        topBarLayout.setComponentAlignment(topBarLayoutRight, Alignment.MIDDLE_RIGHT);
-        
-        topBarLayout.setExpandRatio(topBarLayoutLeft, 1);
-        topBarLayout.setExpandRatio(topBarLayoutRight, 1);
-        
-        topBarCSSLayout.addComponent(topBarLayout);
-        addComponent(topBarCSSLayout);
-        // -------- END: Top Bar -----------
         
         // ------ START: Left NavBar -------
         CssLayout leftNavBar = new CssLayout();
@@ -142,6 +112,106 @@ public class MainWindow extends Window {
         // -------- 
         addComponent(middleContentLayout);
         addComponent(footerLayout);
+    }
+
+    private void createTopBar() {
+       
+        topBarCSSLayout.setStyleName("toolbar");
+        topBarCSSLayout.setSizeFull();
+        topBarLayout.setMargin(false, true, false, true);
+        topBarLayout.setSizeFull();
+        topBarLayoutLeft  = new HorizontalLayout();
+        topBarLayoutRight = new HorizontalLayout();
+        
+        Label pawgLabel = new Label("PAWG");
+        pawgLabel.setStyleName("h1");
+        pawgLabel.setSizeUndefined();
+        topBarLayoutLeft.addComponent(pawgLabel);
+        
+        HorizontalLayout segBtns = createTopBarButtons();
+        topBarLayoutLeft.addComponent(segBtns);
+        
+       // IUser user = (IUser) PawgApp.getInstance().getUser();
+        Label loggedInLabel = new Label("Test User");
+        loggedInLabel.setSizeUndefined();
+        topBarLayoutRight.addComponent(loggedInLabel);
+        topBarLayoutRight.setComponentAlignment(loggedInLabel, Alignment.MIDDLE_RIGHT);
+        topBarLayoutLeft.setComponentAlignment(segBtns, Alignment.MIDDLE_CENTER);
+        topBarLayoutLeft.setSpacing(true);
+        
+        topBarLayout.addComponent(topBarLayoutLeft);
+        topBarLayout.addComponent(topBarLayoutRight);
+        topBarLayout.setComponentAlignment(topBarLayoutRight, Alignment.MIDDLE_RIGHT);
+        
+        topBarLayout.setExpandRatio(topBarLayoutLeft, 1);
+        topBarLayout.setExpandRatio(topBarLayoutRight, 1);
+        
+        topBarCSSLayout.addComponent(topBarLayout);
+        addComponent(topBarCSSLayout);
+       
+    }
+    
+    private void createMenuBar()    
+    {
+       
+        topBarLayout.setMargin(false, false, false, false);
+        topBarLayout.setSizeFull();
+      //  topBarLayout.setStyleName("v-menubar");
+        topBarLayoutLeft  = new HorizontalLayout();
+        topBarLayoutRight = new HorizontalLayout();
+        
+//        Label pawgLabel = new Label("PAWG",Label.CONTENT_XHTML);
+//        pawgLabel.setStyleName("v-menubar");
+//        pawgLabel.addStyleName("v-label-big");
+//        pawgLabel.setSizeFull();
+//        topBarLayoutLeft.addComponent(pawgLabel);
+
+        MenuBar menuBar = new MenuBar();
+        menuBar.setHtmlContentAllowed(true);
+        final MenuBar.MenuItem PAWGLabel = menuBar.addItem("<b>PAWG<b>", null);
+        final MenuBar.MenuItem docItem = menuBar.addItem("Document", null);
+        final MenuBar.MenuItem prefsItem = menuBar.addItem("Preferences", null);
+        final MenuBar.MenuItem aboutItem = menuBar.addItem("About", null);
+        menuBar.setSizeFull();
+        
+        final MenuBar.MenuItem invItem = docItem.addItem("Invoice", null);
+        final MenuBar.MenuItem orderItem = docItem.addItem("Order", null);
+        
+        final MenuBar.MenuItem invCreateItem = invItem.addItem("New",null);
+        final MenuBar.MenuItem invViewItem = invItem.addItem("View",null);
+        
+        final MenuBar.MenuItem ordCreateItem = orderItem.addItem("New",null);
+        final MenuBar.MenuItem ordViewItem = orderItem.addItem("View",null);
+        
+        
+        
+
+        
+        topBarLayoutLeft.addComponent(menuBar);
+       Label loggedInLabel = new Label("Test User");
+
+       //        loggedInLabel.addStyleName("v-menubar");
+      // loggedInLabel.addStyleName("v-menubar-menuitem");
+      //  loggedInLabel.setSizeUndefined();
+      //  topBarLayoutRight.setStyleName("v-menubar");;
+      //  topBarLayoutRight.setSizeUndefined();
+      //  topBarLayoutRight.addComponent(loggedInLabel);
+     //   topBarLayoutRight.setComponentAlignment(loggedInLabel, Alignment.MIDDLE_RIGHT);
+        topBarLayoutLeft.setComponentAlignment(menuBar, Alignment.MIDDLE_CENTER);
+        topBarLayoutLeft.setSpacing(false);
+        topBarLayoutLeft.setSizeFull();
+        topBarLayoutRight.setSizeUndefined();
+        
+        topBarLayout.addComponent(topBarLayoutLeft);
+       // topBarLayout.addComponent(topBarLayoutRight);
+      //  topBarLayout.setComponentAlignment(topBarLayoutRight, Alignment.MIDDLE_RIGHT);
+        
+//        topBarLayout.setExpandRatio(topBarLayoutLeft, 1);
+//        topBarLayout.setExpandRatio(topBarLayoutRight, 1);
+        
+//        topBarCSSLayout.addComponent(topBarLayout);
+        addComponent(topBarLayout);
+        
     }
     
     private HorizontalLayout createTopBarButtons() {
