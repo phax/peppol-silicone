@@ -51,10 +51,11 @@ public final class UserManager extends AbstractManager implements IUserManager {
     }
 
     // Create user
-    final User aUser = new User (sEmailAddress, createUserPasswordHash (sPlainTextPassword));
-    aUser.setFirstName (sFirstName);
-    aUser.setLastName (sLastName);
-    aUser.setDesiredLocale (aDesiredLocale);
+    final User aUser = new User (sEmailAddress,
+                                 createUserPasswordHash (sPlainTextPassword),
+                                 sFirstName,
+                                 sLastName,
+                                 aDesiredLocale);
 
     m_aRWLock.writeLock ().lock ();
     try {

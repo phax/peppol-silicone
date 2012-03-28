@@ -15,15 +15,26 @@ public final class CSecurity {
   public static final EMessageDigestAlgorithm USER_PASSWORD_ALGO = EMessageDigestAlgorithm.SHA_512;
 
   // Default users
+  public static final String USER_ADMINISTRATOR_ID = "admin";
+  public static final String USER_ADMINISTRATOR_NAME = "Administrator";
+  public static final String USER_USER_ID = "user";
+  public static final String USER_USER_NAME = "User";
+  public static final String USER_GUEST_ID = "guest";
+  public static final String USER_GUEST_NAME = "Guest";
 
   // Default roles
-  public static final String ROLE_NAME_ADMINISTRATOR = "Administrator";
-  public static final String ROLE_NAME_USER = "User";
+  public static final String ROLE_ADMINISTRATOR_ID = "radmin";
+  public static final String ROLE_ADMINISTRATOR_NAME = "Administrator";
+  public static final String ROLE_USER_ID = "ruser";
+  public static final String ROLE_USER_NAME = "User";
 
   // Default user groups
-  public static final String USERGROUP_NAME_ADMINISTRATORS = "Administrators";
-  public static final String USERGROUP_NAME_USERS = "Users";
-  public static final String USERGROUP_NAME_GUESTS = "Guests";
+  public static final String USERGROUP_ADMINISTRATORS_ID = "ugadmin";
+  public static final String USERGROUP_ADMINISTRATORS_NAME = "Administrators";
+  public static final String USERGROUP_USERS_ID = "uguser";
+  public static final String USERGROUP_USERS_NAME = "Users";
+  public static final String USERGROUP_GUESTS_ID = "ugguest";
+  public static final String USERGROUP_GUESTS_NAME = "Guests";
 
   private CSecurity () {}
 }
