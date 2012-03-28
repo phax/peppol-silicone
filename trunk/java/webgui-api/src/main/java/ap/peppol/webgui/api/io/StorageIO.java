@@ -24,6 +24,9 @@ import java.io.OutputStream;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.io.EAppend;
 import com.phloc.commons.io.IReadWriteResource;
@@ -37,6 +40,7 @@ import com.phloc.commons.string.StringHelper;
  */
 @Immutable
 public final class StorageIO {
+  private static final Logger s_aLogger = LoggerFactory.getLogger (StorageIO.class);
   private static String s_sBasePath;
 
   private StorageIO () {}
@@ -46,6 +50,7 @@ public final class StorageIO {
       throw new IllegalArgumentException ("realPath");
     if (s_sBasePath != null)
       throw new IllegalStateException ("another real path is already present!");
+    s_aLogger.info ("Using '" + sRealPath + "' as the storage base");
     s_sBasePath = sRealPath;
   }
 
