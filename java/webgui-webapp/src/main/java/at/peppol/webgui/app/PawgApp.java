@@ -1,10 +1,8 @@
 package at.peppol.webgui.app;
 
-import at.peppol.webgui.app.model.User;
+import ap.peppol.webgui.security.user.IUser;
 import com.vaadin.Application;
-import com.vaadin.terminal.ExternalResource;
 import com.vaadin.terminal.gwt.server.HttpServletRequestListener;
-import com.vaadin.ui.Window;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
@@ -13,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 public class PawgApp extends Application implements HttpServletRequestListener {
 
     private static ThreadLocal<PawgApp> threadLocal = new ThreadLocal<PawgApp>();
-    User user;
+    private IUser user;
 
     @Override
     public void init() {
@@ -57,8 +55,10 @@ public class PawgApp extends Application implements HttpServletRequestListener {
 
     public void authenticate(String username, String password) throws Exception {
         
+        //Dummy Authentication
         if (username.equals("peppol") && password.equals("peppol"))
             showMainAppWindow();
+        
         else 
             throw new Exception("Login Failed");
     
