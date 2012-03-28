@@ -46,14 +46,24 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
   <display-name>PEPPOL Web GUI web site</display-name>
   <description>PEPPOL Web GUI - code.google.com/p/peppol-silicone</description>
   <context-param>
+    <description>Enable global tracing (more detailed than debug). Turn off in production system.</description>
+    <param-name>trace</param-name>
+    <param-value>false</param-value>
+  </context-param>
+  <context-param>
     <description>Enable global debugging. Turn off in production</description>
     <param-name>debug</param-name>
     <param-value>true</param-value>
   </context-param>
   <context-param>
-    <description>Enable global tracing (more detailed than debug). Turn off in production system.</description>
-    <param-name>trace</param-name>
+    <description>Enable production mode. Turn on in production</description>
+    <param-name>productionMode</param-name>
     <param-value>false</param-value>
+  </context-param>
+  <context-param>
+    <description>Defines where to store all the runtime data</description>
+    <param-name>storage-base</param-name>
+    <param-value>/var/www/peppol-silicone/webgui/storage</param-value>
   </context-param>
   
   <session-config>
