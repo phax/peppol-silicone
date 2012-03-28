@@ -82,7 +82,7 @@ public interface IUserManager {
    * @return <code>true</code> if the password hash matches the stored hash for
    *         the specified user, <code>false</code> otherwise.
    */
-  boolean isUsernamePasswordValid (@Nullable String sUserID, @Nullable String sPlainTextPassword);
+  boolean areUserIDAndPasswordValid (@Nullable String sUserID, @Nullable String sPlainTextPassword);
 
   /**
    * Check if a user with the specified ID is present.

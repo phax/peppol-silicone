@@ -65,6 +65,7 @@ public final class UserGroupManager extends AbstractManager implements IUserGrou
     if (m_aUserMgr.containsUserWithID (CSecurity.USER_GUEST_ID))
       aUG.assignUser (CSecurity.USER_GUEST_ID);
     // no role for this user group
+
     return EChange.CHANGED;
   }
 
