@@ -8,6 +8,11 @@ import org.junit.Test;
 import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.microdom.convert.MicroTypeConverter;
 
+/**
+ * Test class for class {@link Role}.
+ * 
+ * @author philip
+ */
 public final class RoleTest {
   @Test
   public void testBasic () {

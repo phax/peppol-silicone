@@ -10,6 +10,11 @@ import org.junit.Test;
 import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.microdom.convert.MicroTypeConverter;
 
+/**
+ * Test class for class {@link User}.
+ * 
+ * @author philip
+ */
 public final class UserTest {
   @Test
   public void testBasic () {
