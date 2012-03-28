@@ -5,6 +5,8 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import ap.peppol.webgui.security.role.IRole;
+import ap.peppol.webgui.security.role.Role;
 import ap.peppol.webgui.security.user.IUser;
 import ap.peppol.webgui.security.user.User;
 
@@ -58,7 +60,31 @@ public final class WebGUIMicroTypeConverterRegistrarSPI implements IMicroTypeCon
     }
   }
 
+  private static final class RoleMicroTypeConverter implements IMicroTypeConverter {
+    private static final String ATTR_ID = "id";
+    private static final String ATTR_NAME = "name";
+
+    @Nonnull
+    public IMicroElement convertToMicroElement (@Nonnull final Object aObject,
+                                                @Nullable final String sNamespaceURI,
+                                                @Nonnull final String sTagName) {
+      final IRole aRole = (IRole) aObject;
+      final IMicroElement eUser = new MicroElement (sNamespaceURI, sTagName);
+      eUser.setAttribute (ATTR_ID, aRole.getID ());
+      eUser.setAttribute (ATTR_NAME, aRole.getName ());
+      return eUser;
+    }
+
+    @Nonnull
+    public IRole convertToNative (@Nonnull final IMicroElement aElement) {
+      final String sID = aElement.getAttribute (ATTR_ID);
+      final String sName = aElement.getAttribute (ATTR_NAME);
+      return new Role (sID, sName);
+    }
+  }
+
   public void registerMicroTypeConverter (@Nonnull final IMicroTypeConverterRegistry aRegistry) {
     aRegistry.registerMicroElementTypeConverter (User.class, new UserMicroTypeConverter ());
+    aRegistry.registerMicroElementTypeConverter (Role.class, new RoleMicroTypeConverter ());
   }
 }
