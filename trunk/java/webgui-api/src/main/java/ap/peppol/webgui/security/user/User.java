@@ -20,7 +20,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author Philip Helger
  */
 @NotThreadSafe
-final class User implements IUser {
+public final class User implements IUser {
   private final String m_sID;
   private final String m_sEmailAddress;
   private final String m_sPasswordHash;
@@ -37,13 +37,28 @@ final class User implements IUser {
    * @param sPasswordHash
    *        Password hash of the user. May neither be <code>null</code> nor
    *        empty.
+   * @param sFirstName
+   *        The first name. May be <code>null</code>.
+   * @param sLastName
+   *        The last name. May be <code>null</code>.
+   * @param aDesiredLocale
+   *        The desired locale. May be <code>null</code>.
    */
-  public User (@Nonnull @Nonempty final String sEmailAddress, @Nonnull @Nonempty final String sPasswordHash) {
-    this (GlobalIDFactory.getNewPersistentStringID (), sEmailAddress, sPasswordHash);
+  public User (@Nonnull @Nonempty final String sEmailAddress,
+               @Nonnull @Nonempty final String sPasswordHash,
+               @Nullable final String sFirstName,
+               @Nullable final String sLastName,
+               @Nullable final Locale aDesiredLocale) {
+    this (GlobalIDFactory.getNewPersistentStringID (),
+          sEmailAddress,
+          sPasswordHash,
+          sFirstName,
+          sLastName,
+          aDesiredLocale);
   }
 
   /**
-   * Create an existing user
+   * For deserialization only.
    * 
    * @param sID
    *        user ID
@@ -53,10 +68,19 @@ final class User implements IUser {
    * @param sPasswordHash
    *        Password hash of the user. May neither be <code>null</code> nor
    *        empty.
+   * @param sFirstName
+   *        The first name. May be <code>null</code>.
+   * @param sLastName
+   *        The last name. May be <code>null</code>.
+   * @param aDesiredLocale
+   *        The desired locale. May be <code>null</code>.
    */
   public User (@Nonnull @Nonempty final String sID,
                @Nonnull @Nonempty final String sEmailAddress,
-               @Nonnull @Nonempty final String sPasswordHash) {
+               @Nonnull @Nonempty final String sPasswordHash,
+               @Nullable final String sFirstName,
+               @Nullable final String sLastName,
+               @Nullable final Locale aDesiredLocale) {
     if (StringHelper.hasNoText (sID))
       throw new IllegalArgumentException ("ID");
     if (StringHelper.hasNoText (sEmailAddress))
@@ -66,6 +90,9 @@ final class User implements IUser {
     m_sID = sID;
     m_sEmailAddress = sEmailAddress;
     m_sPasswordHash = sPasswordHash;
+    m_sFirstName = sFirstName;
+    m_sLastName = sLastName;
+    m_aDesiredLocale = aDesiredLocale;
   }
 
   @Nonnull
