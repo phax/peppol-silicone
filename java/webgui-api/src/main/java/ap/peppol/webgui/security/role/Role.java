@@ -24,7 +24,7 @@ public final class Role implements IRole {
     this (GlobalIDFactory.getNewPersistentStringID (), sName);
   }
 
-  public Role (@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sName) {
+  Role (@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sName) {
     if (StringHelper.hasNoText (sID))
       throw new IllegalArgumentException ("ID");
     if (StringHelper.hasNoText (sName))

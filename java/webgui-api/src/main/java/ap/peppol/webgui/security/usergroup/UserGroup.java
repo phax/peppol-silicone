@@ -21,7 +21,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author philip
  */
 @NotThreadSafe
-final class UserGroup implements IUserGroup {
+public final class UserGroup implements IUserGroup {
   private final String m_sID;
   private String m_sName;
   private final Set <String> m_aUserIDs = new HashSet <String> ();
@@ -31,7 +31,7 @@ final class UserGroup implements IUserGroup {
     this (GlobalIDFactory.getNewPersistentStringID (), sName);
   }
 
-  public UserGroup (@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sName) {
+  UserGroup (@Nonnull @Nonempty final String sID, @Nonnull @Nonempty final String sName) {
     if (StringHelper.hasNoText (sID))
       throw new IllegalArgumentException ("ID");
     if (StringHelper.hasNoText (sName))
@@ -48,12 +48,12 @@ final class UserGroup implements IUserGroup {
 
   @Nonnull
   @Nonempty
-  public String getDisplayName () {
+  public String getName () {
     return m_sName;
   }
 
   @Nonnull
-  EChange setDisplayName (@Nonnull @Nonempty final String sName) {
+  EChange setName (@Nonnull @Nonempty final String sName) {
     if (StringHelper.hasNoText (sName))
       throw new IllegalArgumentException ("name");
     if (sName.equals (m_sName))

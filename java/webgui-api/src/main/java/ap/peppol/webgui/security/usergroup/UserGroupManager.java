@@ -106,7 +106,7 @@ public final class UserGroupManager extends AbstractManager implements IUserGrou
 
     m_aRWLock.writeLock ().lock ();
     try {
-      if (aUserGroup.setDisplayName (sNewName).isUnchanged ())
+      if (aUserGroup.setName (sNewName).isUnchanged ())
         return EChange.UNCHANGED;
       markAsChanged ();
       return EChange.CHANGED;
