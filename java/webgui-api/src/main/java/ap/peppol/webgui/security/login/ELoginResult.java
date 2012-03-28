@@ -8,9 +8,13 @@ import com.phloc.commons.state.ISuccessIndicator;
  * @author philip
  */
 public enum ELoginResult implements ISuccessIndicator {
+  /** Login was successfully */
   SUCCESS,
+  /** No such user */
   USER_NOT_EXISTING,
+  /** The provided password is invalid */
   INVALID_PASSWORD,
+  /** The user was already logged in */
   USER_ALREADY_LOGGED_IN;
 
   public boolean isSuccess () {

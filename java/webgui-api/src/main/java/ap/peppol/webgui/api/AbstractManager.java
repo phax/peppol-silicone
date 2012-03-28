@@ -18,22 +18,25 @@ import com.phloc.commons.io.file.FileOperations;
 import com.phloc.commons.io.file.FileUtils;
 import com.phloc.commons.io.resource.FileSystemResource;
 import com.phloc.commons.microdom.IMicroDocument;
+import com.phloc.commons.microdom.impl.MicroComment;
 import com.phloc.commons.microdom.serialize.MicroReader;
 import com.phloc.commons.microdom.serialize.MicroWriter;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.xml.serialize.XMLWriterSettings;
 
 public abstract class AbstractManager {
+  public static final boolean DEFAULT_AUTO_SAVE_ENABLED = true;
   private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractManager.class);
 
   protected final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
   private final File m_aFile;
-  private boolean m_bPendingChanges = true;
-  private boolean m_bAutoSaveEnabled = true;
+  private boolean m_bPendingChanges = false;
+  private boolean m_bAutoSaveEnabled = DEFAULT_AUTO_SAVE_ENABLED;
 
   protected AbstractManager (@Nonnull @Nonempty final String sFilename) {
     m_aFile = StorageIO.getFile (sFilename);
     if (m_aFile.exists ()) {
+      // file exist -> must be a file!
       if (!m_aFile.isFile ())
         throw new IllegalArgumentException ("The passed filename '" + sFilename + "' is a directory and not a file!");
     }
@@ -43,15 +46,35 @@ public abstract class AbstractManager {
     }
   }
 
+  /**
+   * Custom initialization routine. Called only if the underlying file does not
+   * exist yet.
+   * 
+   * @return {@link EChange#CHANGED} if something was modified inside this
+   *         method
+   */
   @Nonnull
   @OverrideOnDemand
   protected EChange onInit () {
     return EChange.UNCHANGED;
   }
 
+  /**
+   * Fill the internal structures with from the passed XML document.
+   * 
+   * @param aDoc
+   *        The XML document to read from
+   * @return {@link EChange#CHANGED} if reading the data changed something in
+   *         the internal structures that requires a writing.
+   */
   @Nonnull
   protected abstract EChange onRead (@Nonnull IMicroDocument aDoc);
 
+  /**
+   * Create the XML document that should be saved to the file.
+   * 
+   * @return The non-<code>null</code> document to write to the file.
+   */
   @Nonnull
   protected abstract IMicroDocument createWriteData ();
 
@@ -59,17 +82,14 @@ public abstract class AbstractManager {
     // Create XML document
     final IMicroDocument aDoc = createWriteData ();
 
+    // Add a small comment
+    aDoc.insertBefore (new MicroComment ("This file was generated automatically - do NOT modify!"),
+                       aDoc.getDocumentElement ());
+
     // Write to file
     if (MicroWriter.writeToStream (aDoc, FileUtils.getOutputStream (m_aFile), XMLWriterSettings.SUGGESTED_XML_SETTINGS)
                    .isFailure ())
       s_aLogger.error ("Failed to write data to " + m_aFile);
-  }
-
-  private void _writeToFileOnPendingChanges () {
-    if (m_bPendingChanges) {
-      _writeToFile ();
-      m_bPendingChanges = false;
-    }
   }
 
   protected final void initialRead () {
@@ -90,6 +110,10 @@ public abstract class AbstractManager {
     m_bPendingChanges = false;
   }
 
+  /**
+   * @return <code>true</code> if auto save is enabled, <code>false</code>
+   *         otherwise.
+   */
   public final boolean isAutoSaveEnabled () {
     m_aRWLock.readLock ().lock ();
     try {
@@ -100,6 +124,12 @@ public abstract class AbstractManager {
     }
   }
 
+  /**
+   * Enable or disable auto save. Does not trigger any file writing operations.
+   * 
+   * @param bAutoSaveEnabled
+   *        The new auto save state.
+   */
   public final void setAutoSaveEnabled (final boolean bAutoSaveEnabled) {
     m_aRWLock.writeLock ().lock ();
     try {
@@ -123,6 +153,45 @@ public abstract class AbstractManager {
     }
   }
 
+  /**
+   * @return <code>true</code> if unsaved changes are present
+   */
+  public boolean hasPendingChanges () {
+    m_aRWLock.readLock ().lock ();
+    try {
+      return m_bPendingChanges;
+    }
+    finally {
+      m_aRWLock.readLock ().unlock ();
+    }
+  }
+
+  /**
+   * In case there are pending changes write them to the file.
+   */
+  public void writeToFileOnPendingChanges () {
+    if (hasPendingChanges ()) {
+      // Write changes
+      m_aRWLock.writeLock ().lock ();
+      try {
+        _writeToFile ();
+        m_bPendingChanges = false;
+      }
+      finally {
+        m_aRWLock.writeLock ().unlock ();
+      }
+    }
+  }
+
+  /**
+   * Run a set of bulk operations with disabled auto save. After the actions,
+   * the original state of auto save is restored. After the actions, all pending
+   * changes are written to disk.
+   * 
+   * @param aCallback
+   *        The callback performing the operations. May not be <code>null</code>
+   *        .
+   */
   public final void runWithoutAutoSave (@Nonnull final INonThrowingRunnable aCallback) {
     if (aCallback == null)
       throw new NullPointerException ("callback");
@@ -136,11 +205,12 @@ public abstract class AbstractManager {
       }
       finally {
         m_bAutoSaveEnabled = bOldAutoSave;
-        _writeToFileOnPendingChanges ();
       }
     }
     finally {
       m_aRWLock.writeLock ().unlock ();
     }
+
+    writeToFileOnPendingChanges ();
   }
 }
