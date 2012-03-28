@@ -85,6 +85,16 @@ public interface IUserManager {
   boolean isUsernamePasswordValid (@Nullable String sUserID, @Nullable String sPlainTextPassword);
 
   /**
+   * Check if a user with the specified ID is present.
+   * 
+   * @param sUserID
+   *        The user ID to resolve. May be <code>null</code>.
+   * @return <code>true</code> if such user exists, <code>false</code>
+   *         otherwise.
+   */
+  boolean containsUserWithID (@Nullable String sUserID);
+
+  /**
    * Get the user with the specified ID.
    * 
    * @param sUserID

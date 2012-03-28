@@ -11,7 +11,7 @@ import com.phloc.commons.messagedigest.EMessageDigestAlgorithm;
  */
 @Immutable
 public final class CSecurity {
-  /** Hashing algorithm to use */
+  /** Hashing algorithm to use for user passwords */
   public static final EMessageDigestAlgorithm USER_PASSWORD_ALGO = EMessageDigestAlgorithm.SHA_512;
 
   // Default users

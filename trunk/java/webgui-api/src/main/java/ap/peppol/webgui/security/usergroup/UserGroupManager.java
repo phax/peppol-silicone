@@ -12,6 +12,8 @@ import javax.annotation.concurrent.ThreadSafe;
 
 import ap.peppol.webgui.api.AbstractManager;
 import ap.peppol.webgui.security.CSecurity;
+import ap.peppol.webgui.security.role.IRoleManager;
+import ap.peppol.webgui.security.user.IUserManager;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
@@ -29,19 +31,40 @@ import com.phloc.commons.state.EChange;
  */
 @ThreadSafe
 public final class UserGroupManager extends AbstractManager implements IUserGroupManager {
+  private final IUserManager m_aUserMgr;
+  private final IRoleManager m_aRoleMgr;
   private final Map <String, UserGroup> m_aUserGroups = new HashMap <String, UserGroup> ();
 
-  public UserGroupManager () {
+  public UserGroupManager (@Nonnull final IUserManager aUserMgr, @Nonnull final IRoleManager aRoleMgr) {
     super ("security/usergroups.xml");
+    m_aUserMgr = aUserMgr;
+    m_aRoleMgr = aRoleMgr;
     initialRead ();
   }
 
   @Override
   @Nonnull
   protected EChange onInit () {
-    _addUserGroup (new UserGroup (CSecurity.USERGROUP_ADMINISTRATORS_ID, CSecurity.USERGROUP_ADMINISTRATORS_NAME));
-    _addUserGroup (new UserGroup (CSecurity.USERGROUP_USERS_ID, CSecurity.USERGROUP_USERS_NAME));
-    _addUserGroup (new UserGroup (CSecurity.USERGROUP_GUESTS_ID, CSecurity.USERGROUP_GUESTS_NAME));
+    // Administrators user group
+    UserGroup aUG = _addUserGroup (new UserGroup (CSecurity.USERGROUP_ADMINISTRATORS_ID,
+                                                  CSecurity.USERGROUP_ADMINISTRATORS_NAME));
+    if (m_aUserMgr.containsUserWithID (CSecurity.USER_ADMINISTRATOR_ID))
+      aUG.assignUser (CSecurity.USER_ADMINISTRATOR_ID);
+    if (m_aRoleMgr.containsRoleWithID (CSecurity.ROLE_ADMINISTRATOR_ID))
+      aUG.assignRole (CSecurity.ROLE_ADMINISTRATOR_ID);
+
+    // Users user group
+    aUG = _addUserGroup (new UserGroup (CSecurity.USERGROUP_USERS_ID, CSecurity.USERGROUP_USERS_NAME));
+    if (m_aUserMgr.containsUserWithID (CSecurity.USER_USER_ID))
+      aUG.assignUser (CSecurity.USER_USER_ID);
+    if (m_aRoleMgr.containsRoleWithID (CSecurity.ROLE_USER_ID))
+      aUG.assignRole (CSecurity.ROLE_USER_ID);
+
+    // Guests user group
+    aUG = _addUserGroup (new UserGroup (CSecurity.USERGROUP_GUESTS_ID, CSecurity.USERGROUP_GUESTS_NAME));
+    if (m_aUserMgr.containsUserWithID (CSecurity.USER_GUEST_ID))
+      aUG.assignUser (CSecurity.USER_GUEST_ID);
+    // no role for this user group
     return EChange.CHANGED;
   }
 
@@ -63,11 +86,13 @@ public final class UserGroupManager extends AbstractManager implements IUserGrou
     return aDoc;
   }
 
-  private void _addUserGroup (@Nonnull final UserGroup aUserGroup) {
+  @Nonnull
+  private UserGroup _addUserGroup (@Nonnull final UserGroup aUserGroup) {
     final String sUserGroupID = aUserGroup.getID ();
     if (m_aUserGroups.containsKey (sUserGroupID))
       throw new IllegalArgumentException ("User group ID " + sUserGroupID + " is already in use!");
     m_aUserGroups.put (sUserGroupID, aUserGroup);
+    return aUserGroup;
   }
 
   @Nonnull
@@ -85,6 +110,16 @@ public final class UserGroupManager extends AbstractManager implements IUserGrou
       m_aRWLock.writeLock ().unlock ();
     }
     return aUserGroup;
+  }
+
+  public boolean containsUserGroupWithID (@Nullable final String sUserGroupID) {
+    m_aRWLock.readLock ().lock ();
+    try {
+      return m_aUserGroups.containsKey (sUserGroupID);
+    }
+    finally {
+      m_aRWLock.readLock ().unlock ();
+    }
   }
 
   /**

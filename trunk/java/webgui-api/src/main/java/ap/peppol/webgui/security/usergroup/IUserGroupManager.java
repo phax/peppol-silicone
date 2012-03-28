@@ -39,6 +39,16 @@ public interface IUserGroupManager {
   EChange deleteUserGroup (@Nullable String sUserGroupID);
 
   /**
+   * Check if a user group with the specified ID is contained
+   * 
+   * @param sUserGroupID
+   *        The ID of the user group to check
+   * @return <code>true</code> if no user group exists, <code>false</code>
+   *         otherwise.
+   */
+  boolean containsUserGroupWithID (@Nullable String sUserGroupID);
+
+  /**
    * Get the user group with the specified ID
    * 
    * @param sUserGroupID
