@@ -3,18 +3,21 @@ package ap.peppol.webgui.security.role;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
 import ap.peppol.webgui.api.AbstractManager;
+import ap.peppol.webgui.security.CSecurity;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.microdom.IMicroDocument;
+import com.phloc.commons.microdom.IMicroElement;
+import com.phloc.commons.microdom.convert.MicroTypeConverter;
+import com.phloc.commons.microdom.impl.MicroDocument;
 import com.phloc.commons.state.EChange;
 
 /**
@@ -24,10 +27,45 @@ import com.phloc.commons.state.EChange;
  */
 @ThreadSafe
 public final class RoleManager extends AbstractManager implements IRoleManager {
-  private final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
   private final Map <String, Role> m_aRoles = new HashMap <String, Role> ();
 
-  public RoleManager () {}
+  public RoleManager () {
+    super ("security/roles.xml");
+    initialRead ();
+  }
+
+  @Override
+  @Nonnull
+  protected EChange onInit () {
+    _addRole (new Role (CSecurity.ROLE_ADMINISTRATOR_ID, CSecurity.ROLE_ADMINISTRATOR_NAME));
+    _addRole (new Role (CSecurity.ROLE_USER_ID, CSecurity.ROLE_USER_NAME));
+    return EChange.CHANGED;
+  }
+
+  @Override
+  @Nonnull
+  protected EChange onRead (@Nonnull final IMicroDocument aDoc) {
+    for (final IMicroElement eRole : aDoc.getDocumentElement ().getChildElements ())
+      _addRole (MicroTypeConverter.convertToNative (eRole, Role.class));
+    return EChange.UNCHANGED;
+  }
+
+  @Override
+  @Nonnull
+  protected IMicroDocument createWriteData () {
+    final IMicroDocument aDoc = new MicroDocument ();
+    final IMicroElement eRoot = aDoc.appendElement ("roles");
+    for (final Role aRole : ContainerHelper.getSortedByKey (m_aRoles).values ())
+      eRoot.appendChild (MicroTypeConverter.convertToMicroElement (aRole, "role"));
+    return aDoc;
+  }
+
+  private void _addRole (@Nonnull final Role aRole) {
+    final String sRoleID = aRole.getID ();
+    if (m_aRoles.containsKey (sRoleID))
+      throw new IllegalArgumentException ("Role ID " + sRoleID + " is already in use!");
+    m_aRoles.put (sRoleID, aRole);
+  }
 
   @Nonnull
   public IRole createNewRole (@Nonnull @Nonempty final String sName) {
@@ -37,7 +75,7 @@ public final class RoleManager extends AbstractManager implements IRoleManager {
     m_aRWLock.writeLock ().lock ();
     try {
       // Store
-      m_aRoles.put (aRole.getID (), aRole);
+      _addRole (aRole);
       markAsChanged ();
     }
     finally {

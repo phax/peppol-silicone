@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -19,6 +17,10 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.messagedigest.MessageDigestGeneratorHelper;
+import com.phloc.commons.microdom.IMicroDocument;
+import com.phloc.commons.microdom.IMicroElement;
+import com.phloc.commons.microdom.convert.MicroTypeConverter;
+import com.phloc.commons.microdom.impl.MicroDocument;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
 
@@ -29,10 +31,61 @@ import com.phloc.commons.string.StringHelper;
  */
 @ThreadSafe
 public final class UserManager extends AbstractManager implements IUserManager {
-  private final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
   private final Map <String, User> m_aUsers = new HashMap <String, User> ();
 
-  public UserManager () {}
+  public UserManager () {
+    super ("security/users.xml");
+    initialRead ();
+  }
+
+  @Override
+  @Nonnull
+  protected EChange onInit () {
+    _addUser (new User (CSecurity.USER_ADMINISTRATOR_ID,
+                        CSecurity.USER_ADMINISTRATOR_EMAIL,
+                        UserManager.createUserPasswordHash ("password"),
+                        CSecurity.USER_ADMINISTRATOR_NAME,
+                        null,
+                        null));
+    _addUser (new User (CSecurity.USER_USER_ID,
+                        CSecurity.USER_USER_EMAIL,
+                        UserManager.createUserPasswordHash ("user"),
+                        CSecurity.USER_USER_NAME,
+                        null,
+                        null));
+    _addUser (new User (CSecurity.USER_GUEST_ID,
+                        CSecurity.USER_GUEST_EMAIL,
+                        UserManager.createUserPasswordHash ("guest"),
+                        CSecurity.USER_GUEST_NAME,
+                        null,
+                        null));
+    return EChange.CHANGED;
+  }
+
+  @Override
+  @Nonnull
+  protected EChange onRead (@Nonnull final IMicroDocument aDoc) {
+    for (final IMicroElement eUser : aDoc.getDocumentElement ().getChildElements ())
+      _addUser (MicroTypeConverter.convertToNative (eUser, User.class));
+    return EChange.UNCHANGED;
+  }
+
+  @Override
+  @Nonnull
+  protected IMicroDocument createWriteData () {
+    final IMicroDocument aDoc = new MicroDocument ();
+    final IMicroElement eRoot = aDoc.appendElement ("users");
+    for (final User aUser : ContainerHelper.getSortedByKey (m_aUsers).values ())
+      eRoot.appendChild (MicroTypeConverter.convertToMicroElement (aUser, "user"));
+    return aDoc;
+  }
+
+  private void _addUser (@Nonnull final User aUser) {
+    final String sUserID = aUser.getID ();
+    if (m_aUsers.containsKey (sUserID))
+      throw new IllegalArgumentException ("User ID " + sUserID + " is already in use!");
+    m_aUsers.put (sUserID, aUser);
+  }
 
   @Nullable
   public IUser createNewUser (@Nonnull @Nonempty final String sEmailAddress,
@@ -59,8 +112,7 @@ public final class UserManager extends AbstractManager implements IUserManager {
 
     m_aRWLock.writeLock ().lock ();
     try {
-      // Store in memory
-      m_aUsers.put (aUser.getID (), aUser);
+      _addUser (aUser);
       markAsChanged ();
     }
     finally {

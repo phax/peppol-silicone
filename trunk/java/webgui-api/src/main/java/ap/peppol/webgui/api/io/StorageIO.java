@@ -24,9 +24,11 @@ import java.io.OutputStream;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
+import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.io.EAppend;
 import com.phloc.commons.io.IReadWriteResource;
-import com.phloc.commons.io.file.FileUtils;
 import com.phloc.commons.io.resource.FileSystemResource;
+import com.phloc.commons.string.StringHelper;
 
 /**
  * Storage IO class
@@ -39,29 +41,39 @@ public final class StorageIO {
 
   private StorageIO () {}
 
-  public static void initBasePath (final String sRealPath) {
+  public static void initBasePath (@Nonnull @Nonempty final String sRealPath) {
+    if (StringHelper.hasNoText (sRealPath))
+      throw new IllegalArgumentException ("realPath");
     if (s_sBasePath != null)
       throw new IllegalStateException ("another real path is already present!");
     s_sBasePath = sRealPath;
   }
 
   @Nonnull
-  public static File getFile (final String sPath) {
-    return new File (s_sBasePath, sPath);
+  @Nonempty
+  public static String getBasePath () {
+    if (s_sBasePath == null)
+      throw new IllegalStateException ("Base path was not initialized!");
+    return s_sBasePath;
   }
 
   @Nonnull
-  public static IReadWriteResource getBasePathRelativeResource (final String sPath) {
-    return new FileSystemResource (getFile (sPath));
+  public static File getFile (final String sBasePathRelativePath) {
+    return new File (getBasePath (), sBasePathRelativePath);
   }
 
   @Nonnull
-  public static InputStream getBasePathRelativeInputStream (final String sPath) {
-    return FileUtils.getInputStream (getFile (sPath));
+  public static IReadWriteResource getResource (final String sBasePathRelativePath) {
+    return new FileSystemResource (getFile (sBasePathRelativePath));
   }
 
   @Nonnull
-  public static OutputStream getBasePathRelativeOutputStream (final String sPath) {
-    return FileUtils.getOutputStream (getFile (sPath));
+  public static InputStream getInputStream (final String sBasePathRelativePath) {
+    return getResource (sBasePathRelativePath).getInputStream ();
+  }
+
+  @Nonnull
+  public static OutputStream getOutputStream (final String sBasePathRelativePath, @Nonnull final EAppend eAppend) {
+    return getResource (sBasePathRelativePath).getOutputStream (eAppend);
   }
 }
