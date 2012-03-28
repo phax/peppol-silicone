@@ -222,7 +222,7 @@ public final class UserManager extends AbstractManager implements IUserManager {
     }
   }
 
-  public boolean isUsernamePasswordValid (@Nullable final String sUserID, @Nullable final String sPlainTextPassword) {
+  public boolean areUserIDAndPasswordValid (@Nullable final String sUserID, @Nullable final String sPlainTextPassword) {
     // No password is not allowed
     if (sPlainTextPassword == null)
       return false;

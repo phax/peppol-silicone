@@ -100,8 +100,25 @@ public final class AccessManager extends GlobalSingleton implements IUserManager
     return m_aUserMgr.setUserData (sUserID, sNewFirstName, sNewLastName, aNewDesiredLocale);
   }
 
-  public boolean isUsernamePasswordValid (@Nullable final String sUserID, @Nullable final String sPlainTextPassword) {
-    return m_aUserMgr.isUsernamePasswordValid (sUserID, sPlainTextPassword);
+  public boolean areUserIDAndPasswordValid (@Nullable final String sUserID, @Nullable final String sPlainTextPassword) {
+    return m_aUserMgr.areUserIDAndPasswordValid (sUserID, sPlainTextPassword);
+  }
+
+  /**
+   * Check if the passed combination of email address (= login) and plain text
+   * password are valid
+   * 
+   * @param sEmailAddress
+   *        The email address for which a user was searched
+   * @param sPlainTextPassword
+   *        The plain text password to validate
+   * @return <code>true</code> if the email address matches a user, and if the
+   *         hash of the plain text password matches the stored password hash
+   */
+  public boolean areUserEmailAndPasswordValid (@Nullable final String sEmailAddress,
+                                               @Nullable final String sPlainTextPassword) {
+    final IUser aUser = getUserOfEmailAddress (sEmailAddress);
+    return aUser == null ? false : m_aUserMgr.areUserIDAndPasswordValid (aUser.getID (), sPlainTextPassword);
   }
 
   // UserGroup API
