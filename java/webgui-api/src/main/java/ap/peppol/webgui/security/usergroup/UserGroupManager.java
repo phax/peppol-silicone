@@ -5,18 +5,21 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
 import ap.peppol.webgui.api.AbstractManager;
+import ap.peppol.webgui.security.CSecurity;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.microdom.IMicroDocument;
+import com.phloc.commons.microdom.IMicroElement;
+import com.phloc.commons.microdom.convert.MicroTypeConverter;
+import com.phloc.commons.microdom.impl.MicroDocument;
 import com.phloc.commons.state.EChange;
 
 /**
@@ -26,10 +29,46 @@ import com.phloc.commons.state.EChange;
  */
 @ThreadSafe
 public final class UserGroupManager extends AbstractManager implements IUserGroupManager {
-  private final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
   private final Map <String, UserGroup> m_aUserGroups = new HashMap <String, UserGroup> ();
 
-  public UserGroupManager () {}
+  public UserGroupManager () {
+    super ("security/usergroups.xml");
+    initialRead ();
+  }
+
+  @Override
+  @Nonnull
+  protected EChange onInit () {
+    _addUserGroup (new UserGroup (CSecurity.USERGROUP_ADMINISTRATORS_ID, CSecurity.USERGROUP_ADMINISTRATORS_NAME));
+    _addUserGroup (new UserGroup (CSecurity.USERGROUP_USERS_ID, CSecurity.USERGROUP_USERS_NAME));
+    _addUserGroup (new UserGroup (CSecurity.USERGROUP_GUESTS_ID, CSecurity.USERGROUP_GUESTS_NAME));
+    return EChange.CHANGED;
+  }
+
+  @Override
+  @Nonnull
+  protected EChange onRead (@Nonnull final IMicroDocument aDoc) {
+    for (final IMicroElement eUserGroup : aDoc.getDocumentElement ().getChildElements ())
+      _addUserGroup (MicroTypeConverter.convertToNative (eUserGroup, UserGroup.class));
+    return EChange.UNCHANGED;
+  }
+
+  @Override
+  @Nonnull
+  protected IMicroDocument createWriteData () {
+    final IMicroDocument aDoc = new MicroDocument ();
+    final IMicroElement eRoot = aDoc.appendElement ("usergroups");
+    for (final UserGroup aUserGroup : ContainerHelper.getSortedByKey (m_aUserGroups).values ())
+      eRoot.appendChild (MicroTypeConverter.convertToMicroElement (aUserGroup, "usergroup"));
+    return aDoc;
+  }
+
+  private void _addUserGroup (@Nonnull final UserGroup aUserGroup) {
+    final String sUserGroupID = aUserGroup.getID ();
+    if (m_aUserGroups.containsKey (sUserGroupID))
+      throw new IllegalArgumentException ("User group ID " + sUserGroupID + " is already in use!");
+    m_aUserGroups.put (sUserGroupID, aUserGroup);
+  }
 
   @Nonnull
   public IUserGroup createNewUserGroup (@Nonnull @Nonempty final String sName) {
@@ -39,7 +78,7 @@ public final class UserGroupManager extends AbstractManager implements IUserGrou
     m_aRWLock.writeLock ().lock ();
     try {
       // Store
-      m_aUserGroups.put (aUserGroup.getID (), aUserGroup);
+      _addUserGroup (aUserGroup);
       markAsChanged ();
     }
     finally {
