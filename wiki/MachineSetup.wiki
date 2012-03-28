@@ -6,7 +6,7 @@ You must have a JRE 1.6.x installed. This software has not yet been tested with 
 
 = Metro =
 
-The software provided by this project makes heavy use of the Java Metro libraries. Currently the version Metro 2.1.1 from http://netro.dev.java.net/2.1.1 is required. Download the ZIP file and extract it locally to perform further steps.
+The software provided by this project makes heavy use of the Java Metro libraries. Currently the version Metro 2.1.1 from http://metro.dev.java.net/2.1.1 is required. Download the ZIP file and extract it locally to perform further steps.
 The rest of the configuration depends on the application server you are using.
 
 *Important Note:* peppol-silicone has not yet been tested with Metro 2.2 which was released on February 20th, 2012!
@@ -24,9 +24,12 @@ Copy the following files into your Tomcat lib directory ({{{${catalina.lib.home}
   * metro/lib/webservices-extra-api.jar
   * metro/lib/webservices-rt.jar
   * metro/lib/webservices-tools.jar
+Note: ensure that the webservices-api.jar is *only* contained in the endorsed directory and not in the lib directory as well!
 
 Ensure that the endorsed libraries are loaded by Tomcat:
   * Define the following system property on Tomcat start: {{{java.endorsed.dirs=/products/tomcat/endorsed}}} (see the [http://tomcat.apache.org/tomcat-6.0-doc/class-loader-howto.html Tomcat 6 Classloader How-To] - works for Tomcat 7 too)
+
+If you get startup errors with Tomcat 7, maybe [http://www.java.net/forum/topic/glassfish/metro-and-jaxb/metro-211-and-servlet-version-30-tomcat-many-startup-errors this post] helps you solve the issues. The easiest thing is to remove all predefined non-PEPPOL web applications (like ROOT, examples, docs etc.) which are using Servlet API 3.0 in their web.xml files. If you can't do this, follow the instructions in the post (add {{{metadata-complete="true"}}} in the web.xml to all applications using Servlet API 3.0).
 
 Finally Tomcat must be restarted to make the changes work.
 
