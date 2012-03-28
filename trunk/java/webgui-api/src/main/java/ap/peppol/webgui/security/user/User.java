@@ -75,12 +75,12 @@ public final class User implements IUser {
    * @param aDesiredLocale
    *        The desired locale. May be <code>null</code>.
    */
-  public User (@Nonnull @Nonempty final String sID,
-               @Nonnull @Nonempty final String sEmailAddress,
-               @Nonnull @Nonempty final String sPasswordHash,
-               @Nullable final String sFirstName,
-               @Nullable final String sLastName,
-               @Nullable final Locale aDesiredLocale) {
+  User (@Nonnull @Nonempty final String sID,
+        @Nonnull @Nonempty final String sEmailAddress,
+        @Nonnull @Nonempty final String sPasswordHash,
+        @Nullable final String sFirstName,
+        @Nullable final String sLastName,
+        @Nullable final Locale aDesiredLocale) {
     if (StringHelper.hasNoText (sID))
       throw new IllegalArgumentException ("ID");
     if (StringHelper.hasNoText (sEmailAddress))
