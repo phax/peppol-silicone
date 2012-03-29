@@ -23,8 +23,6 @@ import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.scopes.nonweb.singleton.GlobalSingleton;
-import com.phloc.scopes.web.domain.ISessionWebScope;
-import com.phloc.scopes.web.mgr.WebScopeSessionManager;
 import com.phloc.scopes.web.singleton.SessionWebSingleton;
 
 /**
@@ -218,22 +216,11 @@ public final class LoggedInUserManager extends GlobalSingleton {
   }
 
   /**
-   * Resets all logged in users.
+   * @return The user currently logged in this session or <code>null</code> if
+   *         no user is logged in.
    */
-  public void resetAllLoggedInUsers () {
-    m_aRWLock.writeLock ().lock ();
-    try {
-      if (!m_aLoggedInUsers.isEmpty ()) {
-        s_aLogger.info ("Resetting " + m_aLoggedInUsers.size () + " user(s): " + m_aLoggedInUsers.toString ());
-        m_aLoggedInUsers.clear ();
-      }
-
-      // Remove the SessionUserHolder from all available sessions
-      for (final ISessionWebScope aSessionScope : WebScopeSessionManager.getInstance ().getAllSessionScopes ())
-        aSessionScope.removeAttribute ("singleton." + SessionUserHolder.class.getName ());
-    }
-    finally {
-      m_aRWLock.writeLock ().unlock ();
-    }
+  @Nullable
+  public IUser getCurrentUser () {
+    return AccessManager.getInstance ().getUserOfID (getCurrentUserID ());
   }
 }
