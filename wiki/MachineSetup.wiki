@@ -50,6 +50,10 @@ Important note: the name of the directory created under {{{/opt/jetty/lib}}} mus
 
 = Deployment =
 
+== LIME ==
+Especially for the LIME server it is recommended to not deploy the web application as a WAR file, because by default all data is stored inside the web application. So instead just create the appropriate context directory manually and copy the compiled web application inside. On update please be careful not to deleted the stored documents!
+
+== Metro ==
 For Metro compatibility please make sure that none of the following files resides in your web applications WEB-INF/lib directory because they are provided by the application server:
   * servlet-api.jar
   * jsp-api.jar
