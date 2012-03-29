@@ -209,8 +209,7 @@ public class MainWindow extends Window {
 
             @Override
             public void menuSelected(MenuItem selectedItem) {
-                getApplication().close();
-                
+              PawgApp.getInstance().logout();
             }
         });
         topBarLayoutRight.addComponent(rMenuBar);
