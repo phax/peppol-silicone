@@ -71,6 +71,7 @@ import org.w3c.dom.Element;
 import at.peppol.commons.identifier.SimpleDocumentTypeIdentifier;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 import at.peppol.commons.identifier.SimpleProcessIdentifier;
+import at.peppol.commons.identifier.actorid.EPredefinedIdentifierIssuingAgency;
 import at.peppol.commons.identifier.docid.EPredefinedDocumentTypeIdentifier;
 import at.peppol.commons.sml.ESML;
 import at.peppol.commons.sml.ISMLInfo;
@@ -293,8 +294,11 @@ public final class ClientTest {
   @Test
   @DevelopersNote ("Requires DNS enabled; Used as the example in the SMP guideline")
   public void getByDNSTestForDocs () throws Exception {
-    final ParticipantIdentifierType aServiceGroupID = SimpleParticipantIdentifier.createWithDefaultScheme ("0088:5798000000001");
+    // ServiceGroup = participant identifier; GLN = 0088
+    final ParticipantIdentifierType aServiceGroupID = EPredefinedIdentifierIssuingAgency.GLN.createParticipantIdentifier ("5798000000001");
+    // Document type identifier from enumeration
     final DocumentIdentifierType aDocumentTypeID = EPredefinedDocumentTypeIdentifier.INVOICE_T010_BIS4A.getAsDocumentTypeIdentifier ();
+    // Main call to the SMP client with the correct SML to use
     final SignedServiceMetadataType aMetadata = SMPServiceCaller.getServiceRegistrationByDNS (ESML.DEVELOPMENT_LOCAL,
                                                                                               aServiceGroupID,
                                                                                               aDocumentTypeID);
