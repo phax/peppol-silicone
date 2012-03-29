@@ -37,7 +37,8 @@
     the provisions above, a recipient may use your version of this file
     under either the MPL or the EUPL License.
 
---><wsdl:definitions targetNamespace="http://www.w3.org/2009/02/ws-tra" 
+-->
+<wsdl:definitions targetNamespace="http://www.w3.org/2009/02/ws-tra" 
                      xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" 
                      xmlns:exc="http://busdox.org/2010/02/channel/fault" 
                      xmlns:fi="http://java.sun.com/xml/ns/wsit/2006/09/policy/fastinfoset/service" 
