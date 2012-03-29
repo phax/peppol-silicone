@@ -1,5 +1,8 @@
 package at.peppol.webgui.app;
 
+import ap.peppol.webgui.security.AccessManager;
+import ap.peppol.webgui.security.login.ELoginResult;
+import ap.peppol.webgui.security.login.LoggedInUserManager;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,8 +24,8 @@ public class PawgApp extends Application implements HttpServletRequestListener {
   public void init () {
     setInstance (this);
     setTheme ("peppol");
-    // showLoginWindow();
-    showMainAppWindow ();
+     showLoginWindow();
+    //showMainAppWindow ();
   }
 
   private void showLoginWindow () {
@@ -55,18 +58,23 @@ public class PawgApp extends Application implements HttpServletRequestListener {
 
   @Override
   public void onRequestEnd (final HttpServletRequest request, final HttpServletResponse response) {
-    WebScopeManager.onRequestEnd ();
-    threadLocal.remove ();
+    WebScopeManager.onRequestEnd();
+    threadLocal.remove();
   }
 
   public void authenticate (final String username, final String password) throws Exception {
 
-    // Dummy Authentication
-    if (username.equals ("peppol") && password.equals ("peppol"))
-      showMainAppWindow ();
+      LoggedInUserManager lum = LoggedInUserManager.getInstance();
+      ELoginResult res = lum.loginUser(username, password);
 
-    else
-      throw new Exception ("Login Failed");
+    if (res.isSuccess())
+    {
+       showMainAppWindow ();
+       user = AccessManager.getInstance().getUserOfID(lum.getCurrentUserID());
+       
+    } else {
+      throw new Exception (res.toString());
+    }
 
   }
 
