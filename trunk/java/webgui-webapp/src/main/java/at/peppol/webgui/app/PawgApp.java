@@ -1,14 +1,14 @@
 package at.peppol.webgui.app;
 
-import ap.peppol.webgui.security.AccessManager;
-import ap.peppol.webgui.security.login.ELoginResult;
-import ap.peppol.webgui.security.login.LoggedInUserManager;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import ap.peppol.webgui.security.AccessManager;
+import ap.peppol.webgui.security.login.ELoginResult;
+import ap.peppol.webgui.security.login.LoggedInUserManager;
 import ap.peppol.webgui.security.user.IUser;
 
 import com.phloc.scopes.web.mgr.WebScopeManager;
@@ -19,15 +19,16 @@ public class PawgApp extends Application implements HttpServletRequestListener {
 
   private static ThreadLocal <PawgApp> threadLocal = new ThreadLocal <PawgApp> ();
   private IUser user;
-  private LoggedInUserManager lum = LoggedInUserManager.getInstance();
-  
+  private final LoggedInUserManager lum = LoggedInUserManager.getInstance ();
+
   @Override
   public void init () {
+    lum.resetAllLoggedInUsers ();
     setInstance (this);
     setTheme ("peppol");
-    
-    showLoginWindow();
-    //showMainAppWindow ();
+
+    showLoginWindow ();
+    // showMainAppWindow ();
   }
 
   private void showLoginWindow () {
@@ -60,30 +61,28 @@ public class PawgApp extends Application implements HttpServletRequestListener {
 
   @Override
   public void onRequestEnd (final HttpServletRequest request, final HttpServletResponse response) {
-    WebScopeManager.onRequestEnd();
-    threadLocal.remove();
+    WebScopeManager.onRequestEnd ();
+    threadLocal.remove ();
   }
 
   public void authenticate (final String username, final String password) throws Exception {
 
-      
-      ELoginResult res = lum.loginUser(username, password);
+    final ELoginResult res = lum.loginUser (username, password);
 
-    if (res.isSuccess())
-    {
-       showMainAppWindow ();
-       user = AccessManager.getInstance().getUserOfID(lum.getCurrentUserID());
-       
-    } else {
-      throw new Exception (res.toString());
+    if (res.isSuccess ()) {
+      showMainAppWindow ();
+      user = AccessManager.getInstance ().getUserOfID (lum.getCurrentUserID ());
+
+    }
+    else {
+      throw new Exception (res.toString ());
     }
 
   }
-  
-  public void logout()
-  {
-      LoggedInUserManager.getInstance().logoutCurrentUser();
-      close();
+
+  public void logout () {
+    lum.logoutCurrentUser ();
+    close ();
   }
 
 }
