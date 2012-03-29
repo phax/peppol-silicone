@@ -5,10 +5,13 @@
 package at.peppol.webgui.app;
 
 import ap.peppol.webgui.security.user.IUser;
+import ap.peppol.webgui.security.user.User;
+import com.vaadin.Application;
 import com.vaadin.terminal.ClassResource;
 import com.vaadin.terminal.ExternalResource;
 import com.vaadin.terminal.ThemeResource;
 import com.vaadin.ui.*;
+import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.themes.Reindeer;
 import javax.ws.rs.HEAD;
 
@@ -46,7 +49,8 @@ public class MainWindow extends Window {
         leftNavBar.setSizeFull();
         leftNavBar.setWidth("220px");
         
-        Label homeLbl = new Label("Home");
+        //User theUser = (User) getApplication().getUser();
+        Label homeLbl = new Label("HOME");
         homeLbl.addStyleName("blue");
         leftNavBar.addComponent(homeLbl);
         
@@ -166,13 +170,13 @@ public class MainWindow extends Window {
 //        pawgLabel.setSizeFull();
 //        topBarLayoutLeft.addComponent(pawgLabel);
 
-        MenuBar menuBar = new MenuBar();
-        menuBar.setHtmlContentAllowed(true);
-        final MenuBar.MenuItem PAWGLabel = menuBar.addItem("<b>PAWG<b>", null);
-        final MenuBar.MenuItem docItem = menuBar.addItem("Document", null);
-        final MenuBar.MenuItem prefsItem = menuBar.addItem("Preferences", null);
-        final MenuBar.MenuItem aboutItem = menuBar.addItem("About", null);
-        menuBar.setSizeFull();
+        MenuBar lMenuBar = new MenuBar();
+        lMenuBar.setHtmlContentAllowed(true);
+        final MenuBar.MenuItem PAWGLabel = lMenuBar.addItem("<b>PAWG<b>", null);
+        final MenuBar.MenuItem docItem = lMenuBar.addItem("Document", null);
+        final MenuBar.MenuItem prefsItem = lMenuBar.addItem("Preferences", null);
+        final MenuBar.MenuItem aboutItem = lMenuBar.addItem("About", null);
+        lMenuBar.setSizeFull();
         
         final MenuBar.MenuItem invItem = docItem.addItem("Invoice", null);
         final MenuBar.MenuItem orderItem = docItem.addItem("Order", null);
@@ -183,12 +187,8 @@ public class MainWindow extends Window {
         final MenuBar.MenuItem ordCreateItem = orderItem.addItem("New",null);
         final MenuBar.MenuItem ordViewItem = orderItem.addItem("View",null);
         
-        
-        
-
-        
-        topBarLayoutLeft.addComponent(menuBar);
-       Label loggedInLabel = new Label("Test User");
+        topBarLayoutLeft.addComponent(lMenuBar);
+        Label loggedInLabel = new Label("Test User");
 
        //        loggedInLabel.addStyleName("v-menubar");
       // loggedInLabel.addStyleName("v-menubar-menuitem");
@@ -197,19 +197,28 @@ public class MainWindow extends Window {
       //  topBarLayoutRight.setSizeUndefined();
       //  topBarLayoutRight.addComponent(loggedInLabel);
      //   topBarLayoutRight.setComponentAlignment(loggedInLabel, Alignment.MIDDLE_RIGHT);
-        topBarLayoutLeft.setComponentAlignment(menuBar, Alignment.MIDDLE_CENTER);
+        topBarLayoutLeft.setComponentAlignment(lMenuBar, Alignment.MIDDLE_CENTER);
         topBarLayoutLeft.setSpacing(false);
         topBarLayoutLeft.setSizeFull();
         topBarLayoutRight.setSizeUndefined();
         
+        MenuBar rMenuBar = new MenuBar();
+        rMenuBar.setHtmlContentAllowed(true);
+        final MenuBar.MenuItem userLabel = rMenuBar.addItem("<b>User<b>", null);
+        final MenuBar.MenuItem logoutLabel = userLabel.addItem("Logout", new MenuBar.Command() {
+
+            @Override
+            public void menuSelected(MenuItem selectedItem) {
+                getApplication().close();
+                
+            }
+        });
+        topBarLayoutRight.addComponent(rMenuBar);
         topBarLayout.addComponent(topBarLayoutLeft);
-       // topBarLayout.addComponent(topBarLayoutRight);
-      //  topBarLayout.setComponentAlignment(topBarLayoutRight, Alignment.MIDDLE_RIGHT);
-        
-//        topBarLayout.setExpandRatio(topBarLayoutLeft, 1);
-//        topBarLayout.setExpandRatio(topBarLayoutRight, 1);
-        
-//        topBarCSSLayout.addComponent(topBarLayout);
+        topBarLayout.addComponent(topBarLayoutRight);
+        topBarLayout.setComponentAlignment(topBarLayoutRight, Alignment.MIDDLE_RIGHT);
+      topBarLayout.setExpandRatio(topBarLayoutLeft, 1);
+      //topBarLayout.setExpandRatio(topBarLayoutRight, 1);
         addComponent(topBarLayout);
         
     }

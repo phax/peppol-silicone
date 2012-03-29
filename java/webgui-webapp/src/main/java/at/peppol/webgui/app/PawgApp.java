@@ -19,12 +19,14 @@ public class PawgApp extends Application implements HttpServletRequestListener {
 
   private static ThreadLocal <PawgApp> threadLocal = new ThreadLocal <PawgApp> ();
   private IUser user;
-
+  private LoggedInUserManager lum = LoggedInUserManager.getInstance();
+  
   @Override
   public void init () {
     setInstance (this);
     setTheme ("peppol");
-     showLoginWindow();
+    
+    showLoginWindow();
     //showMainAppWindow ();
   }
 
@@ -64,7 +66,7 @@ public class PawgApp extends Application implements HttpServletRequestListener {
 
   public void authenticate (final String username, final String password) throws Exception {
 
-      LoggedInUserManager lum = LoggedInUserManager.getInstance();
+      
       ELoginResult res = lum.loginUser(username, password);
 
     if (res.isSuccess())
