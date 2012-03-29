@@ -251,33 +251,6 @@ public final class IdentifierUtils {
    *         If the passed identifier is not a valid URI encoded identifier
    */
   @Nonnull
-  @Deprecated
-  public static SimpleDocumentIdentifier createDocumentIdentifierFromURIPart (@Nonnull final String sURIPart) {
-    if (sURIPart == null)
-      throw new NullPointerException ("URIPart");
-
-    final String [] aSplitted = RegExHelper.split (sURIPart, CIdentifier.URL_SCHEME_VALUE_SEPARATOR, 2);
-    if (aSplitted.length != 2)
-      throw new IllegalArgumentException ("Document identifier '" +
-                                          sURIPart +
-                                          "' did not include correct delimiter: " +
-                                          CIdentifier.URL_SCHEME_VALUE_SEPARATOR);
-
-    return new SimpleDocumentIdentifier (aSplitted[0], aSplitted[1]);
-  }
-
-  /**
-   * Take the passed URI part and try to convert it back to a document
-   * identifier. The URI part must have the layout <code>scheme::value</code>
-   * 
-   * @param sURIPart
-   *        The URI part to be scanned. May not be <code>null</code> if a
-   *        correct result is expected.
-   * @return The document identifier matching the passed URI part
-   * @throws IllegalArgumentException
-   *         If the passed identifier is not a valid URI encoded identifier
-   */
-  @Nonnull
   public static SimpleDocumentTypeIdentifier createDocumentTypeIdentifierFromURIPart (@Nonnull final String sURIPart) {
     if (sURIPart == null)
       throw new NullPointerException ("URIPart");

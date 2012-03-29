@@ -61,7 +61,6 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
 import at.peppol.commons.identifier.CIdentifier;
-import at.peppol.commons.identifier.SimpleDocumentIdentifier;
 import at.peppol.commons.identifier.SimpleDocumentTypeIdentifier;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 import at.peppol.commons.identifier.SimpleProcessIdentifier;
@@ -476,12 +475,6 @@ public final class MainCreateCodelistsFilesFromExcel {
       m.annotate (Nonnull.class);
       m.annotate (Nonempty.class);
       m.body ()._return (fID);
-
-      // public SimpleDocumentIdentifier getAsDocumentIdentifier ()
-      m = s_jEnumPredefinedDoc.method (JMod.PUBLIC, SimpleDocumentIdentifier.class, "getAsDocumentIdentifier");
-      m.annotate (Deprecated.class);
-      m.annotate (Nonnull.class);
-      m.body ()._return (JExpr._new (s_aCodeModel.ref (SimpleDocumentIdentifier.class)).arg (JExpr._this ()));
 
       // public SimpleDocumentTypeIdentifier getAsDocumentTypeIdentifier ()
       m = s_jEnumPredefinedDoc.method (JMod.PUBLIC, SimpleDocumentTypeIdentifier.class, "getAsDocumentTypeIdentifier");

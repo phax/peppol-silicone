@@ -84,13 +84,6 @@ public final class CIdentifier {
   public static final String DEFAULT_DOCUMENT_TYPE_IDENTIFIER_SCHEME = "busdox-docid-qns";
 
   /**
-   * The default document identifier scheme.<br>
-   * See PEPPOL Common definitions chapter 3.5
-   */
-  @Deprecated
-  public static final String DEFAULT_DOCUMENT_IDENTIFIER_SCHEME = DEFAULT_DOCUMENT_TYPE_IDENTIFIER_SCHEME;
-
-  /**
    * The default process identifier scheme.<br>
    * Overrides PEPPOL Common definitions chapter 3.6!
    */
