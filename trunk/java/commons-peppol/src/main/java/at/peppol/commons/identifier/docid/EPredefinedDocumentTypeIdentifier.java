@@ -41,7 +41,6 @@ package at.peppol.commons.identifier.docid;
 import java.util.List;
 import javax.annotation.Nonnull;
 import at.peppol.commons.identifier.CIdentifier;
-import at.peppol.commons.identifier.SimpleDocumentIdentifier;
 import at.peppol.commons.identifier.SimpleDocumentTypeIdentifier;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
@@ -283,12 +282,6 @@ public enum EPredefinedDocumentTypeIdentifier
     @Nonempty
     public String getAsDocumentTypeIdentifierValue() {
         return m_sID;
-    }
-
-    @Deprecated
-    @Nonnull
-    public SimpleDocumentIdentifier getAsDocumentIdentifier() {
-        return new SimpleDocumentIdentifier(this);
     }
 
     @Nonnull
