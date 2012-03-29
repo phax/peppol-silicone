@@ -99,7 +99,6 @@
     <module>transport-start-client</module>
     <module>transport-start-filereceiver</module>
     <module>transport-start-server</module>
-    <module>transport-lime-library</module>
     <module>transport-lime-client</module>
     <module>transport-lime-server</module>
 

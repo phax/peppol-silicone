@@ -13,7 +13,6 @@
       <item groupid="at.peppol" artifactid="peppol-smp-webapp" />
       <item groupid="at.peppol" artifactid="peppol-transport-api" />
       <item groupid="at.peppol" artifactid="peppol-transport-lime-client" />
-      <item groupid="at.peppol" artifactid="peppol-transport-lime-library" />
       <item groupid="at.peppol" artifactid="peppol-transport-lime-server" />
       <item groupid="at.peppol" artifactid="peppol-transport-start-client" />
       <item groupid="at.peppol" artifactid="peppol-transport-start-filereceiver" />
@@ -38,14 +37,9 @@
   </project>
   <project groupid="at.peppol" artifactid="peppol-validation-schematron">
     <isDependentOf>
-      <item groupid="at.peppol" artifactid="maven-schematron2xslt-plugin" />
       <item groupid="at.peppol" artifactid="peppol-validation-rules" />
+      <item groupid="at.peppol" artifactid="schematron2xslt-maven-plugin" />
     </isDependentOf>
-  </project>
-  <project groupid="at.peppol" artifactid="maven-schematron2xslt-plugin">
-    <dependsOn>
-      <item groupid="at.peppol" artifactid="peppol-validation-schematron" />
-    </dependsOn>
   </project>
   <project groupid="at.peppol" artifactid="peppol-commons-peppol">
     <dependsOn>
@@ -62,7 +56,6 @@
       <item groupid="at.peppol" artifactid="peppol-smp-webapp" />
       <item groupid="at.peppol" artifactid="peppol-transport-api" />
       <item groupid="at.peppol" artifactid="peppol-transport-lime-client" />
-      <item groupid="at.peppol" artifactid="peppol-transport-lime-library" />
       <item groupid="at.peppol" artifactid="peppol-transport-lime-server" />
       <item groupid="at.peppol" artifactid="peppol-transport-start-client" />
       <item groupid="at.peppol" artifactid="peppol-transport-start-filereceiver" />
@@ -74,6 +67,11 @@
   <project groupid="at.peppol" artifactid="peppol-visualization">
     <dependsOn>
       <item groupid="at.peppol" artifactid="peppol-commons-cenbii" />
+    </dependsOn>
+  </project>
+  <project groupid="at.peppol" artifactid="schematron2xslt-maven-plugin">
+    <dependsOn>
+      <item groupid="at.peppol" artifactid="peppol-validation-schematron" />
     </dependsOn>
   </project>
   <project groupid="at.peppol" artifactid="peppol-sml-client-library">
@@ -106,7 +104,6 @@
     </dependsOn>
     <isDependentOf>
       <item groupid="at.peppol" artifactid="peppol-transport-lime-client" />
-      <item groupid="at.peppol" artifactid="peppol-transport-lime-library" />
       <item groupid="at.peppol" artifactid="peppol-transport-lime-server" />
       <item groupid="at.peppol" artifactid="peppol-transport-start-client" />
       <item groupid="at.peppol" artifactid="peppol-transport-start-filereceiver" />
@@ -124,6 +121,9 @@
       <item groupid="at.peppol" artifactid="peppol-commons-busdox" />
       <item groupid="at.peppol" artifactid="peppol-commons-peppol" />
     </dependsOn>
+    <isDependentOf>
+      <item groupid="at.peppol" artifactid="peppol-webgui-webapp" />
+    </isDependentOf>
   </project>
   <project groupid="at.peppol" artifactid="peppol-sml-client-apps">
     <dependsOn>
@@ -150,14 +150,13 @@
       <item groupid="at.peppol" artifactid="peppol-smp-client-library" />
     </dependsOn>
   </project>
-  <project groupid="at.peppol" artifactid="peppol-transport-lime-library">
+  <project groupid="at.peppol" artifactid="peppol-transport-lime-client">
     <dependsOn>
       <item groupid="at.peppol" artifactid="peppol-commons-busdox" />
       <item groupid="at.peppol" artifactid="peppol-commons-peppol" />
       <item groupid="at.peppol" artifactid="peppol-transport-api" />
     </dependsOn>
     <isDependentOf>
-      <item groupid="at.peppol" artifactid="peppol-transport-lime-client" />
       <item groupid="at.peppol" artifactid="peppol-transport-lime-server" />
     </isDependentOf>
   </project>
@@ -170,13 +169,6 @@
     <isDependentOf>
       <item groupid="at.peppol" artifactid="peppol-transport-start-server" />
     </isDependentOf>
-  </project>
-  <project groupid="at.peppol" artifactid="peppol-webgui-webapp">
-    <dependsOn>
-      <item groupid="at.peppol" artifactid="peppol-commons-busdox" />
-      <item groupid="at.peppol" artifactid="peppol-commons-peppol" />
-      <item groupid="at.peppol" artifactid="peppol-smp-client-library" />
-    </dependsOn>
   </project>
   <project groupid="at.peppol" artifactid="peppol-sml-webapp">
     <dependsOn>
@@ -202,14 +194,6 @@
       <item groupid="at.peppol" artifactid="peppol-sml-client-library" />
     </dependsOn>
   </project>
-  <project groupid="at.peppol" artifactid="peppol-transport-lime-client">
-    <dependsOn>
-      <item groupid="at.peppol" artifactid="peppol-commons-busdox" />
-      <item groupid="at.peppol" artifactid="peppol-commons-peppol" />
-      <item groupid="at.peppol" artifactid="peppol-transport-api" />
-      <item groupid="at.peppol" artifactid="peppol-transport-lime-library" />
-    </dependsOn>
-  </project>
   <project groupid="at.peppol" artifactid="peppol-transport-start-client">
     <dependsOn>
       <item groupid="at.peppol" artifactid="peppol-commons-busdox" />
@@ -222,13 +206,21 @@
       <item groupid="at.peppol" artifactid="peppol-transport-start-server" />
     </isDependentOf>
   </project>
+  <project groupid="at.peppol" artifactid="peppol-webgui-webapp">
+    <dependsOn>
+      <item groupid="at.peppol" artifactid="peppol-commons-busdox" />
+      <item groupid="at.peppol" artifactid="peppol-commons-peppol" />
+      <item groupid="at.peppol" artifactid="peppol-smp-client-library" />
+      <item groupid="at.peppol" artifactid="peppol-webgui-api" />
+    </dependsOn>
+  </project>
   <project groupid="at.peppol" artifactid="peppol-transport-lime-server">
     <dependsOn>
       <item groupid="at.peppol" artifactid="peppol-commons-busdox" />
       <item groupid="at.peppol" artifactid="peppol-commons-peppol" />
       <item groupid="at.peppol" artifactid="peppol-smp-client-library" />
       <item groupid="at.peppol" artifactid="peppol-transport-api" />
-      <item groupid="at.peppol" artifactid="peppol-transport-lime-library" />
+      <item groupid="at.peppol" artifactid="peppol-transport-lime-client" />
       <item groupid="at.peppol" artifactid="peppol-transport-start-client" />
     </dependsOn>
   </project>
