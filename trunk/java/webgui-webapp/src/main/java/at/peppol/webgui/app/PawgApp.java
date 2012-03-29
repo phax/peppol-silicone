@@ -6,10 +6,10 @@ import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import ap.peppol.webgui.security.AccessManager;
-import ap.peppol.webgui.security.login.ELoginResult;
-import ap.peppol.webgui.security.login.LoggedInUserManager;
-import ap.peppol.webgui.security.user.IUser;
+import at.peppol.webgui.security.AccessManager;
+import at.peppol.webgui.security.login.ELoginResult;
+import at.peppol.webgui.security.login.LoggedInUserManager;
+import at.peppol.webgui.security.user.IUser;
 
 import com.phloc.scopes.web.mgr.WebScopeManager;
 import com.vaadin.Application;

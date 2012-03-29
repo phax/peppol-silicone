@@ -4,10 +4,17 @@
  */
 package at.peppol.webgui.app;
 
-import com.vaadin.ui.*;
-import com.vaadin.ui.Button.ClickEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.PasswordField;
+import com.vaadin.ui.TextField;
+import com.vaadin.ui.Window;
 
 /**
  *
