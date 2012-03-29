@@ -109,7 +109,6 @@ import com.sun.codemodel.writer.FileCodeWriter;
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-@SuppressWarnings ("deprecation")
 public final class MainCreateCodelistsFilesFromExcel {
   private static final Logger s_aLogger = LoggerFactory.getLogger (MainCreateCodelistsFilesFromExcel.class);
   private static final Version CODELIST_VERSION = new Version (1, 1, 0);
