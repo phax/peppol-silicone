@@ -22,7 +22,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,12 +38,16 @@ import com.phloc.commons.string.StringHelper;
  * 
  * @author philip
  */
-@Immutable
+@NotThreadSafe
 public final class StorageIO {
   private static final Logger s_aLogger = LoggerFactory.getLogger (StorageIO.class);
   private static String s_sBasePath;
 
   private StorageIO () {}
+
+  public static boolean isBasePathInited () {
+    return s_sBasePath != null;
+  }
 
   public static void initBasePath (@Nonnull @Nonempty final String sRealPath) {
     if (StringHelper.hasNoText (sRealPath))

@@ -18,12 +18,17 @@ public final class CSecurity {
   public static final String USER_ADMINISTRATOR_ID = "admin";
   public static final String USER_ADMINISTRATOR_EMAIL = "admin@peppol.eu";
   public static final String USER_ADMINISTRATOR_NAME = "Administrator";
+  public static final String USER_ADMINISTRATOR_PASSWORD = "password";
+
   public static final String USER_USER_ID = "user";
   public static final String USER_USER_EMAIL = "user@peppol.eu";
   public static final String USER_USER_NAME = "User";
+  public static final String USER_USER_PASSWORD = "user";
+
   public static final String USER_GUEST_ID = "guest";
   public static final String USER_GUEST_EMAIL = "guest@peppol.eu";
   public static final String USER_GUEST_NAME = "Guest";
+  public static final String USER_GUEST_PASSWORD = "guest";
 
   // Default roles
   public static final String ROLE_ADMINISTRATOR_ID = "radmin";

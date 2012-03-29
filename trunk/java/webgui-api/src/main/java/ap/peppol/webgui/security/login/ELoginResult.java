@@ -15,7 +15,9 @@ public enum ELoginResult implements ISuccessIndicator {
   /** The provided password is invalid */
   INVALID_PASSWORD,
   /** The user was already logged in */
-  USER_ALREADY_LOGGED_IN;
+  USER_ALREADY_LOGGED_IN,
+  /** Another user is already logged in this session */
+  SESSION_ALREADY_HAS_USER;
 
   public boolean isSuccess () {
     return this == SUCCESS;

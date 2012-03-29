@@ -34,7 +34,7 @@ public final class LoggedInUserManager extends GlobalSingleton {
    * 
    * @author philip
    */
-  private static final class SessionUserHolder extends SessionWebSingleton {
+  public static final class SessionUserHolder extends SessionWebSingleton {
     private String m_sUserID;
 
     @SuppressWarnings ("unused")
@@ -47,12 +47,18 @@ public final class LoggedInUserManager extends GlobalSingleton {
       return getSessionSingleton (SessionUserHolder.class);
     }
 
-    public void setUserID (@Nonnull @Nonempty final String sUserID) {
+    @Nonnull
+    public EChange setUserID (@Nonnull @Nonempty final String sUserID) {
       if (StringHelper.hasNoText (sUserID))
         throw new IllegalArgumentException ("userID");
       if (m_sUserID != null)
-        throw new IllegalStateException ("Current session already has a user");
+        return EChange.UNCHANGED;
       m_sUserID = sUserID;
+      return EChange.CHANGED;
+    }
+
+    public void resetUserID () {
+      m_sUserID = null;
     }
 
     @Nullable
@@ -98,7 +104,11 @@ public final class LoggedInUserManager extends GlobalSingleton {
       if (!m_aLoggedInUsers.add (sUserID))
         return ELoginResult.USER_ALREADY_LOGGED_IN;
 
-      SessionUserHolder.getInstance ().setUserID (sUserID);
+      if (SessionUserHolder.getInstance ().setUserID (sUserID).isUnchanged ()) {
+        // Another user is already in the current session
+        m_aLoggedInUsers.remove (sUserID);
+        return ELoginResult.SESSION_ALREADY_HAS_USER;
+      }
       return ELoginResult.SUCCESS;
     }
     finally {
@@ -110,7 +120,10 @@ public final class LoggedInUserManager extends GlobalSingleton {
   public EChange logoutUser (@Nullable final String sUserID) {
     m_aRWLock.writeLock ().lock ();
     try {
-      return EChange.valueOf (m_aLoggedInUsers.remove (sUserID));
+      if (!m_aLoggedInUsers.remove (sUserID))
+        return EChange.UNCHANGED;
+      SessionUserHolder.getInstance ().resetUserID ();
+      return EChange.CHANGED;
     }
     finally {
       m_aRWLock.writeLock ().unlock ();
