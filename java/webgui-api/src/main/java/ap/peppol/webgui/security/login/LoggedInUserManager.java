@@ -37,7 +37,6 @@ public final class LoggedInUserManager extends GlobalSingleton {
   public static final class SessionUserHolder extends SessionWebSingleton {
     private String m_sUserID;
 
-    @SuppressWarnings ("unused")
     @Deprecated
     @UsedViaReflection
     public SessionUserHolder () {}
@@ -101,8 +100,10 @@ public final class LoggedInUserManager extends GlobalSingleton {
     // All checks done!
     m_aRWLock.writeLock ().lock ();
     try {
-      if (!m_aLoggedInUsers.add (sUserID))
+      if (!m_aLoggedInUsers.add (sUserID)) {
+        // The user is already logged in
         return ELoginResult.USER_ALREADY_LOGGED_IN;
+      }
 
       if (SessionUserHolder.getInstance ().setUserID (sUserID).isUnchanged ()) {
         // Another user is already in the current session
@@ -159,6 +160,10 @@ public final class LoggedInUserManager extends GlobalSingleton {
     }
   }
 
+  /**
+   * @return A non-<code>null</code> but maybe empty set with all currently
+   *         logged in user IDs.
+   */
   @Nonnull
   @ReturnsMutableCopy
   public Set <String> getAllLoggedInUserIDs () {
@@ -171,6 +176,9 @@ public final class LoggedInUserManager extends GlobalSingleton {
     }
   }
 
+  /**
+   * @return The number of currently logged in users. Always &ge; 0.
+   */
   @Nonnegative
   public int getLoggedInUserCount () {
     m_aRWLock.readLock ().lock ();
@@ -183,11 +191,19 @@ public final class LoggedInUserManager extends GlobalSingleton {
   }
 
   /**
-   * @return The ID of the currenly logged in user or <code>null</code> if no
-   *         user is logged in.
+   * @return The ID of the user logged in this session or <code>null</code> if
+   *         no user is logged in.
    */
   @Nullable
   public String getCurrentUserID () {
     return SessionUserHolder.getInstance ().getUserID ();
+  }
+
+  /**
+   * @return <code>true</code> if a user is currently logged into this session,
+   *         <code>false</code> otherwise.
+   */
+  public boolean isUserLoggedInInCurrentSession () {
+    return getCurrentUserID () != null;
   }
 }
