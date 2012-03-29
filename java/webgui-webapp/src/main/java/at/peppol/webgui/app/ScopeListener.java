@@ -18,7 +18,8 @@ import com.phloc.scopes.web.mgr.WebScopeManager;
  */
 public final class ScopeListener implements ServletContextListener, HttpSessionListener {
   public static final String INIT_PARAMETER_TRACE = "trace";
-  public static final String INIT_PARAMETER_DEBUG = "debug";
+  // like Vaadin:
+  public static final String INIT_PARAMETER_DEBUG = "Debug";
   // like Vaadin:
   public static final String INIT_PARAMETER_PRODUCTION = "productionMode";
   public static final String INIT_PARAMETER_STORAGE_BASE = "storage-base";
