@@ -10,6 +10,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import ap.peppol.webgui.security.AccessManager;
 import ap.peppol.webgui.security.user.IUser;
 
@@ -20,6 +23,8 @@ import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.scopes.nonweb.singleton.GlobalSingleton;
+import com.phloc.scopes.web.domain.ISessionWebScope;
+import com.phloc.scopes.web.mgr.WebScopeSessionManager;
 import com.phloc.scopes.web.singleton.SessionWebSingleton;
 
 /**
@@ -73,6 +78,8 @@ public final class LoggedInUserManager extends GlobalSingleton {
     }
   }
 
+  private static final Logger s_aLogger = LoggerFactory.getLogger (LoggedInUserManager.class);
+
   private final ReadWriteLock m_aRWLock = new ReentrantReadWriteLock ();
   private final Set <String> m_aLoggedInUsers = new HashSet <String> ();
 
@@ -110,6 +117,8 @@ public final class LoggedInUserManager extends GlobalSingleton {
         m_aLoggedInUsers.remove (sUserID);
         return ELoginResult.SESSION_ALREADY_HAS_USER;
       }
+
+      s_aLogger.info ("Logged in user '" + sUserID + "'");
       return ELoginResult.SUCCESS;
     }
     finally {
@@ -124,6 +133,7 @@ public final class LoggedInUserManager extends GlobalSingleton {
       if (!m_aLoggedInUsers.remove (sUserID))
         return EChange.UNCHANGED;
       SessionUserHolder.getInstance ().resetUserID ();
+      s_aLogger.info ("Logged out user '" + sUserID + "'");
       return EChange.CHANGED;
     }
     finally {
@@ -205,5 +215,25 @@ public final class LoggedInUserManager extends GlobalSingleton {
    */
   public boolean isUserLoggedInInCurrentSession () {
     return getCurrentUserID () != null;
+  }
+
+  /**
+   * Resets all logged in users.
+   */
+  public void resetAllLoggedInUsers () {
+    m_aRWLock.writeLock ().lock ();
+    try {
+      if (!m_aLoggedInUsers.isEmpty ()) {
+        s_aLogger.info ("Resetting " + m_aLoggedInUsers.size () + " user(s): " + m_aLoggedInUsers.toString ());
+        m_aLoggedInUsers.clear ();
+      }
+
+      // Remove the SessionUserHolder from all available sessions
+      for (final ISessionWebScope aSessionScope : WebScopeSessionManager.getInstance ().getAllSessionScopes ())
+        aSessionScope.removeAttribute ("singleton." + SessionUserHolder.class.getName ());
+    }
+    finally {
+      m_aRWLock.writeLock ().unlock ();
+    }
   }
 }
