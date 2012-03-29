@@ -23,7 +23,8 @@ public class PawgApp extends Application implements HttpServletRequestListener {
 
   @Override
   public void init () {
-    lum.resetAllLoggedInUsers ();
+    // Ensure that no user is logged in
+    lum.logoutCurrentUser ();
     setInstance (this);
     setTheme ("peppol");
 
