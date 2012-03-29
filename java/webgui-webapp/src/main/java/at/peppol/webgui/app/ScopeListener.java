@@ -6,7 +6,7 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
-import ap.peppol.webgui.api.io.StorageIO;
+import at.peppol.webgui.api.io.StorageIO;
 
 import com.phloc.commons.GlobalDebug;
 import com.phloc.scopes.web.mgr.WebScopeManager;
