@@ -79,5 +79,11 @@ public class PawgApp extends Application implements HttpServletRequestListener {
     }
 
   }
+  
+  public void logout()
+  {
+      LoggedInUserManager.getInstance().logoutCurrentUser();
+      close();
+  }
 
 }
