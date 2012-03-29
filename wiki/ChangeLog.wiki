@@ -1,9 +1,12 @@
 #summary The change log of the software components
 
-= v2.2.2 - in progress =
+= v2.3.0 - in progress =
 
+==Base libraries==
+  * Removed all deprecated methods using "Document" instead of "DocumentType" in their names
 ==LIME==
   * Improved exception handling when handling an incoming document
+  * Move the contents of the "transport-lime-library" project into the "transport-lime-client" project and removed the "transport-lime-library" project so that the structure is consistent to the one of START
 
 = v2.2.1 (2012-03-21, bugfix release) =
 
