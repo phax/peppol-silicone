@@ -76,8 +76,9 @@
 
     <!-- Validation -->
     <module>validation-schematron</module>
-    <module>validation-rules</module>
     <module>schematron2xslt-maven-plugin</module>
+    <module>validation-rules</module>
+    <module>validation-webapp</module>
 
     <!-- Visualization -->
     <module>visualization</module>
