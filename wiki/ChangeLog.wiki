@@ -7,6 +7,8 @@
 ==LIME==
   * Improved exception handling when handling an incoming document
   * Move the contents of the "transport-lime-library" project into the "transport-lime-client" project and removed the "transport-lime-library" project so that the structure is consistent to the one of START
+==Validation==
+  * Added a new project "validation-webapp" that provides a minimum web application for validating your PEPPOL documents in the web
 
 = v2.2.1 (2012-03-21, bugfix release) =
 
