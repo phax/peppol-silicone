@@ -77,8 +77,10 @@ import com.phloc.commons.url.SimpleURL;
 import com.phloc.commons.xml.serialize.XMLReader;
 import com.phloc.css.DefaultCSSClassProvider;
 import com.phloc.css.ICSSClassProvider;
+import com.phloc.html.EHTMLVersion;
 import com.phloc.html.hc.CHCParam;
 import com.phloc.html.hc.conversion.HCSettings;
+import com.phloc.html.hc.html.AbstractHCCell;
 import com.phloc.html.hc.html.HCBody;
 import com.phloc.html.hc.html.HCButton_Submit;
 import com.phloc.html.hc.html.HCCheckBox;
@@ -90,10 +92,10 @@ import com.phloc.html.hc.html.HCH2;
 import com.phloc.html.hc.html.HCHead;
 import com.phloc.html.hc.html.HCHiddenField;
 import com.phloc.html.hc.html.HCHtml;
+import com.phloc.html.hc.html.HCSpan;
 import com.phloc.html.hc.html.HCTable;
 import com.phloc.html.hc.html.HCTextArea;
 import com.phloc.html.hc.html.HCUL;
-import com.phloc.html.hc.impl.HCTextNode;
 import com.phloc.html.resource.css.CSSExternal;
 
 public final class ValidationServlet extends HttpServlet {
@@ -108,6 +110,9 @@ public final class ValidationServlet extends HttpServlet {
   private static final ICSSClassProvider CSS_CLASS_ERROR = DefaultCSSClassProvider.create ("error");
   private static final ICSSClassProvider CSS_CLASS_WARN = DefaultCSSClassProvider.create ("warn");
   private static final ICSSClassProvider CSS_CLASS_SUCCESS = DefaultCSSClassProvider.create ("success");
+  private static final ICSSClassProvider CSS_CLASS_FIELDNAME = DefaultCSSClassProvider.create ("fieldname");
+  private static final ICSSClassProvider CSS_CLASS_FIELDCTRL = DefaultCSSClassProvider.create ("fieldctrl");
+  private static final ICSSClassProvider CSS_CLASS_BUTTONBAR = DefaultCSSClassProvider.create ("buttonbar");
 
   @Nonnull
   private static ISimpleURL _makeContextAwareURL (@Nonnull final HttpServletRequest aHttpRequest,
@@ -158,7 +163,7 @@ public final class ValidationServlet extends HttpServlet {
     final String sSelectedXML = aHttpRequest.getParameter (FIELD_XML);
 
     // Base layout
-    final HCHtml aHtml = new HCHtml ();
+    final HCHtml aHtml = new HCHtml (EHTMLVersion.HTML5);
     final HCHead aHead = aHtml.getHead ();
     aHead.setPageTitle ("PEPPOL document validation");
     aHead.addCSS (new CSSExternal (_makeContextAwareURL (aHttpRequest, "/css/normalize.min.css")));
@@ -248,42 +253,48 @@ public final class ValidationServlet extends HttpServlet {
       aBody.addChild (new HCH1 ("PEPPOL document validation"));
       final HCForm aForm = aBody.addAndReturnChild (new HCForm (_makeContextAwareURL (aHttpRequest, "/validation/")));
 
-      final HCTable aTable = aForm.addAndReturnChild (new HCTable (new HCCol (170), HCCol.star ()));
+      final HCTable aTable = aForm.addAndReturnChild (new HCTable (new HCCol (150), HCCol.star ()));
 
       // Syntax binding
       aTable.addBodyRow ()
-            .addCells (new HCTextNode ("Syntax:"),
+            .addCells (new HCSpan ("Syntax:").addClass (CSS_CLASS_FIELDNAME),
                        new SyntaxBindingSelect (FIELD_SYNTAX_BINDING, eSelectedSyntax != null
                                                                                              ? eSelectedSyntax.getID ()
-                                                                                             : null));
+                                                                                             : null).addClass (CSS_CLASS_FIELDCTRL));
 
       // Document type
-      aTable.addBodyRow ().addCells (new HCTextNode ("Document type:"),
-                                     new DocumentTypeSelect (FIELD_DOCTYPE,
-                                                             eSelectedDocType != null ? eSelectedDocType.getID ()
-                                                                                     : null));
+      aTable.addBodyRow ()
+            .addCells (new HCSpan ("Document type:").addClass (CSS_CLASS_FIELDNAME),
+                       new DocumentTypeSelect (FIELD_DOCTYPE, eSelectedDocType != null ? eSelectedDocType.getID ()
+                                                                                      : null).addClass (CSS_CLASS_FIELDCTRL));
 
       // Transaction
-      aTable.addBodyRow ().addCells (new HCTextNode ("Transaction:"),
-                                     new TransactionSelect (FIELD_TRANSACTION,
-                                                            null,
-                                                            eSelectedTransaction != null
-                                                                                        ? eSelectedTransaction.getID ()
-                                                                                        : null));
+      aTable.addBodyRow ()
+            .addCells (new HCSpan ("Transaction:").addClass (CSS_CLASS_FIELDNAME),
+                       new TransactionSelect (FIELD_TRANSACTION,
+                                              null,
+                                              eSelectedTransaction != null ? eSelectedTransaction.getID () : null).addClass (CSS_CLASS_FIELDCTRL));
 
       // Country
-      aTable.addBodyRow ().addCells (new HCTextNode ("Country:"), new CountrySelect (FIELD_COUNTRY, sSelectedCountry));
+      aTable.addBodyRow ()
+            .addCells (new HCSpan ("Country:").addClass (CSS_CLASS_FIELDNAME),
+                       new CountrySelect (FIELD_COUNTRY, sSelectedCountry).addClass (CSS_CLASS_FIELDCTRL));
 
       // Industry specific?
-      aTable.addBodyRow ().addCells (new HCTextNode ("Industry level:"),
-                                     new HCCheckBox (FIELD_INDUSTRY_SPECIFIC, bSelectedIndustryLevel));
+      aTable.addBodyRow ()
+            .addCells (new HCSpan ("Industry level:").addClass (CSS_CLASS_FIELDNAME),
+                       new HCDiv (new HCCheckBox (FIELD_INDUSTRY_SPECIFIC, bSelectedIndustryLevel)).addClass (CSS_CLASS_FIELDCTRL));
 
       // XML row
-      aTable.addBodyRow ().addCells (new HCTextNode ("XML content:"),
-                                     new HCTextArea (FIELD_XML, sSelectedXML).setRows (10));
+      aTable.addBodyRow ().addCells (new HCSpan ("XML content:").addClass (CSS_CLASS_FIELDNAME),
+                                     new HCTextArea (FIELD_XML, sSelectedXML).setRows (20)
+                                                                             .setCols (50)
+                                                                             .addClass (CSS_CLASS_FIELDCTRL));
 
       // Toolbar
-      final HCDiv aToolbar = aForm.addAndReturnChild (new HCDiv ());
+      final AbstractHCCell aCell = aTable.addBodyRow ().addCell ().setColspan (aTable.getColumnCount ());
+      final HCDiv aToolbar = aCell.addAndReturnChild (new HCDiv ());
+      aToolbar.addClass (CSS_CLASS_BUTTONBAR);
       aToolbar.addChild (new HCHiddenField (CHCParam.PARAM_STATE, CHCParam.STATE_SUBMITTED));
       aToolbar.addChild (new HCButton_Submit ("Validate"));
     }

@@ -35,6 +35,12 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
+form table {
+  table-layout: auto;
+}
+form td, form th {
+  vertical-align: top; 
+}
 .error {
   color: red;
   font-weight: bold;
@@ -46,4 +52,20 @@
 .success {
   color: green;
   font-weight: bold;
+}
+.fieldname {
+  width: 100%;
+  text-align: right;
+  display:inline-block;
+}
+.fieldctrl {
+  width: 100%;
+  text-align: left;
+  display:block;
+}
+.buttonbar {
+  margin-top: 10px;
+  background-color: #ccc;
+  text-align: right;
+  padding: 3px;
 }
