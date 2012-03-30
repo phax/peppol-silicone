@@ -40,11 +40,16 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>PEPPOL-START-SERVER</title>
-    </head>
-    <body>
-        <h1>Welcome</h1>
-    </body>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>PEPPOL-START-SERVER</title>
+    <style type="text/css">
+body,*{font-family:sans-serif;}      
+    </style>
+  </head>
+  <body>
+    <h1>START Access Point</h1>
+    <div><a href="accessPointService">Service endpoint</a></div>
+    <div><a href="accessPointService?wsdl">WSDL</a></div>
+  </body>
 </html>
