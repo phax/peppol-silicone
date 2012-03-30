@@ -9,7 +9,7 @@ import javax.annotation.Nonnull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.peppol.webgui.api.io.StorageIO;
+import at.peppol.webgui.io.StorageIO;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.OverrideOnDemand;
