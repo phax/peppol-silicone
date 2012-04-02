@@ -12,7 +12,7 @@
   * Move the contents of the "transport-lime-library" project into the "transport-lime-client" project and removed the "transport-lime-library" project so that the structure is consistent to the one of START
 ==SMP==
   * Removed the deprecated REST method CompleteServiceGroupInterface.deleteServiceGroup because it has the exact same semantics as ServiceGroupInterface.deleteServiceGroup
-  * Changed the internal API of the SMP server for consistency reasons
+  * Changed the internal API concerning the database domain objects of the SMP server for consistency reasons
 ==Validation==
   * Added a new project "validation-webapp" that provides a minimum web application for validating your PEPPOL documents in the web
 
