@@ -39,6 +39,7 @@ package at.peppol.validation.rules;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.xml.validation.Schema;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.lang.EnumHelper;
@@ -46,7 +47,7 @@ import com.phloc.ubl.EUBL20DocumentType;
 
 /**
  * All predefined document types for which rules are contained.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public enum EValidationDocumentType implements IValidationDocumentType {
@@ -83,8 +84,8 @@ public enum EValidationDocumentType implements IValidationDocumentType {
   }
 
   @Nullable
-  public EUBL20DocumentType getUBLDocumentType () {
-    return m_eUBLDocType;
+  public Schema getSchema () {
+    return m_eUBLDocType == null ? null : m_eUBLDocType.getSchema ();
   }
 
   @Nullable

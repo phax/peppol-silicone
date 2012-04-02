@@ -45,6 +45,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 import javax.xml.transform.Source;
+import javax.xml.validation.Schema;
 
 import at.peppol.validation.generic.IXMLValidator;
 import at.peppol.validation.generic.XMLSchemaValidator;
@@ -64,7 +65,6 @@ import com.phloc.commons.error.IResourceErrorGroup;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.xml.transform.ResourceStreamSource;
-
 
 /**
  * This class represents the PEPPOL validation pyramid. It evaluates all
@@ -154,10 +154,10 @@ public class ValidationPyramid {
     m_aValidationTransaction = aValidationTransaction;
     m_aValidationCountry = aValidationCountry;
 
-    if (aValidationDocumentType.getUBLDocumentType () != null) {
-      // Add the UBL schema validator first
-      final XMLSchemaValidator aValidator = new XMLSchemaValidator (aValidationDocumentType.getUBLDocumentType ()
-                                                                                           .getSchema ());
+    final Schema aXMLSchema = aValidationDocumentType.getSchema ();
+    if (aXMLSchema != null) {
+      // Add the XML schema validator first
+      final XMLSchemaValidator aValidator = new XMLSchemaValidator (aXMLSchema);
       // true: If the XSD validation fails no Schematron validation is needed
       m_aValidationLayers.add (new ValidationPyramidLayer (EValidationLevel.TECHNICAL_STRUCTURE, aValidator, true));
     }
