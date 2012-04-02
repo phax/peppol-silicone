@@ -64,9 +64,9 @@ public final class IdentifierUtils {
 
   /**
    * Check if the given scheme is a valid participant identifier scheme. It is
-   * valid if it has at last 25 characters and matches a certain regular
-   * expression. Please note that the regular expression is applied case
-   * insensitive!<br>
+   * valid if it has at least 1 character and at last 25 characters and matches
+   * a certain regular expression. Please note that the regular expression is
+   * applied case insensitive!<br>
    * This limitation is important, because the participant identifier scheme is
    * directly encoded into the SML DNS name record.
    * 
@@ -77,9 +77,27 @@ public final class IdentifierUtils {
    * @see CIdentifier#PARTICIPANT_IDENTIFIER_SCHEME_REGEX
    */
   public static boolean isValidParticipantIdentifierScheme (@Nullable final String sScheme) {
-    return sScheme != null &&
-           sScheme.length () <= CIdentifier.MAX_PARTICIPANT_IDENTIFIER_SCHEME_LENGTH &&
+    return isValidIdentifierScheme (sScheme) &&
            RegExHelper.stringMatchesPattern (CIdentifier.PARTICIPANT_IDENTIFIER_SCHEME_REGEX, sScheme.toLowerCase ());
+  }
+
+  /**
+   * Check if the given identifier is valid. It is valid if it has at least 1
+   * character and at last 25 characters. This method applies to all identifier
+   * schemes, but there is a special version for participant identifier schemes,
+   * as they are used in DNS names!
+   * 
+   * @param sScheme
+   *        The scheme to check.
+   * @return <code>true</code> if the passed scheme is a valid identifier
+   *         scheme, <code>false</code> otherwise.
+   * @see #isValidParticipantIdentifierScheme(String)
+   */
+  public static boolean isValidIdentifierScheme (@Nullable final String sScheme) {
+    if (sScheme == null)
+      return false;
+    final int nLength = sScheme.length ();
+    return nLength > 0 && nLength <= CIdentifier.MAX_IDENTIFIER_SCHEME_LENGTH;
   }
 
   /**

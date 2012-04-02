@@ -55,10 +55,14 @@ public final class CIdentifier {
   public static final String DNS_HASHED_IDENTIFIER_PREFIX = "B-";
 
   /**
-   * The maximum length of a participant identifier scheme.
+   * The maximum length of an identifier scheme. This applies to all identifier
+   * schemes (participant, document type and process).
    */
   @Nonnegative
-  public static final int MAX_PARTICIPANT_IDENTIFIER_SCHEME_LENGTH = 25;
+  public static final int MAX_IDENTIFIER_SCHEME_LENGTH = 25;
+
+  @Deprecated
+  public static final int MAX_PARTICIPANT_IDENTIFIER_SCHEME_LENGTH = MAX_IDENTIFIER_SCHEME_LENGTH;
 
   /**
    * The regular expression to be used for validating participant identifier
@@ -102,10 +106,22 @@ public final class CIdentifier {
   public static final String URL_SCHEME_VALUE_SEPARATOR = "::";
 
   static {
-    // Some consistency assertions
+    // Check that the default participant scheme is valid
     if (!IdentifierUtils.isValidParticipantIdentifierScheme (DEFAULT_PARTICIPANT_IDENTIFIER_SCHEME))
       throw new InitializationException ("The default participant scheme '" +
                                          DEFAULT_PARTICIPANT_IDENTIFIER_SCHEME +
+                                         "' is not valid!");
+
+    // Check that the default document type scheme is valid
+    if (!IdentifierUtils.isValidIdentifierScheme (DEFAULT_DOCUMENT_TYPE_IDENTIFIER_SCHEME))
+      throw new InitializationException ("The default document type scheme '" +
+                                         DEFAULT_DOCUMENT_TYPE_IDENTIFIER_SCHEME +
+                                         "' is not valid!");
+
+    // Check that the default process scheme is valid
+    if (!IdentifierUtils.isValidIdentifierScheme (DEFAULT_PROCESS_IDENTIFIER_SCHEME))
+      throw new InitializationException ("The default process scheme '" +
+                                         DEFAULT_PROCESS_IDENTIFIER_SCHEME +
                                          "' is not valid!");
   }
 
