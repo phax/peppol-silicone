@@ -144,7 +144,7 @@ public final class DBMSDataManager extends AbstractJPAEnabledManager implements 
       final Collection <ParticipantIdentifierType> ret = new ArrayList <ParticipantIdentifierType> ();
       for (final DBOwnership aDBOwnership : aDBOwnerships) {
         final DBServiceGroupID aDBServiceGroupID = aDBOwnership.getServiceGroup ().getId ();
-        ret.add (aDBServiceGroupID.asParticipantIdentifier ());
+        ret.add (aDBServiceGroupID.asBusinessIdentifier ());
       }
 
       aTransaction.commit ();
@@ -204,7 +204,7 @@ public final class DBMSDataManager extends AbstractJPAEnabledManager implements 
       if (aDBServiceGroup != null) {
         // The business did exist. So it must be owned by user.
         if (getEntityManager ().find (DBOwnership.class, aDBOwnershipID) == null) {
-          s_aLogger.warn ("No such ownership: " + aDBOwnershipID.asParticipantIdentifier ().toString ());
+          s_aLogger.warn ("No such ownership: " + aDBOwnershipID.asBusinessIdentifier ().toString ());
           throw new UnauthorizedException ();
         }
 
@@ -312,7 +312,7 @@ public final class DBMSDataManager extends AbstractJPAEnabledManager implements 
     final EntityTransaction aTransaction = getEntityManager ().getTransaction ();
     aTransaction.begin ();
     try {
-      final DBServiceMetadataID id = new DBServiceMetadataID (docType, serviceGroupId);
+      final DBServiceMetadataID id = new DBServiceMetadataID (serviceGroupId, docType);
       final DBServiceMetadata aDBServiceMetadata = getEntityManager ().find (DBServiceMetadata.class, id);
 
       if (aDBServiceMetadata == null) {
@@ -381,9 +381,9 @@ public final class DBMSDataManager extends AbstractJPAEnabledManager implements 
         throw new UnauthorizedException ();
 
       // Check if an existing service is already contained
-      final DBServiceMetadataID aDBServiceMetadataID = new DBServiceMetadataID (aServiceMetadata.getServiceInformation ()
-                                                                                                .getDocumentIdentifier (),
-                                                                                aBusinessID);
+      final DBServiceMetadataID aDBServiceMetadataID = new DBServiceMetadataID (aBusinessID,
+                                                                                aServiceMetadata.getServiceInformation ()
+                                                                                                                                                                          .getDocumentIdentifier ());
       DBServiceMetadata aDBServiceMetadata = getEntityManager ().find (DBServiceMetadata.class, aDBServiceMetadataID);
       // Check whether the service already exists
       if (aDBServiceMetadata != null) {
@@ -445,7 +445,7 @@ public final class DBMSDataManager extends AbstractJPAEnabledManager implements 
                                          "::" +
                                          aServiceGroupID.getValue ());
 
-      final DBServiceMetadataID aDBServiceMetadataID = new DBServiceMetadataID (aDocTypeID, aServiceGroupID);
+      final DBServiceMetadataID aDBServiceMetadataID = new DBServiceMetadataID (aServiceGroupID, aDocTypeID);
       final DBServiceMetadata aDBServiceMetadata = getEntityManager ().find (DBServiceMetadata.class,
                                                                              aDBServiceMetadataID);
       if (aDBServiceMetadata == null) {
@@ -517,7 +517,7 @@ public final class DBMSDataManager extends AbstractJPAEnabledManager implements 
 
   private void _convertFromDBToService (final DBServiceMetadata serviceMetadataDB,
                                         final ServiceMetadataType serviceMetadata) {
-    final ParticipantIdentifierType businessIdType = serviceMetadataDB.getId ().asParticipantIdentifier ();
+    final ParticipantIdentifierType businessIdType = serviceMetadataDB.getId ().asBusinessIdentifier ();
     final ExtensionType extension = ExtensionConverter.convert (serviceMetadataDB.getExtension ());
 
     final DocumentIdentifierType documentIdentifier = serviceMetadataDB.getId ().asDocumentTypeIdentifier ();
@@ -575,22 +575,14 @@ public final class DBMSDataManager extends AbstractJPAEnabledManager implements 
 
     final Set <DBProcess> aDBProcesses = new HashSet <DBProcess> ();
     for (final ProcessType aProcess : aServiceInformation.getProcessList ().getProcess ()) {
-      final DBProcessID aDBProcessID = new DBProcessID ();
-      aDBProcessID.setProcessIdentifier (aProcess.getProcessIdentifier ());
-      aDBProcessID.setBusinessIdentifier (aDBServiceMetadata.getId ().asParticipantIdentifier ());
-      aDBProcessID.setDocumentTypeIdentifier (aDBServiceMetadata.getId ().asDocumentTypeIdentifier ());
-
-      final DBProcess aDBProcess = new DBProcess ();
-      aDBProcess.setId (aDBProcessID);
+      final DBProcessID aDBProcessID = new DBProcessID (aDBServiceMetadata.getId (), aProcess.getProcessIdentifier ());
+      final DBProcess aDBProcess = new DBProcess (aDBProcessID);
 
       final Set <DBEndpoint> aDBEndpoints = new HashSet <DBEndpoint> ();
       for (final EndpointType aEndpoint : aProcess.getServiceEndpointList ().getEndpoint ()) {
-        final DBEndpointID aDBEndpointID = new DBEndpointID ();
-        aDBEndpointID.setTransportProfile (aEndpoint.getTransportProfile ());
-        aDBEndpointID.setEndpointReference (W3CEndpointReferenceUtils.getAddress (aEndpoint.getEndpointReference ()));
-        aDBEndpointID.setBusinessIdentifier (aDBServiceMetadata.getId ().asParticipantIdentifier ());
-        aDBEndpointID.setDocumentIdentifier (aDBServiceMetadata.getId ().asDocumentTypeIdentifier ());
-        aDBEndpointID.setProcessIdentifier (aProcess.getProcessIdentifier ());
+        final DBEndpointID aDBEndpointID = new DBEndpointID (aDBProcessID,
+                                                             W3CEndpointReferenceUtils.getAddress (aEndpoint.getEndpointReference ()),
+                                                             aEndpoint.getTransportProfile ());
 
         final DBEndpoint aDBEndpoint = new DBEndpoint ();
         aDBEndpoint.setExtension (ExtensionConverter.convert (aEndpoint.getExtension ()));

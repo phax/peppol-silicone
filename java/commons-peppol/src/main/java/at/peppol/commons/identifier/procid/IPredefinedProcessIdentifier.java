@@ -60,12 +60,5 @@ public interface IPredefinedProcessIdentifier extends IReadonlyProcessIdentifier
    * @return A list of all document identifiers that are valid in this scenario
    */
   @Nonnull
-  @Deprecated
-  List <? extends IPredefinedDocumentTypeIdentifier> getDocumentIdentifiers ();
-
-  /**
-   * @return A list of all document identifiers that are valid in this scenario
-   */
-  @Nonnull
   List <? extends IPredefinedDocumentTypeIdentifier> getDocumentTypeIdentifiers ();
 }

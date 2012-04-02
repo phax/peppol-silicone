@@ -50,6 +50,7 @@ import at.peppol.commons.identifier.IdentifierUtils;
 import at.peppol.commons.identifier.SimpleDocumentTypeIdentifier;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 
+import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.compare.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
@@ -61,41 +62,19 @@ import com.phloc.commons.string.ToStringGenerator;
  */
 @Embeddable
 public class DBServiceMetadataID implements Serializable {
-  private String m_sDocumentTypeIdentifierScheme;
-  private String m_sDocumentTypeIdentifier;
   private String m_sBusinessIdentifierScheme;
   private String m_sBusinessIdentifier;
+  private String m_sDocumentTypeIdentifierScheme;
+  private String m_sDocumentTypeIdentifier;
 
+  @Deprecated
+  @UsedViaReflection
   public DBServiceMetadataID () {}
 
-  public DBServiceMetadataID (@Nonnull final IReadonlyDocumentTypeIdentifier aDocumentTypeID,
-                              @Nonnull final IReadonlyParticipantIdentifier aParticipantID) {
+  public DBServiceMetadataID (@Nonnull final IReadonlyParticipantIdentifier aBusinessID,
+                              @Nonnull final IReadonlyDocumentTypeIdentifier aDocumentTypeID) {
+    setBusinessIdentifier (aBusinessID);
     setDocumentTypeIdentifier (aDocumentTypeID);
-    setBusinessIdentifier (aParticipantID);
-  }
-
-  @Column (name = "documentIdentifierScheme", nullable = false, length = 256)
-  public String getDocumentIdentifierScheme () {
-    return m_sDocumentTypeIdentifierScheme;
-  }
-
-  public void setDocumentIdentifierScheme (final String sDocumentIdentifierScheme) {
-    m_sDocumentTypeIdentifierScheme = sDocumentIdentifierScheme;
-  }
-
-  @Column (name = "documentIdentifier", nullable = false, length = 256)
-  public String getDocumentIdentifier () {
-    return m_sDocumentTypeIdentifier;
-  }
-
-  public void setDocumentIdentifier (final String sDocumentIdentifier) {
-    m_sDocumentTypeIdentifier = sDocumentIdentifier;
-  }
-
-  @Transient
-  public void setDocumentTypeIdentifier (@Nonnull final IReadonlyDocumentTypeIdentifier aDocTypeID) {
-    setDocumentIdentifierScheme (aDocTypeID.getScheme ());
-    setDocumentIdentifier (aDocTypeID.getValue ());
   }
 
   @Column (name = "businessIdentifierScheme", nullable = false, length = 256)
@@ -122,16 +101,40 @@ public class DBServiceMetadataID implements Serializable {
     setBusinessIdentifier (aPI.getValue ());
   }
 
-  @Nonnull
+  @Column (name = "documentIdentifierScheme", nullable = false, length = 256)
+  public String getDocumentIdentifierScheme () {
+    return m_sDocumentTypeIdentifierScheme;
+  }
+
+  public void setDocumentIdentifierScheme (final String sDocumentIdentifierScheme) {
+    m_sDocumentTypeIdentifierScheme = sDocumentIdentifierScheme;
+  }
+
+  @Column (name = "documentIdentifier", nullable = false, length = 256)
+  public String getDocumentIdentifier () {
+    return m_sDocumentTypeIdentifier;
+  }
+
+  public void setDocumentIdentifier (final String sDocumentIdentifier) {
+    m_sDocumentTypeIdentifier = sDocumentIdentifier;
+  }
+
   @Transient
-  public SimpleDocumentTypeIdentifier asDocumentTypeIdentifier () {
-    return new SimpleDocumentTypeIdentifier (m_sDocumentTypeIdentifierScheme, m_sDocumentTypeIdentifier);
+  public void setDocumentTypeIdentifier (@Nonnull final IReadonlyDocumentTypeIdentifier aDocTypeID) {
+    setDocumentIdentifierScheme (aDocTypeID.getScheme ());
+    setDocumentIdentifier (aDocTypeID.getValue ());
   }
 
   @Nonnull
   @Transient
-  public SimpleParticipantIdentifier asParticipantIdentifier () {
+  public SimpleParticipantIdentifier asBusinessIdentifier () {
     return new SimpleParticipantIdentifier (m_sBusinessIdentifierScheme, m_sBusinessIdentifier);
+  }
+
+  @Nonnull
+  @Transient
+  public SimpleDocumentTypeIdentifier asDocumentTypeIdentifier () {
+    return new SimpleDocumentTypeIdentifier (m_sDocumentTypeIdentifierScheme, m_sDocumentTypeIdentifier);
   }
 
   @Override

@@ -49,6 +49,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
+ * Represents a single user within the SMP database.
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Entity
@@ -59,17 +61,6 @@ public class DBUser implements Serializable {
   private Set <DBOwnership> m_aOwnerships = new HashSet <DBOwnership> ();
 
   public DBUser () {}
-
-  public DBUser (final String sUserName, final String sPassword) {
-    m_sUserName = sUserName;
-    m_sPassword = sPassword;
-  }
-
-  public DBUser (final String sUserName, final String sPassword, final Set <DBOwnership> aOwnerships) {
-    m_sUserName = sUserName;
-    m_sPassword = sPassword;
-    m_aOwnerships = aOwnerships;
-  }
 
   @Id
   @Column (name = "username", unique = true, nullable = false, length = 256)

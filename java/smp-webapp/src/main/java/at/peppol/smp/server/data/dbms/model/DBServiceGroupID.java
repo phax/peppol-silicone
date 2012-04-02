@@ -48,6 +48,7 @@ import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
 import at.peppol.commons.identifier.IdentifierUtils;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 
+import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.compare.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
@@ -62,11 +63,13 @@ public class DBServiceGroupID implements Serializable {
   private String m_sBusinessIdentifierScheme;
   private String m_sBusinessIdentifier;
 
+  @Deprecated
+  @UsedViaReflection
   public DBServiceGroupID () {}
 
-  public DBServiceGroupID (@Nonnull final IReadonlyParticipantIdentifier aIdentifier) {
-    setBusinessIdentifierScheme (aIdentifier.getScheme ());
-    setBusinessIdentifier (aIdentifier.getValue ());
+  public DBServiceGroupID (@Nonnull final IReadonlyParticipantIdentifier aBusinessID) {
+    setBusinessIdentifierScheme (aBusinessID.getScheme ());
+    setBusinessIdentifier (aBusinessID.getValue ());
   }
 
   @Column (name = "businessIdentifierScheme", nullable = false, length = 256)
@@ -89,7 +92,7 @@ public class DBServiceGroupID implements Serializable {
 
   @Transient
   @Nonnull
-  public SimpleParticipantIdentifier asParticipantIdentifier () {
+  public SimpleParticipantIdentifier asBusinessIdentifier () {
     return new SimpleParticipantIdentifier (m_sBusinessIdentifierScheme, m_sBusinessIdentifier);
   }
 

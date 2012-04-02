@@ -52,7 +52,7 @@ import javax.persistence.Table;
 
 /**
  * Define the ownership of a service group -&gt; relates DB user to DB service
- * group
+ * group.
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */

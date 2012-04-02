@@ -49,6 +49,7 @@ import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
 import at.peppol.busdox.identifier.IReadonlyProcessIdentifier;
 import at.peppol.commons.identifier.IdentifierUtils;
 
+import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.compare.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 
@@ -61,14 +62,26 @@ import com.phloc.commons.hash.HashCodeGenerator;
 public class DBEndpointID implements Serializable {
   private String m_sBusinessIdentifierScheme;
   private String m_sBusinessIdentifier;
-  private String m_sProcessIdentifierScheme;
-  private String m_sProcessIdentifier;
   private String m_sDocumentIdentifierScheme;
   private String m_sDocumentIdentifier;
+  private String m_sProcessIdentifierScheme;
+  private String m_sProcessIdentifier;
   private String m_sEndpointReference;
   private String m_sTransportProfile;
 
+  @Deprecated
+  @UsedViaReflection
   public DBEndpointID () {}
+
+  public DBEndpointID (@Nonnull final DBProcessID aProcessID,
+                       final String sEndpointReference,
+                       final String sTransportProfile) {
+    setBusinessIdentifier (aProcessID.asBusinessIdentifier ());
+    setDocumentTypeIdentifier (aProcessID.asDocumentTypeIdentifier ());
+    setProcessIdentifier (aProcessID.asProcessIdentifier ());
+    setEndpointReference (sEndpointReference);
+    setTransportProfile (sTransportProfile);
+  }
 
   @Column (name = "businessIdentifierScheme", nullable = false, length = 256)
   public String getBusinessIdentifierScheme () {
@@ -137,7 +150,7 @@ public class DBEndpointID implements Serializable {
   }
 
   @Transient
-  public void setDocumentIdentifier (@Nonnull final IReadonlyDocumentTypeIdentifier aDocumentTypeID) {
+  public void setDocumentTypeIdentifier (@Nonnull final IReadonlyDocumentTypeIdentifier aDocumentTypeID) {
     setDocumentIdentifierScheme (aDocumentTypeID.getScheme ());
     setDocumentIdentifier (aDocumentTypeID.getValue ());
   }
