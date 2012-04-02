@@ -2,7 +2,7 @@
 
 = Contained projects and their dependencies =
 
-Short outline of the contained source projects and how they relate to each other
+Short outline of the contained source projects and how they relate to each other. All dependencies and descriptions refer to the trunk version.
 
 ==PDF Versions==
   * [https://joinup.ec.europa.eu/svn/peppol/PEPPOL_EIA/1-ICT_Architecture/1-ICT-Transport_Infrastructure/14-ICT-Services-Components/ICT-Transport-Silicone_Java_ProjectDependencies-221.pdf Project dependencies 2.2.1]
@@ -25,14 +25,13 @@ Short outline of the contained source projects and how they relate to each other
   * transport-start-server = START server (web application)
   * transport-start-client = START client (library)
   * transport-lime-server = LIME server (web application)
-  * transport-lime-library = LIME client (library)
+  * transport-lime-client = LIME client (library)
 
 ===Utility artefacts:===
   * sml-webapp-standalone = a standalone SML server for testing without DNS
   * sml-client-apps = console and Swing GUI to do SML client actions
   * smp-client-console = console application to access the SMP
   * transport-start-receiver = an example handler for incoming documents on the START server - to be replaced in production environments
-  * transport-lime-client = example application using the LIME library to send a document via LIME
 
 ===Project dependencies:===
 http://peppol-silicone.googlecode.com/svn/trunk/docs/imgs/dependencies_infrastructure.png
@@ -49,6 +48,7 @@ http://peppol-silicone.googlecode.com/svn/trunk/docs/imgs/dependencies_infrastru
 
 ===Utility artefacts:===
   * schematron2xslt-maven-plugin = A [http://maven.apache.org Maven 2/3] plugin that converts Schematron files to XSLT files at compile time
+  * validation-webapp = a standalone validation web application where you can paste your XML code and get it validated
 
 ===Project dependencies:===
 http://peppol-silicone.googlecode.com/svn/trunk/docs/imgs/dependencies_validation.png
