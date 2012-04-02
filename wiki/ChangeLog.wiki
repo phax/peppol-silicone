@@ -15,6 +15,7 @@
   * Changed the internal API concerning the database domain objects of the SMP server for consistency reasons
 ==Validation==
   * Added a new project "validation-webapp" that provides a minimum web application for validating your PEPPOL documents in the web
+  * IValidationDocumentType interface is now more generic by only requiring to offer a Schema object (and not to force UBL usage)
 
 = v2.2.1 (2012-03-21, bugfix release) =
 
