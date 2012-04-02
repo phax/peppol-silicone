@@ -9,6 +9,9 @@
 ==LIME==
   * Improved exception handling when handling an incoming document
   * Move the contents of the "transport-lime-library" project into the "transport-lime-client" project and removed the "transport-lime-library" project so that the structure is consistent to the one of START
+==SMP==
+  * Removed the deprecated REST method CompleteServiceGroupInterface.deleteServiceGroup because it has the exact same semantics as ServiceGroupInterface.deleteServiceGroup
+  * Changed the internal API of the SMP server for consistency reasons
 ==Validation==
   * Added a new project "validation-webapp" that provides a minimum web application for validating your PEPPOL documents in the web
 
@@ -31,7 +34,7 @@ Performed changes so far:
 ==SMP==
   * Updated Jersey (REST libs) from 1.11 to 1.12
   * Improved logging in SMP startup to find keystore configuration errors more easily
-  * SMP: Deprecated CompleteServiceGroupInterface.deleteServiceGroup because it has the exact same semantics as ServiceGroupInterface.deleteServiceGroup
+  * Deprecated CompleteServiceGroupInterface.deleteServiceGroup because it has the exact same semantics as ServiceGroupInterface.deleteServiceGroup
 ==START==
   * Fixed error in transport-start-filereceiver SPI configuration file
 ==LIME==
