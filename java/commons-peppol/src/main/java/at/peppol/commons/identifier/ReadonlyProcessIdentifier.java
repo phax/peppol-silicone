@@ -58,7 +58,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * {@link #hashCode()} where its base class does not. So be careful when mixing
  * this class and its base class!<br>
  * For a mutable version, please check {@link SimpleProcessIdentifier}.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable
@@ -68,6 +68,11 @@ public final class ReadonlyProcessIdentifier extends ProcessIdentifierType {
   }
 
   public ReadonlyProcessIdentifier (@Nullable final String sScheme, @Nullable final String sValue) {
+    if (!IdentifierUtils.isValidIdentifierScheme (sScheme))
+      throw new IllegalArgumentException ("Process identifier scheme '" + sScheme + "' is invalid!");
+    if (!IdentifierUtils.isValidProcessIdentifierValue (sValue))
+      throw new IllegalArgumentException ("Process identifier value '" + sValue + "' is invalid!");
+
     // Explicitly use the super methods, as the methods of this class throw an
     // exception!
     super.setScheme (sScheme);

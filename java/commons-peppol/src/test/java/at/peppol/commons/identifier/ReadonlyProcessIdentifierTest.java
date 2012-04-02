@@ -38,36 +38,25 @@
 package at.peppol.commons.identifier;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-import at.peppol.commons.identifier.ReadonlyProcessIdentifier;
-
 import com.phloc.commons.mock.PhlocTestUtils;
+import com.phloc.commons.string.StringHelper;
 
 /**
  * Test class for class {@link ReadonlyProcessIdentifier}.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class ReadonlyProcessIdentifierTest {
   @Test
   public void testCtor () {
-    ReadonlyProcessIdentifier aID = new ReadonlyProcessIdentifier ("scheme", "value");
+    final ReadonlyProcessIdentifier aID = new ReadonlyProcessIdentifier ("scheme", "value");
     assertEquals ("scheme", aID.getScheme ());
     assertEquals ("value", aID.getValue ());
-    aID = new ReadonlyProcessIdentifier (null, "value");
-    assertNull (aID.getScheme ());
-    assertEquals ("value", aID.getValue ());
-    aID = new ReadonlyProcessIdentifier ("scheme", null);
-    assertEquals ("scheme", aID.getScheme ());
-    assertNull (aID.getValue ());
-    aID = new ReadonlyProcessIdentifier (null, null);
-    assertNull (aID.getScheme ());
-    assertNull (aID.getValue ());
 
-    aID = new ReadonlyProcessIdentifier ("scheme", "value");
     final ReadonlyProcessIdentifier aID2 = new ReadonlyProcessIdentifier (aID);
     assertEquals ("scheme", aID2.getScheme ());
     assertEquals ("value", aID2.getValue ());
@@ -88,5 +77,59 @@ public final class ReadonlyProcessIdentifierTest {
     final ReadonlyProcessIdentifier aID1 = new ReadonlyProcessIdentifier ("scheme1", "value1");
     assertEquals ("scheme1::value1", aID1.getURIEncoded ());
     assertEquals ("scheme1%3A%3Avalue1", aID1.getURIPercentEncoded ());
+  }
+
+  @Test
+  public void testConstraints () {
+    try {
+      // null key not allowed
+      new ReadonlyProcessIdentifier (null, "value");
+      fail ();
+    }
+    catch (final IllegalArgumentException ex) {}
+
+    try {
+      // null value not allowed
+      new ReadonlyProcessIdentifier ("scheme", null);
+      fail ();
+    }
+    catch (final IllegalArgumentException ex) {}
+
+    try {
+      // Both null not allowed
+      new ReadonlyProcessIdentifier (null, null);
+      fail ();
+    }
+    catch (final IllegalArgumentException ex) {}
+
+    try {
+      // Empty is not allowed
+      new ReadonlyProcessIdentifier ("scheme", "");
+      fail ();
+    }
+    catch (final IllegalArgumentException ex) {}
+
+    try {
+      // Cannot be mapped to ISO-8859-1:
+      new ReadonlyProcessIdentifier ("scheme", "Љ");
+      fail ();
+    }
+    catch (final IllegalArgumentException ex) {}
+
+    try {
+      // Scheme too long
+      new ReadonlyProcessIdentifier (StringHelper.getRepeated ('a', CIdentifier.MAX_IDENTIFIER_SCHEME_LENGTH + 1),
+                                     "abc");
+      fail ();
+    }
+    catch (final IllegalArgumentException ex) {}
+
+    try {
+      // Value too long
+      new ReadonlyProcessIdentifier ("scheme",
+                                     StringHelper.getRepeated ('a', CIdentifier.MAX_PROCESS_IDENTIFIER_VALUE_LENGTH + 1));
+      fail ();
+    }
+    catch (final IllegalArgumentException ex) {}
   }
 }

@@ -38,12 +38,12 @@
 package at.peppol.commons.identifier;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
 import com.phloc.commons.mock.PhlocTestUtils;
+import com.phloc.commons.string.StringHelper;
 
 /**
  * Test class for class {@link SimpleDocumentTypeIdentifier}.
@@ -53,20 +53,10 @@ import com.phloc.commons.mock.PhlocTestUtils;
 public final class SimpleDocumentTypeIdentifierTest {
   @Test
   public void testCtor () {
-    SimpleDocumentTypeIdentifier aID = new SimpleDocumentTypeIdentifier ("scheme", "value");
+    final SimpleDocumentTypeIdentifier aID = new SimpleDocumentTypeIdentifier ("scheme", "value");
     assertEquals ("scheme", aID.getScheme ());
     assertEquals ("value", aID.getValue ());
-    aID = new SimpleDocumentTypeIdentifier (null, "value");
-    assertNull (aID.getScheme ());
-    assertEquals ("value", aID.getValue ());
-    aID = new SimpleDocumentTypeIdentifier ("scheme", null);
-    assertEquals ("scheme", aID.getScheme ());
-    assertNull (aID.getValue ());
-    aID = new SimpleDocumentTypeIdentifier (null, null);
-    assertNull (aID.getScheme ());
-    assertNull (aID.getValue ());
 
-    aID = new SimpleDocumentTypeIdentifier ("scheme", "value");
     final SimpleDocumentTypeIdentifier aID2 = new SimpleDocumentTypeIdentifier (aID);
     assertEquals ("scheme", aID2.getScheme ());
     assertEquals ("value", aID2.getValue ());
@@ -93,6 +83,61 @@ public final class SimpleDocumentTypeIdentifierTest {
     try {
       // No separator
       SimpleDocumentTypeIdentifier.createFromURIPart ("scheme1");
+      fail ();
+    }
+    catch (final IllegalArgumentException ex) {}
+  }
+
+  @Test
+  public void testConstraints () {
+    try {
+      // null key not allowed
+      new SimpleDocumentTypeIdentifier (null, "value");
+      fail ();
+    }
+    catch (final IllegalArgumentException ex) {}
+
+    try {
+      // null value not allowed
+      new SimpleDocumentTypeIdentifier ("scheme", null);
+      fail ();
+    }
+    catch (final IllegalArgumentException ex) {}
+
+    try {
+      // Both null not allowed
+      new SimpleDocumentTypeIdentifier (null, null);
+      fail ();
+    }
+    catch (final IllegalArgumentException ex) {}
+
+    try {
+      // Empty is not allowed
+      new SimpleDocumentTypeIdentifier ("scheme", "");
+      fail ();
+    }
+    catch (final IllegalArgumentException ex) {}
+
+    try {
+      // Cannot be mapped to ISO-8859-1:
+      new SimpleDocumentTypeIdentifier ("scheme", "Љ");
+      fail ();
+    }
+    catch (final IllegalArgumentException ex) {}
+
+    try {
+      // Scheme too long
+      new SimpleDocumentTypeIdentifier (StringHelper.getRepeated ('a', CIdentifier.MAX_IDENTIFIER_SCHEME_LENGTH + 1),
+                                        "abc");
+      fail ();
+    }
+    catch (final IllegalArgumentException ex) {}
+
+    try {
+      // Value too long
+      new SimpleDocumentTypeIdentifier ("scheme",
+                                        StringHelper.getRepeated ('a',
+                                                                  CIdentifier.MAX_DOCUMENT_TYPE_IDENTIFIER_VALUE_LENGTH + 1));
       fail ();
     }
     catch (final IllegalArgumentException ex) {}

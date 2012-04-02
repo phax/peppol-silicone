@@ -38,37 +38,25 @@
 package at.peppol.commons.identifier;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-import at.peppol.commons.identifier.SimpleParticipantIdentifier;
-
 import com.phloc.commons.mock.PhlocTestUtils;
+import com.phloc.commons.string.StringHelper;
 
 /**
  * Test class for class {@link SimpleParticipantIdentifier}.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class SimpleParticipantIdentifierTest {
   @Test
   public void testCtor () {
-    SimpleParticipantIdentifier aID = new SimpleParticipantIdentifier ("scheme-actorid-test", "value");
+    final SimpleParticipantIdentifier aID = new SimpleParticipantIdentifier ("scheme-actorid-test", "value");
     assertEquals ("scheme-actorid-test", aID.getScheme ());
     assertEquals ("value", aID.getValue ());
-    aID = new SimpleParticipantIdentifier (null, "value");
-    assertNull (aID.getScheme ());
-    assertEquals ("value", aID.getValue ());
-    aID = new SimpleParticipantIdentifier ("scheme-actorid-test", null);
-    assertEquals ("scheme-actorid-test", aID.getScheme ());
-    assertNull (aID.getValue ());
-    aID = new SimpleParticipantIdentifier (null, null);
-    assertNull (aID.getScheme ());
-    assertNull (aID.getValue ());
 
-    aID = new SimpleParticipantIdentifier ("scheme-actorid-test", "value");
     final SimpleParticipantIdentifier aID2 = new SimpleParticipantIdentifier (aID);
     assertEquals ("scheme-actorid-test", aID2.getScheme ());
     assertEquals ("value", aID2.getValue ());
@@ -95,6 +83,61 @@ public final class SimpleParticipantIdentifierTest {
     try {
       // No separator
       SimpleParticipantIdentifier.createFromURIPart ("scheme1");
+      fail ();
+    }
+    catch (final IllegalArgumentException ex) {}
+  }
+
+  @Test
+  public void testConstraints () {
+    try {
+      // null key not allowed
+      new SimpleParticipantIdentifier (null, "value");
+      fail ();
+    }
+    catch (final IllegalArgumentException ex) {}
+
+    try {
+      // null value not allowed
+      new SimpleParticipantIdentifier ("scheme", null);
+      fail ();
+    }
+    catch (final IllegalArgumentException ex) {}
+
+    try {
+      // Both null not allowed
+      new SimpleParticipantIdentifier (null, null);
+      fail ();
+    }
+    catch (final IllegalArgumentException ex) {}
+
+    try {
+      // Empty is not allowed
+      new SimpleParticipantIdentifier ("scheme", "");
+      fail ();
+    }
+    catch (final IllegalArgumentException ex) {}
+
+    try {
+      // Cannot be mapped to ISO-8859-1:
+      new SimpleParticipantIdentifier ("scheme", "Љ");
+      fail ();
+    }
+    catch (final IllegalArgumentException ex) {}
+
+    try {
+      // Scheme too long
+      new SimpleParticipantIdentifier (StringHelper.getRepeated ('a', CIdentifier.MAX_IDENTIFIER_SCHEME_LENGTH + 1),
+                                       "abc");
+      fail ();
+    }
+    catch (final IllegalArgumentException ex) {}
+
+    try {
+      // Value too long
+      new SimpleParticipantIdentifier ("scheme",
+                                       StringHelper.getRepeated ('a',
+                                                                 CIdentifier.MAX_PARTICIPANT_IDENTIFIER_VALUE_LENGTH + 1));
       fail ();
     }
     catch (final IllegalArgumentException ex) {}

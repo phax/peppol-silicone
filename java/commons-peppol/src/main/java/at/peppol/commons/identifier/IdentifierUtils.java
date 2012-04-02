@@ -37,7 +37,9 @@
  */
 package at.peppol.commons.identifier;
 
+import java.nio.charset.Charset;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -49,6 +51,8 @@ import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
 import at.peppol.busdox.identifier.IReadonlyProcessIdentifier;
 import at.peppol.commons.uri.BusdoxURLUtils;
 
+import com.phloc.commons.charset.CCharset;
+import com.phloc.commons.charset.CharsetManager;
 import com.phloc.commons.compare.EqualsUtils;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
@@ -60,7 +64,36 @@ import com.phloc.commons.string.StringHelper;
  */
 @Immutable
 public final class IdentifierUtils {
+  public static final boolean DEFAULT_CHARSET_CHECKS_DISABLED = false;
+
+  // Grab the Charset objects, as they are thread-safe to use. The CharsetEncode
+  // objects are not thread-safe and therefore queried each time
+  private static final Charset CHARSET_ASCII = CharsetManager.charsetFromName (CCharset.CHARSET_US_ASCII);
+  private static final Charset CHARSET_ISO88591 = CharsetManager.charsetFromName (CCharset.CHARSET_ISO_8859_1);
+
+  private static final AtomicBoolean s_aCharsetChecksDisabled = new AtomicBoolean (DEFAULT_CHARSET_CHECKS_DISABLED);
+
   private IdentifierUtils () {}
+
+  /**
+   * @return <code>true</code> if the charset checks for identifier values are
+   *         disabled, <code>false</code> if they are enabled
+   */
+  public static boolean areCharsetChecksDisabled () {
+    return s_aCharsetChecksDisabled.get ();
+  }
+
+  /**
+   * Enable or disable the charset checks. You may disable charset checks, if
+   * you previously checked them for consistency.
+   * 
+   * @param bDisable
+   *        if <code>true</code> all charset checks are disabled. If
+   *        <code>false</code> charset checks are enabled
+   */
+  public static void disableCharsetChecks (final boolean bDisable) {
+    s_aCharsetChecksDisabled.set (bDisable);
+  }
 
   /**
    * Check if the given scheme is a valid participant identifier scheme. It is
@@ -98,6 +131,67 @@ public final class IdentifierUtils {
       return false;
     final int nLength = sScheme.length ();
     return nLength > 0 && nLength <= CIdentifier.MAX_IDENTIFIER_SCHEME_LENGTH;
+  }
+
+  /**
+   * Check if the passed participant identifier value is valid. A valid
+   * identifier must have at least 1 character and at last
+   * {@link CIdentifier#MAX_PARTICIPANT_IDENTIFIER_VALUE_LENGTH} characters.
+   * Also it must be US ASCII encoded.
+   * 
+   * @param sValue
+   *        The participant identifier value to be checked (without the scheme)
+   * @return <code>true</code> if the participant identifier value is valid,
+   *         <code>false</code> otherwise
+   */
+  public static boolean isValidParticipantIdentifierValue (@Nullable final String sValue) {
+    final int nLength = StringHelper.length (sValue);
+    if (nLength == 0 || nLength > CIdentifier.MAX_PARTICIPANT_IDENTIFIER_VALUE_LENGTH)
+      return false;
+
+    // Check if the value is US ASCII encoded
+    return areCharsetChecksDisabled () || CHARSET_ASCII.newEncoder ().canEncode (sValue);
+  }
+
+  /**
+   * Check if the passed document type identifier value is valid. A valid
+   * identifier must have at least 1 character and at last
+   * {@link CIdentifier#MAX_DOCUMENT_TYPE_IDENTIFIER_VALUE_LENGTH} characters.
+   * Also it must be ISO-8859-1 encoded.
+   * 
+   * @param sValue
+   *        The document type identifier value to be checked (without the
+   *        scheme)
+   * @return <code>true</code> if the document type identifier value is valid,
+   *         <code>false</code> otherwise
+   */
+  public static boolean isValidDocumentTypeIdentifierValue (@Nullable final String sValue) {
+    final int nLength = StringHelper.length (sValue);
+    if (nLength == 0 || nLength > CIdentifier.MAX_DOCUMENT_TYPE_IDENTIFIER_VALUE_LENGTH)
+      return false;
+
+    // Check if the value is ISO-8859-1 encoded
+    return areCharsetChecksDisabled () || CHARSET_ISO88591.newEncoder ().canEncode (sValue);
+  }
+
+  /**
+   * Check if the passed process identifier value is valid. A valid identifier
+   * must have at least 1 character and at last
+   * {@link CIdentifier#MAX_PROCESS_IDENTIFIER_VALUE_LENGTH} characters. Also it
+   * must be ISO-8859-1 encoded.
+   * 
+   * @param sValue
+   *        The process identifier value to be checked (without the scheme)
+   * @return <code>true</code> if the process identifier value is valid,
+   *         <code>false</code> otherwise
+   */
+  public static boolean isValidProcessIdentifierValue (@Nullable final String sValue) {
+    final int nLength = StringHelper.length (sValue);
+    if (nLength == 0 || nLength > CIdentifier.MAX_PROCESS_IDENTIFIER_VALUE_LENGTH)
+      return false;
+
+    // Check if the value is ISO-8859-1 encoded
+    return areCharsetChecksDisabled () || CHARSET_ISO88591.newEncoder ().canEncode (sValue);
   }
 
   /**

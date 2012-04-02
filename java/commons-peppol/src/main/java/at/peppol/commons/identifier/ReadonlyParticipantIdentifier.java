@@ -42,8 +42,6 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import at.peppol.busdox.identifier.IReadonlyIdentifier;
 
@@ -66,17 +64,18 @@ import com.phloc.commons.string.ToStringGenerator;
  */
 @Immutable
 public final class ReadonlyParticipantIdentifier extends ParticipantIdentifierType {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (ReadonlyParticipantIdentifier.class);
-
   public ReadonlyParticipantIdentifier (@Nonnull final IReadonlyIdentifier aIdentifier) {
     this (aIdentifier.getScheme (), aIdentifier.getValue ());
   }
 
   public ReadonlyParticipantIdentifier (@Nullable final String sScheme, @Nullable final String sValue) {
+    if (!IdentifierUtils.isValidParticipantIdentifierScheme (sScheme))
+      throw new IllegalArgumentException ("Participant identifier scheme '" + sScheme + "' is invalid!");
+    if (!IdentifierUtils.isValidParticipantIdentifierValue (sValue))
+      throw new IllegalArgumentException ("Participant identifier value '" + sValue + "' is invalid!");
+
     // Explicitly use the super methods, as the methods of this class throw an
     // exception!
-    if (!IdentifierUtils.isValidParticipantIdentifierScheme (sScheme))
-      s_aLogger.warn ("The identifier scheme '" + sScheme + "' seems to be invalid!");
     super.setScheme (sScheme);
     super.setValue (sValue);
   }

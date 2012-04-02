@@ -42,7 +42,7 @@ import javax.annotation.Nullable;
 
 import org.busdox.transport.identifiers._1.ProcessIdentifierType;
 
-import at.peppol.busdox.identifier.IReadonlyIdentifier;
+import at.peppol.busdox.identifier.IReadonlyProcessIdentifier;
 
 import com.phloc.commons.compare.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
@@ -55,15 +55,19 @@ import com.phloc.commons.string.ToStringGenerator;
  * Important note: this class implements {@link #equals(Object)} and
  * {@link #hashCode()} where its base class does not. So be careful when mixing
  * this class and its base class!
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public class SimpleProcessIdentifier extends ProcessIdentifierType {
-  public SimpleProcessIdentifier (@Nonnull final IReadonlyIdentifier aIdentifier) {
+  public SimpleProcessIdentifier (@Nonnull final IReadonlyProcessIdentifier aIdentifier) {
     this (aIdentifier.getScheme (), aIdentifier.getValue ());
   }
 
-  public SimpleProcessIdentifier (@Nullable final String sScheme, @Nullable final String sValue) {
+  public SimpleProcessIdentifier (@Nonnull final String sScheme, @Nonnull final String sValue) {
+    if (!IdentifierUtils.isValidIdentifierScheme (sScheme))
+      throw new IllegalArgumentException ("Process identifier scheme '" + sScheme + "' is invalid!");
+    if (!IdentifierUtils.isValidProcessIdentifierValue (sValue))
+      throw new IllegalArgumentException ("Process identifier value '" + sValue + "' is invalid!");
     setScheme (sScheme);
     setValue (sValue);
   }
