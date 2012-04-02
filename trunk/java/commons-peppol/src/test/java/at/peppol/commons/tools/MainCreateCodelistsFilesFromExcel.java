@@ -462,13 +462,6 @@ public final class MainCreateCodelistsFilesFromExcel {
       m.annotate (Nonempty.class);
       m.body ()._return (fCommonName);
 
-      // public String getAsDocumentIdentifierValue ()
-      m = s_jEnumPredefinedDoc.method (JMod.PUBLIC, String.class, "getAsDocumentIdentifierValue");
-      m.annotate (Deprecated.class);
-      m.annotate (Nonnull.class);
-      m.annotate (Nonempty.class);
-      m.body ()._return (fID);
-
       // public String getAsDocumentTypeIdentifierValue ()
       m = s_jEnumPredefinedDoc.method (JMod.PUBLIC, String.class, "getAsDocumentTypeIdentifierValue");
       m.annotate (Nonnull.class);
@@ -610,17 +603,6 @@ public final class MainCreateCodelistsFilesFromExcel {
       m.annotate (Nonnull.class);
       m.annotate (Nonempty.class);
       m.body ()._return (fBISID);
-
-      // public List<? extends IPredefinedDocumentIdentifier>
-      // getDocumentIdentifiers ()
-      m = jEnum.method (JMod.PUBLIC,
-                        s_aCodeModel.ref (List.class)
-                                    .narrow (s_aCodeModel.ref (IPredefinedDocumentTypeIdentifier.class).wildcard ()),
-                        "getDocumentIdentifiers");
-      m.annotate (Deprecated.class);
-      m.annotate (Nonnull.class);
-      m.annotate (ReturnsMutableCopy.class);
-      m.body ()._return (s_aCodeModel.ref (ContainerHelper.class).staticInvoke ("newList").arg (fDocIDs));
 
       // public List<? extends IPredefinedDocumentTypeIdentifier>
       // getDocumentTypeIdentifiers ()

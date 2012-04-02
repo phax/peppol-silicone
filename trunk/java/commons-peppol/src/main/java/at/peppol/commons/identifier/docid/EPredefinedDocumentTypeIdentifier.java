@@ -271,13 +271,6 @@ public enum EPredefinedDocumentTypeIdentifier
         return m_sCommonName;
     }
 
-    @Deprecated
-    @Nonnull
-    @Nonempty
-    public String getAsDocumentIdentifierValue() {
-        return m_sID;
-    }
-
     @Nonnull
     @Nonempty
     public String getAsDocumentTypeIdentifierValue() {

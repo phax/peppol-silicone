@@ -139,13 +139,6 @@ public enum EPredefinedProcessIdentifier
         return m_sBISID;
     }
 
-    @Deprecated
-    @Nonnull
-    @ReturnsMutableCopy
-    public List<? extends IPredefinedDocumentTypeIdentifier> getDocumentIdentifiers() {
-        return ContainerHelper.newList(m_aDocIDs);
-    }
-
     @Nonnull
     @ReturnsMutableCopy
     public List<? extends IPredefinedDocumentTypeIdentifier> getDocumentTypeIdentifiers() {

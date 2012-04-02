@@ -39,16 +39,12 @@ package at.peppol.smp.server;
 
 import java.util.List;
 
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 import javax.xml.bind.JAXBElement;
 
@@ -67,7 +63,6 @@ import at.peppol.commons.identifier.IdentifierUtils;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 import at.peppol.smp.server.data.DataManagerFactory;
 import at.peppol.smp.server.data.IDataManager;
-import at.peppol.smp.server.util.RequestHelper;
 
 import com.sun.jersey.api.NotFoundException;
 
@@ -85,9 +80,7 @@ public final class CompleteServiceGroupInterface {
   private static final Logger s_aLogger = LoggerFactory.getLogger (CompleteServiceGroupInterface.class);
 
   @Context
-  private HttpHeaders headers;
-  @Context
-  private UriInfo uriInfo;
+  private UriInfo m_aUriInfo;
 
   public CompleteServiceGroupInterface () {}
 
@@ -103,7 +96,7 @@ public final class CompleteServiceGroupInterface {
       final ServiceGroupType aServiceGroup = aDataManager.getServiceGroup (aServiceGroupID);
       if (aServiceGroup == null) {
         // No such service group
-        throw new NotFoundException ("serviceGroup", uriInfo.getAbsolutePath ());
+        throw new NotFoundException ("serviceGroup", m_aUriInfo.getAbsolutePath ());
       }
 
       /*
@@ -115,7 +108,7 @@ public final class CompleteServiceGroupInterface {
       final List <DocumentIdentifierType> aDocTypeIds = aDataManager.getDocumentTypes (aServiceGroupID);
       for (final DocumentIdentifierType aDocTypeId : aDocTypeIds) {
         final ServiceMetadataReferenceType aMetadataReference = aObjFactory.createServiceMetadataReferenceType ();
-        aMetadataReference.setHref (uriInfo.getBaseUriBuilder ()
+        aMetadataReference.setHref (m_aUriInfo.getBaseUriBuilder ()
                                            .path (ServiceMetadataInterface.class)
                                            .buildFromEncoded (IdentifierUtils.getIdentifierURIPercentEncoded (aServiceGroupID),
                                                               IdentifierUtils.getIdentifierURIPercentEncoded (aDocTypeId))
@@ -135,36 +128,6 @@ public final class CompleteServiceGroupInterface {
     }
     catch (final RuntimeException ex) {
       s_aLogger.error ("Error getting service group", ex);
-      throw ex;
-    }
-  }
-
-  @DELETE
-  @Deprecated
-  public Response deleteServiceGroup (@PathParam ("ServiceGroupId") final String sServiceGroupId) {
-    s_aLogger.warn ("This API is deprecated. Please use the DELETE version without the \"/complete/\" prefix!");
-
-    s_aLogger.info ("DELETE /complete/" + sServiceGroupId);
-    ParticipantIdentifierType aServiceGroupID = null;
-    try {
-      aServiceGroupID = SimpleParticipantIdentifier.createFromURIPart (sServiceGroupId);
-    }
-    catch (final IllegalArgumentException ex) {
-      // Invalid identifier
-      s_aLogger.info ("Failed to parse participant identifier '" + sServiceGroupId + "'");
-      return Response.status (Status.BAD_REQUEST).build ();
-    }
-
-    try {
-      final IDataManager aDataManager = DataManagerFactory.getInstance ();
-      aDataManager.deleteServiceGroup (aServiceGroupID, RequestHelper.getAuth (headers));
-
-      s_aLogger.info ("Finished deleteServiceGroup(" + sServiceGroupId + ")");
-
-      return Response.ok ().build ();
-    }
-    catch (final RuntimeException ex) {
-      s_aLogger.error ("Error deleting service.", ex);
       throw ex;
     }
   }
