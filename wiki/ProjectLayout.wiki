@@ -4,6 +4,10 @@
 
 Short outline of the contained source projects and how they relate to each other
 
+==PDF Versions==
+  * [https://joinup.ec.europa.eu/svn/peppol/PEPPOL_EIA/1-ICT_Architecture/1-ICT-Transport_Infrastructure/14-ICT-Services-Components/ICT-Transport-Silicone_Java_ProjectDependencies-221.pdf Project dependencies 2.2.1]
+  * [https://joinup.ec.europa.eu/svn/peppol/PEPPOL_EIA/1-ICT_Architecture/1-ICT-Transport_Infrastructure/14-ICT-Services-Components/ICT-Transport-Silicone_Java_ProjectDependencies-220.pdf Project dependencies 2.2.0]
+
 == SML, SMP, START and LIME ==
 
 ===Library artefacts:===
