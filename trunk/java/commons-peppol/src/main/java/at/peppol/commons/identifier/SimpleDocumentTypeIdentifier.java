@@ -42,7 +42,7 @@ import javax.annotation.Nullable;
 
 import org.busdox.transport.identifiers._1.DocumentIdentifierType;
 
-import at.peppol.busdox.identifier.IReadonlyIdentifier;
+import at.peppol.busdox.identifier.IReadonlyDocumentTypeIdentifier;
 
 import com.phloc.commons.compare.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
@@ -59,11 +59,15 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public class SimpleDocumentTypeIdentifier extends DocumentIdentifierType {
-  public SimpleDocumentTypeIdentifier (@Nonnull final IReadonlyIdentifier aIdentifier) {
+  public SimpleDocumentTypeIdentifier (@Nonnull final IReadonlyDocumentTypeIdentifier aIdentifier) {
     this (aIdentifier.getScheme (), aIdentifier.getValue ());
   }
 
   public SimpleDocumentTypeIdentifier (@Nullable final String sScheme, @Nullable final String sValue) {
+    if (!IdentifierUtils.isValidIdentifierScheme (sScheme))
+      throw new IllegalArgumentException ("Document Type identifier scheme '" + sScheme + "' is invalid!");
+    if (!IdentifierUtils.isValidDocumentTypeIdentifierValue (sValue))
+      throw new IllegalArgumentException ("Document Type identifier value '" + sValue + "' is invalid!");
     setScheme (sScheme);
     setValue (sValue);
   }

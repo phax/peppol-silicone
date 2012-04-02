@@ -41,10 +41,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import at.peppol.busdox.identifier.IReadonlyIdentifier;
+import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
 
 import com.phloc.commons.compare.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
@@ -57,19 +55,19 @@ import com.phloc.commons.string.ToStringGenerator;
  * Important note: this class implements {@link #equals(Object)} and
  * {@link #hashCode()} where its base class does not. So be careful when mixing
  * this class and its base class!
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public class SimpleParticipantIdentifier extends ParticipantIdentifierType {
-  private static final Logger log = LoggerFactory.getLogger (SimpleParticipantIdentifier.class);
-
-  public SimpleParticipantIdentifier (@Nonnull final IReadonlyIdentifier aIdentifier) {
+  public SimpleParticipantIdentifier (@Nonnull final IReadonlyParticipantIdentifier aIdentifier) {
     this (aIdentifier.getScheme (), aIdentifier.getValue ());
   }
 
   public SimpleParticipantIdentifier (@Nullable final String sScheme, @Nullable final String sValue) {
     if (!IdentifierUtils.isValidParticipantIdentifierScheme (sScheme))
-      log.warn ("The identifier scheme '" + sScheme + "' seems to be invalid!");
+      throw new IllegalArgumentException ("Participant identifier scheme '" + sScheme + "' is invalid!");
+    if (!IdentifierUtils.isValidParticipantIdentifierValue (sValue))
+      throw new IllegalArgumentException ("Participant identifier value '" + sValue + "' is invalid!");
     setScheme (sScheme);
     setValue (sValue);
   }

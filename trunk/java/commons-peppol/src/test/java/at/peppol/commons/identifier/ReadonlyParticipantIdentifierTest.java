@@ -38,36 +38,25 @@
 package at.peppol.commons.identifier;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-import at.peppol.commons.identifier.ReadonlyParticipantIdentifier;
-
 import com.phloc.commons.mock.PhlocTestUtils;
+import com.phloc.commons.string.StringHelper;
 
 /**
  * Test class for class {@link ReadonlyParticipantIdentifier}.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class ReadonlyParticipantIdentifierTest {
   @Test
   public void testCtor () {
-    ReadonlyParticipantIdentifier aID = new ReadonlyParticipantIdentifier ("scheme-actorid-test", "value");
+    final ReadonlyParticipantIdentifier aID = new ReadonlyParticipantIdentifier ("scheme-actorid-test", "value");
     assertEquals ("scheme-actorid-test", aID.getScheme ());
     assertEquals ("value", aID.getValue ());
-    aID = new ReadonlyParticipantIdentifier (null, "value");
-    assertNull (aID.getScheme ());
-    assertEquals ("value", aID.getValue ());
-    aID = new ReadonlyParticipantIdentifier ("scheme-actorid-test", null);
-    assertEquals ("scheme-actorid-test", aID.getScheme ());
-    assertNull (aID.getValue ());
-    aID = new ReadonlyParticipantIdentifier (null, null);
-    assertNull (aID.getScheme ());
-    assertNull (aID.getValue ());
 
-    aID = new ReadonlyParticipantIdentifier ("scheme-actorid-test", "value");
     final ReadonlyParticipantIdentifier aID2 = new ReadonlyParticipantIdentifier (aID);
     assertEquals ("scheme-actorid-test", aID2.getScheme ());
     assertEquals ("value", aID2.getValue ());
@@ -88,5 +77,60 @@ public final class ReadonlyParticipantIdentifierTest {
     final ReadonlyParticipantIdentifier aID1 = new ReadonlyParticipantIdentifier ("scheme-actorid-test", "value1");
     assertEquals ("scheme-actorid-test::value1", aID1.getURIEncoded ());
     assertEquals ("scheme-actorid-test%3A%3Avalue1", aID1.getURIPercentEncoded ());
+  }
+
+  @Test
+  public void testConstraints () {
+    try {
+      // null key not allowed
+      new ReadonlyParticipantIdentifier (null, "value");
+      fail ();
+    }
+    catch (final IllegalArgumentException ex) {}
+
+    try {
+      // null value not allowed
+      new ReadonlyParticipantIdentifier ("scheme", null);
+      fail ();
+    }
+    catch (final IllegalArgumentException ex) {}
+
+    try {
+      // Both null not allowed
+      new ReadonlyParticipantIdentifier (null, null);
+      fail ();
+    }
+    catch (final IllegalArgumentException ex) {}
+
+    try {
+      // Empty is not allowed
+      new ReadonlyParticipantIdentifier ("scheme", "");
+      fail ();
+    }
+    catch (final IllegalArgumentException ex) {}
+
+    try {
+      // Cannot be mapped to ISO-8859-1:
+      new ReadonlyParticipantIdentifier ("scheme", "Љ");
+      fail ();
+    }
+    catch (final IllegalArgumentException ex) {}
+
+    try {
+      // Scheme too long
+      new ReadonlyParticipantIdentifier (StringHelper.getRepeated ('a', CIdentifier.MAX_IDENTIFIER_SCHEME_LENGTH + 1),
+                                         "abc");
+      fail ();
+    }
+    catch (final IllegalArgumentException ex) {}
+
+    try {
+      // Value too long
+      new ReadonlyParticipantIdentifier ("scheme",
+                                         StringHelper.getRepeated ('a',
+                                                                   CIdentifier.MAX_PARTICIPANT_IDENTIFIER_VALUE_LENGTH + 1));
+      fail ();
+    }
+    catch (final IllegalArgumentException ex) {}
   }
 }

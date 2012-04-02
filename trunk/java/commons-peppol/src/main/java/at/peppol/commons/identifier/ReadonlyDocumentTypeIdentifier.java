@@ -68,6 +68,11 @@ public final class ReadonlyDocumentTypeIdentifier extends DocumentIdentifierType
   }
 
   public ReadonlyDocumentTypeIdentifier (@Nullable final String sScheme, @Nullable final String sValue) {
+    if (!IdentifierUtils.isValidIdentifierScheme (sScheme))
+      throw new IllegalArgumentException ("Document Type identifier scheme '" + sScheme + "' is invalid!");
+    if (!IdentifierUtils.isValidDocumentTypeIdentifierValue (sValue))
+      throw new IllegalArgumentException ("Document Type identifier value '" + sValue + "' is invalid!");
+
     // Explicitly use the super methods, as the methods of this class throw an
     // exception!
     super.setScheme (sScheme);

@@ -38,37 +38,26 @@
 package at.peppol.commons.identifier;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-import at.peppol.commons.identifier.SimpleProcessIdentifier;
-
 import com.phloc.commons.mock.PhlocTestUtils;
+import com.phloc.commons.string.StringHelper;
 
 /**
  * Test class for class {@link SimpleProcessIdentifier}.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class SimpleProcessIdentifierTest {
   @Test
   public void testCtor () {
-    SimpleProcessIdentifier aID = new SimpleProcessIdentifier ("scheme", "value");
+    final SimpleProcessIdentifier aID = new SimpleProcessIdentifier ("scheme", "value");
     assertEquals ("scheme", aID.getScheme ());
     assertEquals ("value", aID.getValue ());
-    aID = new SimpleProcessIdentifier (null, "value");
-    assertNull (aID.getScheme ());
-    assertEquals ("value", aID.getValue ());
-    aID = new SimpleProcessIdentifier ("scheme", null);
-    assertEquals ("scheme", aID.getScheme ());
-    assertNull (aID.getValue ());
-    aID = new SimpleProcessIdentifier (null, null);
-    assertNull (aID.getScheme ());
-    assertNull (aID.getValue ());
 
-    aID = new SimpleProcessIdentifier ("scheme", "value");
+    // Create a copy
     final SimpleProcessIdentifier aID2 = new SimpleProcessIdentifier (aID);
     assertEquals ("scheme", aID2.getScheme ());
     assertEquals ("value", aID2.getValue ());
@@ -95,6 +84,59 @@ public final class SimpleProcessIdentifierTest {
     try {
       // No separator
       SimpleProcessIdentifier.createFromURIPart ("scheme1");
+      fail ();
+    }
+    catch (final IllegalArgumentException ex) {}
+  }
+
+  @Test
+  public void testConstraints () {
+    try {
+      // null key not allowed
+      new SimpleProcessIdentifier (null, "value");
+      fail ();
+    }
+    catch (final IllegalArgumentException ex) {}
+
+    try {
+      // null value not allowed
+      new SimpleProcessIdentifier ("scheme", null);
+      fail ();
+    }
+    catch (final IllegalArgumentException ex) {}
+
+    try {
+      // Both null not allowed
+      new SimpleProcessIdentifier (null, null);
+      fail ();
+    }
+    catch (final IllegalArgumentException ex) {}
+
+    try {
+      // Empty is not allowed
+      new SimpleProcessIdentifier ("scheme", "");
+      fail ();
+    }
+    catch (final IllegalArgumentException ex) {}
+
+    try {
+      // Cannot be mapped to ISO-8859-1:
+      new SimpleProcessIdentifier ("scheme", "Љ");
+      fail ();
+    }
+    catch (final IllegalArgumentException ex) {}
+
+    try {
+      // Scheme too long
+      new SimpleProcessIdentifier (StringHelper.getRepeated ('a', CIdentifier.MAX_IDENTIFIER_SCHEME_LENGTH + 1), "abc");
+      fail ();
+    }
+    catch (final IllegalArgumentException ex) {}
+
+    try {
+      // Value too long
+      new SimpleProcessIdentifier ("scheme",
+                                   StringHelper.getRepeated ('a', CIdentifier.MAX_PROCESS_IDENTIFIER_VALUE_LENGTH + 1));
       fail ();
     }
     catch (final IllegalArgumentException ex) {}

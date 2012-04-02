@@ -65,6 +65,21 @@ public final class CIdentifier {
   public static final int MAX_PARTICIPANT_IDENTIFIER_SCHEME_LENGTH = MAX_IDENTIFIER_SCHEME_LENGTH;
 
   /**
+   * Participant identifier value maximum length (excluding the scheme)
+   */
+  public static final int MAX_PARTICIPANT_IDENTIFIER_VALUE_LENGTH = 50;
+
+  /**
+   * Document Type identifier value maximum length (excluding the scheme)
+   */
+  public static final int MAX_DOCUMENT_TYPE_IDENTIFIER_VALUE_LENGTH = 500;
+
+  /**
+   * Process identifier value maximum length (excluding the scheme)
+   */
+  public static final int MAX_PROCESS_IDENTIFIER_VALUE_LENGTH = 50;
+
+  /**
    * The regular expression to be used for validating participant identifier
    * schemes (not values!).
    */

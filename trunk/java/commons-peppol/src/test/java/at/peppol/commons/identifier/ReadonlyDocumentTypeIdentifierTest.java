@@ -38,11 +38,12 @@
 package at.peppol.commons.identifier;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
 import com.phloc.commons.mock.PhlocTestUtils;
+import com.phloc.commons.string.StringHelper;
 
 /**
  * Test class for class {@link ReadonlyDocumentTypeIdentifier}.
@@ -52,20 +53,10 @@ import com.phloc.commons.mock.PhlocTestUtils;
 public final class ReadonlyDocumentTypeIdentifierTest {
   @Test
   public void testCtor () {
-    ReadonlyDocumentTypeIdentifier aID = new ReadonlyDocumentTypeIdentifier ("scheme", "value");
+    final ReadonlyDocumentTypeIdentifier aID = new ReadonlyDocumentTypeIdentifier ("scheme", "value");
     assertEquals ("scheme", aID.getScheme ());
     assertEquals ("value", aID.getValue ());
-    aID = new ReadonlyDocumentTypeIdentifier (null, "value");
-    assertNull (aID.getScheme ());
-    assertEquals ("value", aID.getValue ());
-    aID = new ReadonlyDocumentTypeIdentifier ("scheme", null);
-    assertEquals ("scheme", aID.getScheme ());
-    assertNull (aID.getValue ());
-    aID = new ReadonlyDocumentTypeIdentifier (null, null);
-    assertNull (aID.getScheme ());
-    assertNull (aID.getValue ());
 
-    aID = new ReadonlyDocumentTypeIdentifier ("scheme", "value");
     final ReadonlyDocumentTypeIdentifier aID2 = new ReadonlyDocumentTypeIdentifier (aID);
     assertEquals ("scheme", aID2.getScheme ());
     assertEquals ("value", aID2.getValue ());
@@ -86,5 +77,60 @@ public final class ReadonlyDocumentTypeIdentifierTest {
     final ReadonlyDocumentTypeIdentifier aID1 = new ReadonlyDocumentTypeIdentifier ("scheme1", "value1");
     assertEquals ("scheme1::value1", aID1.getURIEncoded ());
     assertEquals ("scheme1%3A%3Avalue1", aID1.getURIPercentEncoded ());
+  }
+
+  @Test
+  public void testConstraints () {
+    try {
+      // null key not allowed
+      new ReadonlyDocumentTypeIdentifier (null, "value");
+      fail ();
+    }
+    catch (final IllegalArgumentException ex) {}
+
+    try {
+      // null value not allowed
+      new ReadonlyDocumentTypeIdentifier ("scheme", null);
+      fail ();
+    }
+    catch (final IllegalArgumentException ex) {}
+
+    try {
+      // Both null not allowed
+      new ReadonlyDocumentTypeIdentifier (null, null);
+      fail ();
+    }
+    catch (final IllegalArgumentException ex) {}
+
+    try {
+      // Empty is not allowed
+      new ReadonlyDocumentTypeIdentifier ("scheme", "");
+      fail ();
+    }
+    catch (final IllegalArgumentException ex) {}
+
+    try {
+      // Cannot be mapped to ISO-8859-1:
+      new ReadonlyDocumentTypeIdentifier ("scheme", "Љ");
+      fail ();
+    }
+    catch (final IllegalArgumentException ex) {}
+
+    try {
+      // Scheme too long
+      new ReadonlyDocumentTypeIdentifier (StringHelper.getRepeated ('a', CIdentifier.MAX_IDENTIFIER_SCHEME_LENGTH + 1),
+                                          "abc");
+      fail ();
+    }
+    catch (final IllegalArgumentException ex) {}
+
+    try {
+      // Value too long
+      new ReadonlyDocumentTypeIdentifier ("scheme",
+                                          StringHelper.getRepeated ('a',
+                                                                    CIdentifier.MAX_DOCUMENT_TYPE_IDENTIFIER_VALUE_LENGTH + 1));
+      fail ();
+    }
+    catch (final IllegalArgumentException ex) {}
   }
 }
