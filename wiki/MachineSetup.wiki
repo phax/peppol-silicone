@@ -1,5 +1,7 @@
 #summary Installation instructions to be performed to run PEPPOL application
 
+*This page is discontinued - instead a separate PDF is in preparation!*
+
 = Introduction =
 
 You must have a JRE 1.6.x installed. This software has not yet been tested with JRE 1.7.x but is assumed to work.
