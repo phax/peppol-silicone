@@ -38,19 +38,21 @@
 package at.peppol.validation.rules;
 
 import javax.annotation.Nullable;
+import javax.xml.validation.Schema;
 
 import com.phloc.commons.id.IHasID;
-import com.phloc.ubl.EUBL20DocumentType;
+import com.phloc.commons.xml.schema.IHasSchema;
 
 /**
- * Represents a single validation document type.
- *
+ * Represents a single validation document type. It needs an ID and must provide
+ * XML {@link Schema} objects.
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public interface IValidationDocumentType extends IHasID <String> {
+public interface IValidationDocumentType extends IHasID <String>, IHasSchema {
   /**
-   * @return The underlying UBL 2.0 document type. May be <code>null</code>.
+   * @return The {@link Schema} or <code>null</code> if no XML schema is present
    */
   @Nullable
-  EUBL20DocumentType getUBLDocumentType ();
+  Schema getSchema ();
 }
