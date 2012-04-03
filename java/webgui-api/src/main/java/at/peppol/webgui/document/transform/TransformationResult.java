@@ -35,7 +35,7 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.webgui.api.transform;
+package at.peppol.webgui.document.transform;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;

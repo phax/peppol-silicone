@@ -10,7 +10,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
-import at.peppol.webgui.api.AbstractManager;
+import at.peppol.webgui.io.AbstractManager;
 import at.peppol.webgui.security.CSecurity;
 import at.peppol.webgui.security.role.IRoleManager;
 import at.peppol.webgui.security.user.IUserManager;

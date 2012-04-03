@@ -35,39 +35,50 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.webgui.api;
+package at.peppol.webgui.document.transform;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
-import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.id.IHasID;
-import com.phloc.commons.lang.EnumHelper;
+import com.phloc.commons.annotations.IsSPIInterface;
+import com.phloc.commons.io.IReadableResource;
+import com.phloc.commons.typeconvert.TypeConverterException;
 
 /**
- * Represents the different document types that are handled.
+ * SPI interface for converting an invoice to UBL.
  * 
  * @author philip
  */
-public enum EDocumentType implements IHasID <String> {
-  CATALOGUE ("catalogue"),
-  ORDER ("order"),
-  INVOICE ("invoice");
+@IsSPIInterface
+public interface ITransformInvoiceToUBLSPI {
+  /**
+   * Check if this converter can handle the passed source object. If this
+   * converter can handle the passed source, <code>true</code> must be returned
+   * and only in this case {@link #convertInvoiceToUBL(IReadableResource)} is
+   * called. If <code>false</code> is returned,
+   * {@link #convertInvoiceToUBL(IReadableResource)} is never called!
+   * 
+   * @param aSource
+   *        The source object
+   * @return <code>true</code> if this converter can convert the passed
+   *         document.
+   */
+  boolean canConvertInvoice (@Nonnull IReadableResource aSource);
 
-  private String m_sID;
-
-  private EDocumentType (@Nonnull @Nonempty final String sID) {
-    m_sID = sID;
-  }
-
+  /**
+   * Convert the passed source object to a UBL invoice. This method is only
+   * called, if {@link #canConvertInvoice(IReadableResource)} returned
+   * <code>true</code> for this object.
+   * 
+   * @param aSource
+   *        The source object to be converted. May not be
+   *        {@link NullPointerException}.
+   * @return The converted invoice in a supported type. May not be
+   *         <code>null</code>.
+   * @throws TypeConverterException
+   *         in case the conversion fails. The caller must handle this exception
+   *         gracefully and check for further converters who can also handle the
+   *         source object.
+   */
   @Nonnull
-  @Nonempty
-  public String getID () {
-    return m_sID;
-  }
-
-  @Nullable
-  public static EDocumentType getFromIDOrNull (@Nullable final String sID) {
-    return EnumHelper.getFromIDOrNull (EDocumentType.class, sID);
-  }
+  TransformationResult convertInvoiceToUBL (@Nonnull IReadableResource aSource) throws TypeConverterException;
 }

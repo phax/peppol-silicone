@@ -1,4 +1,4 @@
-package at.peppol.webgui.api.transform;
+package at.peppol.webgui.document.transform;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import javax.annotation.concurrent.Immutable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.peppol.webgui.api.EDocumentType;
+import at.peppol.webgui.document.EDocumentType;
 
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.io.IReadableResource;
