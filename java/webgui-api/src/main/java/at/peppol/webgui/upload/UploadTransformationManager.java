@@ -9,12 +9,25 @@ import at.peppol.webgui.document.transform.TransformationResult;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.resource.FileSystemResource;
 import com.phloc.commons.log.InMemoryLogger;
-import com.phloc.commons.microdom.IMicroDocument;
-import com.phloc.commons.microdom.serialize.MicroReader;
 
+/**
+ * This class should be first class to be called after an upload finished
+ * successful.
+ * 
+ * @author philip
+ */
 public final class UploadTransformationManager {
   private UploadTransformationManager () {}
 
+  /**
+   * Perform the transformation of an uploaded document.
+   * 
+   * @param eDocType
+   *        The document type that was uploaded
+   * @param aUploadedResource
+   *        The uploaded resource descriptor
+   * @return Never <code>null</code>.
+   */
   @Nonnull
   public static TransformationResult tryToTransformUploadedResource (@Nonnull final EDocumentType eDocType,
                                                                      @Nonnull final IUploadedResource aUploadedResource) {
@@ -22,6 +35,8 @@ public final class UploadTransformationManager {
       throw new NullPointerException ("docType");
     if (aUploadedResource == null)
       throw new NullPointerException ("uploadedResource");
+    if (!aUploadedResource.isSuccess ())
+      throw new IllegalArgumentException ("Cannot handle failed uploads!");
 
     // Convert to a resource
     final InMemoryLogger aErrorMsgs = new InMemoryLogger ();
@@ -33,11 +48,14 @@ public final class UploadTransformationManager {
       return TransformationResult.createFailure (aErrorMsgs);
     }
 
-    if (false) {
-      // Check if it is XML?
-      final IMicroDocument aDoc = MicroReader.readMicroXML (aRes);
+    // Do the transformation
+    final TransformationResult aRet = TransformationManager.transformDocumentToUBL (eDocType, aRes);
+    if (aRet == null) {
+      aErrorMsgs.error ("No transformer was able to transform uploaded file " +
+                        aUploadedResource.getTemporaryFile ().getAbsolutePath () +
+                        "!");
+      return TransformationResult.createFailure (aErrorMsgs);
     }
-
-    return TransformationManager.transformDocument (eDocType, aRes);
+    return aRet;
   }
 }

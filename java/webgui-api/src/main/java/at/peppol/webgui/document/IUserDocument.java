@@ -5,7 +5,7 @@ import javax.annotation.Nonnull;
 import com.phloc.commons.id.IHasID;
 
 /**
- * Base interface for all documents
+ * Base interface for all user documents
  * 
  * @author philip
  */
