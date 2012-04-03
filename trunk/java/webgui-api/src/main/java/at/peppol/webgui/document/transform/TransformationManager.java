@@ -18,7 +18,7 @@ import com.phloc.commons.lang.ServiceLoaderBackport;
 import com.phloc.commons.typeconvert.TypeConverterException;
 
 /**
- * This is the central class for handling the
+ * This is the central class for handling the transformation of resources.
  * 
  * @author philip
  */
@@ -27,6 +27,7 @@ public final class TransformationManager {
   private static final Logger s_aLogger = LoggerFactory.getLogger (TransformationManager.class);
   private static final List <ITransformCatalogueToUBLSPI> s_aCatalogueTransformers;
   private static final List <ITransformOrderToUBLSPI> s_aOrderTransformers;
+  private static final List <ITransformOrderResponseToUBLSPI> s_aOrderResponseTransformers;
   private static final List <ITransformInvoiceToUBLSPI> s_aInvoiceTransformers;
 
   static {
@@ -36,6 +37,9 @@ public final class TransformationManager {
 
     s_aOrderTransformers = ContainerHelper.newList (ServiceLoaderBackport.load (ITransformOrderToUBLSPI.class));
     s_aLogger.info ("Found " + s_aOrderTransformers.size () + " order transformers");
+
+    s_aOrderResponseTransformers = ContainerHelper.newList (ServiceLoaderBackport.load (ITransformOrderResponseToUBLSPI.class));
+    s_aLogger.info ("Found " + s_aOrderResponseTransformers.size () + " order response transformers");
 
     s_aInvoiceTransformers = ContainerHelper.newList (ServiceLoaderBackport.load (ITransformInvoiceToUBLSPI.class));
     s_aLogger.info ("Found " + s_aInvoiceTransformers.size () + " invoice transformers");
@@ -60,6 +64,8 @@ public final class TransformationManager {
         return transformCatalogue (aRes);
       case ORDER:
         return transformOrder (aRes);
+      case ORDER_RESPONSE:
+        return transformOrderResponse (aRes);
       case INVOICE:
         return transformInvoice (aRes);
       default:
@@ -103,6 +109,28 @@ public final class TransformationManager {
         s_aLogger.info ("Found matching order transformer " + CGStringHelper.getClassLocalName (aTransformer));
         try {
           return aTransformer.convertOrderToUBL (aRes);
+        }
+        catch (final TypeConverterException ex) {
+          s_aLogger.info ("Transformer failed to convert order - ignoring");
+        }
+      }
+    return null;
+  }
+
+  /**
+   * Convert the passed resource to a UBL order response.
+   * 
+   * @param aRes
+   *        The source resource. May not be <code>null</code>.
+   * @return <code>null</code> if no converter can be found.
+   */
+  @Nullable
+  public static TransformationResult transformOrderResponse (@Nonnull final IReadableResource aRes) {
+    for (final ITransformOrderResponseToUBLSPI aTransformer : s_aOrderResponseTransformers)
+      if (aTransformer.canConvertOrderResponse (aRes)) {
+        s_aLogger.info ("Found matching order response transformer " + CGStringHelper.getClassLocalName (aTransformer));
+        try {
+          return aTransformer.convertOrderResponseToUBL (aRes);
         }
         catch (final TypeConverterException ex) {
           s_aLogger.info ("Transformer failed to convert order - ignoring");

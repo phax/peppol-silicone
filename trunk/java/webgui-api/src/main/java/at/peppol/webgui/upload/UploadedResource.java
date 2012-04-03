@@ -12,11 +12,10 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.io.file.FileUtils;
 import com.phloc.commons.io.file.FilenameHelper;
-import com.phloc.commons.state.ISuccessIndicator;
 import com.phloc.commons.string.StringHelper;
 
 @NotThreadSafe
-public final class UploadedResource implements ISuccessIndicator {
+public final class UploadedResource implements IUploadedResource {
   private final String m_sOriginalFilename;
   private final File m_aTempFile;
   private boolean m_bSuccess = false;
