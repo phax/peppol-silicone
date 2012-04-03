@@ -35,50 +35,26 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.webgui.api.transform;
-
-import javax.annotation.Nonnull;
-
-import com.phloc.commons.annotations.IsSPIInterface;
-import com.phloc.commons.io.IReadableResource;
-import com.phloc.commons.typeconvert.TypeConverterException;
+package at.peppol.webgui.document.transform;
 
 /**
- * SPI interface for converting an order to UBL.
+ * Determines the type of the transformation result.
  * 
  * @author philip
  */
-@IsSPIInterface
-public interface ITransformOrderToUBLSPI {
-  /**
-   * Check if this converter can handle the passed source object. If this
-   * converter can handle the passed source, <code>true</code> must be returned
-   * and only in this case {@link #convertOrderToUBL(IReadableResource)} is
-   * called. If <code>false</code> is returned,
-   * {@link #convertOrderToUBL(IReadableResource)} is never called!
-   * 
-   * @param aSource
-   *        The source object
-   * @return <code>true</code> if this converter can convert the passed
-   *         document.
-   */
-  boolean canConvertOrder (@Nonnull IReadableResource aSource);
+public enum ETransformationResultType {
+  /** It's a DOM node (derived from org.w3c.dom.Node) */
+  DOM_NODE,
+
+  /** It's a micro node (derived from com.phloc.commons.microdom.IMicroNode) */
+  MICRONODE,
 
   /**
-   * Convert the passed source object to a UBL order. This method is only
-   * called, if {@link #canConvertOrder(IReadableResource)} returned
-   * <code>true</code> for this object.
-   * 
-   * @param aSource
-   *        The source object to be converted. May not be
-   *        {@link NullPointerException}.
-   * @return The converted order in a supported type. May not be
-   *         <code>null</code>.
-   * @throws TypeConverterException
-   *         in case the conversion fails. The caller must handle this exception
-   *         gracefully and check for further converters who can also handle the
-   *         source object.
+   * It's a readable resource (derived from
+   * {@link com.phloc.commons.io.IReadableResource})
    */
-  @Nonnull
-  TransformationResult convertOrderToUBL (@Nonnull IReadableResource aSource) throws TypeConverterException;
+  RESOURCE,
+
+  /** It is a native UBL object (e.g. CatalogueType) */
+  UBL_TYPE;
 }

@@ -35,7 +35,7 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.webgui.api.transform;
+package at.peppol.webgui.document.transform;
 
 import javax.annotation.Nonnull;
 
@@ -44,35 +44,35 @@ import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.typeconvert.TypeConverterException;
 
 /**
- * SPI interface for converting a catalogue to UBL.
+ * SPI interface for converting an order to UBL.
  * 
  * @author philip
  */
 @IsSPIInterface
-public interface ITransformCatalogueToUBLSPI {
+public interface ITransformOrderToUBLSPI {
   /**
    * Check if this converter can handle the passed source object. If this
    * converter can handle the passed source, <code>true</code> must be returned
-   * and only in this case {@link #convertCatalogueToUBL(IReadableResource)} is
+   * and only in this case {@link #convertOrderToUBL(IReadableResource)} is
    * called. If <code>false</code> is returned,
-   * {@link #convertCatalogueToUBL(IReadableResource)} is never called!
+   * {@link #convertOrderToUBL(IReadableResource)} is never called!
    * 
    * @param aSource
    *        The source object
    * @return <code>true</code> if this converter can convert the passed
    *         document.
    */
-  boolean canConvertCatalogue (@Nonnull IReadableResource aSource);
+  boolean canConvertOrder (@Nonnull IReadableResource aSource);
 
   /**
-   * Convert the passed source object to a UBL catalogue. This method is only
-   * called, if {@link #canConvertCatalogue(IReadableResource)} returned
+   * Convert the passed source object to a UBL order. This method is only
+   * called, if {@link #canConvertOrder(IReadableResource)} returned
    * <code>true</code> for this object.
    * 
    * @param aSource
    *        The source object to be converted. May not be
    *        {@link NullPointerException}.
-   * @return The converted catalogue in a supported type. May not be
+   * @return The converted order in a supported type. May not be
    *         <code>null</code>.
    * @throws TypeConverterException
    *         in case the conversion fails. The caller must handle this exception
@@ -80,5 +80,5 @@ public interface ITransformCatalogueToUBLSPI {
    *         source object.
    */
   @Nonnull
-  TransformationResult convertCatalogueToUBL (@Nonnull IReadableResource aSource) throws TypeConverterException;
+  TransformationResult convertOrderToUBL (@Nonnull IReadableResource aSource) throws TypeConverterException;
 }
