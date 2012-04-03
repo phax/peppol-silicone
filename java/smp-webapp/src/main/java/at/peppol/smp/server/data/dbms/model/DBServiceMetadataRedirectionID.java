@@ -45,6 +45,7 @@ import javax.persistence.Embeddable;
 
 import at.peppol.busdox.identifier.IReadonlyDocumentTypeIdentifier;
 import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
+import at.peppol.commons.identifier.CIdentifier;
 import at.peppol.commons.identifier.IdentifierUtils;
 
 import com.phloc.commons.compare.EqualsUtils;
@@ -68,11 +69,11 @@ public class DBServiceMetadataRedirectionID implements Serializable {
                                          @Nonnull final IReadonlyDocumentTypeIdentifier aDocTypeID) {
     setBusinessIdentifierScheme (aPartID.getScheme ());
     setBusinessIdentifier (aPartID.getValue ());
-    setDocumentIdentifierScheme (aDocTypeID.getScheme ());
-    setDocumentIdentifier (aDocTypeID.getValue ());
+    setDocumentTypeIdentifierScheme (aDocTypeID.getScheme ());
+    setDocumentTypeIdentifier (aDocTypeID.getValue ());
   }
 
-  @Column (name = "businessIdentifierScheme", nullable = false, length = 256)
+  @Column (name = "businessIdentifierScheme", nullable = false, length = CIdentifier.MAX_IDENTIFIER_SCHEME_LENGTH)
   public String getBusinessIdentifierScheme () {
     return m_sBusinessIdentifierScheme;
   }
@@ -90,21 +91,21 @@ public class DBServiceMetadataRedirectionID implements Serializable {
     m_sBusinessIdentifier = IdentifierUtils.getUnifiedParticipantDBValue (sBusinessIdentifier);
   }
 
-  @Column (name = "documentIdentifierScheme", nullable = false, length = 256)
-  public String getDocumentIdentifierScheme () {
+  @Column (name = "documentIdentifierScheme", nullable = false, length = CIdentifier.MAX_IDENTIFIER_SCHEME_LENGTH)
+  public String getDocumentTypeIdentifierScheme () {
     return m_sDocumentTypeIdentifierScheme;
   }
 
-  public void setDocumentIdentifierScheme (final String sDocumentIdentifierScheme) {
+  public void setDocumentTypeIdentifierScheme (final String sDocumentIdentifierScheme) {
     m_sDocumentTypeIdentifierScheme = sDocumentIdentifierScheme;
   }
 
   @Column (name = "documentIdentifier", nullable = false, length = 256)
-  public String getDocumentIdentifier () {
+  public String getDocumentTypeIdentifier () {
     return m_sDocumentTypeIdentifier;
   }
 
-  public void setDocumentIdentifier (final String sDocumentIdentifier) {
+  public void setDocumentTypeIdentifier (final String sDocumentIdentifier) {
     m_sDocumentTypeIdentifier = sDocumentIdentifier;
   }
 

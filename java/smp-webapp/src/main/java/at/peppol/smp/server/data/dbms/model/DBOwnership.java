@@ -39,9 +39,6 @@ package at.peppol.smp.server.data.dbms.model;
 
 import java.io.Serializable;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -72,16 +69,6 @@ public class DBOwnership implements Serializable {
   }
 
   @EmbeddedId
-  @AttributeOverrides ({ @AttributeOverride (name = "username", column = @Column (name = "username",
-                                                                                  nullable = false,
-                                                                                  length = 256)),
-                        @AttributeOverride (name = "businessIdentifier", column = @Column (name = "businessIdentifier",
-                                                                                           nullable = false,
-                                                                                           length = 256)),
-                        @AttributeOverride (name = "businessIdentifierScheme",
-                                            column = @Column (name = "businessIdentifierScheme",
-                                                              nullable = false,
-                                                              length = 256)) })
   public DBOwnershipID getId () {
     return m_aID;
   }
@@ -101,13 +88,13 @@ public class DBOwnership implements Serializable {
   }
 
   @ManyToOne (fetch = FetchType.LAZY)
-  @JoinColumns ({ @JoinColumn (name = "businessIdentifier",
-                               referencedColumnName = "businessIdentifier",
+  @JoinColumns ({ @JoinColumn (name = "businessIdentifierScheme",
+                               referencedColumnName = "businessIdentifierScheme",
                                nullable = false,
                                insertable = false,
                                updatable = false),
-                 @JoinColumn (name = "businessIdentifierScheme",
-                              referencedColumnName = "businessIdentifierScheme",
+                 @JoinColumn (name = "businessIdentifier",
+                              referencedColumnName = "businessIdentifier",
                               nullable = false,
                               insertable = false,
                               updatable = false) })
