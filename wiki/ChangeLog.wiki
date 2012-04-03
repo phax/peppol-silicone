@@ -13,6 +13,7 @@
 ==SMP==
   * Removed the deprecated REST method CompleteServiceGroupInterface.deleteServiceGroup because it has the exact same semantics as ServiceGroupInterface.deleteServiceGroup
   * Changed the internal API concerning the database domain objects of the SMP server for consistency reasons
+  * Adopted the field lengths for identifier values according to the defined maximum length constraints
 ==Validation==
   * Added a new project "validation-webapp" that provides a minimum web application for validating your PEPPOL documents in the web
   * IValidationDocumentType interface is now more generic by only requiring to offer a Schema object (and not to force UBL usage)
