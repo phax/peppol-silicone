@@ -40,7 +40,6 @@ package at.peppol.webgui.document.transform;
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.IsSPIInterface;
-import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.typeconvert.TypeConverterException;
 
 /**
@@ -53,20 +52,20 @@ public interface ITransformOrderToUBLSPI {
   /**
    * Check if this converter can handle the passed source object. If this
    * converter can handle the passed source, <code>true</code> must be returned
-   * and only in this case {@link #convertOrderToUBL(IReadableResource)} is
+   * and only in this case {@link #convertOrderToUBL(TransformationSource)} is
    * called. If <code>false</code> is returned,
-   * {@link #convertOrderToUBL(IReadableResource)} is never called!
+   * {@link #convertOrderToUBL(TransformationSource)} is never called!
    * 
    * @param aSource
    *        The source object
    * @return <code>true</code> if this converter can convert the passed
    *         document.
    */
-  boolean canConvertOrder (@Nonnull IReadableResource aSource);
+  boolean canConvertOrder (@Nonnull TransformationSource aSource);
 
   /**
    * Convert the passed source object to a UBL order. This method is only
-   * called, if {@link #canConvertOrder(IReadableResource)} returned
+   * called, if {@link #canConvertOrder(TransformationSource)} returned
    * <code>true</code> for this object.
    * 
    * @param aSource
@@ -80,5 +79,5 @@ public interface ITransformOrderToUBLSPI {
    *         source object.
    */
   @Nonnull
-  TransformationResult convertOrderToUBL (@Nonnull IReadableResource aSource) throws TypeConverterException;
+  TransformationResult convertOrderToUBL (@Nonnull TransformationSource aSource) throws TypeConverterException;
 }

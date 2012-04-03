@@ -40,7 +40,6 @@ package at.peppol.webgui.document.transform;
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.IsSPIInterface;
-import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.typeconvert.TypeConverterException;
 
 /**
@@ -53,20 +52,20 @@ public interface ITransformInvoiceToUBLSPI {
   /**
    * Check if this converter can handle the passed source object. If this
    * converter can handle the passed source, <code>true</code> must be returned
-   * and only in this case {@link #convertInvoiceToUBL(IReadableResource)} is
+   * and only in this case {@link #convertInvoiceToUBL(TransformationSource)} is
    * called. If <code>false</code> is returned,
-   * {@link #convertInvoiceToUBL(IReadableResource)} is never called!
+   * {@link #convertInvoiceToUBL(TransformationSource)} is never called!
    * 
    * @param aSource
    *        The source object
    * @return <code>true</code> if this converter can convert the passed
    *         document.
    */
-  boolean canConvertInvoice (@Nonnull IReadableResource aSource);
+  boolean canConvertInvoice (@Nonnull TransformationSource aSource);
 
   /**
    * Convert the passed source object to a UBL invoice. This method is only
-   * called, if {@link #canConvertInvoice(IReadableResource)} returned
+   * called, if {@link #canConvertInvoice(TransformationSource)} returned
    * <code>true</code> for this object.
    * 
    * @param aSource
@@ -80,5 +79,5 @@ public interface ITransformInvoiceToUBLSPI {
    *         source object.
    */
   @Nonnull
-  TransformationResult convertInvoiceToUBL (@Nonnull IReadableResource aSource) throws TypeConverterException;
+  TransformationResult convertInvoiceToUBL (@Nonnull TransformationSource aSource) throws TypeConverterException;
 }
