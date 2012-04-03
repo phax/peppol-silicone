@@ -1,5 +1,6 @@
 package at.peppol.webgui.upload;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
@@ -44,8 +45,11 @@ public final class UploadManager extends GlobalWebSingleton {
     m_aLock.lock ();
     try {
       // Delete all created temporary files
-      for (final UploadedResource aRes : m_aUploads)
-        StorageIO.getFileOpMgr ().deleteFile (aRes.getTemporaryFile ());
+      for (final IUploadedResource aRes : m_aUploads) {
+        final File aTempFile = aRes.getTemporaryFile ();
+        if (aTempFile.exists ())
+          StorageIO.getFileOpMgr ().deleteFile (aTempFile);
+      }
       m_aUploads.clear ();
     }
     finally {

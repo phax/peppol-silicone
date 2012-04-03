@@ -91,7 +91,7 @@ public final class TransformationResult {
   @Nonnull
   public Node getResultAsDOMNode () {
     if (m_eResultType != ETransformationResultType.DOM_NODE)
-      throw new IllegalStateException ("Result is not of type DOM node");
+      throw new IllegalStateException ("Result is not of type DOM node but of type " + m_eResultType);
     return (Node) m_aResultObj;
   }
 
@@ -103,7 +103,7 @@ public final class TransformationResult {
   @Nonnull
   public IMicroNode getResultAsMicroNode () {
     if (m_eResultType != ETransformationResultType.MICRONODE)
-      throw new IllegalStateException ("Result is not of type micro node");
+      throw new IllegalStateException ("Result is not of type micro node but of type " + m_eResultType);
     return (IMicroNode) m_aResultObj;
   }
 
@@ -115,7 +115,7 @@ public final class TransformationResult {
   @Nonnull
   public IReadableResource getResultAsResource () {
     if (m_eResultType != ETransformationResultType.RESOURCE)
-      throw new IllegalStateException ("Result is not of type resource");
+      throw new IllegalStateException ("Result is not of type resource but of type " + m_eResultType);
     return (IReadableResource) m_aResultObj;
   }
 
@@ -177,12 +177,12 @@ public final class TransformationResult {
     // Check if the class's owning package has the @XmlSchema annotation
     final XmlSchema aSchema = aUBLObject.getClass ().getPackage ().getAnnotation (XmlSchema.class);
     if (aSchema == null)
-      throw new IllegalArgumentException ("The passed object is not a valid UBL object!");
+      throw new IllegalArgumentException ("The passed object is not a valid UBL object (no @XmlSchema)!");
 
     // Check the namespace of the annotation whether it is UBL
     final String sNamespace = aSchema.namespace ();
     if (sNamespace == null || !sNamespace.startsWith ("urn:oasis:names:specification:ubl:schema:xsd:"))
-      throw new IllegalArgumentException ("The passed object is not a valid UBL object!");
+      throw new IllegalArgumentException ("The passed object is not a valid UBL object (invalid namespace)!");
 
     return new TransformationResult (ETransformationResultType.UBL_TYPE, aUBLObject);
   }

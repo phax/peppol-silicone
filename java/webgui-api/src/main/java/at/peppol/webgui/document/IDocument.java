@@ -11,8 +11,14 @@ import com.phloc.commons.id.IHasID;
  */
 public interface IDocument extends IHasID <String> {
   /**
-   * @return The meta type of the document
+   * @return The meta type of this document. May not be <code>null</code>.
    */
   @Nonnull
   EDocumentMetaType getMetaType ();
+
+  /**
+   * @return The type of this document. May not be <code>null</code>.
+   */
+  @Nonnull
+  EDocumentType getType ();
 }
