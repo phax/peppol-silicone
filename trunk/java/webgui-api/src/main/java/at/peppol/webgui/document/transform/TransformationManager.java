@@ -57,17 +57,17 @@ public final class TransformationManager {
    * @return <code>null</code> if no converter can be found.
    */
   @Nullable
-  public static TransformationResult transformDocument (@Nonnull final EDocumentType eDocType,
-                                                        @Nonnull final IReadableResource aRes) {
+  public static TransformationResult transformDocumentToUBL (@Nonnull final EDocumentType eDocType,
+                                                             @Nonnull final IReadableResource aRes) {
     switch (eDocType) {
       case CATALOGUE:
-        return transformCatalogue (aRes);
+        return transformCatalogueToUBL (aRes);
       case ORDER:
-        return transformOrder (aRes);
+        return transformOrderToUBL (aRes);
       case ORDER_RESPONSE:
-        return transformOrderResponse (aRes);
+        return transformOrderResponseToUBL (aRes);
       case INVOICE:
-        return transformInvoice (aRes);
+        return transformInvoiceToUBL (aRes);
       default:
         throw new IllegalArgumentException ("Unsupported document type " + eDocType);
     }
@@ -81,7 +81,7 @@ public final class TransformationManager {
    * @return <code>null</code> if no converter can be found.
    */
   @Nullable
-  public static TransformationResult transformCatalogue (@Nonnull final IReadableResource aRes) {
+  public static TransformationResult transformCatalogueToUBL (@Nonnull final IReadableResource aRes) {
     for (final ITransformCatalogueToUBLSPI aTransformer : s_aCatalogueTransformers)
       if (aTransformer.canConvertCatalogue (aRes)) {
         s_aLogger.info ("Found matching catalogue transformer " + CGStringHelper.getClassLocalName (aTransformer));
@@ -89,7 +89,7 @@ public final class TransformationManager {
           return aTransformer.convertCatalogueToUBL (aRes);
         }
         catch (final TypeConverterException ex) {
-          s_aLogger.info ("Transformer failed to convert catalogue - ignoring");
+          s_aLogger.warn ("Transformer failed to convert catalogue - ignoring");
         }
       }
     return null;
@@ -103,7 +103,7 @@ public final class TransformationManager {
    * @return <code>null</code> if no converter can be found.
    */
   @Nullable
-  public static TransformationResult transformOrder (@Nonnull final IReadableResource aRes) {
+  public static TransformationResult transformOrderToUBL (@Nonnull final IReadableResource aRes) {
     for (final ITransformOrderToUBLSPI aTransformer : s_aOrderTransformers)
       if (aTransformer.canConvertOrder (aRes)) {
         s_aLogger.info ("Found matching order transformer " + CGStringHelper.getClassLocalName (aTransformer));
@@ -111,7 +111,7 @@ public final class TransformationManager {
           return aTransformer.convertOrderToUBL (aRes);
         }
         catch (final TypeConverterException ex) {
-          s_aLogger.info ("Transformer failed to convert order - ignoring");
+          s_aLogger.warn ("Transformer failed to convert order - ignoring");
         }
       }
     return null;
@@ -125,7 +125,7 @@ public final class TransformationManager {
    * @return <code>null</code> if no converter can be found.
    */
   @Nullable
-  public static TransformationResult transformOrderResponse (@Nonnull final IReadableResource aRes) {
+  public static TransformationResult transformOrderResponseToUBL (@Nonnull final IReadableResource aRes) {
     for (final ITransformOrderResponseToUBLSPI aTransformer : s_aOrderResponseTransformers)
       if (aTransformer.canConvertOrderResponse (aRes)) {
         s_aLogger.info ("Found matching order response transformer " + CGStringHelper.getClassLocalName (aTransformer));
@@ -133,7 +133,7 @@ public final class TransformationManager {
           return aTransformer.convertOrderResponseToUBL (aRes);
         }
         catch (final TypeConverterException ex) {
-          s_aLogger.info ("Transformer failed to convert order - ignoring");
+          s_aLogger.warn ("Transformer failed to convert order response - ignoring");
         }
       }
     return null;
@@ -147,7 +147,7 @@ public final class TransformationManager {
    * @return <code>null</code> if no converter can be found.
    */
   @Nullable
-  public static TransformationResult transformInvoice (@Nonnull final IReadableResource aRes) {
+  public static TransformationResult transformInvoiceToUBL (@Nonnull final IReadableResource aRes) {
     for (final ITransformInvoiceToUBLSPI aTransformer : s_aInvoiceTransformers)
       if (aTransformer.canConvertInvoice (aRes)) {
         s_aLogger.info ("Found matching invoice transformer " + CGStringHelper.getClassLocalName (aTransformer));
@@ -155,7 +155,7 @@ public final class TransformationManager {
           return aTransformer.convertInvoiceToUBL (aRes);
         }
         catch (final TypeConverterException ex) {
-          s_aLogger.info ("Transformer failed to convert invoice - ignoring");
+          s_aLogger.warn ("Transformer failed to convert invoice - ignoring");
         }
       }
     return null;
