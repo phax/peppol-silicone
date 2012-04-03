@@ -37,12 +37,17 @@
  */
 package at.peppol.webgui.document.transform;
 
+import com.phloc.commons.state.ISuccessIndicator;
+
 /**
  * Determines the type of the transformation result.
  * 
  * @author philip
  */
-public enum ETransformationResultType {
+public enum ETransformationResultType implements ISuccessIndicator {
+  /** Indicate transformation failure */
+  FAILURE,
+
   /** It's a DOM node (derived from org.w3c.dom.Node) */
   DOM_NODE,
 
@@ -57,4 +62,12 @@ public enum ETransformationResultType {
 
   /** It is a native UBL object (e.g. CatalogueType) */
   UBL_TYPE;
+
+  public boolean isSuccess () {
+    return this != FAILURE;
+  }
+
+  public boolean isFailure () {
+    return this == FAILURE;
+  }
 }

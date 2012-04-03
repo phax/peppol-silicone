@@ -6,7 +6,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
-import at.peppol.webgui.document.IDocument;
+import at.peppol.webgui.document.IUserDocument;
 
 import com.phloc.commons.combine.CombinatorStringWithSeparator;
 import com.phloc.commons.combine.ICombinator;
@@ -19,7 +19,7 @@ import com.phloc.commons.tree.withid.folder.BasicFolderTreeItem;
  * 
  * @author philip
  */
-final class UserFolderTreeItem extends BasicFolderTreeItem <String, IDocument, Set <IDocument>, UserFolderTreeItem> {
+final class UserFolderTreeItem extends BasicFolderTreeItem <String, IUserDocument, Set <IUserDocument>, UserFolderTreeItem> {
   /**
    * Constructor for root object
    * 
@@ -61,7 +61,7 @@ final class UserFolderTreeItem extends BasicFolderTreeItem <String, IDocument, S
  */
 @NotThreadSafe
 final class UserFolderTreeItemFactory extends
-                                     AbstractFolderTreeItemFactory <String, IDocument, Set <IDocument>, UserFolderTreeItem> {
+                                     AbstractFolderTreeItemFactory <String, IUserDocument, Set <IUserDocument>, UserFolderTreeItem> {
   public UserFolderTreeItemFactory (@Nullable final ICombinator <String> aKeyCombinator) {
     super (aKeyCombinator);
   }
@@ -89,11 +89,11 @@ final class UserFolderTreeItemFactory extends
 }
 
 /**
- * Represents a folder tree having {@link IDocument} elements
+ * Represents a folder tree having {@link IUserDocument} elements
  * 
  * @author philip
  */
-public final class UserFolderTree extends BasicFolderTree <String, IDocument, Set <IDocument>, UserFolderTreeItem> {
+public final class UserFolderTree extends BasicFolderTree <String, IUserDocument, Set <IUserDocument>, UserFolderTreeItem> {
   /**
    * Constructor
    */
