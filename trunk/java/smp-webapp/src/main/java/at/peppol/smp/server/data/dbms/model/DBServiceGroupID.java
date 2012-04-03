@@ -45,6 +45,7 @@ import javax.persistence.Embeddable;
 import javax.persistence.Transient;
 
 import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
+import at.peppol.commons.identifier.CIdentifier;
 import at.peppol.commons.identifier.IdentifierUtils;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 
@@ -72,7 +73,7 @@ public class DBServiceGroupID implements Serializable {
     setBusinessIdentifier (aBusinessID.getValue ());
   }
 
-  @Column (name = "businessIdentifierScheme", nullable = false, length = 256)
+  @Column (name = "businessIdentifierScheme", nullable = false, length = CIdentifier.MAX_IDENTIFIER_SCHEME_LENGTH)
   public String getBusinessIdentifierScheme () {
     return m_sBusinessIdentifierScheme;
   }

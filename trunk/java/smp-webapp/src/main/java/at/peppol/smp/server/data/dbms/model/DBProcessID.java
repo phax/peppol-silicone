@@ -51,6 +51,7 @@ import org.busdox.transport.identifiers._1.ProcessIdentifierType;
 import at.peppol.busdox.identifier.IReadonlyDocumentTypeIdentifier;
 import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
 import at.peppol.busdox.identifier.IReadonlyProcessIdentifier;
+import at.peppol.commons.identifier.CIdentifier;
 import at.peppol.commons.identifier.IdentifierUtils;
 import at.peppol.commons.identifier.SimpleDocumentTypeIdentifier;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
@@ -85,7 +86,7 @@ public class DBProcessID implements Serializable {
     setProcessIdentifier (aPrI);
   }
 
-  @Column (name = "businessIdentifierScheme", nullable = false, length = 256)
+  @Column (name = "businessIdentifierScheme", nullable = false, length = CIdentifier.MAX_IDENTIFIER_SCHEME_LENGTH)
   public String getBusinessIdentifierScheme () {
     return m_sBusinessIdentifierScheme;
   }

@@ -47,6 +47,7 @@ import javax.persistence.Transient;
 import at.peppol.busdox.identifier.IReadonlyDocumentTypeIdentifier;
 import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
 import at.peppol.busdox.identifier.IReadonlyProcessIdentifier;
+import at.peppol.commons.identifier.CIdentifier;
 import at.peppol.commons.identifier.IdentifierUtils;
 
 import com.phloc.commons.annotations.UsedViaReflection;
@@ -83,7 +84,7 @@ public class DBEndpointID implements Serializable {
     setTransportProfile (sTransportProfile);
   }
 
-  @Column (name = "businessIdentifierScheme", nullable = false, length = 256)
+  @Column (name = "businessIdentifierScheme", nullable = false, length = CIdentifier.MAX_IDENTIFIER_SCHEME_LENGTH)
   public String getBusinessIdentifierScheme () {
     return m_sBusinessIdentifierScheme;
   }
@@ -107,12 +108,12 @@ public class DBEndpointID implements Serializable {
     setBusinessIdentifier (aBusinessIdentifier.getValue ());
   }
 
-  @Column (name = "processIdentifierType", nullable = false, length = 256)
-  public String getProcessIdentifierType () {
+  @Column (name = "processIdentifierType", nullable = false, length = CIdentifier.MAX_IDENTIFIER_SCHEME_LENGTH)
+  public String getProcessIdentifierScheme () {
     return m_sProcessIdentifierScheme;
   }
 
-  public void setProcessIdentifierType (final String sProcessIdentifierScheme) {
+  public void setProcessIdentifierScheme (final String sProcessIdentifierScheme) {
     m_sProcessIdentifierScheme = sProcessIdentifierScheme;
   }
 
@@ -127,11 +128,11 @@ public class DBEndpointID implements Serializable {
 
   @Transient
   public void setProcessIdentifier (@Nonnull final IReadonlyProcessIdentifier aProcessID) {
-    setProcessIdentifierType (aProcessID.getScheme ());
+    setProcessIdentifierScheme (aProcessID.getScheme ());
     setProcessIdentifier (aProcessID.getValue ());
   }
 
-  @Column (name = "documentIdentifierScheme", nullable = false, length = 256)
+  @Column (name = "documentIdentifierScheme", nullable = false, length = CIdentifier.MAX_IDENTIFIER_SCHEME_LENGTH)
   public String getDocumentIdentifierScheme () {
     return m_sDocumentIdentifierScheme;
   }
