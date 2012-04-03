@@ -30,6 +30,9 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.io.EAppend;
 import com.phloc.commons.io.IReadWriteResource;
+import com.phloc.commons.io.file.FileOperationManager;
+import com.phloc.commons.io.file.IFileOperationManager;
+import com.phloc.commons.io.file.LoggingFileOperationCallback;
 import com.phloc.commons.io.resource.FileSystemResource;
 import com.phloc.commons.string.StringHelper;
 
@@ -41,6 +44,8 @@ import com.phloc.commons.string.StringHelper;
 @NotThreadSafe
 public final class StorageIO {
   private static final Logger s_aLogger = LoggerFactory.getLogger (StorageIO.class);
+  private static final IFileOperationManager s_aFOM = new FileOperationManager (new LoggingFileOperationCallback ());
+
   private static String s_sBasePath;
 
   private StorageIO () {}
@@ -49,13 +54,17 @@ public final class StorageIO {
     return s_sBasePath != null;
   }
 
-  public static void initBasePath (@Nonnull @Nonempty final String sRealPath) {
-    if (StringHelper.hasNoText (sRealPath))
-      throw new IllegalArgumentException ("realPath");
+  public static void initBasePath (@Nonnull @Nonempty final String sBasePath) {
+    if (StringHelper.hasNoText (sBasePath))
+      throw new IllegalArgumentException ("basePath");
     if (s_sBasePath != null)
-      throw new IllegalStateException ("another real path is already present!");
-    s_aLogger.info ("Using '" + sRealPath + "' as the storage base");
-    s_sBasePath = sRealPath;
+      throw new IllegalStateException ("Another base path is already present: " + s_sBasePath);
+
+    s_aLogger.info ("Using '" + sBasePath + "' as the storage base");
+    s_sBasePath = sBasePath;
+
+    // Ensure the base directory is present
+    s_aFOM.createDirRecursiveIfNotExisting (new File (s_sBasePath));
   }
 
   @Nonnull
@@ -84,5 +93,10 @@ public final class StorageIO {
   @Nonnull
   public static OutputStream getOutputStream (final String sBasePathRelativePath, @Nonnull final EAppend eAppend) {
     return getResource (sBasePathRelativePath).getOutputStream (eAppend);
+  }
+
+  @Nonnull
+  public static IFileOperationManager getFileOpMgr () {
+    return s_aFOM;
   }
 }
