@@ -2,13 +2,19 @@ package at.peppol.webgui.upload;
 
 import javax.annotation.Nonnull;
 
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
+
+import at.peppol.webgui.document.EDocumentMetaType;
 import at.peppol.webgui.document.EDocumentType;
 import at.peppol.webgui.document.transform.TransformationManager;
 import at.peppol.webgui.document.transform.TransformationResult;
+import at.peppol.webgui.document.transform.TransformationSource;
 
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.resource.FileSystemResource;
 import com.phloc.commons.log.InMemoryLogger;
+import com.phloc.commons.xml.serialize.XMLReader;
 
 /**
  * This class should be first class to be called after an upload finished
@@ -48,8 +54,19 @@ public final class UploadTransformationManager {
       return TransformationResult.createFailure (aErrorMsgs);
     }
 
+    // Check if it is valid XML or not
+    Document aXMLDoc = null;
+    EDocumentMetaType eDocMetaType = EDocumentMetaType.BINARY;
+    try {
+      aXMLDoc = XMLReader.readXMLDOM (aRes);
+      if (aXMLDoc != null)
+        eDocMetaType = EDocumentMetaType.XML;
+    }
+    catch (final SAXException ex) {}
+
     // Do the transformation
-    final TransformationResult aRet = TransformationManager.transformDocumentToUBL (eDocType, aRes);
+    final TransformationSource aSource = new TransformationSource (eDocMetaType, aRes, aXMLDoc);
+    final TransformationResult aRet = TransformationManager.transformDocumentToUBL (eDocType, aSource);
     if (aRet == null) {
       aErrorMsgs.error ("No transformer was able to transform uploaded file " +
                         aUploadedResource.getTemporaryFile ().getAbsolutePath () +

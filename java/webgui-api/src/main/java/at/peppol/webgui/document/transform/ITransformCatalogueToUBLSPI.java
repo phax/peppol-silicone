@@ -40,7 +40,6 @@ package at.peppol.webgui.document.transform;
 import javax.annotation.Nonnull;
 
 import com.phloc.commons.annotations.IsSPIInterface;
-import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.typeconvert.TypeConverterException;
 
 /**
@@ -53,20 +52,20 @@ public interface ITransformCatalogueToUBLSPI {
   /**
    * Check if this converter can handle the passed source object. If this
    * converter can handle the passed source, <code>true</code> must be returned
-   * and only in this case {@link #convertCatalogueToUBL(IReadableResource)} is
-   * called. If <code>false</code> is returned,
-   * {@link #convertCatalogueToUBL(IReadableResource)} is never called!
+   * and only in this case {@link #convertCatalogueToUBL(TransformationSource)}
+   * is called. If <code>false</code> is returned,
+   * {@link #convertCatalogueToUBL(TransformationSource)} is never called!
    * 
    * @param aSource
    *        The source object
    * @return <code>true</code> if this converter can convert the passed
    *         document.
    */
-  boolean canConvertCatalogue (@Nonnull IReadableResource aSource);
+  boolean canConvertCatalogue (@Nonnull TransformationSource aSource);
 
   /**
    * Convert the passed source object to a UBL catalogue. This method is only
-   * called, if {@link #canConvertCatalogue(IReadableResource)} returned
+   * called, if {@link #canConvertCatalogue(TransformationSource)} returned
    * <code>true</code> for this object.
    * 
    * @param aSource
@@ -80,5 +79,5 @@ public interface ITransformCatalogueToUBLSPI {
    *         source object.
    */
   @Nonnull
-  TransformationResult convertCatalogueToUBL (@Nonnull IReadableResource aSource) throws TypeConverterException;
+  TransformationResult convertCatalogueToUBL (@Nonnull TransformationSource aSource) throws TypeConverterException;
 }
