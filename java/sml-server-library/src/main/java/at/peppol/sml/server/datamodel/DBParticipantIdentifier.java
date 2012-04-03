@@ -74,8 +74,8 @@ public class DBParticipantIdentifier implements Serializable {
     return m_aID;
   }
 
-  public void setId (final DBParticipantIdentifierID id) {
-    m_aID = id;
+  public void setId (final DBParticipantIdentifierID aID) {
+    m_aID = aID;
   }
 
   @ManyToOne (fetch = FetchType.LAZY)
@@ -84,7 +84,7 @@ public class DBParticipantIdentifier implements Serializable {
     return m_aServiceMetadataPublisher;
   }
 
-  public void setServiceMetadataPublisher (final DBServiceMetadataPublisher serviceMetadataPublisher) {
-    m_aServiceMetadataPublisher = serviceMetadataPublisher;
+  public void setServiceMetadataPublisher (final DBServiceMetadataPublisher aDBPublisher) {
+    m_aServiceMetadataPublisher = aDBPublisher;
   }
 }
