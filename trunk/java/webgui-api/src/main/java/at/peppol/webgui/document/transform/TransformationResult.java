@@ -44,7 +44,9 @@ import javax.xml.bind.annotation.XmlSchema;
 import org.w3c.dom.Node;
 
 import com.phloc.commons.io.IReadableResource;
+import com.phloc.commons.log.InMemoryLogger;
 import com.phloc.commons.microdom.IMicroNode;
+import com.phloc.commons.state.ISuccessIndicator;
 
 /**
  * Represents an aggregated transformation result object. It contains the result
@@ -53,7 +55,7 @@ import com.phloc.commons.microdom.IMicroNode;
  * @author philip
  */
 @Immutable
-public final class TransformationResult {
+public final class TransformationResult implements ISuccessIndicator {
   private final ETransformationResultType m_eResultType;
   private final Object m_aResultObj;
 
@@ -65,6 +67,14 @@ public final class TransformationResult {
 
     m_eResultType = eResultType;
     m_aResultObj = aResultObj;
+  }
+
+  public boolean isSuccess () {
+    return m_eResultType.isSuccess ();
+  }
+
+  public boolean isFailure () {
+    return m_eResultType.isFailure ();
   }
 
   /**
@@ -98,7 +108,7 @@ public final class TransformationResult {
   /**
    * @return The result object as a micro node. Never <code>null</code>.
    * @throws IllegalStateException
-   *         In case the result object type is not a DOM node.
+   *         In case the result object type is not a micro node.
    */
   @Nonnull
   public IMicroNode getResultAsMicroNode () {
@@ -110,13 +120,38 @@ public final class TransformationResult {
   /**
    * @return The result object as a readable resource. Never <code>null</code>.
    * @throws IllegalStateException
-   *         In case the result object type is not a DOM node.
+   *         In case the result object type is not a resource.
    */
   @Nonnull
   public IReadableResource getResultAsResource () {
     if (m_eResultType != ETransformationResultType.RESOURCE)
       throw new IllegalStateException ("Result is not of type resource but of type " + m_eResultType);
     return (IReadableResource) m_aResultObj;
+  }
+
+  /**
+   * @return The result object as the transformation error messages. Never
+   *         <code>null</code>.
+   * @throws IllegalStateException
+   *         In case the result object type is not a failure.
+   */
+  @Nonnull
+  public InMemoryLogger getResultAsFailure () {
+    if (m_eResultType != ETransformationResultType.FAILURE)
+      throw new IllegalStateException ("Result is not of type failure but of type " + m_eResultType);
+    return (InMemoryLogger) m_aResultObj;
+  }
+
+  /**
+   * Create a failure result.
+   * 
+   * @param aErrorMsgs
+   *        The error messages that occurred during transformation
+   * @return The non-<code>null</code> {@link TransformationResult}.
+   */
+  @Nonnull
+  public static TransformationResult createFailure (@Nonnull final InMemoryLogger aErrorMsgs) {
+    return new TransformationResult (ETransformationResultType.FAILURE, aErrorMsgs);
   }
 
   /**
