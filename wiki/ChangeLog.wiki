@@ -2,6 +2,8 @@
 
 = v2.3.0 - in progress =
 
+==All components==
+  * Updated phloc-commons to 3.4.9
 ==Base libraries==
   * Removed all deprecated methods using "Document" instead of "DocumentType" in their names
   * Added length and Charset checks in (Simple|Readonly)(Participant|DocumentType|Process)Identifier classes, according to the Policy for the use of identifiers 2.3 DRAFT
@@ -26,9 +28,9 @@ Performed changes so far:
 ==All components==
   * Fixed errors indicated by FindBugs
   * Improved source comments and added some informational annotations
+  * Updated phloc-commons to 3.4.8
 ==Base libraries==
   * Added easier readable constants in EPredefinedDocumentTypeIdentifier and EPredefinedProcessIdentifier
-  * Updated phloc-commons to 3.4.8
   * Renamed all "DocumentIdentifier" APIs to "DocumentTypeIdentifier" as this is the correct terminus. The old methods got deprecated and will be removed in v2.3.0
   * Updated predefined enumerations to support the codelist v1.1.0 as stated in the PEPPOL policy for use of identifiers v2.2 from 2012-03-20
 ==SML==
