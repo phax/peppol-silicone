@@ -1,21 +1,13 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package at.peppol.webgui.app;
 
+import at.peppol.webgui.app.components.InvoiceForm;
+import at.peppol.webgui.security.user.IUser;
 import com.vaadin.terminal.ExternalResource;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.CssLayout;
-import com.vaadin.ui.Embedded;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.MenuBar;
+import com.vaadin.ui.*;
 import com.vaadin.ui.MenuBar.MenuItem;
-import com.vaadin.ui.NativeButton;
-import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Window;
+import org.vaadin.jouni.animator.AnimatorProxy;
+import org.vaadin.jouni.animator.client.ui.VAnimatorProxy;
+import org.vaadin.jouni.animator.client.ui.VAnimatorProxy.AnimType;
 
 /**
  *
@@ -29,14 +21,21 @@ public class MainWindow extends Window {
     private HorizontalLayout footerLayout = new HorizontalLayout();
     private HorizontalLayout topBarLayoutLeft;
     private HorizontalLayout topBarLayoutRight;
+    private Component mainContentComponent;
+    private NativeButton selectedButton;
+    private AnimatorProxy animProxy = new AnimatorProxy();
     
     public MainWindow()
     {
         super("PAWG Main");
+        addComponent(animProxy);
         initUI();
+        
     }
 
     private void initUI() {
+        
+        
         VerticalLayout root = new VerticalLayout();
         root.setMargin(false);
         setContent(root);
@@ -58,7 +57,6 @@ public class MainWindow extends Window {
         
         leftNavBar.addComponent(new Label("INBOX"));
         NativeButton catalogueBtn = new NativeButton("Catalogue");
-        catalogueBtn.setStyleName("selected");
         leftNavBar.addComponent(catalogueBtn);
         leftNavBar.addComponent(new NativeButton("Orders"));
         leftNavBar.addComponent(new NativeButton("Invoices"));
@@ -85,8 +83,13 @@ public class MainWindow extends Window {
         leftNavBar.addComponent(peppolLogoImg);
         
         middleContentLayout.addComponent(leftNavBar);
+        showInitialMainContent();
+    }
+
+    public void showInitialMainContent() {
         // ------ START: Main Content -------
         VerticalLayout mainContentLayout = new VerticalLayout();
+        
         mainContentLayout.addStyleName("margin");
         VerticalLayout topmain = new VerticalLayout();
         topmain.setWidth("100%");
@@ -111,13 +114,18 @@ public class MainWindow extends Window {
         
         mainContentLayout.setSpacing(true);
         mainContentLayout.setWidth("100%");
-        middleContentLayout.addComponent(mainContentLayout);
-        middleContentLayout.setExpandRatio(mainContentLayout, 1);
         middleContentLayout.setWidth("100%");
         middleContentLayout.setHeight("100%");
         // -------- 
         addComponent(middleContentLayout);
         addComponent(footerLayout);
+        if (mainContentComponent != null) {
+           middleContentLayout.replaceComponent(mainContentComponent, mainContentLayout);
+        } else {
+                 middleContentLayout.addComponent(mainContentLayout);
+        }
+        middleContentLayout.setExpandRatio(mainContentLayout, 1);
+        mainContentComponent = mainContentLayout;
     }
 
     private void createTopBar() {
@@ -174,7 +182,15 @@ public class MainWindow extends Window {
 
         MenuBar lMenuBar = new MenuBar();
         lMenuBar.setHtmlContentAllowed(true);
-        final MenuBar.MenuItem PAWGLabel = lMenuBar.addItem("<b>PAWG<b>", null);
+        final MenuBar.MenuItem PAWGLabel = lMenuBar.addItem("<b>PAWG<b>", new MenuBar.Command() {
+
+            @Override
+            public void menuSelected(MenuItem selectedItem) {
+             
+                removeComponent(mainContentComponent);
+                showInitialMainContent();
+            }
+        });
         final MenuBar.MenuItem docItem = lMenuBar.addItem("Document", null);
         final MenuBar.MenuItem prefsItem = lMenuBar.addItem("Preferences", null);
         final MenuBar.MenuItem aboutItem = lMenuBar.addItem("About", null);
@@ -183,14 +199,29 @@ public class MainWindow extends Window {
         final MenuBar.MenuItem invItem = docItem.addItem("Invoice", null);
         final MenuBar.MenuItem orderItem = docItem.addItem("Order", null);
         
-        final MenuBar.MenuItem invCreateItem = invItem.addItem("New",null);
-        final MenuBar.MenuItem invViewItem = invItem.addItem("View",null);
+        final MenuBar.MenuItem invCreateItem = invItem.addItem("New ...",new MenuBar.Command() {
+
+            @Override
+            public void menuSelected(MenuItem selectedItem) {
+                showInvoiceForm();
+            }
+
+        });
+        final MenuBar.MenuItem invViewItem = invItem.addItem("View ... ",new MenuBar.Command() {
+
+            @Override
+            public void menuSelected(MenuItem selectedItem) {
+                showTestForm();
+            }
+
+        });
         
         final MenuBar.MenuItem ordCreateItem = orderItem.addItem("New",null);
         final MenuBar.MenuItem ordViewItem = orderItem.addItem("View",null);
         
         topBarLayoutLeft.addComponent(lMenuBar);
-        Label loggedInLabel = new Label("Test User");
+        
+        IUser user = (IUser) PawgApp.getInstance().getUser();
 
        //        loggedInLabel.addStyleName("v-menubar");
       // loggedInLabel.addStyleName("v-menubar-menuitem");
@@ -206,7 +237,7 @@ public class MainWindow extends Window {
         
         MenuBar rMenuBar = new MenuBar();
         rMenuBar.setHtmlContentAllowed(true);
-        final MenuBar.MenuItem userLabel = rMenuBar.addItem("<b>User<b>", null);
+        final MenuBar.MenuItem userLabel = rMenuBar.addItem("<b>"+user.getEmailAddress()+"<b>", null);
         final MenuBar.MenuItem logoutLabel = userLabel.addItem("Logout", new MenuBar.Command() {
 
             @Override
@@ -261,4 +292,21 @@ public class MainWindow extends Window {
         
         return lorem;
     } 
+    
+      public void showInvoiceForm() {
+          
+          InvoiceForm invForm = new InvoiceForm();
+          middleContentLayout.replaceComponent(mainContentComponent,invForm);
+          middleContentLayout.setExpandRatio(invForm, 1);
+          mainContentComponent = invForm;
+      }
+      
+      public void showTestForm() {
+          
+          InvoiceForm form = new InvoiceForm();
+          Form f2 = form.createInvoiceTopForm();
+          middleContentLayout.replaceComponent(mainContentComponent,f2);
+          middleContentLayout.setExpandRatio(f2, 1);
+          mainContentComponent = f2;
+      }
 }
