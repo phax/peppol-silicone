@@ -68,7 +68,20 @@ public class PartyDetailForm extends Panel{
                             new NestedMethodProperty(partyrAddress, "postalZone.value"));
         partyItemSet.addItemProperty("Country",
                             new NestedMethodProperty(partyrAddress, "country.identificationCode.value"));
-
+        
+        PartyTaxSchemeType taxScheme = new PartyTaxSchemeType();
+        taxScheme.setCompanyID(new CompanyIDType());
+        
+        // TODO: Hardcoded ShemeID etc for TaxScheme. Should be from a codelist?
+        taxScheme.setTaxScheme(new TaxSchemeType());
+        taxScheme.getTaxScheme().setID(new IDType());
+        taxScheme.getTaxScheme().getID().setValue("VAT");
+        taxScheme.getTaxScheme().getID().setSchemeID("UN/ECE 5153");
+        taxScheme.getTaxScheme().getID().setSchemeAgencyID("6");
+        partyBean.getPartyTaxScheme().add(taxScheme);
+        
+        partyItemSet.addItemProperty("Tax ID",
+                            new NestedMethodProperty(taxScheme.getCompanyID(),"value"));
 
         final Form partyForm = new Form();
         partyForm.setFormFieldFactory(new PartyFieldFactory());
