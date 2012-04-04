@@ -95,7 +95,7 @@ public class DBProcessID implements Serializable {
     m_sBusinessIdentifierScheme = IdentifierUtils.getUnifiedParticipantDBValue (sBusinessIdentifierScheme);
   }
 
-  @Column (name = "businessIdentifier", nullable = false, length = 256)
+  @Column (name = "businessIdentifier", nullable = false, length = CIdentifier.MAX_PARTICIPANT_IDENTIFIER_VALUE_LENGTH)
   public String getBusinessIdentifier () {
     return m_sBusinessIdentifier;
   }
@@ -110,7 +110,7 @@ public class DBProcessID implements Serializable {
     setBusinessIdentifier (aBusinessIdentifier.getValue ());
   }
 
-  @Column (name = "documentIdentifierScheme", nullable = false, length = 256)
+  @Column (name = "documentIdentifierScheme", nullable = false, length = CIdentifier.MAX_IDENTIFIER_SCHEME_LENGTH)
   public String getDocumentIdentifierScheme () {
     return m_sDocumentTypeIdentifierScheme;
   }
@@ -119,7 +119,9 @@ public class DBProcessID implements Serializable {
     m_sDocumentTypeIdentifierScheme = sDocumentIdentifierScheme;
   }
 
-  @Column (name = "documentIdentifier", nullable = false, length = 256)
+  @Column (name = "documentIdentifier",
+           nullable = false,
+           length = CIdentifier.MAX_DOCUMENT_TYPE_IDENTIFIER_VALUE_LENGTH)
   public String getDocumentIdentifier () {
     return m_sDocumentTypeIdentifier;
   }
@@ -134,16 +136,16 @@ public class DBProcessID implements Serializable {
     setDocumentIdentifier (aDocumentTypeID.getValue ());
   }
 
-  @Column (name = "processIdentifierType", nullable = false, length = 256)
-  public String getProcessIdentifierType () {
+  @Column (name = "processIdentifierType", nullable = false, length = CIdentifier.MAX_IDENTIFIER_SCHEME_LENGTH)
+  public String getProcessIdentifierScheme () {
     return m_sProcessIdentifierScheme;
   }
 
-  public void setProcessIdentifierType (final String sProcessIdentifierScheme) {
+  public void setProcessIdentifierScheme (final String sProcessIdentifierScheme) {
     m_sProcessIdentifierScheme = sProcessIdentifierScheme;
   }
 
-  @Column (name = "processIdentifier", nullable = false, length = 256)
+  @Column (name = "processIdentifier", nullable = false, length = CIdentifier.MAX_PROCESS_IDENTIFIER_VALUE_LENGTH)
   public String getProcessIdentifier () {
     return m_sProcessIdentifier;
   }
@@ -154,7 +156,7 @@ public class DBProcessID implements Serializable {
 
   @Transient
   public void setProcessIdentifier (@Nonnull final IReadonlyProcessIdentifier aProcessID) {
-    setProcessIdentifierType (aProcessID.getScheme ());
+    setProcessIdentifierScheme (aProcessID.getScheme ());
     setProcessIdentifier (aProcessID.getValue ());
   }
 

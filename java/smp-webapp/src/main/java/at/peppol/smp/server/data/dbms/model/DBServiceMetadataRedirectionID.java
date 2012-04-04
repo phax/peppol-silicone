@@ -82,7 +82,7 @@ public class DBServiceMetadataRedirectionID implements Serializable {
     m_sBusinessIdentifierScheme = IdentifierUtils.getUnifiedParticipantDBValue (sBusinessIdentifierScheme);
   }
 
-  @Column (name = "businessIdentifier", nullable = false, length = 256)
+  @Column (name = "businessIdentifier", nullable = false, length = CIdentifier.MAX_PARTICIPANT_IDENTIFIER_VALUE_LENGTH)
   public String getBusinessIdentifier () {
     return m_sBusinessIdentifier;
   }
@@ -100,7 +100,9 @@ public class DBServiceMetadataRedirectionID implements Serializable {
     m_sDocumentTypeIdentifierScheme = sDocumentIdentifierScheme;
   }
 
-  @Column (name = "documentIdentifier", nullable = false, length = 256)
+  @Column (name = "documentIdentifier",
+           nullable = false,
+           length = CIdentifier.MAX_DOCUMENT_TYPE_IDENTIFIER_VALUE_LENGTH)
   public String getDocumentTypeIdentifier () {
     return m_sDocumentTypeIdentifier;
   }
