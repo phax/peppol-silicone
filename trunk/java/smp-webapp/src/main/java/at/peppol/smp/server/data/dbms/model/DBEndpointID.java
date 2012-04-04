@@ -93,7 +93,7 @@ public class DBEndpointID implements Serializable {
     m_sBusinessIdentifierScheme = IdentifierUtils.getUnifiedParticipantDBValue (sBusinessIdentifierScheme);
   }
 
-  @Column (name = "businessIdentifier", nullable = false, length = 256)
+  @Column (name = "businessIdentifier", nullable = false, length = CIdentifier.MAX_PARTICIPANT_IDENTIFIER_VALUE_LENGTH)
   public String getBusinessIdentifier () {
     return m_sBusinessIdentifier;
   }
@@ -117,7 +117,7 @@ public class DBEndpointID implements Serializable {
     m_sProcessIdentifierScheme = sProcessIdentifierScheme;
   }
 
-  @Column (name = "processIdentifier", nullable = false, length = 256)
+  @Column (name = "processIdentifier", nullable = false, length = CIdentifier.MAX_PROCESS_IDENTIFIER_VALUE_LENGTH)
   public String getProcessIdentifier () {
     return m_sProcessIdentifier;
   }
@@ -141,7 +141,9 @@ public class DBEndpointID implements Serializable {
     m_sDocumentIdentifierScheme = sDocumentIdentifierScheme;
   }
 
-  @Column (name = "documentIdentifier", nullable = false, length = 256)
+  @Column (name = "documentIdentifier",
+           nullable = false,
+           length = CIdentifier.MAX_DOCUMENT_TYPE_IDENTIFIER_VALUE_LENGTH)
   public String getDocumentIdentifier () {
     return m_sDocumentIdentifier;
   }

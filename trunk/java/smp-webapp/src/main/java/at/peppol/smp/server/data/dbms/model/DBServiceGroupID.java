@@ -82,7 +82,7 @@ public class DBServiceGroupID implements Serializable {
     m_sBusinessIdentifierScheme = IdentifierUtils.getUnifiedParticipantDBValue (sBusinessIdentifierScheme);
   }
 
-  @Column (name = "businessIdentifier", nullable = false, length = 256)
+  @Column (name = "businessIdentifier", nullable = false, length = CIdentifier.MAX_PARTICIPANT_IDENTIFIER_VALUE_LENGTH)
   public String getBusinessIdentifier () {
     return m_sBusinessIdentifier;
   }
