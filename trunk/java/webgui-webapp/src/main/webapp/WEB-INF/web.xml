@@ -65,7 +65,19 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
     <param-name>storage-base</param-name>
     <param-value>/var/www/peppol-silicone/webgui/storage</param-value>
   </context-param>
-  
+  <filter>
+    <filter-name>CharacterEncodingFilter</filter-name>
+   <filter-class>org.apache.catalina.filters.SetCharacterEncodingFilter</filter-class>
+  <init-param>
+    <param-name>encoding</param-name>
+    <param-value>UTF-8</param-value>
+</init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>CharacterEncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+ 
   <session-config>
     <session-timeout>60</session-timeout>
   </session-config>
@@ -83,7 +95,7 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
       <param-value>at.peppol.webgui.app.PawgApp</param-value>
     </init-param>
   </servlet>
-  <servlet-mapping>
+ <servlet-mapping>
     <servlet-name>PawgServlet</servlet-name>
     <url-pattern>/*</url-pattern>
   </servlet-mapping>
