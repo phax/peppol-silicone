@@ -17,7 +17,7 @@ import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.scopes.MetaScopeFactory;
 import com.phloc.scopes.web.domain.IRequestWebScope;
 import com.phloc.scopes.web.factory.DefaultWebScopeFactory;
-import com.phloc.scopes.web.impl.RequestWebScopeNoFileItems;
+import com.phloc.scopes.web.impl.RequestWebScopeNoMultipart;
 import com.phloc.scopes.web.mgr.WebScopeManager;
 
 /**
@@ -56,7 +56,7 @@ public final class ScopeListener implements ServletContextListener, HttpSessionL
       @Nonnull
       public IRequestWebScope createRequestScope (@Nonnull final HttpServletRequest aHttpRequest,
                                                   @Nonnull final HttpServletResponse aHttpResponse) {
-        return new RequestWebScopeNoFileItems (aHttpRequest, aHttpResponse);
+        return new RequestWebScopeNoMultipart (aHttpRequest, aHttpResponse);
       }
     });
 
