@@ -51,10 +51,8 @@ import org.junit.Test;
 
 import at.peppol.commons.identifier.CIdentifier;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
-import at.peppol.sml.server.dns.IDNSClient;
 import at.peppol.sml.server.exceptions.IllegalHostnameException;
 import at.peppol.sml.server.exceptions.IllegalIdentifierSchemeException;
-
 
 /**
  * @author PEPPOL.AT, BRZ, Philip Helger
@@ -101,7 +99,11 @@ public final class DNSTest {
 
     // Insert - WRONG Scheme
     try {
-      final ParticipantIdentifierType pi = new SimpleParticipantIdentifier (wrongSchemeIdentifier, "0010:5798000000001");
+      // Do not use SimpleParticipantIdentifier, because the consistency check
+      // in the constructor will acknowledge the wrong scheme directly
+      final ParticipantIdentifierType pi = new ParticipantIdentifierType ();
+      pi.setScheme (wrongSchemeIdentifier);
+      pi.setValue ("0010:5798000000001");
 
       _createDNSClient ().createIdentifier (pi, validPublisherId);
       fail ("Create Identifier should fail : " + pi.getScheme ());
