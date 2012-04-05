@@ -1,6 +1,7 @@
 package at.peppol.webgui.app.components;
 
 import at.peppol.commons.identifier.actorid.EPredefinedIdentifierIssuingAgency;
+
 import com.vaadin.ui.ComboBox;
 
 /**
