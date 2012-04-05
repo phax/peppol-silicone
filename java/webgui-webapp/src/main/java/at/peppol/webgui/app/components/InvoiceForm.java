@@ -187,7 +187,7 @@ public class InvoiceForm extends Form {
                 new NestedMethodProperty(invoice.getID(),"value"));
         
         invoice.setDocumentCurrencyCode(new DocumentCurrencyCodeType());
-        invoice.getDocumentCurrencyCode().setValue("EUR");
+//        invoice.getDocumentCurrencyCode().setValue("EUR");
         
         invoice.setIssueDate(new IssueDateType());
         invoiceTopForm.addItemProperty("Currency",
@@ -230,7 +230,7 @@ public class InvoiceForm extends Form {
                                     .newInstance()
                                     .newXMLGregorianCalendar();
                             XMLDate.setYear(greg.get(Calendar.YEAR));
-                            XMLDate.setMonth(greg.get(Calendar.MONTH));
+                            XMLDate.setMonth(greg.get(Calendar.MONTH)+1);
                             XMLDate.setDay(greg.get(Calendar.DATE));
                             
                              invoice.getIssueDate().setValue(XMLDate);
@@ -247,7 +247,6 @@ public class InvoiceForm extends Form {
             if (field instanceof AbstractTextField){
                 ((AbstractTextField) field).setNullRepresentation("");
             }
-            
             return field;
         }
      }
