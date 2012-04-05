@@ -16,6 +16,18 @@
         <developerConnection>scm:svn:https://peppol-silicone.googlecode.com/svn/trunk/java/webgui-webapp</developerConnection>
     </scm>
 
+    <repositories>
+        <repository>
+            <id>vaadin-addons</id>
+            <url>http://maven.vaadin.com/vaadin-addons</url>
+            <layout>default</layout>
+        </repository>
+    </repositories>
+    
+    <properties>
+      <vaadin.version>6.7.6</vaadin.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>at.peppol</groupId>
@@ -30,13 +42,18 @@
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin</artifactId>
-            <version>6.7.6</version>
+            <version>${vaadin.version}</version>
         </dependency>
         <dependency>
             <groupId>org.vaadin.addons</groupId>
             <artifactId>animator</artifactId>
             <version>1.6.4</version>
         </dependency>
+        <dependency>
+            <groupId>com.phloc</groupId>
+            <artifactId>phloc-ubl</artifactId>
+            <version>2.5.4</version>
+        </dependency>      
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -52,27 +69,12 @@
         </dependency>
     
         <dependency>
-            <groupId>com.phloc</groupId>
-            <artifactId>phloc-ubl</artifactId>
-            <version>2.5.4</version>
-        </dependency>      
-        <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-webapp</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>peppol-commons-peppol</artifactId>
-            <version>2.3.0-SNAPSHOT</version>
-        </dependency>
     </dependencies>
-    <repositories>
-        <repository>
-            <id>vaadin-addons</id>
-            <url>http://maven.vaadin.com/vaadin-addons</url>
-        </repository>
-    </repositories>
+
     <build>
         <plugins>
             <plugin>
