@@ -74,10 +74,9 @@ import at.peppol.sml.server.exceptions.IllegalIdentifierSchemeException;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 
-
 /**
  * DNSClient for dynamic updating DNS Server from ServiceMetadataLocator.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public class DNSClientImpl implements IDNSClient {
@@ -385,7 +384,7 @@ public class DNSClientImpl implements IDNSClient {
 
   /**
    * Helper for deleting records.
-   *
+   * 
    * @param name
    * @throws IOException
    */
@@ -411,7 +410,7 @@ public class DNSClientImpl implements IDNSClient {
 
   /**
    * Helper for deleting records.
-   *
+   * 
    * @param aDNSRecord
    * @throws IOException
    */
@@ -433,7 +432,7 @@ public class DNSClientImpl implements IDNSClient {
 
   /**
    * Common method for validating Responses from DNS
-   *
+   * 
    * @param aResponse
    */
   private static void validateDNSResponse (final Message aResponse) {
@@ -448,20 +447,20 @@ public class DNSClientImpl implements IDNSClient {
     }
   }
 
-  public ParticipantIdentifierType getIdentifierFromDnsName (final String name) {
-    return DNSUtils.getIdentiferFromDnsName (name, m_sSMLZoneName);
+  public ParticipantIdentifierType getIdentifierFromDnsName (final String sDnsName) {
+    return DNSUtils.getIdentiferFromDnsName (sDnsName, m_sSMLZoneName);
   }
 
-  public String getDNSNameOfParticipant (final ParticipantIdentifierType aParticipantIdentifier) throws IllegalIdentifierSchemeException {
+  public String getDNSNameOfParticipant (@Nonnull final ParticipantIdentifierType aParticipantIdentifier) throws IllegalIdentifierSchemeException {
     return BusdoxURLUtils.getDNSNameOfParticipant (aParticipantIdentifier, m_sSMLZoneName);
   }
 
-  public String getPublisherAnchorFromDnsName (final String name) {
-    return DNSUtils.getPublisherAnchorFromDnsName (name, m_sSMLZoneName);
+  public String getPublisherAnchorFromDnsName (@Nonnull final String sDnsName) {
+    return DNSUtils.getPublisherAnchorFromDnsName (sDnsName, m_sSMLZoneName);
   }
 
-  public boolean isHandledZone (@Nonnull final String name) {
-    return DNSUtils.isHandledZone (name, m_sSMLZoneName);
+  public boolean isHandledZone (@Nonnull final String sDnsName) {
+    return DNSUtils.isHandledZone (sDnsName, m_sSMLZoneName);
   }
 
   @Override

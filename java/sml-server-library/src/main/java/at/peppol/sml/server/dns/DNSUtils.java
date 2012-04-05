@@ -52,13 +52,14 @@ import at.peppol.sml.server.exceptions.IllegalHostnameException;
 
 import com.phloc.commons.regex.RegExHelper;
 
-
 /**
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable
 public final class DNSUtils {
-  private static final Logger log = LoggerFactory.getLogger (DNSUtils.class);
+  private static final Logger s_aLogger = LoggerFactory.getLogger (DNSUtils.class);
+  private static final String DOMAIN_IDENTIFIER = "((\\p{Alnum})([-]|(\\p{Alnum}))*(\\p{Alnum}))|(\\p{Alnum})";
+  private static final String DOMAIN_NAME_RULE = "(" + DOMAIN_IDENTIFIER + ")((\\.)(" + DOMAIN_IDENTIFIER + "))*";
 
   private DNSUtils () {}
 
@@ -66,56 +67,57 @@ public final class DNSUtils {
    * Utility methods which extracts Identifier Hash Value from DNS record.
    * Additionally it is checked whether the passed DNS name belongs to the given
    * SML zone.
-   *
-   * @param sDNSName
+   * 
+   * @param sDnsName
    *        The DNS service name.
-   * @param smlZoneName
+   * @param sSmlZoneName
    *        The SML zone name to which the DNS name must belong
    * @return the hash value from the DNS name or <code>null</code> if parsing
    *         failed
    */
   @Nullable
-  public static String getIdentifierHashValueFromDnsName (final String sDNSName, final String smlZoneName) {
-    final ParticipantIdentifierType aPI = getIdentiferFromDnsName (sDNSName, smlZoneName);
+  public static String getIdentifierHashValueFromDnsName (@Nonnull final String sDnsName,
+                                                          @Nonnull final String sSmlZoneName) {
+    final ParticipantIdentifierType aPI = getIdentiferFromDnsName (sDnsName, sSmlZoneName);
     return aPI == null ? null : aPI.getValue ();
   }
 
   /**
    * Utility methods which extracts Identifier Hash Value from DNS record.
-   *
-   * @param sDNSName
+   * 
+   * @param sDnsName
    * @return the hash value from the DNS name or <code>null</code> if parsing
    *         failed
    */
   @Nullable
-  public static String getIdentifierHashValueFromDnsName (final String sDNSName) {
-    final ParticipantIdentifierType aPI = getIdentiferFromDnsName (sDNSName);
+  public static String getIdentifierHashValueFromDnsName (@Nullable final String sDnsName) {
+    final ParticipantIdentifierType aPI = getIdentiferFromDnsName (sDnsName);
     return aPI == null ? null : aPI.getValue ();
   }
 
   /**
    * Utility methods which extracts ParticipantIdentifier from DNS record.
-   *
-   * @param sName
-   * @param smlZoneName
+   * 
+   * @param sDnsName
+   * @param sSmlZoneName
    * @return ParticipantIdentifier or <code>null</code> if parsing failed
    */
   @Nullable
-  public static ParticipantIdentifierType getIdentiferFromDnsName (@Nonnull final String sName,
-                                                                   @Nonnull final String smlZoneName) {
-    if (!sName.endsWith ("." + smlZoneName)) {
-      log.warn ("wrong DNS zone : " + sName + " not in : " + smlZoneName);
+  public static ParticipantIdentifierType getIdentiferFromDnsName (@Nonnull final String sDnsName,
+                                                                   @Nonnull final String sSmlZoneName) {
+    if (!sDnsName.endsWith ("." + sSmlZoneName)) {
+      s_aLogger.warn ("wrong DNS zone : " + sDnsName + " not in : " + sSmlZoneName);
       return null;
     }
 
     // Remove trailing SML zone name
-    final String sIdentifierPart = sName.substring (0, sName.length () - (1 + smlZoneName.length ()));
+    final String sIdentifierPart = sDnsName.substring (0, sDnsName.length () - (1 + sSmlZoneName.length ()));
     return getIdentiferFromDnsName (sIdentifierPart);
   }
 
   /**
    * Utility methods which extracts ParticipantIdentifier from DNS record.
-   *
+   * 
    * @param sDNSName
    * @return ParticipantIdentifier or <code>null</code> if parsing failed
    */
@@ -124,14 +126,14 @@ public final class DNSUtils {
     // Split in hash, scheme and rest
     final String [] parts = RegExHelper.split (sDNSName, "\\.", 3);
     if (parts.length < 2) {
-      log.warn ("wrong syntax of identifier - must contain at least on separator : " + sDNSName);
+      s_aLogger.warn ("wrong syntax of identifier - must contain at least on separator : " + sDNSName);
       return null;
     }
 
     // Check scheme
     final String sSchemeID = parts[1];
     if (!IdentifierUtils.isValidParticipantIdentifierScheme (sSchemeID)) {
-      log.warn ("wrong syntax of identifier - scheme is invalid : " + sSchemeID);
+      s_aLogger.warn ("wrong syntax of identifier - scheme is invalid : " + sSchemeID);
       return null;
     }
 
@@ -139,7 +141,7 @@ public final class DNSUtils {
     String sHash = parts[0];
     if (!sHash.startsWith (CIdentifier.DNS_HASHED_IDENTIFIER_PREFIX)) {
       // must start with "B-"
-      log.warn ("wrong syntax of identifier - must start with : " + CIdentifier.DNS_HASHED_IDENTIFIER_PREFIX);
+      s_aLogger.warn ("wrong syntax of identifier - must start with : " + CIdentifier.DNS_HASHED_IDENTIFIER_PREFIX);
       return null;
     }
 
@@ -147,12 +149,12 @@ public final class DNSUtils {
 
     // is it a valid MD5 hash?
     if (sHash.length () != 32) {
-      log.warn ("id part : " + sHash + " is not hashed; length=" + sHash.length ());
+      s_aLogger.warn ("id part : " + sHash + " is not hashed; length=" + sHash.length ());
       return null;
     }
 
     if (!RegExHelper.stringMatchesPattern ("[0-9a-f]{32}", sHash)) {
-      log.warn ("id part : " + sHash + " contains illegal characters");
+      s_aLogger.warn ("id part : " + sHash + " contains illegal characters");
       return null;
     }
 
@@ -163,62 +165,60 @@ public final class DNSUtils {
   /**
    * Get the SMP ID from the passed DNS name. SMP DNS names are identified by
    * the ".publisher." identifier in the name.
-   *
-   * @param sDNSName
-   * @param sSMLZoneName
+   * 
+   * @param sDnsName
+   * @param sSmlZoneName
    * @return <code>null</code> if the passed DNS name is not an SMP DNS name
    */
   @Nullable
-  public static String getPublisherAnchorFromDnsName (@Nonnull final String sDNSName, @Nonnull final String sSMLZoneName) {
-    if (log.isDebugEnabled ())
-      log.debug ("Get PublisherAnchroFromDnsName : " + sDNSName);
-    if (!isHandledZone (sDNSName, sSMLZoneName)) {
-      log.error ("This is not correct zone : " + sDNSName + " not in : " + sSMLZoneName);
+  public static String getPublisherAnchorFromDnsName (@Nonnull final String sDnsName, @Nonnull final String sSmlZoneName) {
+    if (s_aLogger.isDebugEnabled ())
+      s_aLogger.debug ("Get PublisherAnchroFromDnsName : " + sDnsName);
+
+    if (!isHandledZone (sDnsName, sSmlZoneName)) {
+      s_aLogger.error ("This is not correct zone : " + sDnsName + " not in : " + sSmlZoneName);
       return null;
     }
 
-    final String sDNSNameLC = sDNSName.toLowerCase ();
-    final String sSuffix = ".publisher." + sSMLZoneName;
-    if (sDNSNameLC.endsWith (sSuffix))
-      return sDNSName.substring (0, sDNSName.length () - sSuffix.length ());
+    final String sDnsNameLC = sDnsName.toLowerCase ();
+    final String sSuffix = ".publisher." + sSmlZoneName;
+    if (sDnsNameLC.endsWith (sSuffix))
+      return sDnsName.substring (0, sDnsName.length () - sSuffix.length ());
 
-    if (log.isDebugEnabled ())
-      log.debug ("This is not Publisher Anchor " + sDNSName);
+    if (s_aLogger.isDebugEnabled ())
+      s_aLogger.debug ("This is not Publisher Anchor " + sDnsName);
     return null;
   }
 
-  public static boolean isHandledZone (@Nonnull final String sDNSName, @Nonnull final String sSMLZoneName) {
-    if (log.isDebugEnabled ())
-      log.debug ("isHandledZone : " + sDNSName + " : " + sSMLZoneName);
+  public static boolean isHandledZone (@Nonnull final String sDnsName, @Nonnull final String sSmlZoneName) {
+    if (s_aLogger.isDebugEnabled ())
+      s_aLogger.debug ("isHandledZone : " + sDnsName + " : " + sSmlZoneName);
 
-    return sDNSName.toLowerCase ().endsWith ("." + sSMLZoneName);
+    return sDnsName.toLowerCase ().endsWith ("." + sSmlZoneName);
   }
 
-  private static final String DOMAIN_IDENTIFIER = "((\\p{Alnum})([-]|(\\p{Alnum}))*(\\p{Alnum}))|(\\p{Alnum})";
-  private static final String DOMAIN_NAME_RULE = "(" + DOMAIN_IDENTIFIER + ")((\\.)(" + DOMAIN_IDENTIFIER + "))*";
+  public static void verifyHostname (@Nonnull final String sHostname) throws IllegalHostnameException {
+    if (s_aLogger.isDebugEnabled ())
+      s_aLogger.debug ("verifyHostname : " + sHostname);
 
-  public static void verifyHostname (final String host) throws IllegalHostnameException {
-    if (log.isDebugEnabled ())
-      log.debug ("verifyHostname : " + host);
-
-    if (host == null)
+    if (sHostname == null)
       throw new IllegalHostnameException ("Hostname cannot be 'null'");
 
-    if (host.length () > 253)
-      throw new IllegalHostnameException ("Hostname total length > 253 : " + host + " : " + host.length ());
+    if (sHostname.length () > 253)
+      throw new IllegalHostnameException ("Hostname total length > 253 : " + sHostname + " : " + sHostname.length ());
 
-    if (!host.matches (DOMAIN_NAME_RULE))
-      throw new IllegalHostnameException ("Hostname not legal : " + host);
+    if (!RegExHelper.stringMatchesPattern (DOMAIN_NAME_RULE, sHostname))
+      throw new IllegalHostnameException ("Hostname not legal : " + sHostname);
 
-    final String [] parts = RegExHelper.split (host, "\\.");
-    for (final String p : parts)
-      if (p.length () > 63)
-        throw new IllegalHostnameException ("Hostname part length > 63 : " + host);
+    final String [] aParts = RegExHelper.split (sHostname, "\\.");
+    for (final String sPart : aParts)
+      if (sPart.length () > 63)
+        throw new IllegalHostnameException ("Hostname part length > 63 : " + sHostname);
   }
 
-  public static boolean isValidHostname (final String host) {
+  public static boolean isValidHostname (final String sHostname) {
     try {
-      verifyHostname (host);
+      verifyHostname (sHostname);
       return true;
     }
     catch (final IllegalHostnameException ex) {

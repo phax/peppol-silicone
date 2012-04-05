@@ -312,8 +312,7 @@ public final class JPAParticipantDataHandlerTest {
 
   @Test
   public void testListParticipantIdentifiers () throws Exception {
-    final ParticipantIdentifierType secondIdentifier = new SimpleParticipantIdentifier ("testScheme",
-                                                                                        "0010:599900000002");
+    final ParticipantIdentifierType secondIdentifier = SimpleParticipantIdentifier.createWithDefaultScheme ("0010:599900000002");
 
     m_aParticipantIdentifierPage.getParticipantIdentifier ().add (secondIdentifier);
     s_aParticipantHandler.createParticipantIdentifiers (m_aParticipantIdentifierPage, CLIENT_UNIQUE_ID);
