@@ -59,17 +59,13 @@ import at.peppol.sml.server.ISMPDataHandler;
 import at.peppol.sml.server.exceptions.BadRequestException;
 import at.peppol.sml.server.exceptions.NotFoundException;
 import at.peppol.sml.server.exceptions.UnauthorizedException;
-import at.peppol.sml.server.jpa.JPAParticipantDataHandler;
-import at.peppol.sml.server.jpa.JPASMPDataHandler;
-import at.peppol.sml.server.jpa.SMLJPAWrapper;
 
 import com.phloc.commons.annotations.DevelopersNote;
-
 
 /**
  * Test class for class {@link JPAParticipantDataHandler} and
  * {@link JPASMPDataHandler}.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @DevelopersNote ("You need to adjust your local META-INF/persistence.xml file to run this test")
@@ -327,8 +323,7 @@ public final class JPADataHandlerTest {
 
   @Test
   public void testListParticipantIdentifiers () throws Exception {
-    final ParticipantIdentifierType secondIdentifier = new SimpleParticipantIdentifier ("testScheme",
-                                                                                        "0010:599900000002");
+    final ParticipantIdentifierType secondIdentifier = SimpleParticipantIdentifier.createWithDefaultScheme ("0010:599900000002");
 
     m_aParticipantIdentifierPage.getParticipantIdentifier ().add (secondIdentifier);
     s_aParticipantHandler.createParticipantIdentifiers (m_aParticipantIdentifierPage, CLIENT_UNIQUE_ID);
