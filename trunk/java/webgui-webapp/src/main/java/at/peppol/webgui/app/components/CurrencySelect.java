@@ -22,6 +22,10 @@ public class CurrencySelect extends Select {
     for (final CurrencyCodeContentType cc : CurrencyCodeContentType.values ()) {
       addItem (cc.value ());
     }
-    setValue (CurrencyCodeContentType.EUR.value ());
   }
+  @Override
+    public void attach() {
+        setValue(CurrencyCodeContentType.EUR.value());
+    }
 }
+
