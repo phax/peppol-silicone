@@ -4,27 +4,24 @@
  */
 package at.peppol.webgui.app.components;
 
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.NativeSelect;
-import com.vaadin.ui.Select;
 import un.unece.uncefact.codelist.specification._54217._2001.CurrencyCodeContentType;
 
+import com.vaadin.ui.Select;
+
 /**
- *
  * @author Jerouris
  */
-public class CurrencySelect extends Select{
-    
-    public CurrencySelect(String caption) {
-        setCaption(caption);
-        initData();
-    }
+public class CurrencySelect extends Select {
 
-    private void initData() {
+  public CurrencySelect (final String caption) {
+    setCaption (caption);
+    initData ();
+  }
 
-      for (CurrencyCodeContentType cc : CurrencyCodeContentType.values()) {
-            addItem(cc.value());
-      }
-      setValue("EUR");
+  private void initData () {
+    for (final CurrencyCodeContentType cc : CurrencyCodeContentType.values ()) {
+      addItem (cc.value ());
     }
+    setValue (CurrencyCodeContentType.EUR.value ());
+  }
 }
