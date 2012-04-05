@@ -4,13 +4,12 @@
  */
 package at.peppol.webgui.app.components;
 
+import java.math.BigDecimal;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.InvoiceLineType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ItemIdentificationType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ItemType;
-import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DescriptionType;
-import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IDType;
-import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.InvoicedQuantityType;
-import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.NameType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.PriceType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.*;
 
 /**
  * An adapter class that ignores the list types found in InvoiceLineType and
@@ -32,6 +31,9 @@ public class InvoiceLineAdapter extends InvoiceLineType {
         getItem().setSellersItemIdentification(new ItemIdentificationType());
         getItem().getSellersItemIdentification().setID(new IDType());
         setInvoicedQuantity(new InvoicedQuantityType());
+        
+        setPrice(new PriceType());
+        getPrice().setPriceAmount(new PriceAmountType());
     }
     
     public String getItemDescription() {
@@ -57,6 +59,16 @@ public class InvoiceLineAdapter extends InvoiceLineType {
     
     public String getSellersItemID() {
         return getItem().getSellersItemIdentification().getID().getValue();
+    }
+    
+    public void setPriceAmount(long amount)
+    {
+        getPrice().getPriceAmount().setValue(BigDecimal.valueOf(amount));
+    }
+    
+    public long getPriceAmount()
+    {
+        return getPrice().getPriceAmount().getValue().longValue();
     }
     
 }
