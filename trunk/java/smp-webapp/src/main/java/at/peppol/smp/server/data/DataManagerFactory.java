@@ -53,11 +53,13 @@ import com.phloc.commons.lang.GenericReflection;
  */
 @Immutable
 public final class DataManagerFactory {
+  private static final String CONFIG_DATA_MANAGER_CLASS = "dataManager.class";
+
   private DataManagerFactory () {}
 
   @Nonnull
   public static IDataManager getInstance () {
-    final String dataManagerName = ConfigFile.getInstance ().getString ("dataManager.class");
+    final String dataManagerName = ConfigFile.getInstance ().getString (CONFIG_DATA_MANAGER_CLASS);
     final IDataManager ret = GenericReflection.newInstance (dataManagerName, IDataManager.class);
     if (ret == null)
       throw new IllegalStateException ("Failed to create DataManager instance of class " + dataManagerName);

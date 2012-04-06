@@ -50,11 +50,13 @@ import com.phloc.commons.lang.GenericReflection;
  */
 @Immutable
 public final class RegistrationHookFactory {
+  private static final String CONFIG_REGISTRATION_HOOK_CLASS = "registrationHook.class";
+
   private RegistrationHookFactory () {}
 
   @Nonnull
   public static IRegistrationHook getInstance () {
-    final String sRegHookName = ConfigFile.getInstance ().getString ("registrationHook.class");
+    final String sRegHookName = ConfigFile.getInstance ().getString (CONFIG_REGISTRATION_HOOK_CLASS);
     final IRegistrationHook aHook = GenericReflection.newInstance (sRegHookName, IRegistrationHook.class);
     if (aHook == null)
       throw new IllegalStateException ("Failed to create registration hook instance from class " + sRegHookName);

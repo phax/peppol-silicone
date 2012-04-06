@@ -99,6 +99,11 @@ import com.sun.jersey.spi.container.ContainerResponseWriter;
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class SignatureFilter implements ContainerResponseFilter {
+  private static final String CONFIG_XMLDSIG_KEYSTORE_CLASSPATH = "xmldsig.keystore.classpath";
+  private static final String CONFIG_XMLDSIG_KEYSTORE_PASSWORD = "xmldsig.keystore.password";
+  private static final String CONFIG_XMLDSIG_KEYSTORE_KEY_ALIAS = "xmldsig.keystore.key.alias";
+  private static final String CONFIG_XMLDSIG_KEYSTORE_KEY_PASSWORD = "xmldsig.keystore.key.password";
+
   private static final Logger s_aLogger = LoggerFactory.getLogger (SignatureFilter.class);
 
   private KeyStore.PrivateKeyEntry m_aKeyEntry;
@@ -108,10 +113,10 @@ public final class SignatureFilter implements ContainerResponseFilter {
     // Load the KeyStore and get the signing key and certificate.
     try {
       final ConfigFile aConfigFile = ConfigFile.getInstance ();
-      final String sKeyStoreClassPath = aConfigFile.getString ("xmldsig.keystore.classpath");
-      final String sKeyStorePassword = aConfigFile.getString ("xmldsig.keystore.password");
-      final String sKeyStoreKeyAlias = aConfigFile.getString ("xmldsig.keystore.key.alias");
-      final String sKeyStoreKeyPassword = aConfigFile.getString ("xmldsig.keystore.key.password");
+      final String sKeyStoreClassPath = aConfigFile.getString (CONFIG_XMLDSIG_KEYSTORE_CLASSPATH);
+      final String sKeyStorePassword = aConfigFile.getString (CONFIG_XMLDSIG_KEYSTORE_PASSWORD);
+      final String sKeyStoreKeyAlias = aConfigFile.getString (CONFIG_XMLDSIG_KEYSTORE_KEY_ALIAS);
+      final String sKeyStoreKeyPassword = aConfigFile.getString (CONFIG_XMLDSIG_KEYSTORE_KEY_PASSWORD);
 
       final KeyStore ks = KeyStoreUtils.loadKeyStoreFromClassPath (sKeyStoreClassPath, sKeyStorePassword);
       m_aKeyEntry = (KeyStore.PrivateKeyEntry) ks.getEntry (sKeyStoreKeyAlias,

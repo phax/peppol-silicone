@@ -72,6 +72,11 @@ import com.phloc.commons.state.ESuccess;
  */
 @NotThreadSafe
 public final class RegistrationServiceRegistrationHook extends AbstractRegistrationHook {
+  private static final String CONFIG_HOOK_REG_LOCATOR_URL = "regServiceRegistrationHook.regLocatorUrl";
+  private static final String CONFIG_HOOK_ID = "regServiceRegistrationHook.id";
+  private static final String CONFIG_HOOK_KEYSTORE_CLASSPATH = "regServiceRegistrationHook.keystore.classpath";
+  private static final String CONFIG_HOOK_KEYSTORE_PASSWORD = "regServiceRegistrationHook.keystore.password";
+
   private static final Logger s_aLogger = LoggerFactory.getLogger (RegistrationServiceRegistrationHook.class);
   private static final URL s_aSMLEndpointURL;
   private static final String s_sSMPID;
@@ -80,7 +85,7 @@ public final class RegistrationServiceRegistrationHook extends AbstractRegistrat
     final ConfigFile aConfigFile = ConfigFile.getInstance ();
 
     // SML endpoint (incl. the service name)
-    final String sURL = aConfigFile.getString ("regServiceRegistrationHook.regLocatorUrl");
+    final String sURL = aConfigFile.getString (CONFIG_HOOK_REG_LOCATOR_URL);
     try {
       s_aSMLEndpointURL = new URL (sURL);
     }
@@ -89,7 +94,7 @@ public final class RegistrationServiceRegistrationHook extends AbstractRegistrat
     }
 
     // SMP ID
-    s_sSMPID = aConfigFile.getString ("regServiceRegistrationHook.id");
+    s_sSMPID = aConfigFile.getString (CONFIG_HOOK_ID);
 
     s_aLogger.info ("Using the following SML address: " + s_aSMLEndpointURL);
     s_aLogger.info ("This SMP has the ID: " + s_sSMPID);
@@ -111,8 +116,8 @@ public final class RegistrationServiceRegistrationHook extends AbstractRegistrat
     // Keystore for SML access:
     try {
       final ConfigFile aConfigFile = ConfigFile.getInstance ();
-      final String sKeystorePath = aConfigFile.getString ("regServiceRegistrationHook.keystore.classpath");
-      final String sKeystorePassword = aConfigFile.getString ("regServiceRegistrationHook.keystore.password");
+      final String sKeystorePath = aConfigFile.getString (CONFIG_HOOK_KEYSTORE_CLASSPATH);
+      final String sKeystorePassword = aConfigFile.getString (CONFIG_HOOK_KEYSTORE_PASSWORD);
 
       // Main key storage
       final KeyStore aKeyStore = KeyStoreUtils.loadKeyStoreFromClassPath (sKeystorePath, sKeystorePassword);

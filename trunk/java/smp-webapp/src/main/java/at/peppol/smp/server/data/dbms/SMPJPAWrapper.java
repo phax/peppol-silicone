@@ -53,6 +53,13 @@ import com.phloc.commons.annotations.ReturnsMutableCopy;
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 final class SMPJPAWrapper extends AbstractJPAWrapper {
+  private static final String CONFIG_JDBC_DRIVER = "jdbc.driver";
+  private static final String CONFIG_JDBC_URL = "jdbc.url";
+  private static final String CONFIG_JDBC_USER = "jdbc.user";
+  private static final String CONFIG_JDBC_PASSWORD = "jdbc.password";
+  private static final String CONFIG_TARGET_DATABASE = "target-database";
+  private static final String CONFIG_JDBC_READ_CONNECTIONS_MAX = "jdbc.read-connections.max";
+
   private static final SMPJPAWrapper s_aInstance = new SMPJPAWrapper ();
 
   @Nonnull
@@ -63,13 +70,13 @@ final class SMPJPAWrapper extends AbstractJPAWrapper {
 
     final Map <String, Object> ret = new HashMap <String, Object> ();
     // Read all properties from the standard configuration file
-    ret.put ("javax.persistence.jdbc.driver", aCF.getString ("jdbc.driver"));
-    ret.put ("javax.persistence.jdbc.url", aCF.getString ("jdbc.url"));
-    ret.put ("javax.persistence.jdbc.user", aCF.getString ("jdbc.user"));
-    ret.put ("javax.persistence.jdbc.password", aCF.getString ("jdbc.password"));
-    ret.put ("eclipselink.target-database", aCF.getString ("target-database"));
+    ret.put ("javax.persistence.jdbc.driver", aCF.getString (CONFIG_JDBC_DRIVER));
+    ret.put ("javax.persistence.jdbc.url", aCF.getString (CONFIG_JDBC_URL));
+    ret.put ("javax.persistence.jdbc.user", aCF.getString (CONFIG_JDBC_USER));
+    ret.put ("javax.persistence.jdbc.password", aCF.getString (CONFIG_JDBC_PASSWORD));
+    ret.put ("eclipselink.target-database", aCF.getString (CONFIG_TARGET_DATABASE));
     // Connection pooling
-    ret.put ("eclipselink.jdbc.read-connections.max", aCF.getString ("jdbc.read-connections.max"));
+    ret.put ("eclipselink.jdbc.read-connections.max", aCF.getString (CONFIG_JDBC_READ_CONNECTIONS_MAX));
 
     // EclipseLink should create the database schema automatically
     // Values: Values: none/create-tables/drop-and-create-tables

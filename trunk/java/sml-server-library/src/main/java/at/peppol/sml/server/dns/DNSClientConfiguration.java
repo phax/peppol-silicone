@@ -41,67 +41,69 @@ import javax.annotation.concurrent.Immutable;
 
 import at.peppol.commons.utils.ConfigFile;
 
-
 /**
  * Get configuration for DNSClient.<br>
  * This class only uses the {@link ConfigFile} with fixed keys and fixed types.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable
 public final class DNSClientConfiguration {
-  private static final String ENABLED = "dnsClient.enabled";
-  private static final String ZONE = "dnsClient.zone";
-  private static final String SML_ZONE_NAME = "dnsClient.smlzonename";
-  private static final String SERVER = "dnsClient.server";
-  private static final String TTL = "dnsClient.ttl";
+  private static final String CONFIG_ENABLED = "dnsClient.enabled";
+  private static final String CONFIG_ZONE = "dnsClient.zone";
+  private static final String CONFIG_SML_ZONE_NAME = "dnsClient.smlzonename";
+  private static final String CONFIG_SERVER = "dnsClient.server";
+  private static final String CONFIG_TTL = "dnsClient.ttl";
+
+  // The config file instance to be used for reading
+  private static final ConfigFile s_aConfigFile = ConfigFile.getInstance ();
 
   private DNSClientConfiguration () {}
 
   /**
    * Property "dnsClient.enabled" from "config.properties".
-   *
+   * 
    * @return enabled or not : default false
    */
   public static boolean isEnabled () {
-    return ConfigFile.getInstance ().getBoolean (ENABLED, false);
+    return s_aConfigFile.getBoolean (CONFIG_ENABLED, false);
   }
 
   /**
    * Property "dnsClient.zone" from "config.properties". This is the Domain
    * name.
-   *
+   * 
    * @return zone
    */
   public static String getZone () {
-    return ConfigFile.getInstance ().getString (ZONE);
+    return s_aConfigFile.getString (CONFIG_ZONE);
   }
 
   /**
    * Property "dnsClient.smlzonename" from "config.properties". This zone is
    * prefixed on Zone (Domain).
-   *
+   * 
    * @return zone
    */
   public static String getSMLZoneName () {
-    return ConfigFile.getInstance ().getString (SML_ZONE_NAME);
+    return s_aConfigFile.getString (CONFIG_SML_ZONE_NAME);
   }
 
   /**
    * Property "dnsClient.server" from "config.properties".
-   *
+   * 
    * @return server
    */
   public static String getServer () {
-    return ConfigFile.getInstance ().getString (SERVER);
+    return s_aConfigFile.getString (CONFIG_SERVER);
   }
 
   /**
    * Property "dnsClient.ttl" from "config.properties".
-   *
+   * 
    * @return ttl : default 60 seconds
    */
   public static int getTTL () {
-    return ConfigFile.getInstance ().getInt (TTL, 60);
+    return s_aConfigFile.getInt (CONFIG_TTL, 60);
   }
 }

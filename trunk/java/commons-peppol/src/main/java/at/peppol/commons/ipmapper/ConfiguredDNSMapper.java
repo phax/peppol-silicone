@@ -49,7 +49,6 @@ import org.slf4j.LoggerFactory;
 
 import at.peppol.commons.utils.ConfigFile;
 
-
 /**
  * @author PEPPOL.AT, BRZ, Andreas Haberl
  * @see IDNSInternalMapper
@@ -63,20 +62,28 @@ public class ConfiguredDNSMapper implements IDNSInternalMapper {
    * externalip1,externalip2=internalip1:port1 externalip3=internalip2:port2
    * etc.
    */
-  private static final String HOSTNAME_MAPPING = "busdox.net.dns.map.hostname_mapping";
+  private static final String CONFIG_HOSTNAME_MAPPING = "busdox.net.dns.map.hostname_mapping";
 
   private final Map <String, String> m_aNameMapping = new HashMap <String, String> ();
 
+  @Deprecated
   public ConfiguredDNSMapper () {
+    // Use the default config file
+    this (ConfigFile.getInstance ());
+  }
+
+  public ConfiguredDNSMapper (@Nonnull final ConfigFile aConfigFile) {
+    if (aConfigFile == null)
+      throw new NullPointerException ("configFile");
     // Init mapping
-    final String sIPMapping = ConfigFile.getInstance ().getString (HOSTNAME_MAPPING);
+    final String sIPMapping = aConfigFile.getString (CONFIG_HOSTNAME_MAPPING);
     _verifyAndSetMapping (sIPMapping);
   }
 
   private void _verifyAndSetMapping (@Nonnull final String sIPMapping) {
     if (sIPMapping == null) {
       s_aLogger.warn ("no external to internal IP translation configuration property found. see property '" +
-                      HOSTNAME_MAPPING +
+                      CONFIG_HOSTNAME_MAPPING +
                       "'...");
       return;
     }
@@ -87,14 +94,14 @@ public class ConfiguredDNSMapper implements IDNSInternalMapper {
     // 4.4.4.4 is assumed to listen on a socket on port 8080
     final String sCleared = sIPMapping.replaceAll (" +", " ");
     if (s_aLogger.isInfoEnabled ()) {
-      s_aLogger.info ("found configuration string '" + sCleared + "' for property '" + HOSTNAME_MAPPING + "'...");
+      s_aLogger.info ("found configuration string '" + sCleared + "' for property '" + CONFIG_HOSTNAME_MAPPING + "'...");
     }
     // get all external to internal mappings should look like
     // 1.1.1.1,2.2.2.2=4.4.4.4:8080 etc.
     final StringTokenizer aMappings = new StringTokenizer (sCleared, " ");
     if (aMappings.countTokens () <= 0) {
       s_aLogger.warn ("empty external to internal IP translation configuration property found. see property '" +
-                      HOSTNAME_MAPPING +
+                      CONFIG_HOSTNAME_MAPPING +
                       "'...");
       return;
     }

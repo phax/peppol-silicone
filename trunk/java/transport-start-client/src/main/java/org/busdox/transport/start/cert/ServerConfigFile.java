@@ -42,7 +42,6 @@ import javax.annotation.concurrent.Immutable;
 
 import at.peppol.commons.utils.ConfigFile;
 
-
 /**
  * Wrapper around the server/client AP configuration file.
  * 
@@ -50,6 +49,15 @@ import at.peppol.commons.utils.ConfigFile;
  */
 @Immutable
 public final class ServerConfigFile {
+  private static final String CONFIG_SERVER_KEYSTORE_PATH = "server.keystore.path";
+  private static final String CONFIG_SERVER_KEYSTORE_PASSWORD = "server.keystore.password";
+  private static final String CONFIG_SERVER_KEYSTORE_ALIAS = "server.keystore.alias";
+  private static final String CONFIG_SERVER_KEYSTORE_ALIASPASSWORD = "server.keystore.aliaspassword";
+  private static final String CONFIG_SERVER_TRUSTSTORE_PATH = "server.truststore.path";
+  private static final String CONFIG_SERVER_TRUSTSTORE_PASSWORD = "server.truststore.password";
+  private static final String CONFIG_SERVER_TRUSTSTORE_ALIAS = "server.truststore.alias";
+  private static final String CONFIG_SERVER_TRUSTSTORE_ALIASPASSWORD = "server.truststore.aliaspassword";
+
   private static final ConfigFile s_aConfigFile = new ConfigFile ("private-configServer.properties",
                                                                   "configServer.properties");
 
@@ -64,41 +72,41 @@ public final class ServerConfigFile {
 
   @Nullable
   public static String getKeyStorePath () {
-    return s_aConfigFile.getString ("server.keystore.path");
+    return s_aConfigFile.getString (CONFIG_SERVER_KEYSTORE_PATH);
   }
 
   @Nullable
   public static String getKeyStorePassword () {
-    return s_aConfigFile.getString ("server.keystore.password");
+    return s_aConfigFile.getString (CONFIG_SERVER_KEYSTORE_PASSWORD);
   }
 
   @Nullable
   public static String getKeyStoreAlias () {
-    return s_aConfigFile.getString ("server.keystore.alias");
+    return s_aConfigFile.getString (CONFIG_SERVER_KEYSTORE_ALIAS);
   }
 
   @Nullable
   public static char [] getKeyStoreAliasPassword () {
-    return s_aConfigFile.getCharArray ("server.keystore.aliaspassword");
+    return s_aConfigFile.getCharArray (CONFIG_SERVER_KEYSTORE_ALIASPASSWORD);
   }
 
   @Nullable
   public static String getTrustStorePath () {
-    return s_aConfigFile.getString ("server.truststore.path");
+    return s_aConfigFile.getString (CONFIG_SERVER_TRUSTSTORE_PATH);
   }
 
   @Nullable
   public static String getTrustStorePassword () {
-    return s_aConfigFile.getString ("server.truststore.password");
+    return s_aConfigFile.getString (CONFIG_SERVER_TRUSTSTORE_PASSWORD);
   }
 
   @Nullable
   public static String getTrustStoreAlias () {
-    return s_aConfigFile.getString ("server.truststore.alias");
+    return s_aConfigFile.getString (CONFIG_SERVER_TRUSTSTORE_ALIAS);
   }
 
   @Nullable
   public static char [] getTrustStoreAliasPassword () {
-    return s_aConfigFile.getCharArray ("server.truststore.aliaspassword");
+    return s_aConfigFile.getCharArray (CONFIG_SERVER_TRUSTSTORE_ALIASPASSWORD);
   }
 }

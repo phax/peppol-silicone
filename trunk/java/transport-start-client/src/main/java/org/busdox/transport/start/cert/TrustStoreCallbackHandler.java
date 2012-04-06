@@ -53,11 +53,10 @@ import at.peppol.commons.security.KeyStoreUtils;
 import com.sun.xml.wss.impl.callback.KeyStoreCallback;
 import com.sun.xml.wss.impl.callback.PrivateKeyCallback;
 
-
 /**
  * This class is referenced from AP client and server from the respective WSDL
  * files, and dynamically provides the keys to be used.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class TrustStoreCallbackHandler implements CallbackHandler {
@@ -92,6 +91,8 @@ public final class TrustStoreCallbackHandler implements CallbackHandler {
       }
       else
         if (aCallback instanceof PrivateKeyCallback) {
+          // TODO
+          s_aLogger.info ("Why is the trust store handler requesting a private key????");
           try {
             final PrivateKey privateKey = (PrivateKey) aKeyStore.getKey (sTrustStoreAlias, aTrustStoreAliasPassword);
             ((PrivateKeyCallback) aCallback).setKey (privateKey);

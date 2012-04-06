@@ -50,29 +50,32 @@ import at.peppol.commons.utils.ConfigFile;
 
 import com.phloc.commons.exceptions.InitializationException;
 
-
 /**
  * This class has the sole purpose of delivering the PEPPOL root certificate in
  * an efficient manner!
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable
 public final class PeppolRootCertificateProvider {
-  private static final Logger log = LoggerFactory.getLogger (PeppolRootCertificateProvider.class);
+  private static final String CONFIG_SML_TRUSTSTORE_PATH = "sml.truststore.path";
+  private static final String CONFIG_SML_TRUSTSTORE_PASSWORD = "sml.truststore.password";
+  private static final String CONFIG_SML_TRUSTSTORE_ALIAS = "sml.truststore.alias";
+  private static final Logger s_aLogger = LoggerFactory.getLogger (PeppolRootCertificateProvider.class);
+
   private static X509Certificate s_aPeppolSMPRootCert;
 
   static {
     final ConfigFile aConfigFile = ConfigFile.getInstance ();
-    final String sTrustStorePath = aConfigFile.getString ("sml.truststore.path");
-    final String sTrustStorePW = aConfigFile.getString ("sml.truststore.password");
-    final String sTrustStoreAlias = aConfigFile.getString ("sml.truststore.alias");
+    final String sTrustStorePath = aConfigFile.getString (CONFIG_SML_TRUSTSTORE_PATH);
+    final String sTrustStorePW = aConfigFile.getString (CONFIG_SML_TRUSTSTORE_PASSWORD);
+    final String sTrustStoreAlias = aConfigFile.getString (CONFIG_SML_TRUSTSTORE_ALIAS);
     try {
       final KeyStore aKS = KeyStoreUtils.loadKeyStoreFromClassPath (sTrustStorePath, sTrustStorePW);
       s_aPeppolSMPRootCert = (X509Certificate) aKS.getCertificate (sTrustStoreAlias);
     }
     catch (final Exception ex) {
-      log.warn ("Failed to read SML trust store", ex);
+      s_aLogger.error ("Failed to read SML trust store from '" + sTrustStorePath + "'", ex);
     }
 
     if (s_aPeppolSMPRootCert == null)

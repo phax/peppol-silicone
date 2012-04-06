@@ -67,7 +67,7 @@ import com.phloc.commons.string.StringHelper;
  * present, the default config file (which is also in the SCM) is accessed by
  * the name<code>config.properties</code>.<br>
  * Additionally you can create a new instance with a custom file path.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable
@@ -88,7 +88,7 @@ public final class ConfigFile {
 
   /**
    * Constructor for explicitly specifying a file path to read.
-   *
+   * 
    * @param aConfigPaths
    *        The array of paths to the config files to be read. Must be
    *        classpath-relative. The first file that could be read will be taken
@@ -141,16 +141,42 @@ public final class ConfigFile {
   }
 
   /**
-   * @return The one and only config file object.
+   * @return The default configuration file denoted by the file names
+   *         {@value #DEFAULT_PRIVATE_CONFIG_PROPERTIES} and
+   *         {@value #DEFAULT_CONFIG_PROPERTIES}.
    */
   @Nonnull
   public static ConfigFile getInstance () {
     return SingletonHolder.s_aInstance;
   }
 
+  /**
+   * Get the string from the configuration files
+   * 
+   * @param sKey
+   *        The key to search
+   * @return <code>null</code> if no such value is in the configuration file.
+   */
   @Nullable
   public final String getString (@Nonnull final String sKey) {
-    return StringHelper.trim (m_aProps.getProperty (sKey));
+    return getString (sKey, null);
+  }
+
+  /**
+   * Get the string from the configuration files
+   * 
+   * @param sKey
+   *        The key to search
+   * @param sDefault
+   *        The default value to be returned if the value was not found. May be
+   *        <code>null</code>.
+   * @return the passed default value if no such value is in the configuration
+   *         file.
+   */
+  @Nullable
+  public final String getString (@Nonnull final String sKey, @Nullable final String sDefault) {
+    final String sValue = m_aProps.getProperty (sKey);
+    return sValue != null ? StringHelper.trim (sValue) : sDefault;
   }
 
   @Nullable
@@ -167,6 +193,9 @@ public final class ConfigFile {
     return StringHelper.parseInt (getString (sKey), nDefault);
   }
 
+  /**
+   * @return A {@link Set} with all keys contained in the configuration file
+   */
   @Nonnull
   @ReturnsMutableCopy
   public final Set <String> getAllKeys () {
