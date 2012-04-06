@@ -52,7 +52,6 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.PresentForCodeCoverage;
-import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.commons.io.resource.FileSystemResource;
 import com.phloc.commons.io.streams.StreamUtils;
@@ -75,9 +74,8 @@ public final class KeyStoreUtils {
   /**
    * Load a key store from a resource.
    * 
-   * @param aKeyStoreRes
-   *        The resource pointing to the key store. May not be <code>null</code>
-   *        .
+   * @param sKeyStorePath
+   *        The path pointing to the key store. May not be <code>null</code>.
    * @param sKeyStorePassword
    *        The key store password. May be <code>null</code> to indicate that no
    *        password is required.
@@ -85,17 +83,17 @@ public final class KeyStoreUtils {
    * @see KeyStore#load(InputStream, char[])
    */
   @Nonnull
-  public static KeyStore loadKeyStoreFromResource (@Nonnull final IReadableResource aKeyStoreRes,
-                                                   @Nullable final String sKeyStorePassword) throws NoSuchAlgorithmException,
-                                                                                            CertificateException,
-                                                                                            IOException {
-    if (aKeyStoreRes == null)
-      throw new NullPointerException ("keyStoreResource");
-
+  public static KeyStore loadKeyStore (@Nonnull final String sKeyStorePath, @Nullable final String sKeyStorePassword) throws NoSuchAlgorithmException,
+                                                                                                                     CertificateException,
+                                                                                                                     IOException {
     // Open the resource stream
-    final InputStream aIS = aKeyStoreRes.getInputStream ();
+    InputStream aIS = ClassPathResource.getInputStream (sKeyStorePath);
+    if (aIS == null) {
+      // Fallback to file system - maybe this helps...
+      aIS = new FileSystemResource (sKeyStorePath).getInputStream ();
+    }
     if (aIS == null)
-      throw new IllegalArgumentException ("Failed to open key store " + aKeyStoreRes);
+      throw new IllegalArgumentException ("Failed to open key store '" + sKeyStorePath + "'");
 
     try {
       final KeyStore aKeyStore = KeyStore.getInstance (KEYSTORE_TYPE_JKS);
@@ -122,11 +120,12 @@ public final class KeyStoreUtils {
    * @return The Java key-store object.
    */
   @Nonnull
+  @Deprecated
   public static KeyStore loadKeyStoreFromClassPath (@Nonnull final String sKeyStorePath,
                                                     @Nullable final String sKeyStorePassword) throws NoSuchAlgorithmException,
                                                                                              CertificateException,
                                                                                              IOException {
-    return loadKeyStoreFromResource (new ClassPathResource (sKeyStorePath), sKeyStorePassword);
+    return loadKeyStore (sKeyStorePath, sKeyStorePassword);
   }
 
   /**
@@ -141,11 +140,12 @@ public final class KeyStoreUtils {
    * @return The Java key-store object.
    */
   @Nonnull
+  @Deprecated
   public static KeyStore loadKeyStoreFromFile (@Nonnull final String sKeyStoreFile,
                                                @Nullable final String sKeyStorePassword) throws NoSuchAlgorithmException,
                                                                                         CertificateException,
                                                                                         IOException {
-    return loadKeyStoreFromResource (new FileSystemResource (sKeyStoreFile), sKeyStorePassword);
+    return loadKeyStore (sKeyStoreFile, sKeyStorePassword);
   }
 
   /**

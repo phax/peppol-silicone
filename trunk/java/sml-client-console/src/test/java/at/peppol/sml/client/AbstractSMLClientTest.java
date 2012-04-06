@@ -54,11 +54,10 @@ import at.peppol.commons.sml.ISMLInfo;
 import com.phloc.commons.annotations.DevelopersNote;
 import com.phloc.commons.random.VerySecureRandom;
 
-
 /**
  * This class tests the URL connection to the SML that is secured with client
  * certificates.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @DevelopersNote ("You need to modify the key store path for this test to run!")
@@ -82,7 +81,7 @@ public abstract class AbstractSMLClientTest {
       }
 
       // Main key storage
-      final KeyStore aKeyStore = KeyStoreUtils.loadKeyStoreFromClassPath (KEYSTORE_PATH, KEYSTORE_PASSWORD);
+      final KeyStore aKeyStore = KeyStoreUtils.loadKeyStore (KEYSTORE_PATH, KEYSTORE_PASSWORD);
 
       // Key manager
       final KeyManagerFactory aKeyManagerFactory = KeyManagerFactory.getInstance ("SunX509");

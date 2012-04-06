@@ -185,7 +185,7 @@ public class AddSignatureHandler implements LogicalHandler <LogicalMessageContex
     final String sKeyStorePath = _getConfigFile ().getString (CONFIG_SML_KEYSTORE_PATH);
     final String sKeyStorePW = _getConfigFile ().getString (CONFIG_SML_KEYSTORE_PASSWORD);
     final String sKeyStoreAlias = _getConfigFile ().getString (CONFIG_SML_KEYSTORE_ALIAS);
-    final KeyStore ks = KeyStoreUtils.loadKeyStoreFromClassPath (sKeyStorePath, sKeyStorePW);
+    final KeyStore ks = KeyStoreUtils.loadKeyStore (sKeyStorePath, sKeyStorePW);
     final KeyStore.PrivateKeyEntry keyEntry = (KeyStore.PrivateKeyEntry) ks.getEntry (sKeyStoreAlias,
                                                                                       new KeyStore.PasswordProtection (sKeyStorePW.toCharArray ()));
     final X509Certificate cert = (X509Certificate) keyEntry.getCertificate ();

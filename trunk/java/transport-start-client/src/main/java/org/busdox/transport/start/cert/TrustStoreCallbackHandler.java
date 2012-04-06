@@ -74,7 +74,7 @@ public final class TrustStoreCallbackHandler implements CallbackHandler {
     s_aLogger.info ("Loading TrustStore from '" + sTrustStorePath + "'");
     KeyStore aKeyStore;
     try {
-      aKeyStore = KeyStoreUtils.loadKeyStoreFromClassPath (sTrustStorePath, sTrustStorePassword);
+      aKeyStore = KeyStoreUtils.loadKeyStore (sTrustStorePath, sTrustStorePassword);
     }
     catch (final Exception ex) {
       throw new IllegalStateException ("Error in loading TrustStore from '" + sTrustStorePath + "!", ex);

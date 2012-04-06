@@ -275,7 +275,7 @@ public final class SAMLCallbackHandler implements CallbackHandler {
                                                                aStatements);
 
     // Read certificates and private keys
-    final KeyStore aKeyStore = KeyStoreUtils.loadKeyStoreFromClassPath (sKeyStoreFilename, sKeyStorePassword);
+    final KeyStore aKeyStore = KeyStoreUtils.loadKeyStore (sKeyStoreFilename, sKeyStorePassword);
     final X509Certificate aAPCertificate = (X509Certificate) aKeyStore.getCertificate (sKeyAlias);
     final Key aKey = aKeyStore.getKey (sKeyAlias, sKeyPassword.toCharArray ());
     final PrivateKey aPrivateKey = aKey instanceof PrivateKey ? (PrivateKey) aKey : null;

@@ -53,11 +53,10 @@ import at.peppol.commons.security.KeyStoreUtils;
 import com.sun.xml.wss.impl.callback.KeyStoreCallback;
 import com.sun.xml.wss.impl.callback.PrivateKeyCallback;
 
-
 /**
  * This class is referenced from AP client and server from the respective WSDL
  * files, and dynamically provides the keys to be used.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class KeyStoreCallbackHandler implements CallbackHandler {
@@ -75,7 +74,7 @@ public final class KeyStoreCallbackHandler implements CallbackHandler {
     s_aLogger.info ("Loading KeyStore from '" + sKeyStorePath + "'");
     KeyStore aKeyStore;
     try {
-      aKeyStore = KeyStoreUtils.loadKeyStoreFromClassPath (sKeyStorePath, sKeyStorePassword);
+      aKeyStore = KeyStoreUtils.loadKeyStore (sKeyStorePath, sKeyStorePassword);
     }
     catch (final Exception ex) {
       throw new IllegalStateException ("Error in loading KeyStore from '" + sKeyStorePath + "'!", ex);

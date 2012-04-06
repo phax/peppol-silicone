@@ -131,7 +131,7 @@ public class AccessPointService {
       final String sKeyStorePath = ServerConfigFile.getKeyStorePath ();
       final String sKeyStorePassword = ServerConfigFile.getKeyStorePassword ();
       final String sKeyStoreAlias = ServerConfigFile.getKeyStoreAlias ();
-      final KeyStore aKeyStore = KeyStoreUtils.loadKeyStoreFromClassPath (sKeyStorePath, sKeyStorePassword);
+      final KeyStore aKeyStore = KeyStoreUtils.loadKeyStore (sKeyStorePath, sKeyStorePassword);
       s_aConfiguredCert = (X509Certificate) aKeyStore.getCertificate (sKeyStoreAlias);
       s_aLogger.info ("Our Certificate - Serial Number: " + s_aConfiguredCert.getSerialNumber ());
     }
