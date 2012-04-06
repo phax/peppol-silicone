@@ -57,9 +57,9 @@ public enum ESMLAction {
   SMP_DELETE (ESMLObjectType.METADATA, ESMLCommand.DELETE),
   SMP_LIST (ESMLObjectType.METADATA, ESMLCommand.READ);
 
-  private ESMLObjectType m_eObjectType;
-  private ESMLCommand m_eCommand;
-  private SMLActionParameter [] m_aParams;
+  private final ESMLObjectType m_eObjectType;
+  private final ESMLCommand m_eCommand;
+  private final SMLActionParameter [] m_aParams;
 
   private ESMLAction (@Nonnull final ESMLObjectType eObjectType,
                       @Nonnull final ESMLCommand eCommand,
@@ -94,7 +94,8 @@ public enum ESMLAction {
 
   @Override
   public String toString () {
-    final StringBuilder aMsg = new StringBuilder (m_eObjectType.getName ()).append (' ').append (m_eCommand.getName ());
+    final StringBuilder aMsg = new StringBuilder ();
+    aMsg.append (m_eObjectType.getName ()).append (' ').append (m_eCommand.getName ());
     if (m_aParams.length > 0) {
       aMsg.append (" (");
       int nIndex = 0;

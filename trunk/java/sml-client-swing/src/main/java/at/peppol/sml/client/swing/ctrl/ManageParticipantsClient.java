@@ -41,8 +41,6 @@ import java.net.URL;
 import java.util.List;
 import java.util.UUID;
 
-import javax.annotation.Nonnull;
-
 import org.busdox.servicemetadata.locator._1.ParticipantIdentifierPageType;
 import org.busdox.servicemetadata.managebusinessidentifierservice._1.BadRequestFault;
 import org.busdox.servicemetadata.managebusinessidentifierservice._1.InternalErrorFault;
@@ -53,7 +51,6 @@ import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 import at.peppol.sml.client.ManageParticipantIdentifierServiceCaller;
 
-
 public final class ManageParticipantsClient {
   private final ManageParticipantIdentifierServiceCaller m_aCaller;
 
@@ -61,125 +58,72 @@ public final class ManageParticipantsClient {
     m_aCaller = new ManageParticipantIdentifierServiceCaller (aEndpointAddress);
   }
 
-  public void create (final String sSMPID, final String [] args, final int index) throws BadRequestFault,
-                                                                                 InternalErrorFault,
-                                                                                 UnauthorizedFault,
-                                                                                 NotFoundFault {
-    final int paramsLeft = args.length - index;
-    if (paramsLeft < 2) {
+  public void create (final String sSMPID, final String [] args) throws BadRequestFault,
+                                                                InternalErrorFault,
+                                                                UnauthorizedFault,
+                                                                NotFoundFault {
+    if (args.length < 2) {
       System.err.println ("Invalid number of args to create a new identifier.");
       System.out.println ("Use the following two parameters: identifier indentifierType");
       return;
     }
-    create (sSMPID, args[index], args[index + 1]);
+    m_aCaller.create (sSMPID, new SimpleParticipantIdentifier (args[1], args[0]));
   }
 
-  public void delete (final String [] args, final int index) throws BadRequestFault,
-                                                            InternalErrorFault,
-                                                            NotFoundFault,
-                                                            UnauthorizedFault {
-    final int paramsLeft = args.length - index;
-    if (paramsLeft < 2) {
+  public void delete (final String [] args) throws BadRequestFault,
+                                           InternalErrorFault,
+                                           NotFoundFault,
+                                           UnauthorizedFault {
+    if (args.length < 2) {
       System.err.println ("Invalid number of args to delete an identifier.");
       System.out.println ("Use the following two parameters: identifier indentifierType");
       return;
     }
-    delete (args[index], args[index + 1]);
+    m_aCaller.delete (new SimpleParticipantIdentifier (args[1], args[0]));
   }
 
-  public void list (final String sSMPID, final String [] args, final int index) throws BadRequestFault,
-                                                                               InternalErrorFault,
-                                                                               NotFoundFault,
-                                                                               UnauthorizedFault {
-    final int paramsLeft = args.length - index;
-    switch (paramsLeft) {
+  public void list (final String sSMPID, final String [] args) throws BadRequestFault,
+                                                              InternalErrorFault,
+                                                              NotFoundFault,
+                                                              UnauthorizedFault {
+    switch (args.length) {
       case 0:
-        list (sSMPID);
+        print (m_aCaller.list ("", sSMPID));
         break;
       default:
-        list (sSMPID, args[index]);
+        print (m_aCaller.list (args[0], sSMPID));
         break;
     }
   }
 
-  public UUID prepareToMigrate (final String sSMPID, final String [] args, final int index) throws BadRequestFault,
-                                                                                           InternalErrorFault,
-                                                                                           NotFoundFault,
-                                                                                           UnauthorizedFault {
-    final int paramsLeft = args.length - index;
-    if (paramsLeft != 2) {
+  public UUID prepareToMigrate (final String sSMPID, final String [] args) throws BadRequestFault,
+                                                                          InternalErrorFault,
+                                                                          NotFoundFault,
+                                                                          UnauthorizedFault {
+    if (args.length != 2) {
       System.err.println ("Invalid number of args to prepare migrate of identifier.");
       System.out.println ("Use the following two parameters: identifier indentifierType");
       return null;
     }
-    final ParticipantIdentifierType aPI = new SimpleParticipantIdentifier (args[index + 1], args[index]);
-    return prepareToMigrate (sSMPID, aPI);
-  }
-
-  public void migrate (final String sSMPID, final String [] args, final int index) throws BadRequestFault,
-                                                                                  InternalErrorFault,
-                                                                                  NotFoundFault,
-                                                                                  UnauthorizedFault {
-    final int paramsLeft = args.length - index;
-    if (paramsLeft != 3) {
-      System.err.println ("Invalid number of args to migrate an identifier.");
-      System.out.println ("Use the following three parameters: identifier indentifierType migrationCode");
-      return;
-    }
-    final ParticipantIdentifierType aPI = new SimpleParticipantIdentifier (args[index + 1], args[index]);
-    final UUID aCode = UUID.fromString (args[index + 2]);
-    migrate (sSMPID, aPI, aCode);
-  }
-
-  void create (final String sSMPID, final ParticipantIdentifierType aIdentifier) throws BadRequestFault,
-                                                                                InternalErrorFault,
-                                                                                UnauthorizedFault,
-                                                                                NotFoundFault {
-    m_aCaller.create (sSMPID, aIdentifier);
-  }
-
-  void create (final String sSMPID, final String sIdentifierValue, final String sIdentifierScheme) throws BadRequestFault,
-                                                                                                  InternalErrorFault,
-                                                                                                  UnauthorizedFault,
-                                                                                                  NotFoundFault {
-    m_aCaller.create (sSMPID, new SimpleParticipantIdentifier (sIdentifierScheme, sIdentifierValue));
-  }
-
-  void delete (final String sIdentifierValue, final String sIdentifierScheme) throws BadRequestFault,
-                                                                             InternalErrorFault,
-                                                                             NotFoundFault,
-                                                                             UnauthorizedFault {
-    m_aCaller.delete (new SimpleParticipantIdentifier (sIdentifierScheme, sIdentifierValue));
-  }
-
-  void list (final String sSMPID) throws BadRequestFault, InternalErrorFault, NotFoundFault, UnauthorizedFault {
-    list (sSMPID, "");
-  }
-
-  void list (final String sSMPID, final String nextPageIdentifier) throws BadRequestFault,
-                                                                  InternalErrorFault,
-                                                                  NotFoundFault,
-                                                                  UnauthorizedFault {
-    final ParticipantIdentifierPageType page = m_aCaller.list (nextPageIdentifier, sSMPID);
-    print (page);
-  }
-
-  @Nonnull
-  UUID prepareToMigrate (final String sSMPID, final ParticipantIdentifierType aIdentifier) throws BadRequestFault,
-                                                                                          InternalErrorFault,
-                                                                                          NotFoundFault,
-                                                                                          UnauthorizedFault {
-    final UUID migrationCode = m_aCaller.prepareToMigrate (aIdentifier, sSMPID);
+    final ParticipantIdentifierType aPI = new SimpleParticipantIdentifier (args[1], args[0]);
+    final UUID migrationCode = m_aCaller.prepareToMigrate (aPI, sSMPID);
 
     System.out.println ("Migration code: " + migrationCode);
     return migrationCode;
   }
 
-  void migrate (final String sSMPID, final ParticipantIdentifierType aIdentifier, final UUID migrationCode) throws BadRequestFault,
-                                                                                                           InternalErrorFault,
-                                                                                                           NotFoundFault,
-                                                                                                           UnauthorizedFault {
-    m_aCaller.migrate (aIdentifier, migrationCode, sSMPID);
+  public void migrate (final String sSMPID, final String [] args) throws BadRequestFault,
+                                                                 InternalErrorFault,
+                                                                 NotFoundFault,
+                                                                 UnauthorizedFault {
+    if (args.length != 3) {
+      System.err.println ("Invalid number of args to migrate an identifier.");
+      System.out.println ("Use the following three parameters: identifier indentifierType migrationCode");
+      return;
+    }
+    final ParticipantIdentifierType aPI = new SimpleParticipantIdentifier (args[1], args[0]);
+    final UUID aCode = UUID.fromString (args[2]);
+    m_aCaller.migrate (aPI, aCode, sSMPID);
   }
 
   public static void print (final ParticipantIdentifierPageType page) {

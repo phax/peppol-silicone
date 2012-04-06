@@ -42,8 +42,13 @@ import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
 
+/**
+ * Explanation for a single SML action parameter
+ * 
+ * @author philip
+ */
 @Immutable
-public final class SMLActionParameter {
+final class SMLActionParameter {
   private final String m_sDescription;
 
   public SMLActionParameter (@Nonnull @Nonempty final String sDescription) {
