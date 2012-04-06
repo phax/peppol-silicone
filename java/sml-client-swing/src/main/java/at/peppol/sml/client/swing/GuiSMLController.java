@@ -46,10 +46,10 @@ import javax.annotation.concurrent.NotThreadSafe;
 import org.busdox.servicemetadata.locator._1.ServiceMetadataPublisherServiceType;
 
 import at.peppol.commons.sml.ISMLInfo;
+import at.peppol.sml.client.ManageServiceMetadataServiceCaller;
 import at.peppol.sml.client.support.ESMLObjectType;
 import at.peppol.sml.client.swing.action.ESMLAction;
 import at.peppol.sml.client.swing.ctrl.ManageParticipantsClient;
-import at.peppol.sml.client.swing.ctrl.ManageSMPClient;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.regex.RegExHelper;
@@ -60,7 +60,7 @@ import com.phloc.commons.string.StringHelper;
  */
 @NotThreadSafe
 final class GuiSMLController {
-  private static ManageSMPClient s_aSMPClient;
+  private static ManageServiceMetadataServiceCaller s_aSMPClient;
   private static ManageParticipantsClient s_aParticipantClient;
   private static URL s_aParticipantEndpointAddress;
   private static URL s_aSMPClientEndpointAddress;
@@ -68,12 +68,14 @@ final class GuiSMLController {
 
   private GuiSMLController () {}
 
-  private static ManageSMPClient _getSMPClient () {
+  @Nonnull
+  private static ManageServiceMetadataServiceCaller _getSMPClient () {
     if (s_aSMPClient == null)
-      s_aSMPClient = new ManageSMPClient (s_aSMPClientEndpointAddress);
+      s_aSMPClient = new ManageServiceMetadataServiceCaller (s_aSMPClientEndpointAddress);
     return s_aSMPClient;
   }
 
+  @Nonnull
   private static ManageParticipantsClient _getParticipantClient () {
     if (s_aParticipantClient == null)
       s_aParticipantClient = new ManageParticipantsClient (s_aParticipantEndpointAddress);
@@ -99,7 +101,7 @@ final class GuiSMLController {
         case DELETE:
           return _delete (eAction.getObjectType (), aArgs);
         case READ:
-          return _read (eAction.getObjectType (), aArgs);
+          return _read (eAction.getObjectType ());
         case LIST:
           return _list (eAction.getObjectType (), aArgs);
         case PREPARETOMIGRATE:
@@ -123,10 +125,10 @@ final class GuiSMLController {
 
     switch (eObject) {
       case PARTICIPANT:
-        _getParticipantClient ().create (s_sSMPID, args, 0);
+        _getParticipantClient ().create (s_sSMPID, args);
         return "PARTICIPANT FOR SMP: " + s_sSMPID + " CREATED";
       case METADATA:
-        _getSMPClient ().create (s_sSMPID, args, 0);
+        _getSMPClient ().create (s_sSMPID, args[0], args[1]);
         return "METADATA FOR SMP: " + s_sSMPID + " CREATED";
     }
 
@@ -139,7 +141,7 @@ final class GuiSMLController {
 
     switch (eObject) {
       case METADATA:
-        _getSMPClient ().update (s_sSMPID, args, 0);
+        _getSMPClient ().update (s_sSMPID, args[0], args[1]);
         return "METADATA FOR SMP " + s_sSMPID + " UPDATED";
     }
     return "CANNOT DO UPDATE ON " + eObject;
@@ -151,19 +153,19 @@ final class GuiSMLController {
 
     switch (eObject) {
       case PARTICIPANT:
-        _getParticipantClient ().delete (args, 0);
+        _getParticipantClient ().delete (args);
         return "PARTICIPANT DELETED";
       case METADATA:
-        _getSMPClient ().delete (s_sSMPID, args, 0);
+        _getSMPClient ().delete (s_sSMPID);
         return "METADATA FOR SMP " + s_sSMPID + " DELETED";
     }
     return "CANNOT DO DELETE ON " + eObject;
   }
 
-  private static String _read (final ESMLObjectType eObject, final String [] args) throws Exception {
+  private static String _read (final ESMLObjectType eObject) throws Exception {
     switch (eObject) {
       case METADATA:
-        final ServiceMetadataPublisherServiceType aSMP = _getSMPClient ().read (s_sSMPID, args, 0);
+        final ServiceMetadataPublisherServiceType aSMP = _getSMPClient ().read (s_sSMPID);
         return "METADATA FOR SMP " +
                s_sSMPID +
                " READ: physical address=" +
@@ -177,7 +179,7 @@ final class GuiSMLController {
   private static String _list (final ESMLObjectType eObject, final String [] args) throws Exception {
     switch (eObject) {
       case PARTICIPANT:
-        _getParticipantClient ().list (s_sSMPID, args, 0);
+        _getParticipantClient ().list (s_sSMPID, args);
         return "PARTICIPANT FOR SMP: " + s_sSMPID + " LISTED";
     }
     return "CANNOT DO LIST ON " + eObject;
@@ -189,7 +191,7 @@ final class GuiSMLController {
 
     switch (eObject) {
       case PARTICIPANT:
-        final UUID aUUID = _getParticipantClient ().prepareToMigrate (s_sSMPID, args, 0);
+        final UUID aUUID = _getParticipantClient ().prepareToMigrate (s_sSMPID, args);
         return "PARTICIPANT FOR SMP: " + s_sSMPID + " PREPARED TO MIGRATE. Migration code = " + aUUID;
     }
     return "CANNOT DO PREPARETOMIGRATE ON " + eObject;
@@ -201,7 +203,7 @@ final class GuiSMLController {
 
     switch (eObject) {
       case PARTICIPANT:
-        _getParticipantClient ().migrate (s_sSMPID, args, 0);
+        _getParticipantClient ().migrate (s_sSMPID, args);
         return "PARTICIPANT FOR SMP: " + s_sSMPID + " MIGRATED";
     }
     return "CANNOT DO MIGRATE ON " + eObject;
