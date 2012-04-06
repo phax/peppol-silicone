@@ -85,7 +85,8 @@
 
     <!-- SML -->
     <module>sml-client-library</module>
-    <module>sml-client-apps</module>
+    <module>sml-client-console</module>
+    <module>sml-client-swing</module>
     <module>sml-server-library</module>
     <module>sml-webapp</module>
     <module>sml-webapp-standalone</module>
