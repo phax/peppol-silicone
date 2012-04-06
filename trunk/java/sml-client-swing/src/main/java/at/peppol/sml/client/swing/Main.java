@@ -42,7 +42,7 @@ import javax.swing.UIManager;
 /**
  * @author PEPPOL.AT, BRZ, Jakob Frohnwieser
  */
-public class SwingMain {
+public class Main {
   public static void main (final String [] args) {
     try {
       UIManager.setLookAndFeel (UIManager.getSystemLookAndFeelClassName ());
