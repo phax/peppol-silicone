@@ -51,8 +51,8 @@ import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 
 import at.peppol.commons.sml.CSMLDefault;
 import at.peppol.commons.sml.ISMLInfo;
-import at.peppol.sml.client.ESMLCommand;
-import at.peppol.sml.client.ESMLObjectType;
+import at.peppol.sml.client.support.ESMLCommand;
+import at.peppol.sml.client.support.ESMLObjectType;
 
 
 public final class Main {

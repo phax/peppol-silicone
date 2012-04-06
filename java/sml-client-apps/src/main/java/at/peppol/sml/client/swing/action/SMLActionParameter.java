@@ -35,7 +35,7 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.sml.client;
+package at.peppol.sml.client.swing.action;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;

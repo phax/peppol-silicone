@@ -44,7 +44,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import net.miginfocom.swing.MigLayout;
-import at.peppol.sml.client.ESMLAction;
+import at.peppol.sml.client.swing.action.ESMLAction;
 
 /**
  * Content action panel

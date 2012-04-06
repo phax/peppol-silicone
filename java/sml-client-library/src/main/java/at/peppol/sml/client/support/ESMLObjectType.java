@@ -35,31 +35,42 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.sml.client;
+package at.peppol.sml.client.support;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.name.IHasName;
+import com.phloc.commons.string.StringHelper;
 
 /**
  * Enum with all object types.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public enum ESMLObjectType {
+public enum ESMLObjectType implements IHasName {
   PARTICIPANT ("participant"),
   METADATA ("metadata");
 
-  private String m_sName;
+  private final String m_sName;
 
-  private ESMLObjectType (final String sName) {
+  private ESMLObjectType (@Nonnull @Nonempty final String sName) {
     m_sName = sName;
   }
 
+  @Nonnull
+  @Nonempty
   public String getName () {
     return m_sName;
   }
 
-  public static ESMLObjectType getFromNameOrNull (final String sName) {
-    for (final ESMLObjectType eCC : values ())
-      if (eCC.getName ().equalsIgnoreCase (sName))
-        return eCC;
+  @Nullable
+  public static ESMLObjectType getFromNameOrNull (@Nullable final String sName) {
+    if (StringHelper.hasText (sName))
+      for (final ESMLObjectType eCC : values ())
+        if (eCC.getName ().equalsIgnoreCase (sName))
+          return eCC;
     return null;
   }
 }

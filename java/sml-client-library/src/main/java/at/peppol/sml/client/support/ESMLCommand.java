@@ -35,7 +35,7 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.sml.client;
+package at.peppol.sml.client.support;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -57,7 +57,7 @@ public enum ESMLCommand {
   PREPARETOMIGRATE ("preparetomigrate"),
   MIGRATE ("migrate");
 
-  private String m_sName;
+  private final String m_sName;
 
   private ESMLCommand (@Nonnull @Nonempty final String sName) {
     m_sName = sName;

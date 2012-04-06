@@ -46,10 +46,10 @@ import javax.annotation.concurrent.NotThreadSafe;
 import org.busdox.servicemetadata.locator._1.ServiceMetadataPublisherServiceType;
 
 import at.peppol.commons.sml.ISMLInfo;
-import at.peppol.sml.client.ESMLAction;
-import at.peppol.sml.client.ESMLObjectType;
 import at.peppol.sml.client.console.ManageParticipantsClient;
 import at.peppol.sml.client.console.ManageSMPClient;
+import at.peppol.sml.client.support.ESMLObjectType;
+import at.peppol.sml.client.swing.action.ESMLAction;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.regex.RegExHelper;
