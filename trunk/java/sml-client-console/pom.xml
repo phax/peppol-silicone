@@ -6,44 +6,24 @@
     <artifactId>parent-pom</artifactId>
     <version>13</version>
   </parent>
-  <artifactId>peppol-sml-client-apps</artifactId>
+  <artifactId>peppol-sml-client-console</artifactId>
   <version>2.3.0-SNAPSHOT</version>
-  <name>peppol-sml-client-apps</name>
+  <name>peppol-sml-client-console</name>
 
   <scm>
-    <connection>scm:svn:http://peppol-silicone.googlecode.com/svn/trunk/java/sml-client-apps</connection>
-    <developerConnection>scm:svn:https://peppol-silicone.googlecode.com/svn/trunk/java/sml-client-apps</developerConnection>
+    <connection>scm:svn:http://peppol-silicone.googlecode.com/svn/trunk/java/sml-client-console</connection>
+    <developerConnection>scm:svn:https://peppol-silicone.googlecode.com/svn/trunk/java/sml-client-console</developerConnection>
   </scm>
 
   <dependencies>
     <dependency>
       <groupId>at.peppol</groupId>
-      <artifactId>peppol-commons-peppol</artifactId>
-      <version>2.3.0-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>at.peppol</groupId>
       <artifactId>peppol-sml-client-library</artifactId>
-      <version>2.3.0-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>com.phloc</groupId>
-      <artifactId>phloc-commons</artifactId>
-      <version>3.4.9</version>
-    </dependency>
-    <dependency>
-      <groupId>com.phloc</groupId>
-      <artifactId>phloc-datetime</artifactId>
-      <version>2.9.2</version>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.miglayout</groupId>
-      <artifactId>miglayout-swing</artifactId>
-      <version>4.2</version>
     </dependency>
   </dependencies>
 

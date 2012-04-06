@@ -40,6 +40,8 @@ package at.peppol.sml.client.swing;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.Vector;
 
 import javax.annotation.Nonnull;
@@ -53,10 +55,6 @@ import javax.swing.JTextField;
 
 import net.miginfocom.swing.MigLayout;
 import at.peppol.sml.client.swing.action.ESMLAction;
-
-import com.phloc.commons.system.SystemHelper;
-import com.phloc.datetime.PDTFactory;
-import com.phloc.datetime.format.PDTToString;
 
 /**
  * Action Panel
@@ -132,11 +130,7 @@ final class ActionPanel extends JPanel {
 
   public void executeAction () {
     final String sResult = GuiSMLController.performAction (getSelectedAction (), m_aTFParams.getText ());
-    final String sMsg = '[' +
-                        PDTToString.getAsString (PDTFactory.getCurrentLocalTime (), SystemHelper.getSystemLocale ()) +
-                        "] " +
-                        sResult +
-                        "\n";
+    final String sMsg = '[' + DateFormat.getTimeInstance ().format (new Date ()) + "] " + sResult + "\n";
     m_aTAOut.append (sMsg);
   }
 }
