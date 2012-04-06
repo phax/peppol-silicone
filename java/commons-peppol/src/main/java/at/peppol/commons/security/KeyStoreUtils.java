@@ -59,7 +59,7 @@ import com.phloc.commons.io.streams.StreamUtils;
 
 /**
  * Helper methods to access Java key stores of type JKS (Java KeyStore).
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable
@@ -74,7 +74,7 @@ public final class KeyStoreUtils {
 
   /**
    * Load a key store from a resource.
-   *
+   * 
    * @param aKeyStoreRes
    *        The resource pointing to the key store. May not be <code>null</code>
    *        .
@@ -112,7 +112,7 @@ public final class KeyStoreUtils {
 
   /**
    * Load a key store from the class path.
-   *
+   * 
    * @param sKeyStorePath
    *        The path to the key store in the class path. May not be
    *        <code>null</code>.
@@ -131,7 +131,7 @@ public final class KeyStoreUtils {
 
   /**
    * Load a key store from the file system.
-   *
+   * 
    * @param sKeyStoreFile
    *        The path to the key store in the file system. May not be
    *        <code>null</code>.
@@ -148,6 +148,25 @@ public final class KeyStoreUtils {
     return loadKeyStoreFromResource (new FileSystemResource (sKeyStoreFile), sKeyStorePassword);
   }
 
+  /**
+   * Create a new key store based on an existing key store
+   * 
+   * @param aBaseKeyStore
+   *        The source key store. May not be <code>null</code>
+   * @param sAliasToCopy
+   *        The name of the alias in the source key store that should be put in
+   *        the new key store
+   * @param aAliasPassword
+   *        The optional password to access the alias in the source key store.
+   *        If it is not <code>null</code> the same password will be used in the
+   *        created key store
+   * @return The created in-memory key store
+   * @throws KeyStoreException
+   * @throws NoSuchAlgorithmException
+   * @throws UnrecoverableEntryException
+   * @throws CertificateException
+   * @throws IOException
+   */
   @Nonnull
   public static KeyStore createKeyStoreWithOnlyOneItem (@Nonnull final KeyStore aBaseKeyStore,
                                                         @Nonnull final String sAliasToCopy,
@@ -157,10 +176,14 @@ public final class KeyStoreUtils {
                                                                                                CertificateException,
                                                                                                IOException {
     final KeyStore aKeyStore = KeyStore.getInstance (aBaseKeyStore.getType (), aBaseKeyStore.getProvider ());
+    // null stream means: create new key store
     aKeyStore.load (null, null);
+
+    // Do we need a password?
     ProtectionParameter aPP = null;
     if (aAliasPassword != null)
       aPP = new PasswordProtection (aAliasPassword);
+
     aKeyStore.setEntry (sAliasToCopy, aBaseKeyStore.getEntry (sAliasToCopy, aPP), aPP);
     return aKeyStore;
   }

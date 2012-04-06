@@ -56,6 +56,7 @@ import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.io.resource.ClassPathResource;
+import com.phloc.commons.io.resource.FileSystemResource;
 import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.state.ESuccess;
 import com.phloc.commons.string.StringHelper;
@@ -72,19 +73,27 @@ import com.phloc.commons.string.StringHelper;
  */
 @Immutable
 public final class ConfigFile {
+  private static final class SingletonHolder {
+    static final ConfigFile s_aInstance = new ConfigFile ();
+  }
+
   /** Default file name for the private config file */
   public static final String DEFAULT_PRIVATE_CONFIG_PROPERTIES = "private-config.properties";
 
   /** Default file name for the regular config file */
   public static final String DEFAULT_CONFIG_PROPERTIES = "config.properties";
 
-  private static final class SingletonHolder {
-    static final ConfigFile s_aInstance = new ConfigFile ();
-  }
-
   private static final Logger s_aLogger = LoggerFactory.getLogger (ConfigFile.class);
 
   private final Properties m_aProps = new Properties ();
+
+  /**
+   * Default constructor for the default file paths (private-config.properties
+   * and afterwards config.properties)
+   */
+  private ConfigFile () {
+    this (DEFAULT_PRIVATE_CONFIG_PROPERTIES, DEFAULT_CONFIG_PROPERTIES);
+  }
 
   /**
    * Constructor for explicitly specifying a file path to read.
@@ -110,18 +119,14 @@ public final class ConfigFile {
     }
   }
 
-  /**
-   * Default constructor for the default file paths (private-config.properties
-   * and afterwards config.properties)
-   */
-  private ConfigFile () {
-    this (DEFAULT_PRIVATE_CONFIG_PROPERTIES, DEFAULT_CONFIG_PROPERTIES);
-  }
-
   @Nonnull
   private ESuccess _readConfigFile (@Nonnull final String sPath) {
     // Try to get the input stream for the passed property file name
-    final InputStream aIS = ClassPathResource.getInputStream (sPath);
+    InputStream aIS = ClassPathResource.getInputStream (sPath);
+    if (aIS == null) {
+      // Fallback to filesystem - maybe this helps...
+      aIS = new FileSystemResource (sPath).getInputStream ();
+    }
     if (aIS != null) {
       try {
         // Does not close the input stream!
