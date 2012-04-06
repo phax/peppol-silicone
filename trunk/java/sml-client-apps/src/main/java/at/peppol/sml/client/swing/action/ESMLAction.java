@@ -35,13 +35,16 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.sml.client;
+package at.peppol.sml.client.swing.action;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+
+import at.peppol.sml.client.support.ESMLCommand;
+import at.peppol.sml.client.support.ESMLObjectType;
 
 public enum ESMLAction {
   PARTICIPANT_CREATE (ESMLObjectType.PARTICIPANT, ESMLCommand.CREATE, new SMLActionParameter ("identifier value"), new SMLActionParameter ("identifier scheme")),

@@ -52,7 +52,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import net.miginfocom.swing.MigLayout;
-import at.peppol.sml.client.ESMLAction;
+import at.peppol.sml.client.swing.action.ESMLAction;
 
 import com.phloc.commons.system.SystemHelper;
 import com.phloc.datetime.PDTFactory;
