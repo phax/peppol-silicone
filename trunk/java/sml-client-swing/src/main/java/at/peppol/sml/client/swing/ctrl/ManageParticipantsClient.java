@@ -35,7 +35,7 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.sml.client.console;
+package at.peppol.sml.client.swing.ctrl;
 
 import java.net.URL;
 import java.util.List;
