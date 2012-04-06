@@ -29,7 +29,8 @@ Short outline of the contained source projects and how they relate to each other
 
 ===Utility artefacts:===
   * sml-webapp-standalone = a standalone SML server for testing without DNS
-  * sml-client-apps = console and Swing GUI to do SML client actions
+  * sml-client-console = console to do SML client actions
+  * sml-client-swing = Swing GUI to do SML client actions
   * smp-client-console = console application to access the SMP
   * transport-start-receiver = an example handler for incoming documents on the START server - to be replaced in production environments
 
