@@ -120,7 +120,7 @@ public final class RegistrationServiceRegistrationHook extends AbstractRegistrat
       final String sKeystorePassword = aConfigFile.getString (CONFIG_HOOK_KEYSTORE_PASSWORD);
 
       // Main key storage
-      final KeyStore aKeyStore = KeyStoreUtils.loadKeyStoreFromClassPath (sKeystorePath, sKeystorePassword);
+      final KeyStore aKeyStore = KeyStoreUtils.loadKeyStore (sKeystorePath, sKeystorePassword);
 
       // Key manager
       final KeyManagerFactory aKeyManagerFactory = KeyManagerFactory.getInstance ("SunX509");

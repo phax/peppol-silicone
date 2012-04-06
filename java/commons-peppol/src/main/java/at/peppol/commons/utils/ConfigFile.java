@@ -124,7 +124,7 @@ public final class ConfigFile {
     // Try to get the input stream for the passed property file name
     InputStream aIS = ClassPathResource.getInputStream (sPath);
     if (aIS == null) {
-      // Fallback to filesystem - maybe this helps...
+      // Fallback to file system - maybe this helps...
       aIS = new FileSystemResource (sPath).getInputStream ();
     }
     if (aIS != null) {

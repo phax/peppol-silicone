@@ -110,7 +110,7 @@ final class MainFrame extends JFrame {
 
     try {
       // Main key storage
-      final KeyStore aKeyStore = KeyStoreUtils.loadKeyStoreFromFile (sKeyStorePath, sKeystorePassword);
+      final KeyStore aKeyStore = KeyStoreUtils.loadKeyStore (sKeyStorePath, sKeystorePassword);
 
       // Key manager
       final KeyManagerFactory aKeyManagerFactory = KeyManagerFactory.getInstance ("SunX509");

@@ -60,7 +60,6 @@ import javax.xml.crypto.dsig.keyinfo.X509Data;
 
 import at.peppol.commons.security.KeyStoreUtils;
 
-
 /**
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
@@ -103,7 +102,7 @@ final class X509KeySelector extends KeySelector {
            */
           final X509Certificate [] certArray = new X509Certificate [] { certificate };
 
-          final KeyStore ks = KeyStoreUtils.loadKeyStoreFromClassPath (sLocation, sPassword);
+          final KeyStore ks = KeyStoreUtils.loadKeyStore (sLocation, sPassword);
           // The PKIXParameters constructor may fail because:
           // - the trustAnchorsParameter is empty
           final PKIXParameters params = new PKIXParameters (ks);

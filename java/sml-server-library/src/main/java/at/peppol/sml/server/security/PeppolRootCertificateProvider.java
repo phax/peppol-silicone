@@ -71,7 +71,7 @@ public final class PeppolRootCertificateProvider {
     final String sTrustStorePW = aConfigFile.getString (CONFIG_SML_TRUSTSTORE_PASSWORD);
     final String sTrustStoreAlias = aConfigFile.getString (CONFIG_SML_TRUSTSTORE_ALIAS);
     try {
-      final KeyStore aKS = KeyStoreUtils.loadKeyStoreFromClassPath (sTrustStorePath, sTrustStorePW);
+      final KeyStore aKS = KeyStoreUtils.loadKeyStore (sTrustStorePath, sTrustStorePW);
       s_aPeppolSMPRootCert = (X509Certificate) aKS.getCertificate (sTrustStoreAlias);
     }
     catch (final Exception ex) {

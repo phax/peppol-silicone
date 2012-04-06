@@ -118,7 +118,7 @@ public final class SignatureFilter implements ContainerResponseFilter {
       final String sKeyStoreKeyAlias = aConfigFile.getString (CONFIG_XMLDSIG_KEYSTORE_KEY_ALIAS);
       final String sKeyStoreKeyPassword = aConfigFile.getString (CONFIG_XMLDSIG_KEYSTORE_KEY_PASSWORD);
 
-      final KeyStore ks = KeyStoreUtils.loadKeyStoreFromClassPath (sKeyStoreClassPath, sKeyStorePassword);
+      final KeyStore ks = KeyStoreUtils.loadKeyStore (sKeyStoreClassPath, sKeyStorePassword);
       m_aKeyEntry = (KeyStore.PrivateKeyEntry) ks.getEntry (sKeyStoreKeyAlias,
                                                             new KeyStore.PasswordProtection (sKeyStoreKeyPassword.toCharArray ()));
       if (m_aKeyEntry == null)

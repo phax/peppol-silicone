@@ -50,12 +50,10 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import at.peppol.commons.security.KeyStoreUtils;
-import at.peppol.sml.server.security.PeppolClientCertificateValidator;
-
 
 /**
  * Test class for class {@link PeppolClientCertificateValidator}.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Ignore
@@ -63,7 +61,7 @@ public final class PeppolClientCertificateValidatorTest {
   @Test
   public void testValidation () throws Exception {
     // Main key storage
-    final KeyStore aKeyStore = KeyStoreUtils.loadKeyStoreFromClassPath ("keys/sml_keystore.jks", "peppol");
+    final KeyStore aKeyStore = KeyStoreUtils.loadKeyStore ("keys/sml_keystore.jks", "peppol");
 
     // Extract all certificates from the key store
     final List <X509Certificate> aCerts = new ArrayList <X509Certificate> ();

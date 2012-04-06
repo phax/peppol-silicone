@@ -101,7 +101,7 @@ public final class Validator implements CertificateValidator {
     try {
       // Load keystore
       final String sTrustStorePassword = s_aConf.getString (CONFIG_TRUSTSTORE_PASS);
-      final KeyStore aTrustStore = KeyStoreUtils.loadKeyStoreFromClassPath (sTrustStorePath, sTrustStorePassword);
+      final KeyStore aTrustStore = KeyStoreUtils.loadKeyStore (sTrustStorePath, sTrustStorePassword);
 
       // Get certificate from alias
       final String sTrustStoreAlias = s_aConf.getString (CONFIG_TRUSTORE_ALIAS);

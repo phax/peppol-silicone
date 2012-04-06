@@ -81,7 +81,7 @@ public abstract class AbstractSMLClientTest {
       }
 
       // Main key storage
-      final KeyStore aKeyStore = KeyStoreUtils.loadKeyStoreFromClassPath (KEYSTORE_PATH, KEYSTORE_PASSWORD);
+      final KeyStore aKeyStore = KeyStoreUtils.loadKeyStore (KEYSTORE_PATH, KEYSTORE_PASSWORD);
 
       // Key manager
       final KeyManagerFactory aKeyManagerFactory = KeyManagerFactory.getInstance ("SunX509");

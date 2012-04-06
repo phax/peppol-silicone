@@ -59,13 +59,11 @@ import org.bouncycastle.x509.X509V1CertificateGenerator;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import at.peppol.commons.security.KeyStoreUtils;
-
 import com.phloc.commons.collections.ContainerHelper;
 
 /**
  * Test class for class {@link KeyStoreUtils}.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @SuppressWarnings ("deprecation")
@@ -100,7 +98,7 @@ public final class KeyStoreUtilsTest {
     final KeyPair aKeyPair = createKeyPair (1024);
     final Certificate [] certs = { createX509V1Certificate (aKeyPair), createX509V1Certificate (aKeyPair) };
 
-    KeyStore ks = KeyStoreUtils.loadKeyStoreFromClassPath ("keystores/keystore-no-pw.jks", null);
+    KeyStore ks = KeyStoreUtils.loadKeyStore ("keystores/keystore-no-pw.jks", null);
     assertEquals (KeyStoreUtils.KEYSTORE_TYPE_JKS, ks.getType ());
     assertEquals (1, ContainerHelper.newList (ks.aliases ()).size ());
     assertTrue (ks.containsAlias ("1"));
@@ -108,7 +106,7 @@ public final class KeyStoreUtilsTest {
     assertNotNull (c1);
     ks.setKeyEntry ("2", aKeyPair.getPrivate (), "key2".toCharArray (), certs);
 
-    ks = KeyStoreUtils.loadKeyStoreFromClassPath ("keystores/keystore-pw-peppol.jks", null);
+    ks = KeyStoreUtils.loadKeyStore ("keystores/keystore-pw-peppol.jks", null);
     assertEquals (1, ContainerHelper.newList (ks.aliases ()).size ());
     assertTrue (ks.containsAlias ("1"));
     final Certificate c2 = ks.getCertificate ("1");
@@ -116,7 +114,7 @@ public final class KeyStoreUtilsTest {
     assertEquals (c1, c2);
     ks.setKeyEntry ("2", aKeyPair.getPrivate (), "key2".toCharArray (), certs);
 
-    ks = KeyStoreUtils.loadKeyStoreFromClassPath ("keystores/keystore-pw-peppol.jks", "peppol");
+    ks = KeyStoreUtils.loadKeyStore ("keystores/keystore-pw-peppol.jks", "peppol");
     assertEquals (1, ContainerHelper.newList (ks.aliases ()).size ());
     assertTrue (ks.containsAlias ("1"));
     final Certificate c3 = ks.getCertificate ("1");
@@ -126,14 +124,14 @@ public final class KeyStoreUtilsTest {
 
     try {
       // Non-existing file
-      KeyStoreUtils.loadKeyStoreFromClassPath ("keystores/keystore-not-existing.jks", null);
+      KeyStoreUtils.loadKeyStore ("keystores/keystore-not-existing.jks", null);
       fail ();
     }
     catch (final IllegalArgumentException ex) {}
 
     try {
       // Invalid password
-      KeyStoreUtils.loadKeyStoreFromClassPath ("keystores/keystore-pw-peppol.jks", "wrongpw");
+      KeyStoreUtils.loadKeyStore ("keystores/keystore-pw-peppol.jks", "wrongpw");
       fail ();
     }
     catch (final IOException ex) {}
