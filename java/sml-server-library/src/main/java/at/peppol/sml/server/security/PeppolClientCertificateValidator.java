@@ -63,7 +63,8 @@ import at.peppol.commons.utils.ConfigFile;
  */
 @Immutable
 public final class PeppolClientCertificateValidator {
-  private static final Logger log = LoggerFactory.getLogger (PeppolClientCertificateValidator.class);
+  private static final String CONFIG_SML_CLIENT_CERTISSUER = "sml.client.certissuer";
+  private static final Logger s_aLogger = LoggerFactory.getLogger (PeppolClientCertificateValidator.class);
 
   private PeppolClientCertificateValidator () {}
 
@@ -114,7 +115,7 @@ public final class PeppolClientCertificateValidator {
   public static boolean isClientCertificateValid (@Nonnull final HttpServletRequest aHttpRequest) {
     final Object aValue = aHttpRequest.getAttribute ("javax.servlet.request.X509Certificate");
     if (aValue == null) {
-      log.warn ("No client certificates present in the request");
+      s_aLogger.warn ("No client certificates present in the request");
       return false;
     }
     if (!(aValue instanceof X509Certificate []))
@@ -125,7 +126,7 @@ public final class PeppolClientCertificateValidator {
   public static boolean isClientCertificateValid (final X509Certificate [] aRequestCerts) {
     if (aRequestCerts == null || aRequestCerts.length == 0) {
       // Empty array
-      log.warn ("No client certificates passed for validation");
+      s_aLogger.warn ("No client certificates passed for validation");
       return false;
     }
 
@@ -144,7 +145,7 @@ public final class PeppolClientCertificateValidator {
 
     // OK, we have a non-empty, type checked Certificate array
     // Find the certificate that is issued by
-    final String sIssuerToSearch = ConfigFile.getInstance ().getString ("sml.client.certissuer");
+    final String sIssuerToSearch = ConfigFile.getInstance ().getString (CONFIG_SML_CLIENT_CERTISSUER);
     X509Certificate aCertToVerify = null;
     for (final X509Certificate aCert : aRequestCerts) {
       final X500Principal aIssuer = aCert.getIssuerX500Principal ();
@@ -163,7 +164,7 @@ public final class PeppolClientCertificateValidator {
     final X509Certificate aRootCert = PeppolRootCertificateProvider.getPeppolSMPRootCertificate ();
     final String sVerifyMsg = _verifyCertificate (aCertToVerify, aRootCert, aCRLs, aNow);
     if (sVerifyMsg != null) {
-      log.warn ("Client certificate not correct: " +
+      s_aLogger.warn ("Client certificate not correct: " +
                 sVerifyMsg +
                 "; root cert serial = " +
                 aRootCert.getSerialNumber ().toString (16));

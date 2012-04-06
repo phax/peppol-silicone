@@ -78,16 +78,26 @@ import at.peppol.commons.utils.ConfigFile;
 
 import com.phloc.commons.xml.transform.XMLTransformerFactory;
 
-
 /**
  * Adds an XMLDSIG to every response.<br>
  * Note: referenced from src/main/resources/handlers.xml
- *
+ * 
  * @author ravnholdt
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public class AddSignatureHandler implements LogicalHandler <LogicalMessageContext> {
-  private static final Logger log = LoggerFactory.getLogger (AddSignatureHandler.class);
+  private static final String CONFIG_SML_KEYSTORE_PATH = "sml.keystore.path";
+  private static final String CONFIG_SML_KEYSTORE_PASSWORD = "sml.keystore.password";
+  private static final String CONFIG_SML_KEYSTORE_ALIAS = "sml.keystore.alias";
+  private static final Logger s_aLogger = LoggerFactory.getLogger (AddSignatureHandler.class);
+
+  /**
+   * @return The configuration file object to be used for reading
+   */
+  @Nonnull
+  private final ConfigFile _getConfigFile () {
+    return ConfigFile.getInstance ();
+  }
 
   @Override
   public void close (final MessageContext context) {}
@@ -119,13 +129,13 @@ public class AddSignatureHandler implements LogicalHandler <LogicalMessageContex
     boolean bNewPayload = false;
     if (!(aSource instanceof DOMSource)) {
       // Ensure we have a DOM source present
-      log.info ("Converting " + aSource + " to DOMSource");
+      s_aLogger.info ("Converting " + aSource + " to DOMSource");
       try {
         aSource = _convertToDOMSource (aSource);
         bNewPayload = true;
       }
       catch (final TransformerException ex) {
-        log.error ("Failed to convert source " + aSource + " to DOMSource", ex);
+        s_aLogger.error ("Failed to convert source " + aSource + " to DOMSource", ex);
         return false;
       }
     }
@@ -137,7 +147,7 @@ public class AddSignatureHandler implements LogicalHandler <LogicalMessageContex
       _signXML (rootElement);
     }
     catch (final Exception e) {
-      log.error ("Error in signing xml", e);
+      s_aLogger.error ("Error in signing xml", e);
       return false;
     }
 
@@ -149,7 +159,7 @@ public class AddSignatureHandler implements LogicalHandler <LogicalMessageContex
     return true;
   }
 
-  private static void _signXML (final Element xmlElementToSign) throws Exception {
+  private void _signXML (final Element xmlElementToSign) throws Exception {
     // Create a DOM XMLSignatureFactory that will be used to
     // generate the enveloped signature.
     final XMLSignatureFactory fac = XMLSignatureFactory.getInstance ("DOM");
@@ -172,9 +182,9 @@ public class AddSignatureHandler implements LogicalHandler <LogicalMessageContex
                                              Collections.singletonList (ref));
 
     // Load the KeyStore and get the signing key and certificate.
-    final String sKeyStorePath = ConfigFile.getInstance ().getString ("sml.keystore.path");
-    final String sKeyStorePW = ConfigFile.getInstance ().getString ("sml.keystore.password");
-    final String sKeyStoreAlias = ConfigFile.getInstance ().getString ("sml.keystore.alias");
+    final String sKeyStorePath = _getConfigFile ().getString (CONFIG_SML_KEYSTORE_PATH);
+    final String sKeyStorePW = _getConfigFile ().getString (CONFIG_SML_KEYSTORE_PASSWORD);
+    final String sKeyStoreAlias = _getConfigFile ().getString (CONFIG_SML_KEYSTORE_ALIAS);
     final KeyStore ks = KeyStoreUtils.loadKeyStoreFromClassPath (sKeyStorePath, sKeyStorePW);
     final KeyStore.PrivateKeyEntry keyEntry = (KeyStore.PrivateKeyEntry) ks.getEntry (sKeyStoreAlias,
                                                                                       new KeyStore.PasswordProtection (sKeyStorePW.toCharArray ()));

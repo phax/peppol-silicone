@@ -95,7 +95,6 @@ import com.sun.xml.wss.saml.SAMLException;
 import com.sun.xml.wss.saml.Subject;
 import com.sun.xml.wss.saml.SubjectConfirmation;
 
-
 /**
  * The SAMLCallbackHandler is the CallbackHandler implementation used for deal
  * with SAML authentication.<br>
@@ -111,10 +110,10 @@ public final class SAMLCallbackHandler implements CallbackHandler {
   private static final Logger s_aLogger = LoggerFactory.getLogger (SAMLCallbackHandler.class);
 
   /** Represents the Sender ID for an operation. */
-  public static final String SENDER_ID = "peppol.senderid";
+  public static final String CONFIG_SENDER_ID = "peppol.senderid";
 
   /** Represents a SAML Issuer. */
-  public static final String SAML_TOKEN_ISSUER_NAME = "peppol.servicename";
+  public static final String CONFIG_SAML_TOKEN_ISSUER_NAME = "peppol.servicename";
 
   /** Represents the TrustStore URL. */
   public static final String CONFIG_KEYSTORE_FILE = "peppol.keystore";
@@ -150,8 +149,6 @@ public final class SAMLCallbackHandler implements CallbackHandler {
 
   /** Attribute Namespace. */
   private static final String ATTRIBUTE_NAMESPACE = "urn:oasis:names:tc:SAML:2.0:attrname-format:basic";
-
-  private static final ConfigFile s_aConfig = new ConfigFile ("private-configSAML.properties", "configSAML.properties");
 
   /**
    * Retrieve or display the information requested in the provided Callbacks.
@@ -198,27 +195,35 @@ public final class SAMLCallbackHandler implements CallbackHandler {
     if (s_aLogger.isDebugEnabled ())
       s_aLogger.debug ("Creating and setting the SAML Sender Vouches Assertion.");
 
+    // Read config file
+    final ConfigFile aConfig = new ConfigFile ("private-configSAML.properties", "configSAML.properties");
+
     // Get configured properties
-    final String sSenderId = s_aConfig.getString (SENDER_ID);
-    if (StringHelper.hasNoText (sSenderId))
-      throw new IllegalStateException ("SAML configuration file is incomplete: " + SENDER_ID + " is missing");
-    final String sAccesspointName = s_aConfig.getString (SAML_TOKEN_ISSUER_NAME);
+    final String sSenderID = aConfig.getString (CONFIG_SENDER_ID);
+    if (StringHelper.hasNoText (sSenderID))
+      throw new IllegalStateException ("SAML configuration file is incomplete: " + CONFIG_SENDER_ID + " is missing");
+
+    final String sAccesspointName = aConfig.getString (CONFIG_SAML_TOKEN_ISSUER_NAME);
     if (StringHelper.hasNoText (sAccesspointName))
       throw new IllegalStateException ("SAML configuration file is incomplete: " +
-                                       SAML_TOKEN_ISSUER_NAME +
+                                       CONFIG_SAML_TOKEN_ISSUER_NAME +
                                        " is missing");
-    final String sKeyStoreFilename = s_aConfig.getString (CONFIG_KEYSTORE_FILE);
+
+    final String sKeyStoreFilename = aConfig.getString (CONFIG_KEYSTORE_FILE);
     if (StringHelper.hasNoText (sKeyStoreFilename))
       throw new IllegalStateException ("SAML configuration file is incomplete: " + CONFIG_KEYSTORE_FILE + " is missing");
-    final String sKeyStorePassword = s_aConfig.getString (CONFIG_KEYSTORE_PASSWORD);
+
+    final String sKeyStorePassword = aConfig.getString (CONFIG_KEYSTORE_PASSWORD);
     if (StringHelper.hasNoText (sKeyStorePassword))
       throw new IllegalStateException ("SAML configuration file is incomplete: " +
                                        CONFIG_KEYSTORE_PASSWORD +
                                        " is missing");
-    final String sKeyAlias = s_aConfig.getString (CONFIG_KEY_ALIAS);
+
+    final String sKeyAlias = aConfig.getString (CONFIG_KEY_ALIAS);
     if (StringHelper.hasNoText (sKeyAlias))
       throw new IllegalStateException ("SAML configuration file is incomplete: " + CONFIG_KEY_ALIAS + " is missing");
-    final String sKeyPassword = s_aConfig.getString (CONFIG_KEY_PASSWORD);
+
+    final String sKeyPassword = aConfig.getString (CONFIG_KEY_PASSWORD);
     if (StringHelper.hasNoText (sKeyPassword))
       throw new IllegalStateException ("SAML configuration file is incomplete: " + CONFIG_KEY_PASSWORD + " is missing");
 
@@ -247,7 +252,7 @@ public final class SAMLCallbackHandler implements CallbackHandler {
     final SAMLAssertionFactory aSAMLFactory = SAMLAssertionFactory.newInstance (SAMLAssertionFactory.SAML2_0);
 
     // Setup SenderNameID
-    final NameID aSenderNameID = aSAMLFactory.createNameID (sSenderId, null, SENDER_NAME_ID_SYNTAX);
+    final NameID aSenderNameID = aSAMLFactory.createNameID (sSenderID, null, SENDER_NAME_ID_SYNTAX);
 
     // Setup AccessPointID
     final NameID aAccessPointNameID = aSAMLFactory.createNameID (sAccesspointName, null, ACCESSPOINT_NAME_ID_SYNTAX);

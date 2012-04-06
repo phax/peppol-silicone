@@ -52,7 +52,6 @@ import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.state.EValidity;
 import com.sun.xml.wss.impl.callback.CertificateValidationCallback.CertificateValidator;
 
-
 /**
  * The main OCSP validator callback.<br>
  * Important: the name of this class is referenced from the WSDL file.
@@ -72,24 +71,10 @@ public final class Validator implements CertificateValidator {
    */
   private static final String TEST_RESPONDER_URL = "http://pilot-ocsp.verisign.com:80";
 
-  /**
-   * Server truststore path.
-   */
-  private static final String TRUSTSTORE_PATH = "ocsp.truststore.path";
+  private static final String CONFIG_TRUSTSTORE_PATH = "ocsp.truststore.path";
+  private static final String CONFIG_TRUSTSTORE_PASS = "ocsp.truststore.password";
+  private static final String CONFIG_TRUSTORE_ALIAS = "ocsp.truststore.alias";
 
-  /**
-   * Server truststore password.
-   */
-  private static final String TRUSTSTORE_PASS = "ocsp.truststore.password";
-
-  /**
-   * Server truststore alias.
-   */
-  private static final String TRUSTORE_ALIAS = "ocsp.truststore.alias";
-
-  /**
-   * Configuration for certificates.
-   */
   private static final ConfigFile s_aConf = new ConfigFile ("private-configOCSP.properties", "configOCSP.properties");
 
   /**
@@ -100,7 +85,7 @@ public final class Validator implements CertificateValidator {
    *         false.
    */
   public final boolean validate (final X509Certificate xc) {
-    final String sPath = s_aConf.getString (TRUSTSTORE_PATH);
+    final String sPath = s_aConf.getString (CONFIG_TRUSTSTORE_PATH);
     return certificateValidate (xc, sPath).isValid ();
   }
 
@@ -108,28 +93,28 @@ public final class Validator implements CertificateValidator {
    * This method validate the X.509 Certificate.
    * 
    * @param xc
-   * @param sFilePath
+   * @param sTrustStorePath
    * @return {@link EValidity}
    */
   @Nonnull
-  public static final EValidity certificateValidate (final X509Certificate xc, @Nonnull final String sFilePath) {
+  public static final EValidity certificateValidate (final X509Certificate xc, @Nonnull final String sTrustStorePath) {
     try {
       // Load keystore
-      final String sTrustStorePassword = s_aConf.getString (TRUSTSTORE_PASS);
-      final KeyStore aTrustStore = KeyStoreUtils.loadKeyStoreFromClassPath (sFilePath, sTrustStorePassword);
+      final String sTrustStorePassword = s_aConf.getString (CONFIG_TRUSTSTORE_PASS);
+      final KeyStore aTrustStore = KeyStoreUtils.loadKeyStoreFromClassPath (sTrustStorePath, sTrustStorePassword);
 
       // Get certificate from alias
-      final String sTrustStoreAlias = s_aConf.getString (TRUSTORE_ALIAS);
-      final X509Certificate rootcert = (X509Certificate) aTrustStore.getCertificate (sTrustStoreAlias);
-      if (rootcert == null)
+      final String sTrustStoreAlias = s_aConf.getString (CONFIG_TRUSTORE_ALIAS);
+      final X509Certificate aRootCert = (X509Certificate) aTrustStore.getCertificate (sTrustStoreAlias);
+      if (aRootCert == null)
         s_aLogger.error ("Failed to resolve trust store alias '" + sTrustStoreAlias + "'");
       else {
-        OCSP.check (ContainerHelper.newList (xc), rootcert, TEST_RESPONDER_URL);
+        OCSP.check (ContainerHelper.newList (xc), aRootCert, TEST_RESPONDER_URL);
         return EValidity.VALID;
       }
     }
     catch (final Exception ex) {
-      s_aLogger.error ("Error validating certificate in key store '" + sFilePath + "'", ex);
+      s_aLogger.error ("Error validating certificate in trust store '" + sTrustStorePath + "'", ex);
     }
     return EValidity.INVALID;
   }
