@@ -44,14 +44,11 @@ import java.net.UnknownHostException;
 
 import org.junit.Test;
 
-import at.peppol.commons.ipmapper.ConfiguredDNSMapper;
-import at.peppol.commons.ipmapper.ISocketType;
-import at.peppol.commons.ipmapper.SocketType;
-
+import at.peppol.commons.utils.ConfigFile;
 
 /**
  * Test class for class {@link ConfiguredDNSMapperTest}.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Andreas Haberl
  */
 public final class ConfiguredDNSMapperTest {
@@ -59,12 +56,12 @@ public final class ConfiguredDNSMapperTest {
    * Test method for
    * {@link at.peppol.commons.ipmapper.ConfiguredDNSMapper#mapInternal(java.net.InetAddress)}
    * .
-   *
+   * 
    * @throws UnknownHostException
    */
   @Test
   public void testMapInternalInetAddress () throws UnknownHostException {
-    final ConfiguredDNSMapper dnsMapper = new ConfiguredDNSMapper ();
+    final ConfiguredDNSMapper dnsMapper = new ConfiguredDNSMapper (ConfigFile.getInstance ());
     final InetAddress _2222 = InetAddress.getByName ("2.2.2.2");
     final InetAddress _4444 = InetAddress.getByName ("4.4.4.4");
     ISocketType res = dnsMapper.mapInternal (_2222);
