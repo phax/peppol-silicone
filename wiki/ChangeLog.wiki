@@ -12,10 +12,14 @@
 ==LIME==
   * Improved exception handling when handling an incoming document
   * Move the contents of the "transport-lime-library" project into the "transport-lime-client" project and removed the "transport-lime-library" project so that the structure is consistent to the one of START
+==SML==
+  * Split the project "sml-client-apps" into "sml-client-console" and "sml-client-swing"
+  * Using the maven-shade-plugin to build standalone runnable projects "sml-client-console" and "sml-client-swing"
 ==SMP==
   * Removed the deprecated REST method CompleteServiceGroupInterface.deleteServiceGroup because it has the exact same semantics as ServiceGroupInterface.deleteServiceGroup
   * Changed the internal API concerning the database domain objects of the SMP server for consistency reasons
   * Adopted the field lengths for identifier values according to the defined maximum length constraints
+  * Using the maven-shade-plugin to build standalone runnable "smp-client-console"
 ==Validation==
   * Added a new project "validation-webapp" that provides a minimum web application for validating your PEPPOL documents in the web
   * IValidationDocumentType interface is now more generic by only requiring to offer a Schema object (and not to force UBL usage)
