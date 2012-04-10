@@ -7,6 +7,7 @@
 ==Base libraries==
   * Removed all deprecated methods using "Document" instead of "DocumentType" in their names
   * Added length and Charset checks in (Simple|Readonly)(Participant|DocumentType|Process)Identifier classes, according to the Policy for the use of identifiers 2.3 DRAFT
+  * Added some Codelists and generated Java enums that are to be used in UBL document instances
 ==START==
   * Improved the welcome page of the START AP service
 ==LIME==
