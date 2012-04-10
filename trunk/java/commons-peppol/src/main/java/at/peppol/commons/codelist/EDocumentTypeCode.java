@@ -35,42 +35,71 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.commons.tools;
+
+package at.peppol.commons.codelist;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.concurrent.Immutable;
+import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.id.IHasID;
+import com.phloc.commons.lang.EnumHelper;
+import com.phloc.commons.name.IHasDisplayName;
 
-import org.oasis_open.docs.codelist.ns.genericode._1.Column;
-import org.oasis_open.docs.codelist.ns.genericode._1.ColumnRef;
-import org.oasis_open.docs.codelist.ns.genericode._1.Row;
-import org.oasis_open.docs.codelist.ns.genericode._1.SimpleValue;
-import org.oasis_open.docs.codelist.ns.genericode._1.Value;
 
 /**
- * Helper class for Genericode reading
- *
- * @author PEPPOL.AT, BRZ, Philip Helger
+ * This file is generated from Genericode file DocumentTypeCode.gc. Do NOT edit!
+ * 
  */
-@Immutable
-public final class GenericodeUtils {
-  private GenericodeUtils () {}
+public enum EDocumentTypeCode
+    implements IHasID<String> , IHasDisplayName
+{
 
-  @Nonnull
-  private static String _getColumnElementID (final Object aColumnElement) {
-    return aColumnElement instanceof ColumnRef ? ((ColumnRef) aColumnElement).getId ()
-                                              : ((Column) aColumnElement).getId ();
-  }
+    QUERY("21", "Query"),
+    RESPONSE_TO_QUERY("22", "Response to query"),
+    INQUIRY("251", "Inquiry"),
+    STATUS_INFORMATION("23", "Status information"),
+    ORDER("220", "Order"),
+    RESPONSE_TO_REGISTRATION("301", "Response to registration"),
+    COMMERCIAL_INVOICE("380", "Commercial invoice"),
+    RELATED_DOCUMENT("916", "Related document"),
+    CREDIT_NOTE_RELATED_TO_GOODS_OR_SERVICES("81", "Credit note related to goods or services");
+    private final String m_sID;
+    private final String m_sDisplayName;
 
-  @Nullable
-  public static String getRowValue (final Row aRow, final String sColumnID) {
-    for (final Value aValue : aRow.getValue ()) {
-      final String sID = _getColumnElementID (aValue.getColumnRef ());
-      if (sID.equals (sColumnID)) {
-        final SimpleValue aSimpleValue = aValue.getSimpleValue ();
-        return aSimpleValue != null ? aSimpleValue.getValue () : null;
-      }
+    private EDocumentTypeCode(
+        @Nonnull
+        @Nonempty
+        final String sID,
+        @Nonnull
+        final String sDisplayName) {
+        m_sID = sID;
+        m_sDisplayName = sDisplayName;
     }
-    return null;
-  }
+
+    @Nonnull
+    @Nonempty
+    public String getID() {
+        return m_sID;
+    }
+
+    @Nonnull
+    public String getDisplayName() {
+        return m_sDisplayName;
+    }
+
+    @Nullable
+    public static EDocumentTypeCode getFromIDOrNull(
+        @Nullable
+        final String sID) {
+        return EnumHelper.getFromIDOrNull(EDocumentTypeCode.class, sID);
+    }
+
+    @Nullable
+    public static String getDisplayNameFromIDOrNull(
+        @Nullable
+        final String sID) {
+        final EDocumentTypeCode eValue = EDocumentTypeCode.getFromIDOrNull(sID);
+        return ((eValue == null)?null:eValue.getDisplayName());
+    }
+
 }
