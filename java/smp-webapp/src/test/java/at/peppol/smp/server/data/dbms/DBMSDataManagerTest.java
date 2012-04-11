@@ -86,7 +86,7 @@ import com.sun.jersey.api.NotFoundException;
 public class DBMSDataManagerTest {
   private static final String PARTICIPANT_IDENTIFIER_SCHEME = CIdentifier.DEFAULT_PARTICIPANT_IDENTIFIER_SCHEME;
   private static final String DOCUMENT_SCHEME = CIdentifier.DEFAULT_DOCUMENT_TYPE_IDENTIFIER_SCHEME;
-  private static final String PROCESS_SCHEME = "http://busdox.org/processIdentifiers/1.0/UBL/CENBII/1.0/";
+  private static final String PROCESS_SCHEME = CIdentifier.DEFAULT_PROCESS_IDENTIFIER_SCHEME;
 
   private static final String PARTICIPANT_IDENTIFIER1 = "0010:599900000000A";
   private static final String PARTICIPANT_IDENTIFIER2 = "0010:599900000000B";
