@@ -1,4 +1,41 @@
-package at.peppol.smp.client;
+/**
+ * Version: MPL 1.1/EUPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at:
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Original Code is Copyright The PEPPOL project (http://www.peppol.eu)
+ *
+ * Alternatively, the contents of this file may be used under the
+ * terms of the EUPL, Version 1.1 or - as soon they will be approved
+ * by the European Commission - subsequent versions of the EUPL
+ * (the "Licence"); You may not use this work except in compliance
+ * with the Licence.
+ * You may obtain a copy of the Licence at:
+ * http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the Licence is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the Licence for the specific language governing permissions and
+ * limitations under the Licence.
+ *
+ * If you wish to allow use of your version of this file only
+ * under the terms of the EUPL License and not to allow others to use
+ * your version of this file under the MPL, indicate your decision by
+ * deleting the provisions above and replace them with the notice and
+ * other provisions required by the EUPL License. If you do not delete
+ * the provisions above, a recipient may use your version of this file
+ * under either the MPL or the EUPL License.
+ */
+package at.peppol.smp.client.tools;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -26,9 +63,16 @@ import at.peppol.commons.sml.ESML;
 import at.peppol.commons.sml.ISMLInfo;
 import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
 import at.peppol.commons.utils.UsernamePWCredentials;
+import at.peppol.smp.client.SMPServiceCaller;
 
 import com.phloc.commons.state.ESuccess;
 
+/**
+ * This tool lets you register a single AP at an SMP. All the constants must be
+ * modified before the tool can be executed!
+ * 
+ * @author philip
+ */
 public final class MainRegisterAPatSMP {
   public static final Logger s_aLogger = LoggerFactory.getLogger (MainRegisterAPatSMP.class);
 
@@ -42,7 +86,7 @@ public final class MainRegisterAPatSMP {
   private static final String PARTICIPANT_ID = "0088:myGLNNumber";
 
   // What is the URL of the START service (without any ?wsdl!)
-  private static final String AP_ENDPOINTREF = "https://myap/service";
+  private static final String AP_ENDPOINTREF = "https://myap.example.com/accessPointService";
 
   // The Base64 encoded, DER encoded AP certificate (public key only)
   private static final String AP_CERT_STRING = null;
@@ -63,7 +107,7 @@ public final class MainRegisterAPatSMP {
   private static final EPredefinedDocumentTypeIdentifier DOCTYPE = EPredefinedDocumentTypeIdentifier.INVOICE_T010_BIS4A;
 
   // Process type to be registered (e.g. BIS4A)
-  private static final EPredefinedProcessIdentifier PROCTYPE = EPredefinedProcessIdentifier.urn_www_cenbii_eu_profile_bii04_ver1_0;
+  private static final EPredefinedProcessIdentifier PROCTYPE = EPredefinedProcessIdentifier.BIS4A;
 
   // Validity start date (may be present!)
   private static final Date START_DATE = new GregorianCalendar (2012, Calendar.JANUARY, 1).getTime ();
