@@ -44,6 +44,9 @@ import java.net.URI;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
 import javax.xml.ws.wsaddressing.W3CEndpointReference;
 import javax.xml.ws.wsaddressing.W3CEndpointReferenceBuilder;
 
@@ -70,6 +73,7 @@ import org.slf4j.LoggerFactory;
 import at.peppol.commons.identifier.SimpleDocumentTypeIdentifier;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 import at.peppol.commons.identifier.SimpleProcessIdentifier;
+import at.peppol.commons.security.DoNothingTrustManager;
 import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
 import at.peppol.commons.utils.ReadonlyUsernamePWCredentials;
 import at.peppol.smp.client.SMPServiceCaller;
@@ -78,6 +82,7 @@ import at.peppol.smp.client.UserId;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.io.file.SimpleFileIO;
 import com.phloc.commons.lang.CGStringHelper;
+import com.phloc.commons.random.VerySecureRandom;
 
 /**
  * SMP commandline client
@@ -126,6 +131,14 @@ public final class SMPClient {
   }
 
   public static void main (final String [] args) throws Exception {
+    if (false) {
+      // Enable this section in development mode, if you want to trust all HTTPS
+      // certificates
+      final SSLContext aSSLContext = SSLContext.getInstance ("SSL");
+      aSSLContext.init (null, new TrustManager [] { new DoNothingTrustManager () }, VerySecureRandom.getInstance ());
+      HttpsURLConnection.setDefaultSSLSocketFactory (aSSLContext.getSocketFactory ());
+    }
+
     final SMPClientOptions options = new SMPClientOptions ();
     final CommandLineParser parser = new PosixParser ();
     final CommandLine cmd = parser.parse (options, args);
@@ -231,20 +244,20 @@ public final class SMPClient {
         client.createServiceGroup ();
         break;
       case DELGROUP:
-        client.deleteServiceGroup ();
+        client._deleteServiceGroup ();
         break;
       case ADD:
-        client.addDocument ();
+        client._addDocument ();
         break;
       case DEL:
-        client.delDocument ();
+        client._deleteDocument ();
         break;
       case LIST:
         client.listDocuments ();
     }
   }
 
-  private void deleteServiceGroup () {
+  private void _deleteServiceGroup () {
     final ParticipantIdentifierType aPI = SimpleParticipantIdentifier.createWithDefaultScheme (m_sParticipantID);
     final SMPServiceCaller client = new SMPServiceCaller (m_aSMPAddress);
     final IReadonlyUsernamePWCredentials smpCreds = new ReadonlyUsernamePWCredentials (m_sSMPUsername, m_sSMPPassword);
@@ -284,7 +297,7 @@ public final class SMPClient {
     }
   }
 
-  private void delDocument () {
+  private void _deleteDocument () {
     final ParticipantIdentifierType aPI = SimpleParticipantIdentifier.createWithDefaultScheme (m_sParticipantID);
     final DocumentIdentifierType documentIdentifier = SimpleDocumentTypeIdentifier.createWithDefaultScheme (m_sDocumentType);
     final SMPServiceCaller client = new SMPServiceCaller (m_aSMPAddress);
@@ -297,7 +310,7 @@ public final class SMPClient {
     }
   }
 
-  private void addDocument () {
+  private void _addDocument () {
     final ProcessIdentifierType processIdentifier = SimpleProcessIdentifier.createWithDefaultScheme (m_sProcessID);
     final ParticipantIdentifierType bi = SimpleParticipantIdentifier.createWithDefaultScheme (m_sParticipantID);
     final DocumentIdentifierType documentIdentifier = SimpleDocumentTypeIdentifier.createWithDefaultScheme (m_sDocumentType);
