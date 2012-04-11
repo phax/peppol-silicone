@@ -41,7 +41,7 @@ import org.apache.commons.cli.Options;
 
 /**
  * Contains the command line options for the {@link SMPClient}.
- *
+ * 
  * @author Itella
  */
 final class SMPClientOptions extends Options {
@@ -51,11 +51,14 @@ final class SMPClientOptions extends Options {
     addOption ("u", "username", true, "USERNAME for SMP");
     addOption ("p", "password", true, "PASSWORD for SMP");
 
-    addOption ("c", "command", true, "Command to perform SMP entry(ADD, DEL, LIST)");
+    addOption ("c", "command", true, "Command to perform SMP entry (ADD, DEL, LIST)");
     addOption ("b", "businessid", true, "Business id of participant");
 
     addOption ("a", "apurl", true, "Accesspoint URL");
-    addOption ("e", "certpemfile", true, "File containing AP cert in pem file");
+    addOption ("e",
+               "certpemfile",
+               true,
+               "File containing the Base64 encoded, DER encoded AP certificate (public key only)");
     addOption ("r", "processid", true, "Process id to perform operation on");
     addOption ("d", "documentid", true, "Document id to perform operation on");
   }
