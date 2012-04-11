@@ -41,7 +41,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Date;
 
 import javax.annotation.Nonnull;
@@ -82,12 +81,15 @@ import at.peppol.smp.client.exception.NotFoundException;
 import at.peppol.smp.client.exception.UnauthorizedException;
 
 import com.phloc.commons.annotations.DevelopersNote;
+import com.phloc.commons.url.URLUtils;
 
 /**
+ * Expects a local SMP up and running at port 80 at the ROOT context. DNS is not
+ * needed. See {@link #SMP_URI} constant.
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Ignore
-@DevelopersNote ("Expects a local SMP up and running at port at the ROOT context. See SMP_URI constant")
 public final class ClientTest {
   private static final ISMLInfo SML_INFO = ESML.DEVELOPMENT_LOCAL;
 
@@ -99,17 +101,7 @@ public final class ClientTest {
   private static final String SMP_PASSWORD = "Test1234";
   private static final IReadonlyUsernamePWCredentials SMP_CREDENTIALS = new ReadonlyUsernamePWCredentials (SMP_USERNAME,
                                                                                                            SMP_PASSWORD);
-  private static final URI SMP_URI;
-
-  // init
-  static {
-    try {
-      SMP_URI = new URI ("http://localhost/");
-    }
-    catch (final URISyntaxException e) {
-      throw new IllegalStateException (e);
-    }
-  }
+  private static final URI SMP_URI = URLUtils.getAsURI ("http://localhost/");
 
   @BeforeClass
   public static void init () throws Exception {
@@ -205,7 +197,7 @@ public final class ClientTest {
   }
 
   @Test
-  @DevelopersNote ("Fails to validate the signed response because of test keystore")
+  @DevelopersNote ("May fails to validate the signed response because of test keystore")
   public void testCRUDServiceRegistration () throws Exception {
     final SMPServiceCaller aClient = new SMPServiceCaller (SMP_URI);
     _createSaveServiceGroup (aClient, SMP_CREDENTIALS);

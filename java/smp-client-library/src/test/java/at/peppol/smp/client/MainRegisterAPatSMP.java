@@ -29,8 +29,8 @@ import at.peppol.commons.utils.UsernamePWCredentials;
 
 import com.phloc.commons.state.ESuccess;
 
-public final class RegisterAPatSMP {
-  public static final Logger s_aLogger = LoggerFactory.getLogger (RegisterAPatSMP.class);
+public final class MainRegisterAPatSMP {
+  public static final Logger s_aLogger = LoggerFactory.getLogger (MainRegisterAPatSMP.class);
 
   // Modify the following constants to fit your needs!
 

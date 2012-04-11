@@ -58,32 +58,32 @@ import at.peppol.commons.sml.ESML;
  */
 public final class SMPServiceCallerTest {
   private static IReadonlyDocumentTypeIdentifier DOCUMENT_INVOICE = EPredefinedDocumentTypeIdentifier.INVOICE_T010_BIS4A;
-  private static IReadonlyProcessIdentifier PROCESS_BII04 = EPredefinedProcessIdentifier.urn_www_cenbii_eu_profile_bii04_ver1_0;
+  private static IReadonlyProcessIdentifier PROCESS_BII04 = EPredefinedProcessIdentifier.BIS4A;
 
-  private static IReadonlyParticipantIdentifier alfa1lab = SimpleParticipantIdentifier.createWithDefaultScheme ("9902:DK28158815");
-  private static IReadonlyParticipantIdentifier helseVest = SimpleParticipantIdentifier.createWithDefaultScheme ("9908:983974724");
-  private static IReadonlyParticipantIdentifier sendRegning = SimpleParticipantIdentifier.createWithDefaultScheme ("9908:976098897");
+  private static IReadonlyParticipantIdentifier PI_alfa1lab = SimpleParticipantIdentifier.createWithDefaultScheme ("9902:DK28158815");
+  private static IReadonlyParticipantIdentifier PI_helseVest = SimpleParticipantIdentifier.createWithDefaultScheme ("9908:983974724");
+  private static IReadonlyParticipantIdentifier PI_sendRegning = SimpleParticipantIdentifier.createWithDefaultScheme ("9908:976098897");
 
   @Test
   public void testGetEndpointAddress () throws Throwable {
     String endpointAddress;
-    endpointAddress = new SMPServiceCaller (alfa1lab, ESML.PRODUCTION).getEndpointAddress (alfa1lab,
-                                                                                           DOCUMENT_INVOICE,
-                                                                                           PROCESS_BII04);
+    endpointAddress = new SMPServiceCaller (PI_alfa1lab, ESML.PRODUCTION).getEndpointAddress (PI_alfa1lab,
+                                                                                              DOCUMENT_INVOICE,
+                                                                                              PROCESS_BII04);
     assertEquals (endpointAddress, "https://start-ap.alfa1lab.com:443/accesspointService");
 
     // 2011-12-08: returns BadRequestException (HTTP status 400)
     if (false) {
-      endpointAddress = new SMPServiceCaller (helseVest, ESML.PRODUCTION).getEndpointAddress (helseVest,
-                                                                                              DOCUMENT_INVOICE,
-                                                                                              PROCESS_BII04);
+      endpointAddress = new SMPServiceCaller (PI_helseVest, ESML.PRODUCTION).getEndpointAddress (PI_helseVest,
+                                                                                                 DOCUMENT_INVOICE,
+                                                                                                 PROCESS_BII04);
       assertEquals (endpointAddress, "https://peppolap.ibxplatform.net:8443/accesspointService");
     }
 
     if (false) {
-      endpointAddress = new SMPServiceCaller (sendRegning, ESML.PRODUCTION).getEndpointAddress (sendRegning,
-                                                                                                DOCUMENT_INVOICE,
-                                                                                                PROCESS_BII04);
+      endpointAddress = new SMPServiceCaller (PI_sendRegning, ESML.PRODUCTION).getEndpointAddress (PI_sendRegning,
+                                                                                                   DOCUMENT_INVOICE,
+                                                                                                   PROCESS_BII04);
       assertEquals (endpointAddress, "https://aksesspunkt.sendregning.no:8443/oxalis/accessPointService");
     }
   }
@@ -91,16 +91,16 @@ public final class SMPServiceCallerTest {
   @Test
   public void testGetEndpointCertificate () throws Throwable {
     X509Certificate endpointCertificate;
-    endpointCertificate = new SMPServiceCaller (alfa1lab, ESML.PRODUCTION).getEndpointCertificate (alfa1lab,
-                                                                                                   DOCUMENT_INVOICE,
-                                                                                                   PROCESS_BII04);
+    endpointCertificate = new SMPServiceCaller (PI_alfa1lab, ESML.PRODUCTION).getEndpointCertificate (PI_alfa1lab,
+                                                                                                      DOCUMENT_INVOICE,
+                                                                                                      PROCESS_BII04);
     assertEquals (endpointCertificate.getSerialNumber ().toString (), "97394193891150626641360283873417712042");
 
     // 2011-12-08: returns BadRequestException (HTTP status 400)
     if (false) {
-      endpointCertificate = new SMPServiceCaller (helseVest, ESML.PRODUCTION).getEndpointCertificate (helseVest,
-                                                                                                      DOCUMENT_INVOICE,
-                                                                                                      PROCESS_BII04);
+      endpointCertificate = new SMPServiceCaller (PI_helseVest, ESML.PRODUCTION).getEndpointCertificate (PI_helseVest,
+                                                                                                         DOCUMENT_INVOICE,
+                                                                                                         PROCESS_BII04);
       assertEquals (endpointCertificate.getSerialNumber ().toString (), "37276025795984990954710880598937203007");
     }
   }
