@@ -10,8 +10,9 @@ This page gives an overview of the core team involved in peppol-silicone
   * Responsibilities: project lead
 
 == Jerry Dimitriou ==
-
-TODO
+  
+  * Organization: University of Pireaus Research Center, Athens, Greece
+  * Responsibilites: Web Application GUI, Testing 
 
 == Ioannis Tsampoulatidis ==
 
