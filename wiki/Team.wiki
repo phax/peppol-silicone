@@ -1,0 +1,22 @@
+#summary Team members
+
+= Introduction =
+
+This page gives an overview of the core team involved in peppol-silicone
+
+== Philip Helger ==
+
+Organization: Bundesrechenzentrum GmbH, Vienna, Austria
+Responsibilities: project lead
+
+== Jerry Dimitriou ==
+
+TODO
+
+== Ioannis Tsampoulatidis ==
+
+TODO
+
+== Arun Kumar ==
+
+TODO
