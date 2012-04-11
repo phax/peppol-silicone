@@ -38,30 +38,32 @@
 package at.peppol.smp.client;
 
 import java.io.InputStream;
+import java.util.Iterator;
 
 import javax.annotation.Nonnull;
 import javax.annotation.WillClose;
 import javax.annotation.concurrent.Immutable;
+import javax.xml.crypto.dsig.Reference;
 import javax.xml.crypto.dsig.XMLSignature;
 import javax.xml.crypto.dsig.XMLSignatureFactory;
 import javax.xml.crypto.dsig.dom.DOMValidateContext;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
 
 import at.peppol.smp.client.exception.NoSignatureFoundException;
 
+import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.io.streams.NonBlockingByteArrayInputStream;
 import com.phloc.commons.io.streams.StreamUtils;
+import com.phloc.commons.xml.serialize.XMLReader;
 import com.sun.jersey.api.client.ClientHandler;
 import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.ClientRequest;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.filter.ClientFilter;
-
 
 /**
  * This Jersey filter checks if a signature is applied to each response object.
@@ -72,16 +74,14 @@ import com.sun.jersey.api.client.filter.ClientFilter;
  */
 @Immutable
 public final class CheckSignatureFilter extends ClientFilter {
+  private static final Logger s_aLogger = LoggerFactory.getLogger (CheckSignatureFilter.class);
+
   private static boolean _checkSignature (@Nonnull @WillClose final InputStream aEntityInputStream) throws Exception {
     try {
       // Get response from servlet
-      final DocumentBuilderFactory aFactory = DocumentBuilderFactory.newInstance ();
-      aFactory.setNamespaceAware (true);
+      final Document aDocument = XMLReader.readXMLDOM (aEntityInputStream);
 
-      final DocumentBuilder builder = aFactory.newDocumentBuilder ();
-      final Document aDocument = builder.parse (new InputSource (aEntityInputStream));
-
-      // We make sure that the XML is a Signed.., if not, we don't have to check
+      // We make sure that the XML is a Signed. If not, we don't have to check
       // any certificates.
 
       // Find Signature element.
@@ -99,8 +99,25 @@ public final class CheckSignatureFilter extends ClientFilter {
       final XMLSignature aSignature = aSignatureFactory.unmarshalXMLSignature (aValidateContext);
 
       // Validate the XMLSignature.
-      final boolean bCoreValidity = aSignature.validate (aValidateContext);
-      return bCoreValidity;
+      final boolean bCoreValid = aSignature.validate (aValidateContext);
+      if (!bCoreValid) {
+        // This code block is for debugging purposes only - it has no semantical
+        // influence
+        s_aLogger.info ("Signature failed core validation");
+        final boolean bSignatureValueValid = aSignature.getSignatureValue ().validate (aValidateContext);
+        s_aLogger.info ("  Signature value valid: " + bSignatureValueValid);
+        if (!bSignatureValueValid) {
+          // Check the validation status of each Reference.
+          int nIndex = 0;
+          final Iterator <?> i = aSignature.getSignedInfo ().getReferences ().iterator ();
+          while (i.hasNext ()) {
+            final boolean bRefValid = ((Reference) i.next ()).validate (aValidateContext);
+            s_aLogger.info ("  Reference[" + nIndex + "] validity status: " + bRefValid);
+            ++nIndex;
+          }
+        }
+      }
+      return bCoreValid;
     }
     finally {
       // Close the input stream
@@ -117,14 +134,12 @@ public final class CheckSignatureFilter extends ClientFilter {
     // Check for a positive result
     if (aClientRequest.getMethod ().equals ("GET") &&
         aClientResponse.getClientResponseStatus ().equals (ClientResponse.Status.OK)) {
+      // Buffer the response in memory
       aClientResponse.bufferEntity ();
-      final InputStream aResponseInStream = aClientResponse.getEntityInputStream ();
 
-      /*
-       * Store the response internally
-       */
-      final byte [] aResponseBytes = StreamUtils.getAllBytes (aResponseInStream);
-      if (aResponseBytes == null)
+      // Get as one big byte buffer
+      final byte [] aResponseBytes = StreamUtils.getAllBytes (aClientResponse.getEntityInputStream ());
+      if (ArrayHelper.isEmpty (aResponseBytes))
         throw new ClientHandlerException ("Could not read entity");
 
       try {
@@ -133,7 +148,7 @@ public final class CheckSignatureFilter extends ClientFilter {
           throw new ClientHandlerException ("Signature was not valid");
       }
       catch (final NoSignatureFoundException e) {
-        throw new ClientHandlerException ("No signature found", e);
+        throw new ClientHandlerException ("No Signature element found", e);
       }
       catch (final Exception ex) {
         throw new ClientHandlerException ("Error in validating signature", ex);

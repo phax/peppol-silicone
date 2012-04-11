@@ -39,6 +39,7 @@ package at.peppol.smp.server.util;
 
 import java.util.TimeZone;
 
+import javax.annotation.Nonnull;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
@@ -54,19 +55,18 @@ import com.phloc.commons.exceptions.InitializationException;
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class TimeZoneCorrector implements ServletContextListener {
+  public static final String DEFAULT_TIMEZONE = "UTC";
   private static final Logger s_aLogger = LoggerFactory.getLogger (TimeZoneCorrector.class);
 
-  public void contextInitialized (final ServletContextEvent aServletContextEvent) {
+  public void contextInitialized (@Nonnull final ServletContextEvent aServletContextEvent) {
     try {
-      TimeZone.setDefault (TimeZone.getTimeZone ("UTC"));
+      TimeZone.setDefault (TimeZone.getTimeZone (DEFAULT_TIMEZONE));
     }
     catch (final Throwable t) {
-      s_aLogger.error ("Failed to set default time zone!", t);
-      throw new InitializationException ("Failed to set default time zone!", t);
+      s_aLogger.error ("Failed to set default time zon to '" + DEFAULT_TIMEZONE + "'!", t);
+      throw new InitializationException ("Failed to set default time zone to '" + DEFAULT_TIMEZONE + "'!", t);
     }
   }
 
-  public void contextDestroyed (final ServletContextEvent aServletContextEvent) {
-    // Do nothing
-  }
+  public void contextDestroyed (final ServletContextEvent aServletContextEvent) {}
 }
