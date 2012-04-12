@@ -21,5 +21,5 @@ This page gives an overview of the core team involved in peppol-silicone
 
 == Arun Kumar ==
 
-  * Organization: [http://www.basware.com/ Basware Corporation , Chandigarh, India
+  * Organization: [http://www.basware.com/ Basware Corporation] , Chandigarh, India
   * Responsibilites: TODO 
