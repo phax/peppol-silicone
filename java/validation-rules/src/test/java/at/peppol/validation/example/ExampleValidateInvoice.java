@@ -61,8 +61,11 @@ public final class ExampleValidateInvoice {
 
     // Show the results
     System.out.println ("Validation results:");
-    for (final ValidationPyramidResultLayer aResultLayer : aResults)
-      for (final IResourceError aError : aResultLayer.getValidationErrors ())
-        System.out.println ("  " + aResultLayer.getValidationLevel () + " " + aError.getAsString ());
+    if (aResults.isEmpty ())
+      System.out.println ("  The document is valid!");
+    else
+      for (final ValidationPyramidResultLayer aResultLayer : aResults)
+        for (final IResourceError aError : aResultLayer.getValidationErrors ())
+          System.out.println ("  " + aResultLayer.getValidationLevel () + " " + aError.getAsString ());
   }
 }
