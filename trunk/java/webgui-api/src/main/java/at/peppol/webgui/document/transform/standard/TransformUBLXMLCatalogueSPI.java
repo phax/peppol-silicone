@@ -2,7 +2,6 @@ package at.peppol.webgui.document.transform.standard;
 
 import javax.annotation.Nonnull;
 
-import at.peppol.webgui.document.EDocumentMetaType;
 import at.peppol.webgui.document.transform.ITransformCatalogueToUBLSPI;
 import at.peppol.webgui.document.transform.TransformationResult;
 import at.peppol.webgui.document.transform.TransformationSource;
@@ -12,14 +11,14 @@ import com.phloc.commons.xml.XMLHelper;
 import com.phloc.ubl.EUBL20DocumentType;
 
 /**
- * "Transform" UBL catalogue available as XML
+ * "Transform" UBL catalogues available as XML
  * 
  * @author philip
  */
 public final class TransformUBLXMLCatalogueSPI implements ITransformCatalogueToUBLSPI {
   public boolean canConvertCatalogue (@Nonnull final TransformationSource aSource) {
     // We can only handle XML documents
-    if (!EDocumentMetaType.XML.equals (aSource.getDocumentMetaType ()))
+    if (!aSource.isXMLSource ())
       return false;
 
     // Check if the namespace matches

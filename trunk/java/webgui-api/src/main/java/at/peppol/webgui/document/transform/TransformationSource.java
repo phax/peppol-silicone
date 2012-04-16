@@ -54,6 +54,10 @@ public final class TransformationSource {
     return m_eDocMetaType;
   }
 
+  public boolean isXMLSource () {
+    return EDocumentMetaType.XML.equals (m_eDocMetaType);
+  }
+
   /**
    * @return The underlying resource. Never <code>null</code>.
    */

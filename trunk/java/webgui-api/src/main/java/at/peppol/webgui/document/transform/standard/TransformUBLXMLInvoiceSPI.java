@@ -2,7 +2,6 @@ package at.peppol.webgui.document.transform.standard;
 
 import javax.annotation.Nonnull;
 
-import at.peppol.webgui.document.EDocumentMetaType;
 import at.peppol.webgui.document.transform.ITransformInvoiceToUBLSPI;
 import at.peppol.webgui.document.transform.TransformationResult;
 import at.peppol.webgui.document.transform.TransformationSource;
@@ -19,7 +18,7 @@ import com.phloc.ubl.EUBL20DocumentType;
 public final class TransformUBLXMLInvoiceSPI implements ITransformInvoiceToUBLSPI {
   public boolean canConvertInvoice (@Nonnull final TransformationSource aSource) {
     // We can only handle XML documents
-    if (!EDocumentMetaType.XML.equals (aSource.getDocumentMetaType ()))
+    if (!aSource.isXMLSource ())
       return false;
 
     // Check if the namespace matches

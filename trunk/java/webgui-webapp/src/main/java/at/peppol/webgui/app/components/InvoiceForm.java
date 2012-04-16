@@ -1,8 +1,6 @@
 package at.peppol.webgui.app.components;
 
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
@@ -11,13 +9,11 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.transform.stream.StreamResult;
 
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.CustomerPartyType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.InvoiceLineType;
@@ -37,8 +33,8 @@ import org.slf4j.LoggerFactory;
 
 import at.peppol.commons.identifier.docid.EPredefinedDocumentTypeIdentifier;
 
-import com.phloc.commons.jaxb.JAXBContextCache;
-import com.phloc.commons.jaxb.JAXBMarshallerUtils;
+import com.phloc.ubl.AbstractUBLDocumentMarshaller;
+import com.phloc.ubl.UBL20DocumentMarshaller;
 import com.vaadin.data.Item;
 import com.vaadin.data.util.NestedMethodProperty;
 import com.vaadin.data.util.ObjectProperty;
@@ -64,7 +60,6 @@ public class InvoiceForm extends Form {
   private final ObjectFactory invObjFactory;
 
   private InvoiceType invoice;
-  private JAXBElement <InvoiceType> inv;
   private CustomerPartyType customer;
   private SupplierPartyType supplier;
 
@@ -121,22 +116,6 @@ public class InvoiceForm extends Form {
     return il;
   }
 
-  private <T> void printInvoiceXML (final JAXBElement <T> elem, final OutputStream os) {
-    try {
-      // Use a cache, because the creation is very time consuming
-      final JAXBContext jc = JAXBContextCache.getInstance ().getFromCache (elem.getValue ().getClass ());
-
-      final Marshaller m = jc.createMarshaller ();
-      JAXBMarshallerUtils.setFormattedOutput (m, true);
-      // Create a printWriter. A good way to show UTF8 in the console
-      final PrintWriter out = new PrintWriter (new OutputStreamWriter (os));
-      m.marshal (elem, out);
-    }
-    catch (final JAXBException ex) {
-      LOGGER.error (ex.getMessage (), ex);
-    }
-  }
-
   private void initElements () {
 
     final GridLayout grid = new GridLayout (2, 4);
@@ -163,8 +142,8 @@ public class InvoiceForm extends Form {
       @Override
       public void buttonClick (final Button.ClickEvent event) {
         try {
-
-          printInvoiceXML (invObjFactory.createInvoice (invoice), System.out);
+          AbstractUBLDocumentMarshaller.setGlobalValidationEventHandler (null);
+          UBL20DocumentMarshaller.writeInvoice (invoice, new StreamResult (new OutputStreamWriter (System.out)));
         }
         catch (final Exception ex) {
           LOGGER.error ("Error creating files. ", ex);
