@@ -1,11 +1,17 @@
 package at.peppol.webgui.folder;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.id.IHasID;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.idfactory.GlobalIDFactory;
-import com.phloc.commons.name.IHasDisplayName;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
 
@@ -14,9 +20,11 @@ import com.phloc.commons.string.StringHelper;
  * 
  * @author philip
  */
-public final class UserFolder implements IHasID <String>, IHasDisplayName {
+@NotThreadSafe
+public final class UserFolder implements IUserFolder {
   private final String m_sID;
   private String m_sDisplayName;
+  private final Set <String> m_aDocs = new HashSet <String> ();
 
   /**
    * Constructor for a new folder
@@ -63,7 +71,7 @@ public final class UserFolder implements IHasID <String>, IHasDisplayName {
    * @return {@link EChange}
    */
   @Nonnull
-  EChange setDisplayName (@Nonnull @Nonempty final String sDisplayName) {
+  public EChange setDisplayName (@Nonnull @Nonempty final String sDisplayName) {
     if (StringHelper.hasNoText (sDisplayName))
       throw new IllegalArgumentException ("displayName");
 
@@ -71,5 +79,36 @@ public final class UserFolder implements IHasID <String>, IHasDisplayName {
       return EChange.UNCHANGED;
     m_sDisplayName = sDisplayName;
     return EChange.CHANGED;
+  }
+
+  public boolean containsDocumentWithID (final String sDocumentID) {
+    return m_aDocs.contains (sDocumentID);
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public Set <String> getAllDocumentIDs () {
+    return ContainerHelper.newSet (m_aDocs);
+  }
+
+  @Nonnegative
+  public int getDocumentCount () {
+    return m_aDocs.size ();
+  }
+
+  public boolean hasDocuments () {
+    return !m_aDocs.isEmpty ();
+  }
+
+  @Nonnull
+  public EChange addDocument (@Nonnull final String sDocID) {
+    if (StringHelper.hasNoText (sDocID))
+      throw new NullPointerException ("docID");
+    return EChange.valueOf (m_aDocs.add (sDocID));
+  }
+
+  @Nonnull
+  public EChange removeDocument (@Nullable final String sDocID) {
+    return EChange.valueOf (m_aDocs.remove (sDocID));
   }
 }
