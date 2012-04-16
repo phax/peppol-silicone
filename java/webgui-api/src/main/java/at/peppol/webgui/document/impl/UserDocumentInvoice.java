@@ -1,8 +1,11 @@
-package at.peppol.webgui.document;
+package at.peppol.webgui.document.impl;
 
 import javax.annotation.Nonnull;
 
 import oasis.names.specification.ubl.schema.xsd.invoice_2.InvoiceType;
+
+import at.peppol.webgui.document.AbstractUserDocument;
+import at.peppol.webgui.document.EDocumentType;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.idfactory.GlobalIDFactory;

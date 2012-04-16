@@ -91,6 +91,9 @@ public final class TransformationSource {
     return m_eDocMetaType;
   }
 
+  /**
+   * @return <code>true</code> if the source's document meta type is XML.
+   */
   public boolean isXMLSource () {
     return EDocumentMetaType.XML.equals (m_eDocMetaType);
   }
