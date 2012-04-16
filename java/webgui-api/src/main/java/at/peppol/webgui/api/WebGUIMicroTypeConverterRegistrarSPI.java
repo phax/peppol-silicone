@@ -4,6 +4,8 @@ import javax.annotation.Nonnull;
 
 import at.peppol.webgui.folder.UserFolder;
 import at.peppol.webgui.folder.UserFolderMicroTypeConverter;
+import at.peppol.webgui.folder.UserFolderTree;
+import at.peppol.webgui.folder.UserFolderTreeMicroTypeConverter;
 import at.peppol.webgui.security.role.Role;
 import at.peppol.webgui.security.role.RoleMicroTypeConverter;
 import at.peppol.webgui.security.user.User;
@@ -25,5 +27,6 @@ public final class WebGUIMicroTypeConverterRegistrarSPI implements IMicroTypeCon
 
     // Folders
     aRegistry.registerMicroElementTypeConverter (UserFolder.class, new UserFolderMicroTypeConverter ());
+    aRegistry.registerMicroElementTypeConverter (UserFolderTree.class, new UserFolderTreeMicroTypeConverter ());
   }
 }

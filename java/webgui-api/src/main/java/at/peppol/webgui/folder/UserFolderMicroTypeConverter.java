@@ -28,11 +28,11 @@ public final class UserFolderMicroTypeConverter implements IMicroTypeConverter {
   }
 
   @Nonnull
-  public IUserFolder convertToNative (@Nonnull final IMicroElement eRole) {
-    final String sID = eRole.getAttribute (ATTR_ID);
-    final String sName = eRole.getAttribute (ATTR_NAME);
+  public IUserFolder convertToNative (@Nonnull final IMicroElement eUserFolder) {
+    final String sID = eUserFolder.getAttribute (ATTR_ID);
+    final String sName = eUserFolder.getAttribute (ATTR_NAME);
     final UserFolder aUserFolder = new UserFolder (sID, sName);
-    for (final IMicroElement eDoc : eRole.getChildElements (ELEMENT_DOC))
+    for (final IMicroElement eDoc : eUserFolder.getChildElements (ELEMENT_DOC))
       aUserFolder.addDocument (eDoc.getAttribute (ATTR_ID));
     return aUserFolder;
   }
