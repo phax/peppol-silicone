@@ -99,7 +99,7 @@ public final class TransformationResult implements ISuccessIndicator {
    *         In case the result object type is not a DOM node.
    */
   @Nonnull
-  public Node getResultAsDOMNode () {
+  public Node getResultDOMNode () {
     if (m_eResultType != ETransformationResultType.DOM_NODE)
       throw new IllegalStateException ("Result is not of type DOM node but of type " + m_eResultType);
     return (Node) m_aResultObj;
@@ -111,7 +111,7 @@ public final class TransformationResult implements ISuccessIndicator {
    *         In case the result object type is not a micro node.
    */
   @Nonnull
-  public IMicroNode getResultAsMicroNode () {
+  public IMicroNode getResultMicroNode () {
     if (m_eResultType != ETransformationResultType.MICRONODE)
       throw new IllegalStateException ("Result is not of type micro node but of type " + m_eResultType);
     return (IMicroNode) m_aResultObj;
@@ -123,7 +123,7 @@ public final class TransformationResult implements ISuccessIndicator {
    *         In case the result object type is not a resource.
    */
   @Nonnull
-  public IReadableResource getResultAsResource () {
+  public IReadableResource getResultResource () {
     if (m_eResultType != ETransformationResultType.RESOURCE)
       throw new IllegalStateException ("Result is not of type resource but of type " + m_eResultType);
     return (IReadableResource) m_aResultObj;
@@ -136,7 +136,7 @@ public final class TransformationResult implements ISuccessIndicator {
    *         In case the result object type is not a failure.
    */
   @Nonnull
-  public InMemoryLogger getResultAsFailure () {
+  public InMemoryLogger getResultFailure () {
     if (m_eResultType != ETransformationResultType.FAILURE)
       throw new IllegalStateException ("Result is not of type failure but of type " + m_eResultType);
     return (InMemoryLogger) m_aResultObj;
@@ -207,7 +207,7 @@ public final class TransformationResult implements ISuccessIndicator {
   @Nonnull
   public static TransformationResult createUBLResult (@Nonnull final Object aUBLObject) {
     if (aUBLObject == null)
-      throw new NullPointerException ("UBLobject");
+      throw new NullPointerException ("UBLObject");
 
     // Check if the class's owning package has the @XmlSchema annotation
     final XmlSchema aSchema = aUBLObject.getClass ().getPackage ().getAnnotation (XmlSchema.class);
