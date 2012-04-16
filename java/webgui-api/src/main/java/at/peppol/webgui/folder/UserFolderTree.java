@@ -1,6 +1,7 @@
 package at.peppol.webgui.folder;
 
 import java.util.Comparator;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -81,7 +82,7 @@ public final class UserFolderTree {
     return aItem.getData ().setDisplayName (sNewFolderName);
   }
 
-  public void iterateFolders (@Nonnull final INonThrowingRunnableWithParameter <UserFolder> aCallback,
+  public void iterateFolders (@Nonnull final INonThrowingRunnableWithParameter <IUserFolder> aCallback,
                               @Nullable final Comparator <? super UserFolder> aFolderComparator) {
     IChildrenProvider <DefaultTreeItemWithID <String, UserFolder>> aChildrenProvider;
     if (aFolderComparator == null) {
@@ -108,8 +109,42 @@ public final class UserFolderTree {
                            @Override
                            @OverrideOnDemand
                            public void onItemBeforeChildren (@Nullable final DefaultTreeItemWithID <String, UserFolder> aItem) {
-                             aCallback.run (aItem.getData ());
+                             final IUserFolder aUserFolder = aItem.getData ();
+                             aCallback.run (aUserFolder);
                            }
                          });
+  }
+
+  @Nonnull
+  public EChange assignDocumentToFolder (@Nullable final String sFolderID, @Nonnull final IUserDocument aDoc) {
+    if (aDoc == null)
+      throw new NullPointerException ("doc");
+
+    // Resolve folder ID
+    final DefaultTreeItemWithID <String, UserFolder> aItem = m_aTree.getItemWithID (sFolderID);
+    if (aItem == null)
+      return EChange.UNCHANGED;
+
+    return aItem.getData ().addDocument (aDoc.getID ());
+  }
+
+  @Nonnull
+  public EChange unassignDocumentFromFolder (@Nullable final String sFolderID, @Nonnull final IUserDocument aDoc) {
+    if (aDoc == null)
+      throw new NullPointerException ("doc");
+
+    // Resolve folder ID
+    final DefaultTreeItemWithID <String, UserFolder> aItem = m_aTree.getItemWithID (sFolderID);
+    if (aItem == null)
+      return EChange.UNCHANGED;
+
+    return aItem.getData ().removeDocument (aDoc.getID ());
+  }
+
+  @Nullable
+  public Set <String> getAllAssignedDocumentIDs (@Nullable final String sFolderID) {
+    // Resolve folder ID
+    final DefaultTreeItemWithID <String, UserFolder> aItem = m_aTree.getItemWithID (sFolderID);
+    return aItem == null ? null : aItem.getData ().getAllDocumentIDs ();
   }
 }
