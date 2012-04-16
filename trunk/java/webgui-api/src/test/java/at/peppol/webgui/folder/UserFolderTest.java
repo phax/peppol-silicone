@@ -9,6 +9,9 @@ import org.junit.Test;
 
 import at.peppol.webgui.AbstractStorageAwareTestCase;
 
+import com.phloc.commons.microdom.IMicroElement;
+import com.phloc.commons.microdom.convert.MicroTypeConverter;
+import com.phloc.commons.mock.PhlocTestUtils;
 import com.phloc.commons.string.StringHelper;
 
 /**
@@ -75,5 +78,15 @@ public final class UserFolderTest extends AbstractStorageAwareTestCase {
     assertTrue (aUF.getAllDocumentIDs ().isEmpty ());
     assertFalse (aUF.containsDocumentWithID ("any"));
     assertFalse (aUF.containsDocumentWithID ("a"));
+  }
+
+  @Test
+  public void testSerialize () {
+    final UserFolder aUF = new UserFolder ("any");
+    aUF.addDocument ("doc1");
+    aUF.addDocument ("doc2");
+    final IMicroElement e = MicroTypeConverter.convertToMicroElement (aUF, "x");
+    final UserFolder aUF2 = MicroTypeConverter.convertToNative (e, UserFolder.class);
+    PhlocTestUtils.testDefaultImplementationWithEqualContentObject (aUF, aUF2);
   }
 }
