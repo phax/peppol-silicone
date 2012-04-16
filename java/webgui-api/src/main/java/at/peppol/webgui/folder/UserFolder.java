@@ -11,9 +11,11 @@ import javax.annotation.concurrent.NotThreadSafe;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.state.EChange;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * Represents a single folder like "Inbox", "Outbox" or "Drafts"
@@ -110,5 +112,28 @@ public final class UserFolder implements IUserFolder {
   @Nonnull
   public EChange removeDocument (@Nullable final String sDocID) {
     return EChange.valueOf (m_aDocs.remove (sDocID));
+  }
+
+  @Override
+  public boolean equals (final Object o) {
+    if (o == this)
+      return true;
+    if (!(o instanceof UserFolder))
+      return false;
+    final UserFolder rhs = (UserFolder) o;
+    return m_sID.equals (rhs.m_sID);
+  }
+
+  @Override
+  public int hashCode () {
+    return new HashCodeGenerator (this).append (m_sID).getHashCode ();
+  }
+
+  @Override
+  public String toString () {
+    return new ToStringGenerator (this).append ("ID", m_sID)
+                                       .append ("name", m_sDisplayName)
+                                       .append ("docs", m_aDocs)
+                                       .toString ();
   }
 }
