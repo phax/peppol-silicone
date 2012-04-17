@@ -68,7 +68,7 @@ public final class ValidationPyramidTest {
   public void testInvoice () {
     final ValidationPyramid vp = new ValidationPyramid (EValidationDocumentType.INVOICE,
                                                         ValidationTransaction.createUBLTransaction (ETransaction.T10));
-    for (final String sInvoiceFile : CValidattionTestFiles.TEST_INVOICES) {
+    for (final String sInvoiceFile : CValidattionTestFiles.TEST_INVOICES_SUCCESS) {
       // Get the UBL XML file
       final IReadableResource aInvoiceRes = new ClassPathResource ("/test-invoices/" + sInvoiceFile);
       for (final ValidationPyramidResultLayer aResultLayer : vp.applyValidation (aInvoiceRes)
@@ -83,7 +83,7 @@ public final class ValidationPyramidTest {
     final ValidationPyramid vp = new ValidationPyramid (EValidationDocumentType.INVOICE,
                                                         ValidationTransaction.createUBLTransaction (ETransaction.T10),
                                                         CountryCache.getCountry ("AT"));
-    for (final String sInvoiceFile : CValidattionTestFiles.TEST_INVOICES_AT) {
+    for (final String sInvoiceFile : CValidattionTestFiles.TEST_INVOICES_AT_SUCCESS) {
       // Do validation
       final ValidationPyramidResult aResult = vp.applyValidation (new ClassPathResource ("/test-invoices/" +
                                                                                          sInvoiceFile));

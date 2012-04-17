@@ -45,25 +45,73 @@ import com.phloc.commons.collections.ContainerHelper;
 
 /**
  * Contains a list of the validation test files.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable
 public final class CValidattionTestFiles {
-  public static final List <String> TEST_CATALOGUES = ContainerHelper.newUnmodifiableList ("Consip_Catalogo_UBL.xml");
-  public static final List <String> TEST_ORDERS = ContainerHelper.newUnmodifiableList ("ADVORD_03_03_00_Order_v2p2.xml",
-                                                                                       "BII03 Order example 01.xml",
-                                                                                       "PEPPOL BIS-3a-FULL.xml",
-                                                                                       "PEPPOL BIS-3a-Small.xml",
-                                                                                       "UBL-Order-2.0-Example-International.xml",
-                                                                                       "UBL-Order-2.0-Example.xml",
-                                                                                       "test-order.xml");
-  public static final List <String> TEST_INVOICES = ContainerHelper.newUnmodifiableList ("BII04 XML example full core data 01.xml",
-                                                                                         "invoice-it-c98fe7f7-8b46-4972-b61b-3b8824f16658.xml",
-                                                                                         "invoice-it-uuid8a69941e-52ae-4cbb-b284-a3a78fb89d07.xml",
-                                                                                         "SubmitInvoice.008660-AA.b1478257-5bd1-4756-bd20-3262afb22923.xml",
-                                                                                         "test-invoice.xml");
-  public static final List <String> TEST_INVOICES_AT = ContainerHelper.newUnmodifiableList ("at-ubl-42-8.xml");
+  public static final String PATH_CATALOGUE_TESTFILES = "/test-catalogues/";
+  public static final String PATH_INVOICE_TESTFILES = "/test-invoices/";
+  public static final String PATH_ORDER_TESTFILES = "/test-orders/";
+  public static final String PATH_TENDERINGCATALOGUE_TESTFILES = "/test-tenderingcatalogues/";
+
+  public static final String PATH_SUCCESS = "success/";
+  public static final String PATH_ERROR = "error/";
+
+  public static final List <String> TEST_TENDERINGCATALOGUES_SUCCESS = ContainerHelper.newUnmodifiableList ("Tender-Sample.xml");
+  public static final List <String> TEST_CATALOGUES_SUCCESS = ContainerHelper.newUnmodifiableList ("Consip_Catalogo_UBL.xml");
+  public static final List <String> TEST_ORDERS_SUCCESS = ContainerHelper.newUnmodifiableList ("ADVORD_03_03_00_Order_v2p2.xml",
+                                                                                               "BII03 Order example 01.xml",
+                                                                                               "PEPPOL BIS-3a-FULL.xml",
+                                                                                               "PEPPOL BIS-3a-Small.xml",
+                                                                                               "TC01.0.TS1.xml",
+                                                                                               "test-order.xml",
+                                                                                               "UBL-Order-2.0-Example-International.xml",
+                                                                                               "UBL-Order-2.0-Example.xml");
+  public static final List <String> TEST_INVOICES_SUCCESS = ContainerHelper.newUnmodifiableList ("BII04 minimal invoice example 03.xml",
+                                                                                                 "BII04 minimal invoice wo addr id.xml",
+                                                                                                 "BII04 minimal VAT invoice example 02.xml",
+                                                                                                 "BII04 XML example full core data 01.xml",
+                                                                                                 "BII04 XML example full core data 02.xml",
+                                                                                                 "invoice-it-c98fe7f7-8b46-4972-b61b-3b8824f16658.xml",
+                                                                                                 "invoice-it-uuid8a69941e-52ae-4cbb-b284-a3a78fb89d07.xml",
+                                                                                                 "PEP BII04 minimal invoice example 03.xml",
+                                                                                                 "PEP BII04 minimal Reverce Charge VAT invoice example 01.xml",
+                                                                                                 "PEP BII04 minimal Reverce Charge VAT invoice example no line 01.xml",
+                                                                                                 "PEP BII04 minimal VAT invoice example 02.xml",
+                                                                                                 "SubmitInvoice.008660-AA.b1478257-5bd1-4756-bd20-3262afb22923.xml",
+                                                                                                 "test-invoice.xml");
+
+  public static final List <String> TEST_INVOICES_ERROR = ContainerHelper.newUnmodifiableList ("ERR-10 BII04 minimal VAT invoice example 02.xml",
+                                                                                               "ERR-11 BII04 minimal invoice example 02.xml",
+                                                                                               "ERR-13 BII04 minimal invoice example 02.xml",
+                                                                                               "ERR-18 BII04 minimal invoice example 02.xml",
+                                                                                               "ERR-19 BII04 minimal invoice example 02.xml",
+                                                                                               "ERR-2 BII04 minimal invoice example 02.xml",
+                                                                                               "ERR-20 BII04 reverse charge invoice example 01.xml",
+                                                                                               "ERR-3 BII04 minimal VAT invoice example 02.xml",
+                                                                                               "ERR-4 BII04 minimal invoice example 02.xml",
+                                                                                               "ERR-5 BII04 minimal VAT invoice example 02.xml",
+                                                                                               "ERR-9 BII04 minimal VAT invoice example 02.xml",
+                                                                                               "TC10.1.TS1.xml",
+                                                                                               "TC10.10.TS1.xml",
+                                                                                               "TC10.11.TS1.xml",
+                                                                                               "TC10.12.TS1.xml",
+                                                                                               "TC10.13.TS1.xml",
+                                                                                               "TC10.14.TS1.xml",
+                                                                                               "TC10.15.TS1.xml",
+                                                                                               "TC10.16.TS1.xml",
+                                                                                               "TC10.17.TS1.xml",
+                                                                                               "TC10.18.TS1.xml",
+                                                                                               "TC10.2.TS1.xml",
+                                                                                               "TC10.3.TS1.xml",
+                                                                                               "TC10.4.TS1.xml",
+                                                                                               "TC10.5.TS1.xml",
+                                                                                               "TC10.6.TS1.xml",
+                                                                                               "TC10.7.TS1.xml",
+                                                                                               "TC10.8.TS1.xml",
+                                                                                               "TC10.9.TS1.xml");
+  public static final List <String> TEST_INVOICES_AT_SUCCESS = ContainerHelper.newUnmodifiableList ("at-ubl-42-8.xml");
 
   private CValidattionTestFiles () {}
 }
