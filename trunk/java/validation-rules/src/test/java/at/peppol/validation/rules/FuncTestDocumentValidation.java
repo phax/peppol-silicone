@@ -49,10 +49,6 @@ import org.xml.sax.SAXException;
 
 import at.peppol.commons.cenbii.profiles.ETransaction;
 import at.peppol.validation.CValidattionTestFiles;
-import at.peppol.validation.rules.EValidationArtefact;
-import at.peppol.validation.rules.EValidationDocumentType;
-import at.peppol.validation.rules.IValidationArtefact;
-import at.peppol.validation.rules.ValidationTransaction;
 import at.peppol.validation.schematron.SchematronHelper;
 import at.peppol.validation.schematron.svrl.SVRLFailedAssert;
 import at.peppol.validation.schematron.svrl.SVRLUtils;
@@ -68,7 +64,6 @@ import com.phloc.commons.xml.serialize.XMLReader;
 import com.phloc.commons.xml.serialize.XMLWriter;
 import com.phloc.ubl.UBL20DocumentMarshaller;
 
-
 /**
  * Validate documents using the supplied functionality of
  * {@link EValidationArtefact}.
@@ -77,11 +72,13 @@ import com.phloc.ubl.UBL20DocumentMarshaller;
  */
 public final class FuncTestDocumentValidation {
   @Test
-  public void testReadCatalogues () throws SAXException {
+  public void testReadCataloguesSuccess () throws SAXException {
     // For all available catalogues
-    for (final String sCatalogueFile : CValidattionTestFiles.TEST_CATALOGUES) {
+    for (final String sCatalogueFile : CValidattionTestFiles.TEST_CATALOGUES_SUCCESS) {
       // Get the UBL XML file
-      final IReadableResource aCatalogueRes = new ClassPathResource ("/test-catalogues/" + sCatalogueFile);
+      final IReadableResource aCatalogueRes = new ClassPathResource (CValidattionTestFiles.PATH_CATALOGUE_TESTFILES +
+                                                                     CValidattionTestFiles.PATH_SUCCESS +
+                                                                     sCatalogueFile);
 
       // Ensure the UBL file validates against the scheme
       final CatalogueType aUBLCatalogue = UBL20DocumentMarshaller.readCatalogue (XMLReader.readXMLDOM (aCatalogueRes));
@@ -113,11 +110,13 @@ public final class FuncTestDocumentValidation {
   }
 
   @Test
-  public void testReadOrders () throws SAXException {
+  public void testReadOrdersSuccess () throws SAXException {
     // For all available orders
-    for (final String sOrderFile : CValidattionTestFiles.TEST_ORDERS) {
+    for (final String sOrderFile : CValidattionTestFiles.TEST_ORDERS_SUCCESS) {
       // Get the UBL XML file
-      final IReadableResource aOrderRes = new ClassPathResource ("/test-orders/" + sOrderFile);
+      final IReadableResource aOrderRes = new ClassPathResource (CValidattionTestFiles.PATH_ORDER_TESTFILES +
+                                                                 CValidattionTestFiles.PATH_SUCCESS +
+                                                                 sOrderFile);
 
       // Ensure the UBL file validates against the scheme
       final OrderType aUBLOrder = UBL20DocumentMarshaller.readOrder (XMLReader.readXMLDOM (aOrderRes));
@@ -151,11 +150,14 @@ public final class FuncTestDocumentValidation {
   }
 
   @Test
-  public void testReadInvoices () throws SAXException {
+  public void testReadInvoicesSuccess () throws SAXException {
+    final IValidationTransaction aVT = ValidationTransaction.createUBLTransaction (ETransaction.T10);
     // For all available invoices
-    for (final String sInvoiceFile : CValidattionTestFiles.TEST_INVOICES) {
+    for (final String sInvoiceFile : CValidattionTestFiles.TEST_INVOICES_SUCCESS) {
       // Get the UBL XML file
-      final IReadableResource aInvoiceRes = new ClassPathResource ("/test-invoices/" + sInvoiceFile);
+      final IReadableResource aInvoiceRes = new ClassPathResource (CValidattionTestFiles.PATH_INVOICE_TESTFILES +
+                                                                   CValidattionTestFiles.PATH_SUCCESS +
+                                                                   sInvoiceFile);
 
       // Ensure the UBL file validates against the scheme
       final InvoiceType aUBLInvoice = UBL20DocumentMarshaller.readInvoice (XMLReader.readXMLDOM (aInvoiceRes));
@@ -166,7 +168,7 @@ public final class FuncTestDocumentValidation {
                                                                                               EValidationDocumentType.INVOICE,
                                                                                               CGlobal.LOCALE_INDEPENDENT)) {
         // Get the XSLT for transaction T10
-        final IReadableResource aXSLT = eArtefact.getValidationXSLTResource (ValidationTransaction.createUBLTransaction (ETransaction.T10));
+        final IReadableResource aXSLT = eArtefact.getValidationXSLTResource (aVT);
 
         // And now run the main "Schematron" validation
         final SchematronOutputType aSVRL = SchematronHelper.applySchematron (new SchematronResourceXSLT (aXSLT),
@@ -189,11 +191,13 @@ public final class FuncTestDocumentValidation {
   }
 
   @Test
-  public void testReadInvoicesAT () throws SAXException {
+  public void testReadInvoicesATSuccess () throws SAXException {
     // For all available invoices
-    for (final String sInvoiceFile : CValidattionTestFiles.TEST_INVOICES_AT) {
+    for (final String sInvoiceFile : CValidattionTestFiles.TEST_INVOICES_AT_SUCCESS) {
       // Get the UBL XML file
-      final IReadableResource aInvoiceRes = new ClassPathResource ("/test-invoices/" + sInvoiceFile);
+      final IReadableResource aInvoiceRes = new ClassPathResource (CValidattionTestFiles.PATH_INVOICE_TESTFILES +
+                                                                   CValidattionTestFiles.PATH_SUCCESS +
+                                                                   sInvoiceFile);
 
       // Ensure the UBL file validates against the scheme
       final InvoiceType aUBLInvoice = UBL20DocumentMarshaller.readInvoice (XMLReader.readXMLDOM (aInvoiceRes));
