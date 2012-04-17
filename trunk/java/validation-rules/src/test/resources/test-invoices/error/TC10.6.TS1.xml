@@ -53,10 +53,10 @@
 			</cac:PartyName>
 			<cac:PostalAddress>
 				<cbc:ID schemeID="GLN" schemeAgencyID="9">1231412341324</cbc:ID>
+        <cac:Country>
+          <cbc:IdentificationCode listID="ISO3166-1" listAgencyID="6">NO</cbc:IdentificationCode>
+        </cac:Country>
 			</cac:PostalAddress>
-			<cac:Country>
-				<cbc:IdentificationCode listID="ISO3166-1" listAgencyID="6">NO</cbc:IdentificationCode>
-			</cac:Country>
 		</cac:Party>
 	</cac:AccountingSupplierParty>
 	<cac:AccountingCustomerParty>

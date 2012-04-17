@@ -70,7 +70,7 @@ import com.phloc.ubl.UBL20DocumentMarshaller;
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public final class FuncTestDocumentValidation {
+public final class FuncTestDocumentValidationSuccess {
   @Test
   public void testReadCataloguesSuccess () throws SAXException {
     // For all available catalogues
