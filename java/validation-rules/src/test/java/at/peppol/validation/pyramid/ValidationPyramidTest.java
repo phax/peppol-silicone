@@ -45,9 +45,6 @@ import org.junit.Test;
 
 import at.peppol.commons.cenbii.profiles.ETransaction;
 import at.peppol.validation.CValidattionTestFiles;
-import at.peppol.validation.pyramid.ValidationPyramid;
-import at.peppol.validation.pyramid.ValidationPyramidResult;
-import at.peppol.validation.pyramid.ValidationPyramidResultLayer;
 import at.peppol.validation.rules.EValidationDocumentType;
 import at.peppol.validation.rules.EValidationLevel;
 import at.peppol.validation.rules.ValidationTransaction;
@@ -57,10 +54,9 @@ import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.commons.locale.country.CountryCache;
 
-
 /**
  * Test class for class {@link ValidationPyramid}.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class ValidationPyramidTest {
@@ -70,7 +66,9 @@ public final class ValidationPyramidTest {
                                                         ValidationTransaction.createUBLTransaction (ETransaction.T10));
     for (final String sInvoiceFile : CValidattionTestFiles.TEST_INVOICES_SUCCESS) {
       // Get the UBL XML file
-      final IReadableResource aInvoiceRes = new ClassPathResource ("/test-invoices/" + sInvoiceFile);
+      final IReadableResource aInvoiceRes = new ClassPathResource (CValidattionTestFiles.PATH_INVOICE_TESTFILES +
+                                                                   CValidattionTestFiles.PATH_SUCCESS +
+                                                                   sInvoiceFile);
       for (final ValidationPyramidResultLayer aResultLayer : vp.applyValidation (aInvoiceRes)
                                                                .getAllValidationResultLayers ())
         for (final IResourceError aError : aResultLayer.getValidationErrors ())
@@ -85,7 +83,8 @@ public final class ValidationPyramidTest {
                                                         CountryCache.getCountry ("AT"));
     for (final String sInvoiceFile : CValidattionTestFiles.TEST_INVOICES_AT_SUCCESS) {
       // Do validation
-      final ValidationPyramidResult aResult = vp.applyValidation (new ClassPathResource ("/test-invoices/" +
+      final ValidationPyramidResult aResult = vp.applyValidation (new ClassPathResource (CValidattionTestFiles.PATH_INVOICE_TESTFILES +
+                                                                                         CValidattionTestFiles.PATH_SUCCESS +
                                                                                          sInvoiceFile));
       assertNotNull (aResult);
 
