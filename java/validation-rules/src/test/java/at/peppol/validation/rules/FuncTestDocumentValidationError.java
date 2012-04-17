@@ -58,6 +58,10 @@ import org.xml.sax.SAXException;
 
 import at.peppol.commons.cenbii.profiles.ETransaction;
 import at.peppol.validation.CValidattionTestFiles;
+import at.peppol.validation.rules.mock.AbstractErrorDefinition;
+import at.peppol.validation.rules.mock.FatalError;
+import at.peppol.validation.rules.mock.TestDocument;
+import at.peppol.validation.rules.mock.Warning;
 import at.peppol.validation.schematron.SchematronHelper;
 import at.peppol.validation.schematron.svrl.SVRLFailedAssert;
 import at.peppol.validation.schematron.svrl.SVRLUtils;
@@ -131,42 +135,150 @@ public final class FuncTestDocumentValidationError {
                                                                                              "TC01.7.TS1.xml",
                                                                                              "TC01.8.TS1.xml",
                                                                                              "TC01.9.TS1.xml");
-  public static final List <String> TEST_INVOICES_ERROR = ContainerHelper.newUnmodifiableList ("ERR-10 BII04 minimal VAT invoice example 02.xml",
-                                                                                               "ERR-11 BII04 minimal invoice example 02.xml",
-                                                                                               "ERR-13 BII04 minimal invoice example 02.xml",
-                                                                                               "ERR-18 BII04 minimal invoice example 02.xml",
-                                                                                               "ERR-19 BII04 minimal invoice example 02.xml",
-                                                                                               "ERR-2 BII04 minimal invoice example 02.xml",
-                                                                                               "ERR-20 BII04 reverse charge invoice example 01.xml",
-                                                                                               "ERR-3 BII04 minimal VAT invoice example 02.xml",
-                                                                                               "ERR-4 BII04 minimal invoice example 02.xml",
-                                                                                               "ERR-5 BII04 minimal VAT invoice example 02.xml",
-                                                                                               "ERR-9 BII04 minimal VAT invoice example 02.xml",
-                                                                                               "TC10.1.TS1.xml",
-                                                                                               "TC10.10.TS1.xml",
-                                                                                               "TC10.11.TS1.xml",
-                                                                                               "TC10.12.TS1.xml",
-                                                                                               "TC10.13.TS1.xml",
-                                                                                               "TC10.14.TS1.xml",
-                                                                                               "TC10.16.TS1.xml",
-                                                                                               "TC10.17.TS1.xml",
-                                                                                               "TC10.18.TS1.xml",
-                                                                                               "TC10.2.TS1.xml",
-                                                                                               "TC10.5.TS1.xml",
-                                                                                               "TC10.6.TS1.xml",
-                                                                                               "TC10.7.TS1.xml",
-                                                                                               "TC10.8.TS1.xml",
-                                                                                               "TC10.9.TS1.xml");
+  public static final List <TestDocument> TEST_INVOICES_ERROR;
+  static {
+    TEST_INVOICES_ERROR = ContainerHelper.newUnmodifiableList (new TestDocument ("ERR-10 BII04 minimal VAT invoice example 02.xml",
+                                                                                 new FatalError ("BIIRULE-T10-R010"),
+                                                                                 new FatalError ("EUGEN-T10-R008"),
+                                                                                 new Warning ("EUGEN-T10-R009"),
+                                                                                 new Warning ("EUGEN-T10-R001"),
+                                                                                 new Warning ("EUGEN-T10-R003")),
+                                                               new TestDocument ("ERR-11 BII04 minimal invoice example 02.xml",
+                                                                                 new FatalError ("BIIRULE-T10-R011"),
+                                                                                 new FatalError ("BIIRULE-T10-R012"),
+                                                                                 new Warning ("EUGEN-T10-R001"),
+                                                                                 new Warning ("EUGEN-T10-R003")),
+                                                               new TestDocument ("ERR-13 BII04 minimal invoice example 02.xml",
+                                                                                 new FatalError ("BIIRULE-T10-R013"),
+                                                                                 new FatalError ("BIIRULE-T10-R017"),
+                                                                                 new Warning ("EUGEN-T10-R001"),
+                                                                                 new Warning ("EUGEN-T10-R003")),
+                                                               new TestDocument ("ERR-18 BII04 minimal invoice example 02.xml",
+                                                                                 new FatalError ("BIIRULE-T10-R018"),
+                                                                                 new Warning ("EUGEN-T10-R001"),
+                                                                                 new Warning ("EUGEN-T10-R003")),
+                                                               new TestDocument ("ERR-19 BII04 minimal invoice example 02.xml",
+                                                                                 new Warning ("BIIRULE-T10-R019"),
+                                                                                 new Warning ("EUGEN-T10-R001"),
+                                                                                 new Warning ("EUGEN-T10-R003")),
+                                                               new TestDocument ("ERR-2 BII04 minimal invoice example 02.xml",
+                                                                                 new Warning ("BIIRULE-T10-R002"),
+                                                                                 new Warning ("EUGEN-T10-R001"),
+                                                                                 new Warning ("EUGEN-T10-R003"),
+                                                                                 new Warning ("BIICORE-T10-R392")),
+                                                               new TestDocument ("ERR-20 BII04 reverse charge invoice example 01.xml",
+                                                                                 new FatalError ("EUGEN-T10-R015"),
+                                                                                 new FatalError ("EUGEN-T10-R016"),
+                                                                                 new FatalError ("EUGEN-T10-R017"),
+                                                                                 new Warning ("BIIRULE-T10-R003"),
+                                                                                 new Warning ("EUGEN-T10-R009")),
+                                                               new TestDocument ("ERR-3 BII04 minimal VAT invoice example 02.xml",
+                                                                                 new Warning ("BIIRULE-T10-R003"),
+                                                                                 new FatalError ("EUGEN-T10-R008"),
+                                                                                 new Warning ("EUGEN-T10-R009"),
+                                                                                 new Warning ("EUGEN-T10-R001"),
+                                                                                 new Warning ("EUGEN-T10-R003")),
+                                                               new TestDocument ("ERR-4 BII04 minimal invoice example 02.xml",
+                                                                                 new Warning ("BIIRULE-T10-R004"),
+                                                                                 new Warning ("EUGEN-T10-R002"),
+                                                                                 new Warning ("EUGEN-T10-R001"),
+                                                                                 new Warning ("EUGEN-T10-R003")),
+                                                               new TestDocument ("ERR-5 BII04 minimal VAT invoice example 02.xml",
+                                                                                 new Warning ("BIIRULE-T10-R005"),
+                                                                                 new FatalError ("EUGEN-T10-R008"),
+                                                                                 new Warning ("EUGEN-T10-R001"),
+                                                                                 new Warning ("EUGEN-T10-R003"),
+                                                                                 new Warning ("EUGEN-T10-R009")),
+                                                               new TestDocument ("ERR-9 BII04 minimal VAT invoice example 02.xml",
+                                                                                 new FatalError ("BIIRULE-T10-R009"),
+                                                                                 new FatalError ("EUGEN-T10-R008"),
+                                                                                 new Warning ("EUGEN-T10-R001"),
+                                                                                 new Warning ("EUGEN-T10-R003"),
+                                                                                 new Warning ("EUGEN-T10-R009")),
+                                                               new TestDocument ("TC10.1.TS1.xml",
+                                                                                 new FatalError ("BIIRULE-T10-R052"),
+                                                                                 new Warning ("EUGEN-T10-R001"),
+                                                                                 new Warning ("EUGEN-T10-R003")),
+                                                               new TestDocument ("TC10.10.TS1.xml",
+                                                                                 new Warning ("BIICORE-T10-R392"),
+                                                                                 new Warning ("BIIRULE-T10-R002"),
+                                                                                 new Warning ("EUGEN-T10-R001"),
+                                                                                 new Warning ("EUGEN-T10-R003")),
+                                                               new TestDocument ("TC10.11.TS1.xml",
+                                                                                 new FatalError ("BIIRULE-T10-R018"),
+                                                                                 new Warning ("EUGEN-T10-R001"),
+                                                                                 new Warning ("EUGEN-T10-R003")),
+                                                               new TestDocument ("TC10.12.TS1.xml",
+                                                                                 new Warning ("BIIRULE-T10-R019"),
+                                                                                 new Warning ("EUGEN-T10-R001"),
+                                                                                 new Warning ("EUGEN-T10-R003")),
+                                                               new TestDocument ("TC10.13.TS1.xml",
+                                                                                 new FatalError ("EUGEN-T10-R008"),
+                                                                                 new Warning ("BIIRULE-T10-R005"),
+                                                                                 new Warning ("EUGEN-T10-R001"),
+                                                                                 new Warning ("EUGEN-T10-R003")),
+                                                               new TestDocument ("TC10.14.TS1.xml",
+                                                                                 new FatalError ("EUGEN-T10-R008"),
+                                                                                 new Warning ("BIIRULE-T10-R003"),
+                                                                                 new Warning ("EUGEN-T10-R001"),
+                                                                                 new Warning ("EUGEN-T10-R003")),
+                                                               new TestDocument ("TC10.16.TS1.xml"),
+                                                               new TestDocument ("TC10.17.TS1.xml",
+                                                                                 new FatalError ("EUGEN-T10-R015"),
+                                                                                 new FatalError ("EUGEN-T10-R016"),
+                                                                                 new FatalError ("EUGEN-T10-R017"),
+                                                                                 new Warning ("BIIRULE-T10-R003"),
+                                                                                 new Warning ("EUGEN-T10-R009")),
+                                                               new TestDocument ("TC10.18.TS1.xml",
+                                                                                 new FatalError ("PCL-010-008"),
+                                                                                 new Warning ("BIICORE-T10-R114"),
+                                                                                 new Warning ("BIICORE-T10-R185"),
+                                                                                 new Warning ("EUGEN-T10-R023")),
+                                                               new TestDocument ("TC10.2.TS1.xml",
+                                                                                 new FatalError ("EUGEN-T10-R008"),
+                                                                                 new Warning ("EUGEN-T10-R001"),
+                                                                                 new Warning ("EUGEN-T10-R003")),
+                                                               new TestDocument ("TC10.5.TS1.xml",
+                                                                                 new FatalError ("BIIRULE-T10-R011"),
+                                                                                 new Warning ("EUGEN-T10-R001"),
+                                                                                 new Warning ("EUGEN-T10-R003")),
+                                                               new TestDocument ("TC10.6.TS1.xml",
+                                                                                 new FatalError ("BIIRULE-T10-R013"),
+                                                                                 new FatalError ("BIIRULE-T10-R017"),
+                                                                                 new Warning ("EUGEN-T10-R001"),
+                                                                                 new Warning ("EUGEN-T10-R003")),
+                                                               new TestDocument ("TC10.7.TS1.xml",
+                                                                                 new FatalError ("BIIRULE-T10-R009"),
+                                                                                 new FatalError ("EUGEN-T10-R008"),
+                                                                                 new Warning ("EUGEN-T10-R001"),
+                                                                                 new Warning ("EUGEN-T10-R003")),
+                                                               new TestDocument ("TC10.8.TS1.xml",
+                                                                                 new FatalError ("BIIRULE-T10-R010"),
+                                                                                 new FatalError ("EUGEN-T10-R008"),
+                                                                                 new Warning ("EUGEN-T10-R001"),
+                                                                                 new Warning ("EUGEN-T10-R003")),
+                                                               new TestDocument ("TC10.9.TS1.xml",
+                                                                                 new Warning ("BIIRULE-T10-R004"),
+                                                                                 new Warning ("EUGEN-T10-R001"),
+                                                                                 new Warning ("EUGEN-T10-R002"),
+                                                                                 new Warning ("EUGEN-T10-R003")));
+  }
 
   @Nonnull
   @ReturnsMutableCopy
-  private static Set <String> _getAllFailedAssertionErrorCode (@Nonnull final SchematronOutputType aSVRL) {
-    final Set <String> ret = new HashSet <String> ();
-    for (final SVRLFailedAssert aFA : SVRLUtils.getAllFailedAssertions (aSVRL)) {
+  private static Set <AbstractErrorDefinition> _getAllFailedAssertionErrorCode (@Nonnull final SchematronOutputType aSVRL) {
+    final Set <AbstractErrorDefinition> ret = new HashSet <AbstractErrorDefinition> ();
+    final List <SVRLFailedAssert> aFAs = SVRLUtils.getAllFailedAssertions (aSVRL);
+    for (final SVRLFailedAssert aFA : aFAs) {
       final String sText = aFA.getText ();
       final Matcher m = RegExHelper.getMatcher ("^\\[(.+)\\].+", sText);
-      if (m.find ())
-        ret.add (m.group (1));
+      if (m.find ()) {
+        final String sErrorCode = m.group (1);
+        if (aFA.getFlag ().equals (EErrorLevel.WARN))
+          ret.add (new Warning (sErrorCode));
+        else
+          ret.add (new FatalError (sErrorCode));
+      }
     }
     return ret;
   }
@@ -220,19 +332,17 @@ public final class FuncTestDocumentValidationError {
   public void testReadInvoicesError () throws SAXException {
     final IValidationTransaction aVT = ValidationTransaction.createUBLTransaction (ETransaction.T10);
     // For all available invoices
-    for (final String sInvoiceFile : TEST_INVOICES_ERROR) {
-      System.out.println (sInvoiceFile);
-
+    for (final TestDocument aErrDoc : TEST_INVOICES_ERROR) {
       // Get the UBL XML file
       final IReadableResource aInvoiceRes = new ClassPathResource (CValidattionTestFiles.PATH_INVOICE_TESTFILES +
                                                                    CValidattionTestFiles.PATH_ERROR +
-                                                                   sInvoiceFile);
+                                                                   aErrDoc.getFilename ());
 
       // Ensure the UBL file validates against the scheme
       final InvoiceType aUBLInvoice = UBL20DocumentMarshaller.readInvoice (XMLReader.readXMLDOM (aInvoiceRes));
       assertNotNull (aUBLInvoice);
 
-      final Set <String> aErrCodes = new TreeSet <String> ();
+      final Set <AbstractErrorDefinition> aErrCodes = new HashSet <AbstractErrorDefinition> ();
 
       // Test the country-independent invoice layers
       for (final IValidationArtefact eArtefact : EValidationArtefact.getAllMatchingArtefacts (null,
@@ -253,7 +363,15 @@ public final class FuncTestDocumentValidationError {
 
         aErrCodes.addAll (_getAllFailedAssertionErrorCode (aSVRL));
       }
-      System.out.println (aErrCodes);
+      final Set <AbstractErrorDefinition> aCopy = new TreeSet <AbstractErrorDefinition> (aErrCodes);
+      for (final AbstractErrorDefinition aExpectedErrCode : aErrDoc.getAllExpectedErrors ())
+        assertTrue (aErrDoc.getFilename () +
+                        " expected " +
+                        aExpectedErrCode.toString () +
+                        " but having " +
+                        aCopy.toString (),
+                    aCopy.remove (aExpectedErrCode));
+      assertTrue (aErrDoc.getFilename () + " also indicated: " + aCopy, aCopy.isEmpty ());
     }
   }
 }
