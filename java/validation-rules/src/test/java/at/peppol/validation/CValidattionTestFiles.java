@@ -81,36 +81,6 @@ public final class CValidattionTestFiles {
                                                                                                  "PEP BII04 minimal VAT invoice example 02.xml",
                                                                                                  "SubmitInvoice.008660-AA.b1478257-5bd1-4756-bd20-3262afb22923.xml",
                                                                                                  "test-invoice.xml");
-
-  public static final List <String> TEST_INVOICES_ERROR = ContainerHelper.newUnmodifiableList ("ERR-10 BII04 minimal VAT invoice example 02.xml",
-                                                                                               "ERR-11 BII04 minimal invoice example 02.xml",
-                                                                                               "ERR-13 BII04 minimal invoice example 02.xml",
-                                                                                               "ERR-18 BII04 minimal invoice example 02.xml",
-                                                                                               "ERR-19 BII04 minimal invoice example 02.xml",
-                                                                                               "ERR-2 BII04 minimal invoice example 02.xml",
-                                                                                               "ERR-20 BII04 reverse charge invoice example 01.xml",
-                                                                                               "ERR-3 BII04 minimal VAT invoice example 02.xml",
-                                                                                               "ERR-4 BII04 minimal invoice example 02.xml",
-                                                                                               "ERR-5 BII04 minimal VAT invoice example 02.xml",
-                                                                                               "ERR-9 BII04 minimal VAT invoice example 02.xml",
-                                                                                               "TC10.1.TS1.xml",
-                                                                                               "TC10.10.TS1.xml",
-                                                                                               "TC10.11.TS1.xml",
-                                                                                               "TC10.12.TS1.xml",
-                                                                                               "TC10.13.TS1.xml",
-                                                                                               "TC10.14.TS1.xml",
-                                                                                               "TC10.15.TS1.xml",
-                                                                                               "TC10.16.TS1.xml",
-                                                                                               "TC10.17.TS1.xml",
-                                                                                               "TC10.18.TS1.xml",
-                                                                                               "TC10.2.TS1.xml",
-                                                                                               "TC10.3.TS1.xml",
-                                                                                               "TC10.4.TS1.xml",
-                                                                                               "TC10.5.TS1.xml",
-                                                                                               "TC10.6.TS1.xml",
-                                                                                               "TC10.7.TS1.xml",
-                                                                                               "TC10.8.TS1.xml",
-                                                                                               "TC10.9.TS1.xml");
   public static final List <String> TEST_INVOICES_AT_SUCCESS = ContainerHelper.newUnmodifiableList ("at-ubl-42-8.xml");
 
   private CValidattionTestFiles () {}

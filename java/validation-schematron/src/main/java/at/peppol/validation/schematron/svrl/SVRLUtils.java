@@ -30,7 +30,7 @@ import com.phloc.commons.error.EErrorLevel;
 
 /**
  * Miscellaneous utility methods for handling Schematron output (SVRL).
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable
@@ -39,7 +39,7 @@ public final class SVRLUtils {
 
   /**
    * Get a list of all failed assertions in a given schematron output.
-   *
+   * 
    * @param aSchematronOutput
    *        The schematron output to be used. May not be <code>null</code>.
    * @return A non-<code>null</code> list with all failed assertions.
@@ -55,8 +55,32 @@ public final class SVRLUtils {
   }
 
   /**
+   * Get a list of all failed assertions in a given schematron output, with an
+   * error level equally or more severe than the passed error level.
+   * 
+   * @param aSchematronOutput
+   *        The schematron output to be used. May not be <code>null</code>.
+   * @param eErrorLevel
+   *        Minimum error level to be queried
+   * @return A non-<code>null</code> list with all failed assertions.
+   */
+  @Nonnull
+  @ReturnsMutableCopy
+  public static List <SVRLFailedAssert> getAllFailedAssertionsMoreOrEqualSevereThan (@Nonnull final SchematronOutputType aSchematronOutput,
+                                                                                     @Nonnull final EErrorLevel eErrorLevel) {
+    final List <SVRLFailedAssert> ret = new ArrayList <SVRLFailedAssert> ();
+    for (final Object aObj : aSchematronOutput.getActivePatternAndFiredRuleAndFailedAssert ())
+      if (aObj instanceof FailedAssertType) {
+        final SVRLFailedAssert aFA = new SVRLFailedAssert ((FailedAssertType) aObj);
+        if (aFA.getFlag ().isMoreOrEqualSevereThan (eErrorLevel))
+          ret.add (aFA);
+      }
+    return ret;
+  }
+
+  /**
    * Get the error level associated with a single failed assertion.
-   *
+   * 
    * @param aFailedAssert
    *        The failed assert to be queried. May not be <code>null</code>.
    * @return The error level and never <code>null</code>.
