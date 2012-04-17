@@ -80,6 +80,9 @@ public final class CValidattionTestFiles {
                                                                                                  "PEP BII04 minimal Reverce Charge VAT invoice example no line 01.xml",
                                                                                                  "PEP BII04 minimal VAT invoice example 02.xml",
                                                                                                  "SubmitInvoice.008660-AA.b1478257-5bd1-4756-bd20-3262afb22923.xml",
+                                                                                                 "TC10.3.TS1.xml",
+                                                                                                 "TC10.4.TS1.xml",
+                                                                                                 "TC10.15.TS1.xml",
                                                                                                  "test-invoice.xml");
   public static final List <String> TEST_INVOICES_AT_SUCCESS = ContainerHelper.newUnmodifiableList ("at-ubl-42-8.xml");
 
