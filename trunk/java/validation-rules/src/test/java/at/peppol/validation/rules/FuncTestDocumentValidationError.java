@@ -40,7 +40,13 @@ package at.peppol.validation.rules;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.regex.Matcher;
+
+import javax.annotation.Nonnull;
 
 import oasis.names.specification.ubl.schema.xsd.invoice_2.InvoiceType;
 import oasis.names.specification.ubl.schema.xsd.order_2.OrderType;
@@ -59,10 +65,12 @@ import at.peppol.validation.schematron.svrl.SVRLWriter;
 import at.peppol.validation.schematron.xslt.SchematronResourceXSLT;
 
 import com.phloc.commons.CGlobal;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.error.EErrorLevel;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.resource.ClassPathResource;
+import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.xml.serialize.XMLReader;
 import com.phloc.commons.xml.serialize.XMLWriter;
 import com.phloc.ubl.UBL20DocumentMarshaller;
@@ -140,18 +148,28 @@ public final class FuncTestDocumentValidationError {
                                                                                                "TC10.12.TS1.xml",
                                                                                                "TC10.13.TS1.xml",
                                                                                                "TC10.14.TS1.xml",
-                                                                                               "TC10.15.TS1.xml",
                                                                                                "TC10.16.TS1.xml",
                                                                                                "TC10.17.TS1.xml",
                                                                                                "TC10.18.TS1.xml",
                                                                                                "TC10.2.TS1.xml",
-                                                                                               "TC10.3.TS1.xml",
-                                                                                               "TC10.4.TS1.xml",
                                                                                                "TC10.5.TS1.xml",
                                                                                                "TC10.6.TS1.xml",
                                                                                                "TC10.7.TS1.xml",
                                                                                                "TC10.8.TS1.xml",
                                                                                                "TC10.9.TS1.xml");
+
+  @Nonnull
+  @ReturnsMutableCopy
+  private static Set <String> _getAllFailedAssertionErrorCode (@Nonnull final SchematronOutputType aSVRL) {
+    final Set <String> ret = new HashSet <String> ();
+    for (final SVRLFailedAssert aFA : SVRLUtils.getAllFailedAssertions (aSVRL)) {
+      final String sText = aFA.getText ();
+      final Matcher m = RegExHelper.getMatcher ("^\\[(.+)\\].+", sText);
+      if (m.find ())
+        ret.add (m.group (1));
+    }
+    return ret;
+  }
 
   @Test
   @Ignore
@@ -203,6 +221,8 @@ public final class FuncTestDocumentValidationError {
     final IValidationTransaction aVT = ValidationTransaction.createUBLTransaction (ETransaction.T10);
     // For all available invoices
     for (final String sInvoiceFile : TEST_INVOICES_ERROR) {
+      System.out.println (sInvoiceFile);
+
       // Get the UBL XML file
       final IReadableResource aInvoiceRes = new ClassPathResource (CValidattionTestFiles.PATH_INVOICE_TESTFILES +
                                                                    CValidattionTestFiles.PATH_ERROR +
@@ -211,6 +231,8 @@ public final class FuncTestDocumentValidationError {
       // Ensure the UBL file validates against the scheme
       final InvoiceType aUBLInvoice = UBL20DocumentMarshaller.readInvoice (XMLReader.readXMLDOM (aInvoiceRes));
       assertNotNull (aUBLInvoice);
+
+      final Set <String> aErrCodes = new TreeSet <String> ();
 
       // Test the country-independent invoice layers
       for (final IValidationArtefact eArtefact : EValidationArtefact.getAllMatchingArtefacts (null,
@@ -229,16 +251,9 @@ public final class FuncTestDocumentValidationError {
           System.out.println (XMLWriter.getXMLString (SVRLWriter.createXML (aSVRL)));
         }
 
-        // Check that there is at least 1 failed assertions with type error
-        final List <SVRLFailedAssert> aFailedAsserts = SVRLUtils.getAllFailedAssertionsMoreOrEqualSevereThan (aSVRL,
-                                                                                                              EErrorLevel.ERROR);
-        assertNotNull (aFailedAsserts);
-
-        for (final SVRLFailedAssert aFailedAssert : aFailedAsserts) {
-          assertTrue (aInvoiceRes.toString () + "\n" + aFailedAssert.toString (),
-                      aFailedAssert.getFlag ().equals (EErrorLevel.FATAL_ERROR));
-        }
+        aErrCodes.addAll (_getAllFailedAssertionErrorCode (aSVRL));
       }
+      System.out.println (aErrCodes);
     }
   }
 }
