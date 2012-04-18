@@ -58,16 +58,8 @@ public final class CValidattionTestFiles {
   public static final String PATH_SUCCESS = "success/";
   public static final String PATH_ERROR = "error/";
 
-  public static final List <String> TEST_TENDERINGCATALOGUES_SUCCESS = ContainerHelper.newUnmodifiableList ("Tender-Sample.xml");
   public static final List <String> TEST_CATALOGUES_SUCCESS = ContainerHelper.newUnmodifiableList ("Consip_Catalogo_UBL.xml");
-  public static final List <String> TEST_ORDERS_SUCCESS = ContainerHelper.newUnmodifiableList ("ADVORD_03_03_00_Order_v2p2.xml",
-                                                                                               "BII03 Order example 01.xml",
-                                                                                               "PEPPOL BIS-3a-FULL.xml",
-                                                                                               "PEPPOL BIS-3a-Small.xml",
-                                                                                               "TC01.0.TS1.xml",
-                                                                                               "test-order.xml",
-                                                                                               "UBL-Order-2.0-Example-International.xml",
-                                                                                               "UBL-Order-2.0-Example.xml");
+  public static final List <String> TEST_CREDITNOTES_SUCCESS = ContainerHelper.newUnmodifiableList ("BII05 TRDM014 example is.xml");
   public static final List <String> TEST_INVOICES_SUCCESS = ContainerHelper.newUnmodifiableList ("BII04 minimal invoice example 03.xml",
                                                                                                  "BII04 minimal invoice wo addr id.xml",
                                                                                                  "BII04 minimal VAT invoice example 02.xml",
@@ -85,6 +77,15 @@ public final class CValidattionTestFiles {
                                                                                                  "TC10.15.TS1.xml",
                                                                                                  "test-invoice.xml");
   public static final List <String> TEST_INVOICES_AT_SUCCESS = ContainerHelper.newUnmodifiableList ("at-ubl-42-8.xml");
+  public static final List <String> TEST_ORDERS_SUCCESS = ContainerHelper.newUnmodifiableList ("ADVORD_03_03_00_Order_v2p2.xml",
+                                                                                               "BII03 Order example 01.xml",
+                                                                                               "PEPPOL BIS-3a-FULL.xml",
+                                                                                               "PEPPOL BIS-3a-Small.xml",
+                                                                                               "TC01.0.TS1.xml",
+                                                                                               "test-order.xml",
+                                                                                               "UBL-Order-2.0-Example-International.xml",
+                                                                                               "UBL-Order-2.0-Example.xml");
+  public static final List <String> TEST_TENDERINGCATALOGUES_SUCCESS = ContainerHelper.newUnmodifiableList ("Tender-Sample.xml");
 
   private CValidattionTestFiles () {}
 }
