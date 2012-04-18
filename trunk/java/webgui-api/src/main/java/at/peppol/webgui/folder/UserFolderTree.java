@@ -71,10 +71,11 @@ import com.phloc.commons.tree.withid.unique.DefaultTreeWithGlobalUniqueID;
  * 
  * @author philip
  */
-public final class UserFolderTree {
+public final class UserFolderTree implements IUserFolderTree {
   private static final Logger s_aLogger = LoggerFactory.getLogger (UserFolderTree.class);
   private static final String ELEMENT_USERFOLDER = "userfolder";
 
+  /** The main tree used. The key is the ID of the contained user folder */
   private final DefaultTreeWithGlobalUniqueID <String, UserFolder> m_aTree;
 
   /**

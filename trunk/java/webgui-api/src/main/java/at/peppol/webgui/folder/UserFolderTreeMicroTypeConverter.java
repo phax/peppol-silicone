@@ -49,14 +49,14 @@ public final class UserFolderTreeMicroTypeConverter implements IMicroTypeConvert
   public IMicroElement convertToMicroElement (@Nonnull final Object aObject,
                                               @Nullable final String sNamespaceURI,
                                               @Nonnull final String sTagName) {
-    final UserFolderTree aUserFolderTree = (UserFolderTree) aObject;
+    final IUserFolderTree aUserFolderTree = (IUserFolderTree) aObject;
     final IMicroElement eUserFolderTree = new MicroElement (sNamespaceURI, sTagName);
     eUserFolderTree.appendChild (aUserFolderTree.getAsXML ());
     return eUserFolderTree;
   }
 
   @Nonnull
-  public UserFolderTree convertToNative (@Nonnull final IMicroElement eUserFolderTree) {
+  public IUserFolderTree convertToNative (@Nonnull final IMicroElement eUserFolderTree) {
     return new UserFolderTree (eUserFolderTree.getFirstChildElement ());
   }
 }

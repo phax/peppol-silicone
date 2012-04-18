@@ -37,9 +37,13 @@
  */
 package at.peppol.webgui.document;
 
+import java.io.OutputStream;
+
 import javax.annotation.Nonnull;
+import javax.annotation.WillClose;
 
 import com.phloc.commons.id.IHasID;
+import com.phloc.commons.state.ESuccess;
 
 /**
  * Base interface for all user documents
@@ -52,4 +56,14 @@ public interface IUserDocument extends IHasID <String> {
    */
   @Nonnull
   EDocumentType getType ();
+
+  /**
+   * Write the content of the file to the specified output stream.
+   * 
+   * @param aOS
+   *        The output stream to write to.
+   * @return Never <code>null</code>.
+   */
+  @Nonnull
+  ESuccess writeToStream (@Nonnull @WillClose OutputStream aOS);
 }
