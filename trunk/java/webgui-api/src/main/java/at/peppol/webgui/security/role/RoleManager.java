@@ -45,7 +45,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
-import at.peppol.webgui.io.AbstractManager;
+import at.peppol.webgui.io.AbstractDAO;
 import at.peppol.webgui.security.CSecurity;
 
 import com.phloc.commons.annotations.Nonempty;
@@ -63,7 +63,7 @@ import com.phloc.commons.state.EChange;
  * @author philip
  */
 @ThreadSafe
-public final class RoleManager extends AbstractManager implements IRoleManager {
+public final class RoleManager extends AbstractDAO implements IRoleManager {
   private final Map <String, Role> m_aRoles = new HashMap <String, Role> ();
 
   public RoleManager () {

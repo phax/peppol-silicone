@@ -47,7 +47,7 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
 import at.peppol.webgui.api.CWebGUI;
-import at.peppol.webgui.io.AbstractManager;
+import at.peppol.webgui.io.AbstractDAO;
 import at.peppol.webgui.security.CSecurity;
 
 import com.phloc.commons.annotations.Nonempty;
@@ -67,7 +67,7 @@ import com.phloc.commons.string.StringHelper;
  * @author philip
  */
 @ThreadSafe
-public final class UserManager extends AbstractManager implements IUserManager {
+public final class UserManager extends AbstractDAO implements IUserManager {
   private final Map <String, User> m_aUsers = new HashMap <String, User> ();
 
   public UserManager () {

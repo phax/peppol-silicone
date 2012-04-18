@@ -47,7 +47,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
-import at.peppol.webgui.io.AbstractManager;
+import at.peppol.webgui.io.AbstractDAO;
 import at.peppol.webgui.security.CSecurity;
 import at.peppol.webgui.security.role.IRoleManager;
 import at.peppol.webgui.security.user.IUserManager;
@@ -67,7 +67,7 @@ import com.phloc.commons.state.EChange;
  * @author philip
  */
 @ThreadSafe
-public final class UserGroupManager extends AbstractManager implements IUserGroupManager {
+public final class UserGroupManager extends AbstractDAO implements IUserGroupManager {
   private final IUserManager m_aUserMgr;
   private final IRoleManager m_aRoleMgr;
   private final Map <String, UserGroup> m_aUserGroups = new HashMap <String, UserGroup> ();
