@@ -50,21 +50,32 @@ import com.phloc.commons.collections.ContainerHelper;
  */
 @Immutable
 public final class CVisualizationTestFiles {
-  public static final List <String> TEST_CREDITNOTES = ContainerHelper.newUnmodifiableList ("BII05 TRDM014 example is.xml",
-                                                                                            "Copy of BII05 TRDM014 example is.xml");
+  public static final List <String> TEST_CREDITNOTES = ContainerHelper.newUnmodifiableList ("BII05 TRDM014 example is.xml");
+  public static final List <String> TEST_INVOICES = ContainerHelper.newUnmodifiableList ("at-ubl-42-8.xml",
+                                                                                         "BII04 minimal invoice example 03.xml",
+                                                                                         "BII04 minimal invoice wo addr id.xml",
+                                                                                         "BII04 minimal VAT invoice example 02.xml",
+                                                                                         "BII04 XML example full core data 01.xml",
+                                                                                         "BII04 XML example full core data 02.xml",
+                                                                                         "invoice-it-c98fe7f7-8b46-4972-b61b-3b8824f16658.xml",
+                                                                                         "invoice-it-uuid8a69941e-52ae-4cbb-b284-a3a78fb89d07.xml",
+                                                                                         "PEP BII04 minimal invoice example 03.xml",
+                                                                                         "PEP BII04 minimal Reverce Charge VAT invoice example 01.xml",
+                                                                                         "PEP BII04 minimal Reverce Charge VAT invoice example no line 01.xml",
+                                                                                         "PEP BII04 minimal VAT invoice example 02.xml",
+                                                                                         "SubmitInvoice.008660-AA.b1478257-5bd1-4756-bd20-3262afb22923.xml",
+                                                                                         "TC10.3.TS1.xml",
+                                                                                         "TC10.4.TS1.xml",
+                                                                                         "TC10.15.TS1.xml",
+                                                                                         "test-invoice.xml");
   public static final List <String> TEST_ORDERS = ContainerHelper.newUnmodifiableList ("ADVORD_03_03_00_Order_v2p2.xml",
                                                                                        "BII03 Order example 01.xml",
                                                                                        "PEPPOL BIS-3a-FULL.xml",
                                                                                        "PEPPOL BIS-3a-Small.xml",
+                                                                                       "TC01.0.TS1.xml",
+                                                                                       "test-order.xml",
                                                                                        "UBL-Order-2.0-Example-International.xml",
-                                                                                       "UBL-Order-2.0-Example.xml",
-                                                                                       "test-order.xml");
-  public static final List <String> TEST_INVOICES = ContainerHelper.newUnmodifiableList ("at-ubl-42-8.xml",
-                                                                                         "BII04 XML example full core data 01.xml",
-                                                                                         "invoice-it-c98fe7f7-8b46-4972-b61b-3b8824f16658.xml",
-                                                                                         "invoice-it-uuid8a69941e-52ae-4cbb-b284-a3a78fb89d07.xml",
-                                                                                         "SubmitInvoice.008660-AA.b1478257-5bd1-4756-bd20-3262afb22923.xml",
-                                                                                         "test-invoice.xml");
+                                                                                       "UBL-Order-2.0-Example.xml");
 
   private CVisualizationTestFiles () {}
 }
