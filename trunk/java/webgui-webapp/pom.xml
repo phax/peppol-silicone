@@ -71,6 +71,12 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/webapp</directory>
+                <targetPath>${project.build.directory}/webapp-classes</targetPath>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>com.mycila.maven-license-plugin</groupId>
