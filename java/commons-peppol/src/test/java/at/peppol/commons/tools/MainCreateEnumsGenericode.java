@@ -179,7 +179,8 @@ public class MainCreateEnumsGenericode {
     for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/main/resources/codelists/ubl"),
                                                                 FilenameFilterFactory.getEndsWithFilter (".gc"))) {
       System.out.println (aFile.getName ());
-      final CodeListDocument aCodeList10 = Genericode10Marshaller.readCodeList (new FileSystemResource (aFile));
+      final CodeListDocument aCodeList10 = Genericode10Marshaller.getInstance ()
+                                                                 .readCodeList (new FileSystemResource (aFile));
       if (aCodeList10 != null)
         _createGenericode10 (aFile, aCodeList10);
     }
