@@ -122,7 +122,7 @@ public final class MainCreateCodelistsFilesFromExcel {
   private static JDefinedClass s_jEnumPredefinedDoc;
 
   private static void _writeGenericodeFile (@Nonnull final CodeListDocument aCodeList, @Nonnull final String sFilename) {
-    final Document aDoc = Genericode10Marshaller.writeCodeList (aCodeList);
+    final Document aDoc = Genericode10Marshaller.getInstance ().writeCodeList (aCodeList);
     if (aDoc == null)
       throw new IllegalStateException ("Failed to serialize code list");
     final OutputStream aFOS = FileUtils.getOutputStream (sFilename);
