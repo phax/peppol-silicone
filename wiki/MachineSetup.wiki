@@ -2,7 +2,7 @@
 
 ----
 
-=_This page is discontinued_ - read the PDF document [https://joinup.ec.europa.eu/svn/peppol/PEPPOL_EIA/1-ICT_Architecture/1-ICT-Transport_Infrastructure/116-ICT-Implementations/ICT-Transport-Silicone/ICT-Transport-Silicone_Java_How_to_deploy-221.pdf How to deploy] instead=
+=_This page is discontinued_ - read the PDF document [https://joinup.ec.europa.eu/svn/peppol/PEPPOL_EIA/1-ICT_Architecture/1-ICT-Transport_Infrastructure/16-ICT-Implementations/ICT-Transport-Silicone/ICT-Transport-Silicone_Java_How_to_deploy-221.pdf How to deploy] instead=
 The PDF is much more complete.....
 
 
