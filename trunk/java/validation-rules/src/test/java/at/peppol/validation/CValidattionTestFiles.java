@@ -54,6 +54,8 @@ public final class CValidattionTestFiles {
   public static final String PATH_INVOICE_TESTFILES = "/test-invoices/";
   public static final String PATH_ORDER_TESTFILES = "/test-orders/";
   public static final String PATH_TENDERINGCATALOGUE_TESTFILES = "/test-tenderingcatalogues/";
+  public static final String PATH_CALLFORTENDERS_TESTFILES = "/test-callfortenders/";
+  public static final String PATH_TENDER_TESTFILES = "/test-tenders/";
 
   public static final String PATH_SUCCESS = "success/";
   public static final String PATH_ERROR = "error/";
@@ -86,8 +88,8 @@ public final class CValidattionTestFiles {
                                                                                                "UBL-Order-2.0-Example-International.xml",
                                                                                                "UBL-Order-2.0-Example.xml");
   public static final List <String> TEST_TENDERINGCATALOGUES_SUCCESS = ContainerHelper.newUnmodifiableList ("Tender-Sample.xml");
-  public static final List <String> TEST_CALLFORTENDERS_SUCCESS = ContainerHelper.newUnmodifiableList ();
-  public static final List <String> TEST_TENDER_SUCCESS = ContainerHelper.newUnmodifiableList ();
+  public static final List <String> TEST_CALLFORTENDERS_SUCCESS = ContainerHelper.newUnmodifiableList ("Catalogue pre award_Call for Tender_RDO MEPA_BIS 12a.xml");
+  public static final List <String> TEST_TENDER_SUCCESS = ContainerHelper.newUnmodifiableList ("Catalogo preaward_Tender_Risposta con offerta ad una RDO MEPA_BIS 12a.xml");
 
   private CValidattionTestFiles () {}
 }
