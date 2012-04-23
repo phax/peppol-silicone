@@ -71,11 +71,11 @@ public enum EValidationDocumentType implements IValidationDocumentType {
   /** Credit note document type */
   CREDIT_NOTE ("creditnote", EUBL20DocumentType.CREDIT_NOTE),
 
-  /** Call for tenders document type */
-  CALL_FOR_TENDERS ("callfortenders", EUBL21DocumentType.CALL_FOR_TENDERS),
-
   /** Tender document type */
-  TENDER ("tender", EUBL21DocumentType.TENDER);
+  TENDER ("tender", EUBL21DocumentType.TENDER),
+
+  /** Call for tenders document type */
+  CALL_FOR_TENDERS ("callfortenders", EUBL21DocumentType.CALL_FOR_TENDERS);
 
   private String m_sID;
   private IUBLDocumentType m_aUBLDocType;

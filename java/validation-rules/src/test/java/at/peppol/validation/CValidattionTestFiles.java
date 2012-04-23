@@ -86,6 +86,8 @@ public final class CValidattionTestFiles {
                                                                                                "UBL-Order-2.0-Example-International.xml",
                                                                                                "UBL-Order-2.0-Example.xml");
   public static final List <String> TEST_TENDERINGCATALOGUES_SUCCESS = ContainerHelper.newUnmodifiableList ("Tender-Sample.xml");
+  public static final List <String> TEST_CALLFORTENDERS_SUCCESS = ContainerHelper.newUnmodifiableList ();
+  public static final List <String> TEST_TENDER_SUCCESS = ContainerHelper.newUnmodifiableList ();
 
   private CValidattionTestFiles () {}
 }
