@@ -50,7 +50,7 @@ import at.peppol.commons.identifier.IdentifierUtils;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 
 import com.phloc.commons.annotations.UsedViaReflection;
-import com.phloc.commons.compare.EqualsUtils;
+import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 
 /**
@@ -119,9 +119,9 @@ public class DBOwnershipID implements Serializable {
     if (!(other instanceof DBOwnershipID))
       return false;
     final DBOwnershipID rhs = (DBOwnershipID) other;
-    return EqualsUtils.nullSafeEquals (m_sUserName, rhs.m_sUserName) &&
-           EqualsUtils.nullSafeEquals (m_sBusinessIdentifierScheme, rhs.m_sBusinessIdentifierScheme) &&
-           EqualsUtils.nullSafeEquals (m_sBusinessIdentifier, rhs.m_sBusinessIdentifier);
+    return EqualsUtils.equals (m_sUserName, rhs.m_sUserName) &&
+           EqualsUtils.equals (m_sBusinessIdentifierScheme, rhs.m_sBusinessIdentifierScheme) &&
+           EqualsUtils.equals (m_sBusinessIdentifier, rhs.m_sBusinessIdentifier);
   }
 
   @Override

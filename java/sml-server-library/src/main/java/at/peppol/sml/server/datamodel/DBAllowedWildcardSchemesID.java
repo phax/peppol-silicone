@@ -45,7 +45,7 @@ import javax.persistence.Embeddable;
 import at.peppol.commons.identifier.CIdentifier;
 
 import com.phloc.commons.annotations.DevelopersNote;
-import com.phloc.commons.compare.EqualsUtils;
+import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 
 /**
@@ -92,8 +92,7 @@ public class DBAllowedWildcardSchemesID implements Serializable {
     if (!(other instanceof DBAllowedWildcardSchemesID))
       return false;
     final DBAllowedWildcardSchemesID rhs = (DBAllowedWildcardSchemesID) other;
-    return EqualsUtils.nullSafeEquals (m_sScheme, rhs.m_sScheme) &&
-           EqualsUtils.nullSafeEquals (m_sUsername, rhs.m_sUsername);
+    return EqualsUtils.equals (m_sScheme, rhs.m_sScheme) && EqualsUtils.equals (m_sUsername, rhs.m_sUsername);
   }
 
   @Override

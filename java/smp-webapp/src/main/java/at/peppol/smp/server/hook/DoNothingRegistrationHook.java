@@ -39,7 +39,6 @@ package at.peppol.smp.server.hook;
 
 import javax.annotation.concurrent.Immutable;
 
-
 import at.peppol.busdox.identifier.IParticipantIdentifier;
 
 import com.phloc.commons.state.ESuccess;

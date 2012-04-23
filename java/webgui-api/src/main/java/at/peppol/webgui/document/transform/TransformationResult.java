@@ -43,8 +43,8 @@ import javax.xml.bind.annotation.XmlSchema;
 
 import org.w3c.dom.Node;
 
+import com.phloc.commons.error.IResourceErrorGroup;
 import com.phloc.commons.io.IReadableResource;
-import com.phloc.commons.log.InMemoryLogger;
 import com.phloc.commons.microdom.IMicroNode;
 import com.phloc.commons.state.ISuccessIndicator;
 
@@ -136,10 +136,10 @@ public final class TransformationResult implements ISuccessIndicator {
    *         In case the result object type is not a failure.
    */
   @Nonnull
-  public InMemoryLogger getResultFailure () {
+  public IResourceErrorGroup getResultFailure () {
     if (m_eResultType != ETransformationResultType.FAILURE)
       throw new IllegalStateException ("Result is not of type failure but of type " + m_eResultType);
-    return (InMemoryLogger) m_aResultObj;
+    return (IResourceErrorGroup) m_aResultObj;
   }
 
   /**
@@ -150,7 +150,7 @@ public final class TransformationResult implements ISuccessIndicator {
    * @return The non-<code>null</code> {@link TransformationResult}.
    */
   @Nonnull
-  public static TransformationResult createFailure (@Nonnull final InMemoryLogger aErrorMsgs) {
+  public static TransformationResult createFailure (@Nonnull final IResourceErrorGroup aErrorMsgs) {
     return new TransformationResult (ETransformationResultType.FAILURE, aErrorMsgs);
   }
 

@@ -46,7 +46,7 @@ import org.busdox.transport.identifiers._1.ProcessIdentifierType;
 import at.peppol.busdox.identifier.IReadonlyIdentifier;
 
 import com.phloc.commons.annotations.UnsupportedOperation;
-import com.phloc.commons.compare.EqualsUtils;
+import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
 
@@ -115,7 +115,7 @@ public final class ReadonlyProcessIdentifier extends ProcessIdentifierType {
     if (!(o instanceof ReadonlyProcessIdentifier))
       return false;
     final ReadonlyProcessIdentifier rhs = (ReadonlyProcessIdentifier) o;
-    return EqualsUtils.nullSafeEquals (scheme, rhs.scheme) && EqualsUtils.nullSafeEquals (value, rhs.value);
+    return EqualsUtils.equals (scheme, rhs.scheme) && EqualsUtils.equals (value, rhs.value);
   }
 
   @Override

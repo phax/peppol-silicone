@@ -48,9 +48,12 @@ import at.peppol.webgui.document.transform.TransformationManager;
 import at.peppol.webgui.document.transform.TransformationResult;
 import at.peppol.webgui.document.transform.TransformationSource;
 
+import com.phloc.commons.error.EErrorLevel;
+import com.phloc.commons.error.ResourceError;
+import com.phloc.commons.error.ResourceErrorGroup;
+import com.phloc.commons.error.ResourceLocation;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.resource.FileSystemResource;
-import com.phloc.commons.log.InMemoryLogger;
 import com.phloc.commons.xml.serialize.XMLReader;
 
 /**
@@ -82,12 +85,14 @@ public final class UploadTransformationManager {
       throw new IllegalArgumentException ("Cannot handle failed uploads!");
 
     // Convert to a resource
-    final InMemoryLogger aErrorMsgs = new InMemoryLogger ();
+    final ResourceErrorGroup aErrorMsgs = new ResourceErrorGroup ();
     final IReadableResource aRes = new FileSystemResource (aUploadedResource.getTemporaryFile ());
     if (!aRes.exists ()) {
-      aErrorMsgs.error ("Temporary file " +
-                        aUploadedResource.getTemporaryFile ().getAbsolutePath () +
-                        " does not exist!");
+      aErrorMsgs.addResourceError (new ResourceError (new ResourceLocation (aRes.getPath ()),
+                                                      EErrorLevel.ERROR,
+                                                      "Temporary file " +
+                                                          aUploadedResource.getTemporaryFile ().getAbsolutePath () +
+                                                          " does not exist!"));
       return TransformationResult.createFailure (aErrorMsgs);
     }
 
@@ -95,9 +100,12 @@ public final class UploadTransformationManager {
     Document aXMLDoc = null;
     EDocumentMetaType eDocMetaType = EDocumentMetaType.BINARY;
     try {
+      // Parse as arbitrary XML
       aXMLDoc = XMLReader.readXMLDOM (aRes);
-      if (aXMLDoc != null)
+      if (aXMLDoc != null) {
+        // Parsing was successful -> it's XML
         eDocMetaType = EDocumentMetaType.XML;
+      }
     }
     catch (final SAXException ex) {}
 
@@ -105,9 +113,11 @@ public final class UploadTransformationManager {
     final TransformationSource aSource = new TransformationSource (eDocMetaType, aRes, aXMLDoc);
     final TransformationResult aRet = TransformationManager.transformDocumentToUBL (eDocType, aSource);
     if (aRet == null) {
-      aErrorMsgs.error ("No transformer was able to transform uploaded file " +
-                        aUploadedResource.getTemporaryFile ().getAbsolutePath () +
-                        "!");
+      aErrorMsgs.addResourceError (new ResourceError (new ResourceLocation (aRes.getPath ()),
+                                                      EErrorLevel.ERROR,
+                                                      "No transformer was able to transform uploaded file " +
+                                                          aUploadedResource.getTemporaryFile ().getAbsolutePath () +
+                                                          "!"));
       return TransformationResult.createFailure (aErrorMsgs);
     }
     return aRet;

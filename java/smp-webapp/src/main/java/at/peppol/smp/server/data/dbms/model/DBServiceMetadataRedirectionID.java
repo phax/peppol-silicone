@@ -48,7 +48,7 @@ import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
 import at.peppol.commons.identifier.CIdentifier;
 import at.peppol.commons.identifier.IdentifierUtils;
 
-import com.phloc.commons.compare.EqualsUtils;
+import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 
 /**
@@ -118,10 +118,10 @@ public class DBServiceMetadataRedirectionID implements Serializable {
     if (!(other instanceof DBServiceMetadataRedirectionID))
       return false;
     final DBServiceMetadataRedirectionID rhs = (DBServiceMetadataRedirectionID) other;
-    return EqualsUtils.nullSafeEquals (m_sBusinessIdentifierScheme, rhs.m_sBusinessIdentifierScheme) &&
-           EqualsUtils.nullSafeEquals (m_sBusinessIdentifier, rhs.m_sBusinessIdentifier) &&
-           EqualsUtils.nullSafeEquals (m_sDocumentTypeIdentifierScheme, rhs.m_sDocumentTypeIdentifierScheme) &&
-           EqualsUtils.nullSafeEquals (m_sDocumentTypeIdentifier, rhs.m_sDocumentTypeIdentifier);
+    return EqualsUtils.equals (m_sBusinessIdentifierScheme, rhs.m_sBusinessIdentifierScheme) &&
+           EqualsUtils.equals (m_sBusinessIdentifier, rhs.m_sBusinessIdentifier) &&
+           EqualsUtils.equals (m_sDocumentTypeIdentifierScheme, rhs.m_sDocumentTypeIdentifierScheme) &&
+           EqualsUtils.equals (m_sDocumentTypeIdentifier, rhs.m_sDocumentTypeIdentifier);
   }
 
   @Override

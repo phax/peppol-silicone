@@ -47,14 +47,14 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.base64.Base64Helper;
 import com.phloc.commons.charset.CCharset;
-import com.phloc.commons.compare.EqualsUtils;
+import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * Default implementation of the {@link IUsernamePWCredentials}.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @NotThreadSafe
@@ -108,8 +108,7 @@ public final class UsernamePWCredentials implements IUsernamePWCredentials {
     if (!(o instanceof UsernamePWCredentials))
       return false;
     final UsernamePWCredentials rhs = (UsernamePWCredentials) o;
-    return EqualsUtils.nullSafeEquals (m_sUsername, rhs.m_sUsername) &&
-           EqualsUtils.nullSafeEquals (m_sPassword, rhs.m_sPassword);
+    return EqualsUtils.equals (m_sUsername, rhs.m_sUsername) && EqualsUtils.equals (m_sPassword, rhs.m_sPassword);
   }
 
   @Override

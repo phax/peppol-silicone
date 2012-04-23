@@ -58,7 +58,7 @@ import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 import at.peppol.commons.identifier.SimpleProcessIdentifier;
 
 import com.phloc.commons.annotations.UsedViaReflection;
-import com.phloc.commons.compare.EqualsUtils;
+import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
 
@@ -185,12 +185,12 @@ public class DBProcessID implements Serializable {
     if (!(other instanceof DBProcessID))
       return false;
     final DBProcessID rhs = (DBProcessID) other;
-    return EqualsUtils.nullSafeEquals (m_sBusinessIdentifierScheme, rhs.m_sBusinessIdentifierScheme) &&
-           EqualsUtils.nullSafeEquals (m_sBusinessIdentifier, rhs.m_sBusinessIdentifier) &&
-           EqualsUtils.nullSafeEquals (m_sDocumentTypeIdentifierScheme, rhs.m_sDocumentTypeIdentifierScheme) &&
-           EqualsUtils.nullSafeEquals (m_sDocumentTypeIdentifier, rhs.m_sDocumentTypeIdentifier) &&
-           EqualsUtils.nullSafeEquals (m_sProcessIdentifierScheme, rhs.m_sProcessIdentifierScheme) &&
-           EqualsUtils.nullSafeEquals (m_sProcessIdentifier, rhs.m_sProcessIdentifier);
+    return EqualsUtils.equals (m_sBusinessIdentifierScheme, rhs.m_sBusinessIdentifierScheme) &&
+           EqualsUtils.equals (m_sBusinessIdentifier, rhs.m_sBusinessIdentifier) &&
+           EqualsUtils.equals (m_sDocumentTypeIdentifierScheme, rhs.m_sDocumentTypeIdentifierScheme) &&
+           EqualsUtils.equals (m_sDocumentTypeIdentifier, rhs.m_sDocumentTypeIdentifier) &&
+           EqualsUtils.equals (m_sProcessIdentifierScheme, rhs.m_sProcessIdentifierScheme) &&
+           EqualsUtils.equals (m_sProcessIdentifier, rhs.m_sProcessIdentifier);
   }
 
   @Override
