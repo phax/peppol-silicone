@@ -34,7 +34,9 @@ public class FuncTestTenderValidation {
     // For all available catalogues
     for (final String sTenderFile : CValidattionTestFiles.TEST_TENDER_SUCCESS) {
       // Get the UBL XML file
-      final IReadableResource aTenderRes = new ClassPathResource ("/test-tender/" + sTenderFile);
+      final IReadableResource aTenderRes = new ClassPathResource (CValidattionTestFiles.PATH_TENDER_TESTFILES +
+                                                                  CValidattionTestFiles.PATH_SUCCESS +
+                                                                  sTenderFile);
 
       // Ensure the UBL file validates against the scheme
       final TenderType aUBLTender = UBL21DocumentMarshaller.readTender (XMLReader.readXMLDOM (aTenderRes));
@@ -69,7 +71,9 @@ public class FuncTestTenderValidation {
     // For all available catalogues
     for (final String sCallForTendersFile : CValidattionTestFiles.TEST_CALLFORTENDERS_SUCCESS) {
       // Get the UBL XML file
-      final IReadableResource aCallForTendersRes = new ClassPathResource ("/test-callfortender/" + sCallForTendersFile);
+      final IReadableResource aCallForTendersRes = new ClassPathResource (CValidattionTestFiles.PATH_CALLFORTENDERS_TESTFILES +
+                                                                          CValidattionTestFiles.PATH_SUCCESS +
+                                                                          sCallForTendersFile);
 
       // Ensure the UBL file validates against the scheme
       final CallForTendersType aUBLCallForTenders = UBL21DocumentMarshaller.readCallForTenders (XMLReader.readXMLDOM (aCallForTendersRes));
