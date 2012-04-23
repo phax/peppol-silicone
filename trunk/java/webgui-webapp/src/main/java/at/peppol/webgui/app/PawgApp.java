@@ -1,5 +1,6 @@
 package at.peppol.webgui.app;
 
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -16,6 +17,7 @@ import com.vaadin.Application;
 import com.vaadin.terminal.gwt.server.HttpServletRequestListener;
 import com.vaadin.ui.Window;
 
+@SuppressWarnings ("serial")
 public class PawgApp extends Application implements HttpServletRequestListener {
 
     private static ThreadLocal<PawgApp> threadLocal = new ThreadLocal<PawgApp>();
@@ -111,4 +113,6 @@ public class PawgApp extends Application implements HttpServletRequestListener {
         }
         return w;
     }
+    
+   
 }

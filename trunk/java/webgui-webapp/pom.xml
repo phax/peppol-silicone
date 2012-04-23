@@ -90,6 +90,9 @@
         <version>7.6.3.v20120416</version>
         <configuration>
           <scanIntervalSeconds>1</scanIntervalSeconds>
+          <!-- Set stopKey and stopPort to be used in run configurations like this: jetty:stop -Dstop.port=9999 -Dstop.key=stopme -->
+          <stopKey>stopme</stopKey>
+          <stopPort>9999</stopPort>
           <!-- Configure the webapp -->
           <contextPath>/</contextPath>
         </configuration>

@@ -3,6 +3,8 @@ package at.peppol.webgui.app;
 import org.vaadin.jouni.animator.AnimatorProxy;
 
 import at.peppol.webgui.app.components.InvoiceForm;
+import at.peppol.webgui.app.components.InvoiceUploadWindow;
+import at.peppol.webgui.app.components.OrderUploadWindow;
 import at.peppol.webgui.security.user.IUser;
 
 import com.vaadin.terminal.ExternalResource;
@@ -10,6 +12,7 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
+import com.vaadin.ui.CustomLayout;
 import com.vaadin.ui.Embedded;
 import com.vaadin.ui.Form;
 import com.vaadin.ui.HorizontalLayout;
@@ -24,6 +27,7 @@ import com.vaadin.ui.Window;
  *
  * @author Jerouris
  */
+@SuppressWarnings ("serial")
 public class MainWindow extends Window {
     
     private CssLayout topBarCSSLayout = new CssLayout();
@@ -41,19 +45,19 @@ public class MainWindow extends Window {
         super("PAWG Main");
         addComponent(animProxy);
         initUI();
-        
     }
 
     private void initUI() {
         
-        
         VerticalLayout root = new VerticalLayout();
         root.setMargin(false);
         setContent(root);
-       // createTopBar();
-       // Changed with menuBar -- under testing
-        createMenuBar();
         
+        //createTopBar();
+        //Changed with menuBar -- under testing
+        createMenuBar();
+        //Changed with custom layout using bootstrap -- under testing
+        //createHeaderMenu();
         
         // ------ START: Left NavBar -------
         CssLayout leftNavBar = new CssLayout();
@@ -88,13 +92,14 @@ public class MainWindow extends Window {
         leftNavBar.addComponent(new NativeButton("Suppliers"));
         
         Embedded peppolLogoImg = new Embedded(null,
-                                 new ExternalResource("img/peppol_logo.png"));
+                                 new ExternalResource("/VAADIN/img/peppol_logo.png"));
 
         peppolLogoImg.setStyleName("logo");
         leftNavBar.addComponent(peppolLogoImg);
         
         middleContentLayout.addComponent(leftNavBar);
         showInitialMainContent();
+        
     }
 
     public void showInitialMainContent() {
@@ -181,15 +186,15 @@ public class MainWindow extends Window {
        
         topBarLayout.setMargin(false, false, false, false);
         topBarLayout.setSizeFull();
-      //  topBarLayout.setStyleName("v-menubar");
+        // topBarLayout.setStyleName("v-menubar");
         topBarLayoutLeft  = new HorizontalLayout();
         topBarLayoutRight = new HorizontalLayout();
         
-//        Label pawgLabel = new Label("PAWG",Label.CONTENT_XHTML);
-//        pawgLabel.setStyleName("v-menubar");
-//        pawgLabel.addStyleName("v-label-big");
-//        pawgLabel.setSizeFull();
-//        topBarLayoutLeft.addComponent(pawgLabel);
+        // Label pawgLabel = new Label("PAWG",Label.CONTENT_XHTML);
+        // pawgLabel.setStyleName("v-menubar");
+        // pawgLabel.addStyleName("v-label-big");
+        // pawgLabel.setSizeFull();
+        // topBarLayoutLeft.addComponent(pawgLabel);
 
         MenuBar lMenuBar = new MenuBar();
         lMenuBar.setHtmlContentAllowed(true);
@@ -209,7 +214,6 @@ public class MainWindow extends Window {
         
         final MenuBar.MenuItem invItem = docItem.addItem("Invoice", null);
         final MenuBar.MenuItem orderItem = docItem.addItem("Order", null);
-        
         final MenuBar.MenuItem invCreateItem = invItem.addItem("New ...",new MenuBar.Command() {
 
             @Override
@@ -226,21 +230,37 @@ public class MainWindow extends Window {
             }
 
         });
+        final MenuBar.MenuItem invUploadItem = invItem.addItem("Upload ...",new MenuBar.Command() {
+
+            @Override
+            public void menuSelected(MenuItem selectedItem) {
+                showInvUploadWindow();
+            }
+
+        });        
         
         final MenuBar.MenuItem ordCreateItem = orderItem.addItem("New",null);
         final MenuBar.MenuItem ordViewItem = orderItem.addItem("View",null);
+        final MenuBar.MenuItem ordUploadItem = orderItem.addItem("Upload ...",new MenuBar.Command() {
+
+          @Override
+          public void menuSelected(MenuItem selectedItem) {
+              showOrdUploadWindow();
+          }
+
+        });        
         
         topBarLayoutLeft.addComponent(lMenuBar);
         
         IUser user = (IUser) PawgApp.getInstance().getUser();
 
-       //        loggedInLabel.addStyleName("v-menubar");
-      // loggedInLabel.addStyleName("v-menubar-menuitem");
-      //  loggedInLabel.setSizeUndefined();
-      //  topBarLayoutRight.setStyleName("v-menubar");;
-      //  topBarLayoutRight.setSizeUndefined();
-      //  topBarLayoutRight.addComponent(loggedInLabel);
-     //   topBarLayoutRight.setComponentAlignment(loggedInLabel, Alignment.MIDDLE_RIGHT);
+        // loggedInLabel.addStyleName("v-menubar");
+        // loggedInLabel.addStyleName("v-menubar-menuitem");
+        // loggedInLabel.setSizeUndefined();
+        // topBarLayoutRight.setStyleName("v-menubar");;
+        // topBarLayoutRight.setSizeUndefined();
+        // topBarLayoutRight.addComponent(loggedInLabel);
+        // topBarLayoutRight.setComponentAlignment(loggedInLabel, Alignment.MIDDLE_RIGHT);
         topBarLayoutLeft.setComponentAlignment(lMenuBar, Alignment.MIDDLE_CENTER);
         topBarLayoutLeft.setSpacing(false);
         topBarLayoutLeft.setSizeFull();
@@ -260,10 +280,24 @@ public class MainWindow extends Window {
         topBarLayout.addComponent(topBarLayoutLeft);
         topBarLayout.addComponent(topBarLayoutRight);
         topBarLayout.setComponentAlignment(topBarLayoutRight, Alignment.MIDDLE_RIGHT);
-      topBarLayout.setExpandRatio(topBarLayoutLeft, 1);
-      //topBarLayout.setExpandRatio(topBarLayoutRight, 1);
+        topBarLayout.setExpandRatio(topBarLayoutLeft, 1);
+        //topBarLayout.setExpandRatio(topBarLayoutRight, 1);
         addComponent(topBarLayout);
         
+    }
+    
+    private void createHeaderMenu() {
+      topBarLayout.setMargin(false, false, false, false);
+      topBarLayout.setSizeFull();
+      CustomLayout custom = new CustomLayout("header-menu");
+      topBarLayout.addComponent(custom); 
+         
+      //Button ok = new Button("Login");
+      //ok.removeStyleName ("v-button-wrap");
+      //ok.addStyleName ("btn btn-success");
+      //custom.addComponent(ok, "okbutton");      
+      
+      addComponent(topBarLayout);
     }
     
     private HorizontalLayout createTopBarButtons() {
@@ -304,20 +338,38 @@ public class MainWindow extends Window {
         return lorem;
     } 
     
-      public void showInvoiceForm() {
-          
-          InvoiceForm invForm = new InvoiceForm();
-          middleContentLayout.replaceComponent(mainContentComponent,invForm);
-          middleContentLayout.setExpandRatio(invForm, 1);
-          mainContentComponent = invForm;
-      }
-      
-      public void showTestForm() {
-          
-          InvoiceForm form = new InvoiceForm();
-          Form f2 = form.createInvoiceTopForm();
-          middleContentLayout.replaceComponent(mainContentComponent,f2);
-          middleContentLayout.setExpandRatio(f2, 1);
-          mainContentComponent = f2;
-      }
+    public void showInvoiceForm() {
+        
+        InvoiceForm invForm = new InvoiceForm();
+        middleContentLayout.replaceComponent(mainContentComponent,invForm);
+        middleContentLayout.setExpandRatio(invForm, 1);
+        mainContentComponent = invForm;
+    }
+    
+    public void showTestForm() {
+        
+        InvoiceForm form = new InvoiceForm();
+        Form f2 = form.createInvoiceTopForm();
+        middleContentLayout.replaceComponent(mainContentComponent,f2);
+        middleContentLayout.setExpandRatio(f2, 1);
+        mainContentComponent = f2;
+    }
+    
+    public void showInvUploadWindow() {
+      //this.showNotification("Warning", "<br/>Uploading invoices is under construction", Window.Notification.TYPE_HUMANIZED_MESSAGE);  
+      Window popup = new InvoiceUploadWindow().getWindow();
+      popup.setResizable (false);
+      popup.setHeight("150px");
+      popup.setWidth("430px");
+      getWindow().addWindow(popup);
+    }
+    
+    public void showOrdUploadWindow() {
+      //this.showNotification("Warning", "<br/>Uploading orders is under construction", Window.Notification.TYPE_HUMANIZED_MESSAGE);  
+      Window popup = new OrderUploadWindow().getWindow();
+      popup.setResizable (false);
+      popup.setHeight("150px");
+      popup.setWidth("430px");
+      getWindow().addWindow(popup);
+    }
 }
