@@ -78,7 +78,8 @@
 
   <servlet>
     <servlet-name>PawgServlet</servlet-name>
-    <servlet-class>com.vaadin.terminal.gwt.server.ApplicationServlet</servlet-class>
+    <!-- <servlet-class>com.vaadin.terminal.gwt.server.ApplicationServlet</servlet-class>  -->
+    <servlet-class>at.peppol.webgui.servlet.WebGuiApplicationServlet</servlet-class>
     <init-param>
       <description>Vaadin application class to start</description>
       <param-name>application</param-name>

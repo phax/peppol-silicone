@@ -1,5 +1,6 @@
 @import "../chameleon/styles.css";
 
+
 /** 
  * "optional-" prefix means that the style is not necessarily used, it can be left blank
  * "generated-" prefix means that the style is calculated from some other color, and not directly selected by the editor user
@@ -380,3 +381,29 @@ td.v-datefield-calendarpanel-month,
 .v-verticallayout-margin {
     margin: 20px;
 }
+
+.upload-popup {
+	background: url(../../img/upload_file_add.png) 96% 90% no-repeat;
+	background-color: rgb(249,249,249);
+	background-color: rgba(249,249,249,.85);	
+}
+.customlayoutexample {
+	background-color: #ccc;
+}
+
+.customlayoutexample a.brand {
+	color: #000;
+	text-decoration:none;
+}
+
+.customlayoutexample .caret {opacity: 0.8;}
+.navbar{margin: 0;}
+
+.v-customlayout{overflow: visible;}
+
+/*
+.v-verticallayout,
+.v-verticallayout div {
+   overflow: visible !important;
+}
+*/
