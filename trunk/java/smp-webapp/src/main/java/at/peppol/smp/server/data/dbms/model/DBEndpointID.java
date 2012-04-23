@@ -51,7 +51,7 @@ import at.peppol.commons.identifier.CIdentifier;
 import at.peppol.commons.identifier.IdentifierUtils;
 
 import com.phloc.commons.annotations.UsedViaReflection;
-import com.phloc.commons.compare.EqualsUtils;
+import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 
 /**
@@ -183,14 +183,14 @@ public class DBEndpointID implements Serializable {
     if (!(other instanceof DBEndpointID))
       return false;
     final DBEndpointID rhs = (DBEndpointID) other;
-    return EqualsUtils.nullSafeEquals (m_sBusinessIdentifierScheme, rhs.m_sBusinessIdentifierScheme) &&
-           EqualsUtils.nullSafeEquals (m_sBusinessIdentifier, rhs.m_sBusinessIdentifier) &&
-           EqualsUtils.nullSafeEquals (m_sDocumentIdentifierScheme, rhs.m_sDocumentIdentifierScheme) &&
-           EqualsUtils.nullSafeEquals (m_sDocumentIdentifier, rhs.m_sDocumentIdentifier) &&
-           EqualsUtils.nullSafeEquals (m_sProcessIdentifierScheme, rhs.m_sProcessIdentifierScheme) &&
-           EqualsUtils.nullSafeEquals (m_sProcessIdentifier, rhs.m_sProcessIdentifier) &&
-           EqualsUtils.nullSafeEquals (m_sEndpointReference, rhs.m_sEndpointReference) &&
-           EqualsUtils.nullSafeEquals (m_sTransportProfile, rhs.m_sTransportProfile);
+    return EqualsUtils.equals (m_sBusinessIdentifierScheme, rhs.m_sBusinessIdentifierScheme) &&
+           EqualsUtils.equals (m_sBusinessIdentifier, rhs.m_sBusinessIdentifier) &&
+           EqualsUtils.equals (m_sDocumentIdentifierScheme, rhs.m_sDocumentIdentifierScheme) &&
+           EqualsUtils.equals (m_sDocumentIdentifier, rhs.m_sDocumentIdentifier) &&
+           EqualsUtils.equals (m_sProcessIdentifierScheme, rhs.m_sProcessIdentifierScheme) &&
+           EqualsUtils.equals (m_sProcessIdentifier, rhs.m_sProcessIdentifier) &&
+           EqualsUtils.equals (m_sEndpointReference, rhs.m_sEndpointReference) &&
+           EqualsUtils.equals (m_sTransportProfile, rhs.m_sTransportProfile);
   }
 
   @Override

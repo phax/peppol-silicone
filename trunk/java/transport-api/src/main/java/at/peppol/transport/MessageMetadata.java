@@ -52,7 +52,7 @@ import at.peppol.commons.identifier.SimpleDocumentTypeIdentifier;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 import at.peppol.commons.identifier.SimpleProcessIdentifier;
 
-import com.phloc.commons.compare.EqualsUtils;
+import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
 
@@ -170,8 +170,8 @@ public final class MessageMetadata implements IMessageMetadata {
     if (!(o instanceof MessageMetadata))
       return false;
     final MessageMetadata rhs = (MessageMetadata) o;
-    return EqualsUtils.nullSafeEquals (m_sMessageID, rhs.m_sMessageID) &&
-           EqualsUtils.nullSafeEquals (m_sChannelID, rhs.m_sChannelID) &&
+    return EqualsUtils.equals (m_sMessageID, rhs.m_sMessageID) &&
+           EqualsUtils.equals (m_sChannelID, rhs.m_sChannelID) &&
            m_aSenderID.equals (rhs.m_aSenderID) &&
            m_aRecipientID.equals (rhs.m_aRecipientID) &&
            m_aDocumentTypeID.equals (rhs.m_aDocumentTypeID) &&

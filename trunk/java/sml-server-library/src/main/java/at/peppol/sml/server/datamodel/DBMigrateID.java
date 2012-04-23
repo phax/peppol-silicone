@@ -50,7 +50,7 @@ import at.peppol.commons.identifier.IdentifierUtils;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 
 import com.phloc.commons.annotations.DevelopersNote;
-import com.phloc.commons.compare.EqualsUtils;
+import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 
 /**
@@ -117,9 +117,9 @@ public class DBMigrateID implements Serializable {
     if (!(other instanceof DBMigrateID))
       return false;
     final DBMigrateID rhs = (DBMigrateID) other;
-    return EqualsUtils.nullSafeEquals (m_sScheme, rhs.m_sScheme) &&
-           EqualsUtils.nullSafeEquals (m_sValue, rhs.m_sValue) &&
-           EqualsUtils.nullSafeEquals (m_sMigrationCode, rhs.m_sMigrationCode);
+    return EqualsUtils.equals (m_sScheme, rhs.m_sScheme) &&
+           EqualsUtils.equals (m_sValue, rhs.m_sValue) &&
+           EqualsUtils.equals (m_sMigrationCode, rhs.m_sMigrationCode);
   }
 
   @Override

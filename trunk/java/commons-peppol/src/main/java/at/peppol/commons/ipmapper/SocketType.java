@@ -43,7 +43,7 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.compare.EqualsUtils;
+import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
@@ -65,7 +65,7 @@ public final class SocketType implements ISocketType {
 
   /**
    * Constructor with no port
-   *
+   * 
    * @param sHost
    *        The host name
    */
@@ -75,7 +75,7 @@ public final class SocketType implements ISocketType {
 
   /**
    * Constructor with host and port
-   *
+   * 
    * @param sHost
    *        Host name
    * @param nPort
@@ -117,7 +117,7 @@ public final class SocketType implements ISocketType {
     if (!(obj instanceof SocketType))
       return false;
     final SocketType other = (SocketType) obj;
-    return m_sHost.equals (other.m_sHost) && EqualsUtils.nullSafeEquals (m_aPort, other.m_aPort);
+    return m_sHost.equals (other.m_sHost) && EqualsUtils.equals (m_aPort, other.m_aPort);
   }
 
   @Override
@@ -133,7 +133,7 @@ public final class SocketType implements ISocketType {
   /**
    * Create a socket part from a string having the layout "host:port" or "host"
    * only. Port must be numeric and must be a valid port number.
-   *
+   * 
    * @param sSocketString
    *        The socket string to be parsed.
    * @return The {@link SocketType} to be used.

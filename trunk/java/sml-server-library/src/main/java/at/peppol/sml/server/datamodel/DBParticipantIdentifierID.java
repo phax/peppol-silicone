@@ -49,7 +49,7 @@ import at.peppol.commons.identifier.IdentifierUtils;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 
 import com.phloc.commons.annotations.DevelopersNote;
-import com.phloc.commons.compare.EqualsUtils;
+import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 
 /**
@@ -107,7 +107,7 @@ public class DBParticipantIdentifierID implements Serializable {
     if (!(other instanceof DBParticipantIdentifierID))
       return false;
     final DBParticipantIdentifierID rhs = (DBParticipantIdentifierID) other;
-    return EqualsUtils.nullSafeEquals (m_sScheme, rhs.m_sScheme) && EqualsUtils.nullSafeEquals (m_sValue, rhs.m_sValue);
+    return EqualsUtils.equals (m_sScheme, rhs.m_sScheme) && EqualsUtils.equals (m_sValue, rhs.m_sValue);
   }
 
   @Override

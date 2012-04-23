@@ -53,7 +53,7 @@ import at.peppol.commons.uri.BusdoxURLUtils;
 
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.charset.CharsetManager;
-import com.phloc.commons.compare.EqualsUtils;
+import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
 
@@ -225,7 +225,7 @@ public final class IdentifierUtils {
   public static boolean areDocumentIdentifierValuesEqual (@Nullable final String sIdentifierValue1,
                                                           @Nullable final String sIdentifierValue2) {
     // Case sensitive!
-    return EqualsUtils.nullSafeEquals (sIdentifierValue1, sIdentifierValue2);
+    return EqualsUtils.equals (sIdentifierValue1, sIdentifierValue2);
   }
 
   /**
@@ -242,7 +242,7 @@ public final class IdentifierUtils {
   public static boolean areProcessIdentifierValuesEqual (@Nullable final String sIdentifierValue1,
                                                          @Nullable final String sIdentifierValue2) {
     // Case sensitive!
-    return EqualsUtils.nullSafeEquals (sIdentifierValue1, sIdentifierValue2);
+    return EqualsUtils.equals (sIdentifierValue1, sIdentifierValue2);
   }
 
   /**
@@ -287,8 +287,8 @@ public final class IdentifierUtils {
       throw new NullPointerException ("identifier2");
 
     // Identifiers are equal, if both scheme and value match case sensitive!
-    return EqualsUtils.nullSafeEquals (aIdentifier1.getScheme (), aIdentifier2.getScheme ()) &&
-           EqualsUtils.nullSafeEquals (aIdentifier1.getValue (), aIdentifier2.getValue ());
+    return EqualsUtils.equals (aIdentifier1.getScheme (), aIdentifier2.getScheme ()) &&
+           EqualsUtils.equals (aIdentifier1.getValue (), aIdentifier2.getValue ());
   }
 
   /**
@@ -310,8 +310,8 @@ public final class IdentifierUtils {
       throw new NullPointerException ("identifier2");
 
     // Identifiers are equal, if both scheme and value match case sensitive!
-    return EqualsUtils.nullSafeEquals (aIdentifier1.getScheme (), aIdentifier2.getScheme ()) &&
-           EqualsUtils.nullSafeEquals (aIdentifier1.getValue (), aIdentifier2.getValue ());
+    return EqualsUtils.equals (aIdentifier1.getScheme (), aIdentifier2.getScheme ()) &&
+           EqualsUtils.equals (aIdentifier1.getValue (), aIdentifier2.getValue ());
   }
 
   /**
