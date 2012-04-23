@@ -44,6 +44,8 @@ import javax.xml.validation.Schema;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.lang.EnumHelper;
 import com.phloc.ubl.EUBL20DocumentType;
+import com.phloc.ubl.EUBL21DocumentType;
+import com.phloc.ubl.IUBLDocumentType;
 
 /**
  * All predefined document types for which rules are contained.
@@ -67,14 +69,20 @@ public enum EValidationDocumentType implements IValidationDocumentType {
   INVOICE ("invoice", EUBL20DocumentType.INVOICE),
 
   /** Credit note document type */
-  CREDIT_NOTE ("creditnote", EUBL20DocumentType.CREDIT_NOTE);
+  CREDIT_NOTE ("creditnote", EUBL20DocumentType.CREDIT_NOTE),
+
+  /** Call for tenders document type */
+  CALL_FOR_TENDERS ("callfortenders", EUBL21DocumentType.CALL_FOR_TENDERS),
+
+  /** Tender document type */
+  TENDER ("tender", EUBL21DocumentType.TENDER);
 
   private String m_sID;
-  private EUBL20DocumentType m_eUBLDocType;
+  private IUBLDocumentType m_aUBLDocType;
 
-  private EValidationDocumentType (@Nonnull @Nonempty final String sID, @Nullable final EUBL20DocumentType eUBLDocType) {
+  private EValidationDocumentType (@Nonnull @Nonempty final String sID, @Nullable final IUBLDocumentType aUBLDocType) {
     m_sID = sID;
-    m_eUBLDocType = eUBLDocType;
+    m_aUBLDocType = aUBLDocType;
   }
 
   @Nonnull
@@ -85,7 +93,7 @@ public enum EValidationDocumentType implements IValidationDocumentType {
 
   @Nullable
   public Schema getSchema () {
-    return m_eUBLDocType == null ? null : m_eUBLDocType.getSchema ();
+    return m_aUBLDocType == null ? null : m_aUBLDocType.getSchema ();
   }
 
   @Nullable
