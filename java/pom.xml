@@ -69,6 +69,7 @@
 
   <modules>
     <!-- Commons -->
+    <module>test-files</module>
     <module>commons-cenbii</module>
     <module>commons-jpa</module>
     <module>commons-busdox</module>
