@@ -51,6 +51,12 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.scopes.web.singleton.GlobalWebSingleton;
 
+/**
+ * Handle uploaded resources and clean them up when the application is shut
+ * down.
+ * 
+ * @author philip
+ */
 public final class UploadManager extends GlobalWebSingleton {
   private final Lock m_aLock = new ReentrantLock ();
   private final List <UploadedResource> m_aUploads = new ArrayList <UploadedResource> ();
