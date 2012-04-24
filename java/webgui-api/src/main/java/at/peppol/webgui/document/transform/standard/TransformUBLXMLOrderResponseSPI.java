@@ -39,13 +39,17 @@ package at.peppol.webgui.document.transform.standard;
 
 import javax.annotation.Nonnull;
 
+import oasis.names.specification.ubl.schema.xsd.orderresponsesimple_2.OrderResponseSimpleType;
 import at.peppol.webgui.document.transform.ITransformOrderResponseToUBLSPI;
 import at.peppol.webgui.document.transform.TransformationResult;
 import at.peppol.webgui.document.transform.TransformationSource;
 
+import com.phloc.commons.error.IResourceErrorGroup;
+import com.phloc.commons.jaxb.CollectingValidationEventHandler;
 import com.phloc.commons.typeconvert.TypeConverterException;
 import com.phloc.commons.xml.XMLHelper;
 import com.phloc.ubl.EUBL20DocumentType;
+import com.phloc.ubl.UBL20DocumentMarshaller;
 
 /**
  * "Transform" UBL order responses available as XML
@@ -65,7 +69,12 @@ public final class TransformUBLXMLOrderResponseSPI implements ITransformOrderRes
 
   @Nonnull
   public TransformationResult convertOrderResponseToUBL (@Nonnull final TransformationSource aSource) throws TypeConverterException {
-    // Use input document as is
-    return TransformationResult.createResult (aSource.getXMLDocument ());
+    final CollectingValidationEventHandler aHdl = new CollectingValidationEventHandler ();
+    final OrderResponseSimpleType aCatalogue = UBL20DocumentMarshaller.readOrderResponseSimple (aSource.getXMLDocument (),
+                                                                                                aHdl);
+    final IResourceErrorGroup aErrors = aHdl.getResourceErrors ();
+    if (aErrors.containsAtLeastOneError ())
+      return TransformationResult.createFailure (aErrors);
+    return TransformationResult.createUBLResult (aCatalogue);
   }
 }

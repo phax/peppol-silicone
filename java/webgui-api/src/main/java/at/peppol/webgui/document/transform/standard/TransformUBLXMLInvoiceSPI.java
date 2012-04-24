@@ -39,13 +39,17 @@ package at.peppol.webgui.document.transform.standard;
 
 import javax.annotation.Nonnull;
 
+import oasis.names.specification.ubl.schema.xsd.invoice_2.InvoiceType;
 import at.peppol.webgui.document.transform.ITransformInvoiceToUBLSPI;
 import at.peppol.webgui.document.transform.TransformationResult;
 import at.peppol.webgui.document.transform.TransformationSource;
 
+import com.phloc.commons.error.IResourceErrorGroup;
+import com.phloc.commons.jaxb.CollectingValidationEventHandler;
 import com.phloc.commons.typeconvert.TypeConverterException;
 import com.phloc.commons.xml.XMLHelper;
 import com.phloc.ubl.EUBL20DocumentType;
+import com.phloc.ubl.UBL20DocumentMarshaller;
 
 /**
  * "Transform" UBL invoices available as XML
@@ -65,7 +69,11 @@ public final class TransformUBLXMLInvoiceSPI implements ITransformInvoiceToUBLSP
 
   @Nonnull
   public TransformationResult convertInvoiceToUBL (@Nonnull final TransformationSource aSource) throws TypeConverterException {
-    // Use input document as is
-    return TransformationResult.createResult (aSource.getXMLDocument ());
+    final CollectingValidationEventHandler aHdl = new CollectingValidationEventHandler ();
+    final InvoiceType aCatalogue = UBL20DocumentMarshaller.readInvoice (aSource.getXMLDocument (), aHdl);
+    final IResourceErrorGroup aErrors = aHdl.getResourceErrors ();
+    if (aErrors.containsAtLeastOneError ())
+      return TransformationResult.createFailure (aErrors);
+    return TransformationResult.createUBLResult (aCatalogue);
   }
 }

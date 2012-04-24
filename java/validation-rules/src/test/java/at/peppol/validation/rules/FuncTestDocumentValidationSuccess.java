@@ -48,7 +48,7 @@ import org.oclc.purl.dsdl.svrl.SchematronOutputType;
 import org.xml.sax.SAXException;
 
 import at.peppol.commons.cenbii.profiles.ETransaction;
-import at.peppol.validation.CValidattionTestFiles;
+import at.peppol.test.CTestFiles;
 import at.peppol.validation.schematron.SchematronHelper;
 import at.peppol.validation.schematron.svrl.SVRLFailedAssert;
 import at.peppol.validation.schematron.svrl.SVRLUtils;
@@ -74,10 +74,10 @@ public final class FuncTestDocumentValidationSuccess {
   @Test
   public void testReadCataloguesSuccess () throws SAXException {
     // For all available catalogues
-    for (final String sCatalogueFile : CValidattionTestFiles.TEST_CATALOGUES_SUCCESS) {
+    for (final String sCatalogueFile : CTestFiles.TEST_CATALOGUES_SUCCESS) {
       // Get the UBL XML file
-      final IReadableResource aCatalogueRes = new ClassPathResource (CValidattionTestFiles.PATH_CATALOGUE_TESTFILES +
-                                                                     CValidattionTestFiles.PATH_SUCCESS +
+      final IReadableResource aCatalogueRes = new ClassPathResource (CTestFiles.PATH_CATALOGUE_TESTFILES +
+                                                                     CTestFiles.PATH_SUCCESS +
                                                                      sCatalogueFile);
 
       // Ensure the UBL file validates against the scheme
@@ -112,10 +112,10 @@ public final class FuncTestDocumentValidationSuccess {
   @Test
   public void testReadOrdersSuccess () throws SAXException {
     // For all available orders
-    for (final String sOrderFile : CValidattionTestFiles.TEST_ORDERS_SUCCESS) {
+    for (final String sOrderFile : CTestFiles.TEST_ORDERS_SUCCESS) {
       // Get the UBL XML file
-      final IReadableResource aOrderRes = new ClassPathResource (CValidattionTestFiles.PATH_ORDER_TESTFILES +
-                                                                 CValidattionTestFiles.PATH_SUCCESS +
+      final IReadableResource aOrderRes = new ClassPathResource (CTestFiles.PATH_ORDER_TESTFILES +
+                                                                 CTestFiles.PATH_SUCCESS +
                                                                  sOrderFile);
 
       // Ensure the UBL file validates against the scheme
@@ -153,10 +153,10 @@ public final class FuncTestDocumentValidationSuccess {
   public void testReadInvoicesSuccess () throws SAXException {
     final IValidationTransaction aVT = ValidationTransaction.createUBLTransaction (ETransaction.T10);
     // For all available invoices
-    for (final String sInvoiceFile : CValidattionTestFiles.TEST_INVOICES_SUCCESS) {
+    for (final String sInvoiceFile : CTestFiles.TEST_INVOICES_SUCCESS) {
       // Get the UBL XML file
-      final IReadableResource aInvoiceRes = new ClassPathResource (CValidattionTestFiles.PATH_INVOICE_TESTFILES +
-                                                                   CValidattionTestFiles.PATH_SUCCESS +
+      final IReadableResource aInvoiceRes = new ClassPathResource (CTestFiles.PATH_INVOICE_TESTFILES +
+                                                                   CTestFiles.PATH_SUCCESS +
                                                                    sInvoiceFile);
 
       // Ensure the UBL file validates against the scheme
@@ -193,10 +193,10 @@ public final class FuncTestDocumentValidationSuccess {
   @Test
   public void testReadInvoicesATSuccess () throws SAXException {
     // For all available invoices
-    for (final String sInvoiceFile : CValidattionTestFiles.TEST_INVOICES_AT_SUCCESS) {
+    for (final String sInvoiceFile : CTestFiles.TEST_INVOICES_AT_SUCCESS) {
       // Get the UBL XML file
-      final IReadableResource aInvoiceRes = new ClassPathResource (CValidattionTestFiles.PATH_INVOICE_TESTFILES +
-                                                                   CValidattionTestFiles.PATH_SUCCESS +
+      final IReadableResource aInvoiceRes = new ClassPathResource (CTestFiles.PATH_INVOICE_TESTFILES +
+                                                                   CTestFiles.PATH_SUCCESS +
                                                                    sInvoiceFile);
 
       // Ensure the UBL file validates against the scheme

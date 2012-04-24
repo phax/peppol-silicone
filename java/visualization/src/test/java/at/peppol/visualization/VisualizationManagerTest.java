@@ -43,6 +43,7 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 
 import at.peppol.commons.cenbii.profiles.ETransaction;
+import at.peppol.test.CTestFiles;
 
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.resource.ClassPathResource;
@@ -56,8 +57,8 @@ public final class VisualizationManagerTest {
   @Test
   public void testCreditNotes () {
     // For all test orders
-    for (final String sFilename : CVisualizationTestFiles.TEST_CREDITNOTES) {
-      final IReadableResource aRes = new ClassPathResource ("/test-creditnotes/" + sFilename);
+    for (final String sFilename : CTestFiles.TEST_CREDITNOTES_SUCCESS) {
+      final IReadableResource aRes = new ClassPathResource ("/test-creditnotes/success/" + sFilename);
 
       // For all order visualizations
       for (final EVisualizationArtefact eArtefact : EVisualizationArtefact.getAllArtefactsOfTransaction (ETransaction.T14)) {
@@ -70,8 +71,8 @@ public final class VisualizationManagerTest {
   @Test
   public void testOrders () {
     // For all test orders
-    for (final String sFilename : CVisualizationTestFiles.TEST_ORDERS) {
-      final IReadableResource aRes = new ClassPathResource ("/test-orders/" + sFilename);
+    for (final String sFilename : CTestFiles.TEST_ORDERS_SUCCESS) {
+      final IReadableResource aRes = new ClassPathResource ("/test-orders/success/" + sFilename);
 
       // For all order visualizations
       for (final EVisualizationArtefact eArtefact : EVisualizationArtefact.getAllArtefactsOfTransaction (ETransaction.T01)) {
@@ -84,8 +85,8 @@ public final class VisualizationManagerTest {
   @Test
   public void testInvoices () {
     // For all test invoices
-    for (final String sFilename : CVisualizationTestFiles.TEST_INVOICES) {
-      final IReadableResource aRes = new ClassPathResource ("/test-invoices/" + sFilename);
+    for (final String sFilename : CTestFiles.TEST_INVOICES_SUCCESS) {
+      final IReadableResource aRes = new ClassPathResource ("/test-invoices/success/" + sFilename);
 
       // For all invoice visualizations
       for (final EVisualizationArtefact eArtefact : EVisualizationArtefact.getAllArtefactsOfTransaction (ETransaction.T10)) {

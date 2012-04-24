@@ -35,7 +35,7 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.validation;
+package at.peppol.test;
 
 import java.util.List;
 
@@ -49,7 +49,7 @@ import com.phloc.commons.collections.ContainerHelper;
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable
-public final class CValidattionTestFiles {
+public final class CTestFiles {
   public static final String PATH_CATALOGUE_TESTFILES = "/test-catalogues/";
   public static final String PATH_INVOICE_TESTFILES = "/test-invoices/";
   public static final String PATH_ORDER_TESTFILES = "/test-orders/";
@@ -91,5 +91,5 @@ public final class CValidattionTestFiles {
   public static final List <String> TEST_CALLFORTENDERS_SUCCESS = ContainerHelper.newUnmodifiableList ("Catalogue pre award_Call for Tender_RDO MEPA_BIS 12a.xml");
   public static final List <String> TEST_TENDER_SUCCESS = ContainerHelper.newUnmodifiableList ("Catalogo preaward_Tender_Risposta con offerta ad una RDO MEPA_BIS 12a.xml");
 
-  private CValidattionTestFiles () {}
+  private CTestFiles () {}
 }

@@ -56,7 +56,7 @@ import org.oclc.purl.dsdl.svrl.SchematronOutputType;
 import org.xml.sax.SAXException;
 
 import at.peppol.commons.cenbii.profiles.ETransaction;
-import at.peppol.validation.CValidattionTestFiles;
+import at.peppol.test.CTestFiles;
 import at.peppol.validation.rules.mock.AbstractErrorDefinition;
 import at.peppol.validation.rules.mock.FatalError;
 import at.peppol.validation.rules.mock.TestDocument;
@@ -364,8 +364,8 @@ public final class FuncTestDocumentValidationError {
     // For all available orders
     for (final TestDocument aTestDoc : TEST_ORDERS_ERROR) {
       // Get the UBL XML file
-      final IReadableResource aOrderRes = new ClassPathResource (CValidattionTestFiles.PATH_ORDER_TESTFILES +
-                                                                 CValidattionTestFiles.PATH_ERROR +
+      final IReadableResource aOrderRes = new ClassPathResource (CTestFiles.PATH_ORDER_TESTFILES +
+                                                                 CTestFiles.PATH_ERROR +
                                                                  aTestDoc.getFilename ());
 
       // Ensure the UBL file validates against the scheme
@@ -414,8 +414,8 @@ public final class FuncTestDocumentValidationError {
     // For all available invoices
     for (final TestDocument aErrDoc : TEST_INVOICES_ERROR) {
       // Get the UBL XML file
-      final IReadableResource aInvoiceRes = new ClassPathResource (CValidattionTestFiles.PATH_INVOICE_TESTFILES +
-                                                                   CValidattionTestFiles.PATH_ERROR +
+      final IReadableResource aInvoiceRes = new ClassPathResource (CTestFiles.PATH_INVOICE_TESTFILES +
+                                                                   CTestFiles.PATH_ERROR +
                                                                    aErrDoc.getFilename ());
 
       // Ensure the UBL file validates against the scheme
