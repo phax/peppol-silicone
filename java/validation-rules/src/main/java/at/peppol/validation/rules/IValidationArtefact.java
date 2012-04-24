@@ -39,6 +39,7 @@ package at.peppol.validation.rules;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -49,10 +50,9 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.io.IReadableResource;
 
-
 /**
  * Interface for a single validation artefact.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public interface IValidationArtefact {
@@ -83,8 +83,22 @@ public interface IValidationArtefact {
   boolean isValidationCountryIndependent ();
 
   /**
+   * @return A set with all validation transactions supported by this artefact.
+   */
+  @Nonnull
+  @Nonempty
+  Set <IValidationTransaction> getAllValidationTransactions ();
+
+  /**
+   * @return A set with all BII transaction supported by this artefact.
+   */
+  @Nonnull
+  @Nonempty
+  Set <ETransaction> getAllTransactions ();
+
+  /**
    * Check if the passed transaction is supported by this validation artefact.
-   *
+   * 
    * @param eTransaction
    *        The transaction to be searched. May be <code>null</code>.
    * @return <code>true</code> if the passed transaction is not
@@ -95,7 +109,7 @@ public interface IValidationArtefact {
   /**
    * Get the Schematron resource (.SCH) of this artefact for the specified
    * transaction.
-   *
+   * 
    * @param aTransaction
    *        The transaction to be searched. May not be <code>null</code>.
    * @return <code>null</code> if no such transaction is present.
@@ -115,7 +129,7 @@ public interface IValidationArtefact {
 
   /**
    * Get the XSLT resource of this artefact for the specified transaction.
-   *
+   * 
    * @param aRuleSet
    *        The transaction to be searched. May not be <code>null</code>.
    * @return <code>null</code> if no such transaction is present.
