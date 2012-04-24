@@ -1,6 +1,5 @@
 package at.peppol.webgui.app.components;
 
-import java.io.File;
 import java.io.OutputStream;
 
 import org.slf4j.Logger;
@@ -23,13 +22,9 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
 @SuppressWarnings ("serial")
-public class OrderUploadWindow extends VerticalLayout implements
-                                                     Upload.Receiver,
-                                                     Upload.FailedListener,
-                                                     Upload.SucceededListener {
+public class OrderUploadWindow extends VerticalLayout implements Upload.Receiver {
   private static final Logger logger = LoggerFactory.getLogger (OrderUploadWindow.class);
   private final Window subwindow;
-  private File file;
   private final Label status = new Label ("Please select a file to upload");
   private final ProgressIndicator pi = new ProgressIndicator ();
   private final HorizontalLayout progressLayout = new HorizontalLayout ();
@@ -69,7 +64,7 @@ public class OrderUploadWindow extends VerticalLayout implements
         // This method gets called immediately after upload is started
         upload.setVisible (false);
         progressLayout.setVisible (true);
-        pi.setValue (0f);
+        pi.setValue (Float.valueOf (0f));
         pi.setPollingInterval (500);
         status.setValue ("Uploading file \"" + event.getFilename () + "\"");
       }
@@ -87,6 +82,10 @@ public class OrderUploadWindow extends VerticalLayout implements
       public void uploadSucceeded (final SucceededEvent event) {
         // This method gets called when the upload finished successfully
         status.setValue ("Uploading file \"" + event.getFilename () + "\" succeeded");
+        if (ur != null)
+          ur.setSuccess (true);
+        else
+          logger.warn ("Order upload succeeded, but no Upload request present!");
       }
     });
 
@@ -94,6 +93,10 @@ public class OrderUploadWindow extends VerticalLayout implements
       @Override
       public void uploadFailed (final FailedEvent event) {
         status.setValue ("Uploading interrupted");
+        if (ur != null)
+          ur.setSuccess (false);
+        else
+          logger.warn ("Order upload failed, but no Upload request present!");
       }
     });
 
@@ -118,19 +121,5 @@ public class OrderUploadWindow extends VerticalLayout implements
   public OutputStream receiveUpload (final String filename, final String mimeType) {
     ur = UploadManager.getInstance ().createManagedResource (filename);
     return ur.createOutputStream ();
-  }
-
-  public void uploadSucceeded (final SucceededEvent event) {
-    if (ur != null)
-      ur.setSuccess (true);
-    else
-      logger.warn ("Order upload succeeded, but no Upload request present!");
-  }
-
-  public void uploadFailed (final FailedEvent event) {
-    if (ur != null)
-      ur.setSuccess (false);
-    else
-      logger.warn ("Order upload failed, but no Upload request present!");
   }
 }
