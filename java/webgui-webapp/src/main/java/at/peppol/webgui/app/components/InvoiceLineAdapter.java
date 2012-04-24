@@ -5,10 +5,7 @@
 package at.peppol.webgui.app.components;
 
 import java.math.BigDecimal;
-import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.InvoiceLineType;
-import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ItemIdentificationType;
-import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ItemType;
-import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.PriceType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.*;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.*;
 
 /**
@@ -20,6 +17,7 @@ import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.*;
  * @author Jerouris
  */
 public class InvoiceLineAdapter extends InvoiceLineType {
+    private final TaxSubtotalType VATTax;
 
 
     public InvoiceLineAdapter() {
@@ -32,8 +30,26 @@ public class InvoiceLineAdapter extends InvoiceLineType {
         getItem().getSellersItemIdentification().setID(new IDType());
         setInvoicedQuantity(new InvoicedQuantityType());
         
+        // Price defaults
         setPrice(new PriceType());
         getPrice().setPriceAmount(new PriceAmountType());
+        
+        // Tax totals and subtotals
+        getTaxTotal().add(new TaxTotalType());
+        
+        //0. is the VAT Tax
+        VATTax = new TaxSubtotalType();
+        getTaxTotal().get(0).getTaxSubtotal().add(VATTax);
+        VATTax.setTaxableAmount(new TaxableAmountType());
+        VATTax.setTaxAmount(new TaxAmountType());
+        VATTax.setTaxCategory(new TaxCategoryType());
+        VATTax.getTaxCategory().setTaxScheme(new TaxSchemeType());
+        VATTax.getTaxCategory().getTaxScheme().setID(new IDType());
+        VATTax.getTaxCategory().getTaxScheme().getID().setSchemeID("UN/ECE 5153");
+        VATTax.getTaxCategory().getTaxScheme().getID().setSchemeAgencyID("6");
+        VATTax.getTaxCategory().getTaxScheme().getID().setValue("VAT");
+        VATTax.getTaxCategory().setPercent(new PercentType());
+        
     }
     
     public String getItemDescription() {
@@ -70,5 +86,7 @@ public class InvoiceLineAdapter extends InvoiceLineType {
     {
         return getPrice().getPriceAmount().getValue().longValue();
     }
+    
+    
     
 }

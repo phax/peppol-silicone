@@ -19,10 +19,12 @@ public class PartyAgencyIDSelect extends ComboBox {
     private void initData() {
       
         for (EPredefinedIdentifierIssuingAgency a : EPredefinedIdentifierIssuingAgency.values()) {
-            addItem(a.getSchemeID());
-            setItemCaption(a.getSchemeID(),a.getSchemeAgency());
-        }
-        
+            if (!a.isDeprecated()) 
+            {
+                addItem(a.getSchemeID());
+                setItemCaption(a.getSchemeID(),a.getSchemeAgency());
+            }
+       }
     }
     
     public String getSelectedAgencyName() 
