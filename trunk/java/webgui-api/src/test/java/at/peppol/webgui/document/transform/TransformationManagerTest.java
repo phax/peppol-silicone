@@ -37,13 +37,20 @@
  */
 package at.peppol.webgui.document.transform;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
+import at.peppol.test.ETestFileType;
+import at.peppol.test.TestFiles;
 import at.peppol.webgui.document.EDocumentMetaType;
 
+import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.resource.ClassPathResource;
+import com.phloc.commons.xml.serialize.XMLReader;
 
 /**
  * Test class for class {@link TransformationManager}.
@@ -56,5 +63,35 @@ public final class TransformationManagerTest {
     assertNull (TransformationManager.transformInvoiceToUBL (new TransformationSource (EDocumentMetaType.BINARY,
                                                                                        new ClassPathResource ("dummy.xml"),
                                                                                        null)));
+  }
+
+  @Test
+  public void testUBLCatalogues () throws SAXException {
+    for (final IReadableResource aTestFile : TestFiles.getSuccessFiles (ETestFileType.CATALOGUE)) {
+      final Document aDoc = XMLReader.readXMLDOM (aTestFile);
+      assertNotNull (TransformationManager.transformCatalogueToUBL (new TransformationSource (EDocumentMetaType.XML,
+                                                                                              aTestFile,
+                                                                                              aDoc)));
+    }
+  }
+
+  @Test
+  public void testUBLInvoices () throws SAXException {
+    for (final IReadableResource aTestFile : TestFiles.getSuccessFiles (ETestFileType.INVOICE)) {
+      final Document aDoc = XMLReader.readXMLDOM (aTestFile);
+      assertNotNull (TransformationManager.transformInvoiceToUBL (new TransformationSource (EDocumentMetaType.XML,
+                                                                                            aTestFile,
+                                                                                            aDoc)));
+    }
+  }
+
+  @Test
+  public void testUBLOrders () throws SAXException {
+    for (final IReadableResource aTestFile : TestFiles.getSuccessFiles (ETestFileType.ORDER)) {
+      final Document aDoc = XMLReader.readXMLDOM (aTestFile);
+      assertNotNull (TransformationManager.transformOrderToUBL (new TransformationSource (EDocumentMetaType.XML,
+                                                                                          aTestFile,
+                                                                                          aDoc)));
+    }
   }
 }
