@@ -79,7 +79,7 @@
   <build>
     <resources>
       <resource>
-        <directory>src/main/webapp</directory>
+        <directory>${basedir}/src/main/webapp</directory>
         <targetPath>${project.build.directory}/webapp-classes</targetPath>
       </resource>
     </resources>
