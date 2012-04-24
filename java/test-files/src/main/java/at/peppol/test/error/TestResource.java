@@ -18,16 +18,25 @@ public final class TestResource {
       m_aExpectedErrors.addAll (aExpectedErrors);
   }
 
+  /**
+   * @return The XML resource path
+   */
   @Nonnull
   public IReadableResource getResource () {
     return m_aRes;
   }
 
+  /**
+   * @return The filename of the underlying resources
+   */
   @Nonnull
   public String getFilename () {
     return m_aRes.getPath ();
   }
 
+  /**
+   * @return The expected validation errors
+   */
   @Nonnull
   public Set <AbstractErrorDefinition> getAllExpectedErrors () {
     return ContainerHelper.makeUnmodifiable (m_aExpectedErrors);
