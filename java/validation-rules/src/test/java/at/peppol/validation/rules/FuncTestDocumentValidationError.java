@@ -56,11 +56,12 @@ import org.oclc.purl.dsdl.svrl.SchematronOutputType;
 import org.xml.sax.SAXException;
 
 import at.peppol.commons.cenbii.profiles.ETransaction;
-import at.peppol.test.CTestFiles;
-import at.peppol.validation.rules.mock.AbstractErrorDefinition;
-import at.peppol.validation.rules.mock.FatalError;
-import at.peppol.validation.rules.mock.TestDocument;
-import at.peppol.validation.rules.mock.Warning;
+import at.peppol.test.ETestFileType;
+import at.peppol.test.TestFiles;
+import at.peppol.test.error.AbstractErrorDefinition;
+import at.peppol.test.error.FatalError;
+import at.peppol.test.error.TestResource;
+import at.peppol.test.error.Warning;
 import at.peppol.validation.schematron.SchematronHelper;
 import at.peppol.validation.schematron.svrl.SVRLFailedAssert;
 import at.peppol.validation.schematron.svrl.SVRLUtils;
@@ -69,10 +70,8 @@ import at.peppol.validation.schematron.xslt.SchematronResourceXSLT;
 
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
-import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.error.EErrorLevel;
 import com.phloc.commons.io.IReadableResource;
-import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.xml.serialize.XMLReader;
 import com.phloc.commons.xml.serialize.XMLWriter;
@@ -85,261 +84,6 @@ import com.phloc.ubl.UBL20DocumentMarshaller;
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class FuncTestDocumentValidationError {
-  public static final List <TestDocument> TEST_ORDERS_ERROR;
-  static {
-    TEST_ORDERS_ERROR = ContainerHelper.newUnmodifiableList (new TestDocument ("TC01.1.TS1.xml",
-                                                                               new FatalError ("BIIRULE-T01-R001")),
-                                                             new TestDocument ("TC01.2.TS1.xml",
-                                                                               new Warning ("BIICORE-T01-R000"),
-                                                                               new FatalError ("BIIRULE-T01-R002")),
-                                                             new TestDocument ("TC01.3.TS1.xml",
-                                                                               new FatalError ("BIIRULE-T01-R003")),
-                                                             /**
-                                                              * TC01.4.TS1.xml,
-                                                              * TC01.5.TS1.xml
-                                                              * not XSD
-                                                              * compliant
-                                                              */
-                                                             new TestDocument ("TC01.6.TS1.xml",
-                                                                               new FatalError ("BIIRULE-T01-R027")),
-                                                             new TestDocument ("TC01.7.TS1.xml",
-                                                                               new FatalError ("BIIRULE-T01-R027")),
-                                                             new TestDocument ("TC01.8.TS1.xml",
-                                                                               new FatalError ("BIIRULE-T01-R030")),
-                                                             new TestDocument ("TC01.9.TS1.xml",
-                                                                               new Warning ("EUGEN-T01-R004")),
-                                                             /**
-                                                              * TC01.10.TS1.xml
-                                                              * not XSD
-                                                              * compliant
-                                                              */
-                                                             new TestDocument ("TC01.11.TS1.xml",
-                                                                               new FatalError ("BIIRULE-T01-R008")),
-                                                             new TestDocument ("TC01.12.TS1.xml",
-                                                                               new Warning ("BIICORE-T01-R436"),
-                                                                               new FatalError ("BIIRULE-T01-R009")),
-                                                             new TestDocument ("TC01.13.TS1.xml",
-                                                                               new Warning ("BIICORE-T01-R439"),
-                                                                               new FatalError ("BIIRULE-T01-R010")),
-                                                             new TestDocument ("TC01.14.TS1.xml",
-                                                                               new Warning ("BIIRULE-T01-R015")),
-                                                             new TestDocument ("TC01.15.TS1.XML",
-                                                                               new Warning ("BIICORE-T01-R080"),
-                                                                               new Warning ("EUGEN-T01-R002"),
-                                                                               new FatalError ("BIIRULE-T01-R028")),
-                                                             new TestDocument ("TC01.16.TS1.xml",
-                                                                               new Warning ("EUGEN-T01-R001")),
-                                                             new TestDocument ("TC01.17.TS1.xml",
-                                                                               new Warning ("EUGEN-T01-R001")),
-                                                             new TestDocument ("TC01.18.TS1.xml",
-                                                                               new Warning ("EUGEN-T01-R001")),
-                                                             new TestDocument ("TC01.19.TS1.xml",
-                                                                               new Warning ("EUGEN-T01-R001")),
-                                                             new TestDocument ("TC01.20.TS1.xml",
-                                                                               new Warning ("EUGEN-T01-R001")),
-                                                             new TestDocument ("TC01.21.TS1.xml",
-                                                                               new Warning ("EUGEN-T01-R002")),
-                                                             new TestDocument ("TC01.22.TS1.xml",
-                                                                               new Warning ("EUGEN-T01-R002")),
-                                                             new TestDocument ("TC01.23.TS1.xml",
-                                                                               new Warning ("EUGEN-T01-R002")),
-                                                             new TestDocument ("TC01.24.TS1.xml",
-                                                                               new Warning ("EUGEN-T01-R002")),
-                                                             new TestDocument ("TC01.25.TS1.xml",
-                                                                               new Warning ("BIIRULE-T01-R018")),
-                                                             new TestDocument ("TC01.26.TS1.xml",
-                                                                               new Warning ("BIIRULE-T01-R019")),
-                                                             new TestDocument ("TC01.27.TS1.xml",
-                                                                               new Warning ("BIIRULE-T01-R020")),
-                                                             new TestDocument ("TC01.28.TS1.xml",
-                                                                               new Warning ("BIIRULE-T01-R021")),
-                                                             new TestDocument ("TC01.29.TS1.xml",
-                                                                               new Warning ("BIIRULE-T01-R021")),
-                                                             new TestDocument ("TC01.30.TS1.xml",
-                                                                               new Warning ("BIIRULE-T01-R021")),
-                                                             new TestDocument ("TC01.31.TS1.xml",
-                                                                               new Warning ("BIIRULE-T01-R021")),
-                                                             new TestDocument ("TC01.32.TS1.xml",
-                                                                               new Warning ("BIIRULE-T01-R021")),
-                                                             new TestDocument ("TC01.33.TS1.xml",
-                                                                               new Warning ("BIIRULE-T01-R029")),
-                                                             new TestDocument ("TC01.34.TS1.xml",
-                                                                               new Warning ("BIIRULE-T01-R018"),
-                                                                               new Warning ("BIIRULE-T01-R021"),
-                                                                               new FatalError ("EUGEN-T01-R008")),
-                                                             new TestDocument ("TC01.35.TS1.xml",
-                                                                               new Warning ("BIIRULE-T01-R018"),
-                                                                               new Warning ("BIIRULE-T01-R021"),
-                                                                               new FatalError ("EUGEN-T01-R009")),
-                                                             new TestDocument ("TC01.36.TS1.xml",
-                                                                               new Warning ("BIIRULE-T01-R019"),
-                                                                               new FatalError ("EUGEN-T01-R006")),
-                                                             new TestDocument ("TC01.37.TS1.xml",
-                                                                               new Warning ("BIIRULE-T01-R018"),
-                                                                               new FatalError ("BIIRULE-T01-R026"),
-                                                                               new FatalError ("EUGEN-T01-R009")),
-                                                             new TestDocument ("TC01.38.TS1.xml",
-                                                                               new FatalError ("BIIRULE-T01-R013")),
-                                                             /*
-                                                              * TC01.39.TS1.xml,
-                                                              * TC01.40.TS1.xml
-                                                              * not XSD
-                                                              * compliant!
-                                                              */
-                                                             new TestDocument ("TC01.41.TS1.xml",
-                                                                               new Warning ("EUGEN-T01-R005"),
-                                                                               new FatalError ("EUGEN-T01-R010")),
-                                                             new TestDocument ("TC01.42.TS1.xml",
-                                                                               new FatalError ("EUGEN-T01-R010")),
-                                                             new TestDocument ("TC01.43.TS1.xml",
-                                                                               new Warning ("BIIRULE-T01-R024")),
-                                                             /*
-                                                              * TC01.44.TS1.xml
-                                                              * not XSD
-                                                              * compliant!
-                                                              */
-                                                             new TestDocument ("TC01.45.TS1.xml",
-                                                                               new FatalError ("BIIRULE-T01-R011")),
-                                                             new TestDocument ("TC01.46.TS1.xml",
-                                                                               new Warning ("EUGEN-T01-R003")),
-                                                             new TestDocument ("TC01.47.TS1.xml",
-                                                                               new Warning ("EUGEN-T01-R003")),
-                                                             new TestDocument ("TC01.48.TS1.xml",
-                                                                               new Warning ("EUGEN-T01-R003")),
-                                                             new TestDocument ("TC01.49.TS1.xml",
-                                                                               new Warning ("BIIRULE-T01-R020"),
-                                                                               new Warning ("BIIRULE-T01-R021")));
-  }
-
-  public static final List <TestDocument> TEST_INVOICES_ERROR;
-  static {
-    TEST_INVOICES_ERROR = ContainerHelper.newUnmodifiableList (new TestDocument ("ERR-2 BII04 minimal invoice example 02.xml",
-                                                                                 new Warning ("BIIRULE-T10-R002"),
-                                                                                 new Warning ("EUGEN-T10-R001"),
-                                                                                 new Warning ("EUGEN-T10-R003"),
-                                                                                 new Warning ("BIICORE-T10-R392")),
-                                                               new TestDocument ("ERR-3 BII04 minimal VAT invoice example 02.xml",
-                                                                                 new Warning ("BIIRULE-T10-R003"),
-                                                                                 new FatalError ("EUGEN-T10-R008"),
-                                                                                 new Warning ("EUGEN-T10-R009"),
-                                                                                 new Warning ("EUGEN-T10-R001"),
-                                                                                 new Warning ("EUGEN-T10-R003")),
-                                                               new TestDocument ("ERR-4 BII04 minimal invoice example 02.xml",
-                                                                                 new Warning ("BIIRULE-T10-R004"),
-                                                                                 new Warning ("EUGEN-T10-R002"),
-                                                                                 new Warning ("EUGEN-T10-R001"),
-                                                                                 new Warning ("EUGEN-T10-R003")),
-                                                               new TestDocument ("ERR-5 BII04 minimal VAT invoice example 02.xml",
-                                                                                 new Warning ("BIIRULE-T10-R005"),
-                                                                                 new FatalError ("EUGEN-T10-R008"),
-                                                                                 new Warning ("EUGEN-T10-R001"),
-                                                                                 new Warning ("EUGEN-T10-R003"),
-                                                                                 new Warning ("EUGEN-T10-R009")),
-                                                               new TestDocument ("ERR-9 BII04 minimal VAT invoice example 02.xml",
-                                                                                 new FatalError ("BIIRULE-T10-R009"),
-                                                                                 new FatalError ("EUGEN-T10-R008"),
-                                                                                 new Warning ("EUGEN-T10-R001"),
-                                                                                 new Warning ("EUGEN-T10-R003"),
-                                                                                 new Warning ("EUGEN-T10-R009")),
-                                                               new TestDocument ("ERR-10 BII04 minimal VAT invoice example 02.xml",
-                                                                                 new FatalError ("BIIRULE-T10-R010"),
-                                                                                 new FatalError ("EUGEN-T10-R008"),
-                                                                                 new Warning ("EUGEN-T10-R009"),
-                                                                                 new Warning ("EUGEN-T10-R001"),
-                                                                                 new Warning ("EUGEN-T10-R003")),
-                                                               new TestDocument ("ERR-11 BII04 minimal invoice example 02.xml",
-                                                                                 new FatalError ("BIIRULE-T10-R011"),
-                                                                                 new FatalError ("BIIRULE-T10-R012"),
-                                                                                 new Warning ("EUGEN-T10-R001"),
-                                                                                 new Warning ("EUGEN-T10-R003")),
-                                                               new TestDocument ("ERR-13 BII04 minimal invoice example 02.xml",
-                                                                                 new FatalError ("BIIRULE-T10-R013"),
-                                                                                 new FatalError ("BIIRULE-T10-R017"),
-                                                                                 new Warning ("EUGEN-T10-R001"),
-                                                                                 new Warning ("EUGEN-T10-R003")),
-                                                               new TestDocument ("ERR-18 BII04 minimal invoice example 02.xml",
-                                                                                 new FatalError ("BIIRULE-T10-R018"),
-                                                                                 new Warning ("EUGEN-T10-R001"),
-                                                                                 new Warning ("EUGEN-T10-R003")),
-                                                               new TestDocument ("ERR-19 BII04 minimal invoice example 02.xml",
-                                                                                 new Warning ("BIIRULE-T10-R019"),
-                                                                                 new Warning ("EUGEN-T10-R001"),
-                                                                                 new Warning ("EUGEN-T10-R003")),
-                                                               new TestDocument ("ERR-20 BII04 reverse charge invoice example 01.xml",
-                                                                                 new FatalError ("EUGEN-T10-R015"),
-                                                                                 new FatalError ("EUGEN-T10-R016"),
-                                                                                 new FatalError ("EUGEN-T10-R017"),
-                                                                                 new Warning ("BIIRULE-T10-R003"),
-                                                                                 new Warning ("EUGEN-T10-R009")),
-                                                               new TestDocument ("TC10.1.TS1.xml",
-                                                                                 new FatalError ("BIIRULE-T10-R052"),
-                                                                                 new Warning ("EUGEN-T10-R001"),
-                                                                                 new Warning ("EUGEN-T10-R003")),
-                                                               new TestDocument ("TC10.2.TS1.xml",
-                                                                                 new FatalError ("EUGEN-T10-R008"),
-                                                                                 new Warning ("EUGEN-T10-R001"),
-                                                                                 new Warning ("EUGEN-T10-R003")),
-                                                               new TestDocument ("TC10.5.TS1.xml",
-                                                                                 new FatalError ("BIIRULE-T10-R011"),
-                                                                                 new Warning ("EUGEN-T10-R001"),
-                                                                                 new Warning ("EUGEN-T10-R003")),
-                                                               new TestDocument ("TC10.6.TS1.xml",
-                                                                                 new FatalError ("BIIRULE-T10-R013"),
-                                                                                 new FatalError ("BIIRULE-T10-R017"),
-                                                                                 new Warning ("EUGEN-T10-R001"),
-                                                                                 new Warning ("EUGEN-T10-R003")),
-                                                               new TestDocument ("TC10.7.TS1.xml",
-                                                                                 new FatalError ("BIIRULE-T10-R009"),
-                                                                                 new FatalError ("EUGEN-T10-R008"),
-                                                                                 new Warning ("EUGEN-T10-R001"),
-                                                                                 new Warning ("EUGEN-T10-R003")),
-                                                               new TestDocument ("TC10.8.TS1.xml",
-                                                                                 new FatalError ("BIIRULE-T10-R010"),
-                                                                                 new FatalError ("EUGEN-T10-R008"),
-                                                                                 new Warning ("EUGEN-T10-R001"),
-                                                                                 new Warning ("EUGEN-T10-R003")),
-                                                               new TestDocument ("TC10.9.TS1.xml",
-                                                                                 new Warning ("BIIRULE-T10-R004"),
-                                                                                 new Warning ("EUGEN-T10-R001"),
-                                                                                 new Warning ("EUGEN-T10-R002"),
-                                                                                 new Warning ("EUGEN-T10-R003")),
-                                                               new TestDocument ("TC10.10.TS1.xml",
-                                                                                 new Warning ("BIICORE-T10-R392"),
-                                                                                 new Warning ("BIIRULE-T10-R002"),
-                                                                                 new Warning ("EUGEN-T10-R001"),
-                                                                                 new Warning ("EUGEN-T10-R003")),
-                                                               new TestDocument ("TC10.11.TS1.xml",
-                                                                                 new FatalError ("BIIRULE-T10-R018"),
-                                                                                 new Warning ("EUGEN-T10-R001"),
-                                                                                 new Warning ("EUGEN-T10-R003")),
-                                                               new TestDocument ("TC10.12.TS1.xml",
-                                                                                 new Warning ("BIIRULE-T10-R019"),
-                                                                                 new Warning ("EUGEN-T10-R001"),
-                                                                                 new Warning ("EUGEN-T10-R003")),
-                                                               new TestDocument ("TC10.13.TS1.xml",
-                                                                                 new FatalError ("EUGEN-T10-R008"),
-                                                                                 new Warning ("BIIRULE-T10-R005"),
-                                                                                 new Warning ("EUGEN-T10-R001"),
-                                                                                 new Warning ("EUGEN-T10-R003")),
-                                                               new TestDocument ("TC10.14.TS1.xml",
-                                                                                 new FatalError ("EUGEN-T10-R008"),
-                                                                                 new Warning ("BIIRULE-T10-R003"),
-                                                                                 new Warning ("EUGEN-T10-R001"),
-                                                                                 new Warning ("EUGEN-T10-R003")),
-                                                               new TestDocument ("TC10.16.TS1.xml"),
-                                                               new TestDocument ("TC10.17.TS1.xml",
-                                                                                 new FatalError ("EUGEN-T10-R015"),
-                                                                                 new FatalError ("EUGEN-T10-R016"),
-                                                                                 new FatalError ("EUGEN-T10-R017"),
-                                                                                 new Warning ("BIIRULE-T10-R003"),
-                                                                                 new Warning ("EUGEN-T10-R009")),
-                                                               new TestDocument ("TC10.18.TS1.xml",
-                                                                                 new FatalError ("PCL-010-008"),
-                                                                                 new Warning ("BIICORE-T10-R114"),
-                                                                                 new Warning ("BIICORE-T10-R185"),
-                                                                                 new Warning ("EUGEN-T10-R023")));
-  }
-
   @Nonnull
   @ReturnsMutableCopy
   private static Set <AbstractErrorDefinition> _getAllFailedAssertionErrorCode (@Nonnull final SchematronOutputType aSVRL) {
@@ -362,14 +106,12 @@ public final class FuncTestDocumentValidationError {
   @Test
   public void testReadOrdersError () throws SAXException {
     // For all available orders
-    for (final TestDocument aTestDoc : TEST_ORDERS_ERROR) {
+    for (final TestResource aTestDoc : TestFiles.getErrorFiles (ETestFileType.ORDER)) {
       // Get the UBL XML file
-      final IReadableResource aOrderRes = new ClassPathResource (CTestFiles.PATH_ORDER_TESTFILES +
-                                                                 CTestFiles.PATH_ERROR +
-                                                                 aTestDoc.getFilename ());
+      final IReadableResource aTestFile = aTestDoc.getResource ();
 
       // Ensure the UBL file validates against the scheme
-      final OrderType aUBLOrder = UBL20DocumentMarshaller.readOrder (XMLReader.readXMLDOM (aOrderRes));
+      final OrderType aUBLOrder = UBL20DocumentMarshaller.readOrder (XMLReader.readXMLDOM (aTestFile));
       assertNotNull (aUBLOrder);
 
       final Set <AbstractErrorDefinition> aErrCodes = new HashSet <AbstractErrorDefinition> ();
@@ -383,7 +125,7 @@ public final class FuncTestDocumentValidationError {
 
         // And now run the main "Schematron" validation
         final SchematronOutputType aSVRL = SchematronHelper.applySchematron (new SchematronResourceXSLT (aXSLT),
-                                                                             aOrderRes);
+                                                                             aTestFile);
         assertNotNull (aSVRL);
 
         if (false) {
@@ -411,15 +153,13 @@ public final class FuncTestDocumentValidationError {
   @Test
   public void testReadInvoicesError () throws SAXException {
     final IValidationTransaction aVT = ValidationTransaction.createUBLTransaction (ETransaction.T10);
-    // For all available invoices
-    for (final TestDocument aErrDoc : TEST_INVOICES_ERROR) {
+    // For all available orders
+    for (final TestResource aTestDoc : TestFiles.getErrorFiles (ETestFileType.INVOICE)) {
       // Get the UBL XML file
-      final IReadableResource aInvoiceRes = new ClassPathResource (CTestFiles.PATH_INVOICE_TESTFILES +
-                                                                   CTestFiles.PATH_ERROR +
-                                                                   aErrDoc.getFilename ());
+      final IReadableResource aTestFile = aTestDoc.getResource ();
 
       // Ensure the UBL file validates against the scheme
-      final InvoiceType aUBLInvoice = UBL20DocumentMarshaller.readInvoice (XMLReader.readXMLDOM (aInvoiceRes));
+      final InvoiceType aUBLInvoice = UBL20DocumentMarshaller.readInvoice (XMLReader.readXMLDOM (aTestFile));
       assertNotNull (aUBLInvoice);
 
       final Set <AbstractErrorDefinition> aErrCodes = new HashSet <AbstractErrorDefinition> ();
@@ -433,7 +173,7 @@ public final class FuncTestDocumentValidationError {
 
         // And now run the main "Schematron" validation
         final SchematronOutputType aSVRL = SchematronHelper.applySchematron (new SchematronResourceXSLT (aXSLT),
-                                                                             aInvoiceRes);
+                                                                             aTestFile);
         assertNotNull (aSVRL);
 
         if (false) {
@@ -444,14 +184,14 @@ public final class FuncTestDocumentValidationError {
         aErrCodes.addAll (_getAllFailedAssertionErrorCode (aSVRL));
       }
       final Set <AbstractErrorDefinition> aCopy = new TreeSet <AbstractErrorDefinition> (aErrCodes);
-      for (final AbstractErrorDefinition aExpectedErrCode : aErrDoc.getAllExpectedErrors ())
-        assertTrue (aErrDoc.getFilename () +
+      for (final AbstractErrorDefinition aExpectedErrCode : aTestDoc.getAllExpectedErrors ())
+        assertTrue (aTestDoc.getFilename () +
                         " expected " +
                         aExpectedErrCode.toString () +
                         " but having " +
                         aCopy.toString (),
                     aCopy.remove (aExpectedErrCode));
-      assertTrue (aErrDoc.getFilename () + " also indicated: " + aCopy, aCopy.isEmpty ());
+      assertTrue (aTestDoc.getFilename () + " also indicated: " + aCopy, aCopy.isEmpty ());
     }
   }
 }

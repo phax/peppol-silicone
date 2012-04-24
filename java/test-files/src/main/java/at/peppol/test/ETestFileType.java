@@ -35,58 +35,36 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.visualization;
+package at.peppol.test;
 
-import static org.junit.Assert.assertNotNull;
+import javax.annotation.Nonnull;
 
-import org.junit.Test;
-import org.w3c.dom.Document;
-
-import at.peppol.commons.cenbii.profiles.ETransaction;
-import at.peppol.test.ETestFileType;
-import at.peppol.test.TestFiles;
-
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.io.IReadableResource;
+import com.phloc.commons.io.resource.ClassPathResource;
 
-/**
- * Test class for class {@link VisualizationManager}.
- * 
- * @author PEPPOL.AT, BRZ, Philip Helger
- */
-public final class VisualizationManagerTest {
-  @Test
-  public void testCreditNotes () {
-    // For all test credit notes
-    for (final IReadableResource aTestFile : TestFiles.getSuccessFiles (ETestFileType.CREDITNOTE)) {
-      // For all order visualizations
-      for (final EVisualizationArtefact eArtefact : EVisualizationArtefact.getAllArtefactsOfTransaction (ETransaction.T14)) {
-        final Document aDoc = VisualizationManager.visualizeToDOMDocument (eArtefact, aTestFile);
-        assertNotNull (aDoc);
-      }
-    }
+public enum ETestFileType {
+  CALLFORTENDERS ("test-callfortenders"),
+  CATALOGUE ("test-catalogues"),
+  CREDITNOTE ("test-creditnotes"),
+  INVOICE ("test-invoices"),
+  ORDER ("test-orders"),
+  TENDER ("test-tenders"),
+  TENDERINGCATALOGUE ("test-tenderingcatalogues");
+
+  private final String m_sDirName;
+
+  private ETestFileType (@Nonnull @Nonempty final String sDirName) {
+    m_sDirName = "/" + sDirName;
   }
 
-  @Test
-  public void testOrders () {
-    // For all test orders
-    for (final IReadableResource aTestFile : TestFiles.getSuccessFiles (ETestFileType.ORDER)) {
-      // For all order visualizations
-      for (final EVisualizationArtefact eArtefact : EVisualizationArtefact.getAllArtefactsOfTransaction (ETransaction.T01)) {
-        final Document aDoc = VisualizationManager.visualizeToDOMDocument (eArtefact, aTestFile);
-        assertNotNull (aDoc);
-      }
-    }
+  @Nonnull
+  public IReadableResource getSuccessResource (@Nonnull @Nonempty final String sFilename) {
+    return new ClassPathResource (m_sDirName + "/success/" + sFilename);
   }
 
-  @Test
-  public void testInvoices () {
-    // For all test invoices
-    for (final IReadableResource aTestFile : TestFiles.getSuccessFiles (ETestFileType.INVOICE)) {
-      // For all invoice visualizations
-      for (final EVisualizationArtefact eArtefact : EVisualizationArtefact.getAllArtefactsOfTransaction (ETransaction.T10)) {
-        final Document aDoc = VisualizationManager.visualizeToDOMDocument (eArtefact, aTestFile);
-        assertNotNull (aDoc);
-      }
-    }
+  @Nonnull
+  public IReadableResource getErrorResource (@Nonnull @Nonempty final String sFilename) {
+    return new ClassPathResource (m_sDirName + "/error/" + sFilename);
   }
 }

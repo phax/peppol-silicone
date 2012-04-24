@@ -10,7 +10,8 @@ import org.oclc.purl.dsdl.svrl.SchematronOutputType;
 import org.xml.sax.SAXException;
 
 import at.peppol.commons.cenbii.profiles.ETransaction;
-import at.peppol.test.CTestFiles;
+import at.peppol.test.ETestFileType;
+import at.peppol.test.TestFiles;
 import at.peppol.validation.schematron.SchematronHelper;
 import at.peppol.validation.schematron.svrl.SVRLFailedAssert;
 import at.peppol.validation.schematron.svrl.SVRLUtils;
@@ -20,7 +21,6 @@ import at.peppol.validation.schematron.xslt.SchematronResourceXSLT;
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.error.EErrorLevel;
 import com.phloc.commons.io.IReadableResource;
-import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.commons.xml.serialize.XMLReader;
 import com.phloc.commons.xml.serialize.XMLWriter;
 import com.phloc.ubl.UBL21DocumentMarshaller;
@@ -31,15 +31,10 @@ public class FuncTestTenderValidation {
 
   @Test
   public void testReadTender () throws SAXException {
-    // For all available catalogues
-    for (final String sTenderFile : CTestFiles.TEST_TENDER_SUCCESS) {
-      // Get the UBL XML file
-      final IReadableResource aTenderRes = new ClassPathResource (CTestFiles.PATH_TENDER_TESTFILES +
-                                                                  CTestFiles.PATH_SUCCESS +
-                                                                  sTenderFile);
-
+    // For all available tenders
+    for (final IReadableResource aTestFile : TestFiles.getSuccessFiles (ETestFileType.TENDER)) {
       // Ensure the UBL file validates against the scheme
-      final TenderType aUBLTender = UBL21DocumentMarshaller.readTender (XMLReader.readXMLDOM (aTenderRes));
+      final TenderType aUBLTender = UBL21DocumentMarshaller.readTender (XMLReader.readXMLDOM (aTestFile));
       assertNotNull (aUBLTender);
 
       // Test the country-independent catalogue layers
@@ -51,7 +46,7 @@ public class FuncTestTenderValidation {
 
         // And now run the main "Schematron" validation
         final SchematronOutputType aSVRL = SchematronHelper.applySchematron (new SchematronResourceXSLT (aXSLT),
-                                                                             aTenderRes);
+                                                                             aTestFile);
         assertNotNull (aSVRL);
 
         if (DEBUG) {
@@ -61,22 +56,17 @@ public class FuncTestTenderValidation {
 
         // Check that all failed assertions are only warnings
         for (final SVRLFailedAssert aFailedAssert : SVRLUtils.getAllFailedAssertions (aSVRL)) {
-          assertEquals (aTenderRes.toString (), EErrorLevel.WARN, aFailedAssert.getFlag ());
+          assertEquals (aTestFile.toString (), EErrorLevel.WARN, aFailedAssert.getFlag ());
         }
       }
     }
   }
 
-  public void testReadVallForTender () throws SAXException {
-    // For all available catalogues
-    for (final String sCallForTendersFile : CTestFiles.TEST_CALLFORTENDERS_SUCCESS) {
-      // Get the UBL XML file
-      final IReadableResource aCallForTendersRes = new ClassPathResource (CTestFiles.PATH_CALLFORTENDERS_TESTFILES +
-                                                                          CTestFiles.PATH_SUCCESS +
-                                                                          sCallForTendersFile);
-
+  public void testReadCallForTenders () throws SAXException {
+    // For all available call for tenders
+    for (final IReadableResource aTestFile : TestFiles.getSuccessFiles (ETestFileType.CALLFORTENDERS)) {
       // Ensure the UBL file validates against the scheme
-      final CallForTendersType aUBLCallForTenders = UBL21DocumentMarshaller.readCallForTenders (XMLReader.readXMLDOM (aCallForTendersRes));
+      final CallForTendersType aUBLCallForTenders = UBL21DocumentMarshaller.readCallForTenders (XMLReader.readXMLDOM (aTestFile));
       assertNotNull (aUBLCallForTenders);
 
       // Test the country-independent catalogue layers
@@ -88,7 +78,7 @@ public class FuncTestTenderValidation {
 
         // And now run the main "Schematron" validation
         final SchematronOutputType aSVRL = SchematronHelper.applySchematron (new SchematronResourceXSLT (aXSLT),
-                                                                             aCallForTendersRes);
+                                                                             aTestFile);
         assertNotNull (aSVRL);
 
         if (DEBUG) {
@@ -98,7 +88,7 @@ public class FuncTestTenderValidation {
 
         // Check that all failed assertions are only warnings
         for (final SVRLFailedAssert aFailedAssert : SVRLUtils.getAllFailedAssertions (aSVRL)) {
-          assertEquals (aCallForTendersRes.toString (), EErrorLevel.WARN, aFailedAssert.getFlag ());
+          assertEquals (aTestFile.toString (), EErrorLevel.WARN, aFailedAssert.getFlag ());
         }
       }
     }

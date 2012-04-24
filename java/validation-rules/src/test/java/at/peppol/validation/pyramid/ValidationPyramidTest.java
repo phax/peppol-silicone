@@ -41,17 +41,19 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Locale;
+
 import org.junit.Test;
 
 import at.peppol.commons.cenbii.profiles.ETransaction;
-import at.peppol.test.CTestFiles;
+import at.peppol.test.ETestFileType;
+import at.peppol.test.TestFiles;
 import at.peppol.validation.rules.EValidationDocumentType;
 import at.peppol.validation.rules.EValidationLevel;
 import at.peppol.validation.rules.ValidationTransaction;
 
 import com.phloc.commons.error.IResourceError;
 import com.phloc.commons.io.IReadableResource;
-import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.commons.locale.country.CountryCache;
 
 /**
@@ -64,12 +66,8 @@ public final class ValidationPyramidTest {
   public void testInvoice () {
     final ValidationPyramid vp = new ValidationPyramid (EValidationDocumentType.INVOICE,
                                                         ValidationTransaction.createUBLTransaction (ETransaction.T10));
-    for (final String sInvoiceFile : CTestFiles.TEST_INVOICES_SUCCESS) {
-      // Get the UBL XML file
-      final IReadableResource aInvoiceRes = new ClassPathResource (CTestFiles.PATH_INVOICE_TESTFILES +
-                                                                   CTestFiles.PATH_SUCCESS +
-                                                                   sInvoiceFile);
-      for (final ValidationPyramidResultLayer aResultLayer : vp.applyValidation (aInvoiceRes)
+    for (final IReadableResource aTestFile : TestFiles.getSuccessFiles (ETestFileType.INVOICE)) {
+      for (final ValidationPyramidResultLayer aResultLayer : vp.applyValidation (aTestFile)
                                                                .getAllValidationResultLayers ())
         for (final IResourceError aError : aResultLayer.getValidationErrors ())
           System.out.println (aResultLayer.getValidationLevel () + " " + aError.getAsString ());
@@ -78,14 +76,13 @@ public final class ValidationPyramidTest {
 
   @Test
   public void testInvoiceAT () {
+    final Locale aCountry = CountryCache.getCountry ("AT");
     final ValidationPyramid vp = new ValidationPyramid (EValidationDocumentType.INVOICE,
                                                         ValidationTransaction.createUBLTransaction (ETransaction.T10),
-                                                        CountryCache.getCountry ("AT"));
-    for (final String sInvoiceFile : CTestFiles.TEST_INVOICES_AT_SUCCESS) {
+                                                        aCountry);
+    for (final IReadableResource aTestFile : TestFiles.getSuccessFiles (ETestFileType.INVOICE, aCountry)) {
       // Do validation
-      final ValidationPyramidResult aResult = vp.applyValidation (new ClassPathResource (CTestFiles.PATH_INVOICE_TESTFILES +
-                                                                                         CTestFiles.PATH_SUCCESS +
-                                                                                         sInvoiceFile));
+      final ValidationPyramidResult aResult = vp.applyValidation (aTestFile);
       assertNotNull (aResult);
 
       // Check that we have results for all levels except entity specific (even

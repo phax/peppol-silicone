@@ -39,6 +39,9 @@ package at.peppol.validation.rules;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+
+import java.util.Locale;
+
 import oasis.names.specification.ubl.schema.xsd.catalogue_2.CatalogueType;
 import oasis.names.specification.ubl.schema.xsd.invoice_2.InvoiceType;
 import oasis.names.specification.ubl.schema.xsd.order_2.OrderType;
@@ -48,7 +51,8 @@ import org.oclc.purl.dsdl.svrl.SchematronOutputType;
 import org.xml.sax.SAXException;
 
 import at.peppol.commons.cenbii.profiles.ETransaction;
-import at.peppol.test.CTestFiles;
+import at.peppol.test.ETestFileType;
+import at.peppol.test.TestFiles;
 import at.peppol.validation.schematron.SchematronHelper;
 import at.peppol.validation.schematron.svrl.SVRLFailedAssert;
 import at.peppol.validation.schematron.svrl.SVRLUtils;
@@ -58,7 +62,6 @@ import at.peppol.validation.schematron.xslt.SchematronResourceXSLT;
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.error.EErrorLevel;
 import com.phloc.commons.io.IReadableResource;
-import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.commons.locale.country.CountryCache;
 import com.phloc.commons.xml.serialize.XMLReader;
 import com.phloc.commons.xml.serialize.XMLWriter;
@@ -74,14 +77,9 @@ public final class FuncTestDocumentValidationSuccess {
   @Test
   public void testReadCataloguesSuccess () throws SAXException {
     // For all available catalogues
-    for (final String sCatalogueFile : CTestFiles.TEST_CATALOGUES_SUCCESS) {
-      // Get the UBL XML file
-      final IReadableResource aCatalogueRes = new ClassPathResource (CTestFiles.PATH_CATALOGUE_TESTFILES +
-                                                                     CTestFiles.PATH_SUCCESS +
-                                                                     sCatalogueFile);
-
+    for (final IReadableResource aTestFile : TestFiles.getSuccessFiles (ETestFileType.CATALOGUE)) {
       // Ensure the UBL file validates against the scheme
-      final CatalogueType aUBLCatalogue = UBL20DocumentMarshaller.readCatalogue (XMLReader.readXMLDOM (aCatalogueRes));
+      final CatalogueType aUBLCatalogue = UBL20DocumentMarshaller.readCatalogue (XMLReader.readXMLDOM (aTestFile));
       assertNotNull (aUBLCatalogue);
 
       // Test the country-independent catalogue layers
@@ -93,7 +91,7 @@ public final class FuncTestDocumentValidationSuccess {
 
         // And now run the main "Schematron" validation
         final SchematronOutputType aSVRL = SchematronHelper.applySchematron (new SchematronResourceXSLT (aXSLT),
-                                                                             aCatalogueRes);
+                                                                             aTestFile);
         assertNotNull (aSVRL);
 
         if (false) {
@@ -103,7 +101,7 @@ public final class FuncTestDocumentValidationSuccess {
 
         // Check that all failed assertions are only warnings
         for (final SVRLFailedAssert aFailedAssert : SVRLUtils.getAllFailedAssertions (aSVRL)) {
-          assertEquals (aCatalogueRes.toString (), EErrorLevel.WARN, aFailedAssert.getFlag ());
+          assertEquals (aTestFile.toString (), EErrorLevel.WARN, aFailedAssert.getFlag ());
         }
       }
     }
@@ -112,14 +110,9 @@ public final class FuncTestDocumentValidationSuccess {
   @Test
   public void testReadOrdersSuccess () throws SAXException {
     // For all available orders
-    for (final String sOrderFile : CTestFiles.TEST_ORDERS_SUCCESS) {
-      // Get the UBL XML file
-      final IReadableResource aOrderRes = new ClassPathResource (CTestFiles.PATH_ORDER_TESTFILES +
-                                                                 CTestFiles.PATH_SUCCESS +
-                                                                 sOrderFile);
-
+    for (final IReadableResource aTestFile : TestFiles.getSuccessFiles (ETestFileType.ORDER)) {
       // Ensure the UBL file validates against the scheme
-      final OrderType aUBLOrder = UBL20DocumentMarshaller.readOrder (XMLReader.readXMLDOM (aOrderRes));
+      final OrderType aUBLOrder = UBL20DocumentMarshaller.readOrder (XMLReader.readXMLDOM (aTestFile));
       assertNotNull (aUBLOrder);
 
       // Test the country-independent orders layers
@@ -131,7 +124,7 @@ public final class FuncTestDocumentValidationSuccess {
 
         // And now run the main "Schematron" validation
         final SchematronOutputType aSVRL = SchematronHelper.applySchematron (new SchematronResourceXSLT (aXSLT),
-                                                                             aOrderRes);
+                                                                             aTestFile);
         assertNotNull (aSVRL);
 
         if (false) {
@@ -141,7 +134,7 @@ public final class FuncTestDocumentValidationSuccess {
 
         // Check that all failed assertions are only warnings
         for (final SVRLFailedAssert aFailedAssert : SVRLUtils.getAllFailedAssertions (aSVRL)) {
-          assertEquals (aOrderRes.toString () + "\n" + aFailedAssert.toString (),
+          assertEquals (aTestFile.toString () + "\n" + aFailedAssert.toString (),
                         EErrorLevel.WARN,
                         aFailedAssert.getFlag ());
         }
@@ -153,14 +146,9 @@ public final class FuncTestDocumentValidationSuccess {
   public void testReadInvoicesSuccess () throws SAXException {
     final IValidationTransaction aVT = ValidationTransaction.createUBLTransaction (ETransaction.T10);
     // For all available invoices
-    for (final String sInvoiceFile : CTestFiles.TEST_INVOICES_SUCCESS) {
-      // Get the UBL XML file
-      final IReadableResource aInvoiceRes = new ClassPathResource (CTestFiles.PATH_INVOICE_TESTFILES +
-                                                                   CTestFiles.PATH_SUCCESS +
-                                                                   sInvoiceFile);
-
+    for (final IReadableResource aTestFile : TestFiles.getSuccessFiles (ETestFileType.INVOICE)) {
       // Ensure the UBL file validates against the scheme
-      final InvoiceType aUBLInvoice = UBL20DocumentMarshaller.readInvoice (XMLReader.readXMLDOM (aInvoiceRes));
+      final InvoiceType aUBLInvoice = UBL20DocumentMarshaller.readInvoice (XMLReader.readXMLDOM (aTestFile));
       assertNotNull (aUBLInvoice);
 
       // Test the country-independent invoice layers
@@ -172,7 +160,7 @@ public final class FuncTestDocumentValidationSuccess {
 
         // And now run the main "Schematron" validation
         final SchematronOutputType aSVRL = SchematronHelper.applySchematron (new SchematronResourceXSLT (aXSLT),
-                                                                             aInvoiceRes);
+                                                                             aTestFile);
         assertNotNull (aSVRL);
 
         if (false) {
@@ -182,7 +170,7 @@ public final class FuncTestDocumentValidationSuccess {
 
         // Check that all failed assertions are only warnings
         for (final SVRLFailedAssert aFailedAssert : SVRLUtils.getAllFailedAssertions (aSVRL)) {
-          assertEquals (aInvoiceRes.toString () + "\n" + aFailedAssert.toString (),
+          assertEquals (aTestFile.toString () + "\n" + aFailedAssert.toString (),
                         EErrorLevel.WARN,
                         aFailedAssert.getFlag ());
         }
@@ -192,27 +180,23 @@ public final class FuncTestDocumentValidationSuccess {
 
   @Test
   public void testReadInvoicesATSuccess () throws SAXException {
+    final Locale aCountry = CountryCache.getCountry ("AT");
     // For all available invoices
-    for (final String sInvoiceFile : CTestFiles.TEST_INVOICES_AT_SUCCESS) {
-      // Get the UBL XML file
-      final IReadableResource aInvoiceRes = new ClassPathResource (CTestFiles.PATH_INVOICE_TESTFILES +
-                                                                   CTestFiles.PATH_SUCCESS +
-                                                                   sInvoiceFile);
-
+    for (final IReadableResource aTestFile : TestFiles.getSuccessFiles (ETestFileType.INVOICE, aCountry)) {
       // Ensure the UBL file validates against the scheme
-      final InvoiceType aUBLInvoice = UBL20DocumentMarshaller.readInvoice (XMLReader.readXMLDOM (aInvoiceRes));
+      final InvoiceType aUBLInvoice = UBL20DocumentMarshaller.readInvoice (XMLReader.readXMLDOM (aTestFile));
       assertNotNull (aUBLInvoice);
 
       // Test the country-independent invoice layers
       for (final IValidationArtefact eArtefact : EValidationArtefact.getAllMatchingArtefacts (null,
                                                                                               EValidationDocumentType.INVOICE,
-                                                                                              CountryCache.getCountry ("AT"))) {
+                                                                                              aCountry)) {
         // Get the XSLT for transaction T10
         final IReadableResource aXSLT = eArtefact.getValidationXSLTResource (ValidationTransaction.createUBLTransaction (ETransaction.T10));
 
         // And now run the main "Schematron" validation
         final SchematronOutputType aSVRL = SchematronHelper.applySchematron (new SchematronResourceXSLT (aXSLT),
-                                                                             aInvoiceRes);
+                                                                             aTestFile);
         assertNotNull (aSVRL);
 
         if (false) {
@@ -222,7 +206,7 @@ public final class FuncTestDocumentValidationSuccess {
 
         // Check that all failed assertions are only warnings
         for (final SVRLFailedAssert aFailedAssert : SVRLUtils.getAllFailedAssertions (aSVRL)) {
-          assertEquals (aInvoiceRes.toString () + " " + aFailedAssert.toString (),
+          assertEquals (aTestFile.toString () + " " + aFailedAssert.toString (),
                         EErrorLevel.WARN,
                         aFailedAssert.getFlag ());
         }
