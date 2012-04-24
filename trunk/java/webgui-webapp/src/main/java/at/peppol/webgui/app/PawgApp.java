@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.peppol.webgui.security.AccessManager;
+import at.peppol.webgui.security.CSecurity;
 import at.peppol.webgui.security.login.ELoginResult;
 import at.peppol.webgui.security.login.LoggedInUserManager;
 import at.peppol.webgui.security.user.IUser;
@@ -35,7 +36,7 @@ public class PawgApp extends Application implements HttpServletRequestListener {
         startWithMainWindow ();
       }
       else {
-        authenticate ("user@peppol.eu", "user");
+        authenticate (CSecurity.USER_USER_EMAIL, CSecurity.USER_USER_PASSWORD);
       }
     }
     catch (final Exception ex) {
@@ -84,7 +85,7 @@ public class PawgApp extends Application implements HttpServletRequestListener {
     final ELoginResult res = lum.loginUser (username, password);
 
     if (res.isSuccess ()) {
-      user = AccessManager.getInstance ().getUserOfID (lum.getCurrentUserID ());
+      user = lum.getCurrentUser ();
       System.out.println ("USER: " + user.getDisplayName ());
       setUser (user);
       showMainAppWindow ();
@@ -102,7 +103,7 @@ public class PawgApp extends Application implements HttpServletRequestListener {
   }
 
   private void startWithMainWindow () throws Exception {
-    user = AccessManager.getInstance ().getUserOfEmailAddress ("user@peppol.eu");
+    user = AccessManager.getInstance ().getUserOfEmailAddress (CSecurity.USER_USER_EMAIL);
     setUser (user);
     showMainAppWindow ();
   }
