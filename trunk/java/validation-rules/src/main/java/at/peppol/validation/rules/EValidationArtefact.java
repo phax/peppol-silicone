@@ -62,10 +62,9 @@ import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.commons.locale.country.CountryCache;
 import com.phloc.commons.string.StringHelper;
 
-
 /**
  * Contains all available invoice validation artefacts.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public enum EValidationArtefact implements IValidationArtefact {
@@ -116,7 +115,7 @@ public enum EValidationArtefact implements IValidationArtefact {
 
   /**
    * Constructor for invoice validation artefacts.
-   *
+   * 
    * @param eLevel
    *        The validation level of this artefact. May not be <code>null</code>.
    * @param aDocType
@@ -160,7 +159,6 @@ public enum EValidationArtefact implements IValidationArtefact {
     m_sFileNamePrefix = sDirName.toUpperCase ();
     m_aCountry = aCountry;
     m_aTransactions = ContainerHelper.newUnmodifiableSet (aTransactions);
-
   }
 
   @Nonnull
@@ -213,7 +211,7 @@ public enum EValidationArtefact implements IValidationArtefact {
       throw new NullPointerException ("transaction");
 
     if (!m_aTransactions.contains (aTransaction)) {
-      s_aLogger.warn ("No such transaction: " + aTransaction.getAsString ());
+      s_aLogger.warn ("Validation artifact does not contain transaction: " + aTransaction.getAsString ());
       return null;
     }
 
@@ -251,7 +249,7 @@ public enum EValidationArtefact implements IValidationArtefact {
       throw new NullPointerException ("transaction");
 
     if (!m_aTransactions.contains (aTransaction)) {
-      s_aLogger.warn ("No such transaction: " + aTransaction.getAsString ());
+      s_aLogger.warn ("Validation artifact does not contain transaction: " + aTransaction.getAsString ());
       return null;
     }
 
@@ -285,7 +283,7 @@ public enum EValidationArtefact implements IValidationArtefact {
 
   /**
    * Get all matching artefacts, in the correct order.
-   *
+   * 
    * @param eLevel
    *        The desired validation level. If it is <code>null</code> all levels
    *        are considered.
@@ -335,7 +333,7 @@ public enum EValidationArtefact implements IValidationArtefact {
   /**
    * Get a set of all countries that have specific rules, matching the
    * parameters.
-   *
+   * 
    * @param eLevel
    *        The desired validation level. If it is <code>null</code> all levels
    *        are considered.
@@ -365,7 +363,7 @@ public enum EValidationArtefact implements IValidationArtefact {
 
   /**
    * Get all artefacts that have rules for the specified transaction.
-   *
+   * 
    * @param eTransaction
    *        The transaction to search. May be <code>null</code>.
    * @return A non-<code>null</code> list with all artefacts supporting the

@@ -43,8 +43,10 @@ import static org.junit.Assert.assertNotNull;
 import java.util.Locale;
 
 import oasis.names.specification.ubl.schema.xsd.catalogue_2.CatalogueType;
+import oasis.names.specification.ubl.schema.xsd.creditnote_2.CreditNoteType;
 import oasis.names.specification.ubl.schema.xsd.invoice_2.InvoiceType;
 import oasis.names.specification.ubl.schema.xsd.order_2.OrderType;
+import oasis.names.specification.ubl.schema.xsd.orderresponsesimple_2.OrderResponseSimpleType;
 
 import org.junit.Test;
 import org.oclc.purl.dsdl.svrl.SchematronOutputType;
@@ -121,6 +123,77 @@ public final class FuncTestDocumentValidationSuccess {
                                                                                               CGlobal.LOCALE_INDEPENDENT)) {
         // Get the XSLT for transaction T01
         final IReadableResource aXSLT = eArtefact.getValidationXSLTResource (ValidationTransaction.createUBLTransaction (ETransaction.T01));
+
+        // And now run the main "Schematron" validation
+        final SchematronOutputType aSVRL = SchematronHelper.applySchematron (new SchematronResourceXSLT (aXSLT),
+                                                                             aTestFile);
+        assertNotNull (aSVRL);
+
+        if (false) {
+          // For debugging purposes: print the SVRL
+          System.out.println (XMLWriter.getXMLString (SVRLWriter.createXML (aSVRL)));
+        }
+
+        // Check that all failed assertions are only warnings
+        for (final SVRLFailedAssert aFailedAssert : SVRLUtils.getAllFailedAssertions (aSVRL)) {
+          assertEquals (aTestFile.toString () + "\n" + aFailedAssert.toString (),
+                        EErrorLevel.WARN,
+                        aFailedAssert.getFlag ());
+        }
+      }
+    }
+  }
+
+  @Test
+  public void testReadOrderResponsesSuccess () throws SAXException {
+    // For all available orders
+    for (final IReadableResource aTestFile : TestFiles.getSuccessFiles (ETestFileType.ORDERRESPONSE)) {
+      // Ensure the UBL file validates against the scheme
+      final OrderResponseSimpleType aUBLOrderResponse = UBL20DocumentMarshaller.readOrderResponseSimple (XMLReader.readXMLDOM (aTestFile));
+      assertNotNull (aUBLOrderResponse);
+
+      // Test the country-independent orders layers
+      for (final IValidationArtefact eArtefact : EValidationArtefact.getAllMatchingArtefacts (null,
+                                                                                              EValidationDocumentType.ORDERRESPONSE,
+                                                                                              CGlobal.LOCALE_INDEPENDENT)) {
+        // Get the XSLT for transaction T01
+        final IReadableResource aXSLT = eArtefact.getValidationXSLTResource (ValidationTransaction.createUBLTransaction (ETransaction.T02));
+
+        // And now run the main "Schematron" validation
+        final SchematronOutputType aSVRL = SchematronHelper.applySchematron (new SchematronResourceXSLT (aXSLT),
+                                                                             aTestFile);
+        assertNotNull (aSVRL);
+
+        if (false) {
+          // For debugging purposes: print the SVRL
+          System.out.println (XMLWriter.getXMLString (SVRLWriter.createXML (aSVRL)));
+        }
+
+        // Check that all failed assertions are only warnings
+        for (final SVRLFailedAssert aFailedAssert : SVRLUtils.getAllFailedAssertions (aSVRL)) {
+          assertEquals (aTestFile.toString () + "\n" + aFailedAssert.toString (),
+                        EErrorLevel.WARN,
+                        aFailedAssert.getFlag ());
+        }
+      }
+    }
+  }
+
+  @Test
+  public void testReadCreditNotesSuccess () throws SAXException {
+    // For all available credit notes
+    for (final IReadableResource aTestFile : TestFiles.getSuccessFiles (ETestFileType.CREDITNOTE)) {
+      System.out.println (aTestFile.getPath ());
+      // Ensure the UBL file validates against the scheme
+      final CreditNoteType aUBLCreditNote = UBL20DocumentMarshaller.readCreditNote (XMLReader.readXMLDOM (aTestFile));
+      assertNotNull (aUBLCreditNote);
+
+      // Test the country-independent orders layers
+      for (final IValidationArtefact eArtefact : EValidationArtefact.getAllMatchingArtefacts (null,
+                                                                                              EValidationDocumentType.CREDIT_NOTE,
+                                                                                              CGlobal.LOCALE_INDEPENDENT)) {
+        // Get the XSLT for transaction T14
+        final IReadableResource aXSLT = eArtefact.getValidationXSLTResource (ValidationTransaction.createUBLTransaction (ETransaction.T14));
 
         // And now run the main "Schematron" validation
         final SchematronOutputType aSVRL = SchematronHelper.applySchematron (new SchematronResourceXSLT (aXSLT),
