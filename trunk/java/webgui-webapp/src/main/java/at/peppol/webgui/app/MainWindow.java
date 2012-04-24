@@ -27,7 +27,7 @@ import com.vaadin.ui.Window;
  *
  * @author Jerouris
  */
-@SuppressWarnings ("serial")
+
 public class MainWindow extends Window {
     
     private CssLayout topBarCSSLayout = new CssLayout();
@@ -92,7 +92,7 @@ public class MainWindow extends Window {
         leftNavBar.addComponent(new NativeButton("Suppliers"));
         
         Embedded peppolLogoImg = new Embedded(null,
-                                 new ExternalResource("/VAADIN/img/peppol_logo.png"));
+                                 new ExternalResource("img/peppol_logo.png"));
 
         peppolLogoImg.setStyleName("logo");
         leftNavBar.addComponent(peppolLogoImg);

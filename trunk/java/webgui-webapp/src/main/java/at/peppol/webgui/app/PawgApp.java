@@ -17,7 +17,7 @@ import com.vaadin.Application;
 import com.vaadin.terminal.gwt.server.HttpServletRequestListener;
 import com.vaadin.ui.Window;
 
-@SuppressWarnings ("serial")
+
 public class PawgApp extends Application implements HttpServletRequestListener {
 
     private static ThreadLocal<PawgApp> threadLocal = new ThreadLocal<PawgApp>();
@@ -29,11 +29,12 @@ public class PawgApp extends Application implements HttpServletRequestListener {
     public void init() {
         // Ensure that no user is logged in
         setInstance(this);
-        setTheme("peppol");
+        setTheme("peppol");  
         try {
         lum.logoutCurrentUser();
-            //showLoginWindow();
-              startWithMainWindow();
+        //showLoginWindow();
+        // startWithMainWindow();
+        authenticate("user@peppol.eu", "user");
         } catch (Exception ex) {
             LOGGER.error(null, ex);
         }
@@ -81,6 +82,7 @@ public class PawgApp extends Application implements HttpServletRequestListener {
 
         if (res.isSuccess()) {
             user = AccessManager.getInstance().getUserOfID(lum.getCurrentUserID());
+            System.out.println("USER: "+user.getDisplayName());
             setUser(user);
             showMainAppWindow();
 

@@ -1,5 +1,7 @@
 package at.peppol.webgui.app.components;
 
+import at.peppol.webgui.upload.UploadManager;
+import at.peppol.webgui.upload.UploadedResource;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
@@ -107,8 +109,8 @@ public class OrderUploadWindow extends VerticalLayout implements Receiver {
   @Override
   public OutputStream receiveUpload (String filename, String mimeType) {
     
-    FileOutputStream fos = null; // Output stream to write to
-    file = new File("/tmp/" + filename);
+    /*FileOutputStream fos = null; // Output stream to write to
+    file = new File(filename);
     try {
       // Open the file for writing.
       fos = new FileOutputStream(file);
@@ -119,8 +121,7 @@ public class OrderUploadWindow extends VerticalLayout implements Receiver {
     }
     
     return fos;
-    
-    /* API CALLBACK (bug: user not logged in
+    */
     UploadedResource ur = UploadManager.getInstance ().createManagedResource (filename);
     if(ur.isSuccess ()){
       System.out.println("success");
@@ -131,7 +132,7 @@ public class OrderUploadWindow extends VerticalLayout implements Receiver {
     
     return null;
     //return UploadManager.getInstance ().createManagedResource (filename).createOutputStream ();
-    */    
+       
     
   }
   
