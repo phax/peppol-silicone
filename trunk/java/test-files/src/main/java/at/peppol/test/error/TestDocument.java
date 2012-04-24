@@ -1,4 +1,4 @@
-package at.peppol.validation.rules.mock;
+package at.peppol.test.error;
 
 import java.util.HashSet;
 import java.util.Set;
