@@ -3,7 +3,7 @@
 = v2.3.0 - in progress =
 
 ==All components==
-  * Updated phloc-commons to 3.4.9
+  * Updated phloc-commons to 3.5.0
 ==Base libraries==
   * Removed all deprecated methods using "Document" instead of "DocumentType" in their names
   * Added length and Charset checks in (Simple|Readonly)(Participant|DocumentType|Process)Identifier classes, according to the Policy for the use of identifiers 2.3 DRAFT
