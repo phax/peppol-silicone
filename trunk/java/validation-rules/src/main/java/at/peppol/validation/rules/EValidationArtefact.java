@@ -312,8 +312,10 @@ public enum EValidationArtefact implements IValidationArtefact {
           // Does the country match?
           if (!eArtefact.getValidationLevel ().canHaveCountrySpecificArtefacts () ||
               aCountry == null ||
-              aCountry.equals (eArtefact.getValidationCountry ()))
+              aCountry.equals (eArtefact.getValidationCountry ())) {
+            // Finally a match :)
             ret.add (eArtefact);
+          }
         }
       }
     }
@@ -349,12 +351,15 @@ public enum EValidationArtefact implements IValidationArtefact {
                                                               @Nullable final IValidationDocumentType eDocType) {
     final Set <Locale> ret = new HashSet <Locale> ();
     for (final IValidationArtefact eArtefact : values ()) {
-      // Does the level match?
-      if (eLevel == null || eArtefact.getValidationLevel ().equals (eLevel)) {
-        // Does the document type match?
-        if (eDocType == null || eArtefact.getValidationDocumentType ().equals (eDocType)) {
-          if (!eArtefact.isValidationCountryIndependent ())
+      // Is the artefact country dependent?
+      if (!eArtefact.isValidationCountryIndependent ()) {
+        // Does the validation level match?
+        if (eLevel == null || eArtefact.getValidationLevel ().equals (eLevel)) {
+          // Does the document type match?
+          if (eDocType == null || eArtefact.getValidationDocumentType ().equals (eDocType)) {
+            // We found a match
             ret.add (eArtefact.getValidationCountry ());
+          }
         }
       }
     }
