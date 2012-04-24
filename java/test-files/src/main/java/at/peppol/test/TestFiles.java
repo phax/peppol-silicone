@@ -94,6 +94,8 @@ public final class TestFiles {
                                                                  "test-order.xml",
                                                                  "UBL-Order-2.0-Example-International.xml",
                                                                  "UBL-Order-2.0-Example.xml" };
+  private static final String [] ORDERRESPONSES_SUCCESS = new String [] { "CENBII-AcceptOrder-maximal.xml",
+                                                                         "CENBII-RejectOrder-maximal.xml" };
   private static final String [] TENDER_SUCCESS = new String [] { "Catalogo preaward_Tender_Risposta con offerta ad una RDO MEPA_BIS 12a.xml" };
   private static final String [] TENDERINGCATALOGUES_SUCCESS = new String [] { "Tender-Sample.xml" };
 
@@ -363,6 +365,9 @@ public final class TestFiles {
         break;
       case ORDER:
         aFilenames = ORDERS_SUCCESS;
+        break;
+      case ORDERRESPONSE:
+        aFilenames = ORDERRESPONSES_SUCCESS;
         break;
       case TENDER:
         aFilenames = TENDER_SUCCESS;

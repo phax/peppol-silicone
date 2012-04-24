@@ -56,8 +56,8 @@ xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/X
 	<cbc:ProfileID>urn:www.cenbii.eu:profile:bii05:ver1.0</cbc:ProfileID>
 	<cbc:ID>CREDIT-TOSL108</cbc:ID>
 	<cbc:IssueDate>2010-08-31</cbc:IssueDate>
+  <cbc:TaxPointDate>2009-11-30</cbc:TaxPointDate>
 	<cbc:Note languageID="EN">Returned goods damaged during transport</cbc:Note>
-	<cbc:TaxPointDate>2009-11-30</cbc:TaxPointDate>
 	<cbc:DocumentCurrencyCode listID="ISO 4217 Alpha" listAgencyID="6">EUR</cbc:DocumentCurrencyCode>
 	<cbc:AccountingCost>Job 123</cbc:AccountingCost>
 	<cac:InvoicePeriod>

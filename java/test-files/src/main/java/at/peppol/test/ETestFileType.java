@@ -49,6 +49,7 @@ public enum ETestFileType {
   CREDITNOTE ("test-creditnotes"),
   INVOICE ("test-invoices"),
   ORDER ("test-orders"),
+  ORDERRESPONSE ("test-orderresponses"),
   TENDER ("test-tenders"),
   TENDERINGCATALOGUE ("test-tenderingcatalogues");
 
