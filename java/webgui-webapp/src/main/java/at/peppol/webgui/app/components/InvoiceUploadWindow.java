@@ -115,7 +115,6 @@ public class InvoiceUploadWindow extends VerticalLayout implements
     return this.subwindow;
   }
 
-  @Override
   public OutputStream receiveUpload (final String filename, final String mimeType) {
     ur = UploadManager.getInstance ().createManagedResource (filename);
     return ur.createOutputStream ();
@@ -125,13 +124,13 @@ public class InvoiceUploadWindow extends VerticalLayout implements
     if (ur != null)
       ur.setSuccess (true);
     else
-      logger.warn ("Upload succeeded, but no Upload request present!");
+      logger.warn ("Invoice upload succeeded, but no Upload request present!");
   }
 
   public void uploadFailed (final FailedEvent event) {
     if (ur != null)
       ur.setSuccess (false);
     else
-      logger.warn ("Upload succeeded, but no Upload request present!");
+      logger.warn ("Invoice upload failed, but no Upload request present!");
   }
 }
