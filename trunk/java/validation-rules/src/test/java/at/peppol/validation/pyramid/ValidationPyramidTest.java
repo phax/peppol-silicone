@@ -44,7 +44,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import at.peppol.commons.cenbii.profiles.ETransaction;
-import at.peppol.validation.CValidattionTestFiles;
+import at.peppol.test.CTestFiles;
 import at.peppol.validation.rules.EValidationDocumentType;
 import at.peppol.validation.rules.EValidationLevel;
 import at.peppol.validation.rules.ValidationTransaction;
@@ -64,10 +64,10 @@ public final class ValidationPyramidTest {
   public void testInvoice () {
     final ValidationPyramid vp = new ValidationPyramid (EValidationDocumentType.INVOICE,
                                                         ValidationTransaction.createUBLTransaction (ETransaction.T10));
-    for (final String sInvoiceFile : CValidattionTestFiles.TEST_INVOICES_SUCCESS) {
+    for (final String sInvoiceFile : CTestFiles.TEST_INVOICES_SUCCESS) {
       // Get the UBL XML file
-      final IReadableResource aInvoiceRes = new ClassPathResource (CValidattionTestFiles.PATH_INVOICE_TESTFILES +
-                                                                   CValidattionTestFiles.PATH_SUCCESS +
+      final IReadableResource aInvoiceRes = new ClassPathResource (CTestFiles.PATH_INVOICE_TESTFILES +
+                                                                   CTestFiles.PATH_SUCCESS +
                                                                    sInvoiceFile);
       for (final ValidationPyramidResultLayer aResultLayer : vp.applyValidation (aInvoiceRes)
                                                                .getAllValidationResultLayers ())
@@ -81,10 +81,10 @@ public final class ValidationPyramidTest {
     final ValidationPyramid vp = new ValidationPyramid (EValidationDocumentType.INVOICE,
                                                         ValidationTransaction.createUBLTransaction (ETransaction.T10),
                                                         CountryCache.getCountry ("AT"));
-    for (final String sInvoiceFile : CValidattionTestFiles.TEST_INVOICES_AT_SUCCESS) {
+    for (final String sInvoiceFile : CTestFiles.TEST_INVOICES_AT_SUCCESS) {
       // Do validation
-      final ValidationPyramidResult aResult = vp.applyValidation (new ClassPathResource (CValidattionTestFiles.PATH_INVOICE_TESTFILES +
-                                                                                         CValidattionTestFiles.PATH_SUCCESS +
+      final ValidationPyramidResult aResult = vp.applyValidation (new ClassPathResource (CTestFiles.PATH_INVOICE_TESTFILES +
+                                                                                         CTestFiles.PATH_SUCCESS +
                                                                                          sInvoiceFile));
       assertNotNull (aResult);
 

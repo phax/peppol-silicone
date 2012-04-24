@@ -10,7 +10,7 @@ import org.oclc.purl.dsdl.svrl.SchematronOutputType;
 import org.xml.sax.SAXException;
 
 import at.peppol.commons.cenbii.profiles.ETransaction;
-import at.peppol.validation.CValidattionTestFiles;
+import at.peppol.test.CTestFiles;
 import at.peppol.validation.schematron.SchematronHelper;
 import at.peppol.validation.schematron.svrl.SVRLFailedAssert;
 import at.peppol.validation.schematron.svrl.SVRLUtils;
@@ -32,10 +32,10 @@ public class FuncTestTenderValidation {
   @Test
   public void testReadTender () throws SAXException {
     // For all available catalogues
-    for (final String sTenderFile : CValidattionTestFiles.TEST_TENDER_SUCCESS) {
+    for (final String sTenderFile : CTestFiles.TEST_TENDER_SUCCESS) {
       // Get the UBL XML file
-      final IReadableResource aTenderRes = new ClassPathResource (CValidattionTestFiles.PATH_TENDER_TESTFILES +
-                                                                  CValidattionTestFiles.PATH_SUCCESS +
+      final IReadableResource aTenderRes = new ClassPathResource (CTestFiles.PATH_TENDER_TESTFILES +
+                                                                  CTestFiles.PATH_SUCCESS +
                                                                   sTenderFile);
 
       // Ensure the UBL file validates against the scheme
@@ -69,10 +69,10 @@ public class FuncTestTenderValidation {
 
   public void testReadVallForTender () throws SAXException {
     // For all available catalogues
-    for (final String sCallForTendersFile : CValidattionTestFiles.TEST_CALLFORTENDERS_SUCCESS) {
+    for (final String sCallForTendersFile : CTestFiles.TEST_CALLFORTENDERS_SUCCESS) {
       // Get the UBL XML file
-      final IReadableResource aCallForTendersRes = new ClassPathResource (CValidattionTestFiles.PATH_CALLFORTENDERS_TESTFILES +
-                                                                          CValidattionTestFiles.PATH_SUCCESS +
+      final IReadableResource aCallForTendersRes = new ClassPathResource (CTestFiles.PATH_CALLFORTENDERS_TESTFILES +
+                                                                          CTestFiles.PATH_SUCCESS +
                                                                           sCallForTendersFile);
 
       // Ensure the UBL file validates against the scheme
