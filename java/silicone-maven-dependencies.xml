@@ -3,7 +3,7 @@
   <project groupid="at.peppol" artifactid="peppol-commons-busdox">
     <isDependentOf>
       <item groupid="at.peppol" artifactid="peppol-commons-peppol" />
-      <item groupid="at.peppol" artifactid="peppol-sml-client-apps" />
+      <item groupid="at.peppol" artifactid="peppol-sml-client-console" />
       <item groupid="at.peppol" artifactid="peppol-sml-client-library" />
       <item groupid="at.peppol" artifactid="peppol-sml-client-swing" />
       <item groupid="at.peppol" artifactid="peppol-sml-server-library" />
@@ -37,6 +37,15 @@
       <item groupid="at.peppol" artifactid="peppol-smp-webapp" />
     </isDependentOf>
   </project>
+  <project groupid="at.peppol" artifactid="peppol-test-files">
+    <isDependentOf>
+      <item groupid="at.peppol" artifactid="peppol-validation-rules" />
+      <item groupid="at.peppol" artifactid="peppol-validation-webapp" />
+      <item groupid="at.peppol" artifactid="peppol-visualization" />
+      <item groupid="at.peppol" artifactid="peppol-webgui-api" />
+      <item groupid="at.peppol" artifactid="peppol-webgui-webapp" />
+    </isDependentOf>
+  </project>
   <project groupid="at.peppol" artifactid="peppol-validation-schematron">
     <isDependentOf>
       <item groupid="at.peppol" artifactid="peppol-validation-rules" />
@@ -49,7 +58,7 @@
       <item groupid="at.peppol" artifactid="peppol-commons-busdox" />
     </dependsOn>
     <isDependentOf>
-      <item groupid="at.peppol" artifactid="peppol-sml-client-apps" />
+      <item groupid="at.peppol" artifactid="peppol-sml-client-console" />
       <item groupid="at.peppol" artifactid="peppol-sml-client-library" />
       <item groupid="at.peppol" artifactid="peppol-sml-client-swing" />
       <item groupid="at.peppol" artifactid="peppol-sml-server-library" />
@@ -68,11 +77,6 @@
       <item groupid="at.peppol" artifactid="peppol-webgui-webapp" />
     </isDependentOf>
   </project>
-  <project groupid="at.peppol" artifactid="peppol-visualization">
-    <dependsOn>
-      <item groupid="at.peppol" artifactid="peppol-commons-cenbii" />
-    </dependsOn>
-  </project>
   <project groupid="at.peppol" artifactid="schematron2xslt-maven-plugin">
     <dependsOn>
       <item groupid="at.peppol" artifactid="peppol-validation-schematron" />
@@ -84,7 +88,7 @@
       <item groupid="at.peppol" artifactid="peppol-commons-peppol" />
     </dependsOn>
     <isDependentOf>
-      <item groupid="at.peppol" artifactid="peppol-sml-client-apps" />
+      <item groupid="at.peppol" artifactid="peppol-sml-client-console" />
       <item groupid="at.peppol" artifactid="peppol-sml-client-swing" />
       <item groupid="at.peppol" artifactid="peppol-smp-webapp" />
     </isDependentOf>
@@ -115,25 +119,13 @@
       <item groupid="at.peppol" artifactid="peppol-transport-start-server" />
     </isDependentOf>
   </project>
-  <project groupid="at.peppol" artifactid="peppol-validation-rules">
+  <project groupid="at.peppol" artifactid="peppol-visualization">
     <dependsOn>
       <item groupid="at.peppol" artifactid="peppol-commons-cenbii" />
-      <item groupid="at.peppol" artifactid="peppol-validation-schematron" />
+      <item groupid="at.peppol" artifactid="peppol-test-files" />
     </dependsOn>
-    <isDependentOf>
-      <item groupid="at.peppol" artifactid="peppol-validation-webapp" />
-    </isDependentOf>
   </project>
-  <project groupid="at.peppol" artifactid="peppol-webgui-api">
-    <dependsOn>
-      <item groupid="at.peppol" artifactid="peppol-commons-busdox" />
-      <item groupid="at.peppol" artifactid="peppol-commons-peppol" />
-    </dependsOn>
-    <isDependentOf>
-      <item groupid="at.peppol" artifactid="peppol-webgui-webapp" />
-    </isDependentOf>
-  </project>
-  <project groupid="at.peppol" artifactid="peppol-sml-client-apps">
+  <project groupid="at.peppol" artifactid="peppol-sml-client-console">
     <dependsOn>
       <item groupid="at.peppol" artifactid="peppol-commons-busdox" />
       <item groupid="at.peppol" artifactid="peppol-commons-peppol" />
@@ -185,12 +177,25 @@
       <item groupid="at.peppol" artifactid="peppol-transport-start-server" />
     </isDependentOf>
   </project>
-  <project groupid="at.peppol" artifactid="peppol-validation-webapp">
+  <project groupid="at.peppol" artifactid="peppol-validation-rules">
     <dependsOn>
       <item groupid="at.peppol" artifactid="peppol-commons-cenbii" />
-      <item groupid="at.peppol" artifactid="peppol-validation-rules" />
+      <item groupid="at.peppol" artifactid="peppol-test-files" />
       <item groupid="at.peppol" artifactid="peppol-validation-schematron" />
     </dependsOn>
+    <isDependentOf>
+      <item groupid="at.peppol" artifactid="peppol-validation-webapp" />
+    </isDependentOf>
+  </project>
+  <project groupid="at.peppol" artifactid="peppol-webgui-api">
+    <dependsOn>
+      <item groupid="at.peppol" artifactid="peppol-commons-busdox" />
+      <item groupid="at.peppol" artifactid="peppol-commons-peppol" />
+      <item groupid="at.peppol" artifactid="peppol-test-files" />
+    </dependsOn>
+    <isDependentOf>
+      <item groupid="at.peppol" artifactid="peppol-webgui-webapp" />
+    </isDependentOf>
   </project>
   <project groupid="at.peppol" artifactid="peppol-sml-webapp">
     <dependsOn>
@@ -228,11 +233,20 @@
       <item groupid="at.peppol" artifactid="peppol-transport-start-server" />
     </isDependentOf>
   </project>
+  <project groupid="at.peppol" artifactid="peppol-validation-webapp">
+    <dependsOn>
+      <item groupid="at.peppol" artifactid="peppol-commons-cenbii" />
+      <item groupid="at.peppol" artifactid="peppol-test-files" />
+      <item groupid="at.peppol" artifactid="peppol-validation-rules" />
+      <item groupid="at.peppol" artifactid="peppol-validation-schematron" />
+    </dependsOn>
+  </project>
   <project groupid="at.peppol" artifactid="peppol-webgui-webapp">
     <dependsOn>
       <item groupid="at.peppol" artifactid="peppol-commons-busdox" />
       <item groupid="at.peppol" artifactid="peppol-commons-peppol" />
       <item groupid="at.peppol" artifactid="peppol-smp-client-library" />
+      <item groupid="at.peppol" artifactid="peppol-test-files" />
       <item groupid="at.peppol" artifactid="peppol-webgui-api" />
     </dependsOn>
   </project>
