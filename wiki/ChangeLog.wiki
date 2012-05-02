@@ -3,7 +3,7 @@
 = v2.3.0 - in progress =
 
 ==All components==
-  * Updated phloc-commons to 3.5.0
+  * Updated phloc-commons to 3.5.1
   * Extracted new project "test-files" that contains all the available test files of several file types. This project can be easily reused from somewhere else
 ==Base libraries==
   * Removed all deprecated methods using "Document" instead of "DocumentType" in their names
@@ -25,6 +25,7 @@
 ==Validation==
   * Added a new project "validation-webapp" that provides a minimum web application for validating your PEPPOL documents in the web
   * IValidationDocumentType interface is now more generic by only requiring to offer a Schema object (and not to force UBL usage)
+  * Updated Saxon HE to 9.4.0_3
 
 = v2.2.1 (2012-03-21, bugfix release) =
 
