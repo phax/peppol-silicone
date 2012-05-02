@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+
+        	CVA File BiiCoreTrdm010
+        	Oriol Bausà 
+
+     -->
+<ValueListConstraints xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:qdt="urn:oasis:names:specification:ubl:schema:xsd:QualifiedDatatypes-2" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:cct="urn:oasis:names:specification:ubl:schema:xsd:CoreComponentParameters-2" version="Version 0.3" name="CodesBiiCoreTrdm010" xmlns:udt="urn:un:unece:uncefact:data:draft:UnqualifiedDataTypesSchemaModule:2" xmlns:stat="urn:oasis:names:specification:ubl:schema:xsd:DocumentStatusCode-1.0" xmlns="http://docs.oasis-open.org/codelist/ns/ContextValueAssociation/cd2-1.0/">
+  <ValueLists>
+    <ValueList xml:id="AddressFormatCode" uri="../gc/AddressFormatCode.gc"/>
+    <ValueList xml:id="AllowanceChargeReasonCode" uri="../gc/AllowanceChargeReasonCode.gc"/>
+    <ValueList xml:id="AccountTypeCode" uri="../gc/AccountTypeCode.gc"/>
+    <ValueList xml:id="BinaryObjectMimeCode" uri="../gc/BinaryObjectMimeCode.gc"/>
+    <ValueList xml:id="ChannelCode" uri="../gc/ChannelCode.gc"/>
+    <ValueList xml:id="CurrencyCode" uri="../gc/CurrencyCode.gc"/>
+    <ValueList xml:id="CountryIdentificationCode" uri="../gc/CountryIdentificationCode.gc"/>
+    <ValueList xml:id="DeliveryTermsID" uri="../gc/DeliveryTermsID.gc"/>
+    <ValueList xml:id="DocumentTypeCode" uri="../gc/DocumentTypeCode.gc"/>
+    <ValueList xml:id="DiscrepancyResponseCode" uri="../gc/DiscrepancyResponseCode.gc"/>
+    <ValueList xml:id="ParentDocumentTypeCode" uri="../gc/ParentDocumentTypeCode.gc"/>
+    <ValueList xml:id="PaymentChannelCode" uri="../gc/PaymentChannelCode.gc"/>
+    <ValueList xml:id="PaymentMeansCode" uri="../gc/PaymentMeansCode.gc"/>
+    <ValueList xml:id="ResponseCode" uri="../gc/ResponseCode.gc"/>
+    <ValueList xml:id="StatusCode" uri="../gc/StatusCode.gc"/>
+    <ValueList xml:id="InvoiceTypeCode" uri="../gc/InvoiceTypeCode.gc"/>
+    <ValueList xml:id="TaxTypeCode" uri="../gc/TaxTypeCode.gc"/>
+    <ValueList xml:id="TaxCategoryID" uri="../gc/TaxCategoryID.gc"/>
+    <ValueList xml:id="TaxSchemeID" uri="../gc/TaxSchemeID.gc"/>
+    <ValueList xml:id="TaxExemptionReasonCode" uri="../gc/TaxExemptionReasonCode.gc"/>
+    <ValueList xml:id="UnitOfMeasureCode" uri="../gc/UnitOfMeasureCode.gc"/>
+    <ValueList xml:id="CountrySubentityCode" uri="../gc/CountrySubentityCode.gc"/>
+  </ValueLists>
+  <Contexts>
+    <Context item="cbc:InvoiceTypeCode" values="InvoiceTypeCode" mark="fatal">
+      <Message>[CL-010-001]-An Invoice MUST be tipified with the InvoiceTypeCode code list</Message>
+    </Context>
+    <Context item="cbc:DocumentCurrencyCode" values="CurrencyCode" mark="fatal">
+      <Message>[CL-010-002]-Currencies in an invoice MUST be coded using ISO currency code</Message>
+    </Context>
+    <Context item="@currencyID" values="CurrencyCode" mark="fatal">
+      <Message>[CL-010-003]-Currencies in an invoice MUST be coded using ISO currency code</Message>
+    </Context>
+    <Context item="cbc:IdentificationCode" values="CountryIdentificationCode" mark="fatal" scope="cac:Country">
+      <Message>[CL-010-004]-Country codes in an invoice MUST be coded using ISO code list 3166-1</Message>
+    </Context>
+    <Context item="cbc:ID" values="TaxSchemeID" mark="warning" scope="cac:TaxScheme">
+      <Message>[CL-010-005]-Invoice tax schemes MUST be coded using UN/ECE 5153 code list</Message>
+    </Context>
+    <Context item="cbc:PaymentMeansCode" values="PaymentMeansCode" mark="warning" scope="cac:PaymentMeans">
+      <Message>[CL-010-006]-Payment means in an invoice MUST be coded using CEFACT code list 4461</Message>
+    </Context>
+    <Context item="cbc:ID" values="TaxCategoryID" mark="warning" scope="cac:TaxCategory">
+      <Message>[CL-010-007]-Invoice tax categories MUST be coded using UN/ECE 5305 code list</Message>
+    </Context>
+  </Contexts>
+</ValueListConstraints>
