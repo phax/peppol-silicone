@@ -254,13 +254,6 @@ public class MainWindow extends Window {
         
         IUser user = (IUser) PawgApp.getInstance().getUser();
 
-        // loggedInLabel.addStyleName("v-menubar");
-        // loggedInLabel.addStyleName("v-menubar-menuitem");
-        // loggedInLabel.setSizeUndefined();
-        // topBarLayoutRight.setStyleName("v-menubar");;
-        // topBarLayoutRight.setSizeUndefined();
-        // topBarLayoutRight.addComponent(loggedInLabel);
-        // topBarLayoutRight.setComponentAlignment(loggedInLabel, Alignment.MIDDLE_RIGHT);
         topBarLayoutLeft.setComponentAlignment(lMenuBar, Alignment.MIDDLE_CENTER);
         topBarLayoutLeft.setSpacing(false);
         topBarLayoutLeft.setSizeFull();
