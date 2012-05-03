@@ -51,119 +51,130 @@ import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.PopupDateField;
 import com.vaadin.ui.VerticalLayout;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.*;
 
 /**
  * @author Jerouris
  */
 public class InvoiceForm extends Form {
-  private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger (InvoiceForm.class);
-  private final ObjectFactory invObjFactory;
 
-  private InvoiceType invoice;
-  private CustomerPartyType customer;
-  private SupplierPartyType supplier;
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(InvoiceForm.class);
+    private final ObjectFactory invObjFactory;
+    private InvoiceType invoice;
+    private CustomerPartyType customer;
+    private SupplierPartyType supplier;
 
-  public InvoiceForm () {
-    invObjFactory = new ObjectFactory ();
-    initInvoiceData ();
-    initElements ();
-  }
+    public InvoiceForm() {
+        invObjFactory = new ObjectFactory();
+        initInvoiceData();
+        initElements();
+    }
 
-  private void initInvoiceData () {
-    invoice = invObjFactory.createInvoiceType ();
+    private void initInvoiceData() {
+        invoice = invObjFactory.createInvoiceType();
 
-    // Standard input, not using user input
-    final UBLVersionIDType version = new UBLVersionIDType ();
-    version.setValue ("2.0");
+        // Standard input, not using user input
+        final UBLVersionIDType version = new UBLVersionIDType();
+        version.setValue("2.0");
 
-    // Use PEPPOL Codelists
-    final CustomizationIDType custID = new CustomizationIDType ();
-    custID.setValue (EPredefinedDocumentTypeIdentifier.INVOICE_T010_BIS4A.getTransactionID ());
-    custID.setSchemeID ("PEPPOL");
+        // Use PEPPOL Codelists
+        final CustomizationIDType custID = new CustomizationIDType();
+        custID.setValue(EPredefinedDocumentTypeIdentifier.INVOICE_T010_BIS4A.getTransactionID());
+        custID.setSchemeID("PEPPOL");
 
-    supplier = new SupplierPartyType ();
-    supplier.setParty (new PartyType ());
+        supplier = new SupplierPartyType();
+        supplier.setParty(new PartyType());
 
-    customer = new CustomerPartyType ();
-    customer.setParty (new PartyType ());
+        customer = new CustomerPartyType();
+        customer.setParty(new PartyType());
 
-    // Setting invoice type code to 380: Commercial Invoice
-    invoice.setInvoiceTypeCode (new InvoiceTypeCodeType ());
-    invoice.getInvoiceTypeCode ().setValue ("380");
+        // Setting invoice type code to 380: Commercial Invoice
+        invoice.setInvoiceTypeCode(new InvoiceTypeCodeType());
+        invoice.getInvoiceTypeCode().setValue("380");
 
-    invoice.setUBLVersionID (version);
-    invoice.setCustomizationID (custID);
-    invoice.setID (new IDType ());
+        invoice.setUBLVersionID(version);
+        invoice.setCustomizationID(custID);
+        invoice.setID(new IDType());
 
-    invoice.setAccountingCustomerParty (customer);
-    invoice.setAccountingSupplierParty (supplier);
-    final List <InvoiceLineType> items = invoice.getInvoiceLine ();
-    items.add (createInvoiceLine ());
-  }
+        invoice.setAccountingCustomerParty(customer);
+        invoice.setAccountingSupplierParty(supplier);
+        invoice.setLegalMonetaryTotal(new MonetaryTotalType());
+        
+        final List<InvoiceLineType> items = invoice.getInvoiceLine();
+        items.add(createInvoiceLine());
+    }
 
-  public JAXBElement <InvoiceType> getInvoice () {
+    public JAXBElement<InvoiceType> getInvoice() {
 
-    return invObjFactory.createInvoice (invoice);
-  }
+        return invObjFactory.createInvoice(invoice);
+    }
 
-  private InvoiceLineType createInvoiceLine () {
-    final InvoiceLineType il = new InvoiceLineType ();
-    il.setID (new IDType ());
-    il.getID ().setValue ("1");
-    il.setInvoicedQuantity (new InvoicedQuantityType ());
-    il.getInvoicedQuantity ().setValue (BigDecimal.ZERO);
+    private InvoiceLineType createInvoiceLine() {
+        final InvoiceLineType il = new InvoiceLineType();
+        il.setID(new IDType());
+        il.getID().setValue("1");
+        il.setInvoicedQuantity(new InvoicedQuantityType());
+        il.getInvoicedQuantity().setValue(BigDecimal.ZERO);
 
-    return il;
-  }
+        return il;
+    }
 
-  private void initElements () {
+    private void initElements() {
 
-    final GridLayout grid = new GridLayout (2, 4);
-    final VerticalLayout outerLayout = new VerticalLayout ();
-    final Panel outerPanel = new Panel ("Invoice Creation Form");
-    outerPanel.addComponent (grid);
-    outerLayout.addComponent (outerPanel);
-    setLayout (outerLayout);
-    grid.setStyleName ("margin");
-    grid.setSpacing (true);
+        final GridLayout grid = new GridLayout(2, 4);
+        final VerticalLayout outerLayout = new VerticalLayout();
+        outerLayout.setMargin(false,true,false,false);
+//        outerLayout.setStyleName("margin");
+        outerLayout.setMargin(true);
+        final Panel outerPanel = new Panel("Invoice Creation Form");
+        
+        outerPanel.addComponent(grid);
+        outerPanel.setScrollable(true);
+        outerLayout.addComponent(outerPanel);
+        setLayout(outerLayout);
 
-    final Panel invoiceDetailsPanel = new Panel ("Invoice Details");
-    invoiceDetailsPanel.setStyleName ("light");
-    invoiceDetailsPanel.setSizeFull ();
-    invoiceDetailsPanel.addComponent (createInvoiceTopForm ());
-    grid.addComponent (invoiceDetailsPanel, 0, 0, 1, 0);
-    final PartyDetailForm supplierForm = new PartyDetailForm ("Supplier", supplier.getParty ());
-    final PartyDetailForm customerForm = new PartyDetailForm ("Customer", customer.getParty ());
-    grid.addComponent (supplierForm, 0, 1);
-    grid.addComponent (customerForm, 1, 1);
-    grid.setSizeUndefined ();
-    getFooter ().addComponent (new Button ("Check", new Button.ClickListener () {
+        final Panel invoiceDetailsPanel = new Panel("Invoice Details");
+        invoiceDetailsPanel.setStyleName("light");
+        invoiceDetailsPanel.setSizeFull();
+        invoiceDetailsPanel.addComponent(createInvoiceTopForm());
+        grid.addComponent(invoiceDetailsPanel, 0, 0, 1, 0);
+        final PartyDetailForm supplierForm = new PartyDetailForm("Supplier", supplier.getParty());
+        final PartyDetailForm customerForm = new PartyDetailForm("Customer", customer.getParty());
+        supplierForm.setSizeFull();
+        customerForm.setSizeFull();
+        grid.addComponent(supplierForm, 0, 1);
+        grid.addComponent(customerForm, 1, 1);
+        grid.setSizeUndefined();
+        InvoiceLineTable table = new InvoiceLineTable(invoice.getInvoiceLine());
+        table.setSizeFull();
+        
+        grid.addComponent(table,0,2,1,2);
+        getFooter().addComponent(new Button("Check", new Button.ClickListener() {
 
-      @Override
-      public void buttonClick (final Button.ClickEvent event) {
-        try {
-          AbstractUBLDocumentMarshaller.setGlobalValidationEventHandler (null);
-          UBL20DocumentMarshaller.writeInvoice (invoice, new StreamResult (new OutputStreamWriter (System.out)));
-        }
-        catch (final Exception ex) {
-          LOGGER.error ("Error creating files. ", ex);
-        }
+            @Override
+            public void buttonClick(final Button.ClickEvent event) {
+                try {
+                    AbstractUBLDocumentMarshaller.setGlobalValidationEventHandler(null);
+                    UBL20DocumentMarshaller.writeInvoice(invoice, new StreamResult(new OutputStreamWriter(System.out)));
+                } catch (final Exception ex) {
+                    LOGGER.error("Error creating files. ", ex);
+                }
 
-      }
-    }));
+            }
+        }));
 
-    outerPanel.requestRepaintAll ();
+        outerPanel.requestRepaintAll();
 
-  }
+    }
 
-  public Form createInvoiceTopForm () {
+    public Form createInvoiceTopForm() {
 
-    final Form invoiceTopForm = new Form (new FormLayout (), new InvoiceFieldFactory ());
-    invoiceTopForm.setImmediate (true);
-
+        final Form invoiceTopForm = new Form(new FormLayout(), new InvoiceFieldFactory());
+        invoiceTopForm.setImmediate(true);
+        
     invoice.setID (new IDType ());
     invoiceTopForm.addItemProperty ("Invoice ID", new NestedMethodProperty (invoice.getID (), "value"));
-
+        
     invoice.setDocumentCurrencyCode (new DocumentCurrencyCodeType ());
     // invoice.getDocumentCurrencyCode().setValue("EUR");
 
@@ -172,58 +183,56 @@ public class InvoiceForm extends Form {
 
     final Date issueDate = new Date ();
     invoiceTopForm.addItemProperty ("Issue Date", new ObjectProperty <Date> (issueDate));
-    return invoiceTopForm;
-  }
-
-  class InvoiceFieldFactory implements FormFieldFactory {
-
-    @Override
-    public Field createField (final Item item, final Object propertyId, final Component uiContext) {
-      // Identify the fields by their Property ID.
-      final String pid = (String) propertyId;
-
-      if ("Currency".equals (pid)) {
-        final CurrencySelect curSelect = new CurrencySelect ("Currency");
-        return curSelect;
-      }
-
-      if ("Issue Date".equals (pid)) {
-        final PopupDateField issueDateField = new PopupDateField ("Issue Date");
-        issueDateField.setValue (new Date ());
-        issueDateField.setResolution (DateField.RESOLUTION_DAY);
-        issueDateField.addListener (new ValueChangeListener () {
-
-          @Override
-          public void valueChange (final com.vaadin.data.Property.ValueChangeEvent event) {
-            try {
-
-              final Date issueDate = (Date) issueDateField.getValue ();
-              final GregorianCalendar greg = new GregorianCalendar ();
-              greg.setTime (issueDate);
-
-              // Workaround to print only the date and not the time.
-              final XMLGregorianCalendar XMLDate = DatatypeFactory.newInstance ().newXMLGregorianCalendar ();
-              XMLDate.setYear (greg.get (Calendar.YEAR));
-              XMLDate.setMonth (greg.get (Calendar.MONTH) + 1);
-              XMLDate.setDay (greg.get (Calendar.DATE));
-
-              invoice.getIssueDate ().setValue (XMLDate);
-            }
-            catch (final DatatypeConfigurationException ex) {
-              Logger.getLogger (InvoiceForm.class.getName ()).log (Level.SEVERE, null, ex);
-            }
-          }
-
-        });
-        return issueDateField;
-      }
-
-      final Field field = DefaultFieldFactory.get ().createField (item, propertyId, uiContext);
-      if (field instanceof AbstractTextField) {
-        ((AbstractTextField) field).setNullRepresentation ("");
-      }
-      return field;
+        return invoiceTopForm;
     }
-  }
 
+    class InvoiceFieldFactory implements FormFieldFactory {
+
+        @Override
+        public Field createField(final Item item, final Object propertyId, final Component uiContext) {
+            // Identify the fields by their Property ID.
+            final String pid = (String) propertyId;
+
+            if ("Currency".equals(pid)) {
+                final CurrencySelect curSelect = new CurrencySelect("Currency");
+                return curSelect;
+            }
+
+            if ("Issue Date".equals(pid)) {
+                final PopupDateField issueDateField = new PopupDateField("Issue Date");
+                issueDateField.setValue(new Date());
+                issueDateField.setResolution(DateField.RESOLUTION_DAY);
+                issueDateField.addListener(new ValueChangeListener() {
+
+                    @Override
+                    public void valueChange(final com.vaadin.data.Property.ValueChangeEvent event) {
+                        try {
+
+                            final Date issueDate = (Date) issueDateField.getValue();
+                            final GregorianCalendar greg = new GregorianCalendar();
+                            greg.setTime(issueDate);
+
+                            // Workaround to print only the date and not the time.
+                            final XMLGregorianCalendar XMLDate = DatatypeFactory.newInstance().newXMLGregorianCalendar();
+                            XMLDate.setYear(greg.get(Calendar.YEAR));
+                            XMLDate.setMonth(greg.get(Calendar.MONTH) + 1);
+                            XMLDate.setDay(greg.get(Calendar.DATE));
+
+                            invoice.getIssueDate().setValue(XMLDate);
+                        } catch (final DatatypeConfigurationException ex) {
+                            Logger.getLogger(InvoiceForm.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                });
+                return issueDateField;
+            }
+            
+
+            final Field field = DefaultFieldFactory.get().createField(item, propertyId, uiContext);
+            if (field instanceof AbstractTextField) {
+                ((AbstractTextField) field).setNullRepresentation("");
+            }
+            return field;
+        }
+    }
 }
