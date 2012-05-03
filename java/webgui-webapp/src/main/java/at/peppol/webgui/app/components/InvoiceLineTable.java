@@ -21,21 +21,28 @@ public class InvoiceLineTable extends Table {
     private final BeanItemContainer<InvoiceLineAdapter> tableLines =
             new BeanItemContainer<InvoiceLineAdapter>(InvoiceLineAdapter.class);
     private final List<String> visibleHeaderNames = new ArrayList<String>();
+    private int counter = 1;
 
     public InvoiceLineTable(List<InvoiceLineType> items) {
         this.invoiceLines = items;
         setContainerDataSource(tableLines);
 
         addPropertyWithHeader("ID.value", "ID");
+        addPropertyWithHeader("SellersItemID","Seller's Code");
         addPropertyWithHeader("item.name.value", "Name");
         addPropertyWithHeader("itemDescription", "Description");
         addPropertyWithHeader("invoicedQuantity.value","Quantity");
         addPropertyWithHeader("priceAmount","Unit Price");
         
+        
         setDefinedPropertiesAsVisible();
 
         addInvoiceLine(createInvoiceLine());
         addInvoiceLine(createInvoiceLine());
+        addInvoiceLine(createInvoiceLine());
+        addInvoiceLine(createInvoiceLine());
+        
+        setPageLength(4);
     }
 
     private void addPropertyWithHeader(String property, String headerName) {
@@ -54,14 +61,16 @@ public class InvoiceLineTable extends Table {
     }
 
     private InvoiceLineAdapter createInvoiceLine() {
+        
+        
         InvoiceLineAdapter inv = new InvoiceLineAdapter();
-        inv.getID().setValue("1");
+        inv.getID().setValue(Integer.toString(counter));
         inv.getInvoicedQuantity().setValue(BigDecimal.valueOf(1));
-        inv.setSellersItemID("Sellers ItemId");
-        inv.setItemDescription("Item 1");
-        inv.getItem().getName().setValue("Item Name");
+        inv.setSellersItemID("AF-CODE-"+(110+counter));
+        inv.setItemDescription("Item "+counter);
+        inv.getItem().getName().setValue("Item Name "+counter);
         inv.setPriceAmount(23);
-
+        counter++;
         return inv;
     }
 }

@@ -87,6 +87,8 @@ public class InvoiceLineAdapter extends InvoiceLineType {
         return getPrice().getPriceAmount().getValue().longValue();
     }
     
-    
+    public void setVatPercent(double percent) {
+        getTaxTotal();
+    }
     
 }
