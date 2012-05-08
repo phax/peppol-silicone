@@ -3,7 +3,7 @@
 = v2.3.0 - in progress =
 
 ==All components==
-  * Updated phloc-commons to 3.5.1
+  * Updated phloc-commons to 3.5.4
   * Extracted new project "test-files" that contains all the available test files of several file types. This project can be easily reused from somewhere else
 ==Base libraries==
   * Removed all deprecated methods using "Document" instead of "DocumentType" in their names
@@ -11,6 +11,8 @@
   * Added some Codelists and generated Java enums that are to be used in UBL document instances
 ==START==
   * Improved the welcome page of the START AP service
+  * Made OCSP check configurable
+  * Made the OCSP responder URL configurable
 ==LIME==
   * Improved exception handling when handling an incoming document
   * Move the contents of the "transport-lime-library" project into the "transport-lime-client" project and removed the "transport-lime-library" project so that the structure is consistent to the one of START
