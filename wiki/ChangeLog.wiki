@@ -3,7 +3,7 @@
 = v2.3.0 - in progress =
 
 ==All components==
-  * Updated phloc-commons to 3.5.4
+  * Updated [http://code.google.com/p/phloc-commons phloc-commons] to 3.5.4
   * Extracted new project "test-files" that contains all the available test files of several file types. This project can be easily reused from somewhere else
 ==Base libraries==
   * Removed all deprecated methods using "Document" instead of "DocumentType" in their names
