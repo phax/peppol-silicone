@@ -50,6 +50,7 @@ import at.peppol.commons.utils.ConfigFile;
 
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.state.EValidity;
+import com.phloc.commons.string.StringHelper;
 import com.sun.xml.wss.impl.callback.CertificateValidationCallback.CertificateValidator;
 
 /**
@@ -66,13 +67,10 @@ public final class Validator implements CertificateValidator {
    */
   private static final Logger s_aLogger = LoggerFactory.getLogger (Validator.class);
 
-  /**
-   * URL from which data for validation is retrieved.
-   */
-  private static final String TEST_RESPONDER_URL = "http://pilot-ocsp.verisign.com:80";
-
+  private static final String CONFIG_ENABLED = "ocsp.enabled";
+  private static final String CONFIG_RESPONDER_URL = "ocsp.responderurl";
   private static final String CONFIG_TRUSTSTORE_PATH = "ocsp.truststore.path";
-  private static final String CONFIG_TRUSTSTORE_PASS = "ocsp.truststore.password";
+  private static final String CONFIG_TRUSTSTORE_PASSWORD = "ocsp.truststore.password";
   private static final String CONFIG_TRUSTORE_ALIAS = "ocsp.truststore.alias";
 
   private static final ConfigFile s_aConf = new ConfigFile ("private-configOCSP.properties", "configOCSP.properties");
@@ -80,37 +78,61 @@ public final class Validator implements CertificateValidator {
   /**
    * Validates a X.509 Certificate.
    * 
-   * @param xc
+   * @param aCert
    * @return true if the certificate passes all validations, otherwise returns
    *         false.
    */
-  public final boolean validate (final X509Certificate xc) {
-    final String sPath = s_aConf.getString (CONFIG_TRUSTSTORE_PATH);
-    return certificateValidate (xc, sPath).isValid ();
+  public final boolean validate (final X509Certificate aCert) {
+    final String sTrustStorePath = s_aConf.getString (CONFIG_TRUSTSTORE_PATH);
+    return certificateValidate (aCert, sTrustStorePath).isValid ();
   }
 
   /**
    * This method validate the X.509 Certificate.
    * 
-   * @param xc
+   * @param aCert
    * @param sTrustStorePath
    * @return {@link EValidity}
    */
   @Nonnull
-  public static final EValidity certificateValidate (final X509Certificate xc, @Nonnull final String sTrustStorePath) {
+  public static final EValidity certificateValidate (final X509Certificate aCert, @Nonnull final String sTrustStorePath) {
+    // Is the OCSP check enabled?
+    // Note: use "enabled" as the default value, in case none is defined
+    final boolean bEnabled = s_aConf.getBoolean (CONFIG_ENABLED, true);
+    if (!bEnabled) {
+      // OCSP is disabled - allow validity
+      return EValidity.VALID;
+    }
+
     try {
       // Load keystore
-      final String sTrustStorePassword = s_aConf.getString (CONFIG_TRUSTSTORE_PASS);
+      final String sTrustStorePassword = s_aConf.getString (CONFIG_TRUSTSTORE_PASSWORD);
       final KeyStore aTrustStore = KeyStoreUtils.loadKeyStore (sTrustStorePath, sTrustStorePassword);
 
       // Get certificate from alias
       final String sTrustStoreAlias = s_aConf.getString (CONFIG_TRUSTORE_ALIAS);
       final X509Certificate aRootCert = (X509Certificate) aTrustStore.getCertificate (sTrustStoreAlias);
-      if (aRootCert == null)
+      if (aRootCert == null) {
         s_aLogger.error ("Failed to resolve trust store alias '" + sTrustStoreAlias + "'");
+      }
       else {
-        OCSP.check (ContainerHelper.newList (xc), aRootCert, TEST_RESPONDER_URL);
-        return EValidity.VALID;
+        // Get the responder URL from the configuration
+        // Note: use the old constant as the default value, in case none is
+        // defined
+        final String DEFAULT_RESPONDER_URL = "http://pilot-ocsp.verisign.com:80";
+        final String sResponderURL = s_aConf.getString (CONFIG_RESPONDER_URL, DEFAULT_RESPONDER_URL);
+        if (StringHelper.hasNoText (sResponderURL)) {
+          // Error
+          s_aLogger.error ("No OCSP responder URL configured (property '" +
+                           CONFIG_RESPONDER_URL +
+                           "'). The old default URL was: " +
+                           DEFAULT_RESPONDER_URL);
+        }
+        else {
+          // Start the main OCSP check
+          OCSP.check (ContainerHelper.newList (aCert), aRootCert, sResponderURL);
+          return EValidity.VALID;
+        }
       }
     }
     catch (final Exception ex) {
