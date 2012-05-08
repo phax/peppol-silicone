@@ -51,7 +51,6 @@ import java.security.cert.PKIXCertPathValidatorResult;
 import java.security.cert.PKIXParameters;
 import java.security.cert.TrustAnchor;
 import java.security.cert.X509Certificate;
-import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -61,6 +60,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.GlobalDebug;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.state.EValidity;
 
 /**
@@ -94,21 +94,20 @@ final class OCSP {
                                  final String sResponderUrl) {
 
     try {
-      /* Instantiate a CertificateFactory for X.509 */
+      // Instantiate a CertificateFactory for X.509
       final CertificateFactory cf = CertificateFactory.getInstance ("X.509");
-      /*
-       * Extract the certification path from the List of Certificates
-       */
+
+      // Extract the certification path from the List of Certificates
       final CertPath cp = cf.generateCertPath (aCertList);
 
-      /* Create CertPathValidator that implements the "PKIX" algorithm */
+      // Create CertPathValidator that implements the "PKIX" algorithm
       final CertPathValidator cpv = CertPathValidator.getInstance ("PKIX");
 
-      /* Set the Trust anchor */
+      // Set the Trust anchor
       final TrustAnchor aTrustAnchor = new TrustAnchor (aTrustedCert, null);
 
-      /* Set the PKIX parameters */
-      final PKIXParameters aParams = new PKIXParameters (Collections.singleton (aTrustAnchor));
+      // Set the PKIX parameters
+      final PKIXParameters aParams = new PKIXParameters (ContainerHelper.newSet (aTrustAnchor));
       aParams.setRevocationEnabled (true);
 
       /*
