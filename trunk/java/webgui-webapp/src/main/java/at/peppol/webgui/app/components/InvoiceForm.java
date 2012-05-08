@@ -51,6 +51,8 @@ import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.PopupDateField;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
+
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.*;
 
 /**
@@ -63,11 +65,14 @@ public class InvoiceForm extends Form {
     private InvoiceType invoice;
     private CustomerPartyType customer;
     private SupplierPartyType supplier;
-
+    private InvoiceLineTable table;
+    private Window popup;
+    
     public InvoiceForm() {
         invObjFactory = new ObjectFactory();
         initInvoiceData();
         initElements();
+        popup = new InvoiceLineWindow(this).getWindow();
     }
 
     private void initInvoiceData() {
@@ -101,9 +106,18 @@ public class InvoiceForm extends Form {
         invoice.setLegalMonetaryTotal(new MonetaryTotalType());
         
         final List<InvoiceLineType> items = invoice.getInvoiceLine();
+        
         items.add(createInvoiceLine());
     }
 
+    public InvoiceLineTable getTable() {
+      return this.table;
+    }
+    
+    public InvoiceType getInvoiceType() {
+      return this.invoice;
+    }
+    
     public JAXBElement<InvoiceType> getInvoice() {
 
         return invObjFactory.createInvoice(invoice);
@@ -145,7 +159,7 @@ public class InvoiceForm extends Form {
         grid.addComponent(supplierForm, 0, 1);
         grid.addComponent(customerForm, 1, 1);
         grid.setSizeUndefined();
-        InvoiceLineTable table = new InvoiceLineTable(invoice.getInvoiceLine());
+        table = new InvoiceLineTable(invoice.getInvoiceLine());
         table.setSizeFull();
         
         grid.addComponent(table,0,2,1,2);
@@ -163,9 +177,32 @@ public class InvoiceForm extends Form {
             }
         }));
 
+        getFooter().addComponent(new Button("Add new Line", new Button.ClickListener() {
+
+          @Override
+          public void buttonClick(final Button.ClickEvent event) {
+            //invoice.getInvoiceLine().add (new InvoiceLineType ().setID (new IDType ().setValue ("tralala")));
+            //invoice.getInvoiceLine().add (null);
+            //Open modal window to add new invoice line
+            showInvLineWindow();
+             
+          }
+        }));        
+        
+
+        
         outerPanel.requestRepaintAll();
 
     }
+    
+    public void showInvLineWindow() {
+
+      popup.setResizable (true);
+      popup.setHeight("420px");
+      popup.setWidth("400px");
+      getWindow().addWindow(popup);
+                 
+    }    
 
     public Form createInvoiceTopForm() {
 

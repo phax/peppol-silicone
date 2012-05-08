@@ -15,6 +15,7 @@ import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.Invo
  *
  * @author Jerouris
  */
+@SuppressWarnings ("serial")
 public class InvoiceLineTable extends Table {
 
     private final List<InvoiceLineType> invoiceLines;
@@ -38,9 +39,9 @@ public class InvoiceLineTable extends Table {
         setDefinedPropertiesAsVisible();
 
         addInvoiceLine(createInvoiceLine());
-        addInvoiceLine(createInvoiceLine());
-        addInvoiceLine(createInvoiceLine());
-        addInvoiceLine(createInvoiceLine());
+        //addInvoiceLine(createInvoiceLine());
+        //addInvoiceLine(createInvoiceLine());
+        //addInvoiceLine(createInvoiceLine());
         
         setPageLength(4);
     }
@@ -55,7 +56,7 @@ public class InvoiceLineTable extends Table {
         setVisibleColumns(visibleHeaderNames.toArray());
     }
 
-    private void addInvoiceLine(InvoiceLineAdapter invln) {
+    public void addInvoiceLine(InvoiceLineAdapter invln) {
         tableLines.addBean(invln);
         invoiceLines.add(invln);
     }
