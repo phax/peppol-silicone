@@ -74,7 +74,7 @@ import com.phloc.commons.io.resource.FileSystemResource;
 import com.phloc.commons.lang.EnumHelper;
 import com.phloc.commons.name.IHasDisplayName;
 import com.phloc.commons.regex.RegExHelper;
-import com.phloc.genericode.Genericode10Marshaller;
+import com.phloc.genericode.Genericode10CodeListMarshaller;
 import com.phloc.genericode.Genericode10Utils;
 import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JCodeModel;
@@ -179,8 +179,7 @@ public class MainCreateEnumsGenericode {
     for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/main/resources/codelists/ubl"),
                                                                 FilenameFilterFactory.getEndsWithFilter (".gc"))) {
       System.out.println (aFile.getName ());
-      final CodeListDocument aCodeList10 = Genericode10Marshaller.getInstance ()
-                                                                 .readCodeList (new FileSystemResource (aFile));
+      final CodeListDocument aCodeList10 = new Genericode10CodeListMarshaller ().read (new FileSystemResource (aFile));
       if (aCodeList10 != null)
         _createGenericode10 (aFile, aCodeList10);
     }

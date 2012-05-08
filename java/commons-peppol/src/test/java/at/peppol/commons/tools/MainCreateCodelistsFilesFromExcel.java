@@ -87,7 +87,7 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.version.Version;
 import com.phloc.commons.xml.serialize.XMLWriter;
 import com.phloc.commons.xml.serialize.XMLWriterSettings;
-import com.phloc.genericode.Genericode10Marshaller;
+import com.phloc.genericode.Genericode10CodeListMarshaller;
 import com.phloc.genericode.Genericode10Utils;
 import com.phloc.genericode.excel.ExcelReadOptions;
 import com.phloc.genericode.excel.ExcelSheetToCodeList;
@@ -122,7 +122,7 @@ public final class MainCreateCodelistsFilesFromExcel {
   private static JDefinedClass s_jEnumPredefinedDoc;
 
   private static void _writeGenericodeFile (@Nonnull final CodeListDocument aCodeList, @Nonnull final String sFilename) {
-    final Document aDoc = Genericode10Marshaller.getInstance ().writeCodeList (aCodeList);
+    final Document aDoc = new Genericode10CodeListMarshaller ().write (aCodeList);
     if (aDoc == null)
       throw new IllegalStateException ("Failed to serialize code list");
     final OutputStream aFOS = FileUtils.getOutputStream (sFilename);
