@@ -35,7 +35,7 @@ import org.w3c.dom.Node;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.commons.jaxb.JAXBContextCache;
-import com.phloc.commons.jaxb.LoggingValidationEventHandler;
+import com.phloc.commons.jaxb.validation.LoggingValidationEventHandler;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.xml.schema.XMLSchemaCache;
 import com.phloc.commons.xml.transform.ResourceStreamSource;
@@ -44,7 +44,7 @@ import com.phloc.commons.xml.transform.ResourceStreamSource;
  * This is the XML reader for Schematron SVRL documents. It reads XML DOM
  * documents and returns {@link SchematronOutputType} elements. The reading
  * itself is done with JAXB.<br>
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable
@@ -76,7 +76,7 @@ public final class SVRLReader {
 
   /**
    * Convert the passed W3C node into a SVRL domain object
-   *
+   * 
    * @param aNode
    *        The node to be converted. May not be <code>null</code>.
    * @return <code>null</code> if the passed object could not be interpreted as

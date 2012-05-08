@@ -45,7 +45,7 @@ import at.peppol.webgui.document.transform.TransformationResult;
 import at.peppol.webgui.document.transform.TransformationSource;
 
 import com.phloc.commons.error.IResourceErrorGroup;
-import com.phloc.commons.jaxb.CollectingValidationEventHandler;
+import com.phloc.commons.jaxb.validation.CollectingValidationEventHandler;
 import com.phloc.commons.typeconvert.TypeConverterException;
 import com.phloc.commons.xml.XMLHelper;
 import com.phloc.ubl.EUBL20DocumentType;
