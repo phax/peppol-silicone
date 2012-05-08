@@ -37,7 +37,7 @@ import org.w3c.dom.Document;
 import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.commons.io.streams.NonBlockingStringWriter;
 import com.phloc.commons.jaxb.JAXBContextCache;
-import com.phloc.commons.jaxb.LoggingValidationEventHandler;
+import com.phloc.commons.jaxb.validation.LoggingValidationEventHandler;
 import com.phloc.commons.state.ESuccess;
 import com.phloc.commons.xml.XMLFactory;
 import com.phloc.commons.xml.schema.XMLSchemaCache;
@@ -46,7 +46,7 @@ import com.phloc.commons.xml.schema.XMLSchemaCache;
  * This is the XML writer for Schematron SVRL documents. It reads
  * {@link SchematronOutputType} elements and converts them to W3C nodes. The
  * writing itself is done with JAXB.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable
@@ -76,7 +76,7 @@ public final class SVRLWriter {
 
   /**
    * Convert the passed schematron output element into an W3C Document node.
-   *
+   * 
    * @param aSchematronOutput
    *        The schematron output to be converted. May not be <code>null</code>.
    * @return {@link ESuccess}
@@ -104,7 +104,7 @@ public final class SVRLWriter {
 
   /**
    * Convert the passed schematron output element into an W3C Document node.
-   *
+   * 
    * @param aSchematronOutput
    *        The schematron output to be converted. May not be <code>null</code>.
    * @return <code>null</code> if conversion failed.
@@ -118,7 +118,7 @@ public final class SVRLWriter {
   /**
    * Utility method to directly convert the passed SVRL domain object to an XML
    * string.
-   *
+   * 
    * @param aSchematronOutput
    *        The SVRL domain object to be converted. May not be null.
    * @return <code>null</code> if the passed domain object could not be
