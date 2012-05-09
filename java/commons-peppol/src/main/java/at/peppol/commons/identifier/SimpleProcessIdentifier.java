@@ -38,7 +38,6 @@
 package at.peppol.commons.identifier;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import org.busdox.transport.identifiers._1.ProcessIdentifierType;
 
@@ -108,7 +107,7 @@ public class SimpleProcessIdentifier extends ProcessIdentifierType {
   }
 
   @Nonnull
-  public static SimpleProcessIdentifier createWithDefaultScheme (@Nullable final String sValue) {
+  public static SimpleProcessIdentifier createWithDefaultScheme (@Nonnull final String sValue) {
     return new SimpleProcessIdentifier (CIdentifier.DEFAULT_PROCESS_IDENTIFIER_SCHEME, sValue);
   }
 

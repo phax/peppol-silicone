@@ -63,7 +63,7 @@ public class SimpleDocumentTypeIdentifier extends DocumentIdentifierType {
     this (aIdentifier.getScheme (), aIdentifier.getValue ());
   }
 
-  public SimpleDocumentTypeIdentifier (@Nullable final String sScheme, @Nullable final String sValue) {
+  public SimpleDocumentTypeIdentifier (@Nullable final String sScheme, @Nonnull final String sValue) {
     if (!IdentifierUtils.isValidIdentifierScheme (sScheme))
       throw new IllegalArgumentException ("Document Type identifier scheme '" + sScheme + "' is invalid!");
     if (!IdentifierUtils.isValidDocumentTypeIdentifierValue (sValue))
@@ -108,7 +108,7 @@ public class SimpleDocumentTypeIdentifier extends DocumentIdentifierType {
   }
 
   @Nonnull
-  public static SimpleDocumentTypeIdentifier createWithDefaultScheme (@Nullable final String sValue) {
+  public static SimpleDocumentTypeIdentifier createWithDefaultScheme (@Nonnull final String sValue) {
     return new SimpleDocumentTypeIdentifier (CIdentifier.DEFAULT_DOCUMENT_TYPE_IDENTIFIER_SCHEME, sValue);
   }
 
