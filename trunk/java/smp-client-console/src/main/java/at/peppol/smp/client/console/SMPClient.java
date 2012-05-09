@@ -39,19 +39,18 @@ package at.peppol.smp.client.console;
 
 import java.io.File;
 import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.net.URI;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.xml.ws.wsaddressing.W3CEndpointReference;
-import javax.xml.ws.wsaddressing.W3CEndpointReferenceBuilder;
 
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.PosixParser;
 import org.busdox.servicemetadata.publishing._1.EndpointType;
@@ -64,9 +63,6 @@ import org.busdox.servicemetadata.publishing._1.ServiceGroupReferenceType;
 import org.busdox.servicemetadata.publishing._1.ServiceGroupType;
 import org.busdox.servicemetadata.publishing._1.ServiceInformationType;
 import org.busdox.servicemetadata.publishing._1.ServiceMetadataType;
-import org.busdox.transport.identifiers._1.DocumentIdentifierType;
-import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
-import org.busdox.transport.identifiers._1.ProcessIdentifierType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,58 +72,81 @@ import at.peppol.commons.identifier.SimpleProcessIdentifier;
 import at.peppol.commons.security.DoNothingTrustManager;
 import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
 import at.peppol.commons.utils.ReadonlyUsernamePWCredentials;
+import at.peppol.commons.wsaddr.W3CEndpointReferenceUtils;
 import at.peppol.smp.client.SMPServiceCaller;
 import at.peppol.smp.client.UserId;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.io.file.SimpleFileIO;
+import com.phloc.commons.io.streams.NonBlockingStringWriter;
 import com.phloc.commons.lang.CGStringHelper;
 import com.phloc.commons.random.VerySecureRandom;
+import com.phloc.commons.string.StringHelper;
 
 /**
  * SMP commandline client
  * 
  * @author Itella
+ * @author Philip Helger
  */
 public final class SMPClient {
-  static enum Command {
+  private static enum ECommand {
     ADDGROUP,
     ADD,
     DELGROUP,
     DEL,
-    LIST,
-    UNDEFINED
+    LIST;
+
+    @Nullable
+    public static ECommand getFromNameOrNull (@Nullable final String sName) {
+      if (StringHelper.hasText (sName))
+        for (final ECommand eCommand : values ())
+          if (sName.equalsIgnoreCase (eCommand.name ()))
+            return eCommand;
+      return null;
+    }
+
+    @Nonnull
+    @Nonempty
+    public static String getAllAsString () {
+      final StringBuilder ret = new StringBuilder ();
+      for (final ECommand eCommand : values ()) {
+        if (ret.length () > 0)
+          ret.append (',');
+        ret.append (eCommand.name ());
+      }
+      return ret.toString ();
+    }
   }
 
   private static final Logger s_aLogger = LoggerFactory.getLogger (SMPClient.class);
 
   private final URI m_aSMPAddress;
   private final String m_sSMPUsername;
-  private final String m_sSMPPassword;
+  private final IReadonlyUsernamePWCredentials m_aSMPCredentials;
   private final String m_sAPAddress;
-  private final String m_sAPWSDLAddress;
-  private final String m_sDocumentType;
   private final String m_sCertificateContent;
-  private final String m_sParticipantID;
-  private final String m_sProcessID;
+  private final SimpleParticipantIdentifier m_aParticipantID;
+  private final SimpleDocumentTypeIdentifier m_aDocumentType;
+  private final SimpleProcessIdentifier m_aProcessID;
 
   public SMPClient (final URI aSMPAddress,
                     final String sSMPUsername,
                     final String sSMPPassword,
-                    final String sAPAddress,
-                    final String sDocumentType,
-                    final String sCertificateContent,
                     final String sParticipantID,
-                    final String sProcessID) {
+                    final String sDocumentType,
+                    final String sProcessID,
+                    final String sAPAddress,
+                    final String sCertificateContent) {
     m_aSMPAddress = aSMPAddress;
     m_sSMPUsername = sSMPUsername;
-    m_sSMPPassword = sSMPPassword;
+    m_aSMPCredentials = new ReadonlyUsernamePWCredentials (sSMPUsername, sSMPPassword);
     m_sAPAddress = sAPAddress;
-    m_sAPWSDLAddress = sAPAddress + "?wsdl";
-    m_sDocumentType = sDocumentType;
-    m_sProcessID = sProcessID;
     m_sCertificateContent = sCertificateContent;
-    m_sParticipantID = sParticipantID;
+    m_aParticipantID = SimpleParticipantIdentifier.createWithDefaultScheme (sParticipantID);
+    m_aDocumentType = SimpleDocumentTypeIdentifier.createWithDefaultScheme (sDocumentType);
+    m_aProcessID = SimpleProcessIdentifier.createWithDefaultScheme (sProcessID);
   }
 
   public static void main (final String [] args) throws Exception {
@@ -139,109 +158,122 @@ public final class SMPClient {
       HttpsURLConnection.setDefaultSSLSocketFactory (aSSLContext.getSocketFactory ());
     }
 
-    final SMPClientOptions options = new SMPClientOptions ();
-    final CommandLineParser parser = new PosixParser ();
-    final CommandLine cmd = parser.parse (options, args);
-    final HelpFormatter formatter = new HelpFormatter ();
+    final SMPClientOptions aOptions = new SMPClientOptions ();
+    final CommandLine cmd = new PosixParser ().parse (aOptions, args);
 
-    Command action = Command.UNDEFINED;
-    boolean goodCMD = true;
+    ECommand eAction = null;
+    boolean bGoodCmd = true;
     String cert = null;
 
     if (!cmd.hasOption ("h")) {
       s_aLogger.error ("No Host specified use -h to specify Host");
-      goodCMD = false;
+      bGoodCmd = false;
     }
 
     if (!cmd.hasOption ("u")) {
       s_aLogger.error ("No Username specified use -u to specify username");
-      goodCMD = false;
+      bGoodCmd = false;
     }
 
     if (!cmd.hasOption ("p")) {
-      s_aLogger.error ("No Password specified use -p to specify Password");
-      goodCMD = false;
+      s_aLogger.error ("No Password specified use -p to specify password");
+      bGoodCmd = false;
     }
 
     if (!cmd.hasOption ("c")) {
-      s_aLogger.error ("No Action specified please use -c parameter to specify command(ADD,DEL,LIST)");
-      goodCMD = false;
+      s_aLogger.error ("No Action specified please use -c parameter to specify command(" +
+                       ECommand.getAllAsString () +
+                       ")");
+      bGoodCmd = false;
     }
     else {
-      final String optValue = cmd.getOptionValue ("c").toUpperCase ();
-      for (final Command element : Command.values ()) {
-        if (element.toString ().equals (optValue)) {
-          action = element;
-          break;
-        }
+      final String sCommand = cmd.getOptionValue ("c");
+      eAction = ECommand.getFromNameOrNull (sCommand);
+      if (eAction == null) {
+        s_aLogger.error ("Illegal Action specified:" +
+                         sCommand +
+                         " allowed commands(" +
+                         ECommand.getAllAsString () +
+                         ")");
+        bGoodCmd = false;
       }
-      if (action == null || action == Command.UNDEFINED) {
-        s_aLogger.error ("Illegal Action specified:" + cmd.getOptionValue ("c") + " allowed commands(ADD,DEL,LIST)");
-        goodCMD = false;
-      }
-      if (action == Command.ADD) {
-        if (!cmd.hasOption ("a")) {
-          s_aLogger.error ("No Accesspoint URL defined use -a to Specifify APurl");
-          goodCMD = false;
+      else
+        switch (eAction) {
+          case ADDGROUP:
+            if (!cmd.hasOption ("b")) {
+              s_aLogger.error ("No Business/Participant ID specified use -b to specify Business/Participant ID");
+              bGoodCmd = false;
+            }
+            break;
+          case DELGROUP:
+            if (!cmd.hasOption ("b")) {
+              s_aLogger.error ("No Business/Participant ID specified use -b to specify Business/Participant ID");
+              bGoodCmd = false;
+            }
+            break;
+          case ADD:
+            if (!cmd.hasOption ("a")) {
+              s_aLogger.error ("No Accesspoint URL defined use -a to Specifify AP-URL");
+              bGoodCmd = false;
+            }
+            if (!cmd.hasOption ("b")) {
+              s_aLogger.error ("No Business/Participant ID specified use -b to specify Business/Participant ID");
+              bGoodCmd = false;
+            }
+            if (!cmd.hasOption ("d")) {
+              s_aLogger.error ("No DocumentType ID specified use -d to specify Document Type ID");
+              bGoodCmd = false;
+            }
+            if (!cmd.hasOption ("r")) {
+              s_aLogger.error ("No Process ID specified use -r to specify Process ID");
+              bGoodCmd = false;
+            }
+            if (!cmd.hasOption ("e")) {
+              s_aLogger.error ("No Certificate PEM file specified use -e to specify Certificate PEM file");
+              bGoodCmd = false;
+            }
+            else {
+              cert = SimpleFileIO.readFileAsString (new File (cmd.getOptionValue ('e')), CCharset.CHARSET_ISO_8859_1);
+            }
+            break;
+          case DEL:
+            if (!cmd.hasOption ("b")) {
+              s_aLogger.error ("No Business/Participant ID specified use -b to specify Business/Participant ID");
+              bGoodCmd = false;
+            }
+            if (!cmd.hasOption ("d")) {
+              s_aLogger.error ("No Document Type ID specified use -d to specify Document Type ID");
+              bGoodCmd = false;
+            }
         }
-        if (!cmd.hasOption ("b")) {
-          s_aLogger.error ("No Business ID specified use -b to specify Participant ID");
-          goodCMD = false;
-        }
-        if (!cmd.hasOption ("d")) {
-          s_aLogger.error ("No DocumentID specified use -d to specify Document TypeID");
-          goodCMD = false;
-        }
-        if (!cmd.hasOption ("r")) {
-          s_aLogger.error ("No ProcessID specified use -r to specify Process TypeID");
-          goodCMD = false;
-        }
-        if (!cmd.hasOption ("e")) {
-          s_aLogger.error ("No Certificate PEM file specified use -e to specify Certificate PEM file");
-          goodCMD = false;
-        }
-        else {
-          cert = readFile (cmd.getOptionValue ('e'));
-        }
-      }
-      if (action == Command.DEL) {
-        if (!cmd.hasOption ("b")) {
-          s_aLogger.error ("No Business ID specified use -b to specify Participant ID");
-          goodCMD = false;
-        }
-        if (!cmd.hasOption ("d")) {
-          s_aLogger.error ("No DocumentID specified use -d to specify Document TypeID");
-          goodCMD = false;
-        }
-      }
     }
 
-    if (!goodCMD) {
-      final StringWriter aSW = new StringWriter ();
-      formatter.printHelp (new PrintWriter (aSW),
-                           HelpFormatter.DEFAULT_WIDTH,
-                           CGStringHelper.getClassLocalName (SMPClient.class),
-                           null,
-                           options,
-                           HelpFormatter.DEFAULT_LEFT_PAD,
-                           HelpFormatter.DEFAULT_DESC_PAD,
-                           null);
-      s_aLogger.info (aSW.toString ());
+    if (!bGoodCmd) {
+      final NonBlockingStringWriter aSW = new NonBlockingStringWriter ();
+      new HelpFormatter ().printHelp (new PrintWriter (aSW),
+                                      HelpFormatter.DEFAULT_WIDTH,
+                                      CGStringHelper.getClassLocalName (SMPClient.class),
+                                      null,
+                                      aOptions,
+                                      HelpFormatter.DEFAULT_LEFT_PAD,
+                                      HelpFormatter.DEFAULT_DESC_PAD,
+                                      null);
+      s_aLogger.info (aSW.getAsString ());
       System.exit (-3);
     }
 
     final SMPClient client = new SMPClient (new URI (cmd.getOptionValue ('h')),
                                             cmd.getOptionValue ('u'),
                                             cmd.getOptionValue ('p'),
-                                            cmd.getOptionValue ('a'),
-                                            cmd.getOptionValue ('d'),
-                                            cert,
                                             cmd.getOptionValue ('b'),
-                                            cmd.getOptionValue ('r'));
+                                            cmd.getOptionValue ('d'),
+                                            cmd.getOptionValue ('r'),
+                                            cmd.getOptionValue ('a'),
+                                            cert);
 
-    switch (action) {
+    switch (eAction) {
       case ADDGROUP:
-        client.createServiceGroup ();
+        client._createServiceGroup ();
         break;
       case DELGROUP:
         client._deleteServiceGroup ();
@@ -253,44 +285,42 @@ public final class SMPClient {
         client._deleteDocument ();
         break;
       case LIST:
-        client.listDocuments ();
+        client._listDocuments ();
+        break;
+      default:
+        throw new IllegalStateException ();
     }
   }
 
-  private void _deleteServiceGroup () {
-    final ParticipantIdentifierType aPI = SimpleParticipantIdentifier.createWithDefaultScheme (m_sParticipantID);
-    final SMPServiceCaller client = new SMPServiceCaller (m_aSMPAddress);
-    final IReadonlyUsernamePWCredentials smpCreds = new ReadonlyUsernamePWCredentials (m_sSMPUsername, m_sSMPPassword);
-    try {
-      client.deleteServiceGroup (aPI, smpCreds);
-    }
-    catch (final Exception e) {
-      s_aLogger.error ("Failed to delete service group", e);
-    }
-  }
-
-  public void createServiceGroup () {
-    final ParticipantIdentifierType aPI = SimpleParticipantIdentifier.createWithDefaultScheme (m_sParticipantID);
+  private void _createServiceGroup () {
     final ServiceGroupType serviceGroup = new ObjectFactory ().createServiceGroupType ();
-    serviceGroup.setParticipantIdentifier (aPI);
+    serviceGroup.setParticipantIdentifier (m_aParticipantID);
     final SMPServiceCaller client = new SMPServiceCaller (m_aSMPAddress);
-    final IReadonlyUsernamePWCredentials smpCreds = new ReadonlyUsernamePWCredentials (m_sSMPUsername, m_sSMPPassword);
     try {
-      client.saveServiceGroup (serviceGroup, smpCreds);
+      client.saveServiceGroup (serviceGroup, m_aSMPCredentials);
     }
     catch (final Exception e) {
       s_aLogger.error ("Failed to create service group", e);
     }
   }
 
-  public void listDocuments () {
+  private void _deleteServiceGroup () {
     final SMPServiceCaller client = new SMPServiceCaller (m_aSMPAddress);
-    final IReadonlyUsernamePWCredentials smpCreds = new ReadonlyUsernamePWCredentials (m_sSMPUsername, m_sSMPPassword);
+    try {
+      client.deleteServiceGroup (m_aParticipantID, m_aSMPCredentials);
+    }
+    catch (final Exception e) {
+      s_aLogger.error ("Failed to delete service group", e);
+    }
+  }
+
+  private void _listDocuments () {
+    final SMPServiceCaller client = new SMPServiceCaller (m_aSMPAddress);
     try {
       final ServiceGroupReferenceListType list = client.getServiceGroupReferenceList (new UserId (m_sSMPUsername),
-                                                                                      smpCreds);
+                                                                                      m_aSMPCredentials);
       for (final ServiceGroupReferenceType gr : list.getServiceGroupReference ())
-        System.out.print (gr.getValue () + ":" + gr.getHref () + "\n");
+        System.out.println (gr.getValue () + ":" + gr.getHref ());
     }
     catch (final Exception e) {
       s_aLogger.error ("Failed to list documents", e);
@@ -298,12 +328,9 @@ public final class SMPClient {
   }
 
   private void _deleteDocument () {
-    final ParticipantIdentifierType aPI = SimpleParticipantIdentifier.createWithDefaultScheme (m_sParticipantID);
-    final DocumentIdentifierType documentIdentifier = SimpleDocumentTypeIdentifier.createWithDefaultScheme (m_sDocumentType);
     final SMPServiceCaller client = new SMPServiceCaller (m_aSMPAddress);
-    final IReadonlyUsernamePWCredentials smpCreds = new ReadonlyUsernamePWCredentials (m_sSMPUsername, m_sSMPPassword);
     try {
-      client.deleteServiceRegistration (aPI, documentIdentifier, smpCreds);
+      client.deleteServiceRegistration (m_aParticipantID, m_aDocumentType, m_aSMPCredentials);
     }
     catch (final Exception e) {
       s_aLogger.error ("Failed to delete document", e);
@@ -311,52 +338,51 @@ public final class SMPClient {
   }
 
   private void _addDocument () {
-    final ProcessIdentifierType processIdentifier = SimpleProcessIdentifier.createWithDefaultScheme (m_sProcessID);
-    final ParticipantIdentifierType bi = SimpleParticipantIdentifier.createWithDefaultScheme (m_sParticipantID);
-    final DocumentIdentifierType documentIdentifier = SimpleDocumentTypeIdentifier.createWithDefaultScheme (m_sDocumentType);
-    final IReadonlyUsernamePWCredentials smpCreds = new ReadonlyUsernamePWCredentials (m_sSMPUsername, m_sSMPPassword);
     final SMPServiceCaller client = new SMPServiceCaller (m_aSMPAddress);
-    final W3CEndpointReferenceBuilder builder = new W3CEndpointReferenceBuilder ();
-    builder.wsdlDocumentLocation (m_sAPWSDLAddress);
-    builder.address (m_sAPAddress);
-    final W3CEndpointReference endpointReferenceType = builder.build ();
+    final W3CEndpointReference endpointReferenceType = W3CEndpointReferenceUtils.createEndpointReference (m_sAPAddress);
 
     final ObjectFactory aObjFactory = new ObjectFactory ();
-    final EndpointType endpointType = aObjFactory.createEndpointType ();
-    endpointType.setEndpointReference (endpointReferenceType);
-    endpointType.setTransportProfile ("busdox-transport-start");
+    final ServiceMetadataType aServiceMetadata = aObjFactory.createServiceMetadataType ();
 
-    endpointType.setCertificate (m_sCertificateContent);
-    endpointType.setServiceActivationDate (new Date (System.currentTimeMillis ()));
-    endpointType.setServiceDescription ("Test service. For Interoperability test usage.");
-    final Calendar exp = Calendar.getInstance ();
-    exp.roll (Calendar.YEAR, 10);
-    endpointType.setServiceExpirationDate (exp.getTime ());
-    endpointType.setTechnicalContactUrl ("");
-    endpointType.setMinimumAuthenticationLevel ("1");
-    endpointType.setRequireBusinessLevelSignature (false);
-    final ServiceEndpointList serviceEndpointList = aObjFactory.createServiceEndpointList ();
-    serviceEndpointList.getEndpoint ().add (endpointType);
-    final ProcessType processType = aObjFactory.createProcessType ();
-    processType.setProcessIdentifier (processIdentifier);
-    processType.setServiceEndpointList (serviceEndpointList);
-    final ProcessListType processListType = aObjFactory.createProcessListType ();
-    processListType.getProcess ().add (processType);
-    final ServiceInformationType serviceInformationType = aObjFactory.createServiceInformationType ();
-    serviceInformationType.setDocumentIdentifier (documentIdentifier);
-    serviceInformationType.setParticipantIdentifier (bi);
-    serviceInformationType.setProcessList (processListType);
-    final ServiceMetadataType serviceMetadata = aObjFactory.createServiceMetadataType ();
-    serviceMetadata.setServiceInformation (serviceInformationType);
+    {
+      final ProcessListType aProcessList = aObjFactory.createProcessListType ();
+      {
+        final ProcessType aProcess = aObjFactory.createProcessType ();
+        aProcess.setProcessIdentifier (m_aProcessID);
+        {
+          final ServiceEndpointList aServiceEndpointList = aObjFactory.createServiceEndpointList ();
+          {
+            final EndpointType aEndpoint = aObjFactory.createEndpointType ();
+            aEndpoint.setEndpointReference (endpointReferenceType);
+            aEndpoint.setTransportProfile ("busdox-transport-start");
+
+            aEndpoint.setCertificate (m_sCertificateContent);
+            aEndpoint.setServiceActivationDate (new Date (System.currentTimeMillis ()));
+            aEndpoint.setServiceDescription ("Test service. For Interoperability test usage.");
+            final Calendar exp = Calendar.getInstance ();
+            exp.roll (Calendar.YEAR, 10);
+            aEndpoint.setServiceExpirationDate (exp.getTime ());
+            aEndpoint.setTechnicalContactUrl ("");
+            aEndpoint.setMinimumAuthenticationLevel ("1");
+            aEndpoint.setRequireBusinessLevelSignature (false);
+            aServiceEndpointList.getEndpoint ().add (aEndpoint);
+          }
+          aProcess.setServiceEndpointList (aServiceEndpointList);
+        }
+        aProcessList.getProcess ().add (aProcess);
+      }
+
+      final ServiceInformationType aServiceInformation = aObjFactory.createServiceInformationType ();
+      aServiceInformation.setDocumentIdentifier (m_aDocumentType);
+      aServiceInformation.setParticipantIdentifier (m_aParticipantID);
+      aServiceInformation.setProcessList (aProcessList);
+      aServiceMetadata.setServiceInformation (aServiceInformation);
+    }
     try {
-      client.saveServiceRegistration (serviceMetadata, smpCreds);
+      client.saveServiceRegistration (aServiceMetadata, m_aSMPCredentials);
     }
     catch (final Exception e) {
       s_aLogger.error ("Failed to add document", e);
     }
-  }
-
-  private static String readFile (final String filename) {
-    return SimpleFileIO.readFileAsString (new File (filename), CCharset.CHARSET_ISO_8859_1);
   }
 }
