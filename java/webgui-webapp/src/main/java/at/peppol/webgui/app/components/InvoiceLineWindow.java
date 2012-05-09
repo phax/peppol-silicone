@@ -1,10 +1,8 @@
 package at.peppol.webgui.app.components;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.InvoiceLineType;
-import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IDType;
 
 import com.vaadin.data.util.NestedMethodProperty;
 import com.vaadin.ui.Alignment;
