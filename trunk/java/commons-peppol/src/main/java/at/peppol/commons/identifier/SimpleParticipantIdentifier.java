@@ -63,7 +63,7 @@ public class SimpleParticipantIdentifier extends ParticipantIdentifierType {
     this (aIdentifier.getScheme (), aIdentifier.getValue ());
   }
 
-  public SimpleParticipantIdentifier (@Nullable final String sScheme, @Nullable final String sValue) {
+  public SimpleParticipantIdentifier (@Nullable final String sScheme, @Nonnull final String sValue) {
     if (!IdentifierUtils.isValidParticipantIdentifierScheme (sScheme))
       throw new IllegalArgumentException ("Participant identifier scheme '" + sScheme + "' is invalid!");
     if (!IdentifierUtils.isValidParticipantIdentifierValue (sValue))
@@ -108,7 +108,7 @@ public class SimpleParticipantIdentifier extends ParticipantIdentifierType {
   }
 
   @Nonnull
-  public static SimpleParticipantIdentifier createWithDefaultScheme (@Nullable final String sValue) {
+  public static SimpleParticipantIdentifier createWithDefaultScheme (@Nonnull final String sValue) {
     return new SimpleParticipantIdentifier (CIdentifier.DEFAULT_PARTICIPANT_IDENTIFIER_SCHEME, sValue);
   }
 
