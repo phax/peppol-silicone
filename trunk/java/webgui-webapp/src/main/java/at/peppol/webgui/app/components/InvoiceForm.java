@@ -17,6 +17,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.CustomerPartyType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.InvoiceLineType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.MonetaryTotalType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.PartyType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.SupplierPartyType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CustomizationIDType;
@@ -52,8 +53,6 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.PopupDateField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
-
-import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.*;
 
 /**
  * @author Jerouris

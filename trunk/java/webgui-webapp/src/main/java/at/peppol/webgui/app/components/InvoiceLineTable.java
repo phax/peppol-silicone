@@ -4,12 +4,14 @@
  */
 package at.peppol.webgui.app.components;
 
-import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.ui.Table;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.InvoiceLineType;
+
+import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.ui.Table;
 
 /**
  *
