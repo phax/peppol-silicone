@@ -48,13 +48,9 @@ import java.net.UnknownHostException;
 
 import org.junit.Test;
 
-import at.peppol.commons.ipmapper.ISocketType;
-import at.peppol.commons.ipmapper.SocketType;
-
-
 /**
  * Test class for class {@link SocketType}.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class SocketTypeTest {
@@ -138,15 +134,18 @@ public final class SocketTypeTest {
    * Test method for
    * {@link at.peppol.commons.ipmapper.SocketType#createSocketType(java.lang.String)}
    * .
-   *
-   * @throws UnknownHostException
    */
   @Test
-  public void testCreateSocketTypeWithDnsResolution () throws UnknownHostException {
-    final String hostName = InetAddress.getByName ("www.chello.at").getHostName ();
-    final SocketType st = SocketType.createSocketType (hostName);
-    assertEquals ("www.chello.at", st.getHost ());
-    assertNull (st.getPort ());
+  public void testCreateSocketTypeWithDnsResolution () {
+    try {
+      final String hostName = InetAddress.getByName ("www.chello.at").getHostName ();
+      final SocketType st = SocketType.createSocketType (hostName);
+      assertEquals ("www.chello.at", st.getHost ());
+      assertNull (st.getPort ());
+    }
+    catch (final UnknownHostException ex) {
+      // Happens in offline more
+    }
   }
 
   /**
