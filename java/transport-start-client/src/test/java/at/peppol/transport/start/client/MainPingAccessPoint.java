@@ -48,12 +48,14 @@ import org.busdox.transport.identifiers._1.ProcessIdentifierType;
 import org.w3c.dom.Document;
 
 import at.peppol.busdox.CBusDox;
+import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+import at.peppol.commons.identifier.docid.EPredefinedDocumentTypeIdentifier;
+import at.peppol.commons.identifier.procid.EPredefinedProcessIdentifier;
 import at.peppol.commons.sml.ESML;
 import at.peppol.commons.sml.ISMLInfo;
 import at.peppol.smp.client.SMPServiceCaller;
 import at.peppol.transport.IMessageMetadata;
 import at.peppol.transport.MessageMetadata;
-import at.peppol.transport.PingMessageHelper;
 
 import com.phloc.commons.SystemProperties;
 import com.phloc.commons.charset.CCharset;
@@ -82,10 +84,10 @@ public class MainPingAccessPoint {
 
   @Nonnull
   private static IMessageMetadata _createPingMetadata () {
-    final ParticipantIdentifierType sender = PingMessageHelper.PING_SENDER;
-    final ParticipantIdentifierType recipient = PingMessageHelper.PING_RECIPIENT;
-    final DocumentIdentifierType documentType = PingMessageHelper.PING_DOCUMENT;
-    final ProcessIdentifierType processIdentifierType = PingMessageHelper.PING_PROCESS;
+    final ParticipantIdentifierType sender = SimpleParticipantIdentifier.createWithDefaultScheme ("9914:ATU53309209XXX");
+    final ParticipantIdentifierType recipient = SimpleParticipantIdentifier.createWithDefaultScheme ("9914:ATU53309209");
+    final DocumentIdentifierType documentType = EPredefinedDocumentTypeIdentifier.INVOICE_T010_BIS4A.getAsDocumentTypeIdentifier ();
+    final ProcessIdentifierType processIdentifierType = EPredefinedProcessIdentifier.BIS4A.getAsProcessIdentifier ();
     final String sMessageID = "uuid:" + UUID.randomUUID ().toString ();
     return new MessageMetadata (sMessageID, null, sender, recipient, documentType, processIdentifierType);
   }

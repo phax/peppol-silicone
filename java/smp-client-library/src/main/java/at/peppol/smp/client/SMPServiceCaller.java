@@ -38,7 +38,6 @@
 package at.peppol.smp.client;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
@@ -77,6 +76,7 @@ import at.peppol.smp.client.exception.NotFoundException;
 import at.peppol.smp.client.exception.UnauthorizedException;
 import at.peppol.smp.client.exception.UnknownException;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.io.streams.NonBlockingByteArrayInputStream;
 import com.sun.jersey.api.client.Client;
@@ -125,13 +125,37 @@ public final class SMPServiceCaller {
     return aClient.resource (aURI);
   }
 
+  /**
+   * Constructor
+   * 
+   * @param aParticipantIdentifier
+   *        The participant identifier to be used. Required to build the SMP
+   *        access URI.
+   * @param aSMLInfo
+   *        The SML to be used. Required to build the SMP access URI.
+   * @see BusdoxURLUtils#getSMPURIOfParticipant(IReadonlyParticipantIdentifier,
+   *      ISMLInfo)
+   */
   public SMPServiceCaller (@Nonnull final IReadonlyParticipantIdentifier aParticipantIdentifier,
                            @Nonnull final ISMLInfo aSMLInfo) {
-    this (aParticipantIdentifier, aSMLInfo.getDNSZone ());
+    this (BusdoxURLUtils.getSMPURIOfParticipant (aParticipantIdentifier, aSMLInfo));
   }
 
+  /**
+   * Constructor
+   * 
+   * @param aParticipantIdentifier
+   *        The participant identifier to be used. Required to build the SMP
+   *        access URI.
+   * @param sSMLZoneName
+   *        The SML DNS zone name to be used. Required to build the SMP access
+   *        URI. Must end with a trailing dot (".") and may neither be
+   *        <code>null</code> nor empty to build a correct URL.
+   * @see BusdoxURLUtils#getSMPURIOfParticipant(IReadonlyParticipantIdentifier,
+   *      String)
+   */
   public SMPServiceCaller (@Nonnull final IReadonlyParticipantIdentifier aParticipantIdentifier,
-                           @Nonnull final String sSMLZoneName) {
+                           @Nonnull @Nonempty final String sSMLZoneName) {
     this (BusdoxURLUtils.getSMPURIOfParticipant (aParticipantIdentifier, sSMLZoneName));
   }
 
@@ -140,8 +164,8 @@ public final class SMPServiceCaller {
    * HTTP and using port 80 only!
    * 
    * @param aSMPHost
-   *        The address of the SMP service. Example:
-   *        http://smpcompany.company.org
+   *        The address of the SMP service. Must be port 80 and basic http only
+   *        (no https!). Example: http://smpcompany.company.org
    */
   public SMPServiceCaller (@Nonnull final URI aSMPHost) {
     if (aSMPHost == null)
@@ -168,8 +192,8 @@ public final class SMPServiceCaller {
    * @throws BadRequestException
    *         The request was not well formed.
    */
-  public ServiceGroupReferenceListType getServiceGroupReferenceList (final UserId aUserID,
-                                                                     final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
+  public ServiceGroupReferenceListType getServiceGroupReferenceList (@Nonnull final UserId aUserID,
+                                                                     @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
     final WebResource aFullResource = m_aWebResource.path ("/list/" + aUserID.getUserIdPercentEncoded ());
     return _getServiceGroupReferenceListResource (aFullResource, aCredentials);
   }
@@ -192,10 +216,9 @@ public final class SMPServiceCaller {
    * @throws BadRequestException
    *         The request was not well formed.
    */
-  public CompleteServiceGroupType getCompleteServiceGroup (final IReadonlyParticipantIdentifier aServiceGroupID) throws Exception {
+  public CompleteServiceGroupType getCompleteServiceGroup (@Nonnull final IReadonlyParticipantIdentifier aServiceGroupID) throws Exception {
     final WebResource aFullResource = m_aWebResource.path ("/complete/" +
                                                            IdentifierUtils.getIdentifierURIPercentEncoded (aServiceGroupID));
-
     return _getCompleteServiceGroupResource (aFullResource);
   }
 
@@ -216,9 +239,8 @@ public final class SMPServiceCaller {
    * @throws BadRequestException
    *         The request was not well formed.
    */
-  public ServiceGroupType getServiceGroup (final IReadonlyParticipantIdentifier aServiceGroupID) throws Exception {
+  public ServiceGroupType getServiceGroup (@Nonnull final IReadonlyParticipantIdentifier aServiceGroupID) throws Exception {
     final WebResource aFullResource = m_aWebResource.path (IdentifierUtils.getIdentifierURIPercentEncoded (aServiceGroupID));
-
     return _getServiceGroupResource (aFullResource);
   }
 
@@ -240,9 +262,9 @@ public final class SMPServiceCaller {
    * @throws BadRequestException
    *         The request was not well formed.
    */
-  public void saveServiceGroup (final ServiceGroupType aServiceGroup, final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
-    final IReadonlyParticipantIdentifier aPI = aServiceGroup.getParticipantIdentifier ();
-    final WebResource aFullResource = m_aWebResource.path (IdentifierUtils.getIdentifierURIPercentEncoded (aPI));
+  public void saveServiceGroup (@Nonnull final ServiceGroupType aServiceGroup,
+                                @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
+    final WebResource aFullResource = m_aWebResource.path (IdentifierUtils.getIdentifierURIPercentEncoded (aServiceGroup.getParticipantIdentifier ()));
     _saveServiceGroupResource (aFullResource, aServiceGroup, aCredentials);
   }
 
@@ -262,8 +284,8 @@ public final class SMPServiceCaller {
    * @throws BadRequestException
    *         The request was not well formed.
    */
-  public void deleteServiceGroup (final IReadonlyParticipantIdentifier aServiceGroupID,
-                                  final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
+  public void deleteServiceGroup (@Nonnull final IReadonlyParticipantIdentifier aServiceGroupID,
+                                  @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
     final WebResource aFullResource = m_aWebResource.path (IdentifierUtils.getIdentifierURIPercentEncoded (aServiceGroupID));
     _deleteServiceGroupResource (aFullResource, aCredentials);
   }
@@ -383,11 +405,11 @@ public final class SMPServiceCaller {
    * @throws BadRequestException
    *         The request was not well formed.
    */
-  public void saveServiceRegistration (final ServiceMetadataType aServiceMetadata,
-                                       final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
-    final ServiceInformationType serviceInformation = aServiceMetadata.getServiceInformation ();
-    final IReadonlyParticipantIdentifier aServiceGroupID = serviceInformation.getParticipantIdentifier ();
-    final IReadonlyDocumentTypeIdentifier aDocumentTypeID = serviceInformation.getDocumentIdentifier ();
+  public void saveServiceRegistration (@Nonnull final ServiceMetadataType aServiceMetadata,
+                                       @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
+    final ServiceInformationType aServiceInformation = aServiceMetadata.getServiceInformation ();
+    final IReadonlyParticipantIdentifier aServiceGroupID = aServiceInformation.getParticipantIdentifier ();
+    final IReadonlyDocumentTypeIdentifier aDocumentTypeID = aServiceInformation.getDocumentIdentifier ();
 
     final WebResource aFullResource = m_aWebResource.path (IdentifierUtils.getIdentifierURIPercentEncoded (aServiceGroupID) +
                                                            "/services/" +
@@ -415,9 +437,9 @@ public final class SMPServiceCaller {
    * @throws BadRequestException
    *         The request was not well formed.
    */
-  public void deleteServiceRegistration (final IReadonlyParticipantIdentifier aServiceGroupID,
-                                         final IReadonlyDocumentTypeIdentifier aDocumentTypeID,
-                                         final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
+  public void deleteServiceRegistration (@Nonnull final IReadonlyParticipantIdentifier aServiceGroupID,
+                                         @Nonnull final IReadonlyDocumentTypeIdentifier aDocumentTypeID,
+                                         @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
     final WebResource aFullResource = m_aWebResource.path (IdentifierUtils.getIdentifierURIPercentEncoded (aServiceGroupID) +
                                                            "/services/" +
                                                            IdentifierUtils.getIdentifierURIPercentEncoded (aDocumentTypeID));
@@ -443,8 +465,8 @@ public final class SMPServiceCaller {
    * @throws BadRequestException
    *         The request was not well formed.
    */
-  public static ServiceGroupReferenceListType getServiceGroupReferenceList (final URI aURI,
-                                                                            final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
+  public static ServiceGroupReferenceListType getServiceGroupReferenceList (@Nonnull final URI aURI,
+                                                                            @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
     return _getServiceGroupReferenceListResource (_getResource (aURI), aCredentials);
   }
 
@@ -465,7 +487,7 @@ public final class SMPServiceCaller {
    * @throws BadRequestException
    *         The request was not well formed.
    */
-  public static CompleteServiceGroupType getCompleteServiceGroup (final URI aURI) throws Exception {
+  public static CompleteServiceGroupType getCompleteServiceGroup (@Nonnull final URI aURI) throws Exception {
     return _getCompleteServiceGroupResource (_getResource (aURI));
   }
 
@@ -485,7 +507,7 @@ public final class SMPServiceCaller {
    * @throws BadRequestException
    *         The request was not well formed.
    */
-  public static ServiceGroupType getServiceGroup (final URI aURI) throws Exception {
+  public static ServiceGroupType getServiceGroup (@Nonnull final URI aURI) throws Exception {
     return _getServiceGroupResource (_getResource (aURI));
   }
 
@@ -497,7 +519,7 @@ public final class SMPServiceCaller {
    *        The URI to the service group resource.
    * @param aServiceGroup
    *        The service group to save.
-   * @param creds
+   * @param aCredentials
    *        The username and password to use as aCredentials.
    * @throws UnauthorizedException
    *         The username or password was not correct.
@@ -511,10 +533,10 @@ public final class SMPServiceCaller {
    *         not corresponding to the service group id in the service group
    *         object.
    */
-  public void saveServiceGroup (final URI aURI,
-                                final ServiceGroupType aServiceGroup,
-                                final IReadonlyUsernamePWCredentials creds) throws Exception {
-    _saveServiceGroupResource (_getResource (aURI), aServiceGroup, creds);
+  public void saveServiceGroup (@Nonnull final URI aURI,
+                                @Nonnull final ServiceGroupType aServiceGroup,
+                                @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
+    _saveServiceGroupResource (_getResource (aURI), aServiceGroup, aCredentials);
   }
 
   /**
@@ -523,7 +545,7 @@ public final class SMPServiceCaller {
    * 
    * @param aURI
    *        The URI to the service group resource.
-   * @param creds
+   * @param aCredentials
    *        The username and password to use as aCredentials.
    * @throws UnauthorizedException
    *         The username or password was not correct.
@@ -534,8 +556,9 @@ public final class SMPServiceCaller {
    * @throws BadRequestException
    *         The request was not well formed.
    */
-  public static void deleteServiceGroup (final URI aURI, final IReadonlyUsernamePWCredentials creds) throws Exception {
-    _deleteServiceGroupResource (_getResource (aURI), creds);
+  public static void deleteServiceGroup (@Nonnull final URI aURI,
+                                         @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
+    _deleteServiceGroupResource (_getResource (aURI), aCredentials);
   }
 
   /**
@@ -553,7 +576,7 @@ public final class SMPServiceCaller {
    * @throws BadRequestException
    *         The request was not well formed.
    */
-  public static SignedServiceMetadataType getServiceRegistration (final URI aURI) throws Exception {
+  public static SignedServiceMetadataType getServiceRegistration (@Nonnull final URI aURI) throws Exception {
     return _getSignedServiceMetadataResource (_getResourceWithSignatureCheck (aURI));
   }
 
@@ -579,9 +602,9 @@ public final class SMPServiceCaller {
    *         not corresponding to the service group id or document type id in
    *         the service metadata object.
    */
-  public void saveServiceRegistration (final URI aURI,
-                                       final ServiceMetadataType aServiceMetadata,
-                                       final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
+  public void saveServiceRegistration (@Nonnull final URI aURI,
+                                       @Nonnull final ServiceMetadataType aServiceMetadata,
+                                       @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
     _saveServiceRegistrationResource (_getResource (aURI), aServiceMetadata, aCredentials);
   }
 
@@ -601,7 +624,8 @@ public final class SMPServiceCaller {
    * @throws BadRequestException
    *         The request was not well formed.
    */
-  public static void deleteServiceRegistration (final URI aURI, final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
+  public static void deleteServiceRegistration (@Nonnull final URI aURI,
+                                                @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
     _deleteServiceRegistrationResource (_getResource (aURI), aCredentials);
   }
 
@@ -628,8 +652,8 @@ public final class SMPServiceCaller {
    * @throws BadRequestException
    *         The request was not well formed.
    */
-  public static CompleteServiceGroupType getCompleteServiceGroupByDNS (final ISMLInfo aSMLInfo,
-                                                                       final IReadonlyParticipantIdentifier aServiceGroupID) throws Exception {
+  public static CompleteServiceGroupType getCompleteServiceGroupByDNS (@Nonnull final ISMLInfo aSMLInfo,
+                                                                       @Nonnull final IReadonlyParticipantIdentifier aServiceGroupID) throws Exception {
     final String sFullPath = _convertServiceGroupToURI (aSMLInfo, aServiceGroupID) +
                              "/complete/" +
                              IdentifierUtils.getIdentifierURIPercentEncoded (aServiceGroupID);
@@ -656,13 +680,12 @@ public final class SMPServiceCaller {
    * @throws BadRequestException
    *         The request was not well formed.
    */
-  public static ServiceGroupType getServiceGroupByDNS (final ISMLInfo aSMLInfo,
-                                                       final IReadonlyParticipantIdentifier aServiceGroupID) throws Exception {
+  public static ServiceGroupType getServiceGroupByDNS (@Nonnull final ISMLInfo aSMLInfo,
+                                                       @Nonnull final IReadonlyParticipantIdentifier aServiceGroupID) throws Exception {
     final String sFullPath = _convertServiceGroupToURI (aSMLInfo, aServiceGroupID) +
                              "/" +
                              IdentifierUtils.getIdentifierURIPercentEncoded (aServiceGroupID);
     final WebResource aFullResource = _getResource (URI.create (sFullPath));
-
     return _getServiceGroupResource (aFullResource);
   }
 
@@ -686,9 +709,9 @@ public final class SMPServiceCaller {
    * @throws BadRequestException
    *         The request was not well formed.
    */
-  public static SignedServiceMetadataType getServiceRegistrationByDNS (final ISMLInfo aSMLInfo,
-                                                                       final IReadonlyParticipantIdentifier aServiceGroupID,
-                                                                       final IReadonlyDocumentTypeIdentifier aDocumentTypeID) throws Exception {
+  public static SignedServiceMetadataType getServiceRegistrationByDNS (@Nonnull final ISMLInfo aSMLInfo,
+                                                                       @Nonnull final IReadonlyParticipantIdentifier aServiceGroupID,
+                                                                       @Nonnull final IReadonlyDocumentTypeIdentifier aDocumentTypeID) throws Exception {
     final String sFullPath = _convertServiceGroupToURI (aSMLInfo, aServiceGroupID) +
                              "/" +
                              IdentifierUtils.getIdentifierURIPercentEncoded (aServiceGroupID) +
@@ -699,8 +722,8 @@ public final class SMPServiceCaller {
     return _getSignedServiceMetadataResource (aFullResource);
   }
 
-  private static ServiceGroupReferenceListType _getServiceGroupReferenceListResource (final WebResource aFullResource,
-                                                                                      final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
+  private static ServiceGroupReferenceListType _getServiceGroupReferenceListResource (@Nonnull final WebResource aFullResource,
+                                                                                      @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
     try {
       final Builder aBuilderWithAuth = aFullResource.header (HttpHeaders.AUTHORIZATION,
                                                              aCredentials.getAsHTTPHeaderValue ());
@@ -711,7 +734,7 @@ public final class SMPServiceCaller {
     }
   }
 
-  private static CompleteServiceGroupType _getCompleteServiceGroupResource (final WebResource aFullResource) throws Exception {
+  private static CompleteServiceGroupType _getCompleteServiceGroupResource (@Nonnull final WebResource aFullResource) throws Exception {
     try {
       return aFullResource.get (TYPE_COMPLETESERVICEGROUP).getValue ();
     }
@@ -720,7 +743,7 @@ public final class SMPServiceCaller {
     }
   }
 
-  private static ServiceGroupType _getServiceGroupResource (final WebResource aFullResource) throws Exception {
+  private static ServiceGroupType _getServiceGroupResource (@Nonnull final WebResource aFullResource) throws Exception {
     try {
       return aFullResource.get (TYPE_SERVICEGROUP).getValue ();
     }
@@ -729,9 +752,9 @@ public final class SMPServiceCaller {
     }
   }
 
-  private void _saveServiceGroupResource (final WebResource aFullResource,
-                                          final ServiceGroupType aServiceGroup,
-                                          final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
+  private void _saveServiceGroupResource (@Nonnull final WebResource aFullResource,
+                                          @Nonnull final ServiceGroupType aServiceGroup,
+                                          @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
     try {
       final Builder aBuilderWithAuth = aFullResource.header (HttpHeaders.AUTHORIZATION,
                                                              aCredentials.getAsHTTPHeaderValue ());
@@ -744,8 +767,8 @@ public final class SMPServiceCaller {
     }
   }
 
-  private static void _deleteServiceGroupResource (final WebResource aFullResource,
-                                                   final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
+  private static void _deleteServiceGroupResource (@Nonnull final WebResource aFullResource,
+                                                   @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
     try {
       final Builder aBuilderWithAuth = aFullResource.header (HttpHeaders.AUTHORIZATION,
                                                              aCredentials.getAsHTTPHeaderValue ());
@@ -756,20 +779,14 @@ public final class SMPServiceCaller {
     }
   }
 
-  private static SignedServiceMetadataType _getSignedServiceMetadataResource (final WebResource aFullResource) throws Exception {
+  private static SignedServiceMetadataType _getSignedServiceMetadataResource (@Nonnull final WebResource aFullResource) throws Exception {
     try {
       SignedServiceMetadataType aMetadata = aFullResource.get (TYPE_SIGNEDSERVICEMETADATA).getValue ();
 
       // If the Redirect element is present, then follow 1 redirect.
       if (aMetadata.getServiceMetadata () != null && aMetadata.getServiceMetadata ().getRedirect () != null) {
         final RedirectType aRedirect = aMetadata.getServiceMetadata ().getRedirect ();
-        WebResource aRedirectFullResource;
-        try {
-          aRedirectFullResource = _getResourceWithSignatureCheck (new URI (aRedirect.getHref ()));
-        }
-        catch (final URISyntaxException e) {
-          throw new UnknownException ("The URI of the received redirect was not well-formed: " + aRedirect.getHref ());
-        }
+        final WebResource aRedirectFullResource = _getResourceWithSignatureCheck (URI.create (aRedirect.getHref ()));
 
         aMetadata = aRedirectFullResource.get (TYPE_SIGNEDSERVICEMETADATA).getValue ();
 
@@ -812,9 +829,9 @@ public final class SMPServiceCaller {
     }
   }
 
-  private void _saveServiceRegistrationResource (final WebResource aFullResource,
-                                                 final ServiceMetadataType aServiceMetadata,
-                                                 final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
+  private void _saveServiceRegistrationResource (@Nonnull final WebResource aFullResource,
+                                                 @Nonnull final ServiceMetadataType aServiceMetadata,
+                                                 @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
     try {
       final Builder aBuilderWithAuth = aFullResource.header (HttpHeaders.AUTHORIZATION,
                                                              aCredentials.getAsHTTPHeaderValue ());
@@ -827,8 +844,8 @@ public final class SMPServiceCaller {
     }
   }
 
-  private static void _deleteServiceRegistrationResource (final WebResource aFullResource,
-                                                          final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
+  private static void _deleteServiceRegistrationResource (@Nonnull final WebResource aFullResource,
+                                                          @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
     try {
       final Builder aBuilderWithAuth = aFullResource.header (HttpHeaders.AUTHORIZATION,
                                                              aCredentials.getAsHTTPHeaderValue ());
