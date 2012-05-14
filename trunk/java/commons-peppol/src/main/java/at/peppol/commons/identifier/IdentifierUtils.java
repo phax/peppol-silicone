@@ -347,6 +347,7 @@ public final class IdentifierUtils {
    *        The identifier to be encoded. May not be <code>null</code>.
    * @return Never <code>null</code>.
    */
+  @Nonnull
   public static String getIdentifierURIPercentEncoded (@Nonnull final IReadonlyIdentifier aIdentifier) {
     return BusdoxURLUtils.createPercentEncodedURL (getIdentifierURIEncoded (aIdentifier));
   }
