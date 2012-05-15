@@ -99,17 +99,17 @@ public final class MessageMetadataHelper {
 
   @Nonnull
   public static String getDebugInfo (@Nonnull final IMessageMetadata aMetadata) {
-    return "\tMessageID\t:" +
+    return "\tMessageID:\t" +
            aMetadata.getMessageID () +
-           "\n\tChannelID\t:" +
+           "\n\tChannelID:\t" +
            aMetadata.getChannelID () +
-           "\n\tSenderID\t:" +
+           "\n\tSenderID:\t" +
            IdentifierUtils.getIdentifierURIEncoded (aMetadata.getSenderID ()) +
-           "\n\tRecipientID\t:" +
+           "\n\tRecipientID:\t" +
            IdentifierUtils.getIdentifierURIEncoded (aMetadata.getRecipientID ()) +
-           "\n\tDocumentID\t:" +
+           "\n\tDocumentTypeID:\t" +
            IdentifierUtils.getIdentifierURIEncoded (aMetadata.getDocumentTypeID ()) +
-           "\n\tProcessID\t:" +
+           "\n\tProcessID:\t" +
            IdentifierUtils.getIdentifierURIEncoded (aMetadata.getProcessID ());
   }
 
