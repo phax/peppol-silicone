@@ -39,7 +39,7 @@ package at.peppol.busdox.identifier;
 
 /**
  * Marker-interface that is specific for process identifiers.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public interface IProcessIdentifier extends IIdentifier, IReadonlyProcessIdentifier {

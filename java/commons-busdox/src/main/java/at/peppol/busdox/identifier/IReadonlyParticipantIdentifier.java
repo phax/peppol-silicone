@@ -41,7 +41,7 @@ package at.peppol.busdox.identifier;
  * Marker-interface that is specific for participant identifiers.<br>
  * This can be used as the read-only/immutable counterpart of the implementation
  * class.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public interface IReadonlyParticipantIdentifier extends IReadonlyIdentifier {

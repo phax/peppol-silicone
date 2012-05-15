@@ -38,6 +38,7 @@
               <wsdlFiles>
                 <wsdlFile>ManageBusinessIdentifierService-1.0.wsdl</wsdlFile>
               </wsdlFiles>
+              <wsdlLocation>/WEB-INF/wsdl/ManageBusinessIdentifierService-1.0.wsdl</wsdlLocation>
               <staleFile>${project.build.directory}/stale/.stale-wsimport1</staleFile>
             </configuration>
           </execution>
@@ -50,6 +51,7 @@
               <wsdlFiles>
                 <wsdlFile>ManageServiceMetadataService-1.0.wsdl</wsdlFile>
               </wsdlFiles>
+              <wsdlLocation>/WEB-INF/wsdl/ManageServiceMetadataService-1.0.wsdl</wsdlLocation>
               <staleFile>${project.build.directory}/stale/.stale-wsimport2</staleFile>
             </configuration>
           </execution>
@@ -62,6 +64,7 @@
               <wsdlFiles>
                 <wsdlFile>peppol-start-2.0.wsdl</wsdlFile>
               </wsdlFiles>
+              <wsdlLocation>/WEB-INF/wsdl/peppol-start-2.0.wsdl</wsdlLocation>
               <staleFile>${project.build.directory}/stale/.stale-wsimport3</staleFile>
               <extension>true</extension>
             </configuration>

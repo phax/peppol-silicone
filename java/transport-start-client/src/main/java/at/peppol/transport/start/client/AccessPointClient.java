@@ -37,13 +37,16 @@
  */
 package at.peppol.transport.start.client;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.KeyManager;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.xml.bind.JAXBException;
 import javax.xml.ws.BindingProvider;
@@ -53,6 +56,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3._2009._02.ws_tra.AccessPointService;
 import org.w3._2009._02.ws_tra.Create;
+import org.w3._2009._02.ws_tra.CreateResponse;
 import org.w3._2009._02.ws_tra.FaultMessage;
 import org.w3._2009._02.ws_tra.Resource;
 import org.w3c.dom.Document;
@@ -67,6 +71,7 @@ import com.phloc.commons.random.VerySecureRandom;
 import com.phloc.commons.state.ESuccess;
 import com.phloc.commons.string.StringHelper;
 import com.sun.xml.ws.api.message.Header;
+import com.sun.xml.ws.developer.JAXWSProperties;
 import com.sun.xml.ws.developer.WSBindingProvider;
 
 /**
@@ -79,7 +84,7 @@ import com.sun.xml.ws.developer.WSBindingProvider;
  */
 public final class AccessPointClient {
   /** String that represents the SSL security provided. */
-  public static final String SECURITY_PROVIDER = "SSL";
+  public static final String SSL_PROTOCOL = "SSL";
 
   /** Logger to follow this class behavior. */
   private static final Logger s_aLogger = LoggerFactory.getLogger (AccessPointClient.class);
@@ -87,15 +92,28 @@ public final class AccessPointClient {
   private AccessPointClient () {}
 
   /**
-   * Sets up the certficate TrustManager.
+   * Sets up the certificate TrustManager.
+   * 
+   * @throws NoSuchAlgorithmException
+   */
+  @Nonnull
+  private static SSLSocketFactory _createSSLSocketFactory () throws Exception {
+    final KeyManager [] aKeyManagers = null;
+    final TrustManager [] aTrustManagers = new TrustManager [] { new AccessPointX509TrustManager (null, null) };
+    final SSLContext aSSLContext = SSLContext.getInstance (SSL_PROTOCOL);
+    aSSLContext.init (aKeyManagers, aTrustManagers, VerySecureRandom.getInstance ());
+    return aSSLContext.getSocketFactory ();
+  }
+
+  /**
+   * Sets up the certificate TrustManager.
    */
   @Nonnull
   private static ESuccess _setupCertificateTrustManager () {
     try {
-      final TrustManager [] aTrustManagers = new TrustManager [] { new AccessPointX509TrustManager (null, null) };
-      final SSLContext aSSLContext = SSLContext.getInstance (SECURITY_PROVIDER);
-      aSSLContext.init (null, aTrustManagers, VerySecureRandom.getInstance ());
-      HttpsURLConnection.setDefaultSSLSocketFactory (aSSLContext.getSocketFactory ());
+      HttpsURLConnection.setDefaultSSLSocketFactory (_createSSLSocketFactory ());
+      if (s_aLogger.isDebugEnabled ())
+        s_aLogger.debug (">> Set Certificate Trust Manager");
       return ESuccess.SUCCESS;
     }
     catch (final Exception e) {
@@ -125,17 +143,22 @@ public final class AccessPointClient {
 
       // SSL socket factory
       _setupCertificateTrustManager ();
-      if (s_aLogger.isDebugEnabled ())
-        s_aLogger.debug (">> Set CertificateTrustManager");
 
       final AccessPointService aService = new AccessPointService ();
       final Resource aPort = aService.getResourceBindingPort ();
       final Map <String, Object> aRequestContext = ((BindingProvider) aPort).getRequestContext ();
       aRequestContext.put (BindingProvider.ENDPOINT_ADDRESS_PROPERTY, sAddress);
+      if (false) {
+        // According to the JAX-WS specs, this should work, but because of RM it
+        // does not!
+        // See Metro bug WSIT-1632
+        aRequestContext.put (JAXWSProperties.HOSTNAME_VERIFIER, new HostnameVerifierAlwaysTrue ());
+        aRequestContext.put (JAXWSProperties.SSL_SOCKET_FACTORY, _createSSLSocketFactory ());
+      }
       return aPort;
     }
     catch (final Exception e) {
-      s_aLogger.error ("Error setting the Endpoint Address '" + sAddress + "'", e);
+      s_aLogger.error ("Error creating the START WS Port for URL '" + sAddress + "'", e);
       return null;
     }
   }
@@ -164,15 +187,21 @@ public final class AccessPointClient {
     if (aBody == null)
       throw new NullPointerException ("body");
 
-    s_aLogger.info ("Ready for sending message\n" + MessageMetadataHelper.getDebugInfo (aMetadata));
+    s_aLogger.info ("Ready for sending message\n" +
+                    MessageMetadataHelper.getDebugInfo (aMetadata) +
+                    "\n\tReceiver AP:\t" +
+                    ((BindingProvider) aPort).getRequestContext ().get (BindingProvider.ENDPOINT_ADDRESS_PROPERTY));
     try {
       // Assign the headers
       final List <Header> aHeaders = MessageMetadataHelper.createHeadersFromMetadata (aMetadata);
       ((WSBindingProvider) aPort).setOutboundHeaders (aHeaders);
 
       // Main
-      aPort.create (aBody);
-      s_aLogger.info ("Message " + aMetadata.getMessageID () + " has been successfully delivered!");
+      final CreateResponse aResponse = aPort.create (aBody);
+      s_aLogger.info ("Message " +
+                      aMetadata.getMessageID () +
+                      " has been successfully delivered! Response=" +
+                      aResponse);
       return ESuccess.SUCCESS;
     }
     catch (final JAXBException ex) {

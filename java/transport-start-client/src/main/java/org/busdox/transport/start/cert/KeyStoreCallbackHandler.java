@@ -71,7 +71,8 @@ public final class KeyStoreCallbackHandler implements CallbackHandler {
     final String sKeyStoreAlias = ServerConfigFile.getKeyStoreAlias ();
     final char [] aKeyStoreAliasPassword = ServerConfigFile.getKeyStoreAliasPassword ();
 
-    s_aLogger.info ("Loading KeyStore from '" + sKeyStorePath + "'");
+    if (s_aLogger.isDebugEnabled ())
+      s_aLogger.debug ("Loading KeyStore from '" + sKeyStorePath + "'");
     KeyStore aKeyStore;
     try {
       aKeyStore = KeyStoreUtils.loadKeyStore (sKeyStorePath, sKeyStorePassword);

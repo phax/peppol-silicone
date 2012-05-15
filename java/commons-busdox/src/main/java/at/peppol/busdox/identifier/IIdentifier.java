@@ -39,13 +39,13 @@ package at.peppol.busdox.identifier;
 
 /**
  * The writable version of an identifier interface.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public interface IIdentifier extends IReadonlyIdentifier {
   /**
    * Set the identifier scheme.
-   *
+   * 
    * @param sScheme
    *        The scheme to be set. May not be <code>null</code>.
    */
@@ -53,7 +53,7 @@ public interface IIdentifier extends IReadonlyIdentifier {
 
   /**
    * Set the identifier value.
-   *
+   * 
    * @param sValue
    *        The value to be set. May not be <code>null</code>.
    */

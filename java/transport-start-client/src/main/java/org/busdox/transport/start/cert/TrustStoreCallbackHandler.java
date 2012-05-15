@@ -71,7 +71,8 @@ public final class TrustStoreCallbackHandler implements CallbackHandler {
     final String sTrustStoreAlias = ServerConfigFile.getTrustStoreAlias ();
     final char [] aTrustStoreAliasPassword = ServerConfigFile.getTrustStoreAliasPassword ();
 
-    s_aLogger.info ("Loading TrustStore from '" + sTrustStorePath + "'");
+    if (s_aLogger.isDebugEnabled ())
+      s_aLogger.debug ("Loading TrustStore from '" + sTrustStorePath + "'");
     KeyStore aKeyStore;
     try {
       aKeyStore = KeyStoreUtils.loadKeyStore (sTrustStorePath, sTrustStorePassword);

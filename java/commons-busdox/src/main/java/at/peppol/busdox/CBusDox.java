@@ -43,7 +43,7 @@ import org.w3._2009._02.ws_tra.AccessPointService;
 
 /**
  * Constants for this BusDox implementation.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class CBusDox {
