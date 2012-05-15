@@ -55,7 +55,6 @@ import at.peppol.commons.sml.ESML;
 import at.peppol.smp.client.SMPServiceCaller;
 import at.peppol.transport.IMessageMetadata;
 import at.peppol.transport.MessageMetadata;
-import at.peppol.transport.PingMessageHelper;
 
 import com.phloc.commons.SystemProperties;
 import com.phloc.commons.charset.CCharset;
@@ -65,43 +64,43 @@ import com.phloc.commons.io.streams.StringInputStream;
 import com.phloc.commons.xml.serialize.XMLReader;
 
 /**
- * @author Ravnholt<br>
- *         PEPPOL.AT, BRZ, Philip Helger<br>
- *         PEPPOL.AT, BRZ, Andreas Haberl
+ * Test sending a document to a receiver
+ * 
+ * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public class MainPingAccessPoint {
-  public static final ParticipantIdentifierType RECEIVER = SimpleParticipantIdentifier.createWithDefaultScheme ("9908:976098897");
+public class MainSendDocument {
+  public static final String RECEIVER = "9914:ATU53309209";
 
   @Nonnull
-  private static IMessageMetadata _createPingMetadata () {
-    final ParticipantIdentifierType aSender = PingMessageHelper.PING_SENDER;
-    final ParticipantIdentifierType aRecipient = PingMessageHelper.PING_RECIPIENT;
-    final DocumentIdentifierType aDocumentType = PingMessageHelper.PING_DOCUMENT_TYPE;
-    final ProcessIdentifierType aProcessIdentifier = PingMessageHelper.PING_PROCESS;
+  private static IMessageMetadata _createMetadata () {
+    final ParticipantIdentifierType aSender = SimpleParticipantIdentifier.createWithDefaultScheme ("9914:ATU00000000");
+    final ParticipantIdentifierType aRecipient = SimpleParticipantIdentifier.createWithDefaultScheme (RECEIVER);
+    final DocumentIdentifierType aDocumentType = EPredefinedDocumentTypeIdentifier.INVOICE_T010_BIS4A.getAsDocumentTypeIdentifier ();
+    final ProcessIdentifierType aProcessIdentifier = EPredefinedProcessIdentifier.BIS4A.getAsProcessIdentifier ();
     final String sMessageID = "uuid:" + UUID.randomUUID ().toString ();
-    return new MessageMetadata (sMessageID, "ping-channel", aSender, aRecipient, aDocumentType, aProcessIdentifier);
+    return new MessageMetadata (sMessageID, "test-channel", aSender, aRecipient, aDocumentType, aProcessIdentifier);
   }
 
   @Nullable
-  private static String _getAccessPointUrl () throws Exception {
+  private static String _getAccessPointUrl (@Nonnull final IMessageMetadata aMetadata) throws Exception {
     // SMP client
-    final SMPServiceCaller aServiceCaller = new SMPServiceCaller (RECEIVER, ESML.PRODUCTION);
+    final SMPServiceCaller aServiceCaller = new SMPServiceCaller (aMetadata.getRecipientID (), ESML.PRODUCTION);
     // get service info
-    return aServiceCaller.getEndpointAddress (RECEIVER,
-                                              EPredefinedDocumentTypeIdentifier.INVOICE_T010_BIS4A,
-                                              EPredefinedProcessIdentifier.BIS4A);
+    return aServiceCaller.getEndpointAddress (aMetadata.getRecipientID (),
+                                              aMetadata.getDocumentTypeID (),
+                                              aMetadata.getProcessID ());
   }
 
   private static void _sendDocument (final IReadableResource aXmlRes) throws Exception {
-    final String sAccessPointURL = false ? "http://localhost:8090/accessPointService" : _getAccessPointUrl ();
-    final IMessageMetadata aMetadata = _createPingMetadata ();
+    final IMessageMetadata aMetadata = _createMetadata ();
+    final String sAccessPointURL = false ? "http://localhost:8090/accessPointService" : _getAccessPointUrl (aMetadata);
     final Document aXMLDoc = XMLReader.readXMLDOM (aXmlRes);
     AccessPointClient.send (sAccessPointURL, aMetadata, aXMLDoc);
   }
 
   public static void main (final String [] args) throws Exception {
     System.setProperty ("java.net.useSystemProxies", "true");
-    if (true) {
+    if (false) {
       System.setProperty ("http.proxyHost", "172.30.9.12");
       System.setProperty ("http.proxyPort", "8080");
       System.setProperty ("https.proxyHost", "172.30.9.12");

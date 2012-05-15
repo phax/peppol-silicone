@@ -39,7 +39,7 @@ package at.peppol.busdox.identifier;
 
 /**
  * Marker-interface that is specific for participant identifiers.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public interface IParticipantIdentifier extends IIdentifier, IReadonlyParticipantIdentifier {

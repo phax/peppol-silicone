@@ -131,7 +131,8 @@ public final class ConfigFile {
       try {
         // Does not close the input stream!
         m_aProps.load (aIS);
-        s_aLogger.info ("Loaded configuration from '" + sPath + "': " + Collections.list (m_aProps.keys ()));
+        if (s_aLogger.isDebugEnabled ())
+          s_aLogger.debug ("Loaded configuration from '" + sPath + "': " + Collections.list (m_aProps.keys ()));
         return ESuccess.SUCCESS;
       }
       catch (final IOException ex) {
