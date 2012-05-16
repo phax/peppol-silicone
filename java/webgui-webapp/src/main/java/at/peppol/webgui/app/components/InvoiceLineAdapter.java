@@ -44,13 +44,14 @@ public class InvoiceLineAdapter extends InvoiceLineType {
         getItem().setSellersItemIdentification(new ItemIdentificationType());
         getItem().getSellersItemIdentification().setID(new IDType());
         setInvoicedQuantity(new InvoicedQuantityType());
-        
+        getInvoicedQuantity().setValue(BigDecimal.TEN);
         // Price defaults
         setPrice(new PriceType());
         getPrice().setPriceAmount(new PriceAmountType());
         
         // Tax totals and subtotals
         getTaxTotal().add(new TaxTotalType());
+        //setItemDescription("");
         
         //0. is the VAT Tax
         VATTax = new TaxSubtotalType();
@@ -76,7 +77,7 @@ public class InvoiceLineAdapter extends InvoiceLineType {
         }
     }
 
-    public void setItemDescription(String Description) {
+    public final void setItemDescription(String Description) {
 
         if (getItem().getDescription().isEmpty()) {
             getItem().getDescription().add(new DescriptionType());
@@ -94,11 +95,16 @@ public class InvoiceLineAdapter extends InvoiceLineType {
     
     public void setPriceAmount(long amount)
     {
+        
         getPrice().getPriceAmount().setValue(BigDecimal.valueOf(amount));
     }
     
-    public long getPriceAmount()
+    public long getPriceAmount() throws Exception
     {
+        BigDecimal val = getPrice().getPriceAmount().getValue();
+        if (val == null ) {
+            throw new Exception("Value is null");
+        }
         return getPrice().getPriceAmount().getValue().longValue();
     }
     
@@ -106,4 +112,12 @@ public class InvoiceLineAdapter extends InvoiceLineType {
         getTaxTotal();
     }
     
+    public int getQuantity()
+    {
+        return getInvoicedQuantity().getValue().intValue();
+    }
+    
+    public void setQuantity(int q) {
+        getInvoicedQuantity().setValue(BigDecimal.valueOf(q));
+    }
 }

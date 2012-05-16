@@ -12,6 +12,7 @@ import com.vaadin.ui.Form;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+import java.math.BigDecimal;
 
 @SuppressWarnings ("serial")
 public class InvoiceLineWindow extends Form {
@@ -58,9 +59,7 @@ public class InvoiceLineWindow extends Form {
         */
         
         parent.getTable().addInvoiceLine (invln);
-        //update XML !!
-        final List <InvoiceLineType> items = parent.getInvoiceType ().getInvoiceLine();
-        items.add(invln);
+
       }
     });
     
@@ -75,7 +74,7 @@ public class InvoiceLineWindow extends Form {
     return this.subwindow;
   }
   
-  public Form createInvoiceLineForm() {
+  public final Form createInvoiceLineForm() {
 
     final Form invoiceLineForm = new Form(new FormLayout()/*, new InvoiceFieldFactory()*/);
     invoiceLineForm.setImmediate(true);
@@ -90,12 +89,13 @@ public class InvoiceLineWindow extends Form {
     invln.setPriceAmount(24);    
     */
     
+    invln.setPriceAmount(11);
     //parent.getInvoiceType ().setID (new IDType ());
     invoiceLineForm.addItemProperty ("lineId", new NestedMethodProperty(invln.getID (), "value") );
     //invoiceLineForm.addItemProperty ("sellersItemId", new NestedMethodProperty (invln.getSellersItemID (), "value"));
     invoiceLineForm.addItemProperty ("itemName", new NestedMethodProperty (invln.getItem ().getName (), "value"));
     //invoiceLineForm.addItemProperty ("itemDescription", new NestedMethodProperty (invln.getItemDescription (), "value"));
-    invoiceLineForm.addItemProperty ("invoicedQuantity", new NestedMethodProperty (invln.getInvoicedQuantity (), "value"));
+    invoiceLineForm.addItemProperty ("invoicedQuantity", new NestedMethodProperty (invln, "quantity"));
     //invoiceLineForm.addItemProperty ("priceAmount", new NestedMethodProperty (invln.getPriceAmount (), "value"));
     
     
