@@ -17,7 +17,7 @@ import com.vaadin.ui.Table;
  *
  * @author Jerouris
  */
-@SuppressWarnings ("serial")
+
 public class InvoiceLineTable extends Table {
 
     private final List<InvoiceLineType> invoiceLines;
@@ -34,13 +34,13 @@ public class InvoiceLineTable extends Table {
         addPropertyWithHeader("SellersItemID","Seller's Code");
         addPropertyWithHeader("item.name.value", "Name");
         addPropertyWithHeader("itemDescription", "Description");
-        addPropertyWithHeader("invoicedQuantity.value","Quantity");
+        addPropertyWithHeader("quantity","Quantity");
         addPropertyWithHeader("priceAmount","Unit Price");
         
         
         setDefinedPropertiesAsVisible();
 
-        addInvoiceLine(createInvoiceLine());
+       // addInvoiceLine(createInvoiceLine());
         //addInvoiceLine(createInvoiceLine());
         //addInvoiceLine(createInvoiceLine());
         //addInvoiceLine(createInvoiceLine());
@@ -59,8 +59,9 @@ public class InvoiceLineTable extends Table {
     }
 
     public void addInvoiceLine(InvoiceLineAdapter invln) {
-        tableLines.addBean(invln);
+
         invoiceLines.add(invln);
+        tableLines.addBean(invln);   
     }
 
     private InvoiceLineAdapter createInvoiceLine() {
