@@ -51,7 +51,7 @@ public class InvoiceLineAdapter extends InvoiceLineType {
         
         // Tax totals and subtotals
         getTaxTotal().add(new TaxTotalType());
-        //setItemDescription("");
+        setItemDescription("");
         
         //0. is the VAT Tax
         VATTax = new TaxSubtotalType();
