@@ -19,7 +19,7 @@
     <dependency>
       <groupId>com.phloc</groupId>
       <artifactId>phloc-commons</artifactId>
-      <version>3.5.4</version>
+      <version>3.5.5</version>
     </dependency>
     <!-- Saxon is required! - does not work with integrated JAXP! -->
     <dependency>
@@ -68,7 +68,7 @@
           <dependency>
             <groupId>com.sun.xml.bind</groupId>
             <artifactId>jaxb-xjc</artifactId>
-            <version>2.2.5-1</version>
+            <version>2.2.5-2</version>
           </dependency>
           <dependency>
             <groupId>com.phloc</groupId>
