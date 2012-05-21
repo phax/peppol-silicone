@@ -79,7 +79,7 @@ public class ExamplePingAccessPoint {
   private static IMessageMetadata _createPingMetadata () {
     final ParticipantIdentifierType aSenderID = PingMessageHelper.PING_SENDER;
     final ParticipantIdentifierType aRecipientID = PingMessageHelper.PING_RECIPIENT;
-    final DocumentIdentifierType aDocumentTypeID = PingMessageHelper.PING_DOCUMENT;
+    final DocumentIdentifierType aDocumentTypeID = PingMessageHelper.PING_DOCUMENT_TYPE;
     final ProcessIdentifierType aProcessIdentifierType = PingMessageHelper.PING_PROCESS;
     final String sMessageID = "uuid:" + UUID.randomUUID ().toString ();
     return new MessageMetadata (sMessageID, null, aSenderID, aRecipientID, aDocumentTypeID, aProcessIdentifierType);
