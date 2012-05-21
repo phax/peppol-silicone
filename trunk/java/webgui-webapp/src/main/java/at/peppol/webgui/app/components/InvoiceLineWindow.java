@@ -1,9 +1,5 @@
 package at.peppol.webgui.app.components;
 
-import java.util.List;
-
-import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.InvoiceLineType;
-
 import com.vaadin.data.util.NestedMethodProperty;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -12,7 +8,6 @@ import com.vaadin.ui.Form;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
-import java.math.BigDecimal;
 
 @SuppressWarnings ("serial")
 public class InvoiceLineWindow extends Form {
