@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.peppol.webgui.security.AccessManager;
-import at.peppol.webgui.security.CSecurity;
 import at.peppol.webgui.security.login.ELoginResult;
 import at.peppol.webgui.security.login.LoggedInUserManager;
 import at.peppol.webgui.security.user.IUser;
