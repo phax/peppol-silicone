@@ -69,7 +69,6 @@ public class InvoiceLineAdapter extends InvoiceLineType {
     }
     
     public String getItemDescription() {
-
         if (getItem().getDescription().isEmpty()) {
             return null;
         } else {
@@ -77,12 +76,12 @@ public class InvoiceLineAdapter extends InvoiceLineType {
         }
     }
 
-    public final void setItemDescription(String Description) {
+    public final void setItemDescription(String description) {
 
         if (getItem().getDescription().isEmpty()) {
             getItem().getDescription().add(new DescriptionType());
         }
-        getItem().getDescription().get(0).setValue(Description);
+        getItem().getDescription().get(0).setValue(description);
     }
     
     public void setSellersItemID(String id) {
@@ -103,7 +102,8 @@ public class InvoiceLineAdapter extends InvoiceLineType {
     {
         BigDecimal val = getPrice().getPriceAmount().getValue();
         if (val == null ) {
-            throw new Exception("Value is null");
+            //throw new Exception("Value is null");
+            return 0;
         }
         return getPrice().getPriceAmount().getValue().longValue();
     }

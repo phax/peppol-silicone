@@ -1,10 +1,24 @@
 package at.peppol.webgui.app.components;
 
+import java.math.BigDecimal;
+import java.util.List;
+
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.InvoiceLineType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IDType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_21.InvoicedQuantityType;
+
+import com.vaadin.data.Item;
+import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.NestedMethodProperty;
+import com.vaadin.ui.AbstractTextField;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.DefaultFieldFactory;
+import com.vaadin.ui.Field;
 import com.vaadin.ui.Form;
+import com.vaadin.ui.FormFieldFactory;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
@@ -14,12 +28,18 @@ public class InvoiceLineWindow extends Form {
   private final Window subwindow;
   private InvoiceForm parent;
   private InvoiceLineAdapter invln;
-  private Line line;  //Auxiliary class
+//  private Line line;  //Auxiliary class
   
   public InvoiceLineWindow(final InvoiceForm parent) {
     this.parent = parent;
     invln = new InvoiceLineAdapter();
-    line = new Line();
+
+//    line = new Line();    
+//    BeanItem<InvoiceLineAdapter> invoiceLine = new BeanItem<InvoiceLineAdapter>(invln);
+//    parent.setItemDataSource(invoiceLine);
+//    BeanItem<Line> invoiceLine = new BeanItem<Line>(line);
+//    parent.setItemDataSource(invoiceLine);
+    
     subwindow = new Window("Invoice Line");
     subwindow.setModal(true);
     
@@ -35,30 +55,36 @@ public class InvoiceLineWindow extends Form {
 
     Button btnSave = new Button("Save", new Button.ClickListener() {
       public void buttonClick(ClickEvent event) {
-        //update GUI table
+        
+        // @Jerry if you uncomment, the line will correctly take any value you set
+        // meaning that in java class level everything is OK
         
         //invln.getID().setValue(Integer.toString(44));
         //invln.getInvoicedQuantity().setValue(BigDecimal.valueOf(1));
         //invln.setSellersItemID("AF-CODE-"+(333));
         //invln.setItemDescription("Item "+552);
         //invln.getItem().getName().setValue("Item Name "+133);
-        //invln.setPriceAmount(249);    
+        //invln.setPriceAmount(666);    
         
-        /*
-        invln.getID().setValue(line.lineId);
-        invln.getInvoicedQuantity().setValue(BigDecimal.valueOf(line.invoicedQuantity));
-        invln.setSellersItemID(line.sellersItemId);
-        invln.setItemDescription(line.itemDescription);
-        invln.getItem().getName().setValue(line.itemName);
-        invln.setPriceAmount(line.priceAmount);    
-        */
-        
+        //update GUI table !!
         parent.getTable().addInvoiceLine (invln);
-
+        
+        //update XML !!
+        final List <InvoiceLineType> items = parent.getInvoiceType().getInvoiceLine();
+        items.add(invln);
+        
+        //close popup
+        (subwindow.getParent()).removeWindow(subwindow);
       }
     });
     
-    layout.addComponent(createInvoiceLineForm());
+    try {
+      layout.addComponent(createInvoiceLineForm());
+    }
+    catch (Exception e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
     layout.addComponent(btnSave);
     layout.addComponent(btnClose);
     layout.setComponentAlignment(btnClose, Alignment.BOTTOM_RIGHT);    
@@ -69,65 +95,77 @@ public class InvoiceLineWindow extends Form {
     return this.subwindow;
   }
   
-  public final Form createInvoiceLineForm() {
+  public Form createInvoiceLineForm() throws Exception {
 
-    final Form invoiceLineForm = new Form(new FormLayout()/*, new InvoiceFieldFactory()*/);
+    final Form invoiceLineForm = new Form(new FormLayout(), new InvoiceFieldFactory());
     invoiceLineForm.setImmediate(true);
-
+    invln = new InvoiceLineAdapter();
     
-    /*
-    invln.getID().setValue(Integer.toString(44));
-    invln.getInvoicedQuantity().setValue(BigDecimal.valueOf(1));
-    invln.setSellersItemID("AF-CODE-"+(333));
-    invln.setItemDescription("Item "+552);
-    invln.getItem().getName().setValue("Item Name "+133);
-    invln.setPriceAmount(24);    
-    */
-    
-    invln.setPriceAmount(11);
     //parent.getInvoiceType ().setID (new IDType ());
+    
+    //1. Line ID
+    invln.setID (new IDType ());
     invoiceLineForm.addItemProperty ("lineId", new NestedMethodProperty(invln.getID (), "value") );
+    
+    //2. Seller's ID
     //invoiceLineForm.addItemProperty ("sellersItemId", new NestedMethodProperty (invln.getSellersItemID (), "value"));
+    
+    //3. Line Item's Name
     invoiceLineForm.addItemProperty ("itemName", new NestedMethodProperty (invln.getItem ().getName (), "value"));
-    //invoiceLineForm.addItemProperty ("itemDescription", new NestedMethodProperty (invln.getItemDescription (), "value"));
-    invoiceLineForm.addItemProperty ("invoicedQuantity", new NestedMethodProperty (invln, "quantity"));
+    
+    //4. Line Item's Description
+    invln.setItemDescription ("hello everybody");
+    //invoiceLineForm.addItemProperty ("itemDescription", new NestedMethodProperty (invln.getItemDescription (), "itemDescription"));
+    
+    //5. Line Item's Quantity 
+    invoiceLineForm.addItemProperty ("invoicedQuantity", new NestedMethodProperty (invln.getInvoicedQuantity (), "value"));
+
+    //6. Line Item's Price
     //invoiceLineForm.addItemProperty ("priceAmount", new NestedMethodProperty (invln.getPriceAmount (), "value"));
-    
-    
-    //invoiceLineForm.addItemProperty ("lineId", new NestedMethodProperty (parent.getInvoiceType ().getID (), "value"));
-    //invoiceLineForm.addItemProperty ("sellersItemId", new NestedMethodProperty (parent.getInvoiceType ().getID (), "value"));
-    //invoiceLineForm.addItemProperty ("itemName", new NestedMethodProperty (parent.getInvoiceType ().getID (), "value"));
-    //invoiceLineForm.addItemProperty ("itemDescription", new NestedMethodProperty (parent.getInvoiceType ().getID (), "value"));
-    //invoiceLineForm.addItemProperty ("invoicedQuantity", new NestedMethodProperty (parent.getInvoiceType ().getID (), "value"));
-    //invoiceLineForm.addItemProperty ("priceAmount", new NestedMethodProperty (parent.getInvoiceType ().getID (), "value"));
-    
-    /*
-    invoiceLineForm.addItemProperty ("lineId", new NestedMethodProperty (line.lineId, "value"));
-    invoiceLineForm.addItemProperty ("sellersItemId", new NestedMethodProperty (line.sellersItemId, "value"));
-    invoiceLineForm.addItemProperty ("itemName", new NestedMethodProperty (line.itemName, "value"));
-    invoiceLineForm.addItemProperty ("itemDescription", new NestedMethodProperty (line.itemDescription, "value"));
-    invoiceLineForm.addItemProperty ("invoicedQuantity", new NestedMethodProperty (line.invoicedQuantity, "value"));
-    invoiceLineForm.addItemProperty ("priceAmount", new NestedMethodProperty (line.priceAmount, "value"));
-    */
-    
+   
     return invoiceLineForm;
   }  
   
-  class Line {
+  /* NOT USED - ONLY FOR TESTING PURPOSES */
+  public class Line {
     String lineId;
     String sellersItemId;
     String itemName;
     String itemDescription;
     long invoicedQuantity;
     long priceAmount;
-      Line() {
-        lineId = "";
-        sellersItemId = "";
-        itemName = "";
-        itemDescription = "";
-        invoicedQuantity = 0;
-        priceAmount = 10;
-      }
+    
+    public Line() {
+      lineId = "";
+      sellersItemId = "";
+      itemName = "";
+      itemDescription = "";
+      invoicedQuantity = 0;
+      priceAmount = 10;
+    }
+    
+    public String getItemDescription(){
+      return this.itemDescription;
+    }
+      
   }
+  /* NOT USED - ONLY FOR TESTING PURPOSES */
+  
+  class InvoiceFieldFactory implements FormFieldFactory {
+
+    public Field createField(final Item item, final Object propertyId, final Component uiContext) {
+        // Identify the fields by their Property ID.
+        final String pid = (String) propertyId;
+
+
+
+        final Field field = DefaultFieldFactory.get().createField(item, propertyId, uiContext);
+        if (field instanceof AbstractTextField) {
+            ((AbstractTextField) field).setNullRepresentation("");
+        }
+        return field;
+    }
+  }  
+  
   
 }

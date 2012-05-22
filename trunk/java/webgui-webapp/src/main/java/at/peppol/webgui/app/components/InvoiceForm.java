@@ -71,7 +71,6 @@ public class InvoiceForm extends Form {
         invObjFactory = new ObjectFactory();
         initInvoiceData();
         initElements();
-        popup = new InvoiceLineWindow(this).getWindow();
     }
 
     private void initInvoiceData() {
@@ -180,22 +179,15 @@ public class InvoiceForm extends Form {
 
           @Override
           public void buttonClick(final Button.ClickEvent event) {
-            //invoice.getInvoiceLine().add (new InvoiceLineType ().setID (new IDType ().setValue ("tralala")));
-            //invoice.getInvoiceLine().add (null);
             //Open modal window to add new invoice line
             showInvLineWindow();
-             
           }
         }));        
-        
-
-        
         outerPanel.requestRepaintAll();
-
     }
     
     public void showInvLineWindow() {
-
+      popup = new InvoiceLineWindow(this).getWindow();
       popup.setResizable (true);
       popup.setHeight("420px");
       popup.setWidth("400px");
@@ -204,22 +196,21 @@ public class InvoiceForm extends Form {
     }    
 
     public Form createInvoiceTopForm() {
-
-        final Form invoiceTopForm = new Form(new FormLayout(), new InvoiceFieldFactory());
-        invoiceTopForm.setImmediate(true);
+      final Form invoiceTopForm = new Form(new FormLayout(), new InvoiceFieldFactory());
+      invoiceTopForm.setImmediate(true);
         
-    invoice.setID (new IDType ());
-    invoiceTopForm.addItemProperty ("Invoice ID", new NestedMethodProperty (invoice.getID (), "value"));
-        
-    invoice.setDocumentCurrencyCode (new DocumentCurrencyCodeType ());
-    // invoice.getDocumentCurrencyCode().setValue("EUR");
-
-    invoice.setIssueDate (new IssueDateType ());
-    invoiceTopForm.addItemProperty ("Currency", new NestedMethodProperty (invoice.getDocumentCurrencyCode (), "value"));
-
-    final Date issueDate = new Date ();
-    invoiceTopForm.addItemProperty ("Issue Date", new ObjectProperty <Date> (issueDate));
-        return invoiceTopForm;
+      invoice.setID (new IDType ());
+      invoiceTopForm.addItemProperty ("Invoice ID", new NestedMethodProperty (invoice.getID (), "value"));
+          
+      invoice.setDocumentCurrencyCode (new DocumentCurrencyCodeType ());
+      // invoice.getDocumentCurrencyCode().setValue("EUR");
+  
+      invoice.setIssueDate (new IssueDateType ());
+      invoiceTopForm.addItemProperty ("Currency", new NestedMethodProperty (invoice.getDocumentCurrencyCode (), "value"));
+  
+      final Date issueDate = new Date ();
+      invoiceTopForm.addItemProperty ("Issue Date", new ObjectProperty <Date> (issueDate));
+      return invoiceTopForm;
     }
 
     class InvoiceFieldFactory implements FormFieldFactory {
