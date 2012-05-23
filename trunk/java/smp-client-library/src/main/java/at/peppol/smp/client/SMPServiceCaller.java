@@ -374,8 +374,8 @@ public final class SMPServiceCaller {
       sRealCertString = BEGIN_CERTIFICATE + sRealCertString;
     if (!sRealCertString.endsWith (END_CERTIFICATE))
       sRealCertString += END_CERTIFICATE;
-    final CertificateFactory certificateFactory = CertificateFactory.getInstance ("X.509");
-    return (X509Certificate) certificateFactory.generateCertificate (new NonBlockingByteArrayInputStream (sRealCertString.getBytes ()));
+    final CertificateFactory aCertificateFactory = CertificateFactory.getInstance ("X.509");
+    return (X509Certificate) aCertificateFactory.generateCertificate (new NonBlockingByteArrayInputStream (sRealCertString.getBytes ()));
   }
 
   @Nullable
