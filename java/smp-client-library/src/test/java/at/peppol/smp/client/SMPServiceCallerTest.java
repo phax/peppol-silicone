@@ -38,7 +38,10 @@
 package at.peppol.smp.client;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
+import java.net.UnknownHostException;
 import java.security.cert.X509Certificate;
 
 import org.junit.Test;
@@ -50,6 +53,8 @@ import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 import at.peppol.commons.identifier.docid.EPredefinedDocumentTypeIdentifier;
 import at.peppol.commons.identifier.procid.EPredefinedProcessIdentifier;
 import at.peppol.commons.sml.ESML;
+
+import com.sun.jersey.api.client.ClientHandlerException;
 
 /**
  * Test class for class {@link SMPServiceCaller}.
@@ -66,42 +71,58 @@ public final class SMPServiceCallerTest {
 
   @Test
   public void testGetEndpointAddress () throws Throwable {
-    String endpointAddress;
-    endpointAddress = new SMPServiceCaller (PI_alfa1lab, ESML.PRODUCTION).getEndpointAddress (PI_alfa1lab,
-                                                                                              DOCUMENT_INVOICE,
-                                                                                              PROCESS_BII04);
-    assertEquals (endpointAddress, "https://start-ap.alfa1lab.com:443/accesspointService");
+    String sEndpointAddress;
 
-    // 2011-12-08: returns BadRequestException (HTTP status 400)
-    if (false) {
-      endpointAddress = new SMPServiceCaller (PI_helseVest, ESML.PRODUCTION).getEndpointAddress (PI_helseVest,
+    try {
+      sEndpointAddress = new SMPServiceCaller (PI_alfa1lab, ESML.PRODUCTION).getEndpointAddress (PI_alfa1lab,
                                                                                                  DOCUMENT_INVOICE,
                                                                                                  PROCESS_BII04);
-      assertEquals (endpointAddress, "https://peppolap.ibxplatform.net:8443/accesspointService");
-    }
+      assertEquals (sEndpointAddress, "https://start-ap.alfa1lab.com:443/accesspointService");
 
-    if (false) {
-      endpointAddress = new SMPServiceCaller (PI_sendRegning, ESML.PRODUCTION).getEndpointAddress (PI_sendRegning,
-                                                                                                   DOCUMENT_INVOICE,
-                                                                                                   PROCESS_BII04);
-      assertEquals (endpointAddress, "https://aksesspunkt.sendregning.no:8443/oxalis/accessPointService");
+      // 2011-12-08: returns BadRequestException (HTTP status 400)
+      if (false) {
+        sEndpointAddress = new SMPServiceCaller (PI_helseVest, ESML.PRODUCTION).getEndpointAddress (PI_helseVest,
+                                                                                                    DOCUMENT_INVOICE,
+                                                                                                    PROCESS_BII04);
+        assertEquals (sEndpointAddress, "https://peppolap.ibxplatform.net:8443/accesspointService");
+      }
+
+      if (false) {
+        sEndpointAddress = new SMPServiceCaller (PI_sendRegning, ESML.PRODUCTION).getEndpointAddress (PI_sendRegning,
+                                                                                                      DOCUMENT_INVOICE,
+                                                                                                      PROCESS_BII04);
+        assertEquals (sEndpointAddress, "https://aksesspunkt.sendregning.no:8443/oxalis/accessPointService");
+      }
+    }
+    catch (final ClientHandlerException ex) {
+      // Happens when being offline!
+      assertTrue (ex.getCause () instanceof UnknownHostException);
     }
   }
 
   @Test
   public void testGetEndpointCertificate () throws Throwable {
-    X509Certificate endpointCertificate;
-    endpointCertificate = new SMPServiceCaller (PI_alfa1lab, ESML.PRODUCTION).getEndpointCertificate (PI_alfa1lab,
-                                                                                                      DOCUMENT_INVOICE,
-                                                                                                      PROCESS_BII04);
-    assertEquals (endpointCertificate.getSerialNumber ().toString (), "97394193891150626641360283873417712042");
+    X509Certificate aEndpointCertificate;
 
-    // 2011-12-08: returns BadRequestException (HTTP status 400)
-    if (false) {
-      endpointCertificate = new SMPServiceCaller (PI_helseVest, ESML.PRODUCTION).getEndpointCertificate (PI_helseVest,
+    try {
+      aEndpointCertificate = new SMPServiceCaller (PI_alfa1lab, ESML.PRODUCTION).getEndpointCertificate (PI_alfa1lab,
                                                                                                          DOCUMENT_INVOICE,
                                                                                                          PROCESS_BII04);
-      assertEquals (endpointCertificate.getSerialNumber ().toString (), "37276025795984990954710880598937203007");
+      assertNotNull (aEndpointCertificate);
+      assertEquals (aEndpointCertificate.getSerialNumber ().toString (), "97394193891150626641360283873417712042");
+
+      // 2011-12-08: returns BadRequestException (HTTP status 400)
+      if (false) {
+        aEndpointCertificate = new SMPServiceCaller (PI_helseVest, ESML.PRODUCTION).getEndpointCertificate (PI_helseVest,
+                                                                                                            DOCUMENT_INVOICE,
+                                                                                                            PROCESS_BII04);
+        assertNotNull (aEndpointCertificate);
+        assertEquals (aEndpointCertificate.getSerialNumber ().toString (), "37276025795984990954710880598937203007");
+      }
+    }
+    catch (final ClientHandlerException ex) {
+      // Happens when being offline!
+      assertTrue (ex.getCause () instanceof UnknownHostException);
     }
   }
 }
