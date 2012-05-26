@@ -68,11 +68,7 @@ public class InvoiceLineWindow extends Form {
         
         //update GUI table !!
         parent.getTable().addInvoiceLine (invln);
-        
-        //update XML !!
-        final List <InvoiceLineType> items = parent.getInvoiceType().getInvoiceLine();
-        items.add(invln);
-        
+       
         //close popup
         (subwindow.getParent()).removeWindow(subwindow);
       }
@@ -105,23 +101,22 @@ public class InvoiceLineWindow extends Form {
     
     //1. Line ID
     invln.setID (new IDType ());
-    invoiceLineForm.addItemProperty ("lineId", new NestedMethodProperty(invln.getID (), "value") );
+    invoiceLineForm.addItemProperty ("lineId", new NestedMethodProperty(invln, "ID.value") );
     
     //2. Seller's ID
-    //invoiceLineForm.addItemProperty ("sellersItemId", new NestedMethodProperty (invln.getSellersItemID (), "value"));
+    invoiceLineForm.addItemProperty ("sellersItemId", new NestedMethodProperty (invln, "sellersItemID"));
     
     //3. Line Item's Name
-    invoiceLineForm.addItemProperty ("itemName", new NestedMethodProperty (invln.getItem ().getName (), "value"));
+    invoiceLineForm.addItemProperty ("itemName", new NestedMethodProperty (invln, "item.name.value"));
     
     //4. Line Item's Description
-    invln.setItemDescription ("hello everybody");
-    //invoiceLineForm.addItemProperty ("itemDescription", new NestedMethodProperty (invln.getItemDescription (), "itemDescription"));
+    invoiceLineForm.addItemProperty ("itemDescription", new NestedMethodProperty (invln, "itemDescription"));
     
     //5. Line Item's Quantity 
-    invoiceLineForm.addItemProperty ("invoicedQuantity", new NestedMethodProperty (invln.getInvoicedQuantity (), "value"));
+    invoiceLineForm.addItemProperty ("invoicedQuantity", new NestedMethodProperty (invln, "invoicedQuantity.value"));
 
     //6. Line Item's Price
-    //invoiceLineForm.addItemProperty ("priceAmount", new NestedMethodProperty (invln.getPriceAmount (), "value"));
+    invoiceLineForm.addItemProperty ("priceAmount", new NestedMethodProperty (invln, "priceAmount"));
    
     return invoiceLineForm;
   }  
