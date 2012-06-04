@@ -19,17 +19,21 @@
     <connection>scm:svn:http://peppol-silicone.googlecode.com/svn/trunk/java/schematron2xslt-maven-plugin</connection>
     <developerConnection>scm:svn:https://peppol-silicone.googlecode.com/svn/trunk/java/schematron2xslt-maven-plugin</developerConnection>
   </scm>
+  
+  <properties>
+    <maven.version>2.0.9</maven.version>
+  </properties>
 
   <dependencies>
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-plugin-api</artifactId>
-      <version>2.0.9</version>
+      <version>${maven.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-project</artifactId>
-      <version>2.0.9</version>
+      <version>${maven.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -44,7 +48,7 @@
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-utils</artifactId>
-      <version>1.5.1</version>
+      <version>1.5.15</version>
     </dependency>
   </dependencies>
 
