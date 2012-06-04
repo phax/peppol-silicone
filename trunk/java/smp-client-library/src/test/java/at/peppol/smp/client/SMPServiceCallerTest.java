@@ -77,7 +77,7 @@ public final class SMPServiceCallerTest {
       sEndpointAddress = new SMPServiceCaller (PI_alfa1lab, ESML.PRODUCTION).getEndpointAddress (PI_alfa1lab,
                                                                                                  DOCUMENT_INVOICE,
                                                                                                  PROCESS_BII04);
-      assertEquals (sEndpointAddress, "https://start-ap.alfa1lab.com:443/accesspointService");
+      assertEquals (sEndpointAddress, "https://start-ap.alfa1lab.com:443/accessPointService");
 
       // 2011-12-08: returns BadRequestException (HTTP status 400)
       if (false) {
