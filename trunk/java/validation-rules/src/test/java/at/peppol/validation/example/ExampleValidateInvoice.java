@@ -38,6 +38,7 @@
 package at.peppol.validation.example;
 
 import java.util.List;
+import java.util.Locale;
 
 import at.peppol.commons.cenbii.profiles.ETransaction;
 import at.peppol.validation.pyramid.ValidationPyramid;
@@ -66,6 +67,6 @@ public final class ExampleValidateInvoice {
     else
       for (final ValidationPyramidResultLayer aResultLayer : aResults)
         for (final IResourceError aError : aResultLayer.getValidationErrors ())
-          System.out.println ("  " + aResultLayer.getValidationLevel () + " " + aError.getAsString ());
+          System.out.println ("  " + aResultLayer.getValidationLevel () + " " + aError.getAsString (Locale.US));
   }
 }

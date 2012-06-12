@@ -20,6 +20,8 @@ package at.peppol.maven.s2x;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Locale;
+
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +33,6 @@ import com.phloc.commons.error.IResourceError;
 import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.commons.xml.serialize.XMLWriter;
 import com.phloc.commons.xml.transform.CollectingTransformErrorListener;
-
 
 /**
  * @author PEPPOL.AT, BRZ, Philip Helger
@@ -49,7 +50,7 @@ public final class SchematronValidatorTest {
     assertTrue (aPreprocessor.isValidSchematron ());
     assertNotNull (aPreprocessor.getXSLTDocument ());
     for (final IResourceError aError : aCEH.getResourceErrors ())
-      s_aLogger.info ("!!" + aError.getAsString ());
+      s_aLogger.info ("!!" + aError.getAsString (Locale.US));
     s_aLogger.info ("!!" + XMLWriter.getXMLString (aPreprocessor.getXSLTDocument ()));
   }
 }

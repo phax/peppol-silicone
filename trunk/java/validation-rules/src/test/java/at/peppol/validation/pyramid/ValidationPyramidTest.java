@@ -70,7 +70,7 @@ public final class ValidationPyramidTest {
       for (final ValidationPyramidResultLayer aResultLayer : vp.applyValidation (aTestFile)
                                                                .getAllValidationResultLayers ())
         for (final IResourceError aError : aResultLayer.getValidationErrors ())
-          System.out.println (aResultLayer.getValidationLevel () + " " + aError.getAsString ());
+          System.out.println (aResultLayer.getValidationLevel () + " " + aError.getAsString (Locale.US));
     }
   }
 
@@ -101,7 +101,7 @@ public final class ValidationPyramidTest {
         assertNotNull (aResultLayer.getValidationErrors ());
 
         for (final IResourceError aError : aResultLayer.getValidationErrors ()) {
-          System.out.println (aResultLayer.getValidationLevel () + " " + aError.getAsString ());
+          System.out.println (aResultLayer.getValidationLevel () + " " + aError.getAsString (Locale.US));
           nItems++;
         }
       }

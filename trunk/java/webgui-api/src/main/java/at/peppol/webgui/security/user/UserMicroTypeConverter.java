@@ -82,7 +82,7 @@ public final class UserMicroTypeConverter implements IMicroTypeConverter {
     final String sFirstName = MicroUtils.getChildTextContent (eUser, ELEMENT_FIRSTNAME);
     final String sLastName = MicroUtils.getChildTextContent (eUser, ELEMENT_LASTNAME);
     final String sDesiredLocale = eUser.getAttribute (ATTR_DESIREDLOCALE);
-    final Locale aDesiredLocale = sDesiredLocale == null ? null : LocaleCache.get (sDesiredLocale);
+    final Locale aDesiredLocale = sDesiredLocale == null ? null : LocaleCache.getLocale (sDesiredLocale);
     return new User (sID, sEmailAddress, sPasswordHash, sFirstName, sLastName, aDesiredLocale);
   }
 }

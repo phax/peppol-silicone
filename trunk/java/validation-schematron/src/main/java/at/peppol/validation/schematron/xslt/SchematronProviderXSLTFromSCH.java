@@ -17,6 +17,8 @@
 
 package at.peppol.validation.schematron.xslt;
 
+import java.util.Locale;
+
 import javax.annotation.Nullable;
 import javax.xml.transform.ErrorListener;
 import javax.xml.transform.Templates;
@@ -39,7 +41,7 @@ import com.phloc.commons.xml.transform.XMLTransformerFactory;
  * The XSLT preprocessor used to convert a Schematron XML document into an XSLT
  * document. This implementation uses JAXP with Saxon to be used as the
  * respective parser.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 final class SchematronProviderXSLTFromSCH extends AbstractSchematronXSLTProvider {
@@ -73,7 +75,7 @@ final class SchematronProviderXSLTFromSCH extends AbstractSchematronXSLTProvider
                                         @Nullable final ErrorListener aCustomErrorListener,
                                         @Nullable final URIResolver aURIResolver) {
     final ErrorListener aErrorListener = aCustomErrorListener != null ? aCustomErrorListener
-                                                                     : LoggingTransformErrorListener.getInstance ();
+                                                                     : new LoggingTransformErrorListener (Locale.US);
 
     try {
       // prepare all steps
@@ -87,8 +89,7 @@ final class SchematronProviderXSLTFromSCH extends AbstractSchematronXSLTProvider
       // perform step 1 (Schematron -> ResultStep1)
       final DOMResult aResult1 = new DOMResult ();
       final Transformer aTransformer1 = s_aStep1.newTransformer ();
-      if (aErrorListener != null)
-        aTransformer1.setErrorListener (aErrorListener);
+      aTransformer1.setErrorListener (aErrorListener);
       if (aURIResolver != null)
         aTransformer1.setURIResolver (aURIResolver);
       aTransformer1.transform (new ResourceStreamSource (aSchematronResource), aResult1);
@@ -96,8 +97,7 @@ final class SchematronProviderXSLTFromSCH extends AbstractSchematronXSLTProvider
       // perform step 2 (ResultStep1 -> ResultStep2)
       final DOMResult aResult2 = new DOMResult ();
       final Transformer aTransformer2 = s_aStep2.newTransformer ();
-      if (aErrorListener != null)
-        aTransformer2.setErrorListener (aErrorListener);
+      aTransformer2.setErrorListener (aErrorListener);
       if (aURIResolver != null)
         aTransformer2.setURIResolver (aURIResolver);
       aTransformer2.transform (new DOMSource (aResult1.getNode ()), aResult2);
@@ -105,8 +105,7 @@ final class SchematronProviderXSLTFromSCH extends AbstractSchematronXSLTProvider
       // perform step 3 (ResultStep2 -> ResultStep3XSL)
       final DOMResult aResult3 = new DOMResult ();
       final Transformer aTransformer3 = s_aStep3.newTransformer ();
-      if (aErrorListener != null)
-        aTransformer3.setErrorListener (aErrorListener);
+      aTransformer3.setErrorListener (aErrorListener);
       if (aURIResolver != null)
         aTransformer3.setURIResolver (aURIResolver);
       aTransformer3.transform (new DOMSource (aResult2.getNode ()), aResult3);

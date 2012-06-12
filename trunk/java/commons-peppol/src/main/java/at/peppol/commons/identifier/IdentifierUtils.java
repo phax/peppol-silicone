@@ -52,7 +52,6 @@ import at.peppol.busdox.identifier.IReadonlyProcessIdentifier;
 import at.peppol.commons.uri.BusdoxURLUtils;
 
 import com.phloc.commons.charset.CCharset;
-import com.phloc.commons.charset.CharsetManager;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
@@ -68,8 +67,8 @@ public final class IdentifierUtils {
 
   // Grab the Charset objects, as they are thread-safe to use. The CharsetEncode
   // objects are not thread-safe and therefore queried each time
-  private static final Charset CHARSET_ASCII = CharsetManager.charsetFromName (CCharset.CHARSET_US_ASCII);
-  private static final Charset CHARSET_ISO88591 = CharsetManager.charsetFromName (CCharset.CHARSET_ISO_8859_1);
+  private static final Charset CHARSET_ASCII = CCharset.CHARSET_US_ASCII_OBJ;
+  private static final Charset CHARSET_ISO88591 = CCharset.CHARSET_ISO_8859_1_OBJ;
 
   private static final AtomicBoolean s_aCharsetChecksDisabled = new AtomicBoolean (DEFAULT_CHARSET_CHECKS_DISABLED);
 
@@ -145,7 +144,7 @@ public final class IdentifierUtils {
    *         <code>false</code> otherwise
    */
   public static boolean isValidParticipantIdentifierValue (@Nullable final String sValue) {
-    final int nLength = StringHelper.length (sValue);
+    final int nLength = StringHelper.getLength (sValue);
     if (nLength == 0 || nLength > CIdentifier.MAX_PARTICIPANT_IDENTIFIER_VALUE_LENGTH)
       return false;
 
@@ -166,7 +165,7 @@ public final class IdentifierUtils {
    *         <code>false</code> otherwise
    */
   public static boolean isValidDocumentTypeIdentifierValue (@Nullable final String sValue) {
-    final int nLength = StringHelper.length (sValue);
+    final int nLength = StringHelper.getLength (sValue);
     if (nLength == 0 || nLength > CIdentifier.MAX_DOCUMENT_TYPE_IDENTIFIER_VALUE_LENGTH)
       return false;
 
@@ -186,7 +185,7 @@ public final class IdentifierUtils {
    *         <code>false</code> otherwise
    */
   public static boolean isValidProcessIdentifierValue (@Nullable final String sValue) {
-    final int nLength = StringHelper.length (sValue);
+    final int nLength = StringHelper.getLength (sValue);
     if (nLength == 0 || nLength > CIdentifier.MAX_PROCESS_IDENTIFIER_VALUE_LENGTH)
       return false;
 
