@@ -86,6 +86,17 @@ public final class BusdoxDocumentTypeIdentifierParts implements IBusdoxDocumentT
     return getAsDocumentTypeIdentifierValue (this);
   }
 
+  @Override
+  public String toString () {
+    return "[BusdoxDocumentTypeIdentifierParts: rootNS=" +
+           m_sRootNS +
+           "; localName=" +
+           m_sLocalName +
+           "; subTypeIdentifier=" +
+           m_sSubTypeIdentifier +
+           "]";
+  }
+
   /**
    * Convert an {@link IBusdoxDocumentTypeIdentifierParts} object to a full
    * document identifier value (without a scheme!)

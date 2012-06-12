@@ -46,6 +46,7 @@ import javax.annotation.concurrent.Immutable;
 import at.peppol.commons.identifier.docid.IPEPPOLDocumentTypeIdentifierParts;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.string.StringHelper;
 
 @Immutable
 final class CodeGenerationUtils {
@@ -69,11 +70,18 @@ final class CodeGenerationUtils {
     String sExtensionID = "";
     for (final String sCurExtensionID : aDocIDParts.getExtensionIDs ())
       if (sCurExtensionID.startsWith (SKIP_BIS_PREFIX)) {
+        // BIS extension
         sExtensionID = "_BIS" + sCurExtensionID.substring (SKIP_BIS_PREFIX.length ());
         final int nIndex = sExtensionID.indexOf (':');
         if (nIndex >= 0)
           sExtensionID = sExtensionID.substring (0, nIndex);
-        break;
+      }
+      else {
+        // Non-BIS extension
+        String sExt = StringHelper.trimStart (sCurExtensionID, "urn:");
+        sExt = sExt.replace ('.', '_').replace (':', '_');
+        sExtensionID += '_';
+        sExtensionID += sExt;
       }
 
     return (aDocIDParts.getLocalName () + sTransactionID + sExtensionID).toUpperCase (Locale.US);

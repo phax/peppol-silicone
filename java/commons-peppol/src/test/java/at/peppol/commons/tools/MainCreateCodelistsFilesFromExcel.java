@@ -113,7 +113,7 @@ import com.sun.codemodel.writer.FileCodeWriter;
 public final class MainCreateCodelistsFilesFromExcel {
   private static final Logger s_aLogger = LoggerFactory.getLogger (MainCreateCodelistsFilesFromExcel.class);
   private static final Version CODELIST_VERSION = new Version (1, 1, 0);
-  private static final String EXCEL_FILE = "src/main/codelists/PEPPOL Code Lists 1.1.0.xls";
+  private static final String EXCEL_FILE = "src/main/codelists/PEPPOL Code Lists 1.1.1.xls";
   private static final String SHEET_PARTICIPANT = "Participant";
   private static final String SHEET_DOCUMENT = "Document";
   private static final String SHEET_PROCESS = "Process";
@@ -369,7 +369,9 @@ public final class MainCreateCodelistsFilesFromExcel {
         if (!aAllShortcutNames.add (sShortcutName))
           throw new IllegalStateException ("The shortcut name " +
                                            sShortcutName +
-                                           " is already used. Please update the algorithm!");
+                                           " is already used for " +
+                                           aDocIDParts.toString () +
+                                           ". Please update the algorithm!");
         s_jEnumPredefinedDoc.field (JMod.PUBLIC | JMod.STATIC | JMod.FINAL,
                                     s_jEnumPredefinedDoc,
                                     sShortcutName,
