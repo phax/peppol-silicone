@@ -49,6 +49,7 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * A standalone wrapper class for the {@link IPEPPOLDocumentTypeIdentifierParts}
@@ -167,6 +168,15 @@ public final class PEPPOLDocumentTypeIdentifierParts implements IPEPPOLDocumentT
   @Nonempty
   public String getAsDocumentTypeIdentifierValue () {
     return m_aBusdoxParts.getAsDocumentTypeIdentifierValue ();
+  }
+
+  @Override
+  public String toString () {
+    return new ToStringGenerator (this).append ("busdoxParts", m_aBusdoxParts)
+                                       .append ("transactionID", m_sTransactionID)
+                                       .append ("extensionIDs", m_aExtensionIDs)
+                                       .append ("version", m_sVersion)
+                                       .toString ();
   }
 
   /**
