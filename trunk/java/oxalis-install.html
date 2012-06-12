@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Oxalis installation guide</title>
+</head>
+<body>
+    <h1>Installing Oxalis, the Norwegian PEPPOL access point reference implementation.</h1>
+
+    <ol>
+        <li>Download and install Java JDK version 6 or higher (Note: you must install the JDK, the JRE is not sufficient).</li>
+        <li>Download and install Apache Tomcat, we recommend version 7.0.22 or higher.</li>
+        <li>Enable SSL (https) in Tomcat by installing your SSL certificate. This guide assumes that you enable SSL on port 8443.</li>
+        <li>Download and install Apache Ant.</li>
+        <li>If you are running on a Windows machine, Set the following user variables (My Computer -> Properties -> Advanced -> Environment Variables)
+        	<pre>
+                JAVA_HOME - should point to the Java JDK installation (ex. C:\Program Files\Java\jdk1.6.0_30
+                CATALINA_HOME - should point to the Apache Tomcat installation (ex. C:\Program Files\Apache Software Foundation\Tomcat 7.0)
+                TOMCAT_HOME - should be identical to CATALINA_HOME
+                ANT_HOME - should point to the Apache Ant installation (ex. C:\Documents and Settings\Administrator\Desktop\apache-ant-1.8.2)</pre>
+        </li>
+        <li>
+        	Add Apache Ant to your path (for Windows):
+        	<pre>set PATH=%PATH%;%ANT_HOME%/bin</pre>
+        </li>
+        <li>Download and install the Java Net Metro package. This package extends your JDK with a complete
+        SOAP Web Services stack:
+            <pre>sudo ant -Dtomcat.home=$TOMCAT_HOME -f metro-on-tomcat.xml install</pre>
+            If you're on a Windows machine, run this command:
+            <pre>ant -Dtomcat.home="%TOMCAT_HOME%" -f metro-on-tomcat.xml install</pre>
+        </li>
+        <li>Install your keystore. We suggest shoving it into the Tomcat installation. Whatever you do, don't forget
+        to specify the location in the Oxalis configuration file, as specified below.
+        <p>This is how we would perform this task on a Linux or Mac OS X machine:</p>
+            <pre>sudo -u tomcat cp ~/keystore.jks $TOMCAT_HOME/conf/keystore</pre>
+        </li>
+        <li>Modify <tt>$TOMCAT/conf/catalina.properties</tt> to ensure that the Oxalis specific stuff is loaded by the Tomcat commons class loader by modifying the
+            line starting with <tt>shared.loader=</tt>:
+            <pre>
+shared.loader=${catalina.base}/shared/lib,${catalina.home}/shared/lib/*.jar, \
+${catalina.base}/shared/lib/oxalis,${catalina.base}/shared/lib/oxalis/*.jar
+            </pre>
+        </li>
+        <li>Copy the supplied <tt>sample-oxalis-web.properties</tt> til to <tt>$TOMCAT_HOME/shared/lib/oxalis/oxalis-web.properties</tt>.
+            This is how you would do it on a Linux or Mac OS X machine:
+            <pre>cp sample-oxalis-web.properties $TOMCAT_HOME/shared/lib/oxalis/oxalis-web.properties</pre>
+        </li>
+        <li>Copy the .jar-files required into the Oxalis directory of Tomcat. This is how you would do that on a Linux
+            or Mac OS X machine:
+            <pre>sudo -u tomcat cp *.jar $TOMCAT_HOME/shared/lib/oxalis</pre>
+        </li>
+        <li>Edit the Oxalis configuration file:
+            <pre>sudo -u tomcat vi $TOMCAT_HOME/shared/lib/oxalis-web.properties</pre>
+        </li>
+        <li>Start Tomcat</li>
+        <li>You should now be able to see the WSDL by going to the address:
+            <a href="https://localhost:8443/oxalis/accessPointService?wsdl">https://localhost:8443/oxalis/accessPointService?wsdl</a>
+        </li>
+    </ol>
+    <h2>Using a JNDI data source</h2>
+    <p>If you intend to roll your own persistence mechanism by implementing the <code>MessageRepository</code> interface, this is how you configure your JDBC data source:
+        <ol>
+        <li>Add this XML fragment to <tt>$TOMCAT_HOME/conf/server.xml</tt> in order to create a global data source:
+            <pre>
+        &lt;Resource name="jdbc/sr"
+		auth="Container"
+		type="javax.sql.DataSource"
+		maxActive="100"
+		maxIdle="30"
+		maxWait="10000"
+		username="xxxxxxxxx"   &lt;-------- Don't forget to change this
+		password="*********"   &lt;-------- Don't forget to change this
+		driverClassName="com.mysql.jdbc.Driver"
+		url="jdbc:mysql://localhost:3306/sendregning?autoReconnect=true"
+		removeAbandoned="true"
+		removeAbandonedTimeout="60"
+		logAbandoned="true"
+	/&gt;
+            </pre>
+        </li>
+        <li>Link the global data source to the JNDI ENC name used by Oxalis:
+            <pre>
+        &lt;ResourceLink name="jdbc/peppol-ap" global="jdbc/sr" type="javax.sql.DataSource"/&gt;
+            </pre>
+        </li>
+        <li>The jar file containing your implementation of <code>MessageRepository</code>, should be copied into the <code>$TOMCAT_HOME/shared/lib/oxalis</code> directory.
+            Don't forget to include the file <code>META-INF/services/eu.peppol.start.persistence.MessageRepository</code> in the root of your .jar file in order to let Oxalis
+            discover your implementation, using the standard Java services location mechanism.
+        </li>
+
+        </ol>
+</body>
+</html>

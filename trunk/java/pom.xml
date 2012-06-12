@@ -43,7 +43,7 @@
   <!-- Properties for default plugins -->
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <metro.new.version>2.1.1</metro.new.version>
+    <metro.new.version>2.2</metro.new.version>
     <slf4j.version>1.6.2</slf4j.version>
   </properties>
 
@@ -108,6 +108,14 @@
     <!-- Web GUI -->
     <module>webgui-api</module>
     <module>webgui-webapp</module>
+
+    <!-- Oxalis -->
+    <module>oxalis-api</module>
+    <module>oxalis-commons</module>
+    <module>oxalis-start-outbound</module>
+    <module>oxalis-start-inbound</module>
+    <module>oxalis-standalone</module>
+    <module>oxalis-distribution</module>
   </modules>
 
   <!-- Specific build configurations (=profiles) -->
