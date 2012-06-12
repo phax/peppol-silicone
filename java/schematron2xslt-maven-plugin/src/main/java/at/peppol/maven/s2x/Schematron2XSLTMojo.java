@@ -19,6 +19,7 @@ package at.peppol.maven.s2x;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.Locale;
 
 import javax.xml.transform.ErrorListener;
 
@@ -199,11 +200,11 @@ public final class Schematron2XSLTMojo extends AbstractMojo {
             // Custom error listener to log to the Mojo logger
             final ErrorListener aMojoErrorListener = new AbstractTransformErrorListener (null) {
               @Override
-              protected void log (final IResourceError aResError) {
+              protected void internalLog (final IResourceError aResError) {
                 if (aResError.isError ())
-                  getLog ().error (aResError.getAsString (), aResError.getLinkedException ());
+                  getLog ().error (aResError.getAsString (Locale.US), aResError.getLinkedException ());
                 else
-                  getLog ().warn (aResError.getAsString (), aResError.getLinkedException ());
+                  getLog ().warn (aResError.getAsString (Locale.US), aResError.getLinkedException ());
               }
             };
 

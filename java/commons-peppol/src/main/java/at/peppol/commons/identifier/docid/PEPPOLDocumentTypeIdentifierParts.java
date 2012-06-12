@@ -80,7 +80,7 @@ public final class PEPPOLDocumentTypeIdentifierParts implements IPEPPOLDocumentT
                                                  @Nonnull final String sVersion) {
     return sTransactionID +
            TRANSACTIONID_SEPARATOR +
-           StringHelper.implode (EXTENSION_SEPARATOR, aExtensionIDs) +
+           StringHelper.getImploded (EXTENSION_SEPARATOR, aExtensionIDs) +
            VERSION_SEPARATOR +
            sVersion;
   }
@@ -160,7 +160,7 @@ public final class PEPPOLDocumentTypeIdentifierParts implements IPEPPOLDocumentT
   @Nonnull
   @Nonempty
   public String getAsUBLCustomizationID () {
-    return m_sTransactionID + TRANSACTIONID_SEPARATOR + StringHelper.implode (EXTENSION_SEPARATOR, m_aExtensionIDs);
+    return m_sTransactionID + TRANSACTIONID_SEPARATOR + StringHelper.getImploded (EXTENSION_SEPARATOR, m_aExtensionIDs);
   }
 
   @Nonnull
@@ -214,7 +214,7 @@ public final class PEPPOLDocumentTypeIdentifierParts implements IPEPPOLDocumentT
 
     final String sTransactionID = aCustomizationIDs[0];
     final String sExtensionIDs = aCustomizationIDs[1];
-    final List <String> aExtensionIDs = StringHelper.explode (EXTENSION_SEPARATOR, sExtensionIDs);
+    final List <String> aExtensionIDs = StringHelper.getExploded (EXTENSION_SEPARATOR, sExtensionIDs);
     return new PEPPOLDocumentTypeIdentifierParts (aBusdoxParts, sTransactionID, aExtensionIDs, sVersion);
   }
 }

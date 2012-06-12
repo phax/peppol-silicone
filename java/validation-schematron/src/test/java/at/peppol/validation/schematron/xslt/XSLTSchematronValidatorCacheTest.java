@@ -21,6 +21,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -30,9 +31,6 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
 import at.peppol.validation.schematron.ISchematronResource;
-import at.peppol.validation.schematron.xslt.ISchematronXSLTProvider;
-import at.peppol.validation.schematron.xslt.SchematronResourceSCH;
-import at.peppol.validation.schematron.xslt.SchematronResourceSCHCache;
 
 import com.phloc.commons.concurrent.ManagedExecutorService;
 import com.phloc.commons.error.IResourceError;
@@ -40,7 +38,6 @@ import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.commons.io.resource.FileSystemResource;
 import com.phloc.commons.xml.serialize.XMLWriter;
 import com.phloc.commons.xml.transform.CollectingTransformErrorListener;
-
 
 /**
  * Test class for class {@link SchematronResourceSCH}
@@ -126,7 +123,7 @@ public final class XSLTSchematronValidatorCacheTest {
     assertTrue (aPreprocessor.isValidSchematron ());
     assertNotNull (aPreprocessor.getXSLTDocument ());
     for (final IResourceError aError : aCEH.getResourceErrors ())
-      s_aLogger.info ("!!" + aError.getAsString ());
+      s_aLogger.info ("!!" + aError.getAsString (Locale.US));
     s_aLogger.info ("!!" + XMLWriter.getXMLString (aPreprocessor.getXSLTDocument ()));
   }
 }

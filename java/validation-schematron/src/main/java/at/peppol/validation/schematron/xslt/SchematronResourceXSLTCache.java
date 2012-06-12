@@ -18,6 +18,7 @@
 package at.peppol.validation.schematron.xslt;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -36,7 +37,7 @@ import com.phloc.commons.xml.transform.LoggingTransformErrorListener;
 
 /**
  * Factory for creating {@link ISchematronXSLTProvider} objects.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 final class SchematronResourceXSLTCache {
@@ -52,14 +53,14 @@ final class SchematronResourceXSLTCache {
       s_aLogger.info ("Compiling XSLT instance " + aXSLTResource.toString ());
 
     final CollectingTransformErrorListener aCEH = new CollectingTransformErrorListener (GlobalDebug.isDebugMode ()
-                                                                                                                  ? LoggingTransformErrorListener.getInstance ()
+                                                                                                                  ? new LoggingTransformErrorListener (Locale.US)
                                                                                                                   : null);
     final SchematronProviderXSLTPrebuild aXSLTPreprocessor = new SchematronProviderXSLTPrebuild (aXSLTResource, aCEH);
     if (!aXSLTPreprocessor.isValidSchematron ()) {
       // Schematron is invalid -> parsing failed
       s_aLogger.warn ("The XSLT resource '" + aXSLTResource.getResourceID () + "' is invalid!");
       for (final IResourceError aError : aCEH.getResourceErrors ())
-        s_aLogger.warn ("  " + aError.getAsString ());
+        s_aLogger.warn ("  " + aError.getAsString (Locale.US));
       return null;
     }
 
@@ -79,7 +80,7 @@ final class SchematronResourceXSLTCache {
 
   /**
    * Create a new Schematron validator for the passed resource.
-   *
+   * 
    * @param aXSLTResource
    *        The resource of the Schematron rules. May not be <code>null</code>.
    * @return <code>null</code> if the passed Schematron resource does not exist.

@@ -60,7 +60,7 @@ import com.phloc.commons.string.StringHelper;
 
 /**
  * Represents the content of the index file for a single visualization artefact.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable
@@ -99,7 +99,7 @@ public final class ArtefactIndex {
 
   /**
    * Check if the passed locale is contained.
-   *
+   * 
    * @param aLocale
    *        The locale to be checked. May not be <code>null</code>.
    * @return <code>true</code> if the locale is contained directly, or if the
@@ -151,7 +151,7 @@ public final class ArtefactIndex {
     final Set <Locale> aLanguages = new HashSet <Locale> ();
     if (sLanguages != null)
       for (final String sLanguage : RegExHelper.split (sLanguages, "[,;]"))
-        aLanguages.add (LocaleCache.get (sLanguage));
+        aLanguages.add (LocaleCache.getLocale (sLanguage));
 
     // Stylesheet filename
     final String sStylesheet = eRoot.getAttribute ("xsl");

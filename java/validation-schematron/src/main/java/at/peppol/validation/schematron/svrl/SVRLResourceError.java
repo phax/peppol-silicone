@@ -68,13 +68,13 @@ public class SVRLResourceError extends ResourceError {
   }
 
   @Override
-  public String getAsString () {
+  public String getAsString (@Nonnull final Locale aContentLocale) {
     String ret = "[" + getErrorLevel ().getID () + "]";
     final String sLocation = getLocation ().getAsString ();
     if (StringHelper.hasText (sLocation))
       ret += ' ' + sLocation;
     ret += "; Test=" + m_sTest;
-    ret += "; Message=" + getErrorText (Locale.US);
+    ret += "; Message=" + getDisplayText (aContentLocale);
     return ret;
   }
 
