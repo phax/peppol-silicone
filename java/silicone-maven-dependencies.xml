@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <root>
+  <project groupid="no.sendregning.ap" artifactid="oxalis-api" />
+  <project groupid="no.sendregning.ap" artifactid="oxalis-commons" />
+  <project groupid="no.sendregning.ap" artifactid="oxalis-distribution" />
+  <project groupid="no.sendregning.ap" artifactid="oxalis-standalone" />
+  <project groupid="no.sendregning.ap" artifactid="oxalis-start-inbound" />
+  <project groupid="no.sendregning.ap" artifactid="oxalis-start-outbound" />
   <project groupid="at.peppol" artifactid="peppol-commons-busdox">
     <isDependentOf>
       <item groupid="at.peppol" artifactid="peppol-commons-peppol" />
