@@ -51,17 +51,6 @@ public class InvoiceLineWindow extends Form {
 
     Button btnSave = new Button("Save", new Button.ClickListener() {
       public void buttonClick(ClickEvent event) {
-        
-        // @Jerry if you uncomment, the line will correctly take any value you set
-        // meaning that in java class level everything is OK
-        
-        //invln.getID().setValue(Integer.toString(44));
-        //invln.getInvoicedQuantity().setValue(BigDecimal.valueOf(1));
-        //invln.setSellersItemID("AF-CODE-"+(333));
-        //invln.setItemDescription("Item "+552);
-        //invln.getItem().getName().setValue("Item Name "+133);
-        //invln.setPriceAmount(666);    
-        
         //update GUI table !!
         parent.getTable().addInvoiceLine (invln);
         //update actual invoice line item
@@ -94,8 +83,6 @@ public class InvoiceLineWindow extends Form {
     final Form invoiceLineForm = new Form(new FormLayout(), new InvoiceFieldFactory());
     invoiceLineForm.setImmediate(true);
     invln = new InvoiceLineAdapter();
-    
-    //parent.getInvoiceType ().setID (new IDType ());
     
     //1. Line ID
     invln.setID (new IDType ());

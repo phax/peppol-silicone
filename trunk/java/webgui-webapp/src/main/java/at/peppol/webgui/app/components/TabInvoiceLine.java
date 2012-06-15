@@ -24,20 +24,17 @@ public class TabInvoiceLine extends Form {
   private Window popup;
   
   public List<InvoiceLineType> items;
-  
-  //private VerticalLayout mainLayout;
-
 
   public TabInvoiceLine (InvoiceTabForm parent) {
     this.parent = parent;
     initElements();
-    //buildMainLayout ();
   }
 
   private void initElements() {
     items = parent.getInvoice().getInvoiceLine();
     //add new item takes place inside the popup...  no need to initiate it here...
     //it would be great for editing though ;)
+    //TODO: when editing is completed remove these comments and next line
     //items.add(createInvoiceLine());
     
     final GridLayout grid = new GridLayout(4, 4);
@@ -48,7 +45,7 @@ public class TabInvoiceLine extends Form {
     table.addStyleName ("striped strong");
     Panel outerPanel = new Panel("Invoice Lines"); 
         
-    
+    //TODO: Do not use popup but "hidden" form elements...
     grid.addComponent(new Button("Add new Line", new Button.ClickListener() {
 
       @Override
@@ -69,21 +66,12 @@ public class TabInvoiceLine extends Form {
     
   }  
   
-  
-  private VerticalLayout buildMainLayout () {
-    
-    // top-level component properties
-    setWidth ("100.0%");
-    setHeight ("100.0%");
-    return null;
-  }
-  
-
   public InvoiceLineTable getTable() {
     return this.table;
   }
   
-  
+  //TODO: when editing is completed remove the following function
+  /*
   private InvoiceLineType createInvoiceLine() {
     final InvoiceLineType il = new InvoiceLineType();
     il.setID(new IDType());
@@ -93,6 +81,7 @@ public class TabInvoiceLine extends Form {
 
     return il;
   }
+  */
   
   
   public void showInvLineWindow() {
