@@ -36,14 +36,20 @@ import com.vaadin.ui.Window;
 
 @SuppressWarnings ("serial")
 public class InvoiceTabForm extends Form {
-  private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(InvoiceForm.class);
+  private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(TabInvoiceHeader.class);
   private final ObjectFactory invObjFactory;
   
   private InvoiceType invoice;
   
-  private InvoiceForm tInvoiceForm; //TODO: change name: InvoiceForm to TabInvoiceHeader
+  private TabInvoiceHeader tTabInvoiceHeader;
   private TabInvoiceLine tTabInvoiceLine;
+  private TabInvoiceDelivery tTabInvoiceDelivery;
+  private TabInvoicePayment tTabInvoicePayment;
+  private TabInvoiceAllowanceCharge tTabInvoiceAllowanceCharge;
+  private TabInvoiceTaxTotal tTabInvoiceTaxTotal;
+  private TabInvoiceMonetaryTotal tTabInvoiceMonetaryTotal;
   
+  //TODO: Naming convension as tTabInvoiceCustomerParty, tTabInvoiceSupplierParty
   private CustomerPartyType customer;
   private SupplierPartyType supplier;
   private PartyDetailForm supplierForm;
@@ -67,8 +73,13 @@ public class InvoiceTabForm extends Form {
   private void initInvoiceData() {
     invoice = invObjFactory.createInvoiceType();
     
-    tInvoiceForm = new InvoiceForm(this);
+    tTabInvoiceHeader = new TabInvoiceHeader(this);
     tTabInvoiceLine = new TabInvoiceLine(this);
+    tTabInvoiceDelivery = new TabInvoiceDelivery(this);
+    tTabInvoicePayment = new TabInvoicePayment(this);
+    tTabInvoiceAllowanceCharge = new TabInvoiceAllowanceCharge(this);
+    tTabInvoiceTaxTotal = new TabInvoiceTaxTotal(this);
+    tTabInvoiceMonetaryTotal = new TabInvoiceMonetaryTotal(this);
     
     supplier = new SupplierPartyType();
     supplier.setParty(new PartyType());
@@ -144,21 +155,21 @@ public class InvoiceTabForm extends Form {
     invTabSheet.setHeight ("100.0%");
     
     // 1st tab: Invoice Header
-    invTabSheet.addTab (tInvoiceForm, "Invoice Header", null, 0);
+    invTabSheet.addTab (tTabInvoiceHeader, "Invoice Header", null, 0);
     // 2nd tab: Supplier Party
     invTabSheet.addTab (supplierForm, "Supplier Party", null, 1);
     // 3rd tab: Customer Party
     invTabSheet.addTab (customerForm, "Customer Party", null, 2);
     // 4th tab: Delivery
-    invTabSheet.addTab (new Label("everything about delivery"), "Delivery", null, 3);
+    invTabSheet.addTab (tTabInvoiceDelivery, "Delivery", null, 3);
     // 5th tab: Payment
-    invTabSheet.addTab (new Label("everything about payment"), "Payment", null, 4);
+    invTabSheet.addTab (tTabInvoicePayment, "Payment", null, 4);
     // 6th tab: Allowance Charge
-    invTabSheet.addTab (new Label("everything about allowance charge"), "Allowance Charge", null, 5);
+    invTabSheet.addTab (tTabInvoiceAllowanceCharge, "Allowance Charge", null, 5);
     // 7th tab: Tax Total
-    invTabSheet.addTab (new Label("everything about tax total"), "Tax Total", null, 6);
+    invTabSheet.addTab (tTabInvoiceTaxTotal, "Tax Total", null, 6);
     // 8th tab: Monetary Total
-    invTabSheet.addTab (new Label("everything about monetary total"), "Monetary Total", null, 7);
+    invTabSheet.addTab (tTabInvoiceMonetaryTotal, "Monetary Total", null, 7);
     // 9th tab: Invoice Lines
     invTabSheet.addTab (tTabInvoiceLine, "Invoice Lines", null, 8);
     
