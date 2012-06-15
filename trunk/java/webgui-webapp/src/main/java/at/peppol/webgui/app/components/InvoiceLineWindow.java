@@ -19,12 +19,14 @@ import com.vaadin.ui.Window;
 
 @SuppressWarnings ("serial")
 public class InvoiceLineWindow extends Form {
+  private TabInvoiceLine parent;
+  
   private final Window subwindow;
-  private InvoiceForm parent;
+ 
   private InvoiceLineAdapter invln;
 //  private Line line;  //Auxiliary class
   
-  public InvoiceLineWindow(final InvoiceForm parent) {
+  public InvoiceLineWindow(final TabInvoiceLine parent) {
     this.parent = parent;
     invln = new InvoiceLineAdapter();
 
@@ -62,6 +64,8 @@ public class InvoiceLineWindow extends Form {
         
         //update GUI table !!
         parent.getTable().addInvoiceLine (invln);
+        //update actual invoice line item
+        parent.items.add (invln);
        
         //close popup
         (subwindow.getParent()).removeWindow(subwindow);
@@ -103,6 +107,8 @@ public class InvoiceLineWindow extends Form {
     //3. Line Item's Name
     invoiceLineForm.addItemProperty ("itemName", new NestedMethodProperty (invln, "item.name.value"));
     
+    //0. invoiceLineForm.addItemProperty ("notes", new NestedMethodProperty (invln, "notes"));
+    
     //4. Line Item's Description
     invoiceLineForm.addItemProperty ("itemDescription", new NestedMethodProperty (invln, "itemDescription"));
     
@@ -115,38 +121,11 @@ public class InvoiceLineWindow extends Form {
     return invoiceLineForm;
   }  
   
-  /* NOT USED - ONLY FOR TESTING PURPOSES */
-  public class Line {
-    String lineId;
-    String sellersItemId;
-    String itemName;
-    String itemDescription;
-    long invoicedQuantity;
-    long priceAmount;
-    
-    public Line() {
-      lineId = "";
-      sellersItemId = "";
-      itemName = "";
-      itemDescription = "";
-      invoicedQuantity = 0;
-      priceAmount = 10;
-    }
-    
-    public String getItemDescription(){
-      return this.itemDescription;
-    }
-      
-  }
-  /* NOT USED - ONLY FOR TESTING PURPOSES */
-  
   class InvoiceFieldFactory implements FormFieldFactory {
 
     public Field createField(final Item item, final Object propertyId, final Component uiContext) {
         // Identify the fields by their Property ID.
         final String pid = (String) propertyId;
-
-
 
         final Field field = DefaultFieldFactory.get().createField(item, propertyId, uiContext);
         if (field instanceof AbstractTextField) {

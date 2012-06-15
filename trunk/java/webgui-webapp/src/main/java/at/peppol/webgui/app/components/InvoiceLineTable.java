@@ -64,6 +64,7 @@ public class InvoiceLineTable extends Table {
         tableLines.addBean(invln);   
     }
 
+    /*
     private InvoiceLineAdapter createInvoiceLine() {
         
         
@@ -77,4 +78,5 @@ public class InvoiceLineTable extends Table {
         counter++;
         return inv;
     }
+    */
 }
