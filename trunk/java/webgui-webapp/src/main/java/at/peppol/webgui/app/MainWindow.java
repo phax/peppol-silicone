@@ -3,6 +3,7 @@ package at.peppol.webgui.app;
 import org.vaadin.jouni.animator.AnimatorProxy;
 
 import at.peppol.webgui.app.components.InvoiceForm;
+import at.peppol.webgui.app.components.InvoiceTabForm;
 import at.peppol.webgui.app.components.InvoiceUploadWindow;
 import at.peppol.webgui.app.components.OrderUploadWindow;
 import at.peppol.webgui.security.user.IUser;
@@ -132,6 +133,7 @@ public class MainWindow extends Window {
         mainContentLayout.setWidth("100%");
         middleContentLayout.setWidth("100%");
         middleContentLayout.setHeight("100%");
+        middleContentLayout.setMargin (true);
         // -------- 
         addComponent(middleContentLayout);
         addComponent(footerLayout);
@@ -333,7 +335,8 @@ public class MainWindow extends Window {
     
     public void showInvoiceForm() {
         
-        InvoiceForm invForm = new InvoiceForm();
+        //InvoiceForm invForm = new InvoiceForm();
+        InvoiceTabForm invForm = new InvoiceTabForm();
         middleContentLayout.replaceComponent(mainContentComponent,invForm);
         middleContentLayout.setExpandRatio(invForm, 1);
         mainContentComponent = invForm;
@@ -341,11 +344,11 @@ public class MainWindow extends Window {
     
     public void showTestForm() {
         
-        InvoiceForm form = new InvoiceForm();
-        Form f2 = form.createInvoiceTopForm();
-        middleContentLayout.replaceComponent(mainContentComponent,f2);
-        middleContentLayout.setExpandRatio(f2, 1);
-        mainContentComponent = f2;
+        //InvoiceForm form = new InvoiceForm();
+        //Form f2 = form.createInvoiceTopForm();
+        //middleContentLayout.replaceComponent(mainContentComponent,f2);
+        //middleContentLayout.setExpandRatio(f2, 1);
+        //mainContentComponent = f2;
     }
     
     public void showInvUploadWindow() {
