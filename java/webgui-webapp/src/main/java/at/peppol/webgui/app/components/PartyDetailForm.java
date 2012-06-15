@@ -49,8 +49,8 @@ public class PartyDetailForm extends Panel{
     }
         private void initElements() {
 
-        setCaption(party+" Details");
-        setStyleName("light");
+        setCaption(party + " Party");
+        //setStyleName("light");
         
         PropertysetItem partyItemSet = new PropertysetItem();
         
@@ -108,12 +108,10 @@ public class PartyDetailForm extends Panel{
         partyForm.setImmediate(true);
         
         addComponent(partyForm);
-
-        
-
     }
     
-     class PartyFieldFactory implements FormFieldFactory {
+     @SuppressWarnings ("serial")
+    class PartyFieldFactory implements FormFieldFactory {
 
         @Override
         public Field createField(Item item, Object propertyId,

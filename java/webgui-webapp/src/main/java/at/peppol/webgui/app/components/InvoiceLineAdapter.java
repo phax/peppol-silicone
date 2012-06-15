@@ -22,6 +22,7 @@ import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PercentT
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PriceAmountType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TaxAmountType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TaxableAmountType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.NoteType;
 
 /**
  * An adapter class that ignores the list types found in InvoiceLineType and
@@ -31,6 +32,7 @@ import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TaxableA
  *
  * @author Jerouris
  */
+@SuppressWarnings ("serial")
 public class InvoiceLineAdapter extends InvoiceLineType {
     private final TaxSubtotalType VATTax;
 
@@ -40,6 +42,9 @@ public class InvoiceLineAdapter extends InvoiceLineType {
         // Initialization of required fields 
         setItem(new ItemType());
         setID(new IDType());
+        NoteType nt = new NoteType();
+        nt.setValue ("");
+        setNote (nt);
         getItem().setName(new NameType());
         getItem().setSellersItemIdentification(new ItemIdentificationType());
         getItem().getSellersItemIdentification().setID(new IDType());
@@ -52,7 +57,7 @@ public class InvoiceLineAdapter extends InvoiceLineType {
         // Tax totals and subtotals
         getTaxTotal().add(new TaxTotalType());
         setItemDescription("");
-        
+    
         //0. is the VAT Tax
         VATTax = new TaxSubtotalType();
         getTaxTotal().get(0).getTaxSubtotal().add(VATTax);
@@ -92,6 +97,14 @@ public class InvoiceLineAdapter extends InvoiceLineType {
         return getItem().getSellersItemIdentification().getID().getValue();
     }
     
+    public void setNotes(String n) {
+      getNote().setValue (n);
+    }
+    public String getNotes() {
+      return getNote().getValue ();
+    }
+    
+  
     public void setPriceAmount(long amount)
     {
         
