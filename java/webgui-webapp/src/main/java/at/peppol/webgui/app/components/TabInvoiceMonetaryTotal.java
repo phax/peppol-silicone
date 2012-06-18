@@ -1,6 +1,34 @@
 package at.peppol.webgui.app.components;
 
+import java.util.List;
+
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AddressType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.CountryType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.DeliveryType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.LocationType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.MonetaryTotalType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ActualDeliveryDateType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AdditionalStreetNameType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AllowanceTotalAmountType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.BuildingNumberType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ChargeTotalAmountType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CityNameType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CountrySubentityType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DepartmentType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IDType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IdentificationCodeType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.LineExtensionAmountType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PayableAmountType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PayableRoundingAmountType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PostalZoneType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PrepaidAmountType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.StreetNameType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TaxExclusiveAmountType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TaxInclusiveAmountType;
+import at.peppol.webgui.app.components.TabInvoiceTaxTotal.InvoiceTaxTotalFieldFactory;
+
 import com.vaadin.data.Item;
+import com.vaadin.data.util.NestedMethodProperty;
 import com.vaadin.ui.AbstractTextField;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.DefaultFieldFactory;
@@ -13,7 +41,10 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 
 public class TabInvoiceMonetaryTotal extends Form {
-private InvoiceTabForm parent;
+  private InvoiceTabForm parent;
+  
+  private MonetaryTotalType monetaryTotal;  
+  
   
   public TabInvoiceMonetaryTotal(InvoiceTabForm parent) {
     this.parent = parent;
@@ -21,6 +52,9 @@ private InvoiceTabForm parent;
   }
 
   private void initElements() {
+    //monetaryTotal = parent.getInvoice().getLegalMonetaryTotal ();
+    monetaryTotal = createMonetaryTotal();
+    parent.getInvoice().setLegalMonetaryTotal (monetaryTotal);
     
     final GridLayout grid = new GridLayout(4, 4);
     final VerticalLayout outerLayout = new VerticalLayout();
@@ -41,17 +75,33 @@ private InvoiceTabForm parent;
     outerPanel.requestRepaintAll();
   }
   
-  
+  private MonetaryTotalType createMonetaryTotal() {
+    final MonetaryTotalType mt = new MonetaryTotalType();
+    mt.setLineExtensionAmount (new LineExtensionAmountType ());
+    mt.setTaxExclusiveAmount (new TaxExclusiveAmountType ());
+    mt.setTaxInclusiveAmount (new TaxInclusiveAmountType ());
+    mt.setAllowanceTotalAmount (new AllowanceTotalAmountType ());
+    mt.setChargeTotalAmount (new ChargeTotalAmountType ());
+    mt.setPrepaidAmount (new PrepaidAmountType ());
+    mt.setPayableRoundingAmount (new PayableRoundingAmountType ());
+    mt.setPayableAmount (new PayableAmountType ());
+    return mt;
+  }  
+ 
   public Form createInvoiceMonetaryTotalTopForm() {
     final Form invoiceMonetaryTotalTopForm = new Form(new FormLayout(), new InvoiceMonetaryTotalFieldFactory());
     invoiceMonetaryTotalTopForm.setImmediate(true);
       
-    /* monetary total fields here...
-    parent.getInvoice().setID (new IDType ());
-    invoiceDeliveryTopForm.addItemProperty ("Invoice ID", new NestedMethodProperty (parent.getInvoice().getID (), "value"));
-        
-    parent.getInvoice().setDocumentCurrencyCode (new DocumentCurrencyCodeType ());
-    */
+    //TODO: Update fields automatically. Make them read only !
+    invoiceMonetaryTotalTopForm.addItemProperty ("Line Extenstion Amount", new NestedMethodProperty(monetaryTotal.getLineExtensionAmount (), "value") );
+    invoiceMonetaryTotalTopForm.addItemProperty ("Tax Exclusive Amount", new NestedMethodProperty(monetaryTotal.getTaxExclusiveAmount (), "value") );
+    invoiceMonetaryTotalTopForm.addItemProperty ("Tax Inclusive Amount", new NestedMethodProperty(monetaryTotal.getTaxInclusiveAmount (), "value") );
+    invoiceMonetaryTotalTopForm.addItemProperty ("Allowance Total Amount", new NestedMethodProperty(monetaryTotal.getAllowanceTotalAmount (), "value") );
+    invoiceMonetaryTotalTopForm.addItemProperty ("Charge Total Amount", new NestedMethodProperty(monetaryTotal.getChargeTotalAmount (), "value") );
+    invoiceMonetaryTotalTopForm.addItemProperty ("Prepaid Amount", new NestedMethodProperty(monetaryTotal.getPrepaidAmount (), "value") );
+    invoiceMonetaryTotalTopForm.addItemProperty ("Payable Rounding Amount", new NestedMethodProperty(monetaryTotal.getPayableRoundingAmount (), "value") );
+    invoiceMonetaryTotalTopForm.addItemProperty ("Payable Amount", new NestedMethodProperty(monetaryTotal.getPayableAmount (), "value") );
+    
     return invoiceMonetaryTotalTopForm;
   }  
   

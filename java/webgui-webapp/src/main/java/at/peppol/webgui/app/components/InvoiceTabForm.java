@@ -91,12 +91,11 @@ public class InvoiceTabForm extends Form {
     invoice.setCustomizationID(custID);
     invoice.setID(new IDType());
 
+
     invoice.setAccountingCustomerParty(customer);
     invoice.setAccountingSupplierParty(supplier);
     //invoice.setLegalMonetaryTotal(new MonetaryTotalType());
-    
-
-    
+   
   }  
   
   private void initElements () {
@@ -104,13 +103,16 @@ public class InvoiceTabForm extends Form {
     customerForm = new PartyDetailForm("Customer", customer.getParty());
     supplierForm.setSizeFull();
     customerForm.setSizeFull();
+    
+    
     getFooter().setMargin (true);
     getFooter().addComponent(new Button("Check Invoice", new Button.ClickListener() {
 
       @Override
       public void buttonClick(final Button.ClickEvent event) {
           try {
-              System.out.println(invoice.getInvoiceLine ().get (0).getInvoicedQuantity ().getValue () );
+              System.out.println(invoice.getDelivery ().get (0).getDeliveryAddress ().getStreetName ().getValue ());
+              //System.out.println(invoice.getInvoiceLine ().get (0).getInvoicedQuantity ().getValue () );
               //AbstractUBLDocumentMarshaller.setGlobalValidationEventHandler(null);
               //UBL20DocumentMarshaller.writeInvoice(invoice, new StreamResult(new OutputStreamWriter(System.out)));
           } catch (final Exception ex) {
