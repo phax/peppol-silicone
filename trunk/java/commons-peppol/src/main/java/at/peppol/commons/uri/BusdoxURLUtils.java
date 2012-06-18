@@ -37,26 +37,16 @@
  */
 package at.peppol.commons.uri;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Locale;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.InflaterInputStream;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
 import at.peppol.commons.identifier.CIdentifier;
@@ -65,30 +55,25 @@ import at.peppol.commons.sml.ISMLInfo;
 
 import com.google.gdata.util.common.base.CharEscapers;
 import com.phloc.commons.charset.CCharset;
-import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.messagedigest.EMessageDigestAlgorithm;
 import com.phloc.commons.messagedigest.MessageDigestGenerator;
 import com.phloc.commons.string.StringHelper;
 
-
 /**
  * Utility methods for assembling URLs and URL elements required for Busdox.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable
 public final class BusdoxURLUtils {
   public static final Charset URL_CHARSET = CCharset.CHARSET_UTF_8_OBJ;
   public static final Locale URL_LOCALE = Locale.US;
-  public static final String ENCODING_GZIP = "gzip";
-  public static final String ENCODING_DEFLATE = "deflate";
-  private static final Logger s_aLogger = LoggerFactory.getLogger (BusdoxURLUtils.class);
 
   private BusdoxURLUtils () {}
 
   /**
    * Escape the passed URL to use the percentage maskings.
-   *
+   * 
    * @param sURL
    *        The input URL or URL part. May be <code>null</code>.
    * @return <code>null</code> if the input stream was <code>null</code>.
@@ -104,7 +89,7 @@ public final class BusdoxURLUtils {
    * characters in the range [0-9a-f]. Note: the hash value creation is done
    * case sensitive! The caller needs to ensure that the value to hash is lower
    * case!
-   *
+   * 
    * @param sValueToHash
    *        The value to be hashed. May not be <code>null</code>.
    * @return The non-<code>null</code> String containing the hash value.
@@ -120,7 +105,7 @@ public final class BusdoxURLUtils {
   /**
    * Get DNS record from ParticipantIdentifier. "0010:1234 | scheme" ->
    * "B-&lt;hash over pi>.&lt;scheme>.&lt;sml-zone-name>".
-   *
+   * 
    * @param aParticipantIdentifier
    *        Participant identifier. May not be <code>null</code>.
    * @param aSML
@@ -138,7 +123,7 @@ public final class BusdoxURLUtils {
    * "B-&lt;hash over pi>.&lt;scheme>.&lt;sml-zone-name>". This method ensures
    * that the hash value is created from the lower case value of the identifier.
    * Lower casing is done with the {@link #URL_LOCALE} locale.
-   *
+   * 
    * @param aParticipantIdentifier
    *        Participant identifier. May not be <code>null</code>.
    * @param sSMLZoneName
@@ -222,57 +207,5 @@ public final class BusdoxURLUtils {
     catch (final MalformedURLException ex) {
       throw new IllegalArgumentException ("Error building SMP URL", ex);
     }
-  }
-
-  /**
-   * Gets the content of a given url.
-   *
-   * @param sURL
-   *        URL where the content is allocated.
-   * @return URL content or <code>null</code> when fetching the content of the
-   *         URL fails.
-   */
-  @Nullable
-  public static String getURLContent (@Nonnull final String sURL) {
-    InputStream aIS = null;
-    BufferedReader aBR = null;
-
-    try {
-      final URL aUrl = new URL (sURL);
-
-      final HttpURLConnection aHttpConn = (HttpURLConnection) aUrl.openConnection ();
-      aHttpConn.setReadTimeout (2000);
-      aHttpConn.connect ();
-      final String sEncoding = aHttpConn.getContentEncoding ();
-
-      aIS = aHttpConn.getInputStream ();
-      if (sEncoding != null) {
-        if (sEncoding.equalsIgnoreCase (ENCODING_GZIP))
-          aIS = new GZIPInputStream (aIS);
-        else
-          if (sEncoding.equalsIgnoreCase (ENCODING_DEFLATE))
-            aIS = new InflaterInputStream (aIS);
-      }
-
-      aBR = new BufferedReader (new InputStreamReader (aIS));
-
-      final StringBuilder aSB = new StringBuilder ();
-      String sLine = null;
-      while ((sLine = aBR.readLine ()) != null)
-        aSB.append (sLine).append ("\n");
-      return aSB.toString ();
-    }
-    catch (final FileNotFoundException ex) {
-      // No need for exception stack trace
-      s_aLogger.error ("URL does not exist: '" + sURL + "'");
-    }
-    catch (final Exception ex) {
-      s_aLogger.error ("Error reading URL '" + sURL + "'", ex);
-    }
-    finally {
-      StreamUtils.close (aBR);
-      StreamUtils.close (aIS);
-    }
-    return null;
   }
 }
