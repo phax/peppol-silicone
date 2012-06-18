@@ -20,10 +20,10 @@
 
         <!-- Make these present in the root for everybody to see -->
         <file>
-            <source>../install.sh</source>
+            <source>../oxalis-install.sh</source>
         </file>
         <file>
-            <source>../install.html</source>
+            <source>../oxalis-install.html</source>
         </file>
     </files>
 

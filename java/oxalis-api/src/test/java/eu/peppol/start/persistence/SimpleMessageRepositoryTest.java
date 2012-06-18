@@ -3,7 +3,6 @@ package eu.peppol.start.persistence;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
-import java.io.IOException;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -30,7 +29,7 @@ public class SimpleMessageRepositoryTest {
   }
 
   @Test
-  public void computeDirectoryNameForMessage () throws IOException {
+  public void computeDirectoryNameForMessage () {
     final SimpleMessageRepository simpleMessageRepository = new SimpleMessageRepository ();
 
     peppolHeader.setChannelId (new ChannelId ("CH2"));
@@ -45,7 +44,7 @@ public class SimpleMessageRepositoryTest {
   }
 
   @Test
-  public void computeDirectoryNameForMessageWithNoChannel () throws IOException {
+  public void computeDirectoryNameForMessageWithNoChannel () {
     final SimpleMessageRepository simpleMessageRepository = new SimpleMessageRepository ();
 
     final String tmpdir = "/tmpx";
@@ -61,8 +60,7 @@ public class SimpleMessageRepositoryTest {
   public void testPrepareMessageStore () {
     final SimpleMessageRepository simpleMessageRepository = new SimpleMessageRepository ();
 
-    final File root = File.listRoots ()[0];
-    final File tmp = new File (root, "/tmp/X");
+    final File tmp = new File ("/tmp/X");
     try {
       tmp.mkdirs ();
       System.err.println (tmp.toString ());
