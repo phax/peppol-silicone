@@ -75,9 +75,9 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.commons.url.SimpleURL;
 import com.phloc.commons.xml.serialize.XMLReader;
-import com.phloc.css.DefaultCSSClassProvider;
-import com.phloc.css.ICSSClassProvider;
 import com.phloc.html.EHTMLVersion;
+import com.phloc.html.css.DefaultCSSClassProvider;
+import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.html.hc.CHCParam;
 import com.phloc.html.hc.conversion.HCSettings;
 import com.phloc.html.hc.html.AbstractHCCell;
@@ -145,6 +145,8 @@ public final class ValidationServlet extends HttpServlet {
    */
   private void _handle (@Nonnull final HttpServletRequest aHttpRequest, @Nonnull final HttpServletResponse aHttpResponse) throws ServletException,
                                                                                                                          IOException {
+    final Locale aDisplayLocale = Locale.US;
+
     // Request parameter values
     final String sSelectedSyntax = aHttpRequest.getParameter (FIELD_SYNTAX_BINDING);
     final EValidationSyntaxBinding eSelectedSyntax = EValidationSyntaxBinding.getFromIDOrNull (sSelectedSyntax);
@@ -153,7 +155,7 @@ public final class ValidationServlet extends HttpServlet {
     final String sSelectedTransaction = aHttpRequest.getParameter (FIELD_TRANSACTION);
     final ETransaction eSelectedTransaction = ETransaction.getFromIDOrNull (sSelectedTransaction);
     final String sSelectedCountry = aHttpRequest.getParameter (FIELD_COUNTRY);
-    final Locale aSelectedCountry = LocaleCache.get (sSelectedCountry);
+    final Locale aSelectedCountry = LocaleCache.getLocale (sSelectedCountry);
     final String sSelectedIndustryLevel = aHttpRequest.getParameter (FIELD_INDUSTRY_SPECIFIC);
     final boolean bSelectedIndustryLevel = sSelectedIndustryLevel != null
                                                                          ? Boolean.parseBoolean (sSelectedIndustryLevel)
@@ -224,7 +226,7 @@ public final class ValidationServlet extends HttpServlet {
         if (!aFailures.isEmpty ()) {
           final HCUL aUL = aBody.addAndReturnChild (new HCUL ());
           for (final IResourceError aResError : aREG)
-            aUL.addItem (_createError (aResError.getAsString ()));
+            aUL.addItem (_createError (aResError.getAsString (aDisplayLocale)));
         }
 
         // Add link to main page
