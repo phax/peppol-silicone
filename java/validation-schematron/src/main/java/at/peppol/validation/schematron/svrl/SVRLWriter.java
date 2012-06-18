@@ -127,6 +127,6 @@ public final class SVRLWriter {
   @Nullable
   public static String createXMLString (@Nonnull final SchematronOutputType aSchematronOutput) {
     final NonBlockingStringWriter aSW = new NonBlockingStringWriter ();
-    return writeSVRL (aSchematronOutput, new StreamResult (aSW)).isSuccess () ? aSW.toString () : null;
+    return writeSVRL (aSchematronOutput, new StreamResult (aSW)).isSuccess () ? aSW.getAsString () : null;
   }
 }
