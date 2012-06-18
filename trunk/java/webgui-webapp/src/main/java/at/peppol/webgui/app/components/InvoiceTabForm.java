@@ -1,38 +1,25 @@
 package at.peppol.webgui.app.components;
 
-import java.io.OutputStreamWriter;
-import java.math.BigDecimal;
-import java.util.List;
-
 import javax.xml.bind.JAXBElement;
-import javax.xml.transform.stream.StreamResult;
-
-import org.slf4j.LoggerFactory;
 
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.CustomerPartyType;
-import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.InvoiceLineType;
-import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.MonetaryTotalType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.PartyType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.SupplierPartyType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CustomizationIDType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IDType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.InvoiceTypeCodeType;
-import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.InvoicedQuantityType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.UBLVersionIDType;
 import oasis.names.specification.ubl.schema.xsd.invoice_2.InvoiceType;
 import oasis.names.specification.ubl.schema.xsd.invoice_2.ObjectFactory;
 
+import org.slf4j.LoggerFactory;
+
 import at.peppol.commons.identifier.docid.EPredefinedDocumentTypeIdentifier;
 
-import com.phloc.ubl.AbstractUBLDocumentMarshaller;
-import com.phloc.ubl.UBL20DocumentMarshaller;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Form;
 import com.vaadin.ui.GridLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Panel;
 import com.vaadin.ui.TabSheet;
-import com.vaadin.ui.Window;
 
 @SuppressWarnings ("serial")
 public class InvoiceTabForm extends Form {

@@ -2,7 +2,6 @@ package at.peppol.webgui.app;
 
 import org.vaadin.jouni.animator.AnimatorProxy;
 
-import at.peppol.webgui.app.components.InvoiceForm;
 import at.peppol.webgui.app.components.InvoiceTabForm;
 import at.peppol.webgui.app.components.InvoiceUploadWindow;
 import at.peppol.webgui.app.components.OrderUploadWindow;
@@ -15,7 +14,6 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.CustomLayout;
 import com.vaadin.ui.Embedded;
-import com.vaadin.ui.Form;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.MenuBar;

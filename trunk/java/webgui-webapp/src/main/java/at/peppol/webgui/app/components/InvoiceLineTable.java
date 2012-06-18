@@ -4,7 +4,6 @@
  */
 package at.peppol.webgui.app.components;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 

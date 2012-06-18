@@ -1,7 +1,5 @@
 package at.peppol.webgui.app.components;
 
-import at.peppol.webgui.app.components.TabInvoiceDelivery.InvoiceDeliveryFieldFactory;
-
 import com.vaadin.data.Item;
 import com.vaadin.ui.AbstractTextField;
 import com.vaadin.ui.Component;
