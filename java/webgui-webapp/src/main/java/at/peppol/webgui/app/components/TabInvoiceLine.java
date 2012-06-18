@@ -37,10 +37,17 @@ public class TabInvoiceLine extends Form {
     final VerticalLayout outerLayout = new VerticalLayout();
     
     table = new InvoiceLineTable(parent.getInvoice().getInvoiceLine());
-    table.setSizeFull();
+    table.setHeight (150, UNITS_PIXELS);
+    table.setFooterVisible (true);
     table.addStyleName ("striped strong");
+    VerticalLayout tableContainer = new VerticalLayout();
+    tableContainer.addComponent (table);
+    tableContainer.setMargin (false, true, false, false);
+    
     Panel outerPanel = new Panel("Invoice Lines"); 
-        
+      
+    grid.addComponent(tableContainer,0,0);
+    
     //TODO: Do not use popup but "hidden" form elements...
     grid.addComponent(new Button("Add new Line", new Button.ClickListener() {
 
@@ -49,10 +56,7 @@ public class TabInvoiceLine extends Form {
         //Open modal window to add new invoice line
         showInvLineWindow();
       }
-    }), 3, 3);
-    
-    
-    grid.addComponent(table,0,3, 2, 3);
+    }), 1, 0);
     
     outerPanel.addComponent (grid);
     outerLayout.addComponent(outerPanel);
