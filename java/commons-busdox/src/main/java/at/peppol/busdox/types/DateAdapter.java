@@ -42,6 +42,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
+import javax.annotation.Nonnull;
+import javax.annotation.concurrent.Immutable;
 import javax.xml.bind.DatatypeConverter;
 
 /**
@@ -50,20 +52,21 @@ import javax.xml.bind.DatatypeConverter;
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
+@Immutable
 public final class DateAdapter {
   /** The time zone used in the adapter */
   public static final TimeZone TIMEZONE_UTC = TimeZone.getTimeZone ("UTC");
 
   private DateAdapter () {}
 
-  // never null
+  @Nonnull
   public static Date parseDate (final String sDate) {
     final Calendar aCal = DatatypeConverter.parseDate (sDate);
     return aCal.getTime ();
   }
 
-  // date may not be null
-  public static String printDate (final Date aDate) {
+  @Nonnull
+  public static String printDate (@Nonnull final Date aDate) {
     final Calendar aCal = new GregorianCalendar (TIMEZONE_UTC);
     aCal.setTime (aDate);
     return DatatypeConverter.printDate (aCal);

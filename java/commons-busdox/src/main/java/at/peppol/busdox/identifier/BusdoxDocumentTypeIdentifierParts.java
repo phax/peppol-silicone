@@ -37,12 +37,22 @@
  */
 package at.peppol.busdox.identifier;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
+
+import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.regex.RegExHelper;
+import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.string.ToStringGenerator;
+
 /**
  * A standalone wrapper class for the {@link IBusdoxDocumentIdentifierParts}
  * interface. The implementation is immutable.
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
+@Immutable
 public final class BusdoxDocumentTypeIdentifierParts implements IBusdoxDocumentTypeIdentifierParts {
   private final String m_sRootNS;
   private final String m_sLocalName;
@@ -58,43 +68,47 @@ public final class BusdoxDocumentTypeIdentifierParts implements IBusdoxDocumentT
    * @param sSubTypeIdentifier
    *        The sub-type identifier. May be <code>null</code>.
    */
-  public BusdoxDocumentTypeIdentifierParts (final String sRootNS,
-                                            final String sLocalName,
-                                            final String sSubTypeIdentifier) {
-    if (sRootNS == null || sRootNS.length () == 0)
+  public BusdoxDocumentTypeIdentifierParts (@Nonnull @Nonempty final String sRootNS,
+                                            @Nonnull @Nonempty final String sLocalName,
+                                            @Nullable final String sSubTypeIdentifier) {
+    if (StringHelper.hasNoText (sRootNS))
       throw new IllegalArgumentException ("rootNS is empty");
-    if (sLocalName == null || sLocalName.length () == 0)
+    if (StringHelper.hasNoText (sLocalName))
       throw new IllegalArgumentException ("local name is empty");
     m_sRootNS = sRootNS;
     m_sLocalName = sLocalName;
     m_sSubTypeIdentifier = sSubTypeIdentifier;
   }
 
+  @Nonnull
+  @Nonempty
   public String getRootNS () {
     return m_sRootNS;
   }
 
+  @Nonnull
+  @Nonempty
   public String getLocalName () {
     return m_sLocalName;
   }
 
+  @Nullable
   public String getSubTypeIdentifier () {
     return m_sSubTypeIdentifier;
   }
 
+  @Nonnull
+  @Nonempty
   public String getAsDocumentTypeIdentifierValue () {
     return getAsDocumentTypeIdentifierValue (this);
   }
 
   @Override
   public String toString () {
-    return "[BusdoxDocumentTypeIdentifierParts: rootNS=" +
-           m_sRootNS +
-           "; localName=" +
-           m_sLocalName +
-           "; subTypeIdentifier=" +
-           m_sSubTypeIdentifier +
-           "]";
+    return new ToStringGenerator (this).append ("rootNS", m_sRootNS)
+                                       .append ("localName", m_sLocalName)
+                                       .append ("subTypeIdentifier", m_sSubTypeIdentifier)
+                                       .toString ();
   }
 
   /**
@@ -106,7 +120,9 @@ public final class BusdoxDocumentTypeIdentifierParts implements IBusdoxDocumentT
    * @return The assembled document identifier value. Never <code>null</code>
    *         nor empty.
    */
-  public static String getAsDocumentTypeIdentifierValue (final IBusdoxDocumentTypeIdentifierParts aParts) {
+  @Nonnull
+  @Nonempty
+  public static String getAsDocumentTypeIdentifierValue (@Nonnull final IBusdoxDocumentTypeIdentifierParts aParts) {
     if (aParts == null)
       throw new NullPointerException ("parts");
 
@@ -131,11 +147,12 @@ public final class BusdoxDocumentTypeIdentifierParts implements IBusdoxDocumentT
    * @throws IllegalArgumentException
    *         if parsing fails
    */
-  public static IBusdoxDocumentTypeIdentifierParts extractFromString (final String sDocTypeID) {
-    if (sDocTypeID == null || sDocTypeID.length () == 0)
+  @Nonnull
+  public static IBusdoxDocumentTypeIdentifierParts extractFromString (@Nonnull @Nonempty final String sDocTypeID) {
+    if (StringHelper.hasNoText (sDocTypeID))
       throw new IllegalArgumentException ("The passed document identifier value may not be empty!");
-    final String [] aMain = sDocTypeID.split (SUBTYPE_SEPARATOR, 2);
-    final String [] aFirst = aMain[0].split (NAMESPACE_SEPARATOR, 2);
+    final String [] aMain = RegExHelper.split (sDocTypeID, SUBTYPE_SEPARATOR, 2);
+    final String [] aFirst = RegExHelper.split (aMain[0], NAMESPACE_SEPARATOR, 2);
     if (aFirst.length < 2)
       throw new IllegalArgumentException ("The document identifier '" +
                                           sDocTypeID +

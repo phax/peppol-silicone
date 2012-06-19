@@ -37,6 +37,8 @@
  */
 package at.peppol.busdox.identifier;
 
+import javax.annotation.Nonnull;
+
 /**
  * Base interface for a single read-only identifier independent of its usage
  * (participant, document or process).
@@ -47,11 +49,13 @@ public interface IReadonlyIdentifier {
   /**
    * @return The scheme used. Never <code>null</code>.
    */
+  @Nonnull
   String getScheme ();
 
   /**
    * @return The identifier value, dependent on the scheme. Never
    *         <code>null</code>.
    */
+  @Nonnull
   String getValue ();
 }
