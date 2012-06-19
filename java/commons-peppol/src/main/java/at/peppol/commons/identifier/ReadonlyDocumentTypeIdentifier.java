@@ -62,7 +62,8 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable
-public final class ReadonlyDocumentTypeIdentifier extends DocumentIdentifierType implements IExtendedIdentifier {
+public final class ReadonlyDocumentTypeIdentifier extends DocumentIdentifierType implements
+                                                                                IExtendedDocumentTypeIdentifier {
   public ReadonlyDocumentTypeIdentifier (@Nonnull final IReadonlyIdentifier aIdentifier) {
     this (aIdentifier.getScheme (), aIdentifier.getValue ());
   }

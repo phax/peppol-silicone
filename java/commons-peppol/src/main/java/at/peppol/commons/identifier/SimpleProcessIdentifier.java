@@ -57,7 +57,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public class SimpleProcessIdentifier extends ProcessIdentifierType implements IExtendedIdentifier {
+public class SimpleProcessIdentifier extends ProcessIdentifierType implements IExtendedProcessIdentifier {
   public SimpleProcessIdentifier (@Nonnull final IReadonlyProcessIdentifier aIdentifier) {
     this (aIdentifier.getScheme (), aIdentifier.getValue ());
   }

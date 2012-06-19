@@ -37,16 +37,8 @@
  */
 package at.peppol.commons.identifier;
 
-import javax.annotation.Nullable;
+import at.peppol.busdox.identifier.IDocumentTypeIdentifier;
 
-import at.peppol.busdox.identifier.IParticipantIdentifier;
-
-public interface IExtendedParticipantIdentifier extends IExtendedIdentifier, IParticipantIdentifier {
-  boolean isValid ();
-
-  @Nullable
-  String getIssuingAgencyID ();
-
-  @Nullable
-  String getLocalParticipantID ();
+public interface IExtendedDocumentTypeIdentifier extends IExtendedIdentifier, IDocumentTypeIdentifier {
+  /* empty */
 }
