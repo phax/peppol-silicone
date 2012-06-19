@@ -37,6 +37,8 @@
  */
 package at.peppol.busdox.identifier;
 
+import javax.annotation.Nonnull;
+
 /**
  * The writable version of an identifier interface.
  * 
@@ -49,7 +51,7 @@ public interface IIdentifier extends IReadonlyIdentifier {
    * @param sScheme
    *        The scheme to be set. May not be <code>null</code>.
    */
-  void setScheme (String sScheme);
+  void setScheme (@Nonnull String sScheme);
 
   /**
    * Set the identifier value.
@@ -57,5 +59,5 @@ public interface IIdentifier extends IReadonlyIdentifier {
    * @param sValue
    *        The value to be set. May not be <code>null</code>.
    */
-  void setValue (String sValue);
+  void setValue (@Nonnull String sValue);
 }

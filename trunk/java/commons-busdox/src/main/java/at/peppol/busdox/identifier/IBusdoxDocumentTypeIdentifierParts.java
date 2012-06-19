@@ -37,6 +37,11 @@
  */
 package at.peppol.busdox.identifier;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import com.phloc.commons.annotations.Nonempty;
+
 /**
  * Contains all the different fields of a document type identifier for BusDox.
  * Note: it is important to note, that the PEPPOL specification separates the
@@ -58,21 +63,28 @@ public interface IBusdoxDocumentTypeIdentifierParts {
   /**
    * @return The root namespace. Never <code>null</code> nor empty.
    */
+  @Nonnull
+  @Nonempty
   String getRootNS ();
 
   /**
    * @return The document element local name. Never <code>null</code> nor empty.
    */
+  @Nonnull
+  @Nonempty
   String getLocalName ();
 
   /**
    * @return The optional sub type identifier. May be <code>null</code>.
    */
+  @Nullable
   String getSubTypeIdentifier ();
 
   /**
    * @return The parts assembled into a complete document identifier value.
    *         Never <code>null</code> nor empty.
    */
+  @Nonnull
+  @Nonempty
   String getAsDocumentTypeIdentifierValue ();
 }
