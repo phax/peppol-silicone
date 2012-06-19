@@ -93,7 +93,7 @@ public class TabInvoiceMonetaryTotal extends Form {
     invoiceMonetaryTotalTopForm.setImmediate(true);
       
     //TODO: Update fields automatically. Make them read only !
-    invoiceMonetaryTotalTopForm.addItemProperty ("Line Extenstion Amount", new NestedMethodProperty(monetaryTotal.getLineExtensionAmount (), "value") );
+    invoiceMonetaryTotalTopForm.addItemProperty ("Line Extension Amount", new NestedMethodProperty(monetaryTotal.getLineExtensionAmount (), "value") );
     invoiceMonetaryTotalTopForm.addItemProperty ("Tax Exclusive Amount", new NestedMethodProperty(monetaryTotal.getTaxExclusiveAmount (), "value") );
     invoiceMonetaryTotalTopForm.addItemProperty ("Tax Inclusive Amount", new NestedMethodProperty(monetaryTotal.getTaxInclusiveAmount (), "value") );
     invoiceMonetaryTotalTopForm.addItemProperty ("Allowance Total Amount", new NestedMethodProperty(monetaryTotal.getAllowanceTotalAmount (), "value") );
