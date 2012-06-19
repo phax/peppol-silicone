@@ -42,6 +42,8 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
+import at.peppol.busdox.identifier.IDocumentTypeIdentifier;
+
 import com.phloc.commons.mock.PhlocTestUtils;
 import com.phloc.commons.string.StringHelper;
 
@@ -89,6 +91,7 @@ public final class SimpleDocumentTypeIdentifierTest {
   }
 
   @Test
+  @edu.umd.cs.findbugs.annotations.SuppressWarnings ("NP_NONNULL_PARAM_VIOLATION")
   public void testConstraints () {
     try {
       // null key not allowed
@@ -141,5 +144,25 @@ public final class SimpleDocumentTypeIdentifierTest {
       fail ();
     }
     catch (final IllegalArgumentException ex) {}
+  }
+
+  @Test
+  public void testValueOf () throws Exception {
+    final String documentIdAsText = "urn:oasis:names:specification:ubl:schema:xsd:ApplicationResponse-2::ApplicationResponse##urn:www.cenbii.eu:transaction:biicoretrdm057:ver1.0:#urn:www.peppol.eu:bis:peppol1a:ver1.0::2.0";
+    final SimpleDocumentTypeIdentifier documentTypeIdentifier = SimpleDocumentTypeIdentifier.createWithDefaultScheme (documentIdAsText);
+    assertEquals (documentTypeIdentifier.getValue (), documentIdAsText);
+  }
+
+  @Test
+  public void testStandardMethods () {
+    final String s = "urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2::CreditNote##urn:www.cenbii.eu:transaction:biicoretrdm014:ver1.0:#urn:www.cenbii.eu:profile:biixx:ver1.0#urn:www.difi.no:ehf:kreditnota:ver1::2.0";
+    final String s2 = "urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2::CreditNote##urn:www.cenbii.eu:transaction:biicoretrdm014:ver1.0:#urn:www.cenbii.eu:profile:biixx:ver1.0#urn:www.difi.no:ehf:kreditnota:ver1::3.0";
+
+    final IDocumentTypeIdentifier d1 = SimpleDocumentTypeIdentifier.createWithDefaultScheme (s);
+    final IDocumentTypeIdentifier d2 = SimpleDocumentTypeIdentifier.createWithDefaultScheme (s);
+    PhlocTestUtils.testDefaultImplementationWithEqualContentObject (d1, d2);
+
+    final IDocumentTypeIdentifier d3 = SimpleDocumentTypeIdentifier.createWithDefaultScheme (s2);
+    PhlocTestUtils.testDefaultImplementationWithDifferentContentObject (d1, d3);
   }
 }

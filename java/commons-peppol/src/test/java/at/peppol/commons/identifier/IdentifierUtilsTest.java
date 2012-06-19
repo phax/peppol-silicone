@@ -176,6 +176,7 @@ public final class IdentifierUtilsTest {
   }
 
   @Test
+  @edu.umd.cs.findbugs.annotations.SuppressWarnings ("NP_NONNULL_PARAM_VIOLATION")
   public void getIdentifierURIEncoded () {
     final SimpleParticipantIdentifier aPI = SimpleParticipantIdentifier.createWithDefaultScheme ("0088:123abc");
     assertEquals ("iso6523-actorid-upis::0088:123abc", IdentifierUtils.getIdentifierURIEncoded (aPI));
@@ -220,5 +221,18 @@ public final class IdentifierUtilsTest {
     // Different value
     aPI = SimpleParticipantIdentifier.createWithDefaultScheme ("0088/123abc");
     assertEquals ("iso6523-actorid-upis%3A%3A0088%2F123abc", IdentifierUtils.getIdentifierURIPercentEncoded (aPI));
+  }
+
+  @Test
+  public void test01 () {
+    assertFalse (IdentifierUtils.isValidParticipantIdentifierValue (null));
+    assertFalse (IdentifierUtils.isValidParticipantIdentifierValue (""));
+
+    assertTrue (IdentifierUtils.isValidParticipantIdentifierValue ("9908:976098897"));
+    assertTrue (IdentifierUtils.isValidParticipantIdentifierValue ("9908:976098897 "));
+    assertTrue (IdentifierUtils.isValidParticipantIdentifierValue ("990:976098897"));
+    assertTrue (IdentifierUtils.isValidParticipantIdentifierValue ("990976098897"));
+    assertTrue (IdentifierUtils.isValidParticipantIdentifierValue ("9909:976098896"));
+    assertTrue (IdentifierUtils.isValidParticipantIdentifierValue ("9908:976098896"));
   }
 }
