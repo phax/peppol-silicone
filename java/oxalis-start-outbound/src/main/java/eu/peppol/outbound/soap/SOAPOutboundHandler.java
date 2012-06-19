@@ -58,11 +58,12 @@ import org.w3._2009._02.ws_tra.ObjectFactory;
 
 import at.peppol.commons.identifier.SimpleDocumentTypeIdentifier;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+import at.peppol.commons.identifier.SimpleProcessIdentifier;
+import at.peppol.transport.IMessageMetadata;
 
 import com.phloc.commons.jaxb.JAXBContextCache;
 
 import eu.peppol.outbound.util.Log;
-import eu.peppol.start.identifier.PeppolMessageHeader;
 
 /**
  * The SOAPOutboundHandler class is used to handle an outbound SOAP message in
@@ -74,9 +75,9 @@ import eu.peppol.start.identifier.PeppolMessageHeader;
 @SuppressWarnings ({ "AccessStaticViaInstance" })
 public class SOAPOutboundHandler implements SOAPHandler <SOAPMessageContext> {
 
-  private final PeppolMessageHeader messageHeader;
+  private final IMessageMetadata messageHeader;
 
-  public SOAPOutboundHandler (final PeppolMessageHeader messageHeader) {
+  public SOAPOutboundHandler (final IMessageMetadata messageHeader) {
     this.messageHeader = messageHeader;
   }
 
@@ -115,16 +116,12 @@ public class SOAPOutboundHandler implements SOAPHandler <SOAPMessageContext> {
 
       final ObjectFactory objectFactory = new ObjectFactory ();
 
-      final String channelId = messageHeader.getChannelId ();
-      final String messageId = messageHeader.getMessageId ();
-
-      final ParticipantIdentifierType recipientId = new SimpleParticipantIdentifier (messageHeader.getRecipientId ());
-      final ParticipantIdentifierType senderId = new SimpleParticipantIdentifier (messageHeader.getSenderId ());
-      final DocumentIdentifierType documentId = new SimpleDocumentTypeIdentifier (messageHeader.getDocumentTypeIdentifier ());
-
-      final ProcessIdentifierType processId = new ProcessIdentifierType ();
-      processId.setValue (messageHeader.getPeppolProcessTypeId ().toString ());
-      processId.setScheme (messageHeader.getPeppolProcessTypeId ().getScheme ());
+      final String channelId = messageHeader.getChannelID ();
+      final String messageId = messageHeader.getMessageID ();
+      final ParticipantIdentifierType senderId = new SimpleParticipantIdentifier (messageHeader.getSenderID ());
+      final ParticipantIdentifierType recipientId = new SimpleParticipantIdentifier (messageHeader.getRecipientID ());
+      final DocumentIdentifierType documentId = new SimpleDocumentTypeIdentifier (messageHeader.getDocumentTypeID ());
+      final ProcessIdentifierType processId = new SimpleProcessIdentifier (messageHeader.getProcessID ());
 
       Marshaller marshaller = JAXBContextCache.getInstance ().getFromCache (String.class).createMarshaller ();
       marshaller.marshal (objectFactory.createMessageIdentifier (messageId), new DOMResult (header));

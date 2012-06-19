@@ -2,7 +2,7 @@ package eu.peppol.start.persistence;
 
 import org.w3c.dom.Document;
 
-import eu.peppol.start.identifier.PeppolMessageHeader;
+import at.peppol.transport.IMessageMetadata;
 
 /**
  * Repository of messages received. The access point will invoke objects
@@ -32,6 +32,5 @@ public interface MessageRepository {
    * @param document
    *        represents the message received, which should be persisted.
    */
-  public void saveInboundMessage (String inboundMessageStore, PeppolMessageHeader peppolMessageHeader, Document document);
-
+  void saveInboundMessage (String inboundMessageStore, IMessageMetadata peppolMessageHeader, Document document);
 }
