@@ -7,9 +7,7 @@ import java.io.File;
 import org.junit.Before;
 import org.junit.Test;
 
-import eu.peppol.start.identifier.ChannelId;
-import eu.peppol.start.identifier.MessageId;
-import eu.peppol.start.identifier.ParticipantId;
+import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 import eu.peppol.start.identifier.PeppolMessageHeader;
 
 /**
@@ -24,17 +22,17 @@ public class SimpleMessageRepositoryTest {
   @Before
   public void createPeppolHeader () {
     peppolHeader = new PeppolMessageHeader ();
-    peppolHeader.setRecipientId (new ParticipantId ("9908:976098897"));
-    peppolHeader.setSenderId (new ParticipantId ("9908:123456789"));
+    peppolHeader.setRecipientId (SimpleParticipantIdentifier.createWithDefaultScheme ("9908:976098897"));
+    peppolHeader.setSenderId (SimpleParticipantIdentifier.createWithDefaultScheme ("9908:123456789"));
   }
 
   @Test
   public void computeDirectoryNameForMessage () {
     final SimpleMessageRepository simpleMessageRepository = new SimpleMessageRepository ();
 
-    peppolHeader.setChannelId (new ChannelId ("CH2"));
-    peppolHeader.setRecipientId (new ParticipantId ("9908:976098897"));
-    peppolHeader.setSenderId (new ParticipantId ("9908:123456789"));
+    peppolHeader.setChannelId ("CH2");
+    peppolHeader.setRecipientId (SimpleParticipantIdentifier.createWithDefaultScheme ("9908:976098897"));
+    peppolHeader.setSenderId (SimpleParticipantIdentifier.createWithDefaultScheme ("9908:123456789"));
 
     final String tmpdir = "/tmpx";
 
@@ -66,9 +64,9 @@ public class SimpleMessageRepositoryTest {
       System.err.println (tmp.toString ());
       System.err.flush ();
       final PeppolMessageHeader peppolMessageHeader = new PeppolMessageHeader ();
-      peppolMessageHeader.setMessageId (new MessageId ("uuid:c5aa916d-9a1e-4ae8-ba25-0709ec913acb"));
-      peppolMessageHeader.setRecipientId (new ParticipantId ("9908:976098897"));
-      peppolMessageHeader.setSenderId (new ParticipantId ("9908:123456789"));
+      peppolMessageHeader.setMessageId ("uuid:c5aa916d-9a1e-4ae8-ba25-0709ec913acb");
+      peppolMessageHeader.setRecipientId (SimpleParticipantIdentifier.createWithDefaultScheme ("9908:976098897"));
+      peppolMessageHeader.setSenderId (SimpleParticipantIdentifier.createWithDefaultScheme ("9908:123456789"));
 
       simpleMessageRepository.prepareMessageDirectory (tmp.toString (), peppolMessageHeader);
     }

@@ -6,25 +6,26 @@ import static org.junit.Assert.fail;
 import java.net.URL;
 import java.security.cert.X509Certificate;
 
+import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 import org.junit.Test;
 
+import at.peppol.busdox.identifier.IDocumentTypeIdentifier;
+import at.peppol.busdox.identifier.IProcessIdentifier;
+import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+import at.peppol.commons.identifier.docid.EPredefinedDocumentTypeIdentifier;
 import eu.peppol.outbound.util.TestBase;
-import eu.peppol.start.identifier.ParticipantId;
-import eu.peppol.start.identifier.PeppolDocumentTypeId;
-import eu.peppol.start.identifier.PeppolDocumentTypeIdAcronym;
-import eu.peppol.start.identifier.PeppolProcessTypeId;
 
 /**
  * User: nigel Date: Oct 25, 2011 Time: 9:05:52 AM
  */
 public class SmpLookupManagerTest extends TestBase {
 
-  private static PeppolDocumentTypeId invoice = PeppolDocumentTypeIdAcronym.INVOICE.getDocumentTypeIdentifier ();
-  // private static ParticipantId alfa1lab =
+  private static IDocumentTypeIdentifier invoice = EPredefinedDocumentTypeIdentifier.INVOICE_T010_BIS5A.getAsDocumentTypeIdentifier ();
+  // private static ParticipantIdentifierType alfa1lab =
   // Identifiers.getParticipantIdentifier("9902:DK28158815");
-  private static ParticipantId alfa1lab = new ParticipantId ("9902:DK28158815");
-  private static ParticipantId helseVest = new ParticipantId ("9908:983974724");
-  private static ParticipantId sendRegning = new ParticipantId ("9908:976098897");
+  private static ParticipantIdentifierType alfa1lab = SimpleParticipantIdentifier.createWithDefaultScheme ("9902:DK28158815");
+  private static ParticipantIdentifierType helseVest = SimpleParticipantIdentifier.createWithDefaultScheme ("9908:983974724");
+  private static ParticipantIdentifierType sendRegning = SimpleParticipantIdentifier.createWithDefaultScheme ("9908:976098897");
 
   @Test
   public void test01 () throws Throwable {
@@ -74,7 +75,7 @@ public class SmpLookupManagerTest extends TestBase {
   public void test03 () throws Throwable {
 
     URL endpointAddress;
-    final ParticipantId notRegisteredParticipant = new ParticipantId ("1234:45678910");
+    final ParticipantIdentifierType notRegisteredParticipant = SimpleParticipantIdentifier.createWithDefaultScheme ("1234:45678910");
     try {
       endpointAddress = new SmpLookupManager ().getEndpointAddress (notRegisteredParticipant, invoice);
       fail (String.format ("Participant '%s' should not be registered", notRegisteredParticipant));
@@ -89,8 +90,8 @@ public class SmpLookupManagerTest extends TestBase {
      */
   @Test
   public void testGetFirstProcessIdentifier () throws SmpSignedServiceMetaDataException {
-    final PeppolProcessTypeId processTypeIdentifier = SmpLookupManager.getProcessIdentifierForDocumentType (new ParticipantId ("9908:810017902"),
-                                                                                                            PeppolDocumentTypeIdAcronym.INVOICE.getDocumentTypeIdentifier ());
+    final IProcessIdentifier processTypeIdentifier = SmpLookupManager.getProcessIdentifierForDocumentType (SimpleParticipantIdentifier.createWithDefaultScheme ("9908:810017902"),
+                                                                                                           EPredefinedDocumentTypeIdentifier.INVOICE_T010_BIS5A.getAsDocumentTypeIdentifier ());
 
     assertEquals (processTypeIdentifier.toString (), "urn:www.cenbii.eu:profile:bii04:ver1.0");
 

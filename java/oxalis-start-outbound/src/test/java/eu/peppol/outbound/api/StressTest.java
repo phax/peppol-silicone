@@ -16,10 +16,10 @@ import java.util.concurrent.TimeUnit;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import at.peppol.commons.identifier.docid.EPredefinedDocumentTypeIdentifier;
+import at.peppol.commons.identifier.procid.EPredefinedProcessIdentifier;
 import eu.peppol.outbound.util.Log;
 import eu.peppol.outbound.util.TestBase;
-import eu.peppol.start.identifier.PeppolDocumentTypeIdAcronym;
-import eu.peppol.start.identifier.PeppolProcessTypeIdAcronym;
 
 /**
  * User: nigel Date: Dec 7, 2011 Time: 7:47:11 PM
@@ -39,8 +39,8 @@ public class StressTest extends TestBase {
 
     final File keystore = new File (KEYSTORE_FILE);
     assertTrue (KEYSTORE_FILE + " not found, check the path :-)", keystore.exists () && keystore.canRead ());
-    final DocumentSender documentSender = new DocumentSenderBuilder ().setDocumentTypeIdentifier (PeppolDocumentTypeIdAcronym.INVOICE.getDocumentTypeIdentifier ())
-                                                                      .setPeppolProcessTypeId (PeppolProcessTypeIdAcronym.INVOICE_ONLY.getPeppolProcessTypeId ())
+    final DocumentSender documentSender = new DocumentSenderBuilder ().setDocumentTypeIdentifier (EPredefinedDocumentTypeIdentifier.INVOICE_T010_BIS5A.getAsDocumentTypeIdentifier ())
+                                                                      .setPeppolProcessTypeId (EPredefinedProcessIdentifier.BIS5A.getAsProcessIdentifier ())
                                                                       .setKeystoreFile (new File (KEYSTORE_FILE))
                                                                       .setKeystorePassword ("peppol")
                                                                       .build ();

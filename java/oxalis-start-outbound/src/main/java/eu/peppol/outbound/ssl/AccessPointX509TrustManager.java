@@ -37,12 +37,13 @@
  */
 package eu.peppol.outbound.ssl;
 
-import eu.peppol.outbound.util.Log;
-
-import javax.net.ssl.X509TrustManager;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Set;
+
+import javax.net.ssl.X509TrustManager;
+
+import eu.peppol.outbound.util.Log;
 
 /**
  * The AccessPointX509TrustManager is pointed to authenticate the remote side when using SSL.
