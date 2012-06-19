@@ -1,7 +1,13 @@
 package at.peppol.webgui.app.components;
 
+import java.util.List;
+
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.InvoiceLineType;
+import at.peppol.webgui.app.components.TabInvoicePayment.InvoicePaymentFieldFactory;
+
 import com.vaadin.data.Item;
 import com.vaadin.ui.AbstractTextField;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.DefaultFieldFactory;
 import com.vaadin.ui.Field;
@@ -11,9 +17,17 @@ import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
 
 public class TabInvoiceAllowanceCharge extends Form {
   private InvoiceTabForm parent;
+  
+  public InvoiceAllowanceChargeTable table;
+  private Window popup;
+  
+  public List<InvoiceLineType> items;
+  
+  
   
   public TabInvoiceAllowanceCharge(InvoiceTabForm parent) {
     this.parent = parent;
@@ -21,23 +35,35 @@ public class TabInvoiceAllowanceCharge extends Form {
   }
 
   private void initElements() {
-    
     final GridLayout grid = new GridLayout(4, 4);
     final VerticalLayout outerLayout = new VerticalLayout();
     
-    final Panel outerPanel = new Panel("Allowance Charge");
-    outerPanel.addComponent(grid);
-    outerPanel.setScrollable(true);
-    outerLayout.addComponent(outerPanel);
+    table = new InvoiceAllowanceChargeTable(parent.getInvoice().getAllowanceCharge ());
+    table.setHeight (150, UNITS_PIXELS);
+    table.setFooterVisible (true);
+    table.addStyleName ("striped strong");
+    VerticalLayout tableContainer = new VerticalLayout();
+    tableContainer.addComponent (table);
+    tableContainer.setMargin (false, true, false, false);
     
-    final Panel invoiceDetailsPanel = new Panel("Allowance Charge Details");
-    invoiceDetailsPanel.setStyleName("light");
-    invoiceDetailsPanel.setSizeFull();
-    invoiceDetailsPanel.addComponent(createInvoiceAllowanceChargeTopForm());
-    grid.addComponent(invoiceDetailsPanel, 0, 0, 3, 0);
-    grid.setSizeUndefined();
-     
+    Panel outerPanel = new Panel("Allowance Charge"); 
+      
+    grid.addComponent(tableContainer,0,0);
+    
+    //TODO: Do not use popup but "hidden" form elements...
+    grid.addComponent(new Button("Add new Line", new Button.ClickListener() {
+
+      @Override
+      public void buttonClick(final Button.ClickEvent event) {
+        //Open modal window to add new invoice line
+        //showInvLineWindow();
+      }
+    }), 1, 0);
+    
+    outerPanel.addComponent (grid);
+    outerLayout.addComponent(outerPanel);
     setLayout(outerLayout);
+    grid.setSizeUndefined();
     outerPanel.requestRepaintAll();
   }
 
