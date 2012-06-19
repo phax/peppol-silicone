@@ -39,20 +39,16 @@ package eu.peppol.outbound.soap;
 
 import java.net.URL;
 import java.security.SecureRandom;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
+import javax.xml.bind.JAXBException;
 import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
-import javax.xml.ws.handler.Handler;
-import javax.xml.ws.handler.HandlerResolver;
-import javax.xml.ws.handler.PortInfo;
 
 import org.w3._2009._02.ws_tra.AccessPointService;
 import org.w3._2009._02.ws_tra.Create;
@@ -60,7 +56,12 @@ import org.w3._2009._02.ws_tra.FaultMessage;
 import org.w3._2009._02.ws_tra.Resource;
 
 import at.peppol.transport.IMessageMetadata;
-import eu.peppol.outbound.ssl.AccessPointX509TrustManager;
+import at.peppol.transport.MessageMetadataHelper;
+import at.peppol.transport.cert.AccessPointX509TrustManager;
+
+import com.sun.xml.ws.api.message.Header;
+import com.sun.xml.ws.developer.WSBindingProvider;
+
 import eu.peppol.outbound.util.Log;
 import eu.peppol.start.identifier.Configuration;
 
@@ -118,7 +119,6 @@ public class SoapDispatcher {
    * 
    * @param endpointAddress
    *        the address of the webservice.
-   * @return the configured port.
    */
   private void sendSoapMessage (final URL endpointAddress, final IMessageMetadata messageHeader, final Create soapBody) throws FaultMessage {
 
@@ -128,28 +128,28 @@ public class SoapDispatcher {
                                                                           new QName ("http://www.w3.org/2009/02/ws-tra",
                                                                                      "accessPointService"));
 
-    accesspointService.setHandlerResolver (new HandlerResolver () {
-
-      public List <Handler> getHandlerChain (final PortInfo portInfo) {
-        final List <Handler> handlerList = new ArrayList <Handler> ();
-        handlerList.add (new SOAPOutboundHandler (messageHeader));
-        return handlerList;
-      }
-    });
-
     Log.debug ("Getting remote resource binding port");
     Resource port = null;
     try {
       port = accesspointService.getResourceBindingPort ();
-      final Map <String, Object> requestContext = ((BindingProvider) port).getRequestContext ();
-      requestContext.put (BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpointAddress.toExternalForm ());
+      ((BindingProvider) port).getRequestContext ().put (BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
+                                                         endpointAddress.toExternalForm ());
+
+      Log.debug ("Adding BUSDOX headers to SOAP-envelope");
+      // Assign the headers
+      final List <Header> aHeaders = MessageMetadataHelper.createHeadersFromMetadata (messageHeader);
+      ((WSBindingProvider) port).setOutboundHeaders (aHeaders);
+
       port.create (soapBody);
 
       Log.info ("Sender:\t" + messageHeader.getSenderID ().getValue ());
       Log.info ("Recipient:\t" + messageHeader.getRecipientID ().getValue ());
       Log.info ("Destination:\t" + endpointAddress);
       Log.info ("Message " + messageHeader.getMessageID () + " has been successfully delivered");
-
+    }
+    catch (final JAXBException ex) {
+      // Usually a JAXB marshalling error
+      Log.error ("An error occurred while marshalling headers.", ex);
     }
     finally {
       // Creates memory leak if not performed

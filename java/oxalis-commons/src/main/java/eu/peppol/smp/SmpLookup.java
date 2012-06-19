@@ -26,6 +26,7 @@ import at.peppol.commons.identifier.docid.EPredefinedDocumentTypeIdentifier;
 import at.peppol.commons.sml.ESML;
 import at.peppol.commons.uri.BusdoxURLUtils;
 
+import com.phloc.commons.regex.RegExPool;
 import com.phloc.commons.url.URLUtils;
 
 import eu.peppol.util.Util;
@@ -37,17 +38,16 @@ import eu.peppol.util.Util;
  * @author Steinar Overbeck Cook steinar@sendregning.no
  */
 public class SmpLookup {
+  private static final Pattern documentTypeIdentifierPattern = RegExPool.getPattern ("/services/busdox-docid-qns::(.*)");
 
   private final SimpleParticipantIdentifier participantId;
-
-  Pattern documentTypeIdentifierPattern = Pattern.compile ("/services/busdox-docid-qns::(.*)");
 
   public SmpLookup (final SimpleParticipantIdentifier participantId) {
 
     this.participantId = participantId;
   }
 
-  URL servicesUrl () throws SmpLookupException {
+  URL servicesUrl () {
     // iso6523-actorid-upis%3A%3A9908:810017902
     return URLUtils.getAsURL (BusdoxURLUtils.getSMPURLOfParticipant (participantId, ESML.PRODUCTION).toExternalForm () +
                               "/" +

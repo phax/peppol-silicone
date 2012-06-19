@@ -1,10 +1,5 @@
 package eu.peppol.inbound.server;
 
-import java.io.IOException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
 import javax.jws.WebService;
@@ -43,7 +38,6 @@ import eu.peppol.start.identifier.KeystoreManager;
 import eu.peppol.start.persistence.MessageRepository;
 import eu.peppol.start.persistence.MessageRepositoryFactory;
 
-@SuppressWarnings ({ "UnusedDeclaration" })
 @WebService (serviceName = "accessPointService",
              portName = "ResourceBindingPort",
              endpointInterface = "org.w3._2009._02.ws_tra.Resource",
@@ -60,15 +54,8 @@ public class accessPointService {
            output = "http://www.w3.org/2009/02/ws-tra/CreateResponse",
            fault = { @FaultAction (className = org.w3._2009._02.ws_tra.FaultMessage.class,
                                    value = "http://busdox.org/2010/02/channel/fault") })
-  public CreateResponse create (final Create body) throws FaultMessage,
-                                                  CertificateException,
-                                                  NoSuchAlgorithmException,
-                                                  NoSuchProviderException,
-                                                  IOException,
-                                                  KeyStoreException {
-
+  public CreateResponse create (final Create body) throws FaultMessage {
     try {
-
       final IMessageMetadata messageHeader = getPeppolMessageHeader ();
       Log.info ("Received PEPPOL SOAP Header:" + messageHeader);
 
@@ -154,15 +141,15 @@ public class accessPointService {
     }
   }
 
-  public GetResponse get (final Get body) {
+  public GetResponse get (@SuppressWarnings ("unused") final Get body) {
     throw new UnsupportedOperationException ();
   }
 
-  public PutResponse put (final Put body) {
+  public PutResponse put (@SuppressWarnings ("unused") final Put body) {
     throw new UnsupportedOperationException ();
   }
 
-  public DeleteResponse delete (final Delete body) {
+  public DeleteResponse delete (@SuppressWarnings ("unused") final Delete body) {
     throw new UnsupportedOperationException ();
   }
 

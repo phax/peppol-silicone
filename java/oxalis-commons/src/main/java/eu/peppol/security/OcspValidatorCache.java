@@ -4,31 +4,29 @@ import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.phloc.commons.CGlobal;
+
 /**
- * User: nigel
- * Date: Dec 6, 2011
- * Time: 9:08:50 PM
+ * User: nigel Date: Dec 6, 2011 Time: 9:08:50 PM
  */
-@SuppressWarnings({"PointlessBooleanExpression", "ConstantConditions"})
-public class OcspValidatorCache {
+public final class OcspValidatorCache {
+  private static final boolean USE_CACHE = true;
 
-    private static final boolean USE_CACHE = true;
+  private static long timeout = CGlobal.MILLISECONDS_PER_MINUTE;
+  private static Map <BigInteger, Long> validCertificateCache = new HashMap <BigInteger, Long> ();
 
-    private static long timeout = 60 * 1000; // One minute
-    private static Map<BigInteger, Long> validCertificateCache = new HashMap<BigInteger, Long>();
+  public synchronized boolean isKnownValidCertificate (final BigInteger serialNumber) {
+    final Long aTimestamp = validCertificateCache.get (serialNumber);
+    return aTimestamp != null && (System.currentTimeMillis () - aTimestamp.longValue ()) < timeout;
+  }
 
-    public synchronized boolean isKnownValidCertificate(BigInteger serialNumber) {
-        Long timestamp = validCertificateCache.get(serialNumber);
-        return timestamp != null && (System.currentTimeMillis() - timestamp) < timeout;
+  public synchronized void setKnownValidCertificate (final BigInteger serialNumber) {
+    if (USE_CACHE) {
+      validCertificateCache.put (serialNumber, Long.valueOf (System.currentTimeMillis ()));
     }
+  }
 
-    public synchronized void setKnownValidCertificate(BigInteger serialNumber) {
-        if (USE_CACHE) {
-            validCertificateCache.put(serialNumber, System.currentTimeMillis());
-        }
-    }
-
-    void setTimoutForTesting(long timeoutValue) {
-        timeout = timeoutValue;
-    }
+  void setTimoutForTesting (final long timeoutValue) {
+    timeout = timeoutValue;
+  }
 }

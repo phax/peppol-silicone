@@ -41,11 +41,13 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
 import javax.net.ssl.X509TrustManager;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.regex.RegExHelper;
 
@@ -148,10 +150,11 @@ public final class AccessPointX509TrustManager implements X509TrustManager {
    * @throws CertificateException
    *         Exception for Certificates.
    */
-  private void _checkPrincipal (final X509Certificate [] aChain) throws CertificateException {
+  private void _checkPrincipal (@Nonnull @Nonempty final X509Certificate [] aChain) throws CertificateException {
     if (m_aCommonNames != null) {
       boolean bCommonNameOK = false;
-      final String [] aArray = RegExHelper.split (aChain[0].getSubjectX500Principal ().toString (), ",");
+      final String sPrincipal = aChain[0].getSubjectX500Principal ().toString ();
+      final String [] aArray = RegExHelper.split (sPrincipal, ",");
       for (final String sToken : aArray) {
         final int nIndex = sToken.indexOf ("CN=");
         if (nIndex >= 0) {
@@ -165,7 +168,7 @@ public final class AccessPointX509TrustManager implements X509TrustManager {
       }
 
       if (!bCommonNameOK) {
-        s_aLogger.error ("No accepted issuer: " + aChain[0].getSubjectX500Principal ().toString ());
+        s_aLogger.error ("No accepted issuer: " + sPrincipal);
         throw new CertificateException ("Remote principal is not trusted");
       }
     }

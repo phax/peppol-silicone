@@ -74,13 +74,12 @@ public class SmpLookupManagerTest extends TestBase {
   @Test
   public void test03 () throws Throwable {
 
-    URL endpointAddress;
     final ParticipantIdentifierType notRegisteredParticipant = SimpleParticipantIdentifier.createWithDefaultScheme ("1234:45678910");
     try {
-      endpointAddress = new SmpLookupManager ().getEndpointAddress (notRegisteredParticipant, invoice);
+      new SmpLookupManager ().getEndpointAddress (notRegisteredParticipant, invoice);
       fail (String.format ("Participant '%s' should not be registered", notRegisteredParticipant));
     }
-    catch (final RuntimeException e) {
+    catch (final NumberFormatException e) {
       // expected
     }
   }
@@ -93,7 +92,6 @@ public class SmpLookupManagerTest extends TestBase {
     final IProcessIdentifier processTypeIdentifier = SmpLookupManager.getProcessIdentifierForDocumentType (SimpleParticipantIdentifier.createWithDefaultScheme ("9908:810017902"),
                                                                                                            EPredefinedDocumentTypeIdentifier.INVOICE_T010_BIS5A.getAsDocumentTypeIdentifier ());
 
-    assertEquals (processTypeIdentifier.toString (), "urn:www.cenbii.eu:profile:bii04:ver1.0");
-
+    assertEquals (processTypeIdentifier.getValue (), "urn:www.cenbii.eu:profile:bii04:ver1.0");
   }
 }

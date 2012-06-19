@@ -55,7 +55,7 @@ public class StressTest extends TestBase {
         public Integer call () throws Exception {
           sendDocument (documentSender);
           getMemoryUsage ();
-          return 1;
+          return Integer.valueOf (1);
         }
       });
     }
@@ -63,10 +63,8 @@ public class StressTest extends TestBase {
     final ExecutorService executorPool = Executors.newFixedThreadPool (THREADS);
     final List <Future <Integer>> values = executorPool.invokeAll (partitions, 1000, TimeUnit.SECONDS);
     int sum = 0;
-
-    for (final Future <Integer> result : values) {
-      sum += result.get ();
-    }
+    for (final Future <Integer> result : values)
+      sum += result.get ().intValue ();
 
     executorPool.shutdown ();
     final long millis = System.currentTimeMillis () - start;
