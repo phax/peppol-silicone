@@ -37,6 +37,8 @@
  */
 package at.peppol.commons.identifier.validator;
 
+import javax.annotation.Nullable;
+
 import at.peppol.commons.identifier.actorid.EPredefinedIdentifierIssuingAgency;
 
 import com.phloc.commons.annotations.IsSPIImplementation;
@@ -46,12 +48,16 @@ import com.phloc.commons.string.StringHelper;
 public final class ParticipantIdentifierValidatorNorwayOrgNumber implements IParticipantIdentifierValidatorSPI {
   private static final int [] WEIGHTS = new int [] { 3, 2, 7, 6, 5, 4, 3, 2 };
 
-  public boolean isSupportedIssuingAgency (final String sScheme) {
-    return EPredefinedIdentifierIssuingAgency.NO_ORGNR.getISO6523Code ().equals (sScheme) ||
-           EPredefinedIdentifierIssuingAgency.NO_VAT.getISO6523Code ().equals (sScheme);
+  public boolean isSupportedIssuingAgency (final String sIssuingAgencyID) {
+    return EPredefinedIdentifierIssuingAgency.NO_ORGNR.getISO6523Code ().equals (sIssuingAgencyID) ||
+           EPredefinedIdentifierIssuingAgency.NO_VAT.getISO6523Code ().equals (sIssuingAgencyID);
   }
 
   public boolean isValueValid (final String sValue) {
+    return isValidOrganisationNumber (sValue);
+  }
+
+  public static boolean isValidOrganisationNumber (@Nullable final String sValue) {
     if (StringHelper.getLength (sValue) != 9)
       return false;
 

@@ -58,7 +58,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public class SimpleDocumentTypeIdentifier extends DocumentIdentifierType implements IExtendedIdentifier {
+public class SimpleDocumentTypeIdentifier extends DocumentIdentifierType implements IExtendedDocumentTypeIdentifier {
   public SimpleDocumentTypeIdentifier (@Nonnull final IReadonlyDocumentTypeIdentifier aIdentifier) {
     this (aIdentifier.getScheme (), aIdentifier.getValue ());
   }

@@ -62,7 +62,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable
-public final class ReadonlyProcessIdentifier extends ProcessIdentifierType implements IExtendedIdentifier {
+public final class ReadonlyProcessIdentifier extends ProcessIdentifierType implements IExtendedProcessIdentifier {
   public ReadonlyProcessIdentifier (@Nonnull final IReadonlyIdentifier aIdentifier) {
     this (aIdentifier.getScheme (), aIdentifier.getValue ());
   }
