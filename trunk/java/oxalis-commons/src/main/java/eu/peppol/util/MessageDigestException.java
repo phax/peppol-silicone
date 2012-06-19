@@ -1,7 +1,6 @@
 /* Created by steinar on 18.05.12 at 13:32 */
 package eu.peppol.util;
 
-import java.security.NoSuchAlgorithmException;
 
 /**
  * @author Steinar Overbeck Cook steinar@sendregning.no

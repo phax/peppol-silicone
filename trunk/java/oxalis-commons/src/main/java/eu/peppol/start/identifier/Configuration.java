@@ -1,13 +1,19 @@
 package eu.peppol.start.identifier;
 
+import static eu.peppol.start.identifier.Configuration.PropertyDef.INBOUND_MESSAGE_STORE;
+import static eu.peppol.start.identifier.Configuration.PropertyDef.KEYSTORE_PASSWORD;
+import static eu.peppol.start.identifier.Configuration.PropertyDef.KEYSTORE_PATH;
+import static eu.peppol.start.identifier.Configuration.PropertyDef.OUTBOUND_MESSAGE_STORE;
+import static eu.peppol.start.identifier.Configuration.PropertyDef.PEPPOL_SENDER_ID;
+import static eu.peppol.start.identifier.Configuration.PropertyDef.PEPPOL_SERVICE_NAME;
+import static eu.peppol.start.identifier.Configuration.PropertyDef.WSDL_FILE_NAME;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.Properties;
-
-import static eu.peppol.start.identifier.Configuration.PropertyDef.*;
 
 /**
  * User: nigel
