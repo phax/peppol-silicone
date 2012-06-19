@@ -39,7 +39,7 @@ public class SmpResponseValidatorTest {
   }
 
   @Test
-  public void testVerificationOfSmpResponseSignature () throws ParserConfigurationException, IOException, SAXException {
+  public void testVerificationOfSmpResponseSignature () {
 
     final SmpResponseValidator smpResponseValidator = new SmpResponseValidator (document);
     final boolean isValid = smpResponseValidator.isSmpSignatureValid ();

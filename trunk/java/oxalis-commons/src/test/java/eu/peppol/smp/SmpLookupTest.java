@@ -23,7 +23,7 @@ import com.phloc.commons.url.URLUtils;
 public class SmpLookupTest {
 
   @Test
-  public void lookupServicesUrl () throws SmpLookupException {
+  public void lookupServicesUrl () {
     final SmpLookup smpLookup = new SmpLookup (SimpleParticipantIdentifier.createWithDefaultScheme ("9908:810017902"));
     final URL url = smpLookup.servicesUrl ();
     assertEquals ("http://B-ddc207601e442e1b751e5655d39371cd.iso6523-actorid-upis." +

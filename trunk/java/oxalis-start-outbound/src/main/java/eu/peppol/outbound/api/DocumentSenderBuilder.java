@@ -15,9 +15,7 @@ import eu.peppol.start.identifier.KeystoreManager;
  * be thread-safe. specification of User: nigel Date: Oct 24, 2011 Time:
  * 10:38:35 AM
  */
-@SuppressWarnings ({ "UnusedDeclaration" })
 public class DocumentSenderBuilder {
-
   private DocumentIdentifierType documentTypeIdentifier = EPredefinedDocumentTypeIdentifier.INVOICE_T010_BIS5A.getAsDocumentTypeIdentifier ();
   private ProcessIdentifierType peppolProcessTypeId = EPredefinedProcessIdentifier.BIS5A.getAsProcessIdentifier ();
   private File keystoreFile;

@@ -4,13 +4,15 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.InflaterInputStream;
 
 import org.xml.sax.InputSource;
+
+import com.phloc.commons.io.streams.StreamUtils;
+import com.phloc.commons.xml.sax.InputSourceFactory;
 
 /**
  * User: nigel Date: Oct 25, 2011 Time: 11:08:22 PM
@@ -65,14 +67,9 @@ public class Util {
       throw new RuntimeException ("Problem reading SMP data at " + url.toExternalForm (), e);
     }
     finally {
-      try {
-        // noinspection ConstantConditions
-        bufferedReader.close ();
-      }
-      catch (final Exception e) {}
+      StreamUtils.close (bufferedReader);
     }
 
-    final String xml = sb.toString ();
-    return new InputSource (new StringReader (xml));
+    return InputSourceFactory.create (sb.toString ());
   }
 }

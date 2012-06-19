@@ -193,6 +193,8 @@ public final class AccessPointClient {
                     ((BindingProvider) aPort).getRequestContext ().get (BindingProvider.ENDPOINT_ADDRESS_PROPERTY));
     try {
       // Assign the headers
+      if (s_aLogger.isDebugEnabled ())
+        s_aLogger.debug ("Adding BUSDOX headers to SOAP-envelope");
       final List <Header> aHeaders = MessageMetadataHelper.createHeadersFromMetadata (aMetadata);
       ((WSBindingProvider) aPort).setOutboundHeaders (aHeaders);
 

@@ -37,78 +37,80 @@
  */
 package eu.peppol.inbound.ocsp;
 
-import com.sun.xml.wss.impl.callback.CertificateValidationCallback.CertificateValidator;
-import eu.peppol.inbound.util.Log;
-import eu.peppol.inbound.util.Util;
-import eu.peppol.start.identifier.KeystoreManager;
-import eu.peppol.security.OcspValidatorCache;
-
 import java.math.BigInteger;
 import java.security.Security;
-import java.security.cert.*;
+import java.security.cert.CertPath;
+import java.security.cert.CertPathValidator;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateFactory;
+import java.security.cert.PKIXParameters;
+import java.security.cert.TrustAnchor;
+import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import com.sun.xml.wss.impl.callback.CertificateValidationCallback.CertificateValidator;
+
+import eu.peppol.inbound.util.Log;
+import eu.peppol.inbound.util.Util;
+import eu.peppol.security.OcspValidatorCache;
+import eu.peppol.start.identifier.KeystoreManager;
+
 /**
  * Call back handler for validation of certificates using OCSP
- *
+ * 
  * @author Nigel Parker
  */
 public class OcspValidator implements CertificateValidator {
 
-    private static CertPathValidator certPathValidator;
-    private static PKIXParameters pkixParameters;
-    private static OcspValidatorCache cache = new OcspValidatorCache();
+  private static CertPathValidator certPathValidator;
+  private static PKIXParameters pkixParameters;
+  private static OcspValidatorCache cache = new OcspValidatorCache ();
 
-    @SuppressWarnings({"RedundantArrayCreation"})
-    public synchronized boolean validate(X509Certificate certificate) {
+  public synchronized boolean validate (final X509Certificate certificate) {
+    final BigInteger serialNumber = certificate.getSerialNumber ();
+    final String certificateName = "Certificate " + serialNumber;
+    Log.debug ("Ocsp validation requested for " + certificateName);
 
-        BigInteger serialNumber = certificate.getSerialNumber();
-        String certificateName = "Certificate " + serialNumber;
-        Log.debug("Ocsp validation requested for " + certificateName);
-
-        if (certPathValidator == null) {
-            initialise();
-        }
-
-        if (cache.isKnownValidCertificate(serialNumber)) {
-            Log.debug(certificateName + " is OCSP valid (cached value)");
-            return true;
-        }
-
-        try {
-
-            List<Certificate> certificates = Arrays.asList(new Certificate[]{certificate});
-            CertPath certPath = CertificateFactory.getInstance("X.509").generateCertPath(certificates);
-            certPathValidator.validate(certPath, pkixParameters);
-            cache.setKnownValidCertificate(serialNumber);
-
-            Log.debug(certificateName + " is OCSP valid");
-            return true;
-
-        } catch (Exception e) {
-            Log.error(certificateName + " failed OCSP validation", e);
-            return false;
-        }
+    if (certPathValidator == null) {
+      initialise ();
     }
 
-    public void initialise() {
-
-        Log.debug("Initialising OCSP validator");
-
-        try {
-
-            TrustAnchor trustAnchor = new KeystoreManager().getTrustAnchor();
-            certPathValidator = CertPathValidator.getInstance("PKIX");
-            pkixParameters = new PKIXParameters(Collections.singleton(trustAnchor));
-            pkixParameters.setRevocationEnabled(true);
-
-            Security.setProperty("ocsp.enable", "true");
-            Security.setProperty("ocsp.responderURL", "http://pilot-ocsp.verisign.com:80");
-
-        } catch (Exception e) {
-            Util.logAndThrowRuntimeException("Failed to get trust anchor", e);
-        }
+    if (cache.isKnownValidCertificate (serialNumber)) {
+      Log.debug (certificateName + " is OCSP valid (cached value)");
+      return true;
     }
+
+    try {
+
+      final List <Certificate> certificates = Arrays.asList (new Certificate [] { certificate });
+      final CertPath certPath = CertificateFactory.getInstance ("X.509").generateCertPath (certificates);
+      certPathValidator.validate (certPath, pkixParameters);
+      cache.setKnownValidCertificate (serialNumber);
+
+      Log.debug (certificateName + " is OCSP valid");
+      return true;
+    }
+    catch (final Exception e) {
+      Log.error (certificateName + " failed OCSP validation", e);
+      return false;
+    }
+  }
+
+  public void initialise () {
+    Log.debug ("Initialising OCSP validator");
+    try {
+      final TrustAnchor trustAnchor = new KeystoreManager ().getTrustAnchor ();
+      certPathValidator = CertPathValidator.getInstance ("PKIX");
+      pkixParameters = new PKIXParameters (Collections.singleton (trustAnchor));
+      pkixParameters.setRevocationEnabled (true);
+
+      Security.setProperty ("ocsp.enable", "true");
+      Security.setProperty ("ocsp.responderURL", "http://pilot-ocsp.verisign.com:80");
+    }
+    catch (final Exception e) {
+      Util.logAndThrowRuntimeException ("Failed to get trust anchor", e);
+    }
+  }
 }
