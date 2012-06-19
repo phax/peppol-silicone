@@ -4,18 +4,15 @@ package eu.peppol.security;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.security.cert.X509Certificate;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
+
+import com.phloc.commons.io.resource.ClassPathResource;
+import com.phloc.commons.xml.serialize.XMLReader;
 
 import eu.peppol.start.identifier.KeystoreManager;
 
@@ -27,15 +24,8 @@ public class SmpResponseValidatorTest {
   private static Document document;
 
   @BeforeClass
-  public static void loadSampleSmpResponse () throws IOException, SAXException, ParserConfigurationException {
-    final InputStream is = SmpResponseValidator.class.getClassLoader ().getResourceAsStream ("sr-smp-result.xml");
-    assertNotNull (is);
-
-    final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance ();
-    documentBuilderFactory.setNamespaceAware (true);
-    final DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder ();
-
-    document = documentBuilder.parse (is);
+  public static void loadSampleSmpResponse () throws SAXException {
+    document = XMLReader.readXMLDOM (new ClassPathResource ("sr-smp-result.xml"));
   }
 
   @Test
@@ -58,10 +48,9 @@ public class SmpResponseValidatorTest {
   public void testValidityOfSmpCertificate () {
     final SmpResponseValidator smpResponseValidator = new SmpResponseValidator (document);
     final X509Certificate smpX509Certificate = smpResponseValidator.getCertificate ();
+    assertNotNull (smpX509Certificate);
 
     final KeystoreManager keystoreManager = new KeystoreManager ();
-    final boolean isValid = keystoreManager.validate (smpX509Certificate);
-
+    keystoreManager.validate (smpX509Certificate);
   }
-
 }
