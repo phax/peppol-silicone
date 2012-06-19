@@ -4,8 +4,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import eu.peppol.start.persistence.IdentifierName;
-
 /**
  * @author $Author$ (of last change) Created by User: steinar Date: 29.11.11
  *         Time: 14:26

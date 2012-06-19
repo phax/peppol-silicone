@@ -9,12 +9,11 @@ import org.junit.Test;
  * @author Steinar Overbeck Cook steinar@sendregning.no
  */
 public class KeystoreManagerTest {
-    @Test
-    public void testGetTruststore() throws Exception {
-        KeystoreManager km = new KeystoreManager();
-        TrustAnchor trustAnchor = km.getTrustAnchor();
-        System.out.println(trustAnchor.getTrustedCert().getSubjectDN());
-    }
-
+  @Test
+  public void testGetTruststore () throws Exception {
+    final KeystoreManager km = new KeystoreManager ();
+    final TrustAnchor trustAnchor = km.getTrustAnchor ();
+    System.out.println (trustAnchor.getTrustedCert ().getSubjectDN ());
+  }
 
 }

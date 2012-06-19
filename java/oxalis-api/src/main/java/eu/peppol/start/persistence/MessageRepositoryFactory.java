@@ -1,76 +1,76 @@
 package eu.peppol.start.persistence;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ServiceLoader;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
- * @author $Author$ (of last change)
- *         Created by
- *         User: steinar
- *         Date: 28.11.11
+ * @author $Author$ (of last change) Created by User: steinar Date: 28.11.11
  *         Time: 21:00
  */
 public class MessageRepositoryFactory {
 
-    public static ServiceLoader<MessageRepository> messageRepositoryServiceLoader = ServiceLoader.load(MessageRepository.class);
+  public static ServiceLoader <MessageRepository> messageRepositoryServiceLoader = ServiceLoader.load (MessageRepository.class);
 
-    private static final Logger log = LoggerFactory.getLogger(MessageRepositoryFactory.class);
+  private static final Logger log = LoggerFactory.getLogger (MessageRepositoryFactory.class);
 
-    /** Prevents any attempts to create instances of this class */
-    private MessageRepositoryFactory(){}
+  /** Prevents any attempts to create instances of this class */
+  private MessageRepositoryFactory () {}
 
-    private enum MessageRepositorySingleton {
-        INSTANCE;
+  private enum MessageRepositorySingleton {
+    INSTANCE;
 
-        MessageRepository messageRepository;
+    MessageRepository messageRepository;
 
-        private MessageRepositorySingleton(){
-            messageRepository = getInstanceWithDefault();
-        }
+    private MessageRepositorySingleton () {
+      messageRepository = getInstanceWithDefault ();
+    }
+  }
+
+  /** Provides a singleton instance of MessageRepository */
+  public static MessageRepository getInstance () {
+    return MessageRepositorySingleton.INSTANCE.messageRepository;
+  }
+
+  /**
+   * Attempts to get an instance of the message persistence, throwing an
+   * exception if an implementation could not be found in any
+   * META-INF/service/....MessageRepository
+   * 
+   * @return instance of MessageRepository
+   */
+  public static MessageRepository getInstanceNoDefault () {
+    final MessageRepository messageRepository = getInstance ();
+    if (getInstance () == null) {
+      throw new IllegalStateException ("No implementation of " +
+                                       MessageRepository.class.getCanonicalName () +
+                                       " found in class path. Searched for files matching /META-INF/services/" +
+                                       MessageRepository.class.getCanonicalName () +
+                                       " in class path");
     }
 
-    /** Provides a singleton instance of MessageRepository */
-    public static MessageRepository getInstance() {
-        return MessageRepositorySingleton.INSTANCE.messageRepository;
+    return messageRepository;
+  }
+
+  static MessageRepository getInstanceWithDefault () {
+    final List <MessageRepository> messageRepositoryImplementations = new ArrayList <MessageRepository> ();
+    for (final MessageRepository messageRepository : messageRepositoryServiceLoader) {
+      messageRepositoryImplementations.add (messageRepository);
     }
 
-    
-    /**
-     * Attempts to get an instance of the message persistence, throwing an exception if
-     * an implementation could not be found in any META-INF/service/....MessageRepository
-     *
-     * @return instance of MessageRepository
-     */
-    public static MessageRepository getInstanceNoDefault() {
-        MessageRepository messageRepository = getInstance();
-        if (getInstance() == null){
-            throw new IllegalStateException("No implementation of " + MessageRepository.class.getCanonicalName() + " found in class path. Searched for files matching /META-INF/services/" + MessageRepository.class.getCanonicalName() + " in class path");
-        }
-
-        return messageRepository;
+    if (messageRepositoryImplementations.isEmpty ()) {
+      return new SimpleMessageRepository ();
     }
 
-
-    static MessageRepository getInstanceWithDefault() {
-        List<MessageRepository> messageRepositoryImplementations = new ArrayList<MessageRepository>();
-        for (MessageRepository messageRepository : messageRepositoryServiceLoader) {
-            messageRepositoryImplementations.add(messageRepository);
-        }
-
-        if (messageRepositoryImplementations.isEmpty()) {
-            return new SimpleMessageRepository();
-        }
-
-        if (messageRepositoryImplementations.size() > 1) {
-            log.warn("Found " + messageRepositoryImplementations.size() + " implementations of " + MessageRepository.class);
-        }
-
-        // Provides the first available implementation
-        return messageRepositoryImplementations.get(0);
-
+    if (messageRepositoryImplementations.size () > 1) {
+      log.warn ("Found " + messageRepositoryImplementations.size () + " implementations of " + MessageRepository.class);
     }
+
+    // Provides the first available implementation
+    return messageRepositoryImplementations.get (0);
+
+  }
 }

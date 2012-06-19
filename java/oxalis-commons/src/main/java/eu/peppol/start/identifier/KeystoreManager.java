@@ -1,18 +1,27 @@
 package eu.peppol.start.identifier;
 
-import eu.peppol.security.OcspValidatorCache;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.math.BigInteger;
-import java.security.*;
-import java.security.cert.*;
+import java.security.Key;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.PrivateKey;
+import java.security.Security;
+import java.security.cert.CertPath;
+import java.security.cert.CertPathValidator;
 import java.security.cert.Certificate;
+import java.security.cert.CertificateFactory;
+import java.security.cert.PKIXParameters;
+import java.security.cert.TrustAnchor;
+import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import eu.peppol.security.OcspValidatorCache;
 
 /**
  * Main manager for handling operations related to our keystore and truststore.
