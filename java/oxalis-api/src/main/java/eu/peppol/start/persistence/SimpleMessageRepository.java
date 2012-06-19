@@ -19,7 +19,6 @@ import com.phloc.commons.io.file.FileUtils;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.xml.serialize.XMLWriter;
 
-import eu.peppol.start.identifier.IdentifierName;
 
 /**
  * @author $Author$ (of last change) Created by User: steinar Date: 28.11.11
