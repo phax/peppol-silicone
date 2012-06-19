@@ -8,7 +8,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
-import eu.peppol.start.identifier.PeppolMessageHeader;
+import at.peppol.transport.IMessageMetadata;
+import at.peppol.transport.MessageMetadata;
 
 /**
  * @author Steinar Overbeck Cook
@@ -17,13 +18,13 @@ import eu.peppol.start.identifier.PeppolMessageHeader;
  */
 public class SimpleMessageRepositoryTest {
 
-  private PeppolMessageHeader peppolHeader;
+  private IMessageMetadata peppolHeader;
 
   @Before
   public void createPeppolHeader () {
-    peppolHeader = new PeppolMessageHeader ();
-    peppolHeader.setRecipientId (SimpleParticipantIdentifier.createWithDefaultScheme ("9908:976098897"));
+    peppolHeader = new MessageMetadata ();
     peppolHeader.setSenderId (SimpleParticipantIdentifier.createWithDefaultScheme ("9908:123456789"));
+    peppolHeader.setRecipientId (SimpleParticipantIdentifier.createWithDefaultScheme ("9908:976098897"));
   }
 
   @Test
@@ -31,8 +32,8 @@ public class SimpleMessageRepositoryTest {
     final SimpleMessageRepository simpleMessageRepository = new SimpleMessageRepository ();
 
     peppolHeader.setChannelId ("CH2");
-    peppolHeader.setRecipientId (SimpleParticipantIdentifier.createWithDefaultScheme ("9908:976098897"));
     peppolHeader.setSenderId (SimpleParticipantIdentifier.createWithDefaultScheme ("9908:123456789"));
+    peppolHeader.setRecipientId (SimpleParticipantIdentifier.createWithDefaultScheme ("9908:976098897"));
 
     final String tmpdir = "/tmpx";
 
@@ -63,7 +64,7 @@ public class SimpleMessageRepositoryTest {
       tmp.mkdirs ();
       System.err.println (tmp.toString ());
       System.err.flush ();
-      final PeppolMessageHeader peppolMessageHeader = new PeppolMessageHeader ();
+      final IMessageMetadata peppolMessageHeader = new MessageMetadata ();
       peppolMessageHeader.setMessageId ("uuid:c5aa916d-9a1e-4ae8-ba25-0709ec913acb");
       peppolMessageHeader.setRecipientId (SimpleParticipantIdentifier.createWithDefaultScheme ("9908:976098897"));
       peppolMessageHeader.setSenderId (SimpleParticipantIdentifier.createWithDefaultScheme ("9908:123456789"));

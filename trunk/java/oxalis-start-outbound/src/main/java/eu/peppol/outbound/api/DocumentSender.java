@@ -16,10 +16,11 @@ import org.w3._2009._02.ws_tra.Create;
 import org.w3c.dom.Document;
 
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+import at.peppol.transport.IMessageMetadata;
+import at.peppol.transport.MessageMetadata;
 import eu.peppol.outbound.smp.SmpLookupManager;
 import eu.peppol.outbound.soap.SoapDispatcher;
 import eu.peppol.outbound.util.Log;
-import eu.peppol.start.identifier.PeppolMessageHeader;
 
 /**
  * The Oxalis START outbound module contains all necessary code for sending
@@ -192,20 +193,17 @@ public class DocumentSender {
     soapBody.getAny ().add (document.getDocumentElement ());
 
     Log.debug ("Constructing SOAP header");
-    final PeppolMessageHeader messageHeader = new PeppolMessageHeader ();
-    messageHeader.setChannelId (channelId);
-
-    final String messageId = "uuid:" + UUID.randomUUID ().toString ();
-    messageHeader.setMessageId (messageId);
-    messageHeader.setDocumentTypeIdentifier (documentTypeIdentifier);
-    messageHeader.setPeppolProcessTypeId (peppolProcessTypeId);
-    messageHeader.setSenderId (senderId);
-    messageHeader.setRecipientId (recipientId);
+    final IMessageMetadata messageHeader = new MessageMetadata ("uuid:" + UUID.randomUUID ().toString (),
+                                                                channelId,
+                                                                senderId,
+                                                                recipientId,
+                                                                documentTypeIdentifier,
+                                                                peppolProcessTypeId);
 
     soapDispatcher.enableSoapLogging (soapLogging);
 
     soapDispatcher.send (destination, messageHeader, soapBody);
 
-    return messageId;
+    return messageHeader.getMessageID ();
   }
 }

@@ -59,10 +59,10 @@ import org.w3._2009._02.ws_tra.Create;
 import org.w3._2009._02.ws_tra.FaultMessage;
 import org.w3._2009._02.ws_tra.Resource;
 
+import at.peppol.transport.IMessageMetadata;
 import eu.peppol.outbound.ssl.AccessPointX509TrustManager;
 import eu.peppol.outbound.util.Log;
 import eu.peppol.start.identifier.Configuration;
-import eu.peppol.start.identifier.PeppolMessageHeader;
 
 /**
  * The accesspointClient class aims to hold all the processes required for
@@ -91,7 +91,7 @@ public class SoapDispatcher {
    * @param soapBody
    *        Create object holding the SOAP-envelope payload.
    */
-  public void send (final URL endpointAddress, final PeppolMessageHeader messageHeader, final Create soapBody) {
+  public void send (final URL endpointAddress, final IMessageMetadata messageHeader, final Create soapBody) {
 
     initialise ();
 
@@ -120,9 +120,7 @@ public class SoapDispatcher {
    *        the address of the webservice.
    * @return the configured port.
    */
-  private void sendSoapMessage (final URL endpointAddress,
-                                final PeppolMessageHeader messageHeader,
-                                final Create soapBody) throws FaultMessage {
+  private void sendSoapMessage (final URL endpointAddress, final IMessageMetadata messageHeader, final Create soapBody) throws FaultMessage {
 
     Log.debug ("Constructing service proxy");
 
@@ -147,10 +145,10 @@ public class SoapDispatcher {
       requestContext.put (BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpointAddress.toExternalForm ());
       port.create (soapBody);
 
-      Log.info ("Sender:\t" + messageHeader.getSenderId ().getValue ());
-      Log.info ("Recipient:\t" + messageHeader.getRecipientId ().getValue ());
+      Log.info ("Sender:\t" + messageHeader.getSenderID ().getValue ());
+      Log.info ("Recipient:\t" + messageHeader.getRecipientID ().getValue ());
       Log.info ("Destination:\t" + endpointAddress);
-      Log.info ("Message " + messageHeader.getMessageId () + " has been successfully delivered");
+      Log.info ("Message " + messageHeader.getMessageID () + " has been successfully delivered");
 
     }
     finally {
