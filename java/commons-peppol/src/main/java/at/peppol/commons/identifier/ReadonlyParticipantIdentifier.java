@@ -63,7 +63,8 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable
-public final class ReadonlyParticipantIdentifier extends ParticipantIdentifierType {
+public final class ReadonlyParticipantIdentifier extends ParticipantIdentifierType implements
+                                                                                  IExtendedParticipantIdentifier {
   public ReadonlyParticipantIdentifier (@Nonnull final IReadonlyIdentifier aIdentifier) {
     this (aIdentifier.getScheme (), aIdentifier.getValue ());
   }
@@ -92,6 +93,16 @@ public final class ReadonlyParticipantIdentifier extends ParticipantIdentifierTy
   public void setScheme (final String sScheme) {
     // This is how we make things read-only :)
     throw new UnsupportedOperationException ("setScheme is forbidden on this class!");
+  }
+
+  @Nullable
+  public String getIssuingAgencyID () {
+    return IdentifierUtils.getIssuingAgencyIDFromParticipantIDValue (getValue ());
+  }
+
+  @Nullable
+  public String getLocalParticipantID () {
+    return IdentifierUtils.getLocalParticipantIDFromParticipantIDValue (getValue ());
   }
 
   @Nonnull

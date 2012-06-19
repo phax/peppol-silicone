@@ -58,7 +58,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public class SimpleParticipantIdentifier extends ParticipantIdentifierType {
+public class SimpleParticipantIdentifier extends ParticipantIdentifierType implements IExtendedParticipantIdentifier {
   public SimpleParticipantIdentifier (@Nonnull final IReadonlyParticipantIdentifier aIdentifier) {
     this (aIdentifier.getScheme (), aIdentifier.getValue ());
   }
@@ -70,6 +70,16 @@ public class SimpleParticipantIdentifier extends ParticipantIdentifierType {
       throw new IllegalArgumentException ("Participant identifier value '" + sValue + "' is invalid!");
     setScheme (sScheme);
     setValue (sValue);
+  }
+
+  @Nullable
+  public String getIssuingAgencyID () {
+    return IdentifierUtils.getIssuingAgencyIDFromParticipantIDValue (getValue ());
+  }
+
+  @Nullable
+  public String getLocalParticipantID () {
+    return IdentifierUtils.getLocalParticipantIDFromParticipantIDValue (getValue ());
   }
 
   @Nonnull

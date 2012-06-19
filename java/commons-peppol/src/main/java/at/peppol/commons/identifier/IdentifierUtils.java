@@ -52,6 +52,7 @@ import at.peppol.busdox.identifier.IReadonlyProcessIdentifier;
 import at.peppol.commons.uri.BusdoxURLUtils;
 
 import com.phloc.commons.charset.CCharset;
+import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
@@ -442,5 +443,17 @@ public final class IdentifierUtils {
   @Nullable
   public static String getUnifiedParticipantDBValue (@Nullable final String sValue) {
     return sValue == null ? null : sValue.toLowerCase (Locale.US);
+  }
+
+  private static final String PATTERN_PARTICIPANT_ID = "^([^:]*):(.*)$";
+
+  @Nullable
+  public static String getIssuingAgencyIDFromParticipantIDValue (@Nonnull final String sValue) {
+    return ArrayHelper.getSafeElement (RegExHelper.getAllMatchingGroupValues (PATTERN_PARTICIPANT_ID, sValue), 0);
+  }
+
+  @Nullable
+  public static String getLocalParticipantIDFromParticipantIDValue (@Nonnull final String sValue) {
+    return ArrayHelper.getSafeElement (RegExHelper.getAllMatchingGroupValues (PATTERN_PARTICIPANT_ID, sValue), 1);
   }
 }
