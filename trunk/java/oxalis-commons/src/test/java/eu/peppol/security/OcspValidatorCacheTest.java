@@ -1,6 +1,7 @@
 package eu.peppol.security;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.math.BigInteger;
 
@@ -17,15 +18,15 @@ public class OcspValidatorCacheTest {
     final OcspValidatorCache cache = new OcspValidatorCache ();
     cache.setTimoutForTesting (10);
     final BigInteger serialNumber = new BigInteger ("1000");
-    assertEquals (cache.isKnownValidCertificate (serialNumber), false);
+    assertFalse (cache.isKnownValidCertificate (serialNumber));
 
     cache.setKnownValidCertificate (serialNumber);
-    assertEquals (cache.isKnownValidCertificate (serialNumber), true);
+    assertTrue (cache.isKnownValidCertificate (serialNumber));
 
     Thread.sleep (5);
-    assertEquals (cache.isKnownValidCertificate (serialNumber), true);
+    assertTrue (cache.isKnownValidCertificate (serialNumber));
 
     Thread.sleep (10);
-    assertEquals (cache.isKnownValidCertificate (serialNumber), false);
+    assertFalse (cache.isKnownValidCertificate (serialNumber));
   }
 }

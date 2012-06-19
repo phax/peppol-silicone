@@ -5,13 +5,15 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import at.peppol.commons.uri.BusdoxURLUtils;
+
 /**
  * @author Steinar Overbeck Cook steinar@sendregning.no
  */
 public class UtilTest {
   @Test
   public void testCalculateMD5 () throws Exception {
-    final String hash = Util.calculateMD5 ("9908:810017902");
+    final String hash = BusdoxURLUtils.getHashValueStringRepresentation ("9908:810017902");
 
     assertEquals (hash, "ddc207601e442e1b751e5655d39371cd");
 

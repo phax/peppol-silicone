@@ -37,13 +37,7 @@
  */
 package eu.peppol.outbound.soap;
 
-import eu.peppol.outbound.util.JaxbContextCache;
-import eu.peppol.outbound.util.Log;
-import eu.peppol.start.identifier.PeppolMessageHeader;
-import org.w3._2009._02.ws_tra.DocumentIdentifierType;
-import org.w3._2009._02.ws_tra.ObjectFactory;
-import org.w3._2009._02.ws_tra.ParticipantIdentifierType;
-import org.w3._2009._02.ws_tra.ProcessIdentifierType;
+import java.util.Set;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
@@ -56,100 +50,104 @@ import javax.xml.transform.dom.DOMResult;
 import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
-import java.util.Set;
+
+import org.busdox.transport.identifiers._1.DocumentIdentifierType;
+import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
+import org.busdox.transport.identifiers._1.ProcessIdentifierType;
+import org.w3._2009._02.ws_tra.ObjectFactory;
+
+import at.peppol.commons.identifier.SimpleDocumentTypeIdentifier;
+import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+
+import com.phloc.commons.jaxb.JAXBContextCache;
+
+import eu.peppol.outbound.util.Log;
+import eu.peppol.start.identifier.PeppolMessageHeader;
 
 /**
- * The SOAPOutboundHandler class is used to handle an outbound SOAP message
- * in order to  include the BUSDOX defined headers.
- *
- * @author Dante Malaga(dante@alfa1lab.com)
- *         Jose Gorvenia Narvaez(jose@alfa1lab.com)
+ * The SOAPOutboundHandler class is used to handle an outbound SOAP message in
+ * order to include the BUSDOX defined headers.
+ * 
+ * @author Dante Malaga(dante@alfa1lab.com) Jose Gorvenia
+ *         Narvaez(jose@alfa1lab.com)
  */
-@SuppressWarnings({"AccessStaticViaInstance"})
-public class SOAPOutboundHandler implements SOAPHandler<SOAPMessageContext> {
+@SuppressWarnings ({ "AccessStaticViaInstance" })
+public class SOAPOutboundHandler implements SOAPHandler <SOAPMessageContext> {
 
-    private PeppolMessageHeader messageHeader;
+  private final PeppolMessageHeader messageHeader;
 
-    public SOAPOutboundHandler(PeppolMessageHeader messageHeader) {
-        this.messageHeader = messageHeader;
+  public SOAPOutboundHandler (final PeppolMessageHeader messageHeader) {
+    this.messageHeader = messageHeader;
+  }
+
+  public Set <QName> getHeaders () {
+    return null;
+  }
+
+  public boolean handleMessage (final SOAPMessageContext soapMessageContext) {
+
+    try {
+
+      Log.debug ("SOAP outbound handler called");
+      addSoapHeader (soapMessageContext);
+      return true;
+
     }
-
-    public Set<QName> getHeaders() {
-        return null;
+    catch (final Exception e) {
+      throw new RuntimeException ("Error occurred while marshalling SOAP headers", e);
     }
+  }
 
-    public boolean handleMessage(SOAPMessageContext soapMessageContext) {
+  private void addSoapHeader (final SOAPMessageContext soapMessageContext) throws SOAPException, JAXBException {
 
-        try {
+    final Boolean isOutboundMessage = (Boolean) soapMessageContext.get (MessageContext.MESSAGE_OUTBOUND_PROPERTY);
 
-            Log.debug("SOAP outbound handler called");
-            addSoapHeader(soapMessageContext);
-            return true;
+    if (isOutboundMessage.booleanValue ()) {
 
-        } catch (Exception e) {
-            throw new RuntimeException("Error occurred while marshalling SOAP headers", e);
-        }
+      Log.debug ("Adding BUSDOX headers to SOAP-envelope");
+
+      final SOAPEnvelope envelope = soapMessageContext.getMessage ().getSOAPPart ().getEnvelope ();
+      SOAPHeader header = envelope.getHeader ();
+
+      if (header == null) {
+        header = envelope.addHeader ();
+      }
+
+      final ObjectFactory objectFactory = new ObjectFactory ();
+
+      final String channelId = messageHeader.getChannelId ();
+      final String messageId = messageHeader.getMessageId ();
+
+      final ParticipantIdentifierType recipientId = new SimpleParticipantIdentifier (messageHeader.getRecipientId ());
+      final ParticipantIdentifierType senderId = new SimpleParticipantIdentifier (messageHeader.getSenderId ());
+      final DocumentIdentifierType documentId = new SimpleDocumentTypeIdentifier (messageHeader.getDocumentTypeIdentifier ());
+
+      final ProcessIdentifierType processId = new ProcessIdentifierType ();
+      processId.setValue (messageHeader.getPeppolProcessTypeId ().toString ());
+      processId.setScheme (messageHeader.getPeppolProcessTypeId ().getScheme ());
+
+      Marshaller marshaller = JAXBContextCache.getInstance ().getFromCache (String.class).createMarshaller ();
+      marshaller.marshal (objectFactory.createMessageIdentifier (messageId), new DOMResult (header));
+
+      final JAXBElement <?> auxChannelId = objectFactory.createChannelIdentifier (channelId);
+      auxChannelId.setNil (true);
+      marshaller.marshal (auxChannelId, new DOMResult (header));
+
+      marshaller = JAXBContextCache.getInstance ().getFromCache (ParticipantIdentifierType.class).createMarshaller ();
+      marshaller.marshal (objectFactory.createRecipientIdentifier (recipientId), new DOMResult (header));
+      marshaller.marshal (objectFactory.createSenderIdentifier (senderId), new DOMResult (header));
+
+      marshaller = JAXBContextCache.getInstance ().getFromCache (DocumentIdentifierType.class).createMarshaller ();
+      marshaller.marshal (objectFactory.createDocumentIdentifier (documentId), new DOMResult (header));
+
+      marshaller = JAXBContextCache.getInstance ().getFromCache (ProcessIdentifierType.class).createMarshaller ();
+      marshaller.marshal (objectFactory.createProcessIdentifier (processId), new DOMResult (header));
     }
+  }
 
-    private void addSoapHeader(SOAPMessageContext soapMessageContext) throws SOAPException, JAXBException {
+  public boolean handleFault (final SOAPMessageContext context) {
+    return true;
+  }
 
-        Boolean isOutboundMessage = (Boolean) soapMessageContext.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
-
-        if (isOutboundMessage) {
-
-            Log.debug("Adding BUSDOX headers to SOAP-envelope");
-
-            SOAPEnvelope envelope = soapMessageContext.getMessage().getSOAPPart().getEnvelope();
-            SOAPHeader header = envelope.getHeader();
-
-            if (header == null) {
-                header = envelope.addHeader();
-            }
-
-            ObjectFactory objectFactory = new ObjectFactory();
-
-            String channelId = messageHeader.getChannelId().stringValue();
-            String messageId = messageHeader.getMessageId().stringValue();
-
-            ParticipantIdentifierType recipientId = new ParticipantIdentifierType();
-            recipientId.setValue(messageHeader.getRecipientId().stringValue());
-            recipientId.setScheme(messageHeader.getRecipientId().getScheme());
-
-            ParticipantIdentifierType senderId = new ParticipantIdentifierType();
-            senderId.setValue(messageHeader.getSenderId().stringValue());
-            senderId.setScheme(messageHeader.getSenderId().getScheme());
-
-            DocumentIdentifierType documentId = new DocumentIdentifierType();
-            documentId.setValue(messageHeader.getDocumentTypeIdentifier().toString());
-            documentId.setScheme(messageHeader.getDocumentTypeIdentifier().getScheme());
-
-            ProcessIdentifierType processId = new ProcessIdentifierType();
-            processId.setValue(messageHeader.getPeppolProcessTypeId().toString());
-            processId.setScheme(messageHeader.getPeppolProcessTypeId().getScheme());
-
-            Marshaller marshaller = JaxbContextCache.getInstance(String.class).createMarshaller();
-            marshaller.marshal(objectFactory.createMessageIdentifier(messageId), new DOMResult(header));
-
-            JAXBElement auxChannelId = objectFactory.createChannelIdentifier(channelId);
-            auxChannelId.setNil(true);
-            marshaller.marshal(auxChannelId, new DOMResult(header));
-
-            marshaller = JaxbContextCache.getInstance(ParticipantIdentifierType.class).createMarshaller();
-            marshaller.marshal(objectFactory.createRecipientIdentifier(recipientId), new DOMResult(header));
-            marshaller.marshal(objectFactory.createSenderIdentifier(senderId), new DOMResult(header));
-
-            marshaller = JaxbContextCache.getInstance(DocumentIdentifierType.class).createMarshaller();
-            marshaller.marshal(objectFactory.createDocumentIdentifier(documentId), new DOMResult(header));
-
-            marshaller = JaxbContextCache.getInstance(ProcessIdentifierType.class).createMarshaller();
-            marshaller.marshal(objectFactory.createProcessIdentifier(processId), new DOMResult(header));
-        }
-    }
-
-    public boolean handleFault(SOAPMessageContext context) {
-        return true;
-    }
-
-    public void close(MessageContext context) {
-    }
+  public void close (final MessageContext context) {}
 }

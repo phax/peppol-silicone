@@ -74,18 +74,26 @@
  */
 package eu.peppol.outbound.callbacks;
 
-import com.sun.xml.wss.impl.callback.SAMLCallback;
-import com.sun.xml.wss.impl.dsig.WSSPolicyConsumerImpl;
-import com.sun.xml.wss.saml.*;
-import eu.peppol.outbound.util.Log;
-import eu.peppol.start.identifier.Configuration;
-import eu.peppol.start.identifier.KeystoreManager;
-import org.w3c.dom.*;
+import java.io.IOException;
+import java.security.PrivateKey;
+import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.GregorianCalendar;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.UnsupportedCallbackException;
-import javax.xml.crypto.dsig.*;
+import javax.xml.crypto.dsig.CanonicalizationMethod;
+import javax.xml.crypto.dsig.DigestMethod;
+import javax.xml.crypto.dsig.Reference;
+import javax.xml.crypto.dsig.SignatureMethod;
+import javax.xml.crypto.dsig.SignedInfo;
+import javax.xml.crypto.dsig.Transform;
+import javax.xml.crypto.dsig.XMLSignature;
+import javax.xml.crypto.dsig.XMLSignatureFactory;
 import javax.xml.crypto.dsig.dom.DOMSignContext;
 import javax.xml.crypto.dsig.keyinfo.KeyInfo;
 import javax.xml.crypto.dsig.keyinfo.KeyInfoFactory;
@@ -93,10 +101,30 @@ import javax.xml.crypto.dsig.keyinfo.X509Data;
 import javax.xml.crypto.dsig.spec.C14NMethodParameterSpec;
 import javax.xml.crypto.dsig.spec.TransformParameterSpec;
 import javax.xml.soap.MessageFactory;
-import java.io.IOException;
-import java.security.PrivateKey;
-import java.security.cert.X509Certificate;
-import java.util.*;
+
+import org.w3c.dom.DOMException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import com.sun.xml.wss.impl.callback.SAMLCallback;
+import com.sun.xml.wss.impl.dsig.WSSPolicyConsumerImpl;
+import com.sun.xml.wss.saml.Assertion;
+import com.sun.xml.wss.saml.Attribute;
+import com.sun.xml.wss.saml.AttributeStatement;
+import com.sun.xml.wss.saml.AuthnContext;
+import com.sun.xml.wss.saml.AuthnStatement;
+import com.sun.xml.wss.saml.Conditions;
+import com.sun.xml.wss.saml.NameID;
+import com.sun.xml.wss.saml.SAMLAssertionFactory;
+import com.sun.xml.wss.saml.SAMLException;
+import com.sun.xml.wss.saml.Subject;
+import com.sun.xml.wss.saml.SubjectConfirmation;
+
+import eu.peppol.outbound.util.Log;
+import eu.peppol.start.identifier.Configuration;
+import eu.peppol.start.identifier.KeystoreManager;
 
 /**
  * The SAMLCallbackHandler is the CallbackHandler implementation used to deal with SAML authentication.

@@ -1,12 +1,14 @@
 package eu.peppol.outbound.callbacks;
 
-import com.sun.xml.wss.impl.callback.KeyStoreCallback;
-import eu.peppol.outbound.util.Log;
-import eu.peppol.start.identifier.KeystoreManager;
+import java.security.KeyStore;
 
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
-import java.security.KeyStore;
+
+import com.sun.xml.wss.impl.callback.KeyStoreCallback;
+
+import eu.peppol.outbound.util.Log;
+import eu.peppol.start.identifier.KeystoreManager;
 
 /**
  * User: nigel

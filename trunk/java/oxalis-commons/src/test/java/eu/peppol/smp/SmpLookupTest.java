@@ -5,15 +5,17 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.net.URL;
-import java.net.URLDecoder;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.junit.Test;
 
-import eu.peppol.start.identifier.ParticipantId;
-import eu.peppol.start.identifier.PeppolDocumentTypeId;
+import at.peppol.busdox.identifier.IDocumentTypeIdentifier;
+import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+import at.peppol.commons.sml.ESML;
+
+import com.phloc.commons.url.URLUtils;
 
 /**
  * @author Steinar Overbeck Cook steinar@sendregning.no
@@ -22,21 +24,21 @@ public class SmpLookupTest {
 
   @Test
   public void lookupServicesUrl () throws SmpLookupException {
-    final SmpLookup smpLookup = new SmpLookup (new ParticipantId ("9908:810017902"));
+    final SmpLookup smpLookup = new SmpLookup (SimpleParticipantIdentifier.createWithDefaultScheme ("9908:810017902"));
     final URL url = smpLookup.servicesUrl ();
-    assertEquals (url.toExternalForm (), "http://B-ddc207601e442e1b751e5655d39371cd.iso6523-actorid-upis." +
-                                         SmpLookup.SML_PEPPOLCENTRAL_ORG +
-                                         "/iso6523-actorid-upis%3A%3A9908:810017902");
+    assertEquals ("http://B-ddc207601e442e1b751e5655d39371cd.iso6523-actorid-upis." +
+                  ESML.PRODUCTION.getDNSZone () +
+                  "/iso6523-actorid-upis%3A%3A9908%3A810017902", url.toExternalForm ());
   }
 
   @Test
   public void performLookup () throws SmpLookupException {
-    final SmpLookup smpLookup = new SmpLookup (new ParticipantId ("9908:810017902"));
+    final SmpLookup smpLookup = new SmpLookup (SimpleParticipantIdentifier.createWithDefaultScheme ("9908:810017902"));
     final List <URL> result = smpLookup.getServiceUrlList ();
 
     for (final URL url : result) {
 
-      final String s = URLDecoder.decode (url.getPath ());
+      final String s = URLUtils.urlDecode (url.getPath ());
       // All URL encoded characters shall have been translated, so we don't
       // expected to see any "%" characters
       assertTrue (s.indexOf ("%") < 0);
@@ -45,10 +47,10 @@ public class SmpLookupTest {
 
   @Test
   public void parseServiceMetadataReferences () throws SmpLookupException {
-    final SmpLookup smpLookup = new SmpLookup (new ParticipantId ("9908:810017902"));
+    final SmpLookup smpLookup = new SmpLookup (SimpleParticipantIdentifier.createWithDefaultScheme ("9908:810017902"));
 
-    final List <PeppolDocumentTypeId> result = smpLookup.parseServiceMetadataReferences ();
-    for (final PeppolDocumentTypeId documentTypeIdentifier : result) {
+    final List <IDocumentTypeIdentifier> result = smpLookup.parseServiceMetadataReferences ();
+    for (final IDocumentTypeIdentifier documentTypeIdentifier : result) {
       System.out.println (documentTypeIdentifier);
     }
   }

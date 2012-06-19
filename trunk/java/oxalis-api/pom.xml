@@ -20,11 +20,16 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
+        <dependency>
+          <groupId>at.peppol</groupId>
+          <artifactId>peppol-commons-peppol</artifactId>
+          <version>${project.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>0.9.17</version>
+            <version>1.0.6</version>
         </dependency>
 
     </dependencies>
