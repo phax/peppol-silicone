@@ -57,7 +57,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public class SimpleProcessIdentifier extends ProcessIdentifierType {
+public class SimpleProcessIdentifier extends ProcessIdentifierType implements IExtendedIdentifier {
   public SimpleProcessIdentifier (@Nonnull final IReadonlyProcessIdentifier aIdentifier) {
     this (aIdentifier.getScheme (), aIdentifier.getValue ());
   }
@@ -69,6 +69,10 @@ public class SimpleProcessIdentifier extends ProcessIdentifierType {
       throw new IllegalArgumentException ("Process identifier value '" + sValue + "' is invalid!");
     setScheme (sScheme);
     setValue (sValue);
+  }
+
+  public boolean isDefaultScheme () {
+    return CIdentifier.DEFAULT_PROCESS_IDENTIFIER_SCHEME.equals (getScheme ());
   }
 
   @Nonnull

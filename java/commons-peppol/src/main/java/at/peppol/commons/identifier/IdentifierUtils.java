@@ -71,6 +71,8 @@ public final class IdentifierUtils {
   private static final Charset CHARSET_ASCII = CCharset.CHARSET_US_ASCII_OBJ;
   private static final Charset CHARSET_ISO88591 = CCharset.CHARSET_ISO_8859_1_OBJ;
 
+  private static final String PATTERN_PARTICIPANT_ID = "^([^:]*):(.*)$";
+
   private static final AtomicBoolean s_aCharsetChecksDisabled = new AtomicBoolean (DEFAULT_CHARSET_CHECKS_DISABLED);
 
   private IdentifierUtils () {}
@@ -445,15 +447,21 @@ public final class IdentifierUtils {
     return sValue == null ? null : sValue.toLowerCase (Locale.US);
   }
 
-  private static final String PATTERN_PARTICIPANT_ID = "^([^:]*):(.*)$";
-
   @Nullable
-  public static String getIssuingAgencyIDFromParticipantIDValue (@Nonnull final String sValue) {
-    return ArrayHelper.getSafeElement (RegExHelper.getAllMatchingGroupValues (PATTERN_PARTICIPANT_ID, sValue), 0);
+  public static String getIssuingAgencyIDFromParticipantIDValue (@Nonnull final IExtendedParticipantIdentifier aIdentifier) {
+    if (!aIdentifier.isDefaultScheme ())
+      return null;
+    return ArrayHelper.getSafeElement (RegExHelper.getAllMatchingGroupValues (PATTERN_PARTICIPANT_ID,
+                                                                              aIdentifier.getValue ()),
+                                       0);
   }
 
   @Nullable
-  public static String getLocalParticipantIDFromParticipantIDValue (@Nonnull final String sValue) {
-    return ArrayHelper.getSafeElement (RegExHelper.getAllMatchingGroupValues (PATTERN_PARTICIPANT_ID, sValue), 1);
+  public static String getLocalParticipantIDFromParticipantIDValue (@Nonnull final IExtendedParticipantIdentifier aIdentifier) {
+    if (!aIdentifier.isDefaultScheme ())
+      return null;
+    return ArrayHelper.getSafeElement (RegExHelper.getAllMatchingGroupValues (PATTERN_PARTICIPANT_ID,
+                                                                              aIdentifier.getValue ()),
+                                       1);
   }
 }

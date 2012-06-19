@@ -37,14 +37,16 @@
  */
 package at.peppol.commons.identifier;
 
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 
-public interface IExtendedParticipantIdentifier extends IExtendedIdentifier {
-  boolean isValid ();
+import at.peppol.busdox.identifier.IIdentifier;
 
-  @Nullable
-  String getIssuingAgencyID ();
+public interface IExtendedIdentifier extends IIdentifier {
+  boolean isDefaultScheme ();
 
-  @Nullable
-  String getLocalParticipantID ();
+  @Nonnull
+  String getURIEncoded ();
+
+  @Nonnull
+  String getURIPercentEncoded ();
 }

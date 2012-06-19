@@ -62,7 +62,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable
-public final class ReadonlyProcessIdentifier extends ProcessIdentifierType {
+public final class ReadonlyProcessIdentifier extends ProcessIdentifierType implements IExtendedIdentifier {
   public ReadonlyProcessIdentifier (@Nonnull final IReadonlyIdentifier aIdentifier) {
     this (aIdentifier.getScheme (), aIdentifier.getValue ());
   }
@@ -91,6 +91,10 @@ public final class ReadonlyProcessIdentifier extends ProcessIdentifierType {
   public void setScheme (final String sScheme) {
     // This is how we make things read-only :)
     throw new UnsupportedOperationException ("setScheme is forbidden on this class!");
+  }
+
+  public boolean isDefaultScheme () {
+    return CIdentifier.DEFAULT_PROCESS_IDENTIFIER_SCHEME.equals (getScheme ());
   }
 
   @Nonnull

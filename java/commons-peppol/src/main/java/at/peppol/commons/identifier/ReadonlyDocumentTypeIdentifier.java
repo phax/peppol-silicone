@@ -62,7 +62,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable
-public final class ReadonlyDocumentTypeIdentifier extends DocumentIdentifierType {
+public final class ReadonlyDocumentTypeIdentifier extends DocumentIdentifierType implements IExtendedIdentifier {
   public ReadonlyDocumentTypeIdentifier (@Nonnull final IReadonlyIdentifier aIdentifier) {
     this (aIdentifier.getScheme (), aIdentifier.getValue ());
   }
@@ -91,6 +91,10 @@ public final class ReadonlyDocumentTypeIdentifier extends DocumentIdentifierType
   public void setScheme (final String sScheme) {
     // This is how we make things read-only :)
     throw new UnsupportedOperationException ("setScheme is forbidden on this class!");
+  }
+
+  public boolean isDefaultScheme () {
+    return CIdentifier.DEFAULT_DOCUMENT_TYPE_IDENTIFIER_SCHEME.equals (getScheme ());
   }
 
   @Nonnull

@@ -58,7 +58,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public class SimpleDocumentTypeIdentifier extends DocumentIdentifierType {
+public class SimpleDocumentTypeIdentifier extends DocumentIdentifierType implements IExtendedIdentifier {
   public SimpleDocumentTypeIdentifier (@Nonnull final IReadonlyDocumentTypeIdentifier aIdentifier) {
     this (aIdentifier.getScheme (), aIdentifier.getValue ());
   }
@@ -70,6 +70,10 @@ public class SimpleDocumentTypeIdentifier extends DocumentIdentifierType {
       throw new IllegalArgumentException ("Document Type identifier value '" + sValue + "' is invalid!");
     setScheme (sScheme);
     setValue (sValue);
+  }
+
+  public boolean isDefaultScheme () {
+    return CIdentifier.DEFAULT_DOCUMENT_TYPE_IDENTIFIER_SCHEME.equals (getScheme ());
   }
 
   @Nonnull

@@ -43,6 +43,7 @@ import javax.annotation.Nullable;
 import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 
 import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
+import at.peppol.commons.identifier.validator.IdentifierValidator;
 
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
@@ -72,14 +73,8 @@ public class SimpleParticipantIdentifier extends ParticipantIdentifierType imple
     setValue (sValue);
   }
 
-  @Nullable
-  public String getIssuingAgencyID () {
-    return IdentifierUtils.getIssuingAgencyIDFromParticipantIDValue (getValue ());
-  }
-
-  @Nullable
-  public String getLocalParticipantID () {
-    return IdentifierUtils.getLocalParticipantIDFromParticipantIDValue (getValue ());
+  public boolean isDefaultScheme () {
+    return CIdentifier.DEFAULT_PARTICIPANT_IDENTIFIER_SCHEME.equals (getScheme ());
   }
 
   @Nonnull
@@ -90,6 +85,20 @@ public class SimpleParticipantIdentifier extends ParticipantIdentifierType imple
   @Nonnull
   public String getURIPercentEncoded () {
     return IdentifierUtils.getIdentifierURIPercentEncoded (this);
+  }
+
+  public boolean isValid () {
+    return IdentifierValidator.isValidParticipantIdentifier (this);
+  }
+
+  @Nullable
+  public String getIssuingAgencyID () {
+    return IdentifierUtils.getIssuingAgencyIDFromParticipantIDValue (this);
+  }
+
+  @Nullable
+  public String getLocalParticipantID () {
+    return IdentifierUtils.getLocalParticipantIDFromParticipantIDValue (this);
   }
 
   /*
