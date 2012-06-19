@@ -8,8 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
-import at.peppol.transport.IMessageMetadata;
-import at.peppol.transport.MessageMetadata;
+import at.peppol.transport.MutableMessageMetadata;
 
 /**
  * @author Steinar Overbeck Cook
@@ -18,22 +17,22 @@ import at.peppol.transport.MessageMetadata;
  */
 public class SimpleMessageRepositoryTest {
 
-  private IMessageMetadata peppolHeader;
+  private MutableMessageMetadata peppolHeader;
 
   @Before
   public void createPeppolHeader () {
-    peppolHeader = new MessageMetadata ();
-    peppolHeader.setSenderId (SimpleParticipantIdentifier.createWithDefaultScheme ("9908:123456789"));
-    peppolHeader.setRecipientId (SimpleParticipantIdentifier.createWithDefaultScheme ("9908:976098897"));
+    peppolHeader = new MutableMessageMetadata ();
+    peppolHeader.setSenderID (SimpleParticipantIdentifier.createWithDefaultScheme ("9908:123456789"));
+    peppolHeader.setRecipientID (SimpleParticipantIdentifier.createWithDefaultScheme ("9908:976098897"));
   }
 
   @Test
   public void computeDirectoryNameForMessage () {
     final SimpleMessageRepository simpleMessageRepository = new SimpleMessageRepository ();
 
-    peppolHeader.setChannelId ("CH2");
-    peppolHeader.setSenderId (SimpleParticipantIdentifier.createWithDefaultScheme ("9908:123456789"));
-    peppolHeader.setRecipientId (SimpleParticipantIdentifier.createWithDefaultScheme ("9908:976098897"));
+    peppolHeader.setChannelID ("CH2");
+    peppolHeader.setSenderID (SimpleParticipantIdentifier.createWithDefaultScheme ("9908:123456789"));
+    peppolHeader.setRecipientID (SimpleParticipantIdentifier.createWithDefaultScheme ("9908:976098897"));
 
     final String tmpdir = "/tmpx";
 
@@ -64,10 +63,10 @@ public class SimpleMessageRepositoryTest {
       tmp.mkdirs ();
       System.err.println (tmp.toString ());
       System.err.flush ();
-      final IMessageMetadata peppolMessageHeader = new MessageMetadata ();
-      peppolMessageHeader.setMessageId ("uuid:c5aa916d-9a1e-4ae8-ba25-0709ec913acb");
-      peppolMessageHeader.setRecipientId (SimpleParticipantIdentifier.createWithDefaultScheme ("9908:976098897"));
-      peppolMessageHeader.setSenderId (SimpleParticipantIdentifier.createWithDefaultScheme ("9908:123456789"));
+      final MutableMessageMetadata peppolMessageHeader = new MutableMessageMetadata ();
+      peppolMessageHeader.setMessageID ("uuid:c5aa916d-9a1e-4ae8-ba25-0709ec913acb");
+      peppolMessageHeader.setSenderID (SimpleParticipantIdentifier.createWithDefaultScheme ("9908:123456789"));
+      peppolMessageHeader.setRecipientID (SimpleParticipantIdentifier.createWithDefaultScheme ("9908:976098897"));
 
       simpleMessageRepository.prepareMessageDirectory (tmp.toString (), peppolMessageHeader);
     }
