@@ -32,6 +32,32 @@ public class InvoiceAllowanceChargeAdapter extends AllowanceChargeType {
     
   }
 
+  public void setIndicator(Boolean v) {
+    getChargeIndicator().setValue (v);
+  }
+  
+  public Boolean getIndicator() {
+    if(getChargeIndicator().isValue ())
+      return true;
+    return false;
+  }
+  
+  public void setReason(String v) {
+    getAllowanceChargeReason().setValue (v);
+  }
+  
+  public String getReason() {
+    return getAllowanceChargeReason().getValue ();
+  }    
+  
+  public void setChargeAmount(BigDecimal v) {
+    getAmount().setValue (v);
+  }
+  
+  public BigDecimal getChargeAmount() {
+    return getAmount().getValue ();
+  }      
+  
   public void setTaxCategoryID(String id) {
     getTaxCategory().get(0).getID().setValue(id);
   }
