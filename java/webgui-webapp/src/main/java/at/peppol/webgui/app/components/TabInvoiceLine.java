@@ -39,6 +39,7 @@ public class TabInvoiceLine extends Form {
     table = new InvoiceLineTable(parent.getInvoice().getInvoiceLine());
     table.setHeight (150, UNITS_PIXELS);
     table.setFooterVisible (true);
+    table.setWidth ("100%");
     table.addStyleName ("striped strong");
     VerticalLayout tableContainer = new VerticalLayout();
     tableContainer.addComponent (table);
@@ -57,6 +58,8 @@ public class TabInvoiceLine extends Form {
         showInvLineWindow();
       }
     }), 1, 0);
+    
+    tableContainer.setExpandRatio(table, 1.0f);
     
     outerPanel.addComponent (grid);
     outerLayout.addComponent(outerPanel);

@@ -77,6 +77,7 @@ public class TabInvoicePayment extends Form {
     //payeeParty.setParty(new PartyType());
     
     final GridLayout grid = new GridLayout(2, 2);
+    grid.setSpacing (true);
     final VerticalLayout outerLayout = new VerticalLayout();
     
     final Panel outerPanel = new Panel("Payment");

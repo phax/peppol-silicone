@@ -20,9 +20,12 @@ public class InvoiceAllowanceChargeTable extends Table {
     this.allowanceChargeLines = items;
     setContainerDataSource(tableLines);
 
-    addPropertyWithHeader("chargeIndicator", "Charge Indicator");
-    addPropertyWithHeader("allowanceChargeReason","Charge Reason");
-    addPropertyWithHeader("amount", "Amount");
+    //addPropertyWithHeader("chargeIndicator", "Charge Indicator");
+    addPropertyWithHeader("indicator", "Charge Indicator");
+    //addPropertyWithHeader("allowanceChargeReason","Charge Reason");
+    addPropertyWithHeader("reason","Charge Reason");
+    //addPropertyWithHeader("amount", "Amount");
+    addPropertyWithHeader("chargeAmount", "Amount");
     addPropertyWithHeader("taxCategoryID","Tax Category ID");
     addPropertyWithHeader("taxCategoryPercent","Tax Category Percent");
     addPropertyWithHeader("taxCategorySchemeID","Tax Scheme ID");
