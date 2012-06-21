@@ -35,14 +35,14 @@ public class TabInvoiceAllowanceCharge extends Form {
   private List<AllowanceChargeType> allowanceChargeList;
   private InvoiceAllowanceChargeAdapter allowanceChargeItem;
   
+  private InvoiceAllowanceChargeAdapter originalItem;
+
   private boolean addMode;
   private boolean editMode;
   
   public InvoiceAllowanceChargeTable table;
   private VerticalLayout hiddenContent;
-  
-  
-  
+
   public TabInvoiceAllowanceCharge(InvoiceTabForm parent) {
     this.parent = parent;
     addMode = false;
@@ -75,6 +75,7 @@ public class TabInvoiceAllowanceCharge extends Form {
     Button addBtn = new Button("Add New", new Button.ClickListener() {
       @Override
       public void buttonClick(final Button.ClickEvent event) {
+        
         addMode = true;
         hiddenContent.removeAllComponents ();
         allowanceChargeItem = createAllowanceChargeItem();
@@ -107,19 +108,16 @@ public class TabInvoiceAllowanceCharge extends Form {
           }
         }));
         
-        
         hiddenContent.addComponent(buttonLayout);
         
         //hiddenContent.setVisible(!hiddenContent.isVisible());
         hiddenContent.setVisible(true);
-        
       }
     });    
     Button editBtn = new Button("Edit Selected", new Button.ClickListener() {
       @Override
       public void buttonClick(final Button.ClickEvent event) {
         Object rowId = table.getValue(); // get the selected rows id
-        
         if(rowId != null){
           if(addMode || editMode){
             parent.getWindow ().showNotification("Info", "You cannot edit while in add/edit mode", Window.Notification.TYPE_HUMANIZED_MESSAGE);
@@ -130,16 +128,18 @@ public class TabInvoiceAllowanceCharge extends Form {
           // TODO: PUT THIS IN FUNCTION BEGINS
           editMode = true;
           hiddenContent.removeAllComponents ();
-
-          final InvoiceAllowanceChargeAdapter original = (InvoiceAllowanceChargeAdapter) allowanceChargeList.get (table.getIndexFromID (sid));
-          System.out.println("original: " + original.getID ().getValue ());
           
-          allowanceChargeItem = createAllowanceChargeItem();
-          System.out.println(allowanceChargeItem.getID ().getValue ());
-
-          allowanceChargeItem = allowanceChargeItem.getCopy (original);
-          System.out.println(allowanceChargeItem.getID ().getValue ());
-          
+          //get selected item
+          allowanceChargeItem = (InvoiceAllowanceChargeAdapter) allowanceChargeList.get (table.getIndexFromID (sid));
+          //clone it to original item
+          originalItem = new InvoiceAllowanceChargeAdapter ();
+          originalItem.setID (allowanceChargeItem.getID ());
+          originalItem.setIndicator (allowanceChargeItem.getIndicator ());
+          originalItem.setReason (allowanceChargeItem.getReason ());
+          originalItem.setChargeAmount (allowanceChargeItem.getChargeAmount ());
+          originalItem.setTaxCategoryID (allowanceChargeItem.getTaxCategoryID ());
+          originalItem.setTaxCategoryPercent (allowanceChargeItem.getTaxCategoryPercent ());
+          originalItem.setTaxCategorySchemeID (allowanceChargeItem.getTaxCategorySchemeID ());
           
           Label formLabel = new Label("<h3>Editing allowance charge line</h3>", Label.CONTENT_XHTML);
           
@@ -163,13 +163,13 @@ public class TabInvoiceAllowanceCharge extends Form {
             @Override
             public void buttonClick (ClickEvent event) {
               hiddenContent.removeAllComponents ();
-              table.setAllowanceChargeLine (sid, original);
+              
+              table.setAllowanceChargeLine (sid, originalItem);
               //hide form
               hiddenContent.setVisible(false);
               editMode = false;
             }
           }));
-          
           
           hiddenContent.addComponent(buttonLayout);
           
@@ -179,25 +179,23 @@ public class TabInvoiceAllowanceCharge extends Form {
         }
         else {
           parent.getWindow ().showNotification("Info", "No table line is selected", Window.Notification.TYPE_HUMANIZED_MESSAGE);
-          
         }
-        
 
-        
       }
     });    
     Button deleteBtn = new Button("Delete Selected", new Button.ClickListener() {
       @Override
       public void buttonClick(final Button.ClickEvent event) {
         Object rowId = table.getValue(); // get the selected rows id
-        
         if(rowId != null){
           if(addMode || editMode){
             parent.getWindow ().showNotification("Info", "You cannot delete while in add/edit mode", Window.Notification.TYPE_HUMANIZED_MESSAGE);
             return;
           }
-          String sid = (String)table.getContainerProperty(rowId,"ID.value").getValue();
-          table.removeAllowanceChargeLine (sid);
+          if(table.getContainerProperty(rowId,"ID.value").getValue() != null){
+            String sid = (String)table.getContainerProperty(rowId,"ID.value").getValue();
+            table.removeAllowanceChargeLine (sid);
+          }
         }
         else {
           parent.getWindow ().showNotification("Info", "No table line is selected", Window.Notification.TYPE_HUMANIZED_MESSAGE);
@@ -205,7 +203,6 @@ public class TabInvoiceAllowanceCharge extends Form {
         }
       }
     });    
-    
     
     VerticalLayout buttonsContainer = new VerticalLayout();
     buttonsContainer.setSpacing (true);
@@ -237,13 +234,18 @@ public class TabInvoiceAllowanceCharge extends Form {
     final Form invoiceAllowanceChargeForm = new Form(new FormLayout(), new InvoiceAllowanceChargeFieldFactory());
     invoiceAllowanceChargeForm.setImmediate(true);
 
+    NestedMethodProperty mp = new NestedMethodProperty(allowanceChargeItem, "ID.value");
     if(!editMode){
       IDType num = new IDType();
       num.setValue (String.valueOf (allowanceChargeList.size ()+1));
       allowanceChargeItem.setID(num);
     }
+    else {
+      mp.setReadOnly (true);
+    }
     
-    invoiceAllowanceChargeForm.addItemProperty ("Line ID #", new NestedMethodProperty(allowanceChargeItem, "ID.value") );
+    //invoiceAllowanceChargeForm.addItemProperty ("Line ID #", new NestedMethodProperty(allowanceChargeItem, "ID.value") );
+    invoiceAllowanceChargeForm.addItemProperty ("Line ID #", mp );
     invoiceAllowanceChargeForm.addItemProperty ("Allowance Charge Indicator", new NestedMethodProperty(allowanceChargeItem, "indicator") );
     invoiceAllowanceChargeForm.addItemProperty ("Allowance Charge Reason", new NestedMethodProperty(allowanceChargeItem, "reason") );
     invoiceAllowanceChargeForm.addItemProperty ("Allowance Charge Amount", new NestedMethodProperty(allowanceChargeItem, "chargeAmount") );
