@@ -1,6 +1,7 @@
 package at.peppol.webgui.app.components;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AllowanceChargeType;
@@ -20,6 +21,8 @@ public class InvoiceAllowanceChargeTable extends Table {
     this.allowanceChargeLines = items;
     setContainerDataSource(tableLines);
 
+    addPropertyWithHeader("ID.value", "ID");
+    
     //addPropertyWithHeader("chargeIndicator", "Charge Indicator");
     addPropertyWithHeader("indicator", "Charge Indicator");
     //addPropertyWithHeader("allowanceChargeReason","Charge Reason");
@@ -47,5 +50,47 @@ public class InvoiceAllowanceChargeTable extends Table {
   public void addAllowanceChargeLine(InvoiceAllowanceChargeAdapter ln) {
     allowanceChargeLines.add(ln);
     tableLines.addBean(ln);   
+  }
+  
+  public void setAllowanceChargeLine(String lineID, InvoiceAllowanceChargeAdapter ln) {
+    //use for editing....
+    if(getIndexFromID(lineID) > -1){
+      allowanceChargeLines.set (getIndexFromID(lineID), ln);
+      
+      //TODO: Better way to "refresh" the table?
+      //tableLines.addBean(ln);
+      tableLines.removeAllItems ();
+      Iterator<AllowanceChargeType> iterator = allowanceChargeLines.iterator ();
+      while (iterator.hasNext()) {
+        AllowanceChargeType ac = iterator.next();
+        tableLines.addBean ((InvoiceAllowanceChargeAdapter) ac);
+      }
+    }
   }  
+  
+  public void removeAllowanceChargeLine(String lineID) {
+    Iterator<AllowanceChargeType> iterator = allowanceChargeLines.iterator ();
+    while (iterator.hasNext()) {
+      AllowanceChargeType ac = iterator.next();
+      if (ac.getID ().getValue ().equals (lineID)) {
+        tableLines.removeItem (ac);
+        allowanceChargeLines.remove (ac);
+        break;
+        
+      }
+    }
+  }
+  
+  public int getIndexFromID(String lineID) {
+    Iterator<AllowanceChargeType> iterator = allowanceChargeLines.iterator ();
+    while (iterator.hasNext()) {
+      AllowanceChargeType ac = iterator.next();
+      if (ac.getID ().getValue ().equals (lineID)) {
+        int index = allowanceChargeLines.indexOf (ac);
+        return index;
+      }
+    }    
+    return -1;
+  }
+  
 }

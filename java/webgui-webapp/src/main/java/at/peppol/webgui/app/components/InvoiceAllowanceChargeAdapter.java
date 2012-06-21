@@ -81,4 +81,28 @@ public class InvoiceAllowanceChargeAdapter extends AllowanceChargeType {
   public String getTaxCategorySchemeID() {
       return getTaxCategory().get(0).getTaxScheme().getID ().getValue();
   }    
+  
+  public InvoiceAllowanceChargeAdapter getCopy(InvoiceAllowanceChargeAdapter src) {
+    InvoiceAllowanceChargeAdapter dst = new InvoiceAllowanceChargeAdapter();
+    dst.setID (src.getID ());
+    
+    dst.setChargeIndicator(src.getChargeIndicator ());
+    dst.setAllowanceChargeReason(src.getAllowanceChargeReason ());
+    dst.setAmount(src.getAmount ());
+    /*
+    TaxCategoryType taxCategory = new TaxCategoryType ();
+    taxCategory.setID (new IDType ());
+    taxCategory.setPercent (new PercentType ());
+    
+    TaxSchemeType taxScheme = new TaxSchemeType();
+    taxScheme.setID (new IDType ());
+    taxCategory.setTaxScheme (taxScheme);
+    
+    getTaxCategory().add(taxCategory);    
+    */
+    
+    return dst;
+  }
+  
+  
 }
