@@ -25,6 +25,7 @@ import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.Select;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
@@ -246,7 +247,7 @@ public class TabInvoiceAllowanceCharge extends Form {
     
     //invoiceAllowanceChargeForm.addItemProperty ("Line ID #", new NestedMethodProperty(allowanceChargeItem, "ID.value") );
     invoiceAllowanceChargeForm.addItemProperty ("Line ID #", mp );
-    invoiceAllowanceChargeForm.addItemProperty ("Allowance Charge Indicator", new NestedMethodProperty(allowanceChargeItem, "indicator") );
+    invoiceAllowanceChargeForm.addItemProperty ("Charge Indicator", new NestedMethodProperty(allowanceChargeItem, "indicator") );
     invoiceAllowanceChargeForm.addItemProperty ("Allowance Charge Reason", new NestedMethodProperty(allowanceChargeItem, "reason") );
     invoiceAllowanceChargeForm.addItemProperty ("Allowance Charge Amount", new NestedMethodProperty(allowanceChargeItem, "chargeAmount") );
     invoiceAllowanceChargeForm.addItemProperty ("Tax Category ID", new NestedMethodProperty(allowanceChargeItem, "taxCategoryID") );
@@ -279,7 +280,18 @@ public class TabInvoiceAllowanceCharge extends Form {
     public Field createField(final Item item, final Object propertyId, final Component uiContext) {
         // Identify the fields by their Property ID.
         final String pid = (String) propertyId;
-
+        
+        if ("Charge Indicator".equals(pid)) {
+          Select indicatorSelect = new Select("Charge or Allowance?");
+          indicatorSelect.setNullSelectionAllowed(false);
+          indicatorSelect.addItem (true);
+          indicatorSelect.addItem (false);
+          indicatorSelect.setItemCaption(true, "Charge");
+          indicatorSelect.setItemCaption(false, "Allowance");
+          
+          return indicatorSelect;
+        }
+        
         final Field field = DefaultFieldFactory.get().createField(item, propertyId, uiContext);
         if (field instanceof AbstractTextField) {
             ((AbstractTextField) field).setNullRepresentation("");
