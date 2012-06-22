@@ -15,13 +15,13 @@ public class InvoiceAllowanceChargeTable extends Table {
   private final BeanItemContainer<InvoiceAllowanceChargeAdapter> tableLines =
           new BeanItemContainer<InvoiceAllowanceChargeAdapter>(InvoiceAllowanceChargeAdapter.class);
   private final List<String> visibleHeaderNames = new ArrayList<String>();
-  private int counter = 1;
+ 
   
   public InvoiceAllowanceChargeTable(List<AllowanceChargeType> items) {
     this.allowanceChargeLines = items;
     setContainerDataSource(tableLines);
 
-    addPropertyWithHeader("ID.value", "ID");
+    addPropertyWithHeader("ID.value", "# ID");
     
     //addPropertyWithHeader("chargeIndicator", "Charge Indicator");
     addPropertyWithHeader("indicator", "Charge Indicator");
