@@ -134,13 +134,7 @@ public class TabInvoiceAllowanceCharge extends Form {
           allowanceChargeItem = (InvoiceAllowanceChargeAdapter) allowanceChargeList.get (table.getIndexFromID (sid));
           //clone it to original item
           originalItem = new InvoiceAllowanceChargeAdapter ();
-          originalItem.setID (allowanceChargeItem.getID ());
-          originalItem.setIndicator (allowanceChargeItem.getIndicator ());
-          originalItem.setReason (allowanceChargeItem.getReason ());
-          originalItem.setChargeAmount (allowanceChargeItem.getChargeAmount ());
-          originalItem.setTaxCategoryID (allowanceChargeItem.getTaxCategoryID ());
-          originalItem.setTaxCategoryPercent (allowanceChargeItem.getTaxCategoryPercent ());
-          originalItem.setTaxCategorySchemeID (allowanceChargeItem.getTaxCategorySchemeID ());
+          cloneInvoiceAllowanceChargeItem(allowanceChargeItem, originalItem);
           
           Label formLabel = new Label("<h3>Editing allowance charge line</h3>", Label.CONTENT_XHTML);
           
@@ -274,6 +268,16 @@ public class TabInvoiceAllowanceCharge extends Form {
     return ac;
   }  
   
+  private void cloneInvoiceAllowanceChargeItem(InvoiceAllowanceChargeAdapter srcItem, InvoiceAllowanceChargeAdapter dstItem)
+  {
+    dstItem.setAllowanceChargeID (srcItem.getAllowanceChargeID ());
+    dstItem.setIndicator (srcItem.getIndicator ());
+    dstItem.setReason (srcItem.getReason ());
+    dstItem.setChargeAmount (srcItem.getChargeAmount ());
+    dstItem.setTaxCategoryID (srcItem.getTaxCategoryID ());
+    dstItem.setTaxCategoryPercent (srcItem.getTaxCategoryPercent ());
+    dstItem.setTaxCategorySchemeID (srcItem.getTaxCategorySchemeID ());    
+  }
   
   class InvoiceAllowanceChargeFieldFactory implements FormFieldFactory {
 
