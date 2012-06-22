@@ -5,8 +5,10 @@
 package at.peppol.webgui.app.components;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AllowanceChargeType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.InvoiceLineType;
 
 import com.vaadin.data.util.BeanItemContainer;
@@ -19,63 +21,83 @@ import com.vaadin.ui.Table;
 
 public class InvoiceLineTable extends Table {
 
-    private final List<InvoiceLineType> invoiceLines;
-    private final BeanItemContainer<InvoiceLineAdapter> tableLines =
-            new BeanItemContainer<InvoiceLineAdapter>(InvoiceLineAdapter.class);
-    private final List<String> visibleHeaderNames = new ArrayList<String>();
-    private int counter = 1;
+  private final List<InvoiceLineType> invoiceLines;
+  private final BeanItemContainer<InvoiceLineAdapter> tableLines =
+          new BeanItemContainer<InvoiceLineAdapter>(InvoiceLineAdapter.class);
+  private final List<String> visibleHeaderNames = new ArrayList<String>();
+  
 
-    public InvoiceLineTable(List<InvoiceLineType> items) {
-        this.invoiceLines = items;
-        setContainerDataSource(tableLines);
+  public InvoiceLineTable(List<InvoiceLineType> items) {
+    this.invoiceLines = items;
+    setContainerDataSource(tableLines);
 
-        addPropertyWithHeader("ID.value", "ID");
-        addPropertyWithHeader("SellersItemID","Seller's Code");
-        addPropertyWithHeader("item.name.value", "Name");
-        addPropertyWithHeader("itemDescription", "Description");
-        addPropertyWithHeader("quantity","Quantity");
-        addPropertyWithHeader("priceAmount","Unit Price");
-        
-        
-        setDefinedPropertiesAsVisible();
+    addPropertyWithHeader("ID.value", "# ID");
+    addPropertyWithHeader("invLineInvoicedQuantity", "Invoiced Quantity");
+    addPropertyWithHeader("invLineLineExtensionAmount", "Line Extension Amount");
+    //addPropertyWithHeader("SellersItemID","Seller's Code");
+    //addPropertyWithHeader("item.name.value", "Name");
+    //addPropertyWithHeader("itemDescription", "Description");
+    //addPropertyWithHeader("quantity","Quantity");
+    //addPropertyWithHeader("priceAmount","Unit Price");
 
-       // addInvoiceLine(createInvoiceLine());
-        //addInvoiceLine(createInvoiceLine());
-        //addInvoiceLine(createInvoiceLine());
-        //addInvoiceLine(createInvoiceLine());
-        
-        setPageLength(4);
+    setDefinedPropertiesAsVisible();
+    setPageLength(4);
+  }
+
+  private void addPropertyWithHeader(String property, String headerName) {
+    tableLines.addNestedContainerProperty(property);
+    setColumnHeader(property, headerName);
+    visibleHeaderNames.add(property);
+  }
+
+  private void setDefinedPropertiesAsVisible() {
+    setVisibleColumns(visibleHeaderNames.toArray());
+  }
+
+  public void addInvoiceLine(InvoiceLineAdapter invln) {
+    invoiceLines.add(invln);
+    tableLines.addBean(invln);   
+  }
+
+  
+  public void setInvoiceLine(String lineID, InvoiceLineAdapter ln) {
+    //use for editing....
+    if(getIndexFromID(lineID) > -1){
+      invoiceLines.set (getIndexFromID(lineID), ln);
+      
+      //TODO: Better way to "refresh" the table?
+      //tableLines.addBean(ln);
+      tableLines.removeAllItems ();
+      Iterator<InvoiceLineType> iterator = invoiceLines.iterator ();
+      while (iterator.hasNext()) {
+        InvoiceLineType ac = iterator.next();
+        tableLines.addBean ((InvoiceLineAdapter) ac);
+      }
     }
-
-    private void addPropertyWithHeader(String property, String headerName) {
-        tableLines.addNestedContainerProperty(property);
-        setColumnHeader(property, headerName);
-        visibleHeaderNames.add(property);
-    }
-
-    private void setDefinedPropertiesAsVisible() {
-        setVisibleColumns(visibleHeaderNames.toArray());
-    }
-
-    public void addInvoiceLine(InvoiceLineAdapter invln) {
-
-        invoiceLines.add(invln);
-        tableLines.addBean(invln);   
-    }
-
-    /*
-    private InvoiceLineAdapter createInvoiceLine() {
+  }  
+  
+  public void removeInvoiceLine(String lineID) {
+    Iterator<InvoiceLineType> iterator = invoiceLines.iterator ();
+    while (iterator.hasNext()) {
+      InvoiceLineType ac = iterator.next();
+      if (ac.getID ().getValue ().equals (lineID)) {
+        tableLines.removeItem (ac);
+        invoiceLines.remove (ac);
+        break;
         
-        
-        InvoiceLineAdapter inv = new InvoiceLineAdapter();
-        inv.getID().setValue(Integer.toString(counter));
-        inv.getInvoicedQuantity().setValue(BigDecimal.valueOf(1));
-        inv.setSellersItemID("AF-CODE-"+(110+counter));
-        inv.setItemDescription("Item "+counter);
-        inv.getItem().getName().setValue("Item Name "+counter);
-        inv.setPriceAmount(23);
-        counter++;
-        return inv;
+      }
     }
-    */
+  }
+  
+  public int getIndexFromID(String lineID) {
+    Iterator<InvoiceLineType> iterator = invoiceLines.iterator ();
+    while (iterator.hasNext()) {
+      InvoiceLineType ac = iterator.next();
+      if (ac.getID ().getValue ().equals (lineID)) {
+        int index = invoiceLines.indexOf (ac);
+        return index;
+      }
+    }    
+    return -1;
+  }  
 }
