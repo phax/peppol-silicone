@@ -52,9 +52,9 @@ public class InvoiceLineWindow extends Form {
     Button btnSave = new Button("Save", new Button.ClickListener() {
       public void buttonClick(ClickEvent event) {
         //update GUI table !!
-        parent.getTable().addInvoiceLine (invln);
+        ///parent.getTable().addInvoiceLine (invln);
         //update actual invoice line item
-        parent.items.add (invln);
+        ///parent.items.add (invln);
        
         //close popup
         (subwindow.getParent()).removeWindow(subwindow);
