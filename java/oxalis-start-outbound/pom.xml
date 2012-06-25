@@ -12,34 +12,7 @@
   <name>Oxalis START outbound</name>
   <packaging>jar</packaging>
 
-  <properties>
-    <wsdl>wsdl_v2.0</wsdl>
-  </properties>
-
   <dependencies>
-    <dependency>
-      <groupId>com.sun.xml.bind</groupId>
-      <artifactId>jaxb-impl</artifactId>
-      <version>2.2.5-2</version>
-      <exclusions>
-        <exclusion>
-          <groupId>javax.xml.stream</groupId>
-          <artifactId>stax-api</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-
-    <dependency>
-      <groupId>org.glassfish.metro</groupId>
-      <artifactId>webservices-rt</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>javax.activation</groupId>
-          <artifactId>activation</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-
     <dependency>
       <groupId>no.sendregning.ap</groupId>
       <artifactId>oxalis-api</artifactId>
@@ -50,7 +23,13 @@
       <artifactId>oxalis-commons</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.glassfish.metro</groupId>
+      <artifactId>webservices-rt</artifactId>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
+  
   <build>
     <resources>
       <resource>
@@ -58,27 +37,5 @@
         <filtering>true</filtering>
       </resource>
     </resources>
-    <plugins>
-      <plugin>
-        <groupId>org.jvnet.jax-ws-commons</groupId>
-        <artifactId>jaxws-maven-plugin</artifactId>
-        <version>2.1</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>wsimport</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <wsdlDirectory>${basedir}/src/main/resources/META-INF/wsdl</wsdlDirectory>
-          <wsdlFiles>
-            <wsdlFile>${wsdl}.wsdl</wsdlFile>
-          </wsdlFiles>
-          <extension>true</extension>
-          <packageName>org.w3._2009._02.ws_tra</packageName>
-        </configuration>
-      </plugin>
-    </plugins>
   </build>
 </project>
