@@ -31,7 +31,6 @@ import com.phloc.commons.jaxb.JAXBContextCache;
 import eu.peppol.outbound.util.Log;
 import eu.peppol.security.SmpResponseValidator;
 import eu.peppol.smp.SmpLookupException;
-import eu.peppol.start.identifier.KeystoreManager;
 import eu.peppol.util.Util;
 
 /**
@@ -41,10 +40,7 @@ import eu.peppol.util.Util;
  * @author Steinar O. Cook
  */
 public class SmpLookupManager {
-
   protected static final String SML_PEPPOLCENTRAL_ORG = "sml.peppolcentral.org";
-
-  KeystoreManager keystoreManager = new KeystoreManager ();
 
   /**
    * @param participant
@@ -248,6 +244,7 @@ public class SmpLookupManager {
       final Unmarshaller unmarshaller = JAXBContextCache.getInstance ()
                                                         .getFromCache (ServiceGroupType.class)
                                                         .createUnmarshaller ();
+      @SuppressWarnings ("unused")
       final ServiceGroupType serviceGroupType = unmarshaller.unmarshal (document, ServiceGroupType.class).getValue ();
     }
     catch (final JAXBException e) {

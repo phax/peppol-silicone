@@ -15,6 +15,8 @@ import java.net.URL;
 import java.util.Enumeration;
 import java.util.Properties;
 
+import com.phloc.commons.string.StringHelper;
+
 /**
  * User: nigel Date: Oct 8, 2011 Time: 5:05:52 PM
  */
@@ -40,8 +42,8 @@ public final class Configuration {
      * External name of property as it appears in your .properties file, i.e.
      * with the dot notation, like for instance "x.y.z = value"
      */
-    private String propertyName;
-    private boolean required;
+    private final String m_sPropertyName;
+    private final boolean m_bRequired;
 
     /**
      * Enum constructor
@@ -53,8 +55,8 @@ public final class Configuration {
       if (propertyName == null || propertyName.trim ().length () == 0) {
         throw new IllegalArgumentException ("Property name is required");
       }
-      this.propertyName = propertyName;
-      this.required = required;
+      this.m_sPropertyName = propertyName;
+      this.m_bRequired = required;
     }
 
     /**
@@ -66,15 +68,15 @@ public final class Configuration {
      * @return value of property
      */
     public String getValue (final Properties properties) {
-      if (required)
-        return required (properties.getProperty (propertyName));
-      return properties.getProperty (propertyName);
+      if (m_bRequired)
+        return required (properties.getProperty (m_sPropertyName));
+      return properties.getProperty (m_sPropertyName);
     }
 
     String required (final String value) {
-      if (value == null || value.trim ().length () == 0) {
+      if (StringHelper.hasNoTextAfterTrim (value)) {
         throw new IllegalStateException ("Property '" +
-                                         propertyName +
+                                         m_sPropertyName +
                                          "' does not exist or is empty, check " +
                                          FALLBACK_PROPERTIES_PATH);
       }
@@ -84,22 +86,22 @@ public final class Configuration {
   }
 
   // Holds our singleton configuration instance
-  private static Configuration instance;
+  private static Configuration s_aInstance;
 
   // Holds the properties, which we loaded upon instantiation
-  private final Properties properties;
+  private final Properties m_aProperties;
 
   /**
    * This is the factory method, which gives access to the singleton instance
    * 
-   * @return a reference to our singletion configuration
+   * @return a reference to our singleton configuration
    */
   public static synchronized Configuration getInstance () {
-    if (instance == null) {
-      instance = new Configuration ();
+    if (s_aInstance == null) {
+      s_aInstance = new Configuration ();
     }
 
-    return instance;
+    return s_aInstance;
   }
 
   @SuppressWarnings ("unchecked")
@@ -116,12 +118,12 @@ public final class Configuration {
     final Properties customProps = new Properties (fallBackProps);
     loadPropertiesFile (customProps, CUSTOM_PROPERTIES_PATH);
 
-    properties = customProps;
+    m_aProperties = customProps;
 
     Log.info ("======= Properties in effect: =======");
-    for (final Enumeration <String> e = (Enumeration <String>) properties.propertyNames (); e.hasMoreElements ();) {
+    for (final Enumeration <String> e = (Enumeration <String>) m_aProperties.propertyNames (); e.hasMoreElements ();) {
       final String propName = e.nextElement ();
-      Log.info (propName + " = " + properties.getProperty (propName));
+      Log.info (propName + " = " + m_aProperties.getProperty (propName));
     }
     Log.info ("======================================");
     Log.info ("Configuration loaded.");
@@ -165,17 +167,17 @@ public final class Configuration {
   }
 
   public String getKeyStoreFileName () {
-    final String s = KEYSTORE_PATH.getValue (properties);
+    final String s = KEYSTORE_PATH.getValue (m_aProperties);
     return s == null ? null : s.trim ();
   }
 
   public String getKeyStorePassword () {
-    return KEYSTORE_PASSWORD.getValue (properties);
+    return KEYSTORE_PASSWORD.getValue (m_aProperties);
   }
 
   public String getInboundMessageStore () {
 
-    String msgStore = INBOUND_MESSAGE_STORE.getValue (properties);
+    String msgStore = INBOUND_MESSAGE_STORE.getValue (m_aProperties);
     if (msgStore == null) {
       msgStore = System.getProperty ("java.io.tmpdir") + File.separator + "inbound";
     }
@@ -183,7 +185,7 @@ public final class Configuration {
   }
 
   public String getOutboundMessageStore () {
-    String msgStore = OUTBOUND_MESSAGE_STORE.getValue (properties);
+    String msgStore = OUTBOUND_MESSAGE_STORE.getValue (m_aProperties);
     if (msgStore == null) {
       msgStore = System.getProperty ("java.io.tmpdir") + File.separator + "outbound";
     }
@@ -191,15 +193,14 @@ public final class Configuration {
   }
 
   public String getWsdlFileName () {
-    return WSDL_FILE_NAME.getValue (properties);
+    return WSDL_FILE_NAME.getValue (m_aProperties);
   }
 
   public String getPeppolSenderId () {
-    return PEPPOL_SENDER_ID.getValue (properties);
+    return PEPPOL_SENDER_ID.getValue (m_aProperties);
   }
 
   public String getPeppolServiceName () {
-    return PEPPOL_SERVICE_NAME.getValue (properties);
+    return PEPPOL_SERVICE_NAME.getValue (m_aProperties);
   }
-
 }
