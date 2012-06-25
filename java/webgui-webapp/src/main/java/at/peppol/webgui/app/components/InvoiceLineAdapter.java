@@ -8,13 +8,9 @@ import java.math.BigDecimal;
 
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AllowanceChargeType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.InvoiceLineType;
-import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ItemIdentificationType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ItemType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.OrderLineReferenceType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.PriceType;
-import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.TaxCategoryType;
-import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.TaxSchemeType;
-import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.TaxSubtotalType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.TaxTotalType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AccountingCostType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AllowanceChargeReasonType;
@@ -22,18 +18,13 @@ import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AmountTy
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.BaseAmountType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.BaseQuantityType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ChargeIndicatorType;
-import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DescriptionType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IDType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.InvoicedQuantityType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.LineExtensionAmountType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.LineIDType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.MultiplierFactorNumericType;
-import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.NameType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.NoteType;
-import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PercentType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PriceAmountType;
-import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TaxAmountType;
-import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TaxableAmountType;
 
 /**
  * An adapter class that ignores the list types found in InvoiceLineType and

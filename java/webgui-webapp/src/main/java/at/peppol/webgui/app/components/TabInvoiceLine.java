@@ -3,17 +3,14 @@ package at.peppol.webgui.app.components;
 import java.math.BigDecimal;
 import java.util.List;
 
-import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AllowanceChargeType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.InvoiceLineType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IDType;
-import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.InvoicedQuantityType;
-
-import at.peppol.webgui.app.components.TabInvoiceAllowanceCharge.InvoiceAllowanceChargeFieldFactory;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.util.NestedMethodProperty;
 import com.vaadin.ui.AbstractTextField;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.DefaultFieldFactory;
 import com.vaadin.ui.Field;
@@ -24,10 +21,8 @@ import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
-import com.vaadin.ui.Select;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
-import com.vaadin.ui.Button.ClickEvent;
 
 @SuppressWarnings ("serial")
 public class TabInvoiceLine extends Form {

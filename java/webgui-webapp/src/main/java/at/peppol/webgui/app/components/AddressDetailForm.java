@@ -14,10 +14,10 @@ import com.vaadin.data.util.PropertysetItem;
 import com.vaadin.ui.AbstractTextField;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.DefaultFieldFactory;
+import com.vaadin.ui.Field;
 import com.vaadin.ui.Form;
 import com.vaadin.ui.FormFieldFactory;
 import com.vaadin.ui.Panel;
-import com.vaadin.ui.Field;
 
 @SuppressWarnings ("serial")
 public class AddressDetailForm extends Panel {
