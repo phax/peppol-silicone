@@ -3,11 +3,10 @@ package at.peppol.webgui.app.components;
 import java.util.Date;
 import java.util.List;
 
-import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.LocationType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AddressType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.CountryType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.DeliveryType;
-import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.PartyType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.LocationType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ActualDeliveryDateType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AdditionalStreetNameType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.BuildingNumberType;

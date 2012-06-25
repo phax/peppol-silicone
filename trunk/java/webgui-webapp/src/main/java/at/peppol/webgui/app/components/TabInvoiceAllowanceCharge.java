@@ -4,13 +4,9 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AllowanceChargeType;
-import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AllowanceChargeReasonType;
-import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AmountType;
-import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ChargeIndicatorType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IDType;
 
 import com.vaadin.data.Item;
-import com.vaadin.data.Property;
 import com.vaadin.data.util.NestedMethodProperty;
 import com.vaadin.ui.AbstractTextField;
 import com.vaadin.ui.Button;
