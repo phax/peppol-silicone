@@ -73,7 +73,6 @@ public class KeystoreManager {
   public synchronized PrivateKey getOurPrivateKey () {
     if (s_aPrivateKey == null) {
       try {
-
         final KeyStore keystore = getKeystore ();
         final String alias = keystore.aliases ().nextElement ();
         final Key key = keystore.getKey (alias, s_sKeystorePassword.toCharArray ());
@@ -95,13 +94,10 @@ public class KeystoreManager {
   }
 
   public TrustAnchor getTrustAnchor () {
-
     try {
-
       final KeyStore truststore = getTruststore ();
-      final String alias = "ap";
+      final String alias = "peppol access point test ca (peppol root test ca)";
       return new TrustAnchor ((X509Certificate) truststore.getCertificate (alias), null);
-
     }
     catch (final Exception e) {
       throw new RuntimeException ("Failed to get the PEPPOL access point certificate", e);
@@ -115,24 +111,17 @@ public class KeystoreManager {
   }
 
   public void initialiseKeystore (final File keystoreFile, final String keystorePassword) {
-    if (keystoreFile == null) {
+    if (keystoreFile == null)
       throw new IllegalStateException ("Keystore file not specified");
-    }
-
-    if (keystorePassword == null) {
+    if (keystorePassword == null)
       throw new IllegalStateException ("Keystore password not specified");
-    }
-
-    if (!keystoreFile.exists ()) {
+    if (!keystoreFile.exists ())
       throw new IllegalStateException ("Keystore file " + keystoreFile + " does not exist");
-    }
 
     try {
-
       setKeystoreLocation (keystoreFile.getCanonicalPath ());
       setKeystorePassword (keystorePassword);
       getKeystore ();
-
     }
     catch (final Exception e) {
       throw new IllegalArgumentException ("Problem accessing keystore file", e);
@@ -150,7 +139,6 @@ public class KeystoreManager {
 
       Security.setProperty ("ocsp.enable", "true");
       Security.setProperty ("ocsp.responderURL", "http://pilot-ocsp.verisign.com:80");
-
     }
     catch (final Exception e) {
       throw new IllegalStateException ("Unable to construct Certificate Path Validator; " + e, e);
@@ -166,7 +154,6 @@ public class KeystoreManager {
    *         otherwise
    */
   public synchronized boolean validate (final X509Certificate certificate) {
-
     final BigInteger serialNumber = certificate.getSerialNumber ();
     final String certificateName = "Certificate " + serialNumber;
     Log.debug ("Ocsp validation requested for " +
