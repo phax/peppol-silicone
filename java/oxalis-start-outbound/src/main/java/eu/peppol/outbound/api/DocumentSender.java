@@ -39,18 +39,18 @@ import eu.peppol.outbound.util.Log;
  */
 public class DocumentSender {
 
-  private final DocumentIdentifierType documentTypeIdentifier;
-  private final ProcessIdentifierType peppolProcessTypeId;
-  private final boolean soapLogging;
-  private final SoapDispatcher soapDispatcher;
+  private final DocumentIdentifierType m_aDocumentTypeIdentifier;
+  private final ProcessIdentifierType m_aPeppolProcessTypeId;
+  private final boolean m_bSoapLogging;
+  private final SoapDispatcher m_aSoapDispatcher;
 
   DocumentSender (final DocumentIdentifierType documentTypeIdentifier,
                   final ProcessIdentifierType processId,
                   final boolean soapLogging) {
-    this.documentTypeIdentifier = documentTypeIdentifier;
-    this.peppolProcessTypeId = processId;
-    this.soapLogging = soapLogging;
-    this.soapDispatcher = new SoapDispatcher ();
+    this.m_aDocumentTypeIdentifier = documentTypeIdentifier;
+    this.m_aPeppolProcessTypeId = processId;
+    this.m_bSoapLogging = soapLogging;
+    this.m_aSoapDispatcher = new SoapDispatcher ();
   }
 
   /**
@@ -163,7 +163,7 @@ public class DocumentSender {
   }
 
   private URL getEndpointAddress (final String recipient) {
-    return new SmpLookupManager ().getEndpointAddress (getParticipantId (recipient), documentTypeIdentifier);
+    return new SmpLookupManager ().getEndpointAddress (getParticipantId (recipient), m_aDocumentTypeIdentifier);
   }
 
   private ParticipantIdentifierType getParticipantId (final String sender) {
@@ -197,12 +197,12 @@ public class DocumentSender {
                                                                 channelId,
                                                                 senderId,
                                                                 recipientId,
-                                                                documentTypeIdentifier,
-                                                                peppolProcessTypeId);
+                                                                m_aDocumentTypeIdentifier,
+                                                                m_aPeppolProcessTypeId);
 
-    soapDispatcher.enableSoapLogging (soapLogging);
+    m_aSoapDispatcher.enableSoapLogging (m_bSoapLogging);
 
-    soapDispatcher.send (destination, messageHeader, soapBody);
+    m_aSoapDispatcher.send (destination, messageHeader, soapBody);
 
     return messageHeader.getMessageID ();
   }

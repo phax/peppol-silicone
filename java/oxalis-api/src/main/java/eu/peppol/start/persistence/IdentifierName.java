@@ -17,19 +17,19 @@ enum IdentifierName {
   PROCESS_ID ("ProcessIdentifier"),
   SCHEME ("scheme");
 
-  String value;
+  private final String m_sValue;
 
-  private IdentifierName (final String value) {
-    this.value = value;
+  private IdentifierName (final String sValue) {
+    this.m_sValue = sValue;
   }
 
   public String stringValue () {
-    return value;
+    return m_sValue;
   }
 
   public static IdentifierName valueOfIdentifier (final String stringValue) {
     for (final IdentifierName id : IdentifierName.values ()) {
-      if (id.value.equals (stringValue))
+      if (id.m_sValue.equals (stringValue))
         return id;
     }
 

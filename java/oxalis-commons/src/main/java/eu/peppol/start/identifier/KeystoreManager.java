@@ -30,23 +30,24 @@ import eu.peppol.security.OcspValidatorCache;
  */
 public class KeystoreManager {
 
-  private static String keystoreLocation;
-  private static String keystorePassword;
-  private static KeyStore keyStore;
-  private static KeyStore trustStore;
-  private static PrivateKey privateKey;
-  private CertPathValidator certPathValidator;
-  private final OcspValidatorCache ocspValidatorCache = new OcspValidatorCache ();
-  private PKIXParameters pkixParameters;
+  private static String s_sKeystoreLocation;
+  private static String s_sKeystorePassword;
+  private static KeyStore s_aKeyStore;
+  private static KeyStore s_aTrustStore;
+  private static PrivateKey s_aPrivateKey;
+
+  private CertPathValidator m_aCertPathValidator;
+  private final OcspValidatorCache m_aOcspValidatorCache = new OcspValidatorCache ();
+  private PKIXParameters m_aPkixParameters;
 
   public KeystoreManager () {
     initCertPathValidator ();
   }
 
   public synchronized KeyStore getKeystore () {
-    if (keyStore == null)
-      keyStore = getKeystore (keystoreLocation, keystorePassword);
-    return keyStore;
+    if (s_aKeyStore == null)
+      s_aKeyStore = getKeystore (s_sKeystoreLocation, s_sKeystorePassword);
+    return s_aKeyStore;
   }
 
   private KeyStore getKeystore (final String location, final String password) {
@@ -70,18 +71,18 @@ public class KeystoreManager {
   }
 
   public synchronized PrivateKey getOurPrivateKey () {
-    if (privateKey == null) {
+    if (s_aPrivateKey == null) {
       try {
 
         final KeyStore keystore = getKeystore ();
         final String alias = keystore.aliases ().nextElement ();
-        final Key key = keystore.getKey (alias, keystorePassword.toCharArray ());
+        final Key key = keystore.getKey (alias, s_sKeystorePassword.toCharArray ());
 
         if (key instanceof PrivateKey) {
-          privateKey = (PrivateKey) key;
+          s_aPrivateKey = (PrivateKey) key;
         }
         else {
-          throw new RuntimeException ("Private key is not first element in keystore at " + keystoreLocation);
+          throw new RuntimeException ("Private key is not first element in keystore at " + s_sKeystoreLocation);
         }
 
       }
@@ -90,7 +91,7 @@ public class KeystoreManager {
       }
     }
 
-    return privateKey;
+    return s_aPrivateKey;
   }
 
   public TrustAnchor getTrustAnchor () {
@@ -108,9 +109,9 @@ public class KeystoreManager {
   }
 
   public synchronized KeyStore getTruststore () {
-    if (trustStore == null)
-      trustStore = getKeystore ("/truststore/global-truststore.jks", "peppol");
-    return trustStore;
+    if (s_aTrustStore == null)
+      s_aTrustStore = getKeystore ("/truststore/global-truststore.jks", "peppol");
+    return s_aTrustStore;
   }
 
   public void initialiseKeystore (final File keystoreFile, final String keystorePassword) {
@@ -143,9 +144,9 @@ public class KeystoreManager {
 
     try {
       final TrustAnchor trustAnchor = getTrustAnchor ();
-      certPathValidator = CertPathValidator.getInstance ("PKIX");
-      pkixParameters = new PKIXParameters (Collections.singleton (trustAnchor));
-      pkixParameters.setRevocationEnabled (true);
+      m_aCertPathValidator = CertPathValidator.getInstance ("PKIX");
+      m_aPkixParameters = new PKIXParameters (Collections.singleton (trustAnchor));
+      m_aPkixParameters.setRevocationEnabled (true);
 
       Security.setProperty ("ocsp.enable", "true");
       Security.setProperty ("ocsp.responderURL", "http://pilot-ocsp.verisign.com:80");
@@ -175,11 +176,11 @@ public class KeystoreManager {
                "\n\tIssued by:" +
                certificate.getIssuerDN ());
 
-    if (certPathValidator == null) {
+    if (m_aCertPathValidator == null) {
       throw new IllegalStateException ("Certificate Path validator not initialized");
     }
 
-    if (ocspValidatorCache.isKnownValidCertificate (serialNumber)) {
+    if (m_aOcspValidatorCache.isKnownValidCertificate (serialNumber)) {
       Log.debug (certificateName + " is OCSP valid (cached value)");
       return true;
     }
@@ -188,8 +189,8 @@ public class KeystoreManager {
 
       final List <Certificate> certificates = Arrays.asList (new Certificate [] { certificate });
       final CertPath certPath = CertificateFactory.getInstance ("X.509").generateCertPath (certificates);
-      certPathValidator.validate (certPath, pkixParameters);
-      ocspValidatorCache.setKnownValidCertificate (serialNumber);
+      m_aCertPathValidator.validate (certPath, m_aPkixParameters);
+      m_aOcspValidatorCache.setKnownValidCertificate (serialNumber);
 
       Log.debug (certificateName + " is OCSP valid");
       return true;
@@ -207,10 +208,10 @@ public class KeystoreManager {
   }
 
   public static void setKeystoreLocation (final String keystoreLocation) {
-    KeystoreManager.keystoreLocation = keystoreLocation;
+    KeystoreManager.s_sKeystoreLocation = keystoreLocation;
   }
 
   public static void setKeystorePassword (final String keystorePassword) {
-    KeystoreManager.keystorePassword = keystorePassword;
+    KeystoreManager.s_sKeystorePassword = keystorePassword;
   }
 }

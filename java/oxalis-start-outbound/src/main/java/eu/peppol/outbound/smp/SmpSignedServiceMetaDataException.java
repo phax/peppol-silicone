@@ -12,9 +12,9 @@ import at.peppol.busdox.identifier.IDocumentTypeIdentifier;
  */
 public class SmpSignedServiceMetaDataException extends Exception {
 
-  private final ParticipantIdentifierType participant;
-  private final IDocumentTypeIdentifier documentTypeIdentifier;
-  private final URL smpUrl;
+  private final ParticipantIdentifierType m_aParticipantID;
+  private final IDocumentTypeIdentifier m_aDocumentTypeID;
+  private final URL m_aSMPUrl;
 
   public SmpSignedServiceMetaDataException (final ParticipantIdentifierType participant,
                                             final IDocumentTypeIdentifier documentTypeIdentifier,
@@ -29,20 +29,20 @@ public class SmpSignedServiceMetaDataException extends Exception {
            " ; " +
            e.getMessage (), e);
 
-    this.participant = participant;
-    this.documentTypeIdentifier = documentTypeIdentifier;
-    this.smpUrl = smpUrl;
+    this.m_aParticipantID = participant;
+    this.m_aDocumentTypeID = documentTypeIdentifier;
+    this.m_aSMPUrl = smpUrl;
   }
 
   public ParticipantIdentifierType getParticipant () {
-    return participant;
+    return m_aParticipantID;
   }
 
   public IDocumentTypeIdentifier getDocumentTypeIdentifier () {
-    return documentTypeIdentifier;
+    return m_aDocumentTypeID;
   }
 
   public URL getSmpUrl () {
-    return smpUrl;
+    return m_aSMPUrl;
   }
 }

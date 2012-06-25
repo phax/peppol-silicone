@@ -16,11 +16,11 @@ import eu.peppol.start.identifier.KeystoreManager;
  * 10:38:35 AM
  */
 public class DocumentSenderBuilder {
-  private DocumentIdentifierType documentTypeIdentifier = EPredefinedDocumentTypeIdentifier.INVOICE_T010_BIS5A.getAsDocumentTypeIdentifier ();
-  private ProcessIdentifierType peppolProcessTypeId = EPredefinedProcessIdentifier.BIS5A.getAsProcessIdentifier ();
-  private File keystoreFile;
-  private String keystorePassword;
-  private boolean soapLogging;
+  private DocumentIdentifierType m_aDocumentTypeIdentifier = EPredefinedDocumentTypeIdentifier.INVOICE_T010_BIS5A.getAsDocumentTypeIdentifier ();
+  private ProcessIdentifierType m_aPeppolProcessTypeId = EPredefinedProcessIdentifier.BIS5A.getAsProcessIdentifier ();
+  private File m_aKeystoreFile;
+  private String m_sKeystorePassword;
+  private boolean m_bSoapLogging;
 
   /**
    * constructs and returns a DocumentSender based on the previously specified
@@ -28,16 +28,16 @@ public class DocumentSenderBuilder {
    */
   public DocumentSender build () {
     final KeystoreManager keystoreManager = new KeystoreManager ();
-    keystoreManager.initialiseKeystore (keystoreFile, keystorePassword);
+    keystoreManager.initialiseKeystore (m_aKeystoreFile, m_sKeystorePassword);
 
-    return new DocumentSender (documentTypeIdentifier, peppolProcessTypeId, soapLogging);
+    return new DocumentSender (m_aDocumentTypeIdentifier, m_aPeppolProcessTypeId, m_bSoapLogging);
   }
 
   /**
    * enables logging of SOAP messages. The default is eu logging.
    */
   public DocumentSenderBuilder enableSoapLogging () {
-    this.soapLogging = true;
+    this.m_bSoapLogging = true;
     return this;
   }
 
@@ -46,7 +46,7 @@ public class DocumentSenderBuilder {
    * invoice document.
    */
   public DocumentSenderBuilder setDocumentTypeIdentifier (final DocumentIdentifierType documentTypeIdentifier) {
-    this.documentTypeIdentifier = documentTypeIdentifier;
+    this.m_aDocumentTypeIdentifier = documentTypeIdentifier;
     return this;
   }
 
@@ -55,7 +55,7 @@ public class DocumentSenderBuilder {
    * private key.
    */
   public DocumentSenderBuilder setKeystoreFile (final File keystore) {
-    this.keystoreFile = keystore;
+    this.m_aKeystoreFile = keystore;
     return this;
   }
 
@@ -63,7 +63,7 @@ public class DocumentSenderBuilder {
    * specifies the password for the keystore.
    */
   public DocumentSenderBuilder setKeystorePassword (final String keystorePassword) {
-    this.keystorePassword = keystorePassword;
+    this.m_sKeystorePassword = keystorePassword;
     return this;
   }
 
@@ -73,7 +73,7 @@ public class DocumentSenderBuilder {
    * invoice.
    */
   public DocumentSenderBuilder setPeppolProcessTypeId (final ProcessIdentifierType peppolProcessTypeId) {
-    this.peppolProcessTypeId = peppolProcessTypeId;
+    this.m_aPeppolProcessTypeId = peppolProcessTypeId;
     return this;
   }
 }

@@ -40,18 +40,16 @@ import eu.peppol.util.Util;
 public class SmpLookup {
   private static final Pattern documentTypeIdentifierPattern = RegExPool.getPattern ("/services/busdox-docid-qns::(.*)");
 
-  private final SimpleParticipantIdentifier participantId;
+  private final SimpleParticipantIdentifier m_aParticipantId;
 
   public SmpLookup (final SimpleParticipantIdentifier participantId) {
-
-    this.participantId = participantId;
+    this.m_aParticipantId = participantId;
   }
 
   URL servicesUrl () {
     // iso6523-actorid-upis%3A%3A9908:810017902
-    return URLUtils.getAsURL (BusdoxURLUtils.getSMPURLOfParticipant (participantId, ESML.PRODUCTION).toExternalForm () +
-                              "/" +
-                              participantId.getURIPercentEncoded ());
+    return URLUtils.getAsURL (BusdoxURLUtils.getSMPURLOfParticipant (m_aParticipantId, ESML.PRODUCTION)
+                                            .toExternalForm () + "/" + m_aParticipantId.getURIPercentEncoded ());
   }
 
   public List <URL> getServiceUrlList () throws SmpLookupException {
@@ -79,7 +77,7 @@ public class SmpLookup {
       return result;
     }
     catch (final Exception e) {
-      throw new SmpLookupException (participantId, servicesUrl, e);
+      throw new SmpLookupException (m_aParticipantId, servicesUrl, e);
     }
   }
 
@@ -107,7 +105,7 @@ public class SmpLookup {
 
       }
       catch (final UnsupportedEncodingException e) {
-        throw new SmpLookupException (participantId, e);
+        throw new SmpLookupException (m_aParticipantId, e);
       }
     }
 
