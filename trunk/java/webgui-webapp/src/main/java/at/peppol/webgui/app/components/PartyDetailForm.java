@@ -35,6 +35,7 @@ import com.vaadin.ui.Panel;
  *
  * @author Jerouris
  */
+@SuppressWarnings ("serial")
 public class PartyDetailForm extends Panel{
 
     private final PartyType partyBean;
@@ -70,7 +71,9 @@ public class PartyDetailForm extends Panel{
         partyItemSet.addItemProperty("Party Name",
                             new NestedMethodProperty(partyName, "name.value"));
         
+        /*
         final AddressType partyrAddress = new AddressType();
+        
         partyBean.setPostalAddress(partyrAddress);
         partyrAddress.setStreetName(new StreetNameType());
         partyrAddress.setCityName(new CityNameType());
@@ -87,6 +90,11 @@ public class PartyDetailForm extends Panel{
                             new NestedMethodProperty(partyrAddress, "postalZone.value"));
         partyItemSet.addItemProperty("Country",
                             new NestedMethodProperty(partyrAddress, "country.identificationCode.value"));
+        */
+        AddressType address = new AddressType ();
+        AddressDetailForm partyAddressForm = new AddressDetailForm (party, address);
+        partyBean.setPostalAddress (address);        
+        
         
         PartyTaxSchemeType taxScheme = new PartyTaxSchemeType();
         taxScheme.setCompanyID(new CompanyIDType());
@@ -108,6 +116,7 @@ public class PartyDetailForm extends Panel{
         partyForm.setImmediate(true);
         
         addComponent(partyForm);
+        addComponent(partyAddressForm);
     }
     
      @SuppressWarnings ("serial")

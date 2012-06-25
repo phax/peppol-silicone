@@ -18,6 +18,7 @@ import com.vaadin.ui.Table;
  * @author Jerouris
  */
 
+@SuppressWarnings ("serial")
 public class InvoiceLineTable extends Table {
 
   private final List<InvoiceLineType> invoiceLines;
@@ -31,13 +32,10 @@ public class InvoiceLineTable extends Table {
     setContainerDataSource(tableLines);
 
     addPropertyWithHeader("ID.value", "# ID");
+    addPropertyWithHeader("invLineItemName", "Item Name");
     addPropertyWithHeader("invLineInvoicedQuantity", "Invoiced Quantity");
     addPropertyWithHeader("invLineLineExtensionAmount", "Line Extension Amount");
-    //addPropertyWithHeader("SellersItemID","Seller's Code");
-    //addPropertyWithHeader("item.name.value", "Name");
-    //addPropertyWithHeader("itemDescription", "Description");
-    //addPropertyWithHeader("quantity","Quantity");
-    //addPropertyWithHeader("priceAmount","Unit Price");
+    addPropertyWithHeader("InvLineTaxAmount", "Tax Total Amount");
 
     setDefinedPropertiesAsVisible();
     setPageLength(4);

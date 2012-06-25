@@ -21,6 +21,7 @@ import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.Select;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
@@ -242,6 +243,21 @@ public class TabInvoiceLine extends Form {
     invoiceLineForm.addItemProperty ("Invoiced Quantity", new NestedMethodProperty(invoiceLineItem, "invLineInvoicedQuantity") );
     invoiceLineForm.addItemProperty ("Line Extension Amount", new NestedMethodProperty(invoiceLineItem, "invLineLineExtensionAmount") );
     invoiceLineForm.addItemProperty ("Accounting Cost", new NestedMethodProperty(invoiceLineItem, "invLineAccountingCost") );
+    invoiceLineForm.addItemProperty ("Tax Total Amount", new NestedMethodProperty(invoiceLineItem, "InvLineTaxAmount") );
+    invoiceLineForm.addItemProperty ("Item Description", new NestedMethodProperty(invoiceLineItem, "InvLineItemDescription") );
+    invoiceLineForm.addItemProperty ("Item Name", new NestedMethodProperty(invoiceLineItem, "InvLineItemName") );
+    invoiceLineForm.addItemProperty ("Sellers Item ID", new NestedMethodProperty(invoiceLineItem, "InvLineItemSellersItemID") );
+    invoiceLineForm.addItemProperty ("Standard Item ID", new NestedMethodProperty(invoiceLineItem, "InvLineItemStandardItemID") );
+    invoiceLineForm.addItemProperty ("Tax Category ID", new NestedMethodProperty(invoiceLineItem, "InvLineItemTaxCategoryID") );
+    invoiceLineForm.addItemProperty ("Tax Category Percent", new NestedMethodProperty(invoiceLineItem, "InvLineItemTaxCategoryPercent") );
+    invoiceLineForm.addItemProperty ("Tax Category Scheme ID", new NestedMethodProperty(invoiceLineItem, "InvLineItemTaxCategoryTaxSchemeID") );
+    invoiceLineForm.addItemProperty ("Price Amount", new NestedMethodProperty(invoiceLineItem, "InvLinePriceAmount") );
+    invoiceLineForm.addItemProperty ("Base Quantity", new NestedMethodProperty(invoiceLineItem, "InvLinePriceBaseQuantity") );
+    invoiceLineForm.addItemProperty ("Allowance/Charge Indicator", new NestedMethodProperty(invoiceLineItem, "InvLinePriceAllowanceChargeIndicator") );
+    invoiceLineForm.addItemProperty ("Allowance/Charge Reason", new NestedMethodProperty(invoiceLineItem, "InvLinePriceAllowanceChargeReason") );
+    invoiceLineForm.addItemProperty ("Allowance/Charge Multiplier Factor", new NestedMethodProperty(invoiceLineItem, "InvLinePriceAllowanceChargeMultiplierFactorNumeric") );
+    invoiceLineForm.addItemProperty ("Allowance/Charge Amount", new NestedMethodProperty(invoiceLineItem, "InvLinePriceAllowanceChargeAmount") );
+    invoiceLineForm.addItemProperty ("Allowance/Charge Base Amount", new NestedMethodProperty(invoiceLineItem, "InvLinePriceAllowanceChargeBaseAmount") );
     
 
     return invoiceLineForm;
@@ -255,7 +271,22 @@ public class TabInvoiceLine extends Form {
     ac.setInvLineInvoicedQuantity (new BigDecimal(0));
     ac.setInvLineLineExtensionAmount (new BigDecimal(0));
     ac.setInvLineAccountingCost ("");
-
+    ac.setInvLineTaxAmount (new BigDecimal(0));
+    ac.setInvLineItemDescription ("");
+    ac.setInvLineItemName ("");
+    ac.setInvLineItemSellersItemID ("");
+    ac.setInvLineItemStandardItemID ("");
+    ac.setInvLineItemTaxCategoryID ("");
+    ac.setInvLineItemTaxCategoryPercent (new BigDecimal(0));
+    ac.setInvLineItemTaxCategoryTaxSchemeID ("");
+    ac.setInvLinePriceAmount(new BigDecimal (0));
+    ac.setInvLinePriceBaseQuantity (new BigDecimal (0));
+    ac.setInvLinePriceAllowanceChargeIndicator (false);
+    ac.setInvLinePriceAllowanceChargeReason("");
+    ac.setInvLinePriceAllowanceChargeMultiplierFactorNumeric (new BigDecimal(0));
+    ac.setInvLinePriceAllowanceChargeAmount(new BigDecimal(0));
+    ac.setInvLinePriceAllowanceChargeBaseAmount(new BigDecimal(0));
+    
     return ac;
   }  
   
@@ -266,6 +297,21 @@ public class TabInvoiceLine extends Form {
     dstItem.setInvLineInvoicedQuantity (srcItem.getInvLineInvoicedQuantity ());
     dstItem.setInvLineLineExtensionAmount (srcItem.getInvLineLineExtensionAmount ());
     dstItem.setInvLineAccountingCost (srcItem.getInvLineAccountingCost ());
+    dstItem.setInvLineTaxAmount (srcItem.getInvLineTaxAmount ());
+    dstItem.setInvLineItemDescription (srcItem.getInvLineItemDescription ());
+    dstItem.setInvLineItemName (srcItem.getInvLineItemName ());
+    dstItem.setInvLineItemSellersItemID (srcItem.getInvLineItemSellersItemID ());
+    dstItem.setInvLineItemStandardItemID (srcItem.getInvLineItemStandardItemID ());
+    dstItem.setInvLineItemTaxCategoryID (srcItem.getInvLineItemTaxCategoryID ());
+    dstItem.setInvLineItemTaxCategoryPercent (srcItem.getInvLineItemTaxCategoryPercent ());
+    dstItem.setInvLineItemTaxCategoryTaxSchemeID (srcItem.getInvLineItemTaxCategoryTaxSchemeID ());
+    dstItem.setInvLinePriceAmount (srcItem.getInvLinePriceAmount ());
+    dstItem.setInvLinePriceBaseQuantity (srcItem.getInvLinePriceBaseQuantity ());
+    dstItem.setInvLinePriceAllowanceChargeIndicator (srcItem.getInvLinePriceAllowanceChargeIndicator());
+    dstItem.setInvLinePriceAllowanceChargeReason(srcItem.getInvLinePriceAllowanceChargeReason());
+    dstItem.setInvLinePriceAllowanceChargeMultiplierFactorNumeric (srcItem.getInvLinePriceAllowanceChargeMultiplierFactorNumeric());
+    dstItem.setInvLinePriceAllowanceChargeAmount(srcItem.getInvLinePriceAllowanceChargeAmount());
+    dstItem.setInvLinePriceAllowanceChargeBaseAmount(srcItem.getInvLinePriceAllowanceChargeBaseAmount());
   }
   
   class InvoiceLineFieldFactory implements FormFieldFactory {
@@ -273,7 +319,16 @@ public class TabInvoiceLine extends Form {
     public Field createField(final Item item, final Object propertyId, final Component uiContext) {
         // Identify the fields by their Property ID.
         final String pid = (String) propertyId;
-                
+        if ("Allowance/Charge Indicator".equals(pid)) {
+          Select indicatorSelect = new Select("Charge or Allowance?");
+          indicatorSelect.setNullSelectionAllowed(false);
+          indicatorSelect.addItem (true);
+          indicatorSelect.addItem (false);
+          indicatorSelect.setItemCaption(true, "Charge");
+          indicatorSelect.setItemCaption(false, "Allowance");
+          
+          return indicatorSelect;
+        }                
         final Field field = DefaultFieldFactory.get().createField(item, propertyId, uiContext);
         if (field instanceof AbstractTextField) {
             ((AbstractTextField) field).setNullRepresentation("");

@@ -52,7 +52,7 @@ public class TabInvoiceDelivery extends Form{
     deliveryList = parent.getInvoice().getDelivery ();
     deliveryItem = createDeliveryItem();
     deliveryList.add (deliveryItem);
-    
+   
     final GridLayout grid = new GridLayout(2, 2);
     final VerticalLayout outerLayout = new VerticalLayout();
     
@@ -65,6 +65,7 @@ public class TabInvoiceDelivery extends Form{
     invoiceDetailsPanel.setStyleName("light");
     invoiceDetailsPanel.setSizeFull();
     invoiceDetailsPanel.addComponent(createInvoiceDeliveryTopForm());
+    invoiceDetailsPanel.addComponent(deliveryAddressForm);
     grid.addComponent(invoiceDetailsPanel, 0, 0);
     grid.setSizeUndefined();
      
@@ -78,6 +79,9 @@ public class TabInvoiceDelivery extends Form{
     final ActualDeliveryDateType actualDeliveryDate = new ActualDeliveryDateType ();
     di.setActualDeliveryDate (actualDeliveryDate);
     
+    /* The following are replaced with AddressDetailForm
+     * TODO: clean up before final version
+     * 
     final AddressType addrType = new AddressType();
     addrType.setStreetName(new StreetNameType());
     addrType.setAdditionalStreetName (new AdditionalStreetNameType());
@@ -90,12 +94,15 @@ public class TabInvoiceDelivery extends Form{
     CountryType ct = new CountryType ();
     ct.setIdentificationCode (new IdentificationCodeType ());
     addrType.setCountry (ct);
-    
-    di.setDeliveryAddress (addrType);
+    */
+    deliveryAddress = new AddressType ();
+    deliveryAddressForm = new AddressDetailForm ("Delivery", deliveryAddress);
+    di.setDeliveryAddress (deliveryAddress);
     
     final  LocationType dl = new LocationType();
     dl.setID (new IDType ());
-    dl.setAddress (addrType);
+    /*dl.setAddress (addrType);*/
+    dl.setAddress(deliveryAddress);
     
     di.setDeliveryLocation (dl);
     return di;
@@ -110,7 +117,8 @@ public class TabInvoiceDelivery extends Form{
     invoiceDeliveryTopForm.addItemProperty ("Actual Delivery Date", new ObjectProperty <Date> (actualDeliveryDate));
     invoiceDeliveryTopForm.addItemProperty ("Delivery Location ID", new NestedMethodProperty(deliveryItem.getDeliveryLocation().getID (), "value") );
     
-    //TODO: replace the following field with AddressDetailForm
+    // The following replaced by AddressDetailForm
+    /*
     invoiceDeliveryTopForm.addItemProperty ("Address Street Name", new NestedMethodProperty(deliveryItem.getDeliveryLocation().getAddress (), "streetName.value") );
     invoiceDeliveryTopForm.addItemProperty ("Address Additional Street Name", new NestedMethodProperty(deliveryItem.getDeliveryLocation().getAddress (), "additionalStreetName.value") );
     invoiceDeliveryTopForm.addItemProperty ("Address Department", new NestedMethodProperty(deliveryItem.getDeliveryLocation().getAddress (), "department.value") );
@@ -119,6 +127,7 @@ public class TabInvoiceDelivery extends Form{
     invoiceDeliveryTopForm.addItemProperty ("Address Postal Zone", new NestedMethodProperty(deliveryItem.getDeliveryLocation().getAddress (), "postalZone.value") );
     invoiceDeliveryTopForm.addItemProperty ("Address Country Subentity", new NestedMethodProperty(deliveryItem.getDeliveryLocation().getAddress (), "countrySubentity.value") );
     invoiceDeliveryTopForm.addItemProperty ("Address Country ID", new NestedMethodProperty(deliveryItem.getDeliveryLocation().getAddress (), "country.identificationCode.value") );
+    */
     
     return invoiceDeliveryTopForm;
   }  
