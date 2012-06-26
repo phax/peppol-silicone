@@ -1,7 +1,15 @@
 package at.peppol.webgui.app.components;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.BranchType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.FinancialAccountType;
@@ -13,12 +21,12 @@ import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IDType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PaymentChannelCodeType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PaymentDueDateType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PaymentMeansCodeType;
-
 import com.vaadin.data.Item;
 import com.vaadin.data.util.NestedMethodProperty;
 import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.ui.AbstractTextField;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.DateField;
 import com.vaadin.ui.DefaultFieldFactory;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.Form;
@@ -26,6 +34,7 @@ import com.vaadin.ui.FormFieldFactory;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.PopupDateField;
 import com.vaadin.ui.VerticalLayout;
 
 public class TabInvoicePayment extends Form {
@@ -93,7 +102,6 @@ public class TabInvoicePayment extends Form {
     final PaymentMeansType pm = new PaymentMeansType();
    
     pm.setPaymentMeansCode (new PaymentMeansCodeType ());
-    pm.setPaymentDueDate (new PaymentDueDateType ());
     pm.setPaymentChannelCode (new PaymentChannelCodeType ());
     pm.setID (new IDType ());
     
@@ -150,9 +158,38 @@ public class TabInvoicePayment extends Form {
         // Identify the fields by their Property ID.
         final String pid = (String) propertyId;
         if ("Payment Due Date".equals(pid)) {
-          //TODO: process date here...
-          
+          final PopupDateField dueDateField = new PopupDateField("Payment Due Date");
+          dueDateField.setValue(new Date());
+          dueDateField.setResolution(DateField.RESOLUTION_DAY);
+          dueDateField.addListener(new ValueChangeListener() {
+
+            @Override
+            public void valueChange(final com.vaadin.data.Property.ValueChangeEvent event) {
+              try {
+                final Date dueDate = (Date) dueDateField.getValue();
+                final GregorianCalendar greg = new GregorianCalendar();
+                greg.setTime(dueDate);
+
+                // Workaround to print only the date and not the time.
+                final XMLGregorianCalendar XMLDate = DatatypeFactory.newInstance().newXMLGregorianCalendar();
+                XMLDate.setYear(greg.get(Calendar.YEAR));
+                XMLDate.setMonth(greg.get(Calendar.MONTH) + 1);
+                XMLDate.setDay(greg.get(Calendar.DATE));
+
+                parent.getInvoice().getPaymentMeans ().add (new PaymentMeansType ());
+                PaymentDueDateType sdt = new PaymentDueDateType ();
+                sdt.setValue (XMLDate);
+                parent.getInvoice().getPaymentMeans ().get (0).setPaymentDueDate (sdt);
+              } catch (final DatatypeConfigurationException ex) {
+                Logger.getLogger(TabInvoiceHeader.class.getName()).log(Level.SEVERE, null, ex);
+              }
+            }
+          });
+         
+
+          return dueDateField;
         }
+        
         final Field field = DefaultFieldFactory.get().createField(item, propertyId, uiContext);
         if (field instanceof AbstractTextField) {
             ((AbstractTextField) field).setNullRepresentation("");

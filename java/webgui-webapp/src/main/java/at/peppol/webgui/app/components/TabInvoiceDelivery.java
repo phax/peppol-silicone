@@ -1,7 +1,15 @@
 package at.peppol.webgui.app.components;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AddressType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.CountryType;
@@ -23,6 +31,7 @@ import com.vaadin.data.util.NestedMethodProperty;
 import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.ui.AbstractTextField;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.DateField;
 import com.vaadin.ui.DefaultFieldFactory;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.Form;
@@ -30,6 +39,7 @@ import com.vaadin.ui.FormFieldFactory;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.PopupDateField;
 import com.vaadin.ui.VerticalLayout;
 
 @SuppressWarnings ("serial")
@@ -75,10 +85,6 @@ public class TabInvoiceDelivery extends Form{
   
   private DeliveryType createDeliveryItem() {
     final DeliveryType di = new DeliveryType();
-   
-    final ActualDeliveryDateType actualDeliveryDate = new ActualDeliveryDateType ();
-    di.setActualDeliveryDate (actualDeliveryDate);
-    
     /* The following are replaced with AddressDetailForm
      * TODO: clean up before final version
      * 
@@ -95,9 +101,11 @@ public class TabInvoiceDelivery extends Form{
     ct.setIdentificationCode (new IdentificationCodeType ());
     addrType.setCountry (ct);
     */
+    
+    
     deliveryAddress = new AddressType ();
     deliveryAddressForm = new AddressDetailForm ("Delivery", deliveryAddress);
-    di.setDeliveryAddress (deliveryAddress);
+    //di.setDeliveryAddress (deliveryAddress);
     
     final  LocationType dl = new LocationType();
     dl.setID (new IDType ());
@@ -115,6 +123,7 @@ public class TabInvoiceDelivery extends Form{
 
     final Date actualDeliveryDate = new Date ();
     invoiceDeliveryTopForm.addItemProperty ("Actual Delivery Date", new ObjectProperty <Date> (actualDeliveryDate));
+    
     invoiceDeliveryTopForm.addItemProperty ("Delivery Location ID", new NestedMethodProperty(deliveryItem.getDeliveryLocation().getID (), "value") );
     
     // The following replaced by AddressDetailForm
@@ -138,8 +147,36 @@ public class TabInvoiceDelivery extends Form{
         // Identify the fields by their Property ID.
         final String pid = (String) propertyId;
         if ("Actual Delivery Date".equals(pid)) {
-          //TODO: process date here...
-          
+          final PopupDateField actualDateField = new PopupDateField("Actual Delivery Date");
+          actualDateField.setValue(new Date());
+          actualDateField.setResolution(DateField.RESOLUTION_DAY);
+          actualDateField.addListener(new ValueChangeListener() {
+
+            @Override
+            public void valueChange(final com.vaadin.data.Property.ValueChangeEvent event) {
+              try {
+                final Date issueDate = (Date) actualDateField.getValue();
+                final GregorianCalendar greg = new GregorianCalendar();
+                greg.setTime(issueDate);
+
+                // Workaround to print only the date and not the time.
+                final XMLGregorianCalendar XMLDate = DatatypeFactory.newInstance().newXMLGregorianCalendar();
+                XMLDate.setYear(greg.get(Calendar.YEAR));
+                XMLDate.setMonth(greg.get(Calendar.MONTH) + 1);
+                XMLDate.setDay(greg.get(Calendar.DATE));
+
+                parent.getInvoice().getDelivery ().add (new DeliveryType());
+                ActualDeliveryDateType sdt = new ActualDeliveryDateType ();
+                sdt.setValue (XMLDate);
+                parent.getInvoice().getDelivery ().get (0).setActualDeliveryDate (sdt);
+              } catch (final DatatypeConfigurationException ex) {
+                Logger.getLogger(TabInvoiceHeader.class.getName()).log(Level.SEVERE, null, ex);
+              }
+            }
+          });
+         
+
+          return actualDateField;
         }
         final Field field = DefaultFieldFactory.get().createField(item, propertyId, uiContext);
         if (field instanceof AbstractTextField) {

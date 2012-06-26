@@ -1,6 +1,9 @@
 package at.peppol.webgui.app.components;
 
+import java.io.OutputStreamWriter;
+
 import javax.xml.bind.JAXBElement;
+import javax.xml.transform.stream.StreamResult;
 
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.CustomerPartyType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.PartyType;
@@ -16,9 +19,13 @@ import org.slf4j.LoggerFactory;
 
 import at.peppol.commons.identifier.docid.EPredefinedDocumentTypeIdentifier;
 
+import com.phloc.ubl.AbstractUBLDocumentMarshaller;
+import com.phloc.ubl.UBL20DocumentMarshaller;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Form;
 import com.vaadin.ui.GridLayout;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.TabSheet;
 
 @SuppressWarnings ("serial")
@@ -54,7 +61,6 @@ public class InvoiceTabForm extends Form {
     initInvoiceData();
     initElements();
     buildMainLayout();
-    
   }
 
   private void initInvoiceData() {
@@ -91,7 +97,6 @@ public class InvoiceTabForm extends Form {
     invoice.setCustomizationID(custID);
     invoice.setID(new IDType());
 
-
     invoice.setAccountingCustomerParty(customer);
     invoice.setAccountingSupplierParty(supplier);
     //invoice.setLegalMonetaryTotal(new MonetaryTotalType());
@@ -105,21 +110,33 @@ public class InvoiceTabForm extends Form {
     customerForm.setSizeFull();
     
     
-    getFooter().setMargin (true);
-    getFooter().addComponent(new Button("Check Invoice", new Button.ClickListener() {
+    HorizontalLayout footerLayout = new HorizontalLayout ();
+    footerLayout.setSpacing (true);
+    footerLayout.setMargin (true);
+    footerLayout.addComponent(new Button("Validate Invoice", new Button.ClickListener() {
+
+      @Override
+      public void buttonClick(final Button.ClickEvent event) {
+          try {
+              AbstractUBLDocumentMarshaller.setGlobalValidationEventHandler(null);
+              UBL20DocumentMarshaller.writeInvoice(invoice, new StreamResult(new OutputStreamWriter(System.out)));
+          } catch (final Exception ex) {
+              LOGGER.error("Error creating files. ", ex);
+          }
+      }
+    }));    
+    footerLayout.addComponent(new Button("Save Invoice", new Button.ClickListener() {
 
       @Override
       public void buttonClick(final Button.ClickEvent event) {
           try {
               System.out.println(invoice.getDelivery ().get (0).getDeliveryAddress ().getStreetName ().getValue ());
-              //System.out.println(invoice.getInvoiceLine ().get (0).getInvoicedQuantity ().getValue () );
-              //AbstractUBLDocumentMarshaller.setGlobalValidationEventHandler(null);
-              //UBL20DocumentMarshaller.writeInvoice(invoice, new StreamResult(new OutputStreamWriter(System.out)));
           } catch (final Exception ex) {
               LOGGER.error("Error creating files. ", ex);
           }
       }
-  }));    
+    }));    
+    getFooter().addComponent (footerLayout);
   }
 
   private GridLayout buildMainLayout () {
@@ -143,24 +160,16 @@ public class InvoiceTabForm extends Form {
     invTabSheet.setWidth ("100.0%");
     invTabSheet.setHeight ("100.0%");
     
-    // 1st tab: Invoice Header
-    invTabSheet.addTab (tTabInvoiceHeader, "Invoice Header", null, 0);
-    // 2nd tab: Supplier Party
-    invTabSheet.addTab (supplierForm, "Supplier Party", null, 1);
-    // 3rd tab: Customer Party
-    invTabSheet.addTab (customerForm, "Customer Party", null, 2);
-    // 4th tab: Delivery
-    invTabSheet.addTab (tTabInvoiceDelivery, "Delivery", null, 3);
-    // 5th tab: Payment
-    invTabSheet.addTab (tTabInvoicePayment, "Payment", null, 4);
-    // 6th tab: Allowance Charge
-    invTabSheet.addTab (tTabInvoiceAllowanceCharge, "Allowance Charge", null, 5);
-    // 7th tab: Tax Total
-    invTabSheet.addTab (tTabInvoiceTaxTotal, "Tax Total", null, 6);
-    // 8th tab: Monetary Total
-    invTabSheet.addTab (tTabInvoiceMonetaryTotal, "Monetary Total", null, 7);
-    // 9th tab: Invoice Lines
-    invTabSheet.addTab (tTabInvoiceLine, "Invoice Lines", null, 8);
+    invTabSheet.addTab (tTabInvoiceHeader, "Invoice Header");
+    invTabSheet.addTab (supplierForm, "Supplier Party");
+    invTabSheet.addTab (customerForm, "Customer Party");
+    invTabSheet.addTab (new Label("move payee party here? or merge all parties here!"), "Payee Party");
+    invTabSheet.addTab (tTabInvoiceDelivery, "Delivery");
+    invTabSheet.addTab (tTabInvoicePayment, "Payment");
+    invTabSheet.addTab (tTabInvoiceAllowanceCharge, "Allowance/Charge");
+    invTabSheet.addTab (tTabInvoiceLine, "Invoice Lines");    
+    //invTabSheet.addTab (tTabInvoiceTaxTotal, "Tax Total");
+    invTabSheet.addTab (tTabInvoiceMonetaryTotal, "Tax/Monetary Total");
     
     mainLayout.addComponent (invTabSheet, 0, 0);
     

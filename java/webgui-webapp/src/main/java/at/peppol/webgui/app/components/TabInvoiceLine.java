@@ -79,7 +79,7 @@ public class TabInvoiceLine extends Form {
         Label formLabel = new Label("<h3>Adding new invoice line</h3>", Label.CONTENT_XHTML);
         
         hiddenContent.addComponent (formLabel);
-        hiddenContent.addComponent(createInvoiceLineForm());
+        hiddenContent.addComponent(createInvoiceLineMainForm());
         
         //Save new line button
         HorizontalLayout buttonLayout = new HorizontalLayout();
@@ -135,7 +135,7 @@ public class TabInvoiceLine extends Form {
           Label formLabel = new Label("<h3>Editing invoice line</h3>", Label.CONTENT_XHTML);
           
           hiddenContent.addComponent (formLabel);
-          hiddenContent.addComponent(createInvoiceLineForm());
+          hiddenContent.addComponent(createInvoiceLineMainForm());
           
           //Save new line button
           HorizontalLayout buttonLayout = new HorizontalLayout();
@@ -221,7 +221,7 @@ public class TabInvoiceLine extends Form {
     outerPanel.requestRepaintAll();
   }
 
-  public Form createInvoiceLineForm() {
+  public Form createInvoiceLineMainForm() {
     final Form invoiceLineForm = new Form(new FormLayout(), new InvoiceLineFieldFactory());
     invoiceLineForm.setImmediate(false);
 
