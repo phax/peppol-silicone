@@ -109,7 +109,6 @@ public class InvoiceTabForm extends Form {
     supplierForm.setSizeFull();
     customerForm.setSizeFull();
     
-    
     HorizontalLayout footerLayout = new HorizontalLayout ();
     footerLayout.setSpacing (true);
     footerLayout.setMargin (true);
@@ -168,8 +167,8 @@ public class InvoiceTabForm extends Form {
     invTabSheet.addTab (tTabInvoicePayment, "Payment");
     invTabSheet.addTab (tTabInvoiceAllowanceCharge, "Allowance/Charge");
     invTabSheet.addTab (tTabInvoiceLine, "Invoice Lines");    
-    //invTabSheet.addTab (tTabInvoiceTaxTotal, "Tax Total");
-    invTabSheet.addTab (tTabInvoiceMonetaryTotal, "Tax/Monetary Total");
+    invTabSheet.addTab (tTabInvoiceTaxTotal, "Tax Total");
+    invTabSheet.addTab (tTabInvoiceMonetaryTotal, "Monetary Total");
     
     mainLayout.addComponent (invTabSheet, 0, 0);
     
