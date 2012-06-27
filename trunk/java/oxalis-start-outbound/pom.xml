@@ -5,7 +5,6 @@
     <version>14-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>no.sendregning.ap</groupId>
   <artifactId>oxalis-start-outbound</artifactId>
   <version>2.3.0-SNAPSHOT</version>
 
@@ -14,12 +13,12 @@
 
   <dependencies>
     <dependency>
-      <groupId>no.sendregning.ap</groupId>
+      <groupId>at.peppol</groupId>
       <artifactId>oxalis-api</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>no.sendregning.ap</groupId>
+      <groupId>at.peppol</groupId>
       <artifactId>oxalis-commons</artifactId>
       <version>${project.version}</version>
     </dependency>
