@@ -1,12 +1,10 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
     <groupId>at.peppol</groupId>
     <artifactId>parent-pom</artifactId>
     <version>14-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>no.sendregning.ap</groupId>
   <artifactId>oxalis-start-inbound</artifactId>
   <version>2.3.0-SNAPSHOT</version>
   <name>Oxalis START inbound (WAR)</name>
@@ -14,26 +12,24 @@
   <packaging>war</packaging>
   <url>https://github.com/SendRegning/sr-peppol/oxalis-start-inbound/</url>
 
-  <properties>
-    <wsdl>wsdl_v2.0</wsdl>
-  </properties>
-
-
   <dependencies>
     <dependency>
-      <groupId>no.sendregning.ap</groupId>
-      <artifactId>oxalis-start-outbound</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <!-- This .jar file has scope provided in order to prevent it from being -->
-    <!-- included in the .war file. The reason being that oxalis-api should -->
-    <!-- should be copied to $TOMCAT_HOME/shared/lib/oxalis and thus be -->
-    <!-- loaded by the shared class loader -->
-    <dependency>
-      <groupId>no.sendregning.ap</groupId>
-      <artifactId>oxalis-api</artifactId>
-      <version>${project.version}</version>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
       <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.sun.xml.bind</groupId>
+      <artifactId>jaxb-impl</artifactId>
+      <version>2.2.5-2</version>
+      <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>javax.xml.stream</groupId>
+          <artifactId>stax-api</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>
@@ -46,6 +42,12 @@
       <groupId>org.glassfish.metro</groupId>
       <artifactId>webservices-rt</artifactId>
       <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>javax.activation</groupId>
+          <artifactId>activation</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>
@@ -53,6 +55,24 @@
       <artifactId>servlet-api</artifactId>
       <scope>provided</scope>
     </dependency>
+
+    <dependency>
+      <groupId>at.peppol</groupId>
+      <artifactId>oxalis-start-outbound</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <!-- This .jar file has scope provided in order to prevent it from being -->
+    <!-- included in the .war file. The reason being that oxalis-api should -->
+    <!-- should be copied to $TOMCAT_HOME/shared/lib/oxalis and thus be -->
+    <!-- loaded by the shared class loader -->
+    <dependency>
+      <groupId>at.peppol</groupId>
+      <artifactId>oxalis-api</artifactId>
+      <version>${project.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
   </dependencies>
 
   <build>
@@ -97,7 +117,7 @@
       <plugin>
         <groupId>org.codehaus.cargo</groupId>
         <artifactId>cargo-maven2-plugin</artifactId>
-        <version>1.2.2</version>
+        <version>1.1.3</version>
         <configuration>
           <container>
             <containerId>tomcat7x</containerId>
