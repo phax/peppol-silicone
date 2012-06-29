@@ -11,9 +11,7 @@
   <packaging>pom</packaging>
   <name>oxalis-distribution</name>
   <description>Creates a complete distribution which may be uploaded and made available.</description>
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
+  
   <build>
     <plugins>
       <plugin>

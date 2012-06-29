@@ -62,6 +62,10 @@
         <targetPath>${project.build.directory}/classes</targetPath>
       </resource>
       <resource>
+        <directory>${basedir}/src/test/resources</directory>
+        <targetPath>${project.build.directory}/test-classes</targetPath>
+      </resource>
+      <resource>
         <directory>${basedir}/src/main/webapp</directory>
         <targetPath>${project.build.directory}/webapp-classes</targetPath>
       </resource>

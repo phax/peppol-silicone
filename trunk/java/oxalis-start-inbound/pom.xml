@@ -79,8 +79,17 @@
     <finalName>oxalis</finalName>
     <resources>
       <resource>
-        <directory>src/main/resources</directory>
+        <directory>${basedir}/src/main/resources</directory>
+        <targetPath>${project.build.directory}/classes</targetPath>
         <filtering>true</filtering>
+      </resource>
+      <resource>
+        <directory>${basedir}/src/test/resources</directory>
+        <targetPath>${project.build.directory}/test-classes</targetPath>
+      </resource>
+      <resource>
+        <directory>${basedir}/src/main/webapp</directory>
+        <targetPath>${project.build.directory}/webapp-classes</targetPath>
       </resource>
     </resources>
     <plugins>
