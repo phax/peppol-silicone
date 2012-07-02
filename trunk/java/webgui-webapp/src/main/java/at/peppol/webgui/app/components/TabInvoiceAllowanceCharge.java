@@ -5,6 +5,7 @@ import java.util.List;
 
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AllowanceChargeType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IDType;
+import un.unece.uncefact.codelist.specification._54217._2001.CurrencyCodeContentType;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.util.NestedMethodProperty;
@@ -251,15 +252,14 @@ public class TabInvoiceAllowanceCharge extends Form {
     InvoiceAllowanceChargeAdapter ac = new InvoiceAllowanceChargeAdapter();
    
     ac.setID (new IDType ());
-    //ac.setChargeIndicator (new ChargeIndicatorType ());
     ac.setIndicator (false);
-    //ac.setAllowanceChargeReason (new AllowanceChargeReasonType ());
     ac.setReason ("");
-    //ac.setAmount (new AmountType ());
     ac.setChargeAmount (new BigDecimal(0));
     ac.setTaxCategoryID ("");
     ac.setTaxCategoryPercent (new BigDecimal(0));
     ac.setTaxCategorySchemeID ("");
+    
+    ac.getAmount ().setCurrencyID (CurrencyCodeContentType.valueOf (parent.getInvoice ().getDocumentCurrencyCode ().getValue ()));
     
     return ac;
   }  

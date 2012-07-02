@@ -360,15 +360,7 @@ public class TabInvoiceHeader extends Form {
  
   }
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
+ 
   @SuppressWarnings ("serial")
   class InvoiceFieldFactory implements FormFieldFactory {
     

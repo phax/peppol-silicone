@@ -113,6 +113,7 @@ public class TabInvoiceTaxTotal extends Form {
             
             //update Total Tax Amount
             taxTotalItem.getTaxAmount ().setValue (SumTaxSubtotalAmount());
+
             //update form as well
             //invoiceTaxTotalTopForm.getField("Tax Total Amount").setRequired(true);
             invoiceTaxTotalTopForm.getField("Tax Total Amount").setValue(taxTotalItem.getTaxAmount ().getValue ());
@@ -216,6 +217,7 @@ public class TabInvoiceTaxTotal extends Form {
             
             //update Total Tax Amount
             taxTotalItem.getTaxAmount ().setValue (SumTaxSubtotalAmount());
+            
             invoiceTaxTotalTopForm.getField("Tax Total Amount").setValue(taxTotalItem.getTaxAmount ().getValue ());
 
           }
@@ -260,6 +262,7 @@ public class TabInvoiceTaxTotal extends Form {
     final TaxTotalType tt = new TaxTotalType();
     tt.setTaxAmount (new TaxAmountType ());
     tt.getTaxAmount ().setValue (new BigDecimal (0));
+    
     return tt;
   }  
   
@@ -267,11 +270,6 @@ public class TabInvoiceTaxTotal extends Form {
     invoiceTaxTotalTopForm = new Form(new FormLayout(), new InvoiceTaxTotalFieldFactory());
     invoiceTaxTotalTopForm.setImmediate(true);
     
-    //TODO: define currency automatically from tab "Header"
-    
-    //String foo = parent.getInvoice ().getDocumentCurrencyCode ().getValue ();
-    //System.out.println(foo);
-    taxTotalItem.getTaxAmount ().setCurrencyID (CurrencyCodeContentType.EUR);
     invoiceTaxTotalTopForm.addItemProperty ("Tax Total Amount", new NestedMethodProperty(taxTotalItem.getTaxAmount (), "value") );
     
     return invoiceTaxTotalTopForm;
@@ -343,9 +341,10 @@ public class TabInvoiceTaxTotal extends Form {
     double sum = 0.0;
     Iterator <TaxSubtotalType> iterator = taxSubtotalList.iterator ();
     while (iterator.hasNext()) {
-      InvoiceTaxSubtotalAdapter ac = (InvoiceTaxSubtotalAdapter) iterator.next();
+       InvoiceTaxSubtotalAdapter ac = (InvoiceTaxSubtotalAdapter) iterator.next();
        sum += ac.getTaxAmount ().getValue ().doubleValue ();
     }    
+
     return new BigDecimal(sum);
   }
   

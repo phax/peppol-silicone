@@ -85,31 +85,12 @@ public class TabInvoiceDelivery extends Form{
   
   private DeliveryType createDeliveryItem() {
     final DeliveryType di = new DeliveryType();
-    /* The following are replaced with AddressDetailForm
-     * TODO: clean up before final version
-     * 
-    final AddressType addrType = new AddressType();
-    addrType.setStreetName(new StreetNameType());
-    addrType.setAdditionalStreetName (new AdditionalStreetNameType());
-    addrType.setBuildingNumber (new BuildingNumberType ());
-    addrType.setDepartment (new DepartmentType ());
-    addrType.setCityName(new CityNameType());
-    addrType.setPostalZone(new PostalZoneType());
-    addrType.setCountrySubentity (new CountrySubentityType ());
-    
-    CountryType ct = new CountryType ();
-    ct.setIdentificationCode (new IdentificationCodeType ());
-    addrType.setCountry (ct);
-    */
-    
     
     deliveryAddress = new AddressType ();
     deliveryAddressForm = new AddressDetailForm ("Delivery", deliveryAddress);
-    //di.setDeliveryAddress (deliveryAddress);
     
     final  LocationType dl = new LocationType();
     dl.setID (new IDType ());
-    /*dl.setAddress (addrType);*/
     dl.setAddress(deliveryAddress);
     
     di.setDeliveryLocation (dl);
