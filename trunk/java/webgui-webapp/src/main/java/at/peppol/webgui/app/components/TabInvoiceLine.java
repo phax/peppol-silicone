@@ -5,6 +5,7 @@ import java.util.List;
 
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.InvoiceLineType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IDType;
+import un.unece.uncefact.codelist.specification._54217._2001.CurrencyCodeContentType;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.util.NestedMethodProperty;
@@ -253,11 +254,12 @@ public class TabInvoiceLine extends Form {
     invoiceLineForm.addItemProperty ("Tax Category Scheme ID", new NestedMethodProperty(invoiceLineItem, "InvLineItemTaxCategoryTaxSchemeID") );
     invoiceLineForm.addItemProperty ("Price Amount", new NestedMethodProperty(invoiceLineItem, "InvLinePriceAmount") );
     invoiceLineForm.addItemProperty ("Base Quantity", new NestedMethodProperty(invoiceLineItem, "InvLinePriceBaseQuantity") );
-    invoiceLineForm.addItemProperty ("Allowance/Charge Indicator", new NestedMethodProperty(invoiceLineItem, "InvLinePriceAllowanceChargeIndicator") );
-    invoiceLineForm.addItemProperty ("Allowance/Charge Reason", new NestedMethodProperty(invoiceLineItem, "InvLinePriceAllowanceChargeReason") );
-    invoiceLineForm.addItemProperty ("Allowance/Charge Multiplier Factor", new NestedMethodProperty(invoiceLineItem, "InvLinePriceAllowanceChargeMultiplierFactorNumeric") );
-    invoiceLineForm.addItemProperty ("Allowance/Charge Amount", new NestedMethodProperty(invoiceLineItem, "InvLinePriceAllowanceChargeAmount") );
-    invoiceLineForm.addItemProperty ("Allowance/Charge Base Amount", new NestedMethodProperty(invoiceLineItem, "InvLinePriceAllowanceChargeBaseAmount") );
+    invoiceLineForm.addItemProperty ("Price Allowance/Charge ID", new NestedMethodProperty(invoiceLineItem, "InvLinePriceAllowanceChargeID") );
+    invoiceLineForm.addItemProperty ("Price Allowance/Charge Indicator", new NestedMethodProperty(invoiceLineItem, "InvLinePriceAllowanceChargeIndicator") );
+    invoiceLineForm.addItemProperty ("Price Allowance/Charge Reason", new NestedMethodProperty(invoiceLineItem, "InvLinePriceAllowanceChargeReason") );
+    invoiceLineForm.addItemProperty ("Price Allowance/Charge Multiplier Factor", new NestedMethodProperty(invoiceLineItem, "InvLinePriceAllowanceChargeMultiplierFactorNumeric") );
+    invoiceLineForm.addItemProperty ("Price Allowance/Charge Amount", new NestedMethodProperty(invoiceLineItem, "InvLinePriceAllowanceChargeAmount") );
+    invoiceLineForm.addItemProperty ("Price Allowance/Charge Base Amount", new NestedMethodProperty(invoiceLineItem, "InvLinePriceAllowanceChargeBaseAmount") );
     
 
     return invoiceLineForm;
@@ -281,6 +283,7 @@ public class TabInvoiceLine extends Form {
     ac.setInvLineItemTaxCategoryTaxSchemeID ("");
     ac.setInvLinePriceAmount(new BigDecimal (0));
     ac.setInvLinePriceBaseQuantity (new BigDecimal (0));
+    ac.setInvLinePriceAllowanceChargeID("");
     ac.setInvLinePriceAllowanceChargeIndicator (false);
     ac.setInvLinePriceAllowanceChargeReason("");
     ac.setInvLinePriceAllowanceChargeMultiplierFactorNumeric (new BigDecimal(0));
@@ -307,6 +310,7 @@ public class TabInvoiceLine extends Form {
     dstItem.setInvLineItemTaxCategoryTaxSchemeID (srcItem.getInvLineItemTaxCategoryTaxSchemeID ());
     dstItem.setInvLinePriceAmount (srcItem.getInvLinePriceAmount ());
     dstItem.setInvLinePriceBaseQuantity (srcItem.getInvLinePriceBaseQuantity ());
+    dstItem.setInvLinePriceAllowanceChargeID (srcItem.getInvLinePriceAllowanceChargeID());
     dstItem.setInvLinePriceAllowanceChargeIndicator (srcItem.getInvLinePriceAllowanceChargeIndicator());
     dstItem.setInvLinePriceAllowanceChargeReason(srcItem.getInvLinePriceAllowanceChargeReason());
     dstItem.setInvLinePriceAllowanceChargeMultiplierFactorNumeric (srcItem.getInvLinePriceAllowanceChargeMultiplierFactorNumeric());
@@ -319,9 +323,9 @@ public class TabInvoiceLine extends Form {
     public Field createField(final Item item, final Object propertyId, final Component uiContext) {
         // Identify the fields by their Property ID.
         final String pid = (String) propertyId;
-        if ("Allowance/Charge Indicator".equals(pid)) {
+        if ("Price Allowance/Charge Indicator".equals(pid)) {
           Select indicatorSelect = new Select("Charge or Allowance?");
-          indicatorSelect.setNullSelectionAllowed(false);
+          indicatorSelect.setNullSelectionAllowed(true);
           indicatorSelect.addItem (true);
           indicatorSelect.addItem (false);
           indicatorSelect.setItemCaption(true, "Charge");

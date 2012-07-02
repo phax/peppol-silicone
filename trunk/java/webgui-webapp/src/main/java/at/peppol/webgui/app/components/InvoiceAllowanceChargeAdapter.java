@@ -10,6 +10,7 @@ import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AmountTy
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ChargeIndicatorType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IDType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PercentType;
+import un.unece.uncefact.codelist.specification._54217._2001.CurrencyCodeContentType;
 
 public class InvoiceAllowanceChargeAdapter extends AllowanceChargeType {
   
@@ -19,7 +20,8 @@ public class InvoiceAllowanceChargeAdapter extends AllowanceChargeType {
     setChargeIndicator(new ChargeIndicatorType ());
     setAllowanceChargeReason(new AllowanceChargeReasonType ());
     setAmount(new AmountType ());
-    
+    //TODO: Get currency from header
+    getAmount().setCurrencyID (CurrencyCodeContentType.EUR);
     TaxCategoryType taxCategory = new TaxCategoryType ();
     taxCategory.setID (new IDType ());
     taxCategory.setPercent (new PercentType ());

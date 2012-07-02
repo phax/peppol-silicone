@@ -1,5 +1,6 @@
 package at.peppol.webgui.app.components;
 
+import java.math.BigDecimal;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.MonetaryTotalType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AllowanceTotalAmountType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ChargeTotalAmountType;
@@ -9,7 +10,7 @@ import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PayableR
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PrepaidAmountType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TaxExclusiveAmountType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TaxInclusiveAmountType;
-
+import un.unece.uncefact.codelist.specification._54217._2001.CurrencyCodeContentType;
 import com.vaadin.data.Item;
 import com.vaadin.data.util.NestedMethodProperty;
 import com.vaadin.ui.AbstractTextField;
@@ -61,13 +62,38 @@ public class TabInvoiceMonetaryTotal extends Form {
   private MonetaryTotalType createMonetaryTotal() {
     final MonetaryTotalType mt = new MonetaryTotalType();
     mt.setLineExtensionAmount (new LineExtensionAmountType ());
+    mt.getLineExtensionAmount ().setCurrencyID (CurrencyCodeContentType.EUR);
+    mt.getLineExtensionAmount ().setValue (new BigDecimal (0));
+    
     mt.setTaxExclusiveAmount (new TaxExclusiveAmountType ());
+    mt.getTaxExclusiveAmount ().setCurrencyID (CurrencyCodeContentType.EUR);
+    mt.getTaxExclusiveAmount ().setValue (new BigDecimal (0));
+    
     mt.setTaxInclusiveAmount (new TaxInclusiveAmountType ());
+    mt.getTaxInclusiveAmount ().setCurrencyID (CurrencyCodeContentType.EUR);
+    mt.getTaxInclusiveAmount ().setValue (new BigDecimal (0));
+    
     mt.setAllowanceTotalAmount (new AllowanceTotalAmountType ());
+    mt.getAllowanceTotalAmount ().setCurrencyID (CurrencyCodeContentType.EUR);
+    mt.getAllowanceTotalAmount ().setValue (new BigDecimal (0));
+    
     mt.setChargeTotalAmount (new ChargeTotalAmountType ());
+    mt.getChargeTotalAmount ().setCurrencyID (CurrencyCodeContentType.EUR);
+    mt.getChargeTotalAmount ().setValue (new BigDecimal (0));
+    
     mt.setPrepaidAmount (new PrepaidAmountType ());
+    mt.getPrepaidAmount ().setCurrencyID (CurrencyCodeContentType.EUR);
+    mt.getPrepaidAmount ().setValue (new BigDecimal (0));
+
     mt.setPayableRoundingAmount (new PayableRoundingAmountType ());
+    mt.getPayableRoundingAmount ().setCurrencyID (CurrencyCodeContentType.EUR);
+    mt.getPayableRoundingAmount ().setValue (new BigDecimal (0));
+
+    
     mt.setPayableAmount (new PayableAmountType ());
+    mt.getPayableAmount ().setCurrencyID (CurrencyCodeContentType.EUR);
+    mt.getPayableAmount ().setValue (new BigDecimal (0));
+    
     return mt;
   }  
  

@@ -6,7 +6,10 @@ import java.util.List;
 
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.TaxSubtotalType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.TaxTotalType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DocumentCurrencyCodeType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TaxAmountType;
+import un.unece.uncefact.codelist.specification._54217._2001.CurrencyCodeContentType;
+
 import com.vaadin.data.Item;
 import com.vaadin.data.util.NestedMethodProperty;
 import com.vaadin.ui.AbstractTextField;
@@ -256,7 +259,7 @@ public class TabInvoiceTaxTotal extends Form {
   private TaxTotalType createTaxTotalItem() {
     final TaxTotalType tt = new TaxTotalType();
     tt.setTaxAmount (new TaxAmountType ());
-
+    tt.getTaxAmount ().setValue (new BigDecimal (0));
     return tt;
   }  
   
@@ -264,6 +267,11 @@ public class TabInvoiceTaxTotal extends Form {
     invoiceTaxTotalTopForm = new Form(new FormLayout(), new InvoiceTaxTotalFieldFactory());
     invoiceTaxTotalTopForm.setImmediate(true);
     
+    //TODO: define currency automatically from tab "Header"
+    
+    //String foo = parent.getInvoice ().getDocumentCurrencyCode ().getValue ();
+    //System.out.println(foo);
+    taxTotalItem.getTaxAmount ().setCurrencyID (CurrencyCodeContentType.EUR);
     invoiceTaxTotalTopForm.addItemProperty ("Tax Total Amount", new NestedMethodProperty(taxTotalItem.getTaxAmount (), "value") );
     
     return invoiceTaxTotalTopForm;
