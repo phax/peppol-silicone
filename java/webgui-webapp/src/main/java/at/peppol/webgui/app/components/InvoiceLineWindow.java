@@ -65,7 +65,6 @@ public class InvoiceLineWindow extends Form {
       layout.addComponent(createInvoiceLineForm());
     }
     catch (Exception e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
     layout.addComponent(btnSave);

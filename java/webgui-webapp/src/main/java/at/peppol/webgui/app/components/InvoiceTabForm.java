@@ -2,13 +2,17 @@ package at.peppol.webgui.app.components;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.transform.stream.StreamResult;
 
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.CustomerPartyType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.InvoiceLineType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.PartyType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.SupplierPartyType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.TaxSubtotalType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CustomizationIDType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IDType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.InvoiceTypeCodeType;
@@ -17,6 +21,8 @@ import oasis.names.specification.ubl.schema.xsd.invoice_2.InvoiceType;
 import oasis.names.specification.ubl.schema.xsd.invoice_2.ObjectFactory;
 
 import org.slf4j.LoggerFactory;
+
+import un.unece.uncefact.codelist.specification._54217._2001.CurrencyCodeContentType;
 
 import at.peppol.commons.identifier.docid.EPredefinedDocumentTypeIdentifier;
 
@@ -118,6 +124,7 @@ public class InvoiceTabForm extends Form {
       @Override
       public void buttonClick(final Button.ClickEvent event) {
           try {
+              SetCommonCurrency();
               AbstractUBLDocumentMarshaller.setGlobalValidationEventHandler(null);
               UBL20DocumentMarshaller.writeInvoice(invoice, new StreamResult(new OutputStreamWriter(System.out)));
               //ByteArrayOutputStream baos = new ByteArrayOutputStream ();
@@ -135,6 +142,7 @@ public class InvoiceTabForm extends Form {
       @Override
       public void buttonClick(final Button.ClickEvent event) {
           try {
+              SetCommonCurrency();
               System.out.println(invoice.getDelivery ().get (0).getDeliveryAddress ().getStreetName ().getValue ());
           } catch (final Exception ex) {
               LOGGER.error("Error creating files. ", ex);
@@ -189,4 +197,39 @@ public class InvoiceTabForm extends Form {
     return invObjFactory.createInvoice(invoice);
   }  
 
+  public void SetCommonCurrency () {
+    CurrencyCodeContentType cur = CurrencyCodeContentType.valueOf (invoice.getDocumentCurrencyCode ().getValue ());
+    //monetary total
+    invoice.getLegalMonetaryTotal().getLineExtensionAmount ().setCurrencyID (cur);
+    invoice.getLegalMonetaryTotal().getTaxExclusiveAmount ().setCurrencyID (cur);
+    invoice.getLegalMonetaryTotal().getTaxInclusiveAmount ().setCurrencyID (cur);
+    invoice.getLegalMonetaryTotal().getAllowanceTotalAmount ().setCurrencyID (cur);
+    invoice.getLegalMonetaryTotal().getChargeTotalAmount ().setCurrencyID (cur);
+    invoice.getLegalMonetaryTotal().getPrepaidAmount ().setCurrencyID (cur);
+    invoice.getLegalMonetaryTotal().getPayableRoundingAmount ().setCurrencyID (cur);
+    invoice.getLegalMonetaryTotal().getPayableAmount ().setCurrencyID (cur);
+  
+    //tax total
+    invoice.getTaxTotal ().get (0).getTaxAmount ().setCurrencyID (CurrencyCodeContentType.valueOf (invoice.getDocumentCurrencyCode ().getValue ()));
+    List <TaxSubtotalType> taxSubtotalList = invoice.getTaxTotal ().get (0).getTaxSubtotal ();
+    Iterator <TaxSubtotalType> iterator = taxSubtotalList.iterator ();
+    while (iterator.hasNext()) {
+      TaxSubtotalType ac = (TaxSubtotalType) iterator.next();
+      ac.getTaxAmount ().setCurrencyID (cur);
+      ac.getTaxableAmount ().setCurrencyID (cur);
+    }
+    
+    //lines
+    List<InvoiceLineType> invoiceLineList = invoice.getInvoiceLine ();
+    Iterator <InvoiceLineType> iter = invoiceLineList.iterator ();
+    while (iter.hasNext()) {
+      InvoiceLineType il = (InvoiceLineType) iter.next();
+      il.getLineExtensionAmount ().setCurrencyID (cur);
+      il.getTaxTotal ().get (0).getTaxAmount ().setCurrencyID (cur);
+      il.getPrice ().getPriceAmount ().setCurrencyID (cur);
+      il.getPrice ().getAllowanceCharge ().get (0).getAmount ().setCurrencyID (cur);
+      il.getPrice ().getAllowanceCharge ().get (0).getBaseAmount ().setCurrencyID (cur);
+    }    
+    
+  }
 }

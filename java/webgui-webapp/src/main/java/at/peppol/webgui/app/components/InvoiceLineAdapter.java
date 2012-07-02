@@ -51,9 +51,6 @@ public class InvoiceLineAdapter extends InvoiceLineType {
     setNote(new NoteType ());
     setInvoicedQuantity (new InvoicedQuantityType ());
     setLineExtensionAmount (new LineExtensionAmountType ());
-    //TODO: get value from header tab
-    getLineExtensionAmount().setCurrencyID (CurrencyCodeContentType.EUR);
-    
     setAccountingCost (new AccountingCostType ());
     
     // --- +Invoice Line/Order Line Reference begins (0..N)
@@ -69,8 +66,6 @@ public class InvoiceLineAdapter extends InvoiceLineType {
     // --- +Invoice Line/Tax Total begins       
     TaxTotalType tt = new TaxTotalType ();
     tt.setTaxAmount (new TaxAmountType ());
-    //TODO: get value from header tab
-    tt.getTaxAmount ().setCurrencyID (CurrencyCodeContentType.EUR);
     getTaxTotal().add(tt);
     // --- +Invoice Line/Tax Total ends     
     
@@ -102,10 +97,7 @@ public class InvoiceLineAdapter extends InvoiceLineType {
     // --- +Invoice Line/Price begins
     setPrice(new PriceType ());
     getPrice().setPriceAmount (new PriceAmountType ());
-    //TODO: get value from header tab
-    getPrice ().getPriceAmount ().setCurrencyID (CurrencyCodeContentType.EUR);    
     getPrice().setBaseQuantity (new BaseQuantityType ());
-    
     
     AllowanceChargeType ac = new AllowanceChargeType ();
     ac.setID (new IDType ());
@@ -113,13 +105,8 @@ public class InvoiceLineAdapter extends InvoiceLineType {
     ac.setAllowanceChargeReason (new AllowanceChargeReasonType ());
     ac.setMultiplierFactorNumeric (new MultiplierFactorNumericType ());
     ac.setAmount (new AmountType ());
-    //TODO: get value from header tab
-    ac.getAmount ().setCurrencyID (CurrencyCodeContentType.EUR);
     ac.setBaseAmount (new BaseAmountType ());
-    //TODO: get value from header tab
-    ac.getBaseAmount ().setCurrencyID (CurrencyCodeContentType.EUR);    
     getPrice().getAllowanceCharge ().add (ac);
-    
     // --- +Invoice Line/Price ends
   
   

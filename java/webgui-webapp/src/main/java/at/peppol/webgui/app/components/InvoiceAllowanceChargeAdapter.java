@@ -20,8 +20,7 @@ public class InvoiceAllowanceChargeAdapter extends AllowanceChargeType {
     setChargeIndicator(new ChargeIndicatorType ());
     setAllowanceChargeReason(new AllowanceChargeReasonType ());
     setAmount(new AmountType ());
-    //TODO: Get currency from header
-    getAmount().setCurrencyID (CurrencyCodeContentType.EUR);
+
     TaxCategoryType taxCategory = new TaxCategoryType ();
     taxCategory.setID (new IDType ());
     taxCategory.setPercent (new PercentType ());

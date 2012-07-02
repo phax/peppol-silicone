@@ -120,7 +120,6 @@ public class TabInvoicePayment extends Form {
   }
  
   
-  //TODO: delete this function
   private PartyType createPayeePartyItem() {
     final PartyType pt = new PartyType();
     return pt;

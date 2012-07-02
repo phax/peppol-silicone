@@ -62,36 +62,27 @@ public class TabInvoiceMonetaryTotal extends Form {
   private MonetaryTotalType createMonetaryTotal() {
     final MonetaryTotalType mt = new MonetaryTotalType();
     mt.setLineExtensionAmount (new LineExtensionAmountType ());
-    mt.getLineExtensionAmount ().setCurrencyID (CurrencyCodeContentType.EUR);
     mt.getLineExtensionAmount ().setValue (new BigDecimal (0));
     
     mt.setTaxExclusiveAmount (new TaxExclusiveAmountType ());
-    mt.getTaxExclusiveAmount ().setCurrencyID (CurrencyCodeContentType.EUR);
     mt.getTaxExclusiveAmount ().setValue (new BigDecimal (0));
     
     mt.setTaxInclusiveAmount (new TaxInclusiveAmountType ());
-    mt.getTaxInclusiveAmount ().setCurrencyID (CurrencyCodeContentType.EUR);
     mt.getTaxInclusiveAmount ().setValue (new BigDecimal (0));
     
     mt.setAllowanceTotalAmount (new AllowanceTotalAmountType ());
-    mt.getAllowanceTotalAmount ().setCurrencyID (CurrencyCodeContentType.EUR);
     mt.getAllowanceTotalAmount ().setValue (new BigDecimal (0));
     
     mt.setChargeTotalAmount (new ChargeTotalAmountType ());
-    mt.getChargeTotalAmount ().setCurrencyID (CurrencyCodeContentType.EUR);
     mt.getChargeTotalAmount ().setValue (new BigDecimal (0));
     
     mt.setPrepaidAmount (new PrepaidAmountType ());
-    mt.getPrepaidAmount ().setCurrencyID (CurrencyCodeContentType.EUR);
     mt.getPrepaidAmount ().setValue (new BigDecimal (0));
 
     mt.setPayableRoundingAmount (new PayableRoundingAmountType ());
-    mt.getPayableRoundingAmount ().setCurrencyID (CurrencyCodeContentType.EUR);
     mt.getPayableRoundingAmount ().setValue (new BigDecimal (0));
-
     
     mt.setPayableAmount (new PayableAmountType ());
-    mt.getPayableAmount ().setCurrencyID (CurrencyCodeContentType.EUR);
     mt.getPayableAmount ().setValue (new BigDecimal (0));
     
     return mt;
