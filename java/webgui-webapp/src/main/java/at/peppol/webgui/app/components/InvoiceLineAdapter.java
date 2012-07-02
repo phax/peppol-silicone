@@ -32,6 +32,7 @@ import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.NoteType
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PercentType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PriceAmountType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TaxAmountType;
+import un.unece.uncefact.codelist.specification._54217._2001.CurrencyCodeContentType;
 
 /**
  * An adapter class that ignores the list types found in InvoiceLineType and
@@ -50,6 +51,9 @@ public class InvoiceLineAdapter extends InvoiceLineType {
     setNote(new NoteType ());
     setInvoicedQuantity (new InvoicedQuantityType ());
     setLineExtensionAmount (new LineExtensionAmountType ());
+    //TODO: get value from header tab
+    getLineExtensionAmount().setCurrencyID (CurrencyCodeContentType.EUR);
+    
     setAccountingCost (new AccountingCostType ());
     
     // --- +Invoice Line/Order Line Reference begins (0..N)
@@ -59,12 +63,14 @@ public class InvoiceLineAdapter extends InvoiceLineType {
     // --- +Invoice Line/Order Line Reference ends
 
     // --- +Invoice Line/Allowance Charge begins (0..N)   
-    getAllowanceCharge ().add (new AllowanceChargeType ());
+    //getAllowanceCharge ().add (new AllowanceChargeType ());
     // --- +Invoice Line/Allowance Charge ends    
     
     // --- +Invoice Line/Tax Total begins       
     TaxTotalType tt = new TaxTotalType ();
     tt.setTaxAmount (new TaxAmountType ());
+    //TODO: get value from header tab
+    tt.getTaxAmount ().setCurrencyID (CurrencyCodeContentType.EUR);
     getTaxTotal().add(tt);
     // --- +Invoice Line/Tax Total ends     
     
@@ -96,16 +102,22 @@ public class InvoiceLineAdapter extends InvoiceLineType {
     // --- +Invoice Line/Price begins
     setPrice(new PriceType ());
     getPrice().setPriceAmount (new PriceAmountType ());
+    //TODO: get value from header tab
+    getPrice ().getPriceAmount ().setCurrencyID (CurrencyCodeContentType.EUR);    
     getPrice().setBaseQuantity (new BaseQuantityType ());
     
     
     AllowanceChargeType ac = new AllowanceChargeType ();
+    ac.setID (new IDType ());
     ac.setChargeIndicator (new ChargeIndicatorType ());
     ac.setAllowanceChargeReason (new AllowanceChargeReasonType ());
     ac.setMultiplierFactorNumeric (new MultiplierFactorNumericType ());
     ac.setAmount (new AmountType ());
+    //TODO: get value from header tab
+    ac.getAmount ().setCurrencyID (CurrencyCodeContentType.EUR);
     ac.setBaseAmount (new BaseAmountType ());
-    
+    //TODO: get value from header tab
+    ac.getBaseAmount ().setCurrencyID (CurrencyCodeContentType.EUR);    
     getPrice().getAllowanceCharge ().add (ac);
     
     // --- +Invoice Line/Price ends
@@ -271,6 +283,13 @@ public class InvoiceLineAdapter extends InvoiceLineType {
   }   
   
   /*pattern: <set/get>InvLinePriceAllowanceCharge<function-name>*/
+  public void setInvLinePriceAllowanceChargeID(String v) {
+    getPrice ().getAllowanceCharge ().get (0).getID ().setValue (v);
+  }
+  
+  public String getInvLinePriceAllowanceChargeID() {
+    return getPrice ().getAllowanceCharge ().get (0).getID().getValue ();
+  } 
   
   public void setInvLinePriceAllowanceChargeIndicator(Boolean v) {
     getPrice ().getAllowanceCharge ().get (0).getChargeIndicator().setValue (v);

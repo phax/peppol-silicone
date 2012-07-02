@@ -1,5 +1,6 @@
 package at.peppol.webgui.app.components;
 
+import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
 
 import javax.xml.bind.JAXBElement;
@@ -25,8 +26,8 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Form;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.TabSheet;
+import com.vaadin.ui.Window;
 
 @SuppressWarnings ("serial")
 public class InvoiceTabForm extends Form {
@@ -119,11 +120,16 @@ public class InvoiceTabForm extends Form {
           try {
               AbstractUBLDocumentMarshaller.setGlobalValidationEventHandler(null);
               UBL20DocumentMarshaller.writeInvoice(invoice, new StreamResult(new OutputStreamWriter(System.out)));
-          } catch (final Exception ex) {
+              //ByteArrayOutputStream baos = new ByteArrayOutputStream ();
+              //UBL20DocumentMarshaller.writeInvoice(invoice, new StreamResult(new OutputStreamWriter(baos)));
+              //getParent().getWindow ().showNotification("Info", baos.toString (), Window.Notification.TYPE_HUMANIZED_MESSAGE);
+          } catch (Exception ex) {
+              getParent().getWindow ().showNotification("Error", ex.getMessage (), Window.Notification.TYPE_HUMANIZED_MESSAGE);
               LOGGER.error("Error creating files. ", ex);
           }
       }
     }));    
+    
     footerLayout.addComponent(new Button("Save Invoice", new Button.ClickListener() {
 
       @Override
@@ -162,7 +168,7 @@ public class InvoiceTabForm extends Form {
     invTabSheet.addTab (tTabInvoiceHeader, "Invoice Header");
     invTabSheet.addTab (supplierForm, "Supplier Party");
     invTabSheet.addTab (customerForm, "Customer Party");
-    invTabSheet.addTab (new Label("move payee party here? or merge all parties here!"), "Payee Party");
+    //invTabSheet.addTab (new Label("move payee party here? or merge all parties here!"), "Payee Party");
     invTabSheet.addTab (tTabInvoiceDelivery, "Delivery");
     invTabSheet.addTab (tTabInvoicePayment, "Payment");
     invTabSheet.addTab (tTabInvoiceAllowanceCharge, "Allowance/Charge");

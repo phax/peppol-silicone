@@ -3,15 +3,20 @@ package at.peppol.webgui.app.components;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
+
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.DocumentReferenceType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.OrderReferenceType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.PeriodType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AccountingCostType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DocumentCurrencyCodeType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DocumentTypeType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IDType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IssueDateType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.NoteType;
@@ -22,6 +27,8 @@ import com.vaadin.data.Item;
 import com.vaadin.data.util.NestedMethodProperty;
 import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.ui.AbstractTextField;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.DefaultFieldFactory;
@@ -30,29 +37,47 @@ import com.vaadin.ui.Form;
 import com.vaadin.ui.FormFieldFactory;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.GridLayout;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.PopupDateField;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
 
 /**
  * @author Jerouris
  */
 public class TabInvoiceHeader extends Form {
-  
   private InvoiceTabForm parent;
+
+  private List <DocumentReferenceType> additionalDocRefList;
+  private InvoiceAdditionalDocRefAdapter additionalDocRefItem;
   
+  private InvoiceAdditionalDocRefAdapter originalItem;
+
+  private boolean addMode;
+  private boolean editMode;
+  
+  public InvoiceAdditionalDocRefTable table;
+  private VerticalLayout hiddenContent;
+
   public TabInvoiceHeader(InvoiceTabForm parent) {
     this.parent = parent;
+    addMode = false;
+    editMode = false;    
     initElements();
     
     parent.getInvoice().getInvoicePeriod ().add (new PeriodType());
   }
 
   private void initElements() {
-    
+    additionalDocRefList = parent.getInvoice().getAdditionalDocumentReference ();
     final GridLayout grid = new GridLayout(4, 4);
     final VerticalLayout outerLayout = new VerticalLayout();
     
+    hiddenContent = new VerticalLayout();
+    hiddenContent.setSpacing (true);
+    hiddenContent.setMargin (true);    
     
     final Panel outerPanel = new Panel("Invoice Header");
     outerPanel.addComponent(grid);
@@ -63,9 +88,170 @@ public class TabInvoiceHeader extends Form {
     invoiceDetailsPanel.setStyleName("light");
     invoiceDetailsPanel.setSizeFull();
     invoiceDetailsPanel.addComponent(createInvoiceTopForm());
-    grid.addComponent(invoiceDetailsPanel, 0, 0, 3, 0);
+
+    final Panel orderReferencePanel = new Panel("Invoice Order Reference");
+    orderReferencePanel.setStyleName("light");
+    orderReferencePanel.setSizeFull();
+    orderReferencePanel.addComponent(createInvoiceOrderReferenceForm());
+    
+    table = new InvoiceAdditionalDocRefTable(parent.getInvoice().getAdditionalDocumentReference ());
+    table.setSelectable(true);
+    table.setImmediate(true);
+    table.setNullSelectionAllowed(false);
+    table.setHeight (150, UNITS_PIXELS);
+    table.setFooterVisible (true);
+    table.addStyleName ("striped strong");    
+    VerticalLayout tableContainer = new VerticalLayout();
+    tableContainer.addComponent (table);
+    tableContainer.setMargin (false, true, false, false);    
+    
+    //buttons Add, Edit, Delete
+    Button addBtn = new Button("Add New", new Button.ClickListener() {
+      @Override
+      public void buttonClick(final Button.ClickEvent event) {
+        
+        addMode = true;
+        hiddenContent.removeAllComponents ();
+        additionalDocRefItem = createAdditionalDocRefItem();
+        
+        Label formLabel = new Label("<h3>Adding new additional document reference line</h3>", Label.CONTENT_XHTML);
+        
+        hiddenContent.addComponent (formLabel);
+        hiddenContent.addComponent(createInvoiceAdditionalDocRefForm());
+        
+        //Save new line button
+        HorizontalLayout buttonLayout = new HorizontalLayout();
+        buttonLayout.setSpacing (true);
+        buttonLayout.addComponent(new Button("Save additional doc ref line",new Button.ClickListener(){
+          @Override
+          public void buttonClick (ClickEvent event) {
+            //update table (and consequently add new item to allowanceChargeList list)
+            table.addAdditionalDocRefLine (additionalDocRefItem);
+            //hide form
+            hiddenContent.setVisible(false);
+            addMode = false;
+          }
+        }));
+        buttonLayout.addComponent(new Button("Cancel",new Button.ClickListener(){
+          @Override
+          public void buttonClick (ClickEvent event) {
+            hiddenContent.removeAllComponents ();
+            //hide form
+            hiddenContent.setVisible(false);
+            addMode = false;
+          }
+        }));
+        
+        hiddenContent.addComponent(buttonLayout);
+        
+        //hiddenContent.setVisible(!hiddenContent.isVisible());
+        hiddenContent.setVisible(true);
+      }
+    });    
+    Button editBtn = new Button("Edit Selected", new Button.ClickListener() {
+      @Override
+      public void buttonClick(final Button.ClickEvent event) {
+        Object rowId = table.getValue(); // get the selected rows id
+        if(rowId != null){
+          if(addMode || editMode){
+            parent.getWindow ().showNotification("Info", "You cannot edit while in add/edit mode", Window.Notification.TYPE_HUMANIZED_MESSAGE);
+            return;
+          }
+          final String sid = (String)table.getContainerProperty(rowId,"AdditionalDocRefID").getValue();
+          
+          // TODO: PUT THIS IN FUNCTION BEGINS
+          editMode = true;
+          hiddenContent.removeAllComponents ();
+          
+          //get selected item
+          additionalDocRefItem = (InvoiceAdditionalDocRefAdapter) additionalDocRefList.get (table.getIndexFromID (sid));
+          //clone it to original item
+          originalItem = new InvoiceAdditionalDocRefAdapter ();
+          cloneInvoiceAdditionalDocRefItem(additionalDocRefItem, originalItem);
+          
+          Label formLabel = new Label("<h3>Editing additional document reference line</h3>", Label.CONTENT_XHTML);
+          
+          hiddenContent.addComponent (formLabel);
+          hiddenContent.addComponent(createInvoiceAdditionalDocRefForm());
+          
+          //Save new line button
+          HorizontalLayout buttonLayout = new HorizontalLayout();
+          buttonLayout.setSpacing (true);
+          buttonLayout.addComponent(new Button("Save changes",new Button.ClickListener(){
+            @Override
+            public void buttonClick (ClickEvent event) {
+              //update table (and consequently edit item to allowanceChargeList list)
+              table.setAdditionalDocRefLine (sid, additionalDocRefItem);
+              //hide form
+              hiddenContent.setVisible(false);
+              editMode = false;
+            }
+          }));
+          buttonLayout.addComponent(new Button("Cancel editing",new Button.ClickListener(){
+            @Override
+            public void buttonClick (ClickEvent event) {
+              hiddenContent.removeAllComponents ();
+              
+              table.setAdditionalDocRefLine (sid, originalItem);
+              //hide form
+              hiddenContent.setVisible(false);
+              editMode = false;
+            }
+          }));
+          
+          hiddenContent.addComponent(buttonLayout);
+          
+          //hiddenContent.setVisible(!hiddenContent.isVisible());
+          hiddenContent.setVisible(true);          
+          // TODO: PUT THIS IN FUNCTION ENDS
+        }
+        else {
+          parent.getWindow ().showNotification("Info", "No table line is selected", Window.Notification.TYPE_HUMANIZED_MESSAGE);
+        }
+
+      }
+    });    
+    Button deleteBtn = new Button("Delete Selected", new Button.ClickListener() {
+      @Override
+      public void buttonClick(final Button.ClickEvent event) {
+        Object rowId = table.getValue(); // get the selected rows id
+        if(rowId != null){
+          if(addMode || editMode){
+            parent.getWindow ().showNotification("Info", "You cannot delete while in add/edit mode", Window.Notification.TYPE_HUMANIZED_MESSAGE);
+            return;
+          }
+          if(table.getContainerProperty(rowId,"AdditionalDocRefID").getValue() != null){
+            String sid = (String)table.getContainerProperty(rowId,"AdditionalDocRefID").getValue();
+            table.removeAdditionalDocRefLine (sid);
+          }
+        }
+        else {
+          parent.getWindow ().showNotification("Info", "No table line is selected", Window.Notification.TYPE_HUMANIZED_MESSAGE);
+          
+        }
+      }
+    });    
+    
+    VerticalLayout buttonsContainer = new VerticalLayout();
+    buttonsContainer.setSpacing (true);
+    buttonsContainer.addComponent (addBtn);
+    buttonsContainer.addComponent (editBtn);
+    buttonsContainer.addComponent (deleteBtn);    
+    
+    grid.addComponent(invoiceDetailsPanel, 0, 0);
+    grid.addComponent(orderReferencePanel, 0, 1);
+    grid.addComponent(tableContainer, 0, 2);
+    grid.addComponent(buttonsContainer, 1, 2);
     grid.setSizeUndefined();
-     
+    grid.setSpacing (true);
+    
+    // ---- HIDDEN FORM BEGINS -----
+    VerticalLayout formLayout = new VerticalLayout();
+    formLayout.addComponent(hiddenContent);
+    hiddenContent.setVisible(false);    
+    outerLayout.addComponent(formLayout);
+    // ---- HIDDEN FORM ENDS -----
+    
     setLayout(outerLayout);
     outerPanel.requestRepaintAll();
   }
@@ -78,12 +264,11 @@ public class TabInvoiceHeader extends Form {
     invoiceTopForm.addItemProperty ("Invoice ID", new NestedMethodProperty (parent.getInvoice().getID (), "value"));
         
     parent.getInvoice().setDocumentCurrencyCode (new DocumentCurrencyCodeType ());
-    // invoice.getDocumentCurrencyCode().setValue("EUR");
-
-    parent.getInvoice().setIssueDate (new IssueDateType ());
+    //parent.getInvoice().getDocumentCurrencyCode().setValue("EUR");
     invoiceTopForm.addItemProperty ("Currency", new NestedMethodProperty (parent.getInvoice().getDocumentCurrencyCode (), "value"));
 
     Date issueDate = new Date ();
+    parent.getInvoice().setIssueDate (new IssueDateType ());
     invoiceTopForm.addItemProperty ("Issue Date", new ObjectProperty <Date> (issueDate));
    
     parent.getInvoice().getNote ().add (new NoteType ());
@@ -105,6 +290,85 @@ public class TabInvoiceHeader extends Form {
     return invoiceTopForm;
   }
 
+  public Form createInvoiceOrderReferenceForm() {
+    final Form invoiceOrderRefForm = new Form(new FormLayout(), new InvoiceFieldFactory());
+    invoiceOrderRefForm.setImmediate(true);
+      
+    
+    OrderReferenceType rt = new OrderReferenceType ();
+    rt.setID (new IDType ());
+    parent.getInvoice().setOrderReference (rt);
+
+    DocumentReferenceType dr = new DocumentReferenceType ();
+    dr.setID (new IDType ());
+    dr.setDocumentType (new DocumentTypeType ());
+    
+    parent.getInvoice().getContractDocumentReference ().add (dr);
+    
+    invoiceOrderRefForm.addItemProperty ("Order Reference ID", new NestedMethodProperty (parent.getInvoice().getOrderReference ().getID (), "value"));
+    invoiceOrderRefForm.addItemProperty ("Document Reference ID", new NestedMethodProperty (parent.getInvoice().getContractDocumentReference ().get(0).getID (), "value"));
+    invoiceOrderRefForm.addItemProperty ("Document Reference Type", new NestedMethodProperty (parent.getInvoice().getContractDocumentReference ().get(0).getDocumentType (), "value"));
+
+    return invoiceOrderRefForm;
+  }
+  
+
+  
+  
+  
+  
+  
+  public Form createInvoiceAdditionalDocRefForm() {
+    final Form invoiceAdditionalDocRefForm = new Form(new FormLayout(), new InvoiceFieldFactory());
+    invoiceAdditionalDocRefForm.setImmediate(true);
+
+    NestedMethodProperty mp = new NestedMethodProperty(additionalDocRefItem, "AdditionalDocRefID");
+    if(!editMode){
+      IDType num = new IDType();
+      num.setValue (String.valueOf (additionalDocRefList.size ()+1));
+      additionalDocRefItem.setID(num);
+    }
+    else {
+      mp.setReadOnly (true);
+    }
+    
+    invoiceAdditionalDocRefForm.addItemProperty ("Additional Doc Ref Type ID", mp );
+    invoiceAdditionalDocRefForm.addItemProperty ("Additional Doc Ref Type", new NestedMethodProperty(additionalDocRefItem, "AdditionalDocRefDocumentType") );
+    //invoiceAdditionalDocRefForm.addItemProperty ("Embedded Doc", new NestedMethodProperty(additionalDocRefItem, "AdditionalDocRefEmbeddedDocumentBinaryObject") );
+    invoiceAdditionalDocRefForm.addItemProperty ("External Ref URI", new NestedMethodProperty(additionalDocRefItem, "AdditionalDocRefExternalReference") );
+
+    return invoiceAdditionalDocRefForm;
+  }  
+  
+  private InvoiceAdditionalDocRefAdapter createAdditionalDocRefItem() {
+    InvoiceAdditionalDocRefAdapter ac = new InvoiceAdditionalDocRefAdapter();
+   
+    ac.setAdditionalDocRefID ("");
+    ac.setAdditionalDocRefDocumentType ("");
+    //ac.setAdditionalDocRefEmbeddedDocumentBinaryObject (null);
+    ac.setAdditionalDocRefExternalReference("");
+    
+    return ac;
+  }  
+  
+  private void cloneInvoiceAdditionalDocRefItem(InvoiceAdditionalDocRefAdapter srcItem, InvoiceAdditionalDocRefAdapter dstItem)
+  {
+    dstItem.setAdditionalDocRefID (srcItem.getAdditionalDocRefID ());
+    dstItem.setAdditionalDocRefDocumentType (srcItem.getAdditionalDocRefDocumentType ());
+    //dstItem.setAdditionalDocRefEmbeddedDocumentBinaryObject (srcItem.getAdditionalDocRefEmbeddedDocumentBinaryObject ());
+    dstItem.setAdditionalDocRefExternalReference (srcItem.getAdditionalDocRefExternalReference ());
+ 
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   @SuppressWarnings ("serial")
   class InvoiceFieldFactory implements FormFieldFactory {
     
