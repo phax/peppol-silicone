@@ -5,10 +5,12 @@
 package at.peppol.webgui.app.components;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AllowanceChargeType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.InvoiceLineType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ItemIdentificationType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ItemPropertyType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ItemType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.OrderLineReferenceType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.PriceType;
@@ -32,6 +34,7 @@ import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.NoteType
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PercentType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PriceAmountType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TaxAmountType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ValueType;
 import un.unece.uncefact.codelist.specification._54217._2001.CurrencyCodeContentType;
 
 /**
@@ -85,14 +88,19 @@ public class InvoiceLineAdapter extends InvoiceLineType {
     ct.setTaxScheme (tst);
     item.getClassifiedTaxCategory ().add(ct);
     
-    setItem(item);
-    // --- +Invoice Line/Item ends
-    
     // --- +Item/Commodity Classification begins (0..N)
     // --- +Item/Commodity Classification ends
     
     // --- +Item/Additional Item Property begins (0..N)
+    ItemPropertyType pt = new ItemPropertyType ();
+    pt.setName (new NameType ());
+    pt.setValue (new ValueType ());
+    item.getAdditionalItemProperty ().add (pt);
     // --- +Item/Additional Item Property ends
+    
+    setItem(item);
+    // --- +Invoice Line/Item ends
+    
     
     // --- +Invoice Line/Price begins
     setPrice(new PriceType ());
@@ -319,6 +327,19 @@ public class InvoiceLineAdapter extends InvoiceLineType {
   public BigDecimal getInvLinePriceAllowanceChargeBaseAmount() {
     return getPrice ().getAllowanceCharge ().get (0).getBaseAmount ().getValue ();
   }    
+  
+  /*
+  public void setInvLineAdditionalItemPropertyList(List<ItemPropertyType> v) {
+    getItem ().getAdditionalItemProperty ().add (v.get (0));
+  }
+  */
+  
+  public List<ItemPropertyType> getInvLineAdditionalItemPropertyList() {
+    if (getItem ().getAdditionalItemProperty ().equals (null)){
+      getItem ().getAdditionalItemProperty ().add (new ItemPropertyType ());
+    }
+    return getItem ().getAdditionalItemProperty ();
+  }
   
   
   

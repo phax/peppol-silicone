@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.InvoiceLineType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ItemPropertyType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IDType;
 import un.unece.uncefact.codelist.specification._54217._2001.CurrencyCodeContentType;
 
@@ -82,6 +83,11 @@ public class TabInvoiceLine extends Form {
         hiddenContent.addComponent (formLabel);
         hiddenContent.addComponent(createInvoiceLineMainForm());
         
+        //Set invoiceLine 0..N cardinalily panels 
+        Panel itemPropertyPanel = new ItemPropertyForm ("Additional", invoiceLineItem.getInvLineAdditionalItemPropertyList ());
+        hiddenContent.addComponent (itemPropertyPanel);        
+        
+        
         //Save new line button
         HorizontalLayout buttonLayout = new HorizontalLayout();
         buttonLayout.setSpacing (true);
@@ -137,6 +143,11 @@ public class TabInvoiceLine extends Form {
           
           hiddenContent.addComponent (formLabel);
           hiddenContent.addComponent(createInvoiceLineMainForm());
+          
+          //Set invoiceLine 0..N cardinalily panels 
+          Panel itemPropertyPanel = new ItemPropertyForm ("Additional", invoiceLineItem.getInvLineAdditionalItemPropertyList ());
+          hiddenContent.addComponent (itemPropertyPanel);
+          
           
           //Save new line button
           HorizontalLayout buttonLayout = new HorizontalLayout();
@@ -289,6 +300,8 @@ public class TabInvoiceLine extends Form {
     ac.setInvLinePriceAllowanceChargeMultiplierFactorNumeric (new BigDecimal(0));
     ac.setInvLinePriceAllowanceChargeAmount(new BigDecimal(0));
     ac.setInvLinePriceAllowanceChargeBaseAmount(new BigDecimal(0));
+    
+    ac.getInvLineAdditionalItemPropertyList ().add (new ItemPropertyType ());
     
     return ac;
   }  
