@@ -42,9 +42,12 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
+import org.eclipse.persistence.config.PersistenceUnitProperties;
+
 import at.peppol.commons.jpa.AbstractJPAWrapper;
 import at.peppol.commons.utils.ConfigFile;
 
+import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 
 /**
@@ -70,24 +73,28 @@ final class SMPJPAWrapper extends AbstractJPAWrapper {
 
     final Map <String, Object> ret = new HashMap <String, Object> ();
     // Read all properties from the standard configuration file
-    ret.put ("javax.persistence.jdbc.driver", aCF.getString (CONFIG_JDBC_DRIVER));
-    ret.put ("javax.persistence.jdbc.url", aCF.getString (CONFIG_JDBC_URL));
-    ret.put ("javax.persistence.jdbc.user", aCF.getString (CONFIG_JDBC_USER));
-    ret.put ("javax.persistence.jdbc.password", aCF.getString (CONFIG_JDBC_PASSWORD));
-    ret.put ("eclipselink.target-database", aCF.getString (CONFIG_TARGET_DATABASE));
+    ret.put (PersistenceUnitProperties.JDBC_DRIVER, aCF.getString (CONFIG_JDBC_DRIVER));
+    ret.put (PersistenceUnitProperties.JDBC_URL, aCF.getString (CONFIG_JDBC_URL));
+    ret.put (PersistenceUnitProperties.JDBC_USER, aCF.getString (CONFIG_JDBC_USER));
+    ret.put (PersistenceUnitProperties.JDBC_PASSWORD, aCF.getString (CONFIG_JDBC_PASSWORD));
+    ret.put (PersistenceUnitProperties.TARGET_DATABASE, aCF.getString (CONFIG_TARGET_DATABASE));
     // Connection pooling
-    ret.put ("eclipselink.jdbc.read-connections.max", aCF.getString (CONFIG_JDBC_READ_CONNECTIONS_MAX));
+    ret.put (PersistenceUnitProperties.CONNECTION_POOL_MAX, aCF.getString (CONFIG_JDBC_READ_CONNECTIONS_MAX));
 
     // EclipseLink should create the database schema automatically
     // Values: Values: none/create-tables/drop-and-create-tables
-    ret.put ("eclipselink.ddl-generation", "drop-and-create-tables");
-    ret.put ("eclipselink.ddl-generation.output-mode", "sql-script");
-    ret.put ("eclipselink.create-ddl-jdbc-file-name", "db-create-smp.sql");
-    ret.put ("eclipselink.drop-ddl-jdbc-file-name", "db-drop-smp.sql");
+    ret.put (PersistenceUnitProperties.DDL_GENERATION, PersistenceUnitProperties.DROP_AND_CREATE);
+    // Write SQL file only in debug mode, so that the production version can be
+    // read-only!
+    ret.put (PersistenceUnitProperties.DDL_GENERATION_MODE,
+             GlobalDebug.isDebugMode () ? PersistenceUnitProperties.DDL_SQL_SCRIPT_GENERATION
+                                       : PersistenceUnitProperties.NONE);
+    ret.put (PersistenceUnitProperties.CREATE_JDBC_DDL_FILE, "db-create-smp.sql");
+    ret.put (PersistenceUnitProperties.DROP_JDBC_DDL_FILE, "db-drop-smp.sql");
 
     // Use an isolated cache
     // (http://code.google.com/p/peppol-silicone/issues/detail?id=6)
-    ret.put ("eclipselink.cache.shared.default", "false");
+    ret.put (PersistenceUnitProperties.CACHE_SHARED_DEFAULT, "false");
 
     return ret;
   }
