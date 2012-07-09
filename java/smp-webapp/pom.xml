@@ -48,18 +48,18 @@
     <dependency>
       <groupId>com.sun.jersey</groupId>
       <artifactId>jersey-server</artifactId>
-      <version>1.12</version>
+      <version>${jersey.version}</version>
     </dependency>
     <dependency>
       <groupId>com.sun.jersey</groupId>
       <artifactId>jersey-servlet</artifactId>
-      <version>1.12</version>
+      <version>${jersey.version}</version>
     </dependency>
     <!-- You may replace MySQL in production with something else -->
     <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
-      <version>5.1.18</version>
+      <version>5.1.21</version>
     </dependency>
     
     <dependency>
