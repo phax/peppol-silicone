@@ -85,6 +85,10 @@ final class SMPJPAWrapper extends AbstractJPAWrapper {
     ret.put ("eclipselink.create-ddl-jdbc-file-name", "db-create-smp.sql");
     ret.put ("eclipselink.drop-ddl-jdbc-file-name", "db-drop-smp.sql");
 
+    // Use an isolated cache
+    // (http://code.google.com/p/peppol-silicone/issues/detail?id=6)
+    ret.put ("eclipselink.cache.shared.default", "false");
+
     return ret;
   }
 

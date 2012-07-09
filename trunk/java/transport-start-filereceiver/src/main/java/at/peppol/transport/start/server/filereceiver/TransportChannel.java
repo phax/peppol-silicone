@@ -51,7 +51,7 @@ import com.phloc.commons.CGlobal;
 import com.phloc.commons.exceptions.LoggedException;
 import com.phloc.commons.io.file.FileOperations;
 import com.phloc.commons.io.file.FileUtils;
-import com.phloc.commons.io.file.filter.FilenameFilterFactory;
+import com.phloc.commons.io.file.filter.FilenameFilterEndsWith;
 import com.phloc.commons.xml.serialize.XMLWriter;
 import com.phloc.commons.xml.serialize.XMLWriterSettings;
 
@@ -246,7 +246,7 @@ final class TransportChannel {
   public final String [] getMessageIDs (final String channelID) throws Exception {
 
     final File dir = getChannelInboxDir (channelID);
-    final File [] files = dir.listFiles (FilenameFilterFactory.getEndsWithFilter (EXT_PAYLOAD));
+    final File [] files = dir.listFiles (new FilenameFilterEndsWith (EXT_PAYLOAD));
 
     final String [] messageIDs = new String [files.length];
     int i = 0;

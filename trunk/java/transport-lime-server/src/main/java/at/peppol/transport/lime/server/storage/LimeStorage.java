@@ -53,7 +53,7 @@ import com.phloc.commons.CGlobal;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.io.file.FileOperations;
 import com.phloc.commons.io.file.FileUtils;
-import com.phloc.commons.io.file.filter.FilenameFilterFactory;
+import com.phloc.commons.io.file.filter.FilenameFilterEndsWith;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.xml.serialize.XMLReader;
 import com.phloc.commons.xml.serialize.XMLWriter;
@@ -142,7 +142,7 @@ public final class LimeStorage {
   @Nonnull
   public String [] getMessageIDs (@Nonnull final String sChannelID) {
     final File aChannnelDir = _getChannelInboxDir (sChannelID);
-    final File [] aPayloadFiles = aChannnelDir.listFiles (FilenameFilterFactory.getEndsWithFilter (EXT_PAYLOAD));
+    final File [] aPayloadFiles = aChannnelDir.listFiles (new FilenameFilterEndsWith (EXT_PAYLOAD));
     if (aPayloadFiles == null)
       return new String [0];
 

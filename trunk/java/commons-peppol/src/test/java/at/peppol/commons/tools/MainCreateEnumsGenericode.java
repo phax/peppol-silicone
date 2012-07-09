@@ -68,7 +68,7 @@ import org.oasis_open.docs.codelist.ns.genericode._1.SimpleCodeList;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.id.IHasID;
-import com.phloc.commons.io.file.filter.FilenameFilterFactory;
+import com.phloc.commons.io.file.filter.FilenameFilterEndsWith;
 import com.phloc.commons.io.file.iterate.FileSystemRecursiveIterator;
 import com.phloc.commons.io.resource.FileSystemResource;
 import com.phloc.commons.lang.EnumHelper;
@@ -177,7 +177,7 @@ public class MainCreateEnumsGenericode {
 
   public static void main (final String [] args) throws JClassAlreadyExistsException, IOException {
     for (final File aFile : FileSystemRecursiveIterator.create (new File ("src/main/resources/codelists/ubl"),
-                                                                FilenameFilterFactory.getEndsWithFilter (".gc"))) {
+                                                                new FilenameFilterEndsWith (".gc"))) {
       System.out.println (aFile.getName ());
       final CodeListDocument aCodeList10 = new Genericode10CodeListMarshaller ().read (new FileSystemResource (aFile));
       if (aCodeList10 != null)
