@@ -240,7 +240,7 @@ final class GuiSMLController {
   }
 
   public static String performAction (@Nonnull final ESMLAction eAction, final String sParameter) {
-    final String [] aParams = RegExHelper.split (sParameter, "[ \t]+");
+    final String [] aParams = RegExHelper.getSplitToArray (sParameter, "[ \t]+");
 
     final AppProperties aAP = AppProperties.getInstance ();
     if (aAP.getSMLInfo () == null) {

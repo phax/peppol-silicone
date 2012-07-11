@@ -150,7 +150,7 @@ public final class ArtefactIndex {
     final String sLanguages = eRoot.getAttribute ("languages");
     final Set <Locale> aLanguages = new HashSet <Locale> ();
     if (sLanguages != null)
-      for (final String sLanguage : RegExHelper.split (sLanguages, "[,;]"))
+      for (final String sLanguage : RegExHelper.getSplitToArray (sLanguages, "[,;]"))
         aLanguages.add (LocaleCache.getLocale (sLanguage));
 
     // Stylesheet filename

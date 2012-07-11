@@ -49,7 +49,7 @@ import com.phloc.commons.regex.RegExHelper;
 /**
  * A logging adapter that can be hooked into JPA and forwards all logging
  * requests to phloc logging.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class JPALogger extends AbstractSessionLog {
@@ -59,7 +59,7 @@ public final class JPALogger extends AbstractSessionLog {
   public void log (final SessionLogEntry aSessionLogEntry) {
     final int nLogLevel = aSessionLogEntry.getLevel ();
     // JPA uses the System property for adding line breaks
-    final String [] aMsgLines = RegExHelper.split (aSessionLogEntry.getMessage (), CGlobal.LINE_SEPARATOR);
+    final String [] aMsgLines = RegExHelper.getSplitToArray (aSessionLogEntry.getMessage (), CGlobal.LINE_SEPARATOR);
     for (int i = 0; i < aMsgLines.length; ++i) {
       final String sMsg = aMsgLines[i];
       final Throwable t = i == aMsgLines.length - 1 ? aSessionLogEntry.getException () : null;

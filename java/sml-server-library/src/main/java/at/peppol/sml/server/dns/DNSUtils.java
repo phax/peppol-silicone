@@ -124,7 +124,7 @@ public final class DNSUtils {
   @Nullable
   public static ParticipantIdentifierType getIdentiferFromDnsName (@Nullable final String sDNSName) {
     // Split in hash, scheme and rest
-    final String [] parts = RegExHelper.split (sDNSName, "\\.", 3);
+    final String [] parts = RegExHelper.getSplitToArray (sDNSName, "\\.", 3);
     if (parts.length < 2) {
       s_aLogger.warn ("wrong syntax of identifier - must contain at least on separator : " + sDNSName);
       return null;
@@ -210,7 +210,7 @@ public final class DNSUtils {
     if (!RegExHelper.stringMatchesPattern (DOMAIN_NAME_RULE, sHostname))
       throw new IllegalHostnameException ("Hostname not legal : " + sHostname);
 
-    final String [] aParts = RegExHelper.split (sHostname, "\\.");
+    final String [] aParts = RegExHelper.getSplitToArray (sHostname, "\\.");
     for (final String sPart : aParts)
       if (sPart.length () > 63)
         throw new IllegalHostnameException ("Hostname part length > 63 : " + sHostname);
