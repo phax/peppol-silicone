@@ -42,7 +42,7 @@ import javax.net.ssl.SSLSession;
 
 /**
  * Implementation of HostnameVerifier always returning <code>true</code>.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class HostnameVerifierAlwaysTrue implements HostnameVerifier {

@@ -49,7 +49,7 @@ import com.phloc.commons.state.ESuccess;
 public interface IRegistrationHook {
   /**
    * Create a participant in the SML.
-   *
+   * 
    * @param aPI
    *        The participant to be created
    * @throws HookException
@@ -59,7 +59,7 @@ public interface IRegistrationHook {
 
   /**
    * Delete a participant in the SML.
-   *
+   * 
    * @param aPI
    *        The participant to be deleted
    * @throws HookException
@@ -70,7 +70,7 @@ public interface IRegistrationHook {
   /**
    * In case of failure, this method is meant to rollback the previously done
    * changes. It is call for success and failures.
-   *
+   * 
    * @param eSuccess
    *        The success state.
    * @throws HookException

@@ -41,10 +41,9 @@ import at.peppol.commons.uri.BusdoxURLUtils;
 
 import com.phloc.commons.string.ToStringGenerator;
 
-
 /**
  * Represents a single user ID.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class UserId {

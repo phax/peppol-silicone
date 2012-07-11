@@ -46,13 +46,13 @@ import org.busdox.transport.identifiers._1.ProcessIdentifierType;
 
 /**
  * Read only interface for the Metadata object.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public interface IMessageMetadata {
   /**
    * Get message identifier value.
-   *
+   * 
    * @return the messageId the value of the message identifier.
    */
   @Nullable

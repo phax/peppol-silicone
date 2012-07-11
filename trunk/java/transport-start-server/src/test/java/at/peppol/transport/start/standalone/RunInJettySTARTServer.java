@@ -52,7 +52,6 @@ import at.peppol.commons.utils.ConfigFile;
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.SystemProperties;
 
-
 /**
  * Run this as an application and your SML will be up and running on port 8080
  * of your local machine. Please ensure that you have adopted the Hibernate

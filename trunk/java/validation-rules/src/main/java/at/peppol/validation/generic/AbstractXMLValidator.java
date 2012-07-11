@@ -45,7 +45,7 @@ import com.phloc.commons.xml.transform.ResourceStreamSource;
 
 /**
  * Abstract implementation of the {@link IXMLValidator}.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public abstract class AbstractXMLValidator implements IXMLValidator {

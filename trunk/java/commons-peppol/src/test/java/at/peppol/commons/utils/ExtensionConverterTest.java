@@ -50,10 +50,9 @@ import org.w3c.dom.Element;
 
 import at.peppol.commons.utils.ExtensionConverter;
 
-
 /**
  * Test class for class {@link ExtensionConverter}.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class ExtensionConverterTest {

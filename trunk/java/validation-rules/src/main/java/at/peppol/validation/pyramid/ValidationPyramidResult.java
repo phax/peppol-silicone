@@ -56,10 +56,9 @@ import com.phloc.commons.error.IResourceErrorGroup;
 import com.phloc.commons.error.ResourceErrorGroup;
 import com.phloc.commons.string.ToStringGenerator;
 
-
 /**
  * Represents a result of validating the whole pyramid.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @NotThreadSafe
@@ -73,7 +72,7 @@ public final class ValidationPyramidResult {
   /**
    * Constructor. Passing the input parameters to validation to query them from
    * the result object without having access to the query parameters.
-   *
+   * 
    * @param aValidationDocumentType
    *        The document type to be validated. May not be <code>null</code>.
    * @param aValidationTransaction
@@ -130,7 +129,7 @@ public final class ValidationPyramidResult {
 
   /**
    * Add a new validation result layer.
-   *
+   * 
    * @param aResultLayer
    *        The new validation result layer. May not be <code>null</code>.
    */
@@ -154,7 +153,7 @@ public final class ValidationPyramidResult {
    * Call this method with <code>true</code> to indicate that not the whole
    * pyramid was handled, so this result reflects only the result of validating
    * a part of the pyramid.
-   *
+   * 
    * @param bInterrupted
    *        <code>true</code> if interrupted, <code>false</code> otherwise.
    */
@@ -172,7 +171,7 @@ public final class ValidationPyramidResult {
   /**
    * Check if this result set contains results for the specified validation
    * level.
-   *
+   * 
    * @param eValidationLevel
    *        The validation level to check. May not be <code>null</code>.
    * @return <code>true</code> if results are contained for the specified level,
@@ -190,7 +189,7 @@ public final class ValidationPyramidResult {
 
   /**
    * Get all validation result layers for the passed validation level.
-   *
+   * 
    * @param eValidationLevel
    *        The validation level to use. May not be <code>null</code>.
    * @return A non-<code>null</code> potentially empty list of all validation
@@ -212,7 +211,7 @@ public final class ValidationPyramidResult {
   /**
    * Get an aggregated error object, that contains the elements of all
    * validation result layers.
-   *
+   * 
    * @return A non-<code>null</code> aggregated result error object.
    */
   @Nonnull

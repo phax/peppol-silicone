@@ -39,7 +39,7 @@ package at.peppol.commons.cenbii.profiles;
 
 /**
  * Defines the groups (= categories) available for profiles ({@link EProfile}).
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public enum EGroup {

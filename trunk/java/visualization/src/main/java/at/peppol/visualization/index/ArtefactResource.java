@@ -49,7 +49,7 @@ import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * Represents a single resource that is attached to a visualization artefact.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable

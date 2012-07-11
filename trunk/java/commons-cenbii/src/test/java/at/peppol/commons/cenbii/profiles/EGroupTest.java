@@ -45,7 +45,7 @@ import at.peppol.commons.cenbii.profiles.EGroup;
 
 /**
  * Test class for class {@link EGroup}.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class EGroupTest {

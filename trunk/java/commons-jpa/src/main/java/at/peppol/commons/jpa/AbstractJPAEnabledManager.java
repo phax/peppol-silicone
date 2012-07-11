@@ -53,7 +53,7 @@ import com.phloc.commons.state.ESuccess;
 /**
  * Abstract base class for entity managers. Provides the
  * {@link #doInTransaction(Runnable)} method and other sanity methods.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public abstract class AbstractJPAEnabledManager {

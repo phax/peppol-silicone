@@ -46,7 +46,7 @@ import com.phloc.commons.lang.EnumHelper;
 
 /**
  * Represents the different resource types of artefacts.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public enum EArtefactResourceType implements IHasID <String> {

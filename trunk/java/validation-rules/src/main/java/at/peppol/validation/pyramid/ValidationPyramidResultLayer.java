@@ -46,10 +46,9 @@ import at.peppol.validation.rules.EValidationLevel;
 import com.phloc.commons.error.IResourceErrorGroup;
 import com.phloc.commons.string.ToStringGenerator;
 
-
 /**
  * Represents a single result layer of the validation pyramid.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable
@@ -61,7 +60,7 @@ public final class ValidationPyramidResultLayer {
 
   /**
    * Constructor.
-   *
+   * 
    * @param eValidationLevel
    *        The validation level. May not be <code>null</code>.
    * @param eXMLValidationType

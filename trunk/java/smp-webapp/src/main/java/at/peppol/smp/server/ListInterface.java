@@ -64,11 +64,10 @@ import at.peppol.smp.server.data.IDataManager;
 import at.peppol.smp.server.exception.UnauthorizedException;
 import at.peppol.smp.server.util.RequestHelper;
 
-
 /**
  * This class implements a REST frontend for getting the list of service groups
  * for a given user.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Path ("/list/{UserId}")

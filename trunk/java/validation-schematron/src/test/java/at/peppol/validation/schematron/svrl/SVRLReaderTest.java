@@ -36,7 +36,6 @@ import com.phloc.commons.xml.XMLFactory;
 import com.phloc.commons.xml.serialize.XMLReader;
 import com.phloc.commons.xml.serialize.XMLWriter;
 
-
 /**
  * Test class for class {@link SVRLReader}.
  * 

@@ -48,10 +48,9 @@ import at.peppol.commons.utils.ReadonlyUsernamePWCredentials;
 
 import com.phloc.commons.mock.PhlocTestUtils;
 
-
 /**
  * Test class for class {@link ReadonlyUsernamePWCredentials}.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class ReadonlyUsernamePWCredentialsTest {

@@ -55,7 +55,6 @@ import at.peppol.sml.server.exceptions.IllegalHostnameException;
 import at.peppol.sml.server.exceptions.IllegalIdentifierSchemeException;
 import at.peppol.sml.server.exceptions.InternalErrorException;
 
-
 /**
  * @author PEPPOL.AT, BRZ, Philip Helger
  */

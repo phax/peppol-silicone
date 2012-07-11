@@ -27,12 +27,11 @@ import at.peppol.validation.schematron.svrl.SVRLReader;
 import com.phloc.commons.id.IHasID;
 import com.phloc.commons.io.IReadableResource;
 
-
 /**
  * Base interface for a Schematron resource. The implementation can e.g. be a
  * SCH file that needs preprocessing to XSLT or an already precompiled XSLT
  * file.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public interface ISchematronResource extends IHasID <String> {
@@ -53,7 +52,7 @@ public interface ISchematronResource extends IHasID <String> {
   /**
    * Apply the schematron validation on the passed XML resource and return an
    * SVRL XML document.
-   *
+   * 
    * @param aXMLResource
    *        The XML resource to validate via Schematron. May not be
    *        <code>null</code>.
@@ -70,7 +69,7 @@ public interface ISchematronResource extends IHasID <String> {
   /**
    * Apply the schematron validation on the passed XML source and return an SVRL
    * XML document.
-   *
+   * 
    * @param aXMLSource
    *        The XML source to validate via Schematron. May not be
    *        <code>null</code>.

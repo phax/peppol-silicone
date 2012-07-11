@@ -30,7 +30,7 @@ import com.phloc.commons.xml.transform.ResourceStreamSource;
 /**
  * Abstract implementation of the {@link ISchematronResource} interface handling
  * the underlying resource and wrapping one method.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public abstract class AbstractSchematronResource implements ISchematronResource {

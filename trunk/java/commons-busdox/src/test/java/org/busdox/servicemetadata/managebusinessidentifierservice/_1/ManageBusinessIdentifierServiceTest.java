@@ -41,13 +41,12 @@ import org.junit.Test;
 
 /**
  * Test class for class {@link ManageBusinessIdentifierService}.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
- *
  */
 public final class ManageBusinessIdentifierServiceTest {
   @Test
-  public void testCtor() {
-    new ManageBusinessIdentifierService();
+  public void testCtor () {
+    new ManageBusinessIdentifierService ();
   }
 }

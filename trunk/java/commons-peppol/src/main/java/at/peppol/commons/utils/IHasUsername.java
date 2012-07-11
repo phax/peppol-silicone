@@ -41,7 +41,7 @@ import javax.annotation.Nullable;
 
 /**
  * A read-only version of a username retriever.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public interface IHasUsername {

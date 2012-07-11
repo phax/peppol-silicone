@@ -40,7 +40,7 @@ package at.peppol.sml.server.exceptions;
 /**
  * This exception is thrown whenever the client of the web service gives bad
  * input.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public class BadRequestException extends SMLException {

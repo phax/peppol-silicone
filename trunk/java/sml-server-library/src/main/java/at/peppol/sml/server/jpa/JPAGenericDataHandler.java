@@ -64,10 +64,9 @@ import at.peppol.sml.server.exceptions.UnknownUserException;
 
 import com.phloc.commons.annotations.UsedViaReflection;
 
-
 /**
  * A JPA implementation of the {@link IGenericDataHandler} interface.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @UsedViaReflection

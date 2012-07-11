@@ -44,7 +44,7 @@ import com.phloc.commons.annotations.Nonempty;
 
 /**
  * Base interface for a single identifier issuing agency.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public interface IIdentifierIssuingAgency {

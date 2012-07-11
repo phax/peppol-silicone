@@ -45,10 +45,9 @@ import at.peppol.validation.rules.EValidationLevel;
 
 import com.phloc.commons.string.ToStringGenerator;
 
-
 /**
  * Represent a single validation layer within the validation pyramid.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable
@@ -59,7 +58,7 @@ public final class ValidationPyramidLayer {
 
   /**
    * Constructor
-   *
+   * 
    * @param eValidationLevel
    *        The validation level of this layer. May not be <code>null</code>.
    * @param aValidator

@@ -54,7 +54,7 @@ import com.phloc.commons.name.IHasName;
  * Defines a single CEN BII collaboration, that is used in 1-n profiles (
  * {@link EProfile}). Each collaboration consists of 1-n transactions (process
  * steps, {@link ETransaction}).
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public enum ECollaboration implements IHasName {
@@ -128,7 +128,7 @@ public enum ECollaboration implements IHasName {
 
   /**
    * Check if the passed transaction is contained in this collaboration.
-   *
+   * 
    * @param eTransaction
    *        The transaction to query. May be <code>null</code>.
    * @return <code>true</code> if the passed transaction is contained in this
@@ -148,7 +148,7 @@ public enum ECollaboration implements IHasName {
 
   /**
    * Get a list with all collaborations supporting a certain transaction.
-   *
+   * 
    * @param eTransaction
    *        The transaction to be searched. May not be <code>null</code>.
    * @return A non-<code>null</code> non-empty list with all collaborations. It

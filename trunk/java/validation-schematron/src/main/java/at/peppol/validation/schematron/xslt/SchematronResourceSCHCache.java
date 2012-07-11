@@ -35,7 +35,7 @@ import com.phloc.commons.io.IReadableResource;
 
 /**
  * Factory for creating {@link ISchematronXSLTProvider} objects.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class SchematronResourceSCHCache {
@@ -73,7 +73,7 @@ public final class SchematronResourceSCHCache {
 
   /**
    * Create a new Schematron validator for the passed resource.
-   *
+   * 
    * @param aSchematronResource
    *        The resource of the Schematron rules. May not be <code>null</code>.
    * @param aCustomErrorListener

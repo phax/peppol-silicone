@@ -45,11 +45,10 @@ import at.peppol.validation.schematron.svrl.ISVRLLocationBeautifierSPI;
 import com.phloc.commons.annotations.IsSPIImplementation;
 import com.phloc.ubl.UBL20DocumentTypes;
 
-
 /**
  * SPI implementation of the {@link ISVRLLocationBeautifierSPI} interface. Used
  * to beautify error messages in SVRL :)
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @IsSPIImplementation

@@ -53,10 +53,9 @@ import org.slf4j.LoggerFactory;
 import at.peppol.sml.server.security.ClientUniqueIDProvider;
 import at.peppol.sml.server.security.PeppolClientCertificateValidator;
 
-
 /**
  * This servlet filter checks each request for a valid client certificate.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class ClientCertificateValidationFilter implements Filter {

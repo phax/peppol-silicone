@@ -52,13 +52,12 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.PresentForCodeCoverage;
 import com.phloc.commons.annotations.ReturnsImmutableObject;
 
-
 /**
  * This class manages the predefined PEPPOL process identifiers the
  * <b>cenbii-procid-ubl</b> scheme. This class provides sanity methods around
  * {@link EPredefinedProcessIdentifier} which would be to bogus to generate
  * them.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable
@@ -90,7 +89,7 @@ public final class PredefinedProcessIdentifierManager {
   /**
    * Find the process identifier with the given ID. This search is done case
    * insensitive.
-   *
+   * 
    * @param sProcIDValue
    *        The value to search. Without any identifier scheme! May be
    *        <code>null</code>.
@@ -109,7 +108,7 @@ public final class PredefinedProcessIdentifierManager {
 
   /**
    * Check if a process identifier with the given ID exists.
-   *
+   * 
    * @param sProcIDValue
    *        The value to search. Without any identifier scheme! May be
    *        <code>null</code>.

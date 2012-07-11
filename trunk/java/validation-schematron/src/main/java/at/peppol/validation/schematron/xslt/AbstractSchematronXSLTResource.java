@@ -32,11 +32,10 @@ import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.string.ToStringGenerator;
 import com.phloc.commons.xml.XMLFactory;
 
-
 /**
  * Abstract implementation of a Schematron resource that is based on XSLT
  * transformations.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public abstract class AbstractSchematronXSLTResource extends AbstractSchematronResource {

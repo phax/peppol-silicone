@@ -62,10 +62,9 @@ import at.peppol.sml.server.exceptions.NotFoundException;
 import at.peppol.sml.server.exceptions.UnauthorizedException;
 import at.peppol.sml.server.exceptions.UnknownUserException;
 
-
 /**
  * A JPA implementation of the {@link ISMPDataHandler} interface.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class JPASMPDataHandler extends AbstractJPAEnabledManager implements ISMPDataHandler {

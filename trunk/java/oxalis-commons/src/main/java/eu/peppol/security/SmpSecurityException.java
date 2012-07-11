@@ -3,13 +3,12 @@ package eu.peppol.security;
 
 /**
  * Thrown when something goes wrong during the verification of a SMP response.
- *
+ * 
  * @author Steinar Overbeck Cook steinar@sendregning.no
  */
 public class SmpSecurityException extends RuntimeException {
 
-
-    public SmpSecurityException(String msg) {
-        super(msg);
-    }
+  public SmpSecurityException (String msg) {
+    super (msg);
+  }
 }

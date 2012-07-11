@@ -44,7 +44,7 @@ import at.peppol.sml.client.console.Main;
 
 /**
  * This class simply register an SMP to SML.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class RegisterSMPToSML {

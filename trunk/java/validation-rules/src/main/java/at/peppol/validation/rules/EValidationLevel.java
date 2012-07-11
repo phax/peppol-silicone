@@ -55,7 +55,7 @@ import com.phloc.commons.lang.EnumHelper;
 /**
  * This enum represents the validation hierarchy. The hierarchy must be iterated
  * from top to bottom.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public enum EValidationLevel implements IHasID <String> {
@@ -107,7 +107,7 @@ public enum EValidationLevel implements IHasID <String> {
 
   /**
    * Check if this level is lower than the passed level.
-   *
+   * 
    * @param eLevel
    *        The level to check against. May not be <code>null</code>.
    * @return <code>true</code> if this level is lower than the passed level,
@@ -119,7 +119,7 @@ public enum EValidationLevel implements IHasID <String> {
 
   /**
    * Check if this level is lower or equal than the passed level.
-   *
+   * 
    * @param eLevel
    *        The level to check against. May not be <code>null</code>.
    * @return <code>true</code> if this level is lower or equal than the passed
@@ -131,7 +131,7 @@ public enum EValidationLevel implements IHasID <String> {
 
   /**
    * Check if this level is higher than the passed level.
-   *
+   * 
    * @param eLevel
    *        The level to check against. May not be <code>null</code>.
    * @return <code>true</code> if this level is higher than the passed level,
@@ -143,7 +143,7 @@ public enum EValidationLevel implements IHasID <String> {
 
   /**
    * Check if this level is higher or equal than the passed level.
-   *
+   * 
    * @param eLevel
    *        The level to check against. May not be <code>null</code>.
    * @return <code>true</code> if this level is higher or equal than the passed
@@ -177,7 +177,7 @@ public enum EValidationLevel implements IHasID <String> {
 
   /**
    * Get the passed validation levels in the order they should be executed.
-   *
+   * 
    * @param aLevels
    *        The validation levels to be ordered
    * @return All validation levels in the order they must be executed.
@@ -197,7 +197,7 @@ public enum EValidationLevel implements IHasID <String> {
   /**
    * Get a list of all validation levels that support country specific
    * artefacts.
-   *
+   * 
    * @return All validation levels having country specific artefacts. Never
    *         <code>null</code>.
    */
@@ -214,7 +214,7 @@ public enum EValidationLevel implements IHasID <String> {
   /**
    * Get a list of all validation levels that do NOT support country specific
    * artefacts.
-   *
+   * 
    * @return All validation levels NOT having country specific artefacts. Never
    *         <code>null</code>.
    */

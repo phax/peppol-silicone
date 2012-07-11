@@ -65,10 +65,9 @@ import at.peppol.sml.server.management.DataHandlerFactory;
 import at.peppol.sml.server.management.DataValidator;
 import at.peppol.sml.server.web.WebRequestClientIdentifier;
 
-
 /**
  * An implementation of the Manage Service Metadata web service.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 // @SchemaValidation

@@ -61,10 +61,9 @@ import org.xbill.DNS.Record;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.io.streams.StreamUtils;
 
-
 /**
  * Utility servlet to list all DNS Records.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class ServletListDNS extends HttpServlet {
@@ -73,7 +72,7 @@ public final class ServletListDNS extends HttpServlet {
 
   /**
    * Write log line to servlet output stream.
-   *
+   * 
    * @param os
    * @param msg
    * @throws IOException
@@ -92,7 +91,7 @@ public final class ServletListDNS extends HttpServlet {
 
   /**
    * Write exception to servlet output stream.
-   *
+   * 
    * @param os
    * @param e
    * @throws IOException
@@ -107,7 +106,7 @@ public final class ServletListDNS extends HttpServlet {
 
   /**
    * List all DNS records to servlet output stream.
-   *
+   * 
    * @param os
    *        The {@link OutputStream} to write to. Will not be closed in here!
    * @throws Exception
@@ -172,7 +171,7 @@ public final class ServletListDNS extends HttpServlet {
 
   /**
    * Handle both get/post request.
-   *
+   * 
    * @param req
    *        HTTP request
    * @param resp
@@ -218,7 +217,7 @@ public final class ServletListDNS extends HttpServlet {
   /**
    * Run listing locally. NOTE: DNS ZoneTransfer must be enabled for client.
    * Check your DNS administrator for details
-   *
+   * 
    * @param args
    * @throws Exception
    */

@@ -35,7 +35,6 @@ import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.commons.xml.serialize.XMLWriter;
 
-
 /**
  * Test class for class {@link SchematronHelper}.
  * 

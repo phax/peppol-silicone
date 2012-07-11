@@ -41,7 +41,6 @@ import java.util.List;
 
 import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
 
-
 /**
  * @author Ravnholt<br>
  *         PEPPOL.AT, BRZ, Philip Helger
@@ -49,18 +48,17 @@ import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
 public interface IInbox {
   // Returns a reference to all messages in the inbox
   List <IMessageReference> getMessageList (IReadonlyUsernamePWCredentials credentials,
-                                                   IEndpointReference endpointReference) throws MessageException;
+                                           IEndpointReference endpointReference) throws MessageException;
 
   // Returns a reference to one page of messages in the inbox, pagenumbers
   // starts at zero
   List <IMessageReference> getMessageListPage (IReadonlyUsernamePWCredentials credentials,
-                                                       IEndpointReference endpointReference,
-                                                       int pageNumber) throws MessageException;
+                                               IEndpointReference endpointReference,
+                                               int pageNumber) throws MessageException;
 
   // Returns the message identified by the message reference. Messages may be
   // retrieved more than once.
-  IMessage getMessage (IReadonlyUsernamePWCredentials credentials,
-                               IMessageReference messageReferenceInterface) throws MessageException;
+  IMessage getMessage (IReadonlyUsernamePWCredentials credentials, IMessageReference messageReferenceInterface) throws MessageException;
 
   // Messages must be deleted when they are no longer needed.
   void deleteMessage (IReadonlyUsernamePWCredentials credentials, IMessageReference messageReferenceInterface) throws MessageException;

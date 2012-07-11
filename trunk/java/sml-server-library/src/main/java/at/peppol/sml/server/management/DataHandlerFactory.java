@@ -50,11 +50,10 @@ import at.peppol.sml.server.ISMPDataHandlerCallback;
 import com.phloc.commons.lang.GenericReflection;
 import com.phloc.commons.string.StringHelper;
 
-
 /**
  * A factory used for constructing new instances of the
  * {@link IGenericDataHandler} interface.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable

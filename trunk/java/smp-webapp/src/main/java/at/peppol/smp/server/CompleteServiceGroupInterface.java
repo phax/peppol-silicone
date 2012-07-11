@@ -109,10 +109,10 @@ public final class CompleteServiceGroupInterface {
       for (final DocumentIdentifierType aDocTypeId : aDocTypeIds) {
         final ServiceMetadataReferenceType aMetadataReference = aObjFactory.createServiceMetadataReferenceType ();
         aMetadataReference.setHref (m_aUriInfo.getBaseUriBuilder ()
-                                           .path (ServiceMetadataInterface.class)
-                                           .buildFromEncoded (IdentifierUtils.getIdentifierURIPercentEncoded (aServiceGroupID),
-                                                              IdentifierUtils.getIdentifierURIPercentEncoded (aDocTypeId))
-                                           .toString ());
+                                              .path (ServiceMetadataInterface.class)
+                                              .buildFromEncoded (IdentifierUtils.getIdentifierURIPercentEncoded (aServiceGroupID),
+                                                                 IdentifierUtils.getIdentifierURIPercentEncoded (aDocTypeId))
+                                              .toString ());
         aMetadataReferences.add (aMetadataReference);
       }
       aServiceGroup.setServiceMetadataReferenceCollection (aRefCollection);

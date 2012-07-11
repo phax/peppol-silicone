@@ -54,7 +54,7 @@ import com.phloc.commons.string.StringHelper;
 
 /**
  * Test class for class {@link EValidationLevel}.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class EValidationLevelTest {

@@ -24,14 +24,14 @@ import com.phloc.commons.annotations.IsSPIInterface;
 /**
  * Implement this SPI interface to beautify SVRL error messages by replacing
  * namespaceURLs with common prefixes.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @IsSPIInterface
 public interface ISVRLLocationBeautifierSPI {
   /**
    * Beautify the passed combination.
-   *
+   * 
    * @param sNamespaceURI
    *        Namespace URI
    * @param sLocalName

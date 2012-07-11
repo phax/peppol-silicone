@@ -55,7 +55,7 @@ import com.phloc.commons.xml.XMLFactory;
 
 /**
  * Test class for class {@link W3CEndpointReferenceUtils}.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class W3CEndpointReferenceUtilsTest {

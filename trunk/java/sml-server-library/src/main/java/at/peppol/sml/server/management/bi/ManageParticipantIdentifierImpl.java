@@ -72,10 +72,9 @@ import at.peppol.sml.server.web.WebRequestClientIdentifier;
 import com.phloc.commons.collections.ContainerHelper;
 import com.sun.xml.ws.developer.SchemaValidation;
 
-
 /**
  * An implementation of the Manage Participant Identifier web service.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @SchemaValidation

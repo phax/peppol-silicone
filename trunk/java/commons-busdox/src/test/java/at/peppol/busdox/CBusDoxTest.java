@@ -48,7 +48,7 @@ import at.peppol.busdox.CBusDox;
 
 /**
  * Test class for class {@link CBusDox}.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class CBusDoxTest {

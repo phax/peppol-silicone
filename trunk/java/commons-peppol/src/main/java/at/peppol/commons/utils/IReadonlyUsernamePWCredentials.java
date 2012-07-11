@@ -42,7 +42,7 @@ import javax.annotation.Nullable;
 
 /**
  * A read-only version of username/password credentials.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public interface IReadonlyUsernamePWCredentials extends IHasUsername {

@@ -46,7 +46,7 @@ import com.phloc.commons.annotations.PresentForCodeCoverage;
  * recommended that the real values are out-sourced into a configuration file.
  * You can of course use the values in this file as the default values in case
  * no configuration item is specified.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable

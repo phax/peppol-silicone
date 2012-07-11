@@ -50,7 +50,7 @@ import com.phloc.commons.mock.PhlocTestUtils;
 
 /**
  * Test class for class {@link SimpleSMLInfo}.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class SimpleSMLInfoTest {

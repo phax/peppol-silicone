@@ -48,7 +48,7 @@ import com.phloc.commons.name.IHasName;
 
 /**
  * Represents a single CEN BII transaction used in several collaborations.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public enum ETransaction implements IHasID <String>, IHasName {

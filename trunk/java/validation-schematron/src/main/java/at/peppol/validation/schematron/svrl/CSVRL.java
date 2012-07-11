@@ -25,7 +25,7 @@ import com.phloc.commons.string.StringHelper;
 
 /**
  * SVRL constants.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable

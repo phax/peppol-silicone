@@ -48,7 +48,7 @@ import at.peppol.sml.server.dns.DNSUtils;
 
 /**
  * Test class for class {@link DNSUtils}.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class DNSUtilsTest {

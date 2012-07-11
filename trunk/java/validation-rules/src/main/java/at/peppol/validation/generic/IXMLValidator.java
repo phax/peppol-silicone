@@ -46,7 +46,7 @@ import com.phloc.commons.io.IReadableResource;
 
 /**
  * Base interface for an XML validator.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public interface IXMLValidator {
@@ -58,7 +58,7 @@ public interface IXMLValidator {
 
   /**
    * Validate the passed XML
-   *
+   * 
    * @param aXML
    *        The XML to be validated. May not be <code>null</code>.
    * @return A non-<code>null</code> error group.
@@ -68,7 +68,7 @@ public interface IXMLValidator {
 
   /**
    * Validate the passed XML
-   *
+   * 
    * @param sPath
    *        The path to the XML source. May be <code>null</code>.
    * @param aXML

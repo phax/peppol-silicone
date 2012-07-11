@@ -45,7 +45,7 @@ import com.phloc.commons.state.ESuccess;
 
 /**
  * An extension of the RegistrationHook class that does nothing.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable

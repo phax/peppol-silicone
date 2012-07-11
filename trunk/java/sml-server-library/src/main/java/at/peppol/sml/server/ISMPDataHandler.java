@@ -45,7 +45,6 @@ import at.peppol.sml.server.exceptions.NotFoundException;
 import at.peppol.sml.server.exceptions.UnauthorizedException;
 import at.peppol.sml.server.exceptions.UnknownUserException;
 
-
 /**
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
@@ -53,7 +52,7 @@ public interface ISMPDataHandler {
   /**
    * Listener for when data is being changed. This is for example used for
    * sync'ing with DNS.
-   *
+   * 
    * @param aCallback
    *        The callback handler to be invoked.
    */

@@ -65,7 +65,6 @@ import at.peppol.sml.AbstractSMLClientTest;
 import at.peppol.sml.client.ManageParticipantIdentifierServiceCaller;
 import at.peppol.sml.client.ManageServiceMetadataServiceCaller;
 
-
 /**
  * @author Ravnholt<br>
  *         PEPPOL.AT, BRZ, Philip Helger

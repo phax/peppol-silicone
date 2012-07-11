@@ -383,7 +383,7 @@ public final class DBMSDataManager extends AbstractJPAEnabledManager implements 
       // Check if an existing service is already contained
       final DBServiceMetadataID aDBServiceMetadataID = new DBServiceMetadataID (aBusinessID,
                                                                                 aServiceMetadata.getServiceInformation ()
-                                                                                                                                                                          .getDocumentIdentifier ());
+                                                                                                .getDocumentIdentifier ());
       DBServiceMetadata aDBServiceMetadata = getEntityManager ().find (DBServiceMetadata.class, aDBServiceMetadataID);
       // Check whether the service already exists
       if (aDBServiceMetadata != null) {

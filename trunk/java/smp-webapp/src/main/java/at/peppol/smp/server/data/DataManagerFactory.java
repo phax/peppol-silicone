@@ -44,11 +44,10 @@ import at.peppol.commons.utils.ConfigFile;
 
 import com.phloc.commons.lang.GenericReflection;
 
-
 /**
  * Factory for creating new DataManagers. This implementation retrieves the name
  * of the data manager from a configuration file.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable

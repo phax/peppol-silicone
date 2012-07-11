@@ -66,7 +66,7 @@ import com.phloc.commons.xml.XMLHelper;
  * using DOM serialization to access the content of a
  * {@link W3CEndpointReference}. In case the serialization tag names of
  * {@link W3CEndpointReference} change, this implementation has to be adopted!
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable
@@ -76,7 +76,7 @@ public final class W3CEndpointReferenceUtils {
   /**
    * Create a new endpoint reference for the given address without reference
    * parameters.
-   *
+   * 
    * @param sAddress
    *        The address to use. May not be <code>null</code>.
    * @return The non-<code>null</code> endpoint reference for the given address
@@ -89,7 +89,7 @@ public final class W3CEndpointReferenceUtils {
   /**
    * Create a new endpoint reference for the given address, using the specified
    * reference parameters.
-   *
+   * 
    * @param sAddress
    *        The address to use. May not be <code>null</code>.
    * @param aReferenceParameters
@@ -111,7 +111,7 @@ public final class W3CEndpointReferenceUtils {
    * document element.<br>
    * This is necessary, as {@link W3CEndpointReference} does not provide read
    * access methods.
-   *
+   * 
    * @param aEndpointReference
    *        The endpoint to be marshaled
    * @return The document element called "EndpointReference"
@@ -126,7 +126,7 @@ public final class W3CEndpointReferenceUtils {
 
   /**
    * Get the address contained in the passed endpoint reference.
-   *
+   * 
    * @param aEndpointReference
    *        The endpoint reference to retrieve the address from. May not be
    *        <code>null</code>.
@@ -141,7 +141,7 @@ public final class W3CEndpointReferenceUtils {
   /**
    * Get a list of all reference parameters contained in the passed endpoint
    * reference.
-   *
+   * 
    * @param aEndpointReference
    *        The endpoint reference to retrieve the reference parameters. May not
    *        be <code>null</code>.
@@ -159,7 +159,7 @@ public final class W3CEndpointReferenceUtils {
 
   /**
    * Get the reference parameter at the given index
-   *
+   * 
    * @param aEndpointReference
    *        The object to retrieve the reference parameter from. May not be
    *        <code>null</code>.

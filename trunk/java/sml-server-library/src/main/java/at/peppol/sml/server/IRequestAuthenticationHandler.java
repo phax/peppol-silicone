@@ -45,7 +45,7 @@ import at.peppol.sml.server.exceptions.UnknownUserException;
 public interface IRequestAuthenticationHandler {
   /**
    * Verify the passed client unique ID.
-   *
+   * 
    * @param sClientUniqueID
    *        The client unique ID to verify
    * @throws UnknownUserException

@@ -69,11 +69,10 @@ import at.peppol.sml.server.exceptions.UnknownUserException;
 
 import com.phloc.commons.collections.ContainerHelper;
 
-
 /**
  * A JPA of the {@link IParticipantDataHandler} interface.<br>
  * TODO: Implement paging. Currently all found results are returned.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class JPAParticipantDataHandler extends AbstractJPAEnabledManager implements IParticipantDataHandler {

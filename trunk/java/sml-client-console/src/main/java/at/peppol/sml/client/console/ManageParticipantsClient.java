@@ -53,7 +53,6 @@ import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 import at.peppol.sml.client.ManageParticipantIdentifierServiceCaller;
 
-
 public final class ManageParticipantsClient {
   private final ManageParticipantIdentifierServiceCaller m_aCaller;
 

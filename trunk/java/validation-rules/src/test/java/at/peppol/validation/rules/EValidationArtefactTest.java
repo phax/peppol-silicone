@@ -51,10 +51,9 @@ import at.peppol.validation.schematron.xslt.SchematronResourceXSLT;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.locale.country.CountryCache;
 
-
 /**
  * Test class for class {@link EValidationArtefact}.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class EValidationArtefactTest {

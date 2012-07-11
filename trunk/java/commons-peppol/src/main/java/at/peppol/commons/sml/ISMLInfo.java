@@ -45,7 +45,7 @@ import com.phloc.commons.annotations.Nonempty;
 
 /**
  * Specifies the different properties an SML implementation uses.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public interface ISMLInfo {

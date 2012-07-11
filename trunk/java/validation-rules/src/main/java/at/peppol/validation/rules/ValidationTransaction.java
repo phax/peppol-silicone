@@ -45,13 +45,12 @@ import at.peppol.commons.cenbii.profiles.ETransaction;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
 
-
 /**
  * This is the default implementation of the {@link IValidationTransaction}
  * interface. It represents a single "validation transaction" consisting of a
  * syntax binding (see {@link EValidationSyntaxBinding}) and a CEN BII
  * transaction.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable
@@ -110,7 +109,7 @@ public final class ValidationTransaction implements IValidationTransaction {
   /**
    * This is a shortcut method for creating a transaction using the UBL syntax
    * binding.
-   *
+   * 
    * @param eTransaction
    *        The transaction to use. May not be <code>null</code>.
    * @return The non-<code>null</code> object.

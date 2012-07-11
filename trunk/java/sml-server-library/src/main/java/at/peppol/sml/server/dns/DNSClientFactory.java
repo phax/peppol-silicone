@@ -46,7 +46,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Factory to init DNSClient. If property "dnsClient.enabled=true" from
  * "config.properties" a real implementation is returned, otherwise Dummy.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @ThreadSafe
@@ -88,7 +88,7 @@ public final class DNSClientFactory {
 
   /**
    * Return instance.
-   *
+   * 
    * @return non null
    */
   @Nonnull

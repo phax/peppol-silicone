@@ -33,10 +33,9 @@ import at.peppol.validation.schematron.xslt.SchematronResourceSCH;
 import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.commons.string.StringHelper;
 
-
 /**
  * Test class for class {@link SVRLWriter}.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class SVRLWriterTest {

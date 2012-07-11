@@ -49,10 +49,9 @@ import at.peppol.commons.utils.UsernamePWCredentials;
 
 import com.phloc.commons.mock.PhlocTestUtils;
 
-
 /**
  * Test class for class {@link UsernamePWCredentials}.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class UsernamePWCredentialsTest {

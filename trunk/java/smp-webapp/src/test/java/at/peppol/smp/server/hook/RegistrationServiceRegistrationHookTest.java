@@ -43,7 +43,6 @@ import org.junit.Test;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 import at.peppol.smp.server.hook.RegistrationServiceRegistrationHook;
 
-
 /**
  * Test class for class {@link RegistrationServiceRegistrationHook}.
  * 
