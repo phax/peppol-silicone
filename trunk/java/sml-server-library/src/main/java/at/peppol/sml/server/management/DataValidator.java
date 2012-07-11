@@ -60,10 +60,9 @@ import at.peppol.sml.server.exceptions.BadRequestException;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
 
-
 /**
  * Validates Input values. Is used in the two web service implementations.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable
@@ -91,7 +90,7 @@ public final class DataValidator {
       if (StringHelper.hasNoText (sValue))
         throw new BadRequestException ("Participant Identifier Value cannot be 'null' or empty");
 
-      final String [] aParts = RegExHelper.split (sValue, ":", 2);
+      final String [] aParts = RegExHelper.getSplitToArray (sValue, ":", 2);
       if (aParts.length != 2)
         throw new BadRequestException ("Participant Identifier Value is not valid for the default scheme");
 

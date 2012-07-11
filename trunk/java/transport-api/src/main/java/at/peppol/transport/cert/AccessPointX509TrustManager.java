@@ -154,7 +154,7 @@ public final class AccessPointX509TrustManager implements X509TrustManager {
     if (m_aCommonNames != null) {
       boolean bCommonNameOK = false;
       final String sPrincipal = aChain[0].getSubjectX500Principal ().toString ();
-      final String [] aArray = RegExHelper.split (sPrincipal, ",");
+      final String [] aArray = RegExHelper.getSplitToArray (sPrincipal, ",");
       for (final String sToken : aArray) {
         final int nIndex = sToken.indexOf ("CN=");
         if (nIndex >= 0) {
