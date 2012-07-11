@@ -47,7 +47,7 @@ import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * Dummy implementation..
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class DoNothingDNSClient implements IDNSClient {

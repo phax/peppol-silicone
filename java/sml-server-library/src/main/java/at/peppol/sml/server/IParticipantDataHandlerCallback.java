@@ -45,12 +45,11 @@ import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 import at.peppol.sml.server.exceptions.BadRequestException;
 import at.peppol.sml.server.exceptions.InternalErrorException;
 
-
 /**
  * This interface is used in a DataHandler to inform another class about changed
  * to the underlying data. Example: HibernateDataHandler informs DNS code about
  * changes.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public interface IParticipantDataHandlerCallback {

@@ -39,7 +39,7 @@ package at.peppol.sml.server.exceptions;
 
 /**
  * Is thrown if the user is not authorized to perform the requested action.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public class UnauthorizedException extends SMLException {

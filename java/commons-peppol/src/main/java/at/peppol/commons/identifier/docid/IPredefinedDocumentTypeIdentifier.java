@@ -46,7 +46,9 @@ import at.peppol.busdox.identifier.IReadonlyDocumentTypeIdentifier;
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public interface IPredefinedDocumentTypeIdentifier extends IReadonlyDocumentTypeIdentifier, IPEPPOLDocumentTypeIdentifierParts {
+public interface IPredefinedDocumentTypeIdentifier extends
+                                                  IReadonlyDocumentTypeIdentifier,
+                                                  IPEPPOLDocumentTypeIdentifierParts {
   /**
    * @return The common name under which a document is known. This is e.g.
    *         "Order" or "Invoice".

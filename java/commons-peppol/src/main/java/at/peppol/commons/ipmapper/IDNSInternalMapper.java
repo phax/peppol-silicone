@@ -47,7 +47,7 @@ import javax.annotation.Nonnull;
  * internal IPs. Useful in cases where IP-Router don't allow requests from an
  * internal source-IP over the public network to a destination-IP with the same
  * internal IP (the same server)
- *
+ * 
  * @author PEPPOL.AT, BRZ, Andreas Haberl
  */
 public interface IDNSInternalMapper {

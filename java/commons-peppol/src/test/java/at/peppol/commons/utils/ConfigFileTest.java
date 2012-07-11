@@ -46,10 +46,9 @@ import org.junit.Test;
 
 import at.peppol.commons.utils.ConfigFile;
 
-
 /**
  * Test class for class {@link ConfigFile}.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class ConfigFileTest {

@@ -47,7 +47,6 @@ import org.busdox.servicemetadata.manageservicemetadataservice._1.UnauthorizedFa
 
 import at.peppol.sml.client.ManageServiceMetadataServiceCaller;
 
-
 public final class ManageSMPClient {
   private final ManageServiceMetadataServiceCaller m_aCaller;
 

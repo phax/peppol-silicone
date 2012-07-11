@@ -34,11 +34,10 @@ import com.phloc.commons.error.IResourceErrorGroup;
 import com.phloc.commons.error.ResourceErrorGroup;
 import com.phloc.commons.io.IReadableResource;
 
-
 /**
  * This is a helper class that provides a way to easily apply an Schematron
  * resource on an XML resource.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable
@@ -48,7 +47,7 @@ public final class SchematronHelper {
   /**
    * Apply the passed schematron on the passed XML resource using a custom error
    * handler.
-   *
+   * 
    * @param aSchematron
    *        The Schematron resource. May not be <code>null</code>.
    * @param aXML
@@ -85,7 +84,7 @@ public final class SchematronHelper {
 
   /**
    * Apply the passed schematron on the passed XML resource.
-   *
+   * 
    * @param aSchematron
    *        The Schematron resource. May not be <code>null</code>.
    * @param aXML
@@ -122,7 +121,7 @@ public final class SchematronHelper {
 
   /**
    * Convert a {@link SchematronOutputType} to an {@link IResourceErrorGroup}.
-   *
+   * 
    * @param aSchematronOutput
    *        The result of Schematron validation
    * @param sResourceName

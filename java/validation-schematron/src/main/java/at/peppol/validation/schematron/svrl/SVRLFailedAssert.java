@@ -35,7 +35,7 @@ import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * A wrapper around {@link FailedAssertType} with easier error level handling.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable

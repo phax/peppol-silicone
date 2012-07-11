@@ -56,7 +56,6 @@ import at.peppol.sml.client.console.Main;
 
 import com.phloc.commons.annotations.DevelopersNote;
 
-
 /**
  * @author PEPPOL.AT, BRZ, Philip Helger
  */

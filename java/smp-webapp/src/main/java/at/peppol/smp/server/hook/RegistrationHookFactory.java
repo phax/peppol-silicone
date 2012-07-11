@@ -44,7 +44,6 @@ import at.peppol.commons.utils.ConfigFile;
 
 import com.phloc.commons.lang.GenericReflection;
 
-
 /**
  * @author PEPPOL.AT, BRZ, Philip Helger
  */

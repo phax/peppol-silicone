@@ -55,7 +55,7 @@ import com.phloc.commons.SystemProperties;
  * configuration file.<br>
  * To stop the running Jetty simply invoke the {@link JettyStopSML} application
  * in this package. It performs a graceful shutdown of the App Server.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class RunInJettySMLMgr {

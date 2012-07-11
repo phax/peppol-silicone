@@ -53,7 +53,7 @@ import at.peppol.commons.cenbii.profiles.EProfile;
 
 /**
  * Test class for class {@link EProfile}.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class EProfileTest {

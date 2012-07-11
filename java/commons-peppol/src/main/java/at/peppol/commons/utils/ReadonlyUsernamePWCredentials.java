@@ -49,7 +49,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * interface. It encapsulates an object of type {@link UsernamePWCredentials}
  * and offers only the reading methods. This is done to avoid copying too much
  * business logic.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable

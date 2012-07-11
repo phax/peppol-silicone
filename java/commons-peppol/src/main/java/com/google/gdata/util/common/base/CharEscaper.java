@@ -15,7 +15,6 @@
 
 package com.google.gdata.util.common.base;
 
-
 /**
  * An object that converts literal text into a format safe for inclusion in a
  * particular context (such as an XML document). Typically (but not always), the

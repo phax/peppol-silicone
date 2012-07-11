@@ -55,7 +55,7 @@ import com.phloc.commons.xml.schema.XMLSchemaValidationHelper;
 
 /**
  * Implementation of the {@link IXMLValidator} for XML Schema.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class XMLSchemaValidator extends AbstractXMLValidator {
@@ -64,7 +64,7 @@ public final class XMLSchemaValidator extends AbstractXMLValidator {
   /**
    * Constructor for schema validation based on the given resources (order is
    * important).
-   *
+   * 
    * @param aXSDs
    *        The resources where the XSD files can be found. May neither be
    *        <code>null</code> nor empty.
@@ -76,7 +76,7 @@ public final class XMLSchemaValidator extends AbstractXMLValidator {
 
   /**
    * Constructor for a pre-built {@link Schema} object.
-   *
+   * 
    * @param aSchema
    *        The schema to be used for validation. May not be <code>null</code>.
    */

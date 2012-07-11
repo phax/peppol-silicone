@@ -58,7 +58,7 @@ import com.phloc.commons.text.resolve.DefaultTextResolver;
 
 /**
  * Contains the names of the BII profiles for later translation.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Translatable
@@ -107,7 +107,7 @@ enum EProfileName implements IHasDisplayText {
  * collaborations ({@link ECollaboration}) and belongs to a group {@link EGroup}
  * .<br>
  * Source: http://www.cen.eu/cwa/bii/specs/Profiles/IndexWG1.html
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public enum EProfile implements IHasDisplayText {
@@ -235,7 +235,7 @@ public enum EProfile implements IHasDisplayText {
 
   /**
    * Check if the passed collaboration is contained in this profile.
-   *
+   * 
    * @param eCollaboration
    *        The collaboration to query. May be <code>null</code>.
    * @return <code>true</code> if the passed collaboration is contained in this
@@ -255,7 +255,7 @@ public enum EProfile implements IHasDisplayText {
 
   /**
    * Get a list with all profiles supporting a certain collaboration.
-   *
+   * 
    * @param eCollaboration
    *        The collaboration to be searched. May not be <code>null</code>.
    * @return A non-<code>null</code> non-empty list with all collaborations. It

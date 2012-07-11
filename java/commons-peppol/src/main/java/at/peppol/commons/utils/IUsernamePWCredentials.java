@@ -44,13 +44,13 @@ import com.phloc.commons.annotations.Nonempty;
 
 /**
  * A writable version of the username/password credentials.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public interface IUsernamePWCredentials extends IReadonlyUsernamePWCredentials {
   /**
    * Set the user name
-   *
+   * 
    * @param sUsername
    *        The new user name
    */
@@ -58,7 +58,7 @@ public interface IUsernamePWCredentials extends IReadonlyUsernamePWCredentials {
 
   /**
    * Set the password
-   *
+   * 
    * @param sPassword
    *        The new password
    */

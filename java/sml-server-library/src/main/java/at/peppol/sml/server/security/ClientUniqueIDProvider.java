@@ -52,7 +52,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Extract certificate principal from HTTP request.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable
@@ -65,7 +65,7 @@ public final class ClientUniqueIDProvider {
    * Extract the client unique ID from the certificate.<br>
    * Note: this assumes that a single root certificate is present. Otherwise the
    * unique ID should also contain the subject DN and serial of the issuer!
-   *
+   * 
    * @param aHttpRequest
    *        The HTTP request to use.
    * @return <code>null</code> if some error occurred.

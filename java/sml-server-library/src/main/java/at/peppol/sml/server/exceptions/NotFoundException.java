@@ -39,7 +39,7 @@ package at.peppol.sml.server.exceptions;
 
 /**
  * Is thrown if the requested data cannot be found.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public class NotFoundException extends SMLException {

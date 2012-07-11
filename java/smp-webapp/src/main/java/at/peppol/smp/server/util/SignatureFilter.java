@@ -104,8 +104,8 @@ public final class SignatureFilter implements ContainerResponseFilter {
       if (nIndex != -1) {
         if (aRequest.getPath (false).length () > nIndex + "/services/".length ()) {
           aResponse.setContainerResponseWriter (new SigningContainerResponseWriter (aResponse.getContainerResponseWriter (),
-                                                                                   m_aKeyEntry,
-                                                                                   m_aCert));
+                                                                                    m_aKeyEntry,
+                                                                                    m_aCert));
         }
       }
     }

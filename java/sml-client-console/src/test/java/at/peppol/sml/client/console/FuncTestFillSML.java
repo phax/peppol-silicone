@@ -53,10 +53,9 @@ import at.peppol.sml.client.console.ManageParticipantsClient;
 
 import com.phloc.commons.annotations.DevelopersNote;
 
-
 /**
  * This class if for BRZ internal use only!
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Ignore

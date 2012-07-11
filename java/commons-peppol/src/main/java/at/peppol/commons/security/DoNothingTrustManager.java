@@ -43,7 +43,7 @@ import javax.net.ssl.X509TrustManager;
 
 /**
  * A trust manager that accepts all certificates.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class DoNothingTrustManager implements X509TrustManager {

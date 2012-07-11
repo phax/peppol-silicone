@@ -40,7 +40,7 @@ package at.peppol.sml.server.exceptions;
 /**
  * This exception is thrown whenever an internal error in the web service
  * happens.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public class InternalErrorException extends SMLException {

@@ -54,7 +54,6 @@ import at.peppol.commons.sml.ISMLInfo;
 import at.peppol.sml.client.support.ESMLCommand;
 import at.peppol.sml.client.support.ESMLObjectType;
 
-
 public final class Main {
   private static ManageSMPClient m_aManageServiceMetadataClient;
   private static ManageParticipantsClient m_aManageParticipantIdentifierClient;

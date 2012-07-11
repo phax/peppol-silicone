@@ -127,239 +127,264 @@ import eu.peppol.start.identifier.Configuration;
 import eu.peppol.start.identifier.KeystoreManager;
 
 /**
- * The SAMLCallbackHandler is the CallbackHandler implementation used to deal with SAML authentication.
- *
- * @author Alexander Aguirre Julcapoma(alex@alfa1lab.com)
- *         Jose Gorvenia Narvaez(jose@alfa1lab.com)
+ * The SAMLCallbackHandler is the CallbackHandler implementation used to deal
+ * with SAML authentication.
+ * 
+ * @author Alexander Aguirre Julcapoma(alex@alfa1lab.com) Jose Gorvenia
+ *         Narvaez(jose@alfa1lab.com)
  */
 public class SAMLCallbackHandler implements CallbackHandler {
 
-    private final String SENDER_NAME_ID_SYNTAX = "http://busdox.org/profiles/serviceMetadata/1.0/UniversalBusinessIdentifier/1.0/";
-    private final String ACCESSPOINT_NAME_ID_SYNTAX = "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified";
-    private final String CONFIRMATION_METHOD = "urn:oasis:names:tc:SAML:2.0:cm:sender-vouches";
-    private final String AUTHENTICATION_CONTEXT_TYPE = "urn:oasis:names:tc:SAML:2.0:ac:classes:X509";
-    private final String ATTRIBUTE_NAME = "urn:eu:busdox:attribute:assurance-level";
-    private final String ATTRIBUTE_NAMESPACE = "urn:oasis:names:tc:SAML:2.0:attrname-format:basic";
+  private final String SENDER_NAME_ID_SYNTAX = "http://busdox.org/profiles/serviceMetadata/1.0/UniversalBusinessIdentifier/1.0/";
+  private final String ACCESSPOINT_NAME_ID_SYNTAX = "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified";
+  private final String CONFIRMATION_METHOD = "urn:oasis:names:tc:SAML:2.0:cm:sender-vouches";
+  private final String AUTHENTICATION_CONTEXT_TYPE = "urn:oasis:names:tc:SAML:2.0:ac:classes:X509";
+  private final String ATTRIBUTE_NAME = "urn:eu:busdox:attribute:assurance-level";
+  private final String ATTRIBUTE_NAMESPACE = "urn:oasis:names:tc:SAML:2.0:attrname-format:basic";
 
-    /**
-     * Retrieve or display the information requested in the provided Callbacks.
-     *
-     * @param callbacks an array of Callback objects provided by an underlying
-     *                  security service which contains the information
-     *                  requested to be retrieved or displayed.
-     * @throws IOException                  if an input or output error occurs.
-     * @throws UnsupportedCallbackException if the implementation of this method
-     *                                      does not support one or more of the Callbacks specified in
-     *                                      the callbacks parameter.
-     */
-    public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException {
+  /**
+   * Retrieve or display the information requested in the provided Callbacks.
+   * 
+   * @param callbacks
+   *        an array of Callback objects provided by an underlying security
+   *        service which contains the information requested to be retrieved or
+   *        displayed.
+   * @throws IOException
+   *         if an input or output error occurs.
+   * @throws UnsupportedCallbackException
+   *         if the implementation of this method does not support one or more
+   *         of the Callbacks specified in the callbacks parameter.
+   */
+  public void handle (Callback [] callbacks) throws IOException, UnsupportedCallbackException {
 
-        Log.debug("Requested SAML callback handling");
+    Log.debug ("Requested SAML callback handling");
 
-        for (Callback callback : callbacks) {
+    for (Callback callback : callbacks) {
 
-            if (callback instanceof SAMLCallback) {
-                SAMLCallback samlCallback = (SAMLCallback) callback;
-
-                try {
-                    if (samlCallback.getConfirmationMethod().equals(SAMLCallback.SV_ASSERTION_TYPE)) {
-                        Element element = createSenderVouchesSAMLAssertion(samlCallback);
-                        samlCallback.setAssertionElement(element);
-                    }
-                } catch (Exception e) {
-                    throw new RuntimeException("Error while handling SAML callbacks", e);
-                }
-
-            } else {
-                throw new UnsupportedCallbackException(callback);
-            }
-        }
-    }
-
-    /**
-     * Gets an Element representing SAML Assertion.
-     *
-     * @param samlCallback the SAMLCallback.
-     * @return an Element.
-     * @throws Exception thrown if there is a SOAP problem.
-     */
-    private Element createSenderVouchesSAMLAssertion(SAMLCallback samlCallback) throws Exception {
-
-        Log.debug("Creating and setting the SAML Sender Vouches Assertion");
-
-        KeystoreManager keystoreManager = new KeystoreManager();
-
-        Configuration configuration = Configuration.getInstance();
-        String senderId = configuration.getPeppolSenderId();
-        String accesspointName = configuration.getPeppolServiceName();
-
-        String assertionID = "SamlID" + String.valueOf(System.currentTimeMillis());
-        samlCallback.setAssertionId(assertionID);
-
-        GregorianCalendar oneHourAgo = getNowOffsetByHours(-1);
-        GregorianCalendar now = getNowOffsetByHours(0);
-        GregorianCalendar inOneHour = getNowOffsetByHours(1);
-
-        SAMLAssertionFactory assertionFactory = SAMLAssertionFactory.newInstance(SAMLAssertionFactory.SAML2_0);
-
-        NameID senderNameID = assertionFactory.createNameID(senderId, null, SENDER_NAME_ID_SYNTAX);
-        NameID accessPointNameID = assertionFactory.createNameID(accesspointName, null, ACCESSPOINT_NAME_ID_SYNTAX);
-        SubjectConfirmation subjectConfirmation = assertionFactory.createSubjectConfirmation(null, CONFIRMATION_METHOD);
-        Subject subject = assertionFactory.createSubject(senderNameID, subjectConfirmation);
-        AuthnContext authnContext = assertionFactory.createAuthnContext(AUTHENTICATION_CONTEXT_TYPE, null);
-        AuthnStatement authnStatement = assertionFactory.createAuthnStatement(now, null, authnContext, null, null);
-
-        List<Object> statements = new LinkedList<Object>();
-        statements.add(authnStatement);
-        // FIXME: eu hard coding of security assurance level
-        statements.add(getAssuranceLevelStatement("2", assertionFactory));
-        Conditions conditions = assertionFactory.createConditions(oneHourAgo, inOneHour, null, null, null, null);
-
-        Assertion assertion = assertionFactory.createAssertion(
-                assertionID,
-                accessPointNameID,
-                now,
-                conditions,
-                null,
-                subject,
-                statements);
-
-        return sign(assertion, keystoreManager.getOurCertificate(), keystoreManager.getOurPrivateKey());
-    }
-
-    private GregorianCalendar getNowOffsetByHours(int hours) {
-        GregorianCalendar gregorianCalendar = new GregorianCalendar();
-        long now = gregorianCalendar.getTimeInMillis();
-        long then = now + (60L * 60L * 1000L * hours);
-        gregorianCalendar.setTimeInMillis(then);
-        return gregorianCalendar;
-    }
-
-    /**
-     * Gets the Level Statement of Assurance. Assuarnace levels are defined in
-     * http://csrc.nist.gov/publications/nistpubs/800-63/SP800-63V1_0_2.pdf
-     *
-     * @param assuranceLevel    the assurance level.
-     * @param samlAssertFactory the SAMLAssertionFactory.
-     * @return an AttributeStatement.
-     * @throws SAMLException Throws a SAMLException.
-     */
-    private AttributeStatement getAssuranceLevelStatement(String assuranceLevel, SAMLAssertionFactory samlAssertFactory)
-            throws SAMLException {
-
-        List<String> values = new ArrayList<String>();
-        values.add(assuranceLevel);
-
-        Attribute attribute = samlAssertFactory.createAttribute(ATTRIBUTE_NAME, ATTRIBUTE_NAMESPACE, values);
-        List<Attribute> attributes = new ArrayList<Attribute>();
-        attributes.add(attribute);
-
-        return samlAssertFactory.createAttributeStatement(attributes);
-    }
-
-    /**
-     * Converts a SAML Assertion to an org.w3c.dom.Element object and signs it
-     * with the X509Certificate and PrivateKey using the SHA1 DigestMethod and
-     * the RSA_SHA1 SignatureMethod.
-     *
-     * @param assertion   SAML Assertion to be signed.
-     * @param certificate the X509Certificate.
-     * @param privateKey  the certificate's private key.
-     * @return a signed org.w3c.dom.Element holding the SAML Assertion.
-     * @throws SAMLException Throws a SAMLException.
-     */
-    public final Element sign(Assertion assertion, X509Certificate certificate, PrivateKey privateKey) throws SAMLException {
+      if (callback instanceof SAMLCallback) {
+        SAMLCallback samlCallback = (SAMLCallback) callback;
 
         try {
-
-            XMLSignatureFactory signatureFactory = WSSPolicyConsumerImpl.getInstance().getSignatureFactory();
-            DigestMethod digestMethod = signatureFactory.newDigestMethod(DigestMethod.SHA1, null);
-            return sign(assertion, digestMethod, SignatureMethod.RSA_SHA1, certificate, privateKey);
-
-        } catch (Exception ex) {
-            throw new SAMLException(ex);
+          if (samlCallback.getConfirmationMethod ().equals (SAMLCallback.SV_ASSERTION_TYPE)) {
+            Element element = createSenderVouchesSAMLAssertion (samlCallback);
+            samlCallback.setAssertionElement (element);
+          }
         }
+        catch (Exception e) {
+          throw new RuntimeException ("Error while handling SAML callbacks", e);
+        }
+
+      }
+      else {
+        throw new UnsupportedCallbackException (callback);
+      }
+    }
+  }
+
+  /**
+   * Gets an Element representing SAML Assertion.
+   * 
+   * @param samlCallback
+   *        the SAMLCallback.
+   * @return an Element.
+   * @throws Exception
+   *         thrown if there is a SOAP problem.
+   */
+  private Element createSenderVouchesSAMLAssertion (SAMLCallback samlCallback) throws Exception {
+
+    Log.debug ("Creating and setting the SAML Sender Vouches Assertion");
+
+    KeystoreManager keystoreManager = new KeystoreManager ();
+
+    Configuration configuration = Configuration.getInstance ();
+    String senderId = configuration.getPeppolSenderId ();
+    String accesspointName = configuration.getPeppolServiceName ();
+
+    String assertionID = "SamlID" + String.valueOf (System.currentTimeMillis ());
+    samlCallback.setAssertionId (assertionID);
+
+    GregorianCalendar oneHourAgo = getNowOffsetByHours (-1);
+    GregorianCalendar now = getNowOffsetByHours (0);
+    GregorianCalendar inOneHour = getNowOffsetByHours (1);
+
+    SAMLAssertionFactory assertionFactory = SAMLAssertionFactory.newInstance (SAMLAssertionFactory.SAML2_0);
+
+    NameID senderNameID = assertionFactory.createNameID (senderId, null, SENDER_NAME_ID_SYNTAX);
+    NameID accessPointNameID = assertionFactory.createNameID (accesspointName, null, ACCESSPOINT_NAME_ID_SYNTAX);
+    SubjectConfirmation subjectConfirmation = assertionFactory.createSubjectConfirmation (null, CONFIRMATION_METHOD);
+    Subject subject = assertionFactory.createSubject (senderNameID, subjectConfirmation);
+    AuthnContext authnContext = assertionFactory.createAuthnContext (AUTHENTICATION_CONTEXT_TYPE, null);
+    AuthnStatement authnStatement = assertionFactory.createAuthnStatement (now, null, authnContext, null, null);
+
+    List <Object> statements = new LinkedList <Object> ();
+    statements.add (authnStatement);
+    // FIXME: eu hard coding of security assurance level
+    statements.add (getAssuranceLevelStatement ("2", assertionFactory));
+    Conditions conditions = assertionFactory.createConditions (oneHourAgo, inOneHour, null, null, null, null);
+
+    Assertion assertion = assertionFactory.createAssertion (assertionID,
+                                                            accessPointNameID,
+                                                            now,
+                                                            conditions,
+                                                            null,
+                                                            subject,
+                                                            statements);
+
+    return sign (assertion, keystoreManager.getOurCertificate (), keystoreManager.getOurPrivateKey ());
+  }
+
+  private GregorianCalendar getNowOffsetByHours (int hours) {
+    GregorianCalendar gregorianCalendar = new GregorianCalendar ();
+    long now = gregorianCalendar.getTimeInMillis ();
+    long then = now + (60L * 60L * 1000L * hours);
+    gregorianCalendar.setTimeInMillis (then);
+    return gregorianCalendar;
+  }
+
+  /**
+   * Gets the Level Statement of Assurance. Assuarnace levels are defined in
+   * http://csrc.nist.gov/publications/nistpubs/800-63/SP800-63V1_0_2.pdf
+   * 
+   * @param assuranceLevel
+   *        the assurance level.
+   * @param samlAssertFactory
+   *        the SAMLAssertionFactory.
+   * @return an AttributeStatement.
+   * @throws SAMLException
+   *         Throws a SAMLException.
+   */
+  private AttributeStatement getAssuranceLevelStatement (String assuranceLevel, SAMLAssertionFactory samlAssertFactory) throws SAMLException {
+
+    List <String> values = new ArrayList <String> ();
+    values.add (assuranceLevel);
+
+    Attribute attribute = samlAssertFactory.createAttribute (ATTRIBUTE_NAME, ATTRIBUTE_NAMESPACE, values);
+    List <Attribute> attributes = new ArrayList <Attribute> ();
+    attributes.add (attribute);
+
+    return samlAssertFactory.createAttributeStatement (attributes);
+  }
+
+  /**
+   * Converts a SAML Assertion to an org.w3c.dom.Element object and signs it
+   * with the X509Certificate and PrivateKey using the SHA1 DigestMethod and the
+   * RSA_SHA1 SignatureMethod.
+   * 
+   * @param assertion
+   *        SAML Assertion to be signed.
+   * @param certificate
+   *        the X509Certificate.
+   * @param privateKey
+   *        the certificate's private key.
+   * @return a signed org.w3c.dom.Element holding the SAML Assertion.
+   * @throws SAMLException
+   *         Throws a SAMLException.
+   */
+  public final Element sign (Assertion assertion, X509Certificate certificate, PrivateKey privateKey) throws SAMLException {
+
+    try {
+
+      XMLSignatureFactory signatureFactory = WSSPolicyConsumerImpl.getInstance ().getSignatureFactory ();
+      DigestMethod digestMethod = signatureFactory.newDigestMethod (DigestMethod.SHA1, null);
+      return sign (assertion, digestMethod, SignatureMethod.RSA_SHA1, certificate, privateKey);
+
+    }
+    catch (Exception ex) {
+      throw new SAMLException (ex);
+    }
+  }
+
+  /**
+   * Converts a SAML Assertion to an org.w3c.dom.Element object and signs it
+   * with the X509Certificate and private key using the given DigestMethod and
+   * the specified SignatureMethod.
+   * 
+   * @param assertion
+   *        SAML Assertion to be signed.
+   * @param digestMethod
+   *        the digest method.
+   * @param signatureMethod
+   *        the signature method.
+   * @param certificate
+   *        the X509Certificate.
+   * @param privateKey
+   *        the certificate's private key.
+   * @return a signed org.w3c.dom.Element holding the SAML Assertion.
+   * @throws SAMLException
+   *         Throws a SAMLException.
+   */
+  public final Element sign (Assertion assertion,
+                             DigestMethod digestMethod,
+                             String signatureMethod,
+                             X509Certificate certificate,
+                             PrivateKey privateKey) throws SAMLException {
+
+    try {
+      XMLSignatureFactory signatureFactory = WSSPolicyConsumerImpl.getInstance ().getSignatureFactory ();
+
+      List <Transform> transformList = new ArrayList <Transform> ();
+      transformList.add (signatureFactory.newTransform (Transform.ENVELOPED, (TransformParameterSpec) null));
+      transformList.add (signatureFactory.newTransform (CanonicalizationMethod.EXCLUSIVE, (TransformParameterSpec) null));
+
+      Reference reference = signatureFactory.newReference ("#" + assertion.getID (),
+                                                           digestMethod,
+                                                           transformList,
+                                                           null,
+                                                           null);
+
+      CanonicalizationMethod canonicalizationMethod = signatureFactory.newCanonicalizationMethod (CanonicalizationMethod.EXCLUSIVE,
+                                                                                                  (C14NMethodParameterSpec) null);
+
+      SignedInfo signedInfo = signatureFactory.newSignedInfo (canonicalizationMethod,
+                                                              signatureFactory.newSignatureMethod (signatureMethod,
+                                                                                                   null),
+                                                              Collections.singletonList (reference));
+
+      Document document = MessageFactory.newInstance ().createMessage ().getSOAPPart ();
+      KeyInfoFactory keyInfoFactory = signatureFactory.getKeyInfoFactory ();
+
+      X509Data x509Data = keyInfoFactory.newX509Data (Collections.singletonList (certificate));
+      KeyInfo keyInfo = keyInfoFactory.newKeyInfo (Collections.singletonList (x509Data));
+
+      Element assertionElement = assertion.toElement (document);
+      DOMSignContext domSignContext = new DOMSignContext (privateKey, assertionElement);
+
+      XMLSignature xmlSignature = signatureFactory.newXMLSignature (signedInfo, keyInfo);
+      domSignContext.putNamespacePrefix ("http://www.w3.org/2000/09/xmldsig#", "ds");
+      xmlSignature.sign (domSignContext);
+      placeSignatureAfterIssuer (assertionElement);
+
+      return assertionElement;
+
+    }
+    catch (Exception e) {
+      throw new SAMLException (e);
+    }
+  }
+
+  /**
+   * Places a Signature.
+   * 
+   * @param assertionElement
+   *        an Element containing an Assertion.
+   * @throws DOMException
+   *         Throws a DOMException.
+   */
+  private void placeSignatureAfterIssuer (final Element assertionElement) throws DOMException {
+
+    NodeList nodes = assertionElement.getChildNodes ();
+    List <Node> movingNodes = new ArrayList <Node> ();
+
+    for (int i = 1; i < nodes.getLength () - 1; i++) {
+      movingNodes.add (nodes.item (i));
     }
 
-    /**
-     * Converts a SAML Assertion to an org.w3c.dom.Element object and signs it with the X509Certificate and private key
-     * using the given DigestMethod and the specified SignatureMethod.
-     *
-     * @param assertion       SAML Assertion to be signed.
-     * @param digestMethod    the digest method.
-     * @param signatureMethod the signature method.
-     * @param certificate     the X509Certificate.
-     * @param privateKey      the certificate's private key.
-     * @return a signed org.w3c.dom.Element holding the SAML Assertion.
-     * @throws SAMLException Throws a SAMLException.
-     */
-    public final Element sign(Assertion assertion,
-                              DigestMethod digestMethod,
-                              String signatureMethod,
-                              X509Certificate certificate,
-                              PrivateKey privateKey)
-            throws SAMLException {
-
-        try {
-            XMLSignatureFactory signatureFactory = WSSPolicyConsumerImpl.getInstance().getSignatureFactory();
-
-            List<Transform> transformList = new ArrayList<Transform>();
-            transformList.add(signatureFactory.newTransform(Transform.ENVELOPED, (TransformParameterSpec) null));
-            transformList.add(signatureFactory.newTransform(CanonicalizationMethod.EXCLUSIVE, (TransformParameterSpec) null));
-
-            Reference reference = signatureFactory.newReference("#" + assertion.getID(), digestMethod, transformList, null, null);
-
-            CanonicalizationMethod canonicalizationMethod =
-                    signatureFactory.newCanonicalizationMethod(CanonicalizationMethod.EXCLUSIVE, (C14NMethodParameterSpec) null);
-
-            SignedInfo signedInfo = signatureFactory.newSignedInfo(
-                    canonicalizationMethod,
-                    signatureFactory.newSignatureMethod(signatureMethod, null),
-                    Collections.singletonList(reference));
-
-            Document document = MessageFactory.newInstance().createMessage().getSOAPPart();
-            KeyInfoFactory keyInfoFactory = signatureFactory.getKeyInfoFactory();
-
-            X509Data x509Data = keyInfoFactory.newX509Data(Collections.singletonList(certificate));
-            KeyInfo keyInfo = keyInfoFactory.newKeyInfo(Collections.singletonList(x509Data));
-
-            Element assertionElement = assertion.toElement(document);
-            DOMSignContext domSignContext = new DOMSignContext(privateKey, assertionElement);
-
-            XMLSignature xmlSignature = signatureFactory.newXMLSignature(signedInfo, keyInfo);
-            domSignContext.putNamespacePrefix("http://www.w3.org/2000/09/xmldsig#", "ds");
-            xmlSignature.sign(domSignContext);
-            placeSignatureAfterIssuer(assertionElement);
-
-            return assertionElement;
-
-        } catch (Exception e) {
-            throw new SAMLException(e);
-        }
+    for (Node node : movingNodes) {
+      assertionElement.removeChild (node);
     }
 
-    /**
-     * Places a Signature.
-     *
-     * @param assertionElement an Element containing an Assertion.
-     * @throws DOMException Throws a DOMException.
-     */
-    private void placeSignatureAfterIssuer(final Element assertionElement)
-            throws DOMException {
-
-        NodeList nodes = assertionElement.getChildNodes();
-        List<Node> movingNodes = new ArrayList<Node>();
-
-        for (int i = 1; i < nodes.getLength() - 1; i++) {
-            movingNodes.add(nodes.item(i));
-        }
-
-        for (Node node : movingNodes) {
-            assertionElement.removeChild(node);
-        }
-
-        for (Node node : movingNodes) {
-            assertionElement.appendChild(node);
-        }
+    for (Node node : movingNodes) {
+      assertionElement.appendChild (node);
     }
+  }
 }

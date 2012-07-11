@@ -49,10 +49,9 @@ import at.peppol.sml.server.exceptions.NotFoundException;
 import at.peppol.sml.server.exceptions.UnauthorizedException;
 import at.peppol.sml.server.exceptions.UnknownUserException;
 
-
 /**
  * This interface is used by the web service to access the underlying data.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public interface IGenericDataHandler extends IRequestAuthenticationHandler {

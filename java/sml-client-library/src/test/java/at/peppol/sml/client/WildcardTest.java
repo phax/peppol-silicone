@@ -57,10 +57,9 @@ import at.peppol.sml.AbstractSMLClientTest;
 import at.peppol.sml.client.ManageParticipantIdentifierServiceCaller;
 import at.peppol.sml.client.ManageServiceMetadataServiceCaller;
 
-
 /**
  * This class is used for generating test data.
- *
+ * 
  * @author Ravnholt<br>
  *         PEPPOL.AT, BRZ, Philip Helger
  */

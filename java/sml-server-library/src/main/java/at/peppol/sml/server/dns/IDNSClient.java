@@ -47,18 +47,17 @@ import org.xbill.DNS.ZoneTransferException;
 import at.peppol.sml.server.exceptions.IllegalHostnameException;
 import at.peppol.sml.server.exceptions.IllegalIdentifierSchemeException;
 
-
 /**
  * Interface for DNSClient used by ServiceMetadataLocator to maintain Publisher
  * hosts in DNS. The interface contains both a Factory and a Dummy
  * implementation.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public interface IDNSClient {
   /**
    * Administrative Zone configured for DNSClient.
-   *
+   * 
    * @return zonename
    */
   String getDNSZoneName ();
@@ -66,14 +65,14 @@ public interface IDNSClient {
   /**
    * SML Zone name configured used by Identifiers for DNSClient. Will be
    * prefixed on Zone
-   *
+   * 
    * @return zonename
    */
   String getSMLZoneName ();
 
   /**
    * DNS Server handling Publisher hosts.
-   *
+   * 
    * @return server
    */
   String getServer ();
@@ -82,7 +81,7 @@ public interface IDNSClient {
    * Create an 'anchor'/CNAME for a Publisher which points to the host/server
    * running the MetadataPublisher. ParticipantIdentifier Registrations for the
    * Publisher will point to this 'anchor'
-   *
+   * 
    * @param smpId
    *        unique id for Publisher
    * @param host
@@ -95,7 +94,7 @@ public interface IDNSClient {
   /**
    * Delete the 'anchor'/CNAME for a Publisher which points to the host/server
    * running the MetadataPublisher.
-   *
+   * 
    * @param smpId
    *        unique id for Publisher
    * @throws IOException
@@ -105,7 +104,7 @@ public interface IDNSClient {
   /**
    * Creates a DNS entry/CNAME for a ParticipantIdentifier pointing to the
    * 'anchor'/CNAME for the Publisher.
-   *
+   * 
    * @param pi
    *        ParticipantIdentifier
    * @param smpId
@@ -120,7 +119,7 @@ public interface IDNSClient {
 
   /**
    * Creates a list of : DNS entry/CNAME for a ParticipantIdentifier.
-   *
+   * 
    * @param list
    *        List of {@link ParticipantIdentifierType}
    * @throws IOException
@@ -133,7 +132,7 @@ public interface IDNSClient {
 
   /**
    * Deletes a DNS entry/CNAME for a ParticipantIdentifier.
-   *
+   * 
    * @param pi
    *        {@link ParticipantIdentifierType}
    * @throws IOException
@@ -143,7 +142,7 @@ public interface IDNSClient {
 
   /**
    * Deletes a list of : DNS entry/CNAME for a ParticipantIdentifier.
-   *
+   * 
    * @param list
    *        list of {@link ParticipantIdentifierType}
    * @throws IOException
@@ -153,7 +152,7 @@ public interface IDNSClient {
 
   /**
    * Resolves a DNS Hostname.
-   *
+   * 
    * @param dnsName
    *        name to resolve
    * @return host
@@ -163,7 +162,7 @@ public interface IDNSClient {
 
   /**
    * Run Zone Transfer and list all records.
-   *
+   * 
    * @return List<org.xbill.DNS.Record>
    * @throws IOException
    * @throws ZoneTransferException
@@ -172,7 +171,7 @@ public interface IDNSClient {
 
   /**
    * Find host/server registration for Publisher.
-   *
+   * 
    * @param dnsPublisher
    * @return host
    * @throws IOException
@@ -181,7 +180,7 @@ public interface IDNSClient {
 
   /**
    * Create ParticipantIdentifier from DNS Name.
-   *
+   * 
    * @param name
    *        DNS Name
    * @return ParticipantIdentifier
@@ -190,7 +189,7 @@ public interface IDNSClient {
 
   /**
    * Create DNS Name from ParticipantIdentifier
-   *
+   * 
    * @param pi
    *        ParticipantIdentifier
    * @return DNS Name
@@ -200,7 +199,7 @@ public interface IDNSClient {
 
   /**
    * Extract Publisher Anchor from DNS Name.
-   *
+   * 
    * @param name
    * @return Publisher Anchor
    */
@@ -208,7 +207,7 @@ public interface IDNSClient {
 
   /**
    * Checks if name is handled.
-   *
+   * 
    * @param name
    * @return true or false
    */

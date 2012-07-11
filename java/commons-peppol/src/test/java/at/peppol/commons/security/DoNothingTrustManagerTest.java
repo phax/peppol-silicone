@@ -45,7 +45,7 @@ import at.peppol.commons.security.DoNothingTrustManager;
 
 /**
  * Test class for class {@link DoNothingTrustManager}.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class DoNothingTrustManagerTest {

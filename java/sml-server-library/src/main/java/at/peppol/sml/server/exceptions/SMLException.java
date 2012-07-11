@@ -39,7 +39,7 @@ package at.peppol.sml.server.exceptions;
 
 /**
  * Base class for all SML exceptions.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public abstract class SMLException extends Exception {

@@ -70,12 +70,11 @@ import at.peppol.sml.server.exceptions.InternalErrorException;
 import at.peppol.sml.server.exceptions.NotFoundException;
 import at.peppol.sml.server.management.DataHandlerFactory;
 
-
 /**
  * Utility servlet that verifies consistency between registration in DNS and
  * Locator Database. First loops through DNS - and verifies against DB. Then
  * loops through DB and verifies against DNS.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public class ServletVerifyDNS extends HttpServlet {
@@ -95,7 +94,7 @@ public class ServletVerifyDNS extends HttpServlet {
 
   /**
    * Handle both get/post request.
-   *
+   * 
    * @param req
    * @param resp
    * @throws IOException
@@ -120,7 +119,7 @@ public class ServletVerifyDNS extends HttpServlet {
 
   /**
    * Write log line to servlet output stream.
-   *
+   * 
    * @param os
    * @param msg
    * @throws Exception
@@ -133,7 +132,7 @@ public class ServletVerifyDNS extends HttpServlet {
 
   /**
    * Write exception to servlet output stream.
-   *
+   * 
    * @param os
    * @param e
    * @throws Exception
@@ -155,7 +154,7 @@ public class ServletVerifyDNS extends HttpServlet {
 
   /**
    * Verify DNS Records.
-   *
+   * 
    * @param os
    * @throws Exception
    */
@@ -357,7 +356,7 @@ public class ServletVerifyDNS extends HttpServlet {
 
   /**
    * Verifies that ParticipantIdentifier
-   *
+   * 
    * @param aOS
    * @param aDNSClient
    * @param sSMPID
@@ -424,7 +423,7 @@ public class ServletVerifyDNS extends HttpServlet {
   /**
    * Verify that Publisher/Anchor. - checks if Publisher/Anchor exists in DB. --
    * If NOT : Delete Publisher/Anchor in DBS.
-   *
+   * 
    * @param aOS
    * @param aDNSClient
    * @param aGenericHandler
@@ -477,7 +476,7 @@ public class ServletVerifyDNS extends HttpServlet {
    * ParticipantIdentifier in DNS - checks if hostname found in DNS matches
    * hostname found in MetadataPublisher. -- If NOT : hostname is updated for
    * Publisher/Anchor.
-   *
+   * 
    * @param os
    * @param dnsClient
    * @param handler
@@ -571,7 +570,7 @@ public class ServletVerifyDNS extends HttpServlet {
 
   /**
    * Utility method to get host name.
-   *
+   * 
    * @param endpoint
    * @return the host name to use
    * @throws MalformedURLException

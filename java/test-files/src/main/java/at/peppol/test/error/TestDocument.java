@@ -5,7 +5,6 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
-
 import com.phloc.commons.collections.ContainerHelper;
 
 public final class TestDocument {

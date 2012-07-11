@@ -46,7 +46,7 @@ import com.phloc.commons.lang.EnumHelper;
 
 /**
  * Determines the different validation types.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public enum EXMLValidationType implements IHasID <String> {

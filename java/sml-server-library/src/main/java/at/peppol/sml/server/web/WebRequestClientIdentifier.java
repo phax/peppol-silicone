@@ -48,7 +48,7 @@ import com.phloc.commons.string.StringHelper;
 
 /**
  * Manages the client unique ID for SML requests.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable

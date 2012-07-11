@@ -63,10 +63,9 @@ import at.peppol.sml.AbstractSMLClientTest;
 import at.peppol.sml.client.ManageParticipantIdentifierServiceCaller;
 import at.peppol.sml.client.ManageServiceMetadataServiceCaller;
 
-
 /**
  * This class is for BRZ internal use only!
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Ignore

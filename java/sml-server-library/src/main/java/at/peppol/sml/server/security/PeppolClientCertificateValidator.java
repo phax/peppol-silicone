@@ -54,11 +54,10 @@ import org.slf4j.LoggerFactory;
 
 import at.peppol.commons.utils.ConfigFile;
 
-
 /**
  * Extract certificates from HTTP requests. These are the client certificates
  * submitted by the user.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable
@@ -107,7 +106,7 @@ public final class PeppolClientCertificateValidator {
 
   /**
    * Extract certificates from request and validate them.
-   *
+   * 
    * @param aHttpRequest
    *        The HTTP request to use.
    * @return <code>true</code> if valid, <code>false</code> otherwise.
@@ -165,9 +164,9 @@ public final class PeppolClientCertificateValidator {
     final String sVerifyMsg = _verifyCertificate (aCertToVerify, aRootCert, aCRLs, aNow);
     if (sVerifyMsg != null) {
       s_aLogger.warn ("Client certificate not correct: " +
-                sVerifyMsg +
-                "; root cert serial = " +
-                aRootCert.getSerialNumber ().toString (16));
+                      sVerifyMsg +
+                      "; root cert serial = " +
+                      aRootCert.getSerialNumber ().toString (16));
       return false;
     }
 

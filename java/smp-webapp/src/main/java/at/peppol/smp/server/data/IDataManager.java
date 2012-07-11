@@ -49,17 +49,16 @@ import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 
 import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
 
-
 /**
  * This interface is used by the REST interface for accessing the underlying SMP
  * data. One should implement this interface if a new data source is needed.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public interface IDataManager {
   /**
    * This method returns a ServiceGroup given its id.
-   *
+   * 
    * @param id
    *        The service group id.
    * @return The service group corresponding to the id.
@@ -70,7 +69,7 @@ public interface IDataManager {
   /**
    * Persists the service group in the underlying data layer. This operation
    * requires credentials.
-   *
+   * 
    * @param serviceGroup
    *        The service group to save.
    * @param creds
@@ -80,7 +79,7 @@ public interface IDataManager {
 
   /**
    * Deletes the service group having the specified id.
-   *
+   * 
    * @param serviceGroupId
    *        The ID of the service group to delete.
    * @param creds
@@ -90,7 +89,7 @@ public interface IDataManager {
 
   /**
    * Gets a list of the document id's of the given service group.
-   *
+   * 
    * @param serviceGroupId
    *        The id of the service group.
    * @return The corresponding document id's.
@@ -100,7 +99,7 @@ public interface IDataManager {
   /**
    * Gets the service metadata corresponding to the service group id and
    * document id.
-   *
+   * 
    * @param serviceGroupId
    *        The service group id of the service metadata.
    * @param docType
@@ -111,7 +110,7 @@ public interface IDataManager {
 
   /**
    * Saves the given service metadata in the underlying data layer.
-   *
+   * 
    * @param serviceMetadata
    *        The service metadata to save.
    * @param creds
@@ -122,7 +121,7 @@ public interface IDataManager {
   /**
    * Deletes a service metadata object given by its service group id and
    * document id.
-   *
+   * 
    * @param serviceGroupId
    *        The service group id of the service metadata.
    * @param docType
@@ -136,7 +135,7 @@ public interface IDataManager {
 
   /**
    * Checks whether the ServiceMetadata should be found elsewhere.
-   *
+   * 
    * @param servGroupId
    *        The service group id of the service metadata.
    * @param docTypeId
@@ -148,7 +147,7 @@ public interface IDataManager {
 
   /**
    * Gets the service group ids owned by the given credentials.
-   *
+   * 
    * @param creds
    *        The credentials to get service groups id for.
    * @return A collection of service group id's.
@@ -158,7 +157,7 @@ public interface IDataManager {
   /**
    * Gets the list of service metadata objects corresponding to a given service
    * group id.
-   *
+   * 
    * @param serviceGroupId
    *        The service group id.
    * @return A list of service metadata objects.

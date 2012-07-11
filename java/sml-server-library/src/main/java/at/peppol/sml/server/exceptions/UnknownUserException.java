@@ -39,7 +39,7 @@ package at.peppol.sml.server.exceptions;
 
 /**
  * Is thrown if the user requesting an operation is unknown.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public class UnknownUserException extends SMLException {

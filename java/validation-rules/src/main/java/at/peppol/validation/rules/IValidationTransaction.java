@@ -44,11 +44,10 @@ import at.peppol.commons.cenbii.profiles.ETransaction;
 import com.phloc.commons.IHasStringRepresentation;
 import com.phloc.commons.annotations.MustImplementEqualsAndHashcode;
 
-
 /**
  * Represents a single transaction used for validation. It consists of a syntax
  * binding and the underlying BII transaction.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @MustImplementEqualsAndHashcode

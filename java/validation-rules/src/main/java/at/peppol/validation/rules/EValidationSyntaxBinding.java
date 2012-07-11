@@ -47,7 +47,7 @@ import com.phloc.commons.lang.EnumHelper;
 /**
  * Represents all possible syntax bindings supported by the PEPPOL validation
  * artefacts.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public enum EValidationSyntaxBinding implements IHasID <String> {

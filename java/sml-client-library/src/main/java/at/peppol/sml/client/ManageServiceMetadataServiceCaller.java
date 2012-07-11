@@ -53,10 +53,9 @@ import org.busdox.servicemetadata.manageservicemetadataservice._1.UnauthorizedFa
 
 import at.peppol.commons.sml.ISMLInfo;
 
-
 /**
  * This class is used for calling the service metadata interface of the SML.
- *
+ * 
  * @author Ravnholt<br>
  *         PEPPOL.AT, BRZ, Philip Helger
  */
@@ -65,7 +64,7 @@ public final class ManageServiceMetadataServiceCaller {
 
   /**
    * Creates a service caller for the service metadata interface
-   *
+   * 
    * @param aSMLInfo
    *        The SML info object
    */
@@ -75,7 +74,7 @@ public final class ManageServiceMetadataServiceCaller {
 
   /**
    * Creates a service caller for the service metadata interface
-   *
+   * 
    * @param aEndpointAddress
    *        The address of the SML management interface.
    */
@@ -87,7 +86,7 @@ public final class ManageServiceMetadataServiceCaller {
 
   /**
    * Create the main WebService client for the specified endpoint address.
-   *
+   * 
    * @return The WebService port to be used.
    */
   @Nonnull
@@ -102,7 +101,7 @@ public final class ManageServiceMetadataServiceCaller {
 
   /**
    * Creates the service metadata for the specified user.
-   *
+   * 
    * @param sSMPID
    *        The certificate UID of the SMP
    * @param sSMPAddressPhysical
@@ -130,7 +129,7 @@ public final class ManageServiceMetadataServiceCaller {
 
   /**
    * Creates the service metadata for the specified user.
-   *
+   * 
    * @param aServiceMetadata
    *        The data about the SMP
    * @throws BadRequestFault
@@ -148,7 +147,7 @@ public final class ManageServiceMetadataServiceCaller {
 
   /**
    * Updates the specified service metadata given by the publisher id.
-   *
+   * 
    * @param sSMPID
    *        The publisher id
    * @param sSMPAddressPhysical
@@ -179,7 +178,7 @@ public final class ManageServiceMetadataServiceCaller {
 
   /**
    * Updates the specified service metadata.
-   *
+   * 
    * @param aServiceMetadata
    *        The service metadata instance to update.
    * @throws InternalErrorFault
@@ -200,7 +199,7 @@ public final class ManageServiceMetadataServiceCaller {
 
   /**
    * Deletes the service metadata given by the publisher id.
-   *
+   * 
    * @param sSMPID
    *        The publisher id of the service metadata to delete.
    * @throws InternalErrorFault
@@ -218,7 +217,7 @@ public final class ManageServiceMetadataServiceCaller {
 
   /**
    * Returns information about the publisher given by the publisher id.
-   *
+   * 
    * @param sSMPID
    *        The publisher id of the service metadata to read.
    * @return The service metadata given by the id.
@@ -242,7 +241,7 @@ public final class ManageServiceMetadataServiceCaller {
 
   /**
    * Returns information about the publisher given by the publisher id.
-   *
+   * 
    * @param aSMPService
    *        The publisher id is read from this service metadata object.
    * @return The service metadata given by the id.

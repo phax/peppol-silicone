@@ -8,7 +8,6 @@ import at.peppol.commons.identifier.CIdentifier;
 
 import com.phloc.commons.compare.AbstractComparator;
 
-
 /**
  * Comparator for sorting DNS records alphabetically.
  * 

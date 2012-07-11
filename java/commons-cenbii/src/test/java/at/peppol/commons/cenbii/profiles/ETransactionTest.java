@@ -48,7 +48,7 @@ import com.phloc.commons.string.StringHelper;
 
 /**
  * Test class for class {@link ETransaction}.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class ETransactionTest {

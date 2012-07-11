@@ -53,11 +53,10 @@ import at.peppol.sml.AbstractSMLClientTest;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.io.streams.StreamUtils;
 
-
 /**
  * This class tests the URL connection to the SML that is secured with client
  * certificates.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Ignore

@@ -61,7 +61,6 @@ import org.slf4j.LoggerFactory;
 import at.peppol.commons.identifier.IdentifierUtils;
 import at.peppol.commons.sml.ISMLInfo;
 
-
 /**
  * This class is used for calling the Manage Participant Identifier interface on
  * the SML.

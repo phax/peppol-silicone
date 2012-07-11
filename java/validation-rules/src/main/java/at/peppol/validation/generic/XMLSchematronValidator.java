@@ -58,10 +58,9 @@ import com.phloc.commons.error.ResourceLocation;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.string.ToStringGenerator;
 
-
 /**
  * Implementation of the {@link IXMLValidator} for XML Schema.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class XMLSchematronValidator extends AbstractXMLValidator {

@@ -59,7 +59,7 @@ import com.phloc.commons.state.ESuccess;
  * in {@link AbstractRegistrationHook}, this filter will make sure the
  * registration is ended by calling
  * {@link AbstractRegistrationHook#postUpdate(ESuccess)}.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public class PostRegistrationFilter implements Filter {
@@ -112,12 +112,12 @@ public class PostRegistrationFilter implements Filter {
   private static void _notifyRegistrationHook (@Nonnull final ESuccess eSuccess) throws ServletException {
     final AbstractRegistrationHook aCallback = AbstractRegistrationHook.getQueue ();
     if (aCallback != null) {
-    try {
+      try {
         aCallback.postUpdate (eSuccess);
-    }
-    catch (final HookException e) {
-      throw new ServletException (e);
-    }
+      }
+      catch (final HookException e) {
+        throw new ServletException (e);
+      }
       finally {
         // Ensure that no memory leak resides in the ThreadLocal
         AbstractRegistrationHook.resetQueue ();

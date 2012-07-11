@@ -43,10 +43,9 @@ import org.junit.Test;
 
 import at.peppol.commons.utils.HostnameVerifierAlwaysTrue;
 
-
 /**
  * Test class for class {@link HostnameVerifierAlwaysTrue}.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class HostnameVerifierAlwaysTrueTest {

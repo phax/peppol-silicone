@@ -50,7 +50,6 @@ import at.peppol.sml.server.exceptions.NotFoundException;
 import at.peppol.sml.server.exceptions.UnauthorizedException;
 import at.peppol.sml.server.exceptions.UnknownUserException;
 
-
 /**
  * @author PEPPOL.AT, BRZ, Philip Helger
  */

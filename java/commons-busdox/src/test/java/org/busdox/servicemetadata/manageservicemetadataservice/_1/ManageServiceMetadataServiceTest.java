@@ -41,13 +41,12 @@ import org.junit.Test;
 
 /**
  * Test class for class {@link ManageServiceMetadataService}.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
- *
  */
 public class ManageServiceMetadataServiceTest {
   @Test
-  public void testCtor() {
-    new ManageServiceMetadataService();
+  public void testCtor () {
+    new ManageServiceMetadataService ();
   }
 }

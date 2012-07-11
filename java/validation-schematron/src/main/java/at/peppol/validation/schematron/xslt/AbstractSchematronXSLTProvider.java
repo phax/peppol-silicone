@@ -26,7 +26,7 @@ import com.phloc.commons.string.ToStringGenerator;
 
 /**
  * Abstract base class handling XSLT to perform Schematron validation.
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 abstract class AbstractSchematronXSLTProvider implements ISchematronXSLTProvider {

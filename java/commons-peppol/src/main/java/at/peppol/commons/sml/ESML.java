@@ -53,7 +53,7 @@ import com.phloc.commons.annotations.Nonempty;
  * <li>DEVELOPMENT_LOCAL - used for development environment assuming the
  * management application is running on localhost in the ROOT context!</li>
  * </ul>
- *
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public enum ESML implements ISMLInfo {
