@@ -136,7 +136,7 @@ public final class UserFolderTreeManager extends AbstractDAO implements IUserFol
   }
 
   public void iterateFolders (final INonThrowingRunnableWithParameter <IUserFolder> aCallback,
-                              final Comparator <? super UserFolder> aFolderComparator) {
+                              @Nullable final Comparator <? super UserFolder> aFolderComparator) {
     m_aRWLock.readLock ().lock ();
     try {
       m_aTree.iterateFolders (aCallback, aFolderComparator);
@@ -147,7 +147,7 @@ public final class UserFolderTreeManager extends AbstractDAO implements IUserFol
   }
 
   @Nonnull
-  public EChange assignDocumentToFolder (final String sFolderID, final IUserDocument aDoc) {
+  public EChange assignDocumentToFolder (@Nullable final String sFolderID, @Nonnull final IUserDocument aDoc) {
     m_aRWLock.writeLock ().lock ();
     try {
       if (m_aTree.assignDocumentToFolder (sFolderID, aDoc).isUnchanged ())
@@ -161,7 +161,7 @@ public final class UserFolderTreeManager extends AbstractDAO implements IUserFol
   }
 
   @Nonnull
-  public EChange unassignDocumentFromFolder (final String sFolderID, final IUserDocument aDoc) {
+  public EChange unassignDocumentFromFolder (@Nullable final String sFolderID, @Nonnull final IUserDocument aDoc) {
     m_aRWLock.writeLock ().lock ();
     try {
       if (m_aTree.unassignDocumentFromFolder (sFolderID, aDoc).isUnchanged ())
@@ -175,7 +175,7 @@ public final class UserFolderTreeManager extends AbstractDAO implements IUserFol
   }
 
   @Nullable
-  public Set <String> getAllAssignedDocumentIDs (final String sFolderID) {
+  public Set <String> getAllAssignedDocumentIDs (@Nullable final String sFolderID) {
     m_aRWLock.readLock ().lock ();
     try {
       return m_aTree.getAllAssignedDocumentIDs (sFolderID);

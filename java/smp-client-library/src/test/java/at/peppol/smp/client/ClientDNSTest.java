@@ -76,7 +76,7 @@ public final class ClientDNSTest {
   private static final String SMP_PASSWORD = "Test1234";
   private static final IReadonlyUsernamePWCredentials SMP_CREDENTIALS = new ReadonlyUsernamePWCredentials (SMP_USERNAME,
                                                                                                            SMP_PASSWORD);
-  private static final URI SMP_URI = URLUtils.getAsURI ("http://localhost/");
+  public static final URI SMP_URI = URLUtils.getAsURI ("http://localhost/");
 
   @BeforeClass
   public static void init () throws Exception {

@@ -120,7 +120,7 @@ public final class UserFolder implements IUserFolder {
     return EChange.CHANGED;
   }
 
-  public boolean containsDocumentWithID (final String sDocumentID) {
+  public boolean containsDocumentWithID (@Nullable final String sDocumentID) {
     return m_aDocs.contains (sDocumentID);
   }
 
