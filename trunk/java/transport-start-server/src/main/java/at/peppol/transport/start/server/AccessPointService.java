@@ -275,7 +275,7 @@ public class AccessPointService {
 
     if (PingMessageHelper.isPingMessage (aMetadata)) {
       // It's a PING message - no actions to be taken!
-      s_aLogger.info ("Got a ping message!");
+      s_aLogger.info ("Got a ping message - discarding it!");
     }
     else {
       // Not a ping message
@@ -346,9 +346,9 @@ public class AccessPointService {
           s_aLogger.info ("Done handling document from PEPPOL");
         }
         else {
-          s_aLogger.info ("The received document is not for us!");
-          s_aLogger.info ("Request is for: " + sRecipientAPUrl);
-          s_aLogger.info ("    Our URL is: " + sOwnAPUrl);
+          s_aLogger.error ("The received document is not for us!");
+          s_aLogger.error ("Request is for: " + sRecipientAPUrl);
+          s_aLogger.error ("    Our URL is: " + sOwnAPUrl);
 
           // Avoid endless loop
           ExceptionUtils.createFaultMessage (new IllegalStateException ("Receiver(" +
@@ -361,7 +361,7 @@ public class AccessPointService {
       else {
         s_aLogger.error ("Metadata Certificate (" +
                          aRecipientSMPCert +
-                         ") does final not match Access Point Certificate (" +
+                         ") does not match Access Point Certificate (" +
                          s_aConfiguredCert +
                          ") - ignoring document");
       }
