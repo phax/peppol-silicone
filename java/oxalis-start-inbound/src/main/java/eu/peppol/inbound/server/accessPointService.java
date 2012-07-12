@@ -125,8 +125,8 @@ public class accessPointService {
   private void verifyThatThisDocumentIsForUs (final IMessageMetadata messageHeader) {
 
     try {
-      final X509Certificate recipientCertificate = new SmpLookupManager ().getEndpointCertificate (messageHeader.getRecipientID (),
-                                                                                                   messageHeader.getDocumentTypeID ());
+      final X509Certificate recipientCertificate = SmpLookupManager.getEndpointCertificate (messageHeader.getRecipientID (),
+                                                                                            messageHeader.getDocumentTypeID ());
 
       if (new KeystoreManager ().isOurCertificate (recipientCertificate)) {
         Log.info ("SMP lookup OK");

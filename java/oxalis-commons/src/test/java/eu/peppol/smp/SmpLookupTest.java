@@ -34,14 +34,19 @@ public class SmpLookupTest {
   @Test
   public void performLookup () throws SmpLookupException {
     final SmpLookup smpLookup = new SmpLookup (SimpleParticipantIdentifier.createWithDefaultScheme ("9908:810017902"));
-    final List <URL> result = smpLookup.getServiceUrlList ();
+    try {
+      final List <URL> result = smpLookup.getServiceUrlList ();
 
-    for (final URL url : result) {
+      for (final URL url : result) {
 
-      final String s = URLUtils.urlDecode (url.getPath ());
-      // All URL encoded characters shall have been translated, so we don't
-      // expected to see any "%" characters
-      assertTrue (s.indexOf ("%") < 0);
+        final String s = URLUtils.urlDecode (url.getPath ());
+        // All URL encoded characters shall have been translated, so we don't
+        // expected to see any "%" characters
+        assertTrue (s.indexOf ("%") < 0);
+      }
+    }
+    catch (final IllegalStateException ex) {
+      System.err.println ("Offline mode");
     }
   }
 
@@ -49,9 +54,14 @@ public class SmpLookupTest {
   public void parseServiceMetadataReferences () throws SmpLookupException {
     final SmpLookup smpLookup = new SmpLookup (SimpleParticipantIdentifier.createWithDefaultScheme ("9908:810017902"));
 
-    final List <IDocumentTypeIdentifier> result = smpLookup.parseServiceMetadataReferences ();
-    for (final IDocumentTypeIdentifier documentTypeIdentifier : result) {
-      System.out.println (documentTypeIdentifier);
+    try {
+      final List <IDocumentTypeIdentifier> result = smpLookup.parseServiceMetadataReferences ();
+      for (final IDocumentTypeIdentifier documentTypeIdentifier : result) {
+        System.out.println (documentTypeIdentifier);
+      }
+    }
+    catch (final IllegalStateException ex) {
+      System.err.println ("Offline mode");
     }
   }
 

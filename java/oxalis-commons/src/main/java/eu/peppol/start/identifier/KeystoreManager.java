@@ -28,7 +28,7 @@ import eu.peppol.security.OcspValidatorCache;
  * 
  * @author steinar@sendregning.no
  */
-public class KeystoreManager {
+public final class KeystoreManager {
 
   private static String s_sKeystoreLocation;
   private static String s_sKeystorePassword;
