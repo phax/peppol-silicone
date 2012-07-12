@@ -115,9 +115,9 @@ public class MainCreateEnumsGenericode {
 
     final JDefinedClass jEnum = s_aCodeModel._package ("at.peppol.commons.codelist")
                                             ._enum ("E" +
-                                                    RegExHelper.makeIdentifier (aCodeList10.getIdentification ()
-                                                                                           .getShortName ()
-                                                                                           .getValue ()))
+                                                    RegExHelper.getAsIdentifier (aCodeList10.getIdentification ()
+                                                                                            .getShortName ()
+                                                                                            .getValue ()))
                                             ._implements (s_aCodeModel.ref (IHasID.class).narrow (String.class))
                                             ._implements (IHasDisplayName.class);
     jEnum.javadoc ().add ("This file is generated from Genericode file " + aFile.getName () + ". Do NOT edit!");
@@ -126,7 +126,7 @@ public class MainCreateEnumsGenericode {
       final String sCode = Genericode10Utils.getRowValue (aRow, COLID_CODE);
       final String sName = Genericode10Utils.getRowValue (aRow, COLID_NAME);
 
-      final String sIdentifier = RegExHelper.makeIdentifier (sName.toUpperCase (Locale.US)).replaceAll ("__", "_");
+      final String sIdentifier = RegExHelper.getAsIdentifier (sName.toUpperCase (Locale.US)).replaceAll ("__", "_");
       final JEnumConstant jEnumConst = jEnum.enumConstant (sIdentifier);
       jEnumConst.arg (JExpr.lit (sCode));
       jEnumConst.arg (JExpr.lit (sName));

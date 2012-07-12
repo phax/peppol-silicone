@@ -71,7 +71,6 @@ public final class PredefinedProcessIdentifierManager {
   }
 
   @PresentForCodeCoverage
-  @SuppressWarnings ("unused")
   private static final PredefinedProcessIdentifierManager s_aInstance = new PredefinedProcessIdentifierManager ();
 
   private PredefinedProcessIdentifierManager () {}

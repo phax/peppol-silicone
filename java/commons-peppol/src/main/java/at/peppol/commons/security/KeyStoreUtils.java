@@ -66,7 +66,6 @@ public final class KeyStoreUtils {
   public static final String KEYSTORE_TYPE_JKS = "JKS";
 
   @PresentForCodeCoverage
-  @SuppressWarnings ("unused")
   private static final KeyStoreUtils s_aInstance = new KeyStoreUtils ();
 
   private KeyStoreUtils () {}
