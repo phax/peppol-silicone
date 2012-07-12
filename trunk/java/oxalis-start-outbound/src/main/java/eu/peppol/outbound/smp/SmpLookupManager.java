@@ -2,18 +2,15 @@ package eu.peppol.outbound.smp;
 
 import java.io.ByteArrayInputStream;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 
-import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.busdox.servicemetadata.publishing._1.EndpointType;
-import org.busdox.servicemetadata.publishing._1.ServiceGroupType;
 import org.busdox.servicemetadata.publishing._1.SignedServiceMetadataType;
 import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 import org.busdox.transport.identifiers._1.ProcessIdentifierType;
@@ -30,7 +27,6 @@ import com.phloc.commons.jaxb.JAXBContextCache;
 
 import eu.peppol.outbound.util.Log;
 import eu.peppol.security.SmpResponseValidator;
-import eu.peppol.smp.SmpLookupException;
 import eu.peppol.util.Util;
 
 /**
@@ -39,8 +35,10 @@ import eu.peppol.util.Util;
  * @author Nigel Parker
  * @author Steinar O. Cook
  */
-public class SmpLookupManager {
+public final class SmpLookupManager {
   protected static final String SML_PEPPOLCENTRAL_ORG = "sml.peppolcentral.org";
+
+  private SmpLookupManager () {}
 
   /**
    * @param participant
@@ -50,10 +48,10 @@ public class SmpLookupManager {
    *         If the end point address cannot be resolved for the participant.
    *         This is caused by a {@link java.net.UnknownHostException}
    */
-  public URL getEndpointAddress (final ParticipantIdentifierType participant,
-                                 final IDocumentTypeIdentifier documentTypeIdentifier) {
+  public static URL getEndpointAddress (final ParticipantIdentifierType participant,
+                                        final IDocumentTypeIdentifier documentTypeIdentifier) {
 
-    final EndpointType endpointType = getEndpointType (participant, documentTypeIdentifier);
+    final EndpointType endpointType = _getEndpointType (participant, documentTypeIdentifier);
     final String address = W3CEndpointReferenceUtils.getAddress (endpointType.getEndpointReference ());
     Log.info ("Found endpoint address for " + participant.getValue () + " from SMP: " + address);
 
@@ -79,11 +77,11 @@ public class SmpLookupManager {
    *         If the end point address cannot be resolved for the participant.
    *         This is caused by a {@link java.net.UnknownHostException}
    */
-  public X509Certificate getEndpointCertificate (final ParticipantIdentifierType participant,
-                                                 final IDocumentTypeIdentifier documentTypeIdentifier) {
+  public static X509Certificate getEndpointCertificate (final ParticipantIdentifierType participant,
+                                                        final IDocumentTypeIdentifier documentTypeIdentifier) {
 
     try {
-      final String body = getEndpointType (participant, documentTypeIdentifier).getCertificate ();
+      final String body = _getEndpointType (participant, documentTypeIdentifier).getCertificate ();
       final String endpointCertificate = "-----BEGIN CERTIFICATE-----\n" + body + "\n-----END CERTIFICATE-----";
       final CertificateFactory certificateFactory = CertificateFactory.getInstance ("X.509");
       return (X509Certificate) certificateFactory.generateCertificate (new ByteArrayInputStream (endpointCertificate.getBytes ()));
@@ -97,11 +95,10 @@ public class SmpLookupManager {
     }
   }
 
-  private EndpointType getEndpointType (final ParticipantIdentifierType participant,
-                                        final IDocumentTypeIdentifier documentTypeIdentifier) {
-
+  private static EndpointType _getEndpointType (final ParticipantIdentifierType participant,
+                                                final IDocumentTypeIdentifier documentTypeIdentifier) {
     try {
-      final SignedServiceMetadataType serviceMetadata = getServiceMetaData (participant, documentTypeIdentifier);
+      final SignedServiceMetadataType serviceMetadata = _getServiceMetaData (participant, documentTypeIdentifier);
 
       return serviceMetadata.getServiceMetadata ()
                             .getServiceInformation ()
@@ -118,12 +115,12 @@ public class SmpLookupManager {
     }
   }
 
-  private static SignedServiceMetadataType getServiceMetaData (final ParticipantIdentifierType participant,
-                                                               final IDocumentTypeIdentifier documentTypeIdentifier) throws SmpSignedServiceMetaDataException {
+  private static SignedServiceMetadataType _getServiceMetaData (final ParticipantIdentifierType participant,
+                                                                final IDocumentTypeIdentifier documentTypeIdentifier) throws SmpSignedServiceMetaDataException {
 
     URL smpUrl = null;
     try {
-      smpUrl = getSmpUrl (participant, documentTypeIdentifier);
+      smpUrl = _getSmpUrl (participant, documentTypeIdentifier);
     }
     catch (final Exception e) {
       throw new IllegalStateException ("Unable to construct URL for " +
@@ -176,9 +173,8 @@ public class SmpLookupManager {
     }
   }
 
-  private static URL getSmpUrl (final ParticipantIdentifierType participantId,
-                                final IDocumentTypeIdentifier documentTypeIdentifier) throws Exception {
-
+  private static URL _getSmpUrl (final ParticipantIdentifierType participantId,
+                                 final IDocumentTypeIdentifier documentTypeIdentifier) throws Exception {
     final String scheme = participantId.getScheme ();
     final String value = participantId.getValue ();
     final String hostname = "B-" +
@@ -193,73 +189,9 @@ public class SmpLookupManager {
     return new URL ("http://" + hostname + "/" + encodedParticipant + "/services/" + encodedDocumentId);
   }
 
-  static URL getServiceGroupURL (final ParticipantIdentifierType participantId) throws SmpLookupException {
-    final String scheme = participantId.getScheme ();
-    final String value = participantId.getValue ();
-
-    try {
-      final String hostname = "B-" +
-                              BusdoxURLUtils.getHashValueStringRepresentation (value.toLowerCase ()) +
-                              "." +
-                              scheme +
-                              "." +
-                              SML_PEPPOLCENTRAL_ORG;
-
-      // Example: iso6523-actorid-upis%3A%3A9908:810017902
-      final String encodedParticipant = URLEncoder.encode (scheme + "::", "UTF-8") + value;
-
-      return new URL ("http://" + hostname + "/" + encodedParticipant);
-    }
-    catch (final Exception e) {
-      throw new SmpLookupException (participantId, e);
-    }
-  }
-
-  /**
-   * Retrieves a group of URLs representing the documents accepted by the given
-   * participant id
-   * 
-   * @param participantId
-   *        participant id to look up
-   * @return list of URLs representing each document type accepted
-   */
-  static URL getServiceGroup (final ParticipantIdentifierType participantId) throws SmpLookupException {
-    final URL serviceGroupURL = getServiceGroupURL (participantId);
-    final InputSource smpContents = Util.getUrlContent (serviceGroupURL);
-
-    // Parses the XML response from the SMP
-    final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance ();
-    documentBuilderFactory.setNamespaceAware (true);
-    DocumentBuilder documentBuilder = null;
-    Document document;
-    try {
-      documentBuilder = documentBuilderFactory.newDocumentBuilder ();
-      document = documentBuilder.parse (smpContents);
-    }
-    catch (final Exception e) {
-      throw new IllegalStateException ("Unable to create XML document parser " + e.getMessage (), e);
-    }
-
-    try {
-      final Unmarshaller unmarshaller = JAXBContextCache.getInstance ()
-                                                        .getFromCache (ServiceGroupType.class)
-                                                        .createUnmarshaller ();
-      @SuppressWarnings ("unused")
-      final ServiceGroupType serviceGroupType = unmarshaller.unmarshal (document, ServiceGroupType.class).getValue ();
-    }
-    catch (final JAXBException e) {
-      throw new IllegalStateException ("Unable to create JAXB unmarshaller during ServiceGroup lookup in SMP for " +
-                                       participantId +
-                                       "; " +
-                                       e.getMessage (), e);
-    }
-
-    return null;
-  }
-
   public static SimpleProcessIdentifier getProcessIdentifierForDocumentType (final ParticipantIdentifierType participantId,
                                                                              final IDocumentTypeIdentifier documentTypeIdentifier) throws SmpSignedServiceMetaDataException {
-    final SignedServiceMetadataType serviceMetaData = getServiceMetaData (participantId, documentTypeIdentifier);
+    final SignedServiceMetadataType serviceMetaData = _getServiceMetaData (participantId, documentTypeIdentifier);
     // SOAP generated type...
     final ProcessIdentifierType processIdentifier = serviceMetaData.getServiceMetadata ()
                                                                    .getServiceInformation ()

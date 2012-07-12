@@ -32,13 +32,13 @@ public class SmpLookupManagerTest extends TestBase {
     try {
 
       URL endpointAddress;
-      endpointAddress = new SmpLookupManager ().getEndpointAddress (sendRegning, invoice);
+      endpointAddress = SmpLookupManager.getEndpointAddress (sendRegning, invoice);
       assertEquals (endpointAddress.toExternalForm (), "https://aksesspunkt.sendregning.no/oxalis/accessPointService");
 
-      endpointAddress = new SmpLookupManager ().getEndpointAddress (alfa1lab, invoice);
+      endpointAddress = SmpLookupManager.getEndpointAddress (alfa1lab, invoice);
       assertEquals (endpointAddress.toExternalForm (), "https://start-ap.alfa1lab.com:443/accessPointService");
 
-      endpointAddress = new SmpLookupManager ().getEndpointAddress (helseVest, invoice);
+      endpointAddress = SmpLookupManager.getEndpointAddress (helseVest, invoice);
       assertEquals (endpointAddress.toExternalForm (), "https://peppolap.ibxplatform.net:8443/accesspointService");
 
     }
@@ -52,7 +52,7 @@ public class SmpLookupManagerTest extends TestBase {
     try {
 
       X509Certificate endpointCertificate;
-      endpointCertificate = new SmpLookupManager ().getEndpointCertificate (alfa1lab, invoice);
+      endpointCertificate = SmpLookupManager.getEndpointCertificate (alfa1lab, invoice);
       assertEquals (endpointCertificate.getSerialNumber ().toString (), "97394193891150626641360283873417712042");
 
       // endpointCertificate = new
@@ -76,7 +76,7 @@ public class SmpLookupManagerTest extends TestBase {
 
     final ParticipantIdentifierType notRegisteredParticipant = SimpleParticipantIdentifier.createWithDefaultScheme ("1234:45678910");
     try {
-      new SmpLookupManager ().getEndpointAddress (notRegisteredParticipant, invoice);
+      SmpLookupManager.getEndpointAddress (notRegisteredParticipant, invoice);
       fail (String.format ("Participant '%s' should not be registered", notRegisteredParticipant));
     }
     catch (final NumberFormatException e) {

@@ -5,10 +5,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.UUID;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.busdox.transport.identifiers._1.DocumentIdentifierType;
 import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 import org.busdox.transport.identifiers._1.ProcessIdentifierType;
@@ -18,6 +14,9 @@ import org.w3c.dom.Document;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 import at.peppol.transport.IMessageMetadata;
 import at.peppol.transport.MessageMetadata;
+
+import com.phloc.commons.xml.serialize.XMLReader;
+
 import eu.peppol.outbound.smp.SmpLookupManager;
 import eu.peppol.outbound.soap.SoapDispatcher;
 import eu.peppol.outbound.util.Log;
@@ -117,7 +116,7 @@ public class DocumentSender {
     log (destination);
     Document document;
     try {
-      document = getDocumentBuilder ().parse (xmlDocument);
+      document = XMLReader.readXMLDOM (xmlDocument);
     }
     catch (final Exception e) {
       throw new IllegalStateException ("Unable to parse xml document from " + sender + " to " + recipient + "; " + e, e);
@@ -150,7 +149,7 @@ public class DocumentSender {
     log (destination);
     Document document;
     try {
-      document = getDocumentBuilder ().parse (xmlDocument);
+      document = XMLReader.readXMLDOM (xmlDocument);
     }
     catch (final Exception e) {
       throw new IllegalStateException ("Unable to parse XML Document in file " + xmlDocument + "; " + e, e);
@@ -158,15 +157,11 @@ public class DocumentSender {
     return send (document, sender, recipient, destination, channelId);
   }
 
-  private DocumentBuilder getDocumentBuilder () throws ParserConfigurationException {
-    return DocumentBuilderFactory.newInstance ().newDocumentBuilder ();
-  }
-
   private URL getEndpointAddress (final String recipient) {
-    return new SmpLookupManager ().getEndpointAddress (getParticipantId (recipient), m_aDocumentTypeIdentifier);
+    return SmpLookupManager.getEndpointAddress (getParticipantId (recipient), m_aDocumentTypeIdentifier);
   }
 
-  private ParticipantIdentifierType getParticipantId (final String sender) {
+  private static ParticipantIdentifierType getParticipantId (final String sender) {
     final SimpleParticipantIdentifier aID = SimpleParticipantIdentifier.createWithDefaultScheme (sender);
     if (!aID.isValid ())
       throw new IllegalArgumentException ("Invalid participant " + sender);
