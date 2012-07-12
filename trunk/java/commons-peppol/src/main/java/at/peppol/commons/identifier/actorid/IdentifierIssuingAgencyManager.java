@@ -66,7 +66,6 @@ public final class IdentifierIssuingAgencyManager {
   }
 
   @PresentForCodeCoverage
-  @SuppressWarnings ("unused")
   private static final IdentifierIssuingAgencyManager s_aInstance = new IdentifierIssuingAgencyManager ();
 
   private IdentifierIssuingAgencyManager () {}

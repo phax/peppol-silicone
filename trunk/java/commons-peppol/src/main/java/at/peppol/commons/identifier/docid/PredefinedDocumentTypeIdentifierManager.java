@@ -72,7 +72,6 @@ public final class PredefinedDocumentTypeIdentifierManager {
   }
 
   @PresentForCodeCoverage
-  @SuppressWarnings ("unused")
   private static final PredefinedDocumentTypeIdentifierManager s_aInstance = new PredefinedDocumentTypeIdentifierManager ();
 
   private PredefinedDocumentTypeIdentifierManager () {}

@@ -208,7 +208,7 @@ public final class MainCreateCodelistsFilesFromExcel {
         if (!RegExHelper.stringMatchesPattern ("[0-9]{4}", sISO6523))
           throw new IllegalArgumentException ("The ISO 6523 code '" + sISO6523 + "' does not consist of 4 numbers");
 
-        final JEnumConstant jEnumConst = jEnum.enumConstant (RegExHelper.makeIdentifier (sSchemeID));
+        final JEnumConstant jEnumConst = jEnum.enumConstant (RegExHelper.getAsIdentifier (sSchemeID));
         jEnumConst.arg (JExpr.lit (sSchemeID));
         jEnumConst.arg (sAgency == null ? JExpr._null () : JExpr.lit (sAgency));
         jEnumConst.arg (JExpr.lit (sISO6523));
@@ -352,7 +352,7 @@ public final class MainCreateCodelistsFilesFromExcel {
         for (final String sExtensionID : aDocIDParts.getExtensionIDs ())
           jExtensions.arg (JExpr.lit (sExtensionID));
 
-        final JEnumConstant jEnumConst = s_jEnumPredefinedDoc.enumConstant (RegExHelper.makeIdentifier (sDocID));
+        final JEnumConstant jEnumConst = s_jEnumPredefinedDoc.enumConstant (RegExHelper.getAsIdentifier (sDocID));
         jEnumConst.arg (JExpr._new (s_aCodeModel.ref (PEPPOLDocumentTypeIdentifierParts.class))
                              .arg (JExpr.lit (aDocIDParts.getRootNS ()))
                              .arg (JExpr.lit (aDocIDParts.getLocalName ()))
@@ -514,7 +514,7 @@ public final class MainCreateCodelistsFilesFromExcel {
       final String sDocIDs = Genericode10Utils.getRowValue (aRow, "docids");
       // Split the document identifier string into a list of single strings,
       // and check if each of them is a valid predefined document identifier
-      final List <String> aDocIDs = RegExHelper.splitToList (sDocIDs, "\n");
+      final List <String> aDocIDs = RegExHelper.getSplitToList (sDocIDs, "\n");
       final String sSince = Genericode10Utils.getRowValue (aRow, "since");
 
       final IMicroElement eAgency = eRoot.appendElement ("process");
@@ -543,15 +543,15 @@ public final class MainCreateCodelistsFilesFromExcel {
         final String sDocTypeIDs = Genericode10Utils.getRowValue (aRow, "docids");
         final String sSince = Genericode10Utils.getRowValue (aRow, "since");
 
-        final JEnumConstant jEnumConst = jEnum.enumConstant (RegExHelper.makeIdentifier (sID));
+        final JEnumConstant jEnumConst = jEnum.enumConstant (RegExHelper.getAsIdentifier (sID));
         jEnumConst.arg (JExpr.lit (sID));
         jEnumConst.arg (JExpr.lit (sBISID));
         final JArray jArray = JExpr.newArray (s_jEnumPredefinedDoc);
-        for (final String sDocTypeID : RegExHelper.splitToList (sDocTypeIDs, "\n")) {
+        for (final String sDocTypeID : RegExHelper.getSplitToList (sDocTypeIDs, "\n")) {
           // Use the short name for better readability
           final String sIdentifier = true
                                          ? CodeGenerationUtils.createShortcutDocumentTypeIDName (PEPPOLDocumentTypeIdentifierParts.extractFromString (sDocTypeID))
-                                         : RegExHelper.makeIdentifier (sDocTypeID);
+                                         : RegExHelper.getAsIdentifier (sDocTypeID);
           jArray.add (s_jEnumPredefinedDoc.staticRef (sIdentifier));
         }
         jEnumConst.arg (jArray);

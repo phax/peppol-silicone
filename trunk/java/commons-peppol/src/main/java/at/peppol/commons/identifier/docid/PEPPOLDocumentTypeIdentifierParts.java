@@ -209,14 +209,14 @@ public final class PEPPOLDocumentTypeIdentifierParts implements IPEPPOLDocumentT
     // <customization id>::<version>
     // --> even more detailed:
     // <transactionId>:#<extensionId>[#<extensionId>]::<version>
-    final String [] aSubTypeParts = RegExHelper.split (sSubTypeIdentifier, VERSION_SEPARATOR, 2);
+    final String [] aSubTypeParts = RegExHelper.getSplitToArray (sSubTypeIdentifier, VERSION_SEPARATOR, 2);
     if (aSubTypeParts.length < 2)
       throw new IllegalArgumentException ("The sub type identifier '" +
                                           sSubTypeIdentifier +
                                           "' is missing the separation between customization ID and version!");
     final String sVersion = aSubTypeParts[1];
 
-    final String [] aCustomizationIDs = RegExHelper.split (aSubTypeParts[0], TRANSACTIONID_SEPARATOR, 2);
+    final String [] aCustomizationIDs = RegExHelper.getSplitToArray (aSubTypeParts[0], TRANSACTIONID_SEPARATOR, 2);
     if (aCustomizationIDs.length < 2)
       throw new IllegalArgumentException ("The sub type identifier '" +
                                           sSubTypeIdentifier +

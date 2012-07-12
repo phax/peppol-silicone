@@ -142,7 +142,7 @@ public final class SocketType implements ISocketType {
   public static SocketType createSocketType (@Nonnull final String sSocketString) {
     if (StringHelper.hasNoText (sSocketString))
       throw new IllegalArgumentException ("socketString may not be empty");
-    final String [] aParts = RegExHelper.split (sSocketString, ":", 2);
+    final String [] aParts = RegExHelper.getSplitToArray (sSocketString, ":", 2);
     if (aParts.length == 0)
       throw new IllegalArgumentException ("invalid socketString - at least the host must be defined");
     if (aParts.length == 1)

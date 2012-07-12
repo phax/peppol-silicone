@@ -370,7 +370,7 @@ public final class IdentifierUtils {
     if (sURIPart == null)
       throw new NullPointerException ("URIPart");
 
-    final String [] aSplitted = RegExHelper.split (sURIPart, CIdentifier.URL_SCHEME_VALUE_SEPARATOR, 2);
+    final String [] aSplitted = RegExHelper.getSplitToArray (sURIPart, CIdentifier.URL_SCHEME_VALUE_SEPARATOR, 2);
     if (aSplitted.length != 2)
       throw new IllegalArgumentException ("Document type identifier '" +
                                           sURIPart +
@@ -396,7 +396,7 @@ public final class IdentifierUtils {
     if (sURIPart == null)
       throw new NullPointerException ("URIPart");
 
-    final String [] aSplitted = RegExHelper.split (sURIPart, CIdentifier.URL_SCHEME_VALUE_SEPARATOR, 2);
+    final String [] aSplitted = RegExHelper.getSplitToArray (sURIPart, CIdentifier.URL_SCHEME_VALUE_SEPARATOR, 2);
     if (aSplitted.length != 2)
       throw new IllegalArgumentException ("Participant identifier '" +
                                           sURIPart +
@@ -422,7 +422,7 @@ public final class IdentifierUtils {
     if (sURIPart == null)
       throw new NullPointerException ("URIPart");
 
-    final String [] aSplitted = RegExHelper.split (sURIPart, CIdentifier.URL_SCHEME_VALUE_SEPARATOR, 2);
+    final String [] aSplitted = RegExHelper.getSplitToArray (sURIPart, CIdentifier.URL_SCHEME_VALUE_SEPARATOR, 2);
     if (aSplitted.length != 2)
       throw new IllegalArgumentException ("Process identifier '" +
                                           sURIPart +
