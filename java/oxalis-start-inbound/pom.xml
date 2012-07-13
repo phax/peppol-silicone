@@ -15,11 +15,6 @@
   <dependencies>
     <dependency>
       <groupId>at.peppol</groupId>
-      <artifactId>oxalis-api</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>at.peppol</groupId>
       <artifactId>oxalis-commons</artifactId>
       <version>${project.version}</version>
     </dependency>
