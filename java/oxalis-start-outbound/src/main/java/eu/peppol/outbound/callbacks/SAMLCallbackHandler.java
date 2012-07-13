@@ -1,4 +1,4 @@
-/*
+/**
  * Version: MPL 1.1/EUPL 1.1
  *
  * The contents of this file are subject to the Mozilla Public License Version
@@ -19,7 +19,7 @@
  * (the "Licence"); You may not use this work except in compliance
  * with the Licence.
  * You may obtain a copy of the Licence at:
- * http://www.osor.eu/eupl/european-union-public-licence-eupl-v.1.1
+ * http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the Licence is distributed on an "AS IS" basis,
@@ -102,6 +102,8 @@ import javax.xml.crypto.dsig.spec.C14NMethodParameterSpec;
 import javax.xml.crypto.dsig.spec.TransformParameterSpec;
 import javax.xml.soap.MessageFactory;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -122,7 +124,6 @@ import com.sun.xml.wss.saml.SAMLException;
 import com.sun.xml.wss.saml.Subject;
 import com.sun.xml.wss.saml.SubjectConfirmation;
 
-import eu.peppol.outbound.util.Log;
 import eu.peppol.start.identifier.Configuration;
 import eu.peppol.start.identifier.KeystoreManager;
 
@@ -133,7 +134,8 @@ import eu.peppol.start.identifier.KeystoreManager;
  * @author Alexander Aguirre Julcapoma(alex@alfa1lab.com) Jose Gorvenia
  *         Narvaez(jose@alfa1lab.com)
  */
-public class SAMLCallbackHandler implements CallbackHandler {
+public final class SAMLCallbackHandler implements CallbackHandler {
+  private static final Logger log = LoggerFactory.getLogger ("oxalis-out");
 
   private final String SENDER_NAME_ID_SYNTAX = "http://busdox.org/profiles/serviceMetadata/1.0/UniversalBusinessIdentifier/1.0/";
   private final String ACCESSPOINT_NAME_ID_SYNTAX = "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified";
@@ -155,22 +157,21 @@ public class SAMLCallbackHandler implements CallbackHandler {
    *         if the implementation of this method does not support one or more
    *         of the Callbacks specified in the callbacks parameter.
    */
-  public void handle (Callback [] callbacks) throws IOException, UnsupportedCallbackException {
+  public void handle (final Callback [] callbacks) throws IOException, UnsupportedCallbackException {
+    log.debug ("Requested SAML callback handling");
 
-    Log.debug ("Requested SAML callback handling");
-
-    for (Callback callback : callbacks) {
+    for (final Callback callback : callbacks) {
 
       if (callback instanceof SAMLCallback) {
-        SAMLCallback samlCallback = (SAMLCallback) callback;
+        final SAMLCallback samlCallback = (SAMLCallback) callback;
 
         try {
           if (samlCallback.getConfirmationMethod ().equals (SAMLCallback.SV_ASSERTION_TYPE)) {
-            Element element = createSenderVouchesSAMLAssertion (samlCallback);
+            final Element element = createSenderVouchesSAMLAssertion (samlCallback);
             samlCallback.setAssertionElement (element);
           }
         }
-        catch (Exception e) {
+        catch (final Exception e) {
           throw new RuntimeException ("Error while handling SAML callbacks", e);
         }
 
@@ -190,53 +191,53 @@ public class SAMLCallbackHandler implements CallbackHandler {
    * @throws Exception
    *         thrown if there is a SOAP problem.
    */
-  private Element createSenderVouchesSAMLAssertion (SAMLCallback samlCallback) throws Exception {
+  private Element createSenderVouchesSAMLAssertion (final SAMLCallback samlCallback) throws Exception {
+    log.debug ("Creating and setting the SAML Sender Vouches Assertion");
 
-    Log.debug ("Creating and setting the SAML Sender Vouches Assertion");
+    final KeystoreManager keystoreManager = new KeystoreManager ();
 
-    KeystoreManager keystoreManager = new KeystoreManager ();
+    final Configuration configuration = Configuration.getInstance ();
+    final String senderId = configuration.getPeppolSenderId ();
+    final String accesspointName = configuration.getPeppolServiceName ();
 
-    Configuration configuration = Configuration.getInstance ();
-    String senderId = configuration.getPeppolSenderId ();
-    String accesspointName = configuration.getPeppolServiceName ();
-
-    String assertionID = "SamlID" + String.valueOf (System.currentTimeMillis ());
+    final String assertionID = "SamlID" + String.valueOf (System.currentTimeMillis ());
     samlCallback.setAssertionId (assertionID);
 
-    GregorianCalendar oneHourAgo = getNowOffsetByHours (-1);
-    GregorianCalendar now = getNowOffsetByHours (0);
-    GregorianCalendar inOneHour = getNowOffsetByHours (1);
+    final GregorianCalendar oneHourAgo = getNowOffsetByHours (-1);
+    final GregorianCalendar now = getNowOffsetByHours (0);
+    final GregorianCalendar inOneHour = getNowOffsetByHours (1);
 
-    SAMLAssertionFactory assertionFactory = SAMLAssertionFactory.newInstance (SAMLAssertionFactory.SAML2_0);
+    final SAMLAssertionFactory assertionFactory = SAMLAssertionFactory.newInstance (SAMLAssertionFactory.SAML2_0);
 
-    NameID senderNameID = assertionFactory.createNameID (senderId, null, SENDER_NAME_ID_SYNTAX);
-    NameID accessPointNameID = assertionFactory.createNameID (accesspointName, null, ACCESSPOINT_NAME_ID_SYNTAX);
-    SubjectConfirmation subjectConfirmation = assertionFactory.createSubjectConfirmation (null, CONFIRMATION_METHOD);
-    Subject subject = assertionFactory.createSubject (senderNameID, subjectConfirmation);
-    AuthnContext authnContext = assertionFactory.createAuthnContext (AUTHENTICATION_CONTEXT_TYPE, null);
-    AuthnStatement authnStatement = assertionFactory.createAuthnStatement (now, null, authnContext, null, null);
+    final NameID senderNameID = assertionFactory.createNameID (senderId, null, SENDER_NAME_ID_SYNTAX);
+    final NameID accessPointNameID = assertionFactory.createNameID (accesspointName, null, ACCESSPOINT_NAME_ID_SYNTAX);
+    final SubjectConfirmation subjectConfirmation = assertionFactory.createSubjectConfirmation (null,
+                                                                                                CONFIRMATION_METHOD);
+    final Subject subject = assertionFactory.createSubject (senderNameID, subjectConfirmation);
+    final AuthnContext authnContext = assertionFactory.createAuthnContext (AUTHENTICATION_CONTEXT_TYPE, null);
+    final AuthnStatement authnStatement = assertionFactory.createAuthnStatement (now, null, authnContext, null, null);
 
-    List <Object> statements = new LinkedList <Object> ();
+    final List <Object> statements = new LinkedList <Object> ();
     statements.add (authnStatement);
     // FIXME: eu hard coding of security assurance level
     statements.add (getAssuranceLevelStatement ("2", assertionFactory));
-    Conditions conditions = assertionFactory.createConditions (oneHourAgo, inOneHour, null, null, null, null);
+    final Conditions conditions = assertionFactory.createConditions (oneHourAgo, inOneHour, null, null, null, null);
 
-    Assertion assertion = assertionFactory.createAssertion (assertionID,
-                                                            accessPointNameID,
-                                                            now,
-                                                            conditions,
-                                                            null,
-                                                            subject,
-                                                            statements);
+    final Assertion assertion = assertionFactory.createAssertion (assertionID,
+                                                                  accessPointNameID,
+                                                                  now,
+                                                                  conditions,
+                                                                  null,
+                                                                  subject,
+                                                                  statements);
 
     return sign (assertion, keystoreManager.getOurCertificate (), keystoreManager.getOurPrivateKey ());
   }
 
-  private GregorianCalendar getNowOffsetByHours (int hours) {
-    GregorianCalendar gregorianCalendar = new GregorianCalendar ();
-    long now = gregorianCalendar.getTimeInMillis ();
-    long then = now + (60L * 60L * 1000L * hours);
+  private GregorianCalendar getNowOffsetByHours (final int hours) {
+    final GregorianCalendar gregorianCalendar = new GregorianCalendar ();
+    final long now = gregorianCalendar.getTimeInMillis ();
+    final long then = now + (60L * 60L * 1000L * hours);
     gregorianCalendar.setTimeInMillis (then);
     return gregorianCalendar;
   }
@@ -253,13 +254,14 @@ public class SAMLCallbackHandler implements CallbackHandler {
    * @throws SAMLException
    *         Throws a SAMLException.
    */
-  private AttributeStatement getAssuranceLevelStatement (String assuranceLevel, SAMLAssertionFactory samlAssertFactory) throws SAMLException {
+  private AttributeStatement getAssuranceLevelStatement (final String assuranceLevel,
+                                                         final SAMLAssertionFactory samlAssertFactory) throws SAMLException {
 
-    List <String> values = new ArrayList <String> ();
+    final List <String> values = new ArrayList <String> ();
     values.add (assuranceLevel);
 
-    Attribute attribute = samlAssertFactory.createAttribute (ATTRIBUTE_NAME, ATTRIBUTE_NAMESPACE, values);
-    List <Attribute> attributes = new ArrayList <Attribute> ();
+    final Attribute attribute = samlAssertFactory.createAttribute (ATTRIBUTE_NAME, ATTRIBUTE_NAMESPACE, values);
+    final List <Attribute> attributes = new ArrayList <Attribute> ();
     attributes.add (attribute);
 
     return samlAssertFactory.createAttributeStatement (attributes);
@@ -280,16 +282,16 @@ public class SAMLCallbackHandler implements CallbackHandler {
    * @throws SAMLException
    *         Throws a SAMLException.
    */
-  public final Element sign (Assertion assertion, X509Certificate certificate, PrivateKey privateKey) throws SAMLException {
+  public final Element sign (final Assertion assertion, final X509Certificate certificate, final PrivateKey privateKey) throws SAMLException {
 
     try {
 
-      XMLSignatureFactory signatureFactory = WSSPolicyConsumerImpl.getInstance ().getSignatureFactory ();
-      DigestMethod digestMethod = signatureFactory.newDigestMethod (DigestMethod.SHA1, null);
+      final XMLSignatureFactory signatureFactory = WSSPolicyConsumerImpl.getInstance ().getSignatureFactory ();
+      final DigestMethod digestMethod = signatureFactory.newDigestMethod (DigestMethod.SHA1, null);
       return sign (assertion, digestMethod, SignatureMethod.RSA_SHA1, certificate, privateKey);
 
     }
-    catch (Exception ex) {
+    catch (final Exception ex) {
       throw new SAMLException (ex);
     }
   }
@@ -313,43 +315,43 @@ public class SAMLCallbackHandler implements CallbackHandler {
    * @throws SAMLException
    *         Throws a SAMLException.
    */
-  public final Element sign (Assertion assertion,
-                             DigestMethod digestMethod,
-                             String signatureMethod,
-                             X509Certificate certificate,
-                             PrivateKey privateKey) throws SAMLException {
+  public final Element sign (final Assertion assertion,
+                             final DigestMethod digestMethod,
+                             final String signatureMethod,
+                             final X509Certificate certificate,
+                             final PrivateKey privateKey) throws SAMLException {
 
     try {
-      XMLSignatureFactory signatureFactory = WSSPolicyConsumerImpl.getInstance ().getSignatureFactory ();
+      final XMLSignatureFactory signatureFactory = WSSPolicyConsumerImpl.getInstance ().getSignatureFactory ();
 
-      List <Transform> transformList = new ArrayList <Transform> ();
+      final List <Transform> transformList = new ArrayList <Transform> ();
       transformList.add (signatureFactory.newTransform (Transform.ENVELOPED, (TransformParameterSpec) null));
       transformList.add (signatureFactory.newTransform (CanonicalizationMethod.EXCLUSIVE, (TransformParameterSpec) null));
 
-      Reference reference = signatureFactory.newReference ("#" + assertion.getID (),
-                                                           digestMethod,
-                                                           transformList,
-                                                           null,
-                                                           null);
+      final Reference reference = signatureFactory.newReference ("#" + assertion.getID (),
+                                                                 digestMethod,
+                                                                 transformList,
+                                                                 null,
+                                                                 null);
 
-      CanonicalizationMethod canonicalizationMethod = signatureFactory.newCanonicalizationMethod (CanonicalizationMethod.EXCLUSIVE,
-                                                                                                  (C14NMethodParameterSpec) null);
+      final CanonicalizationMethod canonicalizationMethod = signatureFactory.newCanonicalizationMethod (CanonicalizationMethod.EXCLUSIVE,
+                                                                                                        (C14NMethodParameterSpec) null);
 
-      SignedInfo signedInfo = signatureFactory.newSignedInfo (canonicalizationMethod,
-                                                              signatureFactory.newSignatureMethod (signatureMethod,
-                                                                                                   null),
-                                                              Collections.singletonList (reference));
+      final SignedInfo signedInfo = signatureFactory.newSignedInfo (canonicalizationMethod,
+                                                                    signatureFactory.newSignatureMethod (signatureMethod,
+                                                                                                         null),
+                                                                    Collections.singletonList (reference));
 
-      Document document = MessageFactory.newInstance ().createMessage ().getSOAPPart ();
-      KeyInfoFactory keyInfoFactory = signatureFactory.getKeyInfoFactory ();
+      final Document document = MessageFactory.newInstance ().createMessage ().getSOAPPart ();
+      final KeyInfoFactory keyInfoFactory = signatureFactory.getKeyInfoFactory ();
 
-      X509Data x509Data = keyInfoFactory.newX509Data (Collections.singletonList (certificate));
-      KeyInfo keyInfo = keyInfoFactory.newKeyInfo (Collections.singletonList (x509Data));
+      final X509Data x509Data = keyInfoFactory.newX509Data (Collections.singletonList (certificate));
+      final KeyInfo keyInfo = keyInfoFactory.newKeyInfo (Collections.singletonList (x509Data));
 
-      Element assertionElement = assertion.toElement (document);
-      DOMSignContext domSignContext = new DOMSignContext (privateKey, assertionElement);
+      final Element assertionElement = assertion.toElement (document);
+      final DOMSignContext domSignContext = new DOMSignContext (privateKey, assertionElement);
 
-      XMLSignature xmlSignature = signatureFactory.newXMLSignature (signedInfo, keyInfo);
+      final XMLSignature xmlSignature = signatureFactory.newXMLSignature (signedInfo, keyInfo);
       domSignContext.putNamespacePrefix ("http://www.w3.org/2000/09/xmldsig#", "ds");
       xmlSignature.sign (domSignContext);
       placeSignatureAfterIssuer (assertionElement);
@@ -357,7 +359,7 @@ public class SAMLCallbackHandler implements CallbackHandler {
       return assertionElement;
 
     }
-    catch (Exception e) {
+    catch (final Exception e) {
       throw new SAMLException (e);
     }
   }
@@ -372,18 +374,18 @@ public class SAMLCallbackHandler implements CallbackHandler {
    */
   private void placeSignatureAfterIssuer (final Element assertionElement) throws DOMException {
 
-    NodeList nodes = assertionElement.getChildNodes ();
-    List <Node> movingNodes = new ArrayList <Node> ();
+    final NodeList nodes = assertionElement.getChildNodes ();
+    final List <Node> movingNodes = new ArrayList <Node> ();
 
     for (int i = 1; i < nodes.getLength () - 1; i++) {
       movingNodes.add (nodes.item (i));
     }
 
-    for (Node node : movingNodes) {
+    for (final Node node : movingNodes) {
       assertionElement.removeChild (node);
     }
 
-    for (Node node : movingNodes) {
+    for (final Node node : movingNodes) {
       assertionElement.appendChild (node);
     }
   }

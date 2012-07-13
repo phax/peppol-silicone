@@ -1,4 +1,4 @@
-/*
+/**
  * Version: MPL 1.1/EUPL 1.1
  *
  * The contents of this file are subject to the Mozilla Public License Version
@@ -19,7 +19,7 @@
  * (the "Licence"); You may not use this work except in compliance
  * with the Licence.
  * You may obtain a copy of the Licence at:
- * http://www.osor.eu/eupl/european-union-public-licence-eupl-v.1.1
+ * http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the Licence is distributed on an "AS IS" basis,
@@ -50,9 +50,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.sun.xml.wss.impl.callback.CertificateValidationCallback.CertificateValidator;
 
-import eu.peppol.inbound.util.Log;
 import eu.peppol.security.OcspValidatorCache;
 import eu.peppol.start.identifier.KeystoreManager;
 
@@ -62,6 +64,7 @@ import eu.peppol.start.identifier.KeystoreManager;
  * @author Nigel Parker
  */
 public class OcspValidator implements CertificateValidator {
+  private static final Logger log = LoggerFactory.getLogger ("oxalis-inb");
 
   private static CertPathValidator s_aCertPathValidator;
   private static PKIXParameters s_aPkixParameters;
@@ -70,14 +73,14 @@ public class OcspValidator implements CertificateValidator {
   public synchronized boolean validate (final X509Certificate certificate) {
     final BigInteger serialNumber = certificate.getSerialNumber ();
     final String certificateName = "Certificate " + serialNumber;
-    Log.debug ("Ocsp validation requested for " + certificateName);
+    log.debug ("Ocsp validation requested for " + certificateName);
 
     if (s_aCertPathValidator == null) {
       initialise ();
     }
 
     if (s_aCache.isKnownValidCertificate (serialNumber)) {
-      Log.debug (certificateName + " is OCSP valid (cached value)");
+      log.debug (certificateName + " is OCSP valid (cached value)");
       return true;
     }
 
@@ -88,17 +91,17 @@ public class OcspValidator implements CertificateValidator {
       s_aCertPathValidator.validate (certPath, s_aPkixParameters);
       s_aCache.setKnownValidCertificate (serialNumber);
 
-      Log.debug (certificateName + " is OCSP valid");
+      log.debug (certificateName + " is OCSP valid");
       return true;
     }
     catch (final Exception e) {
-      Log.error (certificateName + " failed OCSP validation", e);
+      log.error (certificateName + " failed OCSP validation", e);
       return false;
     }
   }
 
   public void initialise () {
-    Log.debug ("Initialising OCSP validator");
+    log.debug ("Initialising OCSP validator");
     try {
       final TrustAnchor trustAnchor = new KeystoreManager ().getTrustAnchor ();
       s_aCertPathValidator = CertPathValidator.getInstance ("PKIX");
@@ -109,7 +112,7 @@ public class OcspValidator implements CertificateValidator {
       Security.setProperty ("ocsp.responderURL", "http://pilot-ocsp.verisign.com:80");
     }
     catch (final Exception e) {
-      Log.error ("Failed to init OCSP validator", e);
+      log.error ("Failed to init OCSP validator", e);
       throw new RuntimeException ("Failed to init OCSP validator", e);
     }
   }

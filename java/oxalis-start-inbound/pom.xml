@@ -14,30 +14,25 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <scope>provided</scope>
+      <groupId>at.peppol</groupId>
+      <artifactId>oxalis-api</artifactId>
+      <version>${project.version}</version>
     </dependency>
-
     <dependency>
-      <groupId>com.sun.xml.bind</groupId>
-      <artifactId>jaxb-impl</artifactId>
-      <version>2.2.5-2</version>
-      <scope>provided</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>javax.xml.stream</groupId>
-          <artifactId>stax-api</artifactId>
-        </exclusion>
-      </exclusions>
+      <groupId>at.peppol</groupId>
+      <artifactId>oxalis-commons</artifactId>
+      <version>${project.version}</version>
     </dependency>
-
     <dependency>
-      <groupId>javax.annotation</groupId>
-      <artifactId>jsr250-api</artifactId>
-      <version>1.0</version>
+      <groupId>at.peppol</groupId>
+      <artifactId>peppol-transport-api</artifactId>
+      <version>${project.version}</version>
     </dependency>
-
+    <dependency>
+      <groupId>at.peppol</groupId>
+      <artifactId>peppol-smp-client-library</artifactId>
+      <version>${project.version}</version>
+    </dependency>
     <dependency>
       <groupId>org.glassfish.metro</groupId>
       <artifactId>webservices-rt</artifactId>
@@ -49,30 +44,11 @@
         </exclusion>
       </exclusions>
     </dependency>
-
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>
       <scope>provided</scope>
     </dependency>
-
-    <dependency>
-      <groupId>at.peppol</groupId>
-      <artifactId>oxalis-start-outbound</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <!-- This .jar file has scope provided in order to prevent it from being -->
-    <!-- included in the .war file. The reason being that oxalis-api should -->
-    <!-- should be copied to $TOMCAT_HOME/shared/lib/oxalis and thus be -->
-    <!-- loaded by the shared class loader -->
-    <dependency>
-      <groupId>at.peppol</groupId>
-      <artifactId>oxalis-api</artifactId>
-      <version>${project.version}</version>
-      <scope>provided</scope>
-    </dependency>
-
   </dependencies>
 
   <build>
