@@ -160,11 +160,6 @@ public final class Configuration {
   }
 
   @Nullable
-  public String getWsdlFileName () {
-    return PropertyDef.WSDL_FILE_NAME.getValue (m_aProperties);
-  }
-
-  @Nullable
   public String getPeppolSenderId () {
     return PropertyDef.PEPPOL_SENDER_ID.getValue (m_aProperties);
   }

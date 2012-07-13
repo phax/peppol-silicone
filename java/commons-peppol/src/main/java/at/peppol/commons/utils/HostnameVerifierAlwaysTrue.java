@@ -40,13 +40,22 @@ package at.peppol.commons.utils;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.phloc.commons.GlobalDebug;
+
 /**
  * Implementation of HostnameVerifier always returning <code>true</code>.
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class HostnameVerifierAlwaysTrue implements HostnameVerifier {
+  private static final Logger s_aLogger = LoggerFactory.getLogger (HostnameVerifierAlwaysTrue.class);
+
   public boolean verify (final String sURLHostname, final SSLSession aSession) {
+    if (GlobalDebug.isDebugMode ())
+      s_aLogger.debug ("Hostname '" + sURLHostname + "' is accepted by default!");
     return true;
   }
 }
