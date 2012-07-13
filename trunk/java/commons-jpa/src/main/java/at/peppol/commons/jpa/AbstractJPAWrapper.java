@@ -104,6 +104,7 @@ public abstract class AbstractJPAWrapper implements Closeable {
   }
 
   public final void close () {
+    // Close entity manager
     if (m_aEntityManager != null) {
       if (m_aEntityManager.isOpen ()) {
         m_aEntityManager.clear ();
@@ -111,6 +112,8 @@ public abstract class AbstractJPAWrapper implements Closeable {
       }
       m_aEntityManager = null;
     }
+
+    // Close factory
     if (m_aFactory != null) {
       if (m_aFactory.isOpen ())
         m_aFactory.close ();

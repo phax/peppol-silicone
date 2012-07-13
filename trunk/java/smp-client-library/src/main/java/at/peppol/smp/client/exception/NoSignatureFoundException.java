@@ -40,6 +40,8 @@ package at.peppol.smp.client.exception;
 /**
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public final class NoSignatureFoundException extends Exception {
-  public NoSignatureFoundException () {}
+public final class NoSignatureFoundException extends RuntimeException {
+  public NoSignatureFoundException (final String sMsg) {
+    super (sMsg);
+  }
 }

@@ -59,11 +59,20 @@ import javax.xml.crypto.dsig.keyinfo.KeyInfo;
 import javax.xml.crypto.dsig.keyinfo.X509Data;
 
 import at.peppol.commons.security.KeyStoreUtils;
+import at.peppol.commons.utils.ConfigFile;
 
 /**
+ * Finds and returns a key using the data contained in a {@link KeyInfo} object
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
+ * @see <a
+ *      href="http://java.sun.com/developer/technicalArticles/xml/dig_signature_api/">Programming
+ *      with the Java XML Digital Signature API</a>
  */
-final class X509KeySelector extends KeySelector {
+public final class X509KeySelector extends KeySelector {
+  private static final String TRUSTSTORE_LOCATION = ConfigFile.getInstance ().getString ("truststore.location");
+  private static final String TRUSTSTORE_PASSWORD = ConfigFile.getInstance ().getString ("truststore.password");
+
   public X509KeySelector () {}
 
   private static boolean _algEquals (final String algURI, final String algName) {
@@ -73,11 +82,9 @@ final class X509KeySelector extends KeySelector {
 
   @Override
   public KeySelectorResult select (final KeyInfo aKeyInfo,
-                                   final KeySelector.Purpose purpose,
-                                   final AlgorithmMethod method,
-                                   final XMLCryptoContext context) throws KeySelectorException {
-    final String sLocation = "truststore/global-truststore.jks";
-    final String sPassword = "peppol";
+                                   final KeySelector.Purpose aPurpose,
+                                   final AlgorithmMethod aMethod,
+                                   final XMLCryptoContext aCryptoContext) throws KeySelectorException {
 
     final Iterator <?> ki = aKeyInfo.getContent ().iterator ();
     while (ki.hasNext ()) {
@@ -97,37 +104,35 @@ final class X509KeySelector extends KeySelector {
           // Check if the certificate is expired or active.
           certificate.checkValidity ();
 
-          /*
-           * Checks whether the certificate is in the trusted store.
-           */
+          // Checks whether the certificate is in the trusted store.
           final X509Certificate [] certArray = new X509Certificate [] { certificate };
 
-          final KeyStore ks = KeyStoreUtils.loadKeyStore (sLocation, sPassword);
+          final KeyStore ks = KeyStoreUtils.loadKeyStore (TRUSTSTORE_LOCATION, TRUSTSTORE_PASSWORD);
           // The PKIXParameters constructor may fail because:
           // - the trustAnchorsParameter is empty
           final PKIXParameters params = new PKIXParameters (ks);
           params.setRevocationEnabled (false);
-          final CertificateFactory factory = CertificateFactory.getInstance ("X509");
-          final CertPath certPath = factory.generateCertPath (Arrays.asList (certArray));
-          final CertPathValidator pathValidator = CertPathValidator.getInstance ("PKIX");
-          pathValidator.validate (certPath, params);
+          final CertificateFactory aCertificateFactory = CertificateFactory.getInstance ("X509");
+          final CertPath aCertPath = aCertificateFactory.generateCertPath (Arrays.asList (certArray));
+          final CertPathValidator aPathValidator = CertPathValidator.getInstance ("PKIX");
+          aPathValidator.validate (aCertPath, params);
 
-          final PublicKey key = certificate.getPublicKey ();
+          final PublicKey aPublicKey = certificate.getPublicKey ();
 
           // Make sure the algorithm is compatible with the method.
-          if (_algEquals (method.getAlgorithm (), key.getAlgorithm ())) {
+          if (_algEquals (aMethod.getAlgorithm (), aPublicKey.getAlgorithm ())) {
             return new KeySelectorResult () {
               public Key getKey () {
-                return key;
+                return aPublicKey;
               }
             };
           }
         }
         catch (final Exception e) {
-          throw new KeySelectorException (e);
+          throw new KeySelectorException ("Failed to select public key", e);
         }
       }
     }
-    throw new KeySelectorException ("No key found!");
+    throw new KeySelectorException ("No public key found!");
   }
 }

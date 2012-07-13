@@ -112,10 +112,10 @@ public enum ETransaction implements IHasID <String>, IHasName {
   T62 ("AcceptCataloguePriceUpdate", 62, true),
   T63 ("RequestRescan", 63, true);
 
-  private String m_sID;
-  private String m_sName;
-  private int m_nNumber;
-  private boolean m_bInCoreSupported;
+  private final String m_sID;
+  private final String m_sName;
+  private final int m_nNumber;
+  private final boolean m_bInCoreSupported;
 
   private ETransaction (@Nonnull @Nonempty final String sName,
                         @Nonnegative final int nNumber,
