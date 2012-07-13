@@ -39,17 +39,46 @@ package at.peppol.webgui.folder;
 
 import java.util.Set;
 
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.id.IHasID;
 import com.phloc.commons.name.IHasDisplayName;
 
+/**
+ * Interface representing a single folder (like Inbox) specific to a user. It
+ * has a unique ID (IHasID) and a non-translatable name (IHasDisplayName).
+ * 
+ * @author philip
+ */
 public interface IUserFolder extends IHasID <String>, IHasDisplayName {
+  /**
+   * Check if the passed document is contained in this folder.
+   * 
+   * @param sDocumentID
+   *        The document ID to check. May be <code>null</code>.
+   * @return <code>true</code> if the document is contained in this folder,
+   *         <code>false</code> if not.
+   */
   boolean containsDocumentWithID (@Nullable String sDocumentID);
 
+  /**
+   * @return A set with all document IDs of this folder. Never <code>null</code>
+   *         .
+   */
+  @Nonnull
   Set <String> getAllDocumentIDs ();
 
+  /**
+   * @return The number of documents in this folder. Always &ge; 0.
+   */
+  @Nonnegative
   int getDocumentCount ();
 
+  /**
+   * @return <code>true</code> if this folder contains at least one document,
+   *         <code>false</code> if it is empty.
+   */
   boolean hasDocuments ();
 }

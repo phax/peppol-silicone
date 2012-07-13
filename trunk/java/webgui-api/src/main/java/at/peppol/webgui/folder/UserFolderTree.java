@@ -67,7 +67,8 @@ import com.phloc.commons.tree.withid.DefaultTreeItemWithID;
 import com.phloc.commons.tree.withid.unique.DefaultTreeWithGlobalUniqueID;
 
 /**
- * Represents a folder tree having {@link IUserDocument} elements
+ * Represents a folder tree having {@link IUserDocument} elements. Default
+ * implementation of {@link IUserFolder}.
  * 
  * @author philip
  */
@@ -82,15 +83,20 @@ public final class UserFolderTree implements IUserFolderTree {
    * Constructor
    */
   public UserFolderTree () {
+    // Create an empty new tree
     m_aTree = new DefaultTreeWithGlobalUniqueID <String, UserFolder> ();
   }
 
   UserFolderTree (@Nonnull final IMicroElement aElement) {
+    if (aElement == null)
+      throw new NullPointerException ("element");
+
+    // Parse XML to user folder tree
     m_aTree = TreeXMLConverter.getXMLAsTreeWithUniqueStringID (aElement,
                                                                new MicroTypeConverterTreeXML <UserFolder> (ELEMENT_USERFOLDER,
                                                                                                            UserFolder.class));
     if (m_aTree == null)
-      throw new IllegalStateException ("Deserialization failed!");
+      throw new IllegalStateException ("Deserialization of XML to user folder tree failed!");
   }
 
   @Nonnull
@@ -174,8 +180,10 @@ public final class UserFolderTree implements IUserFolderTree {
 
     // Resolve folder ID
     final DefaultTreeItemWithID <String, UserFolder> aItem = m_aTree.getItemWithID (sFolderID);
-    if (aItem == null)
+    if (aItem == null) {
+      s_aLogger.info ("Failed to resolve folder with ID '" + sFolderID + "'");
       return EChange.UNCHANGED;
+    }
 
     return aItem.getData ().addDocument (aDoc.getID ());
   }
@@ -187,8 +195,10 @@ public final class UserFolderTree implements IUserFolderTree {
 
     // Resolve folder ID
     final DefaultTreeItemWithID <String, UserFolder> aItem = m_aTree.getItemWithID (sFolderID);
-    if (aItem == null)
+    if (aItem == null) {
+      s_aLogger.info ("Failed to resolve folder with ID '" + sFolderID + "'");
       return EChange.UNCHANGED;
+    }
 
     return aItem.getData ().removeDocument (aDoc.getID ());
   }
@@ -197,7 +207,11 @@ public final class UserFolderTree implements IUserFolderTree {
   public Set <String> getAllAssignedDocumentIDs (@Nullable final String sFolderID) {
     // Resolve folder ID
     final DefaultTreeItemWithID <String, UserFolder> aItem = m_aTree.getItemWithID (sFolderID);
-    return aItem == null ? null : aItem.getData ().getAllDocumentIDs ();
+    if (aItem == null) {
+      s_aLogger.info ("Failed to resolve folder with ID '" + sFolderID + "'");
+      return null;
+    }
+    return aItem.getData ().getAllDocumentIDs ();
   }
 
   @Nonnull

@@ -45,6 +45,11 @@ import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.microdom.convert.IMicroTypeConverter;
 import com.phloc.commons.microdom.impl.MicroElement;
 
+/**
+ * Convert {@link IUserFolder} from and to XML.
+ * 
+ * @author philip
+ */
 public final class UserFolderMicroTypeConverter implements IMicroTypeConverter {
   private static final String ATTR_ID = "id";
   private static final String ATTR_NAME = "name";

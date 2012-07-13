@@ -5,8 +5,8 @@ import org.vaadin.jouni.animator.AnimatorProxy;
 import at.peppol.webgui.app.components.InvoiceTabForm;
 import at.peppol.webgui.app.components.InvoiceUploadWindow;
 import at.peppol.webgui.app.components.OrderUploadWindow;
-import at.peppol.webgui.security.user.IUser;
 
+import com.phloc.appbasics.security.user.IUser;
 import com.vaadin.terminal.ExternalResource;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;

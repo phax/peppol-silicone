@@ -44,6 +44,11 @@ import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.microdom.convert.IMicroTypeConverter;
 import com.phloc.commons.microdom.impl.MicroElement;
 
+/**
+ * Convert {@link UserFolderTree} objects from and to XML.
+ * 
+ * @author philip
+ */
 public final class UserFolderTreeMicroTypeConverter implements IMicroTypeConverter {
   @Nonnull
   public IMicroElement convertToMicroElement (@Nonnull final Object aObject,

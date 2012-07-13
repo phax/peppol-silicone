@@ -45,8 +45,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import javax.annotation.Nonnull;
 
-import at.peppol.webgui.io.StorageIO;
-
+import com.phloc.appbasics.app.WebFileIO;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.scopes.web.singleton.GlobalWebSingleton;
@@ -91,7 +90,7 @@ public final class UploadManager extends GlobalWebSingleton {
       for (final IUploadedResource aRes : m_aUploads) {
         final File aTempFile = aRes.getTemporaryFile ();
         if (aTempFile.exists ())
-          StorageIO.getFileOpMgr ().deleteFile (aTempFile);
+          WebFileIO.getFileOpMgr ().deleteFile (aTempFile);
       }
       m_aUploads.clear ();
     }

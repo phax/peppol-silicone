@@ -43,8 +43,7 @@ import java.io.OutputStream;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
-import at.peppol.webgui.security.login.LoggedInUserStorage;
-
+import com.phloc.appbasics.security.login.LoggedInUserStorage;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.idfactory.GlobalIDFactory;
 import com.phloc.commons.io.file.FileUtils;
@@ -62,8 +61,8 @@ public final class UploadedResource implements IUploadedResource {
       throw new IllegalArgumentException ("originalFilename");
     m_sOriginalFilename = FilenameHelper.getWithoutPath (sOriginalFilename);
     // Ensure a unique name
-    m_aTempFile = new File (LoggedInUserStorage.getUploadDirectory (), "upload-" +
-                                                                       GlobalIDFactory.getNewPersistentIntID ());
+    m_aTempFile = new File (LoggedInUserStorage.getUserdataDirectory (), "upload/upload-" +
+                                                                         GlobalIDFactory.getNewPersistentIntID ());
   }
 
   @Nonnull
