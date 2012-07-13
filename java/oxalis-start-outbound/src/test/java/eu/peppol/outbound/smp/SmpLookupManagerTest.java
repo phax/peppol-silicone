@@ -115,7 +115,7 @@ public class SmpLookupManagerTest {
       SmpLookupManager.getEndpointAddress (notRegisteredParticipant, invoice);
       fail (String.format ("Participant '%s' should not be registered", notRegisteredParticipant));
     }
-    catch (final NumberFormatException e) {
+    catch (final RuntimeException e) {
       // expected
     }
   }
@@ -128,6 +128,6 @@ public class SmpLookupManagerTest {
     final IProcessIdentifier processTypeIdentifier = SmpLookupManager.getProcessIdentifierForDocumentType (SimpleParticipantIdentifier.createWithDefaultScheme ("9908:810017902"),
                                                                                                            EPredefinedDocumentTypeIdentifier.INVOICE_T010_BIS5A.getAsDocumentTypeIdentifier ());
 
-    assertEquals (processTypeIdentifier.getValue (), "urn:www.cenbii.eu:profile:bii04:ver1.0");
+    assertEquals ("urn:www.cenbii.eu:profile:bii05:ver1.0", processTypeIdentifier.getValue ());
   }
 }
