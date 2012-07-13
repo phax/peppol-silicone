@@ -74,12 +74,11 @@ public final class DataHandlerFactory {
 
       // SMP stuff
       {
-        // Instantiate the data handler
+        // Instantiate the SMP data handler
         final String sSMPHandlerClass = aConfig.getString (CONFIG_SML_DATAHANDLER_SMP_CLASS);
-
         s_aSMPInstance = GenericReflection.newInstance (sSMPHandlerClass, ISMPDataHandler.class);
         if (s_aSMPInstance == null)
-          throw new IllegalStateException ("Failed to instantiate SMP data handler class " + sSMPHandlerClass);
+          throw new IllegalStateException ("Failed to instantiate SMP data handler class '" + sSMPHandlerClass + "'");
 
         // Check for the callback
         final String sSMPCallbackClass = aConfig.getString (CONFIG_SML_DATAHANDLER_SMP_CALLBACK);
@@ -99,8 +98,9 @@ public final class DataHandlerFactory {
         // Instantiate the main data handler
         s_aParticipantInstance = GenericReflection.newInstance (sParticipantHandlerClass, IParticipantDataHandler.class);
         if (s_aParticipantInstance == null)
-          throw new IllegalStateException ("Failed to instantiate participant data handler class " +
-                                           sParticipantHandlerClass);
+          throw new IllegalStateException ("Failed to instantiate participant data handler class '" +
+                                           sParticipantHandlerClass +
+                                           "'");
 
         final String sParticipantCallbackClass = aConfig.getString (CONFIG_SML_DATAHANDLER_PARTICIPANT_CALLBACK);
         if (StringHelper.hasText (sParticipantCallbackClass)) {
@@ -119,7 +119,9 @@ public final class DataHandlerFactory {
         // Instantiate the main data handler
         s_aGenericInstance = GenericReflection.newInstance (sGenericHandlerClass, IGenericDataHandler.class);
         if (s_aGenericInstance == null)
-          throw new IllegalStateException ("Failed to instantiate generic data handler class " + sGenericHandlerClass);
+          throw new IllegalStateException ("Failed to instantiate generic data handler class '" +
+                                           sGenericHandlerClass +
+                                           "'");
       }
     }
   }
