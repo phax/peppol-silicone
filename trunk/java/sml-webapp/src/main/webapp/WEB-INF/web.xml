@@ -52,7 +52,7 @@
   
   <filter>
     <filter-name>ClientCertFilter</filter-name>
-    <filter-class>at.peppol.sml.server.web,ClientCertificateValidationFilter</filter-class>
+    <filter-class>at.peppol.sml.server.web.ClientCertificateValidationFilter</filter-class>
   </filter>
   
   <filter-mapping>
