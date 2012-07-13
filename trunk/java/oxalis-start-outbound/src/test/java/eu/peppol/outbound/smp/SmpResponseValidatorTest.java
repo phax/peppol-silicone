@@ -51,7 +51,6 @@ import org.xml.sax.SAXException;
 import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.commons.xml.serialize.XMLReader;
 
-import eu.peppol.outbound.smp.SmpResponseValidator;
 import eu.peppol.start.identifier.KeystoreManager;
 
 /**
@@ -64,6 +63,7 @@ public class SmpResponseValidatorTest {
   @BeforeClass
   public static void loadSampleSmpResponse () throws SAXException {
     document = XMLReader.readXMLDOM (new ClassPathResource ("sr-smp-result.xml"));
+    assertNotNull (document);
   }
 
   @Test
