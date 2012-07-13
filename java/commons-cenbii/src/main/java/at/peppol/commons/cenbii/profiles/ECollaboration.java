@@ -48,6 +48,8 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsImmutableObject;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.id.IHasID;
+import com.phloc.commons.lang.EnumHelper;
 import com.phloc.commons.name.IHasName;
 
 /**
@@ -57,7 +59,7 @@ import com.phloc.commons.name.IHasName;
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public enum ECollaboration implements IHasName {
+public enum ECollaboration implements IHasID <String>, IHasName {
   COLL001 ("Ordering", new ETransaction [] { ETransaction.T01 }),
   COLL002 ("CounterOfferSubmission", new ETransaction [] { ETransaction.T04 }),
   COLL003 ("OrderResponse", new ETransaction [] { ETransaction.T02, ETransaction.T03 }),
@@ -88,9 +90,10 @@ public enum ECollaboration implements IHasName {
   COLL030 ("CustomsBilling", new ETransaction [] { ETransaction.T07, ETransaction.T08, ETransaction.T09 }),
   COLL031 ("ScannedInvoice", new ETransaction [] { ETransaction.T52, ETransaction.T53, ETransaction.T63 });
 
-  private String m_sName;
-  private List <ETransaction> m_aTransactions;
-  private boolean m_bInCoreSupported;
+  private final String m_sID;
+  private final String m_sName;
+  private final List <ETransaction> m_aTransactions;
+  private final boolean m_bInCoreSupported;
 
   private void _checkTransactionCoreSupport () {
     final int nMax = m_aTransactions.size ();
@@ -101,12 +104,19 @@ public enum ECollaboration implements IHasName {
   }
 
   private ECollaboration (@Nonnull @Nonempty final String sName, @Nonnull @Nonempty final ETransaction [] aTransactions) {
+    m_sID = name ();
     m_sName = sName;
     m_aTransactions = ContainerHelper.newUnmodifiableList (aTransactions);
     // All transactions in a collaboration must share the same state
     m_bInCoreSupported = m_aTransactions.get (0).isInCoreSupported ();
     if (GlobalDebug.isDebugMode ())
       _checkTransactionCoreSupport ();
+  }
+
+  @Nonnull
+  @Nonempty
+  public String getID () {
+    return m_sID;
   }
 
   @Nonnull
@@ -166,5 +176,10 @@ public enum ECollaboration implements IHasName {
       if (eCollaboration.containsTransaction (eTransaction))
         ret.add (eCollaboration);
     return ret;
+  }
+
+  @Nullable
+  public static ECollaboration getFromIDOrNull (@Nullable final String sID) {
+    return EnumHelper.getFromIDOrNull (ECollaboration.class, sID);
   }
 }

@@ -37,39 +37,59 @@
  */
 package at.peppol.commons.cenbii.profiles;
 
+import java.util.Locale;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.phloc.commons.annotations.Nonempty;
-import com.phloc.commons.id.IHasID;
-import com.phloc.commons.lang.EnumHelper;
+import com.phloc.commons.annotations.Translatable;
+import com.phloc.commons.name.IHasDisplayText;
+import com.phloc.commons.text.ITextProvider;
+import com.phloc.commons.text.impl.TextProvider;
+import com.phloc.commons.text.resolve.DefaultTextResolver;
 
 /**
- * Defines the groups (= categories) available for profiles ({@link EProfile}).
+ * Contains the names of the BII profiles for later translation.
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public enum EGroup implements IHasID <String> {
-  PUBLICATION ("publication"),
-  TENDERING ("tendering"),
-  SOURCING ("sourcing"),
-  ORDERING_AND_BILLING ("ordering-and-billing"),
-  SUPPORT ("support");
+@Translatable
+public enum EProfileName implements IHasDisplayText {
+  BII14 ("Prior Information Notice"),
+  BII10 ("Tender Notification"),
+  BII11 ("Qualification"),
+  BII22 ("Call for Tender"),
+  BII12 ("Tendering Simple"),
+  BII01 ("Catalogue only"),
+  BII02 ("Catalogue update"),
+  BII16 ("Catalogue deletion"),
+  BII17 ("Multi party catalogue"),
+  BII18 ("Punch-out"),
+  BII20 ("Customer Initiated Sourcing"),
+  BII03 ("Basic Order Only"),
+  BII04 ("Basic Invoice only"),
+  BII23 ("Invoice only with Dispute"),
+  BII05 ("Billing"),
+  BII06 ("Procurement"),
+  BII07 ("Procurement with Invoice dispute"),
+  BII08 ("Billing with dispute and reminder"),
+  BII13 ("Advanced Procurement with dispatch"),
+  BII15 ("Scanned Invoice"),
+  BII19 ("Advanced Procurement"),
+  BII09 ("Customs Bill"),
+  BII21 ("Statement"),
+  BII24 ("Attached Document"),
+  BII25 ("Status Request"),
+  BII26 ("Retrieve Business Document");
 
-  private final String m_sID;
+  private final ITextProvider m_aTP;
 
-  private EGroup (@Nonnull @Nonempty final String sID) {
-    m_sID = sID;
-  }
-
-  @Nonnull
-  @Nonempty
-  public String getID () {
-    return m_sID;
+  private EProfileName (@Nonnull final String sEN) {
+    m_aTP = TextProvider.create_EN (sEN);
   }
 
   @Nullable
-  public static EGroup getFromIDOrNull (@Nullable final String sID) {
-    return EnumHelper.getFromIDOrNull (EGroup.class, sID);
+  public String getDisplayText (@Nonnull final Locale aContentLocale) {
+    return DefaultTextResolver.getText (this, m_aTP, aContentLocale);
   }
 }

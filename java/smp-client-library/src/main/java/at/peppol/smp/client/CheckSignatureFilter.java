@@ -87,7 +87,7 @@ public final class CheckSignatureFilter extends ClientFilter {
       // Find Signature element.
       final NodeList aNodeList = aDocument.getElementsByTagNameNS (XMLSignature.XMLNS, "Signature");
       if (aNodeList == null || aNodeList.getLength () == 0)
-        throw new NoSignatureFoundException ();
+        throw new NoSignatureFoundException ("Element <Signature> not found in SMP XML response");
 
       // Create a DOMValidateContext and specify a KeySelector
       // and document context.

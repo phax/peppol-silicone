@@ -42,6 +42,8 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.equals.EqualsUtils;
+import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
@@ -101,6 +103,26 @@ public final class BusdoxDocumentTypeIdentifierParts implements IBusdoxDocumentT
   @Nonempty
   public String getAsDocumentTypeIdentifierValue () {
     return getAsDocumentTypeIdentifierValue (this);
+  }
+
+  @Override
+  public boolean equals (final Object o) {
+    if (o == this)
+      return true;
+    if (!(o instanceof BusdoxDocumentTypeIdentifierParts))
+      return false;
+    final BusdoxDocumentTypeIdentifierParts rhs = (BusdoxDocumentTypeIdentifierParts) o;
+    return m_sRootNS.equals (rhs.m_sRootNS) &&
+           m_sLocalName.equals (rhs.m_sLocalName) &&
+           EqualsUtils.equals (m_sSubTypeIdentifier, rhs.m_sSubTypeIdentifier);
+  }
+
+  @Override
+  public int hashCode () {
+    return new HashCodeGenerator (this).append (m_sRootNS)
+                                       .append (m_sLocalName)
+                                       .append (m_sSubTypeIdentifier)
+                                       .getHashCode ();
   }
 
   @Override

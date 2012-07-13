@@ -37,11 +37,13 @@
  */
 package at.peppol.busdox;
 
+import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 import javax.xml.ws.WebServiceClient;
 
 import org.w3._2009._02.ws_tra.AccessPointService;
 
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.exceptions.InitializationException;
 
 /**
@@ -56,11 +58,16 @@ public final class CBusDox {
    * String and cannot be determined from {@link AccessPointService} class
    * because only constant strings can be used as annotation parameter values.
    */
+  @Nonnull
+  @Nonempty
   public static final String START_WSDL_PATH = "WEB-INF/wsdl/peppol-start-2.0.wsdl";
 
+  @Nonnull
+  @Nonempty
   public static final String START_WSDL_RESOURCE = "/" + START_WSDL_PATH;
 
   /** The sample path contained in the START WSDL file */
+  @Deprecated
   public static final String START_WSDL_SAMPLE_PORT_ADDRESS = "https://host:port/serviceName";
 
   static {

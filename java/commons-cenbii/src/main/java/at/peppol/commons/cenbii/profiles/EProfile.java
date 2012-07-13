@@ -49,58 +49,8 @@ import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsImmutableObject;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
-import com.phloc.commons.annotations.Translatable;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.name.IHasDisplayText;
-import com.phloc.commons.text.ITextProvider;
-import com.phloc.commons.text.impl.TextProvider;
-import com.phloc.commons.text.resolve.DefaultTextResolver;
-
-/**
- * Contains the names of the BII profiles for later translation.
- * 
- * @author PEPPOL.AT, BRZ, Philip Helger
- */
-@Translatable
-enum EProfileName implements IHasDisplayText {
-  BII14 ("Prior Information Notice"),
-  BII10 ("Tender Notification"),
-  BII11 ("Qualification"),
-  BII22 ("Call for Tender"),
-  BII12 ("Tendering Simple"),
-  BII01 ("Catalogue only"),
-  BII02 ("Catalogue update"),
-  BII16 ("Catalogue deletion"),
-  BII17 ("Multi party catalogue"),
-  BII18 ("Punch-out"),
-  BII20 ("Customer Initiated Sourcing"),
-  BII03 ("Basic Order Only"),
-  BII04 ("Basic Invoice only"),
-  BII23 ("Invoice only with Dispute"),
-  BII05 ("Billing"),
-  BII06 ("Procurement"),
-  BII07 ("Procurement with Invoice dispute"),
-  BII08 ("Billing with dispute and reminder"),
-  BII13 ("Advanced Procurement with dispatch"),
-  BII15 ("Scanned Invoice"),
-  BII19 ("Advanced Procurement"),
-  BII09 ("Customs Bill"),
-  BII21 ("Statement"),
-  BII24 ("Attached Document"),
-  BII25 ("Status Request"),
-  BII26 ("Retrieve Business Document");
-
-  private ITextProvider m_aTP;
-
-  private EProfileName (@Nonnull final String sEN) {
-    m_aTP = TextProvider.create_EN (sEN);
-  }
-
-  @Nullable
-  public String getDisplayText (@Nonnull final Locale aContentLocale) {
-    return DefaultTextResolver.getText (this, m_aTP, aContentLocale);
-  }
-}
 
 /**
  * Defines the predefined profiles. Each profile consists of a set of
@@ -168,11 +118,11 @@ public enum EProfile implements IHasDisplayText {
   BII25 (EGroup.SUPPORT, EProfileName.BII25, 25, new ECollaboration [] { ECollaboration.COLL015 }),
   BII26 (EGroup.SUPPORT, EProfileName.BII26, 26, new ECollaboration [] { ECollaboration.COLL016 });
 
-  private EGroup m_eGroup;
-  private IHasDisplayText m_aName;
-  private int m_nNumber;
-  private List <ECollaboration> m_aCollaborations;
-  private boolean m_bInCoreSupported;
+  private final EGroup m_eGroup;
+  private final IHasDisplayText m_aName;
+  private final int m_nNumber;
+  private final List <ECollaboration> m_aCollaborations;
+  private final boolean m_bInCoreSupported;
 
   private void _checkCollaborationCoreSupport () {
     final boolean bFirstCollaborationSupported = m_aCollaborations.get (0).isInCoreSupported ();
