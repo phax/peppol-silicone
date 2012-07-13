@@ -111,7 +111,6 @@
     <module>webgui-webapp</module>
 
     <!-- Oxalis -->
-    <module>oxalis-api</module>
     <module>oxalis-commons</module>
     <module>oxalis-start-outbound</module>
     <module>oxalis-start-inbound</module>
