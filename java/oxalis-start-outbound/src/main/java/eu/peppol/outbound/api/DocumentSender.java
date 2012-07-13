@@ -42,6 +42,8 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.UUID;
 
+import javax.annotation.Nonnull;
+
 import org.busdox.transport.identifiers._1.DocumentIdentifierType;
 import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 import org.busdox.transport.identifiers._1.ProcessIdentifierType;
@@ -151,13 +153,12 @@ public final class DocumentSender {
                              final String recipient,
                              final URL destination,
                              final String channelId) {
-    log (destination);
     Document document;
     try {
       document = XMLReader.readXMLDOM (xmlDocument);
     }
     catch (final Exception e) {
-      throw new IllegalStateException ("Unable to parse xml document from " + sender + " to " + recipient + "; " + e, e);
+      throw new IllegalStateException ("Unable to parse xml document from " + sender + " to " + recipient, e);
     }
     return send (document, sender, recipient, destination, channelId);
   }
@@ -184,13 +185,12 @@ public final class DocumentSender {
                              final String recipient,
                              final URL destination,
                              final String channelId) {
-    log (destination);
     Document document;
     try {
       document = XMLReader.readXMLDOM (xmlDocument);
     }
     catch (final Exception e) {
-      throw new IllegalStateException ("Unable to parse XML Document in file " + xmlDocument + "; " + e, e);
+      throw new IllegalStateException ("Unable to parse XML Document in file " + xmlDocument, e);
     }
     return send (document, sender, recipient, destination, channelId);
   }
@@ -199,16 +199,13 @@ public final class DocumentSender {
     return SmpLookupManager.getEndpointAddress (getParticipantId (recipient), m_aDocumentTypeIdentifier);
   }
 
+  @Nonnull
   private static ParticipantIdentifierType getParticipantId (final String sender) {
     final SimpleParticipantIdentifier aID = SimpleParticipantIdentifier.createWithDefaultScheme (sender);
     if (!aID.isValid ())
       throw new IllegalArgumentException ("Invalid participant " + sender);
 
     return aID;
-  }
-
-  private void log (final URL destination) {
-    log.info ("Document destination is " + destination);
   }
 
   private String send (final Document document,
@@ -234,9 +231,7 @@ public final class DocumentSender {
                                                                 m_aPeppolProcessTypeId);
 
     CBusDox.enableSoapLogging (m_bSoapLogging);
-
     AccessPointClient.send (destination.toExternalForm (), messageHeader, soapBody);
-
     return messageHeader.getMessageID ();
   }
 }

@@ -51,7 +51,7 @@ public final class Schematron2XSLTMojo extends AbstractMojo {
   /**
    * The Maven Project.
    * 
-   * @parameter expression="${project}"
+   * @parameter property="project"
    * @required
    * @readonly
    */
@@ -62,7 +62,7 @@ public final class Schematron2XSLTMojo extends AbstractMojo {
    * The directory where the Schematron files reside.
    * 
    * @parameter property="schematronDirectory"
-   *            expression="${basedir}/src/main/schematron"
+   *            default="${basedir}/src/main/schematron"
    */
   private File m_aSchematronDirectory;
 
@@ -71,8 +71,7 @@ public final class Schematron2XSLTMojo extends AbstractMojo {
    * double wildcards. All files that match the pattern will be converted. Files
    * in the schematronDirectory and its subdirectories will be considered.
    * 
-   * @parameter property="schematronPattern" expression="${schematronPattern}"
-   *            default-value="**\/*.sch"
+   * @parameter property="schematronPattern" default-value="**\/*.sch"
    */
   private String m_sSchematronPattern;
 
@@ -80,15 +79,14 @@ public final class Schematron2XSLTMojo extends AbstractMojo {
    * The directory where the XSLT files will be saved.
    * 
    * @required
-   * @parameter property="xsltDirectory" expression="${basedir}/src/main/xslt"
+   * @parameter property="xsltDirectory" default="${basedir}/src/main/xslt"
    */
   private File m_aXSLTDirectory;
 
   /**
    * The file extension of the XSLT files.
    * 
-   * @parameter property="xsltExtension" expression="${xsltExtension}"
-   *            default-value=".xslt"
+   * @parameter property="xsltExtension" default-value=".xslt"
    */
   private String m_sXSLTExtension;
 
