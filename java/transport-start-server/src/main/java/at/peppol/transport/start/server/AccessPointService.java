@@ -126,7 +126,7 @@ public class AccessPointService {
                        IAccessPointServiceReceiverSPI.class +
                        " found! Incoming documents will be discarded!");
 
-    // Read certificate from configuration
+    // Read certificate from configuration only once, so it is cached for reuse
     try {
       final String sKeyStorePath = ServerConfigFile.getKeyStorePath ();
       final String sKeyStorePassword = ServerConfigFile.getKeyStorePassword ();
@@ -267,111 +267,115 @@ public class AccessPointService {
     final IMessageMetadata aMetadata = MessageMetadataHelper.createMetadataFromHeaders (aHeaderList);
 
     // TODO do we need a check, whether the message ID was already received
+    try {
+      MDC.put ("msgId", aMetadata.getMessageID ());
+      if (aMetadata.getChannelID () != null)
+        MDC.put ("channelId", aMetadata.getChannelID ());
+      MDC.put ("senderId", aMetadata.getSenderID ().getValue ());
 
-    MDC.put ("msgId", aMetadata.getMessageID ());
-    if (aMetadata.getChannelID () != null)
-      MDC.put ("channelId", aMetadata.getChannelID ());
-    MDC.put ("senderId", aMetadata.getSenderID ().getValue ());
-
-    if (PingMessageHelper.isPingMessage (aMetadata)) {
-      // It's a PING message - no actions to be taken!
-      s_aLogger.info ("Got a ping message - discarding it!");
-    }
-    else {
-      // Not a ping message
-
-      // Get our public endpoint address from the config file
-      final String sOwnAPUrl = ServerConfigFile.getConfigFile ().getString ("server.endpoint.url");
-
-      // In debug mode, use our recipient URL, so that the URL check will work
-      final String sRecipientAPUrl = GlobalDebug.isDebugMode () ? sOwnAPUrl : _getAPURL (aMetadata);
-
-      // Get the recipient certificate from the SMP
-      final X509Certificate aRecipientSMPCert = _getRecipientCert (aMetadata);
-      if (aRecipientSMPCert == null)
-        s_aLogger.error ("No Metadata Certificate found! Is this AP maybe not contained in an SMP? Recipient ID is " +
-                         IdentifierUtils.getIdentifierURIEncoded (aMetadata.getRecipientID ()));
-
-      if (s_aLogger.isDebugEnabled ()) {
-        s_aLogger.debug ("Our endpoint: " + sOwnAPUrl);
-        s_aLogger.debug ("Recipient endpoint: " + sRecipientAPUrl);
-        if (aRecipientSMPCert == null)
-          s_aLogger.debug ("No Recipient certificate found");
-        else
-          s_aLogger.debug ("Recipient certificate present: " + aRecipientSMPCert.toString ());
-      }
-
-      if (_isTheSameCert (aRecipientSMPCert)) {
-        // Is it for us?
-        if (sRecipientAPUrl.indexOf (sOwnAPUrl) >= 0) {
-          s_aLogger.info ("This is a handled request for " + aMetadata.getRecipientID ().getValue ());
-
-          // Invoke all available SPI implementations
-          ESuccess eOverallSuccess = ESuccess.SUCCESS;
-          final List <LogMessage> aProcessingMessages = new ArrayList <LogMessage> ();
-          try {
-            // Invoke all available SPI implementations
-            for (final IAccessPointServiceReceiverSPI aReceiver : s_aReceivers) {
-              final SuccessWithValue <AccessPointReceiveError> aSV = aReceiver.receiveDocument (webServiceContext,
-                                                                                                aMetadata,
-                                                                                                aBody);
-              eOverallSuccess = eOverallSuccess.and (aSV);
-              final AccessPointReceiveError aError = aSV.get ();
-              if (aError != null) {
-                // Remember all messages
-                aProcessingMessages.addAll (aError.getAllMessages ());
-              }
-            }
-          }
-          catch (final Exception ex) {
-            aProcessingMessages.add (new LogMessage (EErrorLevel.ERROR,
-                                                     "Internal error in processing incoming message",
-                                                     ex));
-            eOverallSuccess = ESuccess.FAILURE;
-          }
-
-          if (!aProcessingMessages.isEmpty ()) {
-            // Log all messages from processing
-            s_aLogger.info ("Messages from processing the document " + aMetadata.getMessageID () + ":");
-            for (final LogMessage aLogMsg : aProcessingMessages)
-              s_aLogger.info ('[' + aLogMsg.getErrorLevel ().getID () + "] " + aLogMsg.getMessage (),
-                              aLogMsg.getThrowable ());
-          }
-
-          if (eOverallSuccess.isFailure ())
-            throw ExceptionUtils.createFaultMessage (new IllegalStateException ("Failure in processing document from PEPPOL"),
-                                                     "Internal error in processing the incoming PEPPOL document");
-
-          // Log success
-          s_aLogger.info ("Done handling document from PEPPOL");
-        }
-        else {
-          s_aLogger.error ("The received document is not for us!");
-          s_aLogger.error ("Request is for: " + sRecipientAPUrl);
-          s_aLogger.error ("    Our URL is: " + sOwnAPUrl);
-
-          // Avoid endless loop
-          ExceptionUtils.createFaultMessage (new IllegalStateException ("Receiver(" +
-                                                                        sRecipientAPUrl +
-                                                                        ") invalid for us (" +
-                                                                        sOwnAPUrl +
-                                                                        ")"), "The received document is not for us!");
-        }
+      if (PingMessageHelper.isPingMessage (aMetadata)) {
+        // It's a PING message - no actions to be taken!
+        s_aLogger.info ("Got a ping message - discarding it!");
       }
       else {
-        s_aLogger.error ("Metadata Certificate (" +
-                         aRecipientSMPCert +
-                         ") does not match Access Point Certificate (" +
-                         s_aConfiguredCert +
-                         ") - ignoring document");
+        // Not a ping message
+
+        // Get our public endpoint address from the config file
+        final String sOwnAPUrl = ServerConfigFile.getConfigFile ().getString ("server.endpoint.url");
+
+        // In debug mode, use our recipient URL, so that the URL check will work
+        final String sRecipientAPUrl = GlobalDebug.isDebugMode () ? sOwnAPUrl : _getAPURL (aMetadata);
+
+        // Get the recipient certificate from the SMP
+        final X509Certificate aRecipientSMPCert = _getRecipientCert (aMetadata);
+        if (aRecipientSMPCert == null)
+          s_aLogger.error ("No Metadata Certificate found! Is this AP maybe not contained in an SMP? Recipient ID is " +
+                           IdentifierUtils.getIdentifierURIEncoded (aMetadata.getRecipientID ()));
+
+        if (s_aLogger.isDebugEnabled ()) {
+          s_aLogger.debug ("Our endpoint: " + sOwnAPUrl);
+          s_aLogger.debug ("Recipient endpoint: " + sRecipientAPUrl);
+          if (aRecipientSMPCert == null)
+            s_aLogger.debug ("No Recipient certificate found");
+          else
+            s_aLogger.debug ("Recipient certificate present: " + aRecipientSMPCert.toString ());
+        }
+
+        if (_isTheSameCert (aRecipientSMPCert)) {
+          // Is it for us?
+          if (sRecipientAPUrl.indexOf (sOwnAPUrl) >= 0) {
+            s_aLogger.info ("This is a handled request for " + aMetadata.getRecipientID ().getValue ());
+
+            // Invoke all available SPI implementations
+            ESuccess eOverallSuccess = ESuccess.SUCCESS;
+            final List <LogMessage> aProcessingMessages = new ArrayList <LogMessage> ();
+            try {
+              // Invoke all available SPI implementations
+              for (final IAccessPointServiceReceiverSPI aReceiver : s_aReceivers) {
+                final SuccessWithValue <AccessPointReceiveError> aSV = aReceiver.receiveDocument (webServiceContext,
+                                                                                                  aMetadata,
+                                                                                                  aBody);
+                eOverallSuccess = eOverallSuccess.and (aSV);
+                final AccessPointReceiveError aError = aSV.get ();
+                if (aError != null) {
+                  // Remember all messages
+                  aProcessingMessages.addAll (aError.getAllMessages ());
+                }
+              }
+            }
+            catch (final Exception ex) {
+              aProcessingMessages.add (new LogMessage (EErrorLevel.ERROR,
+                                                       "Internal error in processing incoming message",
+                                                       ex));
+              eOverallSuccess = ESuccess.FAILURE;
+            }
+
+            if (!aProcessingMessages.isEmpty ()) {
+              // Log all messages from processing
+              s_aLogger.info ("Messages from processing the document " + aMetadata.getMessageID () + ":");
+              for (final LogMessage aLogMsg : aProcessingMessages)
+                s_aLogger.info ('[' + aLogMsg.getErrorLevel ().getID () + "] " + aLogMsg.getMessage (),
+                                aLogMsg.getThrowable ());
+            }
+
+            if (eOverallSuccess.isFailure ())
+              throw ExceptionUtils.createFaultMessage (new IllegalStateException ("Failure in processing document from PEPPOL"),
+                                                       "Internal error in processing the incoming PEPPOL document");
+
+            // Log success
+            s_aLogger.info ("Done handling document from PEPPOL");
+          }
+          else {
+            s_aLogger.error ("The received document is not for us!");
+            s_aLogger.error ("Request is for: " + sRecipientAPUrl);
+            s_aLogger.error ("    Our URL is: " + sOwnAPUrl);
+
+            // Avoid endless loop
+            ExceptionUtils.createFaultMessage (new IllegalStateException ("Receiver(" +
+                                                                          sRecipientAPUrl +
+                                                                          ") invalid for us (" +
+                                                                          sOwnAPUrl +
+                                                                          ")"), "The received document is not for us!");
+          }
+        }
+        else {
+          s_aLogger.error ("Metadata Certificate (" +
+                           aRecipientSMPCert +
+                           ") does not match Access Point Certificate (" +
+                           s_aConfiguredCert +
+                           ") - ignoring document");
+        }
       }
+
+      if (GlobalDebug.isDebugMode ())
+        _checkMemoryUsage ();
+
+      final CreateResponse aResponse = new CreateResponse ();
+      return aResponse;
     }
-
-    if (GlobalDebug.isDebugMode ())
-      _checkMemoryUsage ();
-
-    final CreateResponse aResponse = new CreateResponse ();
-    return aResponse;
+    finally {
+      MDC.clear ();
+    }
   }
 
   private static final long MEMORY_THRESHOLD_BYTES = 10 * CGlobal.BYTES_PER_MEGABYTE;
