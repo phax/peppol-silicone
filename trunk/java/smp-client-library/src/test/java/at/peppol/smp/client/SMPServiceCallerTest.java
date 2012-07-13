@@ -77,22 +77,17 @@ public final class SMPServiceCallerTest {
       sEndpointAddress = new SMPServiceCaller (PI_alfa1lab, ESML.PRODUCTION).getEndpointAddress (PI_alfa1lab,
                                                                                                  DOCUMENT_INVOICE,
                                                                                                  PROCESS_BII04);
-      assertEquals (sEndpointAddress, "https://start-ap.alfa1lab.com:443/accessPointService");
+      assertEquals ("https://start-ap.alfa1lab.com:443/accessPointService", sEndpointAddress);
 
-      // 2011-12-08: returns BadRequestException (HTTP status 400)
-      if (false) {
-        sEndpointAddress = new SMPServiceCaller (PI_helseVest, ESML.PRODUCTION).getEndpointAddress (PI_helseVest,
+      sEndpointAddress = new SMPServiceCaller (PI_helseVest, ESML.PRODUCTION).getEndpointAddress (PI_helseVest,
+                                                                                                  DOCUMENT_INVOICE,
+                                                                                                  PROCESS_BII04);
+      assertEquals ("https://peppolap.ibxplatform.net:8443/accessPointService", sEndpointAddress);
+
+      sEndpointAddress = new SMPServiceCaller (PI_sendRegning, ESML.PRODUCTION).getEndpointAddress (PI_sendRegning,
                                                                                                     DOCUMENT_INVOICE,
                                                                                                     PROCESS_BII04);
-        assertEquals (sEndpointAddress, "https://peppolap.ibxplatform.net:8443/accesspointService");
-      }
-
-      if (false) {
-        sEndpointAddress = new SMPServiceCaller (PI_sendRegning, ESML.PRODUCTION).getEndpointAddress (PI_sendRegning,
-                                                                                                      DOCUMENT_INVOICE,
-                                                                                                      PROCESS_BII04);
-        assertEquals (sEndpointAddress, "https://aksesspunkt.sendregning.no:8443/oxalis/accessPointService");
-      }
+      assertEquals ("https://aksesspunkt.sendregning.no/oxalis/accessPointService", sEndpointAddress);
     }
     catch (final ClientHandlerException ex) {
       // Happens when being offline!
@@ -109,16 +104,13 @@ public final class SMPServiceCallerTest {
                                                                                                          DOCUMENT_INVOICE,
                                                                                                          PROCESS_BII04);
       assertNotNull (aEndpointCertificate);
-      assertEquals (aEndpointCertificate.getSerialNumber ().toString (), "97394193891150626641360283873417712042");
+      assertEquals ("97394193891150626641360283873417712042", aEndpointCertificate.getSerialNumber ().toString ());
 
-      // 2011-12-08: returns BadRequestException (HTTP status 400)
-      if (false) {
-        aEndpointCertificate = new SMPServiceCaller (PI_helseVest, ESML.PRODUCTION).getEndpointCertificate (PI_helseVest,
-                                                                                                            DOCUMENT_INVOICE,
-                                                                                                            PROCESS_BII04);
-        assertNotNull (aEndpointCertificate);
-        assertEquals (aEndpointCertificate.getSerialNumber ().toString (), "37276025795984990954710880598937203007");
-      }
+      aEndpointCertificate = new SMPServiceCaller (PI_helseVest, ESML.PRODUCTION).getEndpointCertificate (PI_helseVest,
+                                                                                                          DOCUMENT_INVOICE,
+                                                                                                          PROCESS_BII04);
+      assertNotNull (aEndpointCertificate);
+      assertEquals ("37276025795984990954710880598937203007", aEndpointCertificate.getSerialNumber ().toString ());
     }
     catch (final ClientHandlerException ex) {
       // Happens when being offline!
