@@ -50,14 +50,15 @@ import org.slf4j.LoggerFactory;
 import org.w3._2009._02.ws_tra.Create;
 import org.w3c.dom.Document;
 
+import at.peppol.busdox.CBusDox;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 import at.peppol.transport.IMessageMetadata;
 import at.peppol.transport.MessageMetadata;
+import at.peppol.transport.start.client.AccessPointClient;
 
 import com.phloc.commons.xml.serialize.XMLReader;
 
 import eu.peppol.outbound.smp.SmpLookupManager;
-import eu.peppol.outbound.soap.SoapDispatcher;
 
 /**
  * The Oxalis START outbound module contains all necessary code for sending
@@ -80,15 +81,13 @@ public final class DocumentSender {
   private final DocumentIdentifierType m_aDocumentTypeIdentifier;
   private final ProcessIdentifierType m_aPeppolProcessTypeId;
   private final boolean m_bSoapLogging;
-  private final SoapDispatcher m_aSoapDispatcher;
 
   DocumentSender (final DocumentIdentifierType documentTypeIdentifier,
                   final ProcessIdentifierType processId,
                   final boolean soapLogging) {
-    this.m_aDocumentTypeIdentifier = documentTypeIdentifier;
-    this.m_aPeppolProcessTypeId = processId;
-    this.m_bSoapLogging = soapLogging;
-    this.m_aSoapDispatcher = new SoapDispatcher ();
+    m_aDocumentTypeIdentifier = documentTypeIdentifier;
+    m_aPeppolProcessTypeId = processId;
+    m_bSoapLogging = soapLogging;
   }
 
   /**
@@ -234,9 +233,9 @@ public final class DocumentSender {
                                                                 m_aDocumentTypeIdentifier,
                                                                 m_aPeppolProcessTypeId);
 
-    m_aSoapDispatcher.enableSoapLogging (m_bSoapLogging);
+    CBusDox.enableSoapLogging (m_bSoapLogging);
 
-    m_aSoapDispatcher.send (destination, messageHeader, soapBody);
+    AccessPointClient.send (destination.toExternalForm (), messageHeader, soapBody);
 
     return messageHeader.getMessageID ();
   }

@@ -85,9 +85,7 @@ public final class CBusDox {
   public static void setMetroDebugSystemProperties (final boolean bDebug) {
     // Depending on the used JAX-WS version, the property names are
     // different....
-    System.setProperty ("com.sun.xml.ws.transport.http.client.HttpTransportPipe.dump", Boolean.toString (bDebug));
-    System.setProperty ("com.sun.xml.internal.ws.transport.http.client.HttpTransportPipe.dump",
-                        Boolean.toString (bDebug));
+    enableSoapLogging (bDebug);
 
     System.setProperty ("com.sun.xml.ws.transport.http.HttpAdapter.dump", Boolean.toString (bDebug));
     System.setProperty ("com.sun.xml.internal.ws.transport.http.HttpAdapter.dump", Boolean.toString (bDebug));
@@ -102,5 +100,11 @@ public final class CBusDox {
     System.setProperty ("com.sun.xml.wss.jaxws.impl.SecurityServerTube.dump", Boolean.toString (bDebug));
     System.setProperty ("com.sun.xml.wss.jaxws.impl.SecurityClientTube.dump", Boolean.toString (bDebug));
     System.setProperty ("com.sun.xml.ws.rx.rm.runtime.ClientTube.dump", Boolean.toString (bDebug));
+  }
+
+  public static void enableSoapLogging (final boolean bDebug) {
+    System.setProperty ("com.sun.xml.ws.transport.http.client.HttpTransportPipe.dump", Boolean.toString (bDebug));
+    System.setProperty ("com.sun.xml.internal.ws.transport.http.client.HttpTransportPipe.dump",
+                        Boolean.toString (bDebug));
   }
 }

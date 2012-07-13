@@ -24,7 +24,7 @@
     </dependency>
     <dependency>
       <groupId>at.peppol</groupId>
-      <artifactId>peppol-transport-api</artifactId>
+      <artifactId>peppol-transport-start-client</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>

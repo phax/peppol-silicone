@@ -5,21 +5,20 @@ import java.util.Properties;
 import com.phloc.commons.string.StringHelper;
 
 /**
- * Property definitions, which are declared separately from the actual
- * instances of the properties.
+ * Property definitions, which are declared separately from the actual instances
+ * of the properties.
  */
 enum PropertyDef {
   KEYSTORE_PATH ("oxalis.keystore", true),
   KEYSTORE_PASSWORD ("oxalis.keystore.password", true),
   INBOUND_MESSAGE_STORE ("oxalis.inbound.message.store", false),
   OUTBOUND_MESSAGE_STORE ("oxalis.outbound.message.store", false),
-  WSDL_FILE_NAME ("oxalis.wsdl", true),
   PEPPOL_SENDER_ID ("peppol.senderid", true),
   PEPPOL_SERVICE_NAME ("peppol.servicename", true);
 
   /**
-   * External name of property as it appears in your .properties file, i.e.
-   * with the dot notation, like for instance "x.y.z = value"
+   * External name of property as it appears in your .properties file, i.e. with
+   * the dot notation, like for instance "x.y.z = value"
    */
   private final String m_sPropertyName;
   private final boolean m_bRequired;
@@ -53,13 +52,8 @@ enum PropertyDef {
   }
 
   String required (final String value) {
-    if (StringHelper.hasNoTextAfterTrim (value)) {
-      throw new IllegalStateException ("Property '" +
-                                       m_sPropertyName +
-                                       "' does not exist or is empty, check " +
-                                       Configuration.FALLBACK_PROPERTIES_PATH);
-    }
+    if (StringHelper.hasNoTextAfterTrim (value))
+      throw new IllegalStateException ("Property '" + m_sPropertyName + "' does not exist or is empty, check the file");
     return value;
   }
-
 }
