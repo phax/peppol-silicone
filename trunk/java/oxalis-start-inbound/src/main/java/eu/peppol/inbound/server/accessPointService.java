@@ -1,7 +1,45 @@
+/**
+ * Version: MPL 1.1/EUPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at:
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Original Code is Copyright The PEPPOL project (http://www.peppol.eu)
+ *
+ * Alternatively, the contents of this file may be used under the
+ * terms of the EUPL, Version 1.1 or - as soon they will be approved
+ * by the European Commission - subsequent versions of the EUPL
+ * (the "Licence"); You may not use this work except in compliance
+ * with the Licence.
+ * You may obtain a copy of the Licence at:
+ * http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the Licence is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the Licence for the specific language governing permissions and
+ * limitations under the Licence.
+ *
+ * If you wish to allow use of your version of this file only
+ * under the terms of the EUPL License and not to allow others to use
+ * your version of this file under the MPL, indicate your decision by
+ * deleting the provisions above and replace them with the notice and
+ * other provisions required by the EUPL License. If you do not delete
+ * the provisions above, a recipient may use your version of this file
+ * under either the MPL or the EUPL License.
+ */
 package eu.peppol.inbound.server;
 
 import java.security.cert.X509Certificate;
 
+import javax.annotation.Nonnull;
 import javax.jws.WebService;
 import javax.xml.ws.Action;
 import javax.xml.ws.BindingType;
@@ -12,6 +50,8 @@ import javax.xml.ws.soap.Addressing;
 import javax.xml.ws.soap.SOAPBinding;
 
 import org.busdox._2010._02.channel.fault.StartException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.w3._2009._02.ws_tra.Create;
 import org.w3._2009._02.ws_tra.CreateResponse;
@@ -25,14 +65,16 @@ import org.w3._2009._02.ws_tra.PutResponse;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import at.peppol.busdox.identifier.IParticipantIdentifier;
+import at.peppol.commons.sml.ESML;
+import at.peppol.commons.sml.ISMLInfo;
+import at.peppol.smp.client.SMPServiceCaller;
 import at.peppol.transport.IMessageMetadata;
 import at.peppol.transport.MessageMetadataHelper;
 
 import com.sun.xml.ws.api.message.HeaderList;
 import com.sun.xml.ws.developer.JAXWSProperties;
 
-import eu.peppol.inbound.util.Log;
-import eu.peppol.outbound.smp.SmpLookupManager;
 import eu.peppol.start.identifier.Configuration;
 import eu.peppol.start.identifier.KeystoreManager;
 import eu.peppol.start.persistence.MessageRepository;
@@ -46,6 +88,8 @@ import eu.peppol.start.persistence.MessageRepositoryFactory;
 @BindingType (value = SOAPBinding.SOAP11HTTP_BINDING)
 @Addressing
 public class accessPointService {
+  private static final Logger log = LoggerFactory.getLogger ("oxalis-inb");
+  private static final ISMLInfo SML_INFO = ESML.PRODUCTION;
 
   @javax.annotation.Resource
   private WebServiceContext webServiceContext;
@@ -57,7 +101,7 @@ public class accessPointService {
   public CreateResponse create (final Create body) throws FaultMessage {
     try {
       final IMessageMetadata messageHeader = getPeppolMessageHeader ();
-      Log.info ("Received PEPPOL SOAP Header:" + messageHeader);
+      log.info ("Received PEPPOL SOAP Header:" + messageHeader);
 
       // TODO: Verifies the SOAP header and rejects illegal messages
 
@@ -76,7 +120,7 @@ public class accessPointService {
 
     }
     catch (final Exception e) {
-      Log.error ("Problem while handling inbound document: " + e.getMessage (), e);
+      log.error ("Problem while handling inbound document: " + e.getMessage (), e);
       throw new FaultMessage ("Unexpected error in document handling: " + e.getMessage (), new StartException (), e);
     }
     finally {
@@ -105,10 +149,11 @@ public class accessPointService {
 
     }
     catch (final Throwable e) {
-      Log.error ("Unable to persist", e);
+      log.error ("Unable to persist", e);
     }
   }
 
+  @Nonnull
   private IMessageMetadata getPeppolMessageHeader () {
     final MessageContext messageContext = webServiceContext.getMessageContext ();
     final HeaderList headerList = (HeaderList) messageContext.get (JAXWSProperties.INBOUND_HEADER_LIST_PROPERTY);
@@ -116,28 +161,28 @@ public class accessPointService {
     return peppolMessageHeader;
   }
 
-  void setUpSlf4JMDC (final IMessageMetadata messageHeader) {
+  static void setUpSlf4JMDC (final IMessageMetadata messageHeader) {
     MDC.put ("msgId", messageHeader.getMessageID ());
     MDC.put ("senderId", messageHeader.getSenderID ().getValue ());
     MDC.put ("channelId", messageHeader.getChannelID ());
   }
 
-  private void verifyThatThisDocumentIsForUs (final IMessageMetadata messageHeader) {
-
+  private void verifyThatThisDocumentIsForUs (final IMessageMetadata aMetadata) {
     try {
-      final X509Certificate recipientCertificate = SmpLookupManager.getEndpointCertificate (messageHeader.getRecipientID (),
-                                                                                            messageHeader.getDocumentTypeID ());
-
+      final IParticipantIdentifier aRecipientID = aMetadata.getRecipientID ();
+      final X509Certificate recipientCertificate = new SMPServiceCaller (aRecipientID, SML_INFO).getEndpointCertificate (aRecipientID,
+                                                                                                                         aMetadata.getDocumentTypeID (),
+                                                                                                                         aMetadata.getProcessID ());
       if (new KeystoreManager ().isOurCertificate (recipientCertificate)) {
-        Log.info ("SMP lookup OK");
+        log.info ("SMP lookup OK");
       }
       else {
-        Log.info ("SMP lookup indicates that document was sent to the wrong access point");
+        log.info ("SMP lookup indicates that document was sent to the wrong access point");
         throw new FaultMessage ("This message was sent to the wrong Access Point", new StartException ());
       }
     }
     catch (final Exception e) {
-      Log.info ("SMP lookup fails, we assume the message is for us");
+      log.info ("SMP lookup fails, we assume the message is for us");
     }
   }
 

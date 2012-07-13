@@ -1,4 +1,4 @@
-/*
+/**
  * Version: MPL 1.1/EUPL 1.1
  *
  * The contents of this file are subject to the Mozilla Public License Version
@@ -19,7 +19,7 @@
  * (the "Licence"); You may not use this work except in compliance
  * with the Licence.
  * You may obtain a copy of the Licence at:
- * http://www.osor.eu/eupl/european-union-public-licence-eupl-v.1.1
+ * http://joinup.ec.europa.eu/software/page/eupl/licence-eupl
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the Licence is distributed on an "AS IS" basis,
@@ -50,6 +50,8 @@ import javax.xml.bind.JAXBException;
 import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3._2009._02.ws_tra.AccessPointService;
 import org.w3._2009._02.ws_tra.Create;
 import org.w3._2009._02.ws_tra.FaultMessage;
@@ -62,7 +64,6 @@ import at.peppol.transport.cert.AccessPointX509TrustManager;
 import com.sun.xml.ws.api.message.Header;
 import com.sun.xml.ws.developer.WSBindingProvider;
 
-import eu.peppol.outbound.util.Log;
 import eu.peppol.start.identifier.Configuration;
 
 /**
@@ -72,7 +73,8 @@ import eu.peppol.start.identifier.Configuration;
  * @author Dante Malaga(dante@alfa1lab.com) Jose Gorvenia
  *         Narvaez(jose@alfa1lab.com)
  */
-public class SoapDispatcher {
+public final class SoapDispatcher {
+  private static final Logger log = LoggerFactory.getLogger ("oxalis-out");
 
   private static boolean initialised = false;
 
@@ -121,35 +123,34 @@ public class SoapDispatcher {
    *        the address of the webservice.
    */
   private void sendSoapMessage (final URL endpointAddress, final IMessageMetadata messageHeader, final Create soapBody) throws FaultMessage {
-
-    Log.debug ("Constructing service proxy");
+    log.debug ("Constructing service proxy");
 
     final AccessPointService accesspointService = new AccessPointService (getWsdlUrl (),
                                                                           new QName ("http://www.w3.org/2009/02/ws-tra",
                                                                                      "accessPointService"));
 
-    Log.debug ("Getting remote resource binding port");
+    log.debug ("Getting remote resource binding port");
     Resource port = null;
     try {
       port = accesspointService.getResourceBindingPort ();
       ((BindingProvider) port).getRequestContext ().put (BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
                                                          endpointAddress.toExternalForm ());
 
-      Log.debug ("Adding BUSDOX headers to SOAP-envelope");
+      log.debug ("Adding BUSDOX headers to SOAP-envelope");
       // Assign the headers
       final List <Header> aHeaders = MessageMetadataHelper.createHeadersFromMetadata (messageHeader);
       ((WSBindingProvider) port).setOutboundHeaders (aHeaders);
 
       port.create (soapBody);
 
-      Log.info ("Sender:\t" + messageHeader.getSenderID ().getValue ());
-      Log.info ("Recipient:\t" + messageHeader.getRecipientID ().getValue ());
-      Log.info ("Destination:\t" + endpointAddress);
-      Log.info ("Message " + messageHeader.getMessageID () + " has been successfully delivered");
+      log.info ("Sender:\t" + messageHeader.getSenderID ().getValue ());
+      log.info ("Recipient:\t" + messageHeader.getRecipientID ().getValue ());
+      log.info ("Destination:\t" + endpointAddress);
+      log.info ("Message " + messageHeader.getMessageID () + " has been successfully delivered");
     }
     catch (final JAXBException ex) {
       // Usually a JAXB marshalling error
-      Log.error ("An error occurred while marshalling headers.", ex);
+      log.error ("An error occurred while marshalling headers.", ex);
     }
     finally {
       // Creates memory leak if not performed
@@ -168,18 +169,16 @@ public class SoapDispatcher {
       throw new IllegalStateException ("Unable to locate WSDL file " + wsdlLocation);
     }
 
-    Log.debug ("Found WSDL file at " + wsdlUrl);
+    log.debug ("Found WSDL file at " + wsdlUrl);
     return wsdlUrl;
   }
 
   private void setDefaultSSLSocketFactory () {
     try {
-
       final TrustManager [] trustManagers = new TrustManager [] { new AccessPointX509TrustManager (null, null) };
       final SSLContext sslContext = SSLContext.getInstance ("SSL");
       sslContext.init (null, trustManagers, new SecureRandom ());
       HttpsURLConnection.setDefaultSSLSocketFactory (sslContext.getSocketFactory ());
-
     }
     catch (final Exception e) {
       throw new RuntimeException ("Error setting socket factory", e);
@@ -189,7 +188,7 @@ public class SoapDispatcher {
   private void setDefaultHostnameVerifier () {
     final HostnameVerifier hostnameVerifier = new HostnameVerifier () {
       public boolean verify (final String hostname, final SSLSession session) {
-        Log.debug ("Void hostname verification OK");
+        log.debug ("Void hostname verification OK");
         return true;
       }
     };
