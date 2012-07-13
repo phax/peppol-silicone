@@ -43,6 +43,11 @@ import javax.annotation.Nonnull;
 
 import com.phloc.commons.state.ISuccessIndicator;
 
+/**
+ * Abstract uploaded resource descriptor.
+ * 
+ * @author philip
+ */
 public interface IUploadedResource extends ISuccessIndicator {
   /**
    * @return The original filename provided on upload.

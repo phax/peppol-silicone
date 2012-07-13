@@ -49,6 +49,11 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.callback.INonThrowingRunnableWithParameter;
 import com.phloc.commons.state.EChange;
 
+/**
+ * Base interface for a tree of {@link IUserFolder} objects.
+ * 
+ * @author philip
+ */
 public interface IUserFolderTree {
   /**
    * Create a new root folder
@@ -95,13 +100,14 @@ public interface IUserFolderTree {
   EChange renameFolder (@Nullable String sFolderID, @Nonnull @Nonempty String sNewFolderName);
 
   /**
-   * Iterate all available folders
+   * Iterate all available folders and perform an arbitrary action.
    * 
    * @param aCallback
-   *        The callback to be invoked for every folder.
+   *        The callback to be invoked for every folder. May not be
+   *        <code>null</code>.
    * @param aFolderComparator
    *        An optional comparator to specify the way how folders are sorted on
-   *        each level
+   *        each level. May be <code>null</code>.
    */
   void iterateFolders (@Nonnull INonThrowingRunnableWithParameter <IUserFolder> aCallback,
                        @Nullable Comparator <? super UserFolder> aFolderComparator);
@@ -136,8 +142,10 @@ public interface IUserFolderTree {
    * Get all assigned documents of the specified folder.
    * 
    * @param sFolderID
-   *        The ID of the folder to get the documents from.
-   * @return <code>null</code> if no such folder exists.
+   *        The ID of the folder to get the documents from. May be
+   *        <code>null</code>.
+   * @return <code>null</code> if no such folder exists, an empty container if
+   *         the folder was found, but is empty.
    */
   @Nullable
   Set <String> getAllAssignedDocumentIDs (@Nullable String sFolderID);

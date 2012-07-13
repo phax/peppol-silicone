@@ -45,8 +45,8 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
 import at.peppol.webgui.document.IUserDocument;
-import at.peppol.webgui.io.AbstractDAO;
 
+import com.phloc.appbasics.app.AbstractDAO;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.callback.INonThrowingRunnableWithParameter;
 import com.phloc.commons.microdom.IMicroDocument;
