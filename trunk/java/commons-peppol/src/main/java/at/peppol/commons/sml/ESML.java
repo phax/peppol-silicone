@@ -57,9 +57,13 @@ import com.phloc.commons.annotations.Nonempty;
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public enum ESML implements ISMLInfo {
+  /** https://sml.peppolcentral.org */
   PRODUCTION (CSMLDefault.PRODUCTION_DNS_ZONE, CSMLDefault.PRODUCTION_MANAGEMENT_HOSTNAME, CSMLDefault.PRODUCTION_MANAGEMENT_SERVICE),
+  /** https://smk.peppolcentral.org */
   TEST (CSMLDefault.TEST_DNS_ZONE, CSMLDefault.TEST_MANAGEMENT_HOSTNAME, CSMLDefault.TEST_MANAGEMENT_SERVICE),
+  /** http://plixvde2 */
   DEVELOPMENT ("smj." + CSMLDefault.DNS_ZONE, "http://plixvde2", "http://plixvde2/ServiceMetadataLocatorManagement"),
+  /** http://localhost:8080 */
   DEVELOPMENT_LOCAL ("smj." + CSMLDefault.DNS_ZONE, "http://localhost:8080", "http://localhost:8080");
 
   private final String m_sDNSZone;
