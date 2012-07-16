@@ -37,9 +37,18 @@
  */
 package at.peppol.sml.server.jpa;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.annotation.Nonnull;
 
+import org.eclipse.persistence.config.PersistenceUnitProperties;
+
 import at.peppol.commons.jpa.AbstractJPAWrapper;
+import at.peppol.commons.utils.ConfigFile;
+
+import com.phloc.commons.GlobalDebug;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 
 /**
  * Specific SML JPA entity manager
@@ -47,10 +56,51 @@ import at.peppol.commons.jpa.AbstractJPAWrapper;
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class SMLJPAWrapper extends AbstractJPAWrapper {
+  private static final String CONFIG_JDBC_DRIVER = "jdbc.driver";
+  private static final String CONFIG_JDBC_URL = "jdbc.url";
+  private static final String CONFIG_JDBC_USER = "jdbc.user";
+  private static final String CONFIG_JDBC_PASSWORD = "jdbc.password";
+  private static final String CONFIG_TARGET_DATABASE = "target-database";
+  private static final String CONFIG_JDBC_READ_CONNECTIONS_MAX = "jdbc.read-connections.max";
+
   private static final SMLJPAWrapper s_aInstance = new SMLJPAWrapper ();
 
+  @Nonnull
+  @ReturnsMutableCopy
+  private static Map <String, Object> _createSettingsMap () {
+    // Standard configuration file
+    final ConfigFile aCF = ConfigFile.getInstance ();
+
+    final Map <String, Object> ret = new HashMap <String, Object> ();
+    // Read all properties from the standard configuration file
+    ret.put (PersistenceUnitProperties.JDBC_DRIVER, aCF.getString (CONFIG_JDBC_DRIVER));
+    ret.put (PersistenceUnitProperties.JDBC_URL, aCF.getString (CONFIG_JDBC_URL));
+    ret.put (PersistenceUnitProperties.JDBC_USER, aCF.getString (CONFIG_JDBC_USER));
+    ret.put (PersistenceUnitProperties.JDBC_PASSWORD, aCF.getString (CONFIG_JDBC_PASSWORD));
+    ret.put (PersistenceUnitProperties.TARGET_DATABASE, aCF.getString (CONFIG_TARGET_DATABASE));
+    // Connection pooling
+    ret.put (PersistenceUnitProperties.CONNECTION_POOL_MAX, aCF.getString (CONFIG_JDBC_READ_CONNECTIONS_MAX));
+
+    // EclipseLink should create the database schema automatically
+    // Values: Values: none/create-tables/drop-and-create-tables
+    ret.put (PersistenceUnitProperties.DDL_GENERATION, PersistenceUnitProperties.DROP_AND_CREATE);
+    // Write SQL file only in debug mode, so that the production version can be
+    // read-only!
+    ret.put (PersistenceUnitProperties.DDL_GENERATION_MODE,
+             GlobalDebug.isDebugMode () ? PersistenceUnitProperties.DDL_SQL_SCRIPT_GENERATION
+                                       : PersistenceUnitProperties.NONE);
+    ret.put (PersistenceUnitProperties.CREATE_JDBC_DDL_FILE, "db-create-sml.sql");
+    ret.put (PersistenceUnitProperties.DROP_JDBC_DDL_FILE, "db-drop-sml.sql");
+
+    // Use an isolated cache
+    // (http://code.google.com/p/peppol-silicone/issues/detail?id=6)
+    ret.put (PersistenceUnitProperties.CACHE_SHARED_DEFAULT, "false");
+
+    return ret;
+  }
+
   private SMLJPAWrapper () {
-    super ("peppol-sml");
+    super ("peppol-sml", _createSettingsMap ());
   }
 
   @Nonnull

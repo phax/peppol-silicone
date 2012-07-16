@@ -51,6 +51,6 @@
     <class>at.peppol.smp.server.data.dbms.model.DBServiceMetadata</class>
     <class>at.peppol.smp.server.data.dbms.model.DBUser</class>
     <class>at.peppol.smp.server.data.dbms.model.DBServiceMetadataRedirection</class>
+    <!-- Note: all properties are passed in the code -->
   </persistence-unit>
-  <!-- Note: all properties are passed in the code -->
 </persistence>
