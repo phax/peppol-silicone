@@ -49,22 +49,6 @@
     <class>at.peppol.sml.server.datamodel.DBParticipantIdentifier</class>
     <class>at.peppol.sml.server.datamodel.DBServiceMetadataPublisher</class>
     <class>at.peppol.sml.server.datamodel.DBUser</class>
-    <properties>
-      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
-      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost/sml"/>
-      <property name="javax.persistence.jdbc.user" value="sml"/>
-      <property name="javax.persistence.jdbc.password" value="sml"/>
-      <property name="eclipselink.target-database" value="MySQL"/>
-      
-      <!-- Connection pooling -->
-      <property name="eclipselink.jdbc.read-connections.max" value="10"/>
-      
-      <!-- EclipseLink should create the database schema automatically -->
-      <!-- Values: Values: none/create-tables/drop-and-create-tables -->
-      <property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>
-      <property name="eclipselink.ddl-generation.output-mode" value="sql-script"/>
-      <property name="eclipselink.create-ddl-jdbc-file-name" value="db-create-sml.sql"/>
-      <property name="eclipselink.drop-ddl-jdbc-file-name" value="db-drop-sml.sql"/>
-    </properties>
+    <!-- Note: all properties are passed in the code -->
   </persistence-unit>
 </persistence>
