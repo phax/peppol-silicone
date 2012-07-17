@@ -23,9 +23,9 @@ public final class CharEscapers {
   private CharEscapers () {}
 
   /**
-   * Returns a {@link AbstractCharEscaper} instance that escapes special characters in a
-   * string so it can safely be included in an XML document in either element
-   * content or attribute values.
+   * Returns a {@link AbstractCharEscaper} instance that escapes special
+   * characters in a string so it can safely be included in an XML document in
+   * either element content or attribute values.
    * <p>
    * <b>Note</b>
    * </p>
@@ -43,12 +43,13 @@ public final class CharEscapers {
    * them in XML.
    */
   private static final AbstractCharEscaper XML_ESCAPER = newBasicXmlEscapeBuilder ().addEscape ('"', "&quot;")
-                                                                            .addEscape ('\'', "&apos;")
-                                                                            .toEscaper ();
+                                                                                    .addEscape ('\'', "&apos;")
+                                                                                    .toEscaper ();
 
   /**
-   * Returns a {@link AbstractCharEscaper} instance that escapes special characters in a
-   * string so it can safely be included in an XML document in element content.
+   * Returns a {@link AbstractCharEscaper} instance that escapes special
+   * characters in a string so it can safely be included in an XML document in
+   * element content.
    * <p>
    * <b>Note</b>
    * </p>
@@ -180,9 +181,9 @@ public final class CharEscapers {
   }
 
   /**
-   * Returns a {@link IEscaper} instance that escapes Java characters so they can
-   * be safely included in URIs. For details on escaping URIs, see section 2.4
-   * of <a href="http://www.ietf.org/rfc/rfc2396.txt">RFC 2396</a>.
+   * Returns a {@link IEscaper} instance that escapes Java characters so they
+   * can be safely included in URIs. For details on escaping URIs, see section
+   * 2.4 of <a href="http://www.ietf.org/rfc/rfc2396.txt">RFC 2396</a>.
    * <p>
    * When encoding a String, the following rules apply:
    * <ul>
@@ -223,7 +224,7 @@ public final class CharEscapers {
   private static final IEscaper URI_PATH_ESCAPER = new PercentEscaper (PercentEscaper.SAFEPATHCHARS_URLENCODER, false);
 
   private static final IEscaper URI_QUERY_STRING_ESCAPER = new PercentEscaper (PercentEscaper.SAFEQUERYSTRINGCHARS_URLENCODER,
-                                                                              false);
+                                                                               false);
 
   private static CharEscaperBuilder newBasicXmlEscapeBuilder () {
     return new CharEscaperBuilder ().addEscape ('&', "&amp;")

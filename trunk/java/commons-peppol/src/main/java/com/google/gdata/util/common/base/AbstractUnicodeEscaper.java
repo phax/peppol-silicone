@@ -27,8 +27,8 @@ package com.google.gdata.util.common.base;
  * parsed, the parser API will return this text as the original literal string
  * {@code "Foo<Bar>"}.
  * <p>
- * <b>Note:</b> This class is similar to {@link AbstractCharEscaper} but with one very
- * important difference. A CharEscaper can only process Java <a
+ * <b>Note:</b> This class is similar to {@link AbstractCharEscaper} but with
+ * one very important difference. A CharEscaper can only process Java <a
  * href="http://en.wikipedia.org/wiki/UTF-16">UTF16</a> characters in isolation
  * and may not cope when it encounters surrogate pairs. This class facilitates
  * the correct escaping of all Unicode characters.
