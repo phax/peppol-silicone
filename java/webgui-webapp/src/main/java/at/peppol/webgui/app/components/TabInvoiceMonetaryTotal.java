@@ -63,98 +63,111 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 
 public class TabInvoiceMonetaryTotal extends Form {
-  private InvoiceTabForm parent;
-  
-  private MonetaryTotalType monetaryTotal;  
-  
-  
-  public TabInvoiceMonetaryTotal(InvoiceTabForm parent) {
+  private final InvoiceTabForm parent;
+
+  private MonetaryTotalType monetaryTotal;
+
+  public TabInvoiceMonetaryTotal (final InvoiceTabForm parent) {
     this.parent = parent;
-    initElements();
+    initElements ();
   }
 
-  private void initElements() {
-    //monetaryTotal = parent.getInvoice().getLegalMonetaryTotal ();
-    monetaryTotal = createMonetaryTotal();
-    parent.getInvoice().setLegalMonetaryTotal (monetaryTotal);
-    
-    final GridLayout grid = new GridLayout(4, 4);
-    final VerticalLayout outerLayout = new VerticalLayout();
-    
-    final Panel outerPanel = new Panel("Monetary Total");
-    outerPanel.addComponent(grid);
-    outerPanel.setScrollable(true);
-    outerLayout.addComponent(outerPanel);
-    
-    final Panel invoiceDetailsPanel = new Panel("Monetary Total Details");
-    invoiceDetailsPanel.setStyleName("light");
-    invoiceDetailsPanel.setSizeFull();
-    invoiceDetailsPanel.addComponent(createInvoiceMonetaryTotalTopForm());
-    grid.addComponent(invoiceDetailsPanel, 0, 0, 3, 0);
-    grid.setSizeUndefined();
-     
-    setLayout(outerLayout);
-    outerPanel.requestRepaintAll();
+  private void initElements () {
+    // monetaryTotal = parent.getInvoice().getLegalMonetaryTotal ();
+    monetaryTotal = createMonetaryTotal ();
+    parent.getInvoice ().setLegalMonetaryTotal (monetaryTotal);
+
+    final GridLayout grid = new GridLayout (4, 4);
+    final VerticalLayout outerLayout = new VerticalLayout ();
+
+    final Panel outerPanel = new Panel ("Monetary Total");
+    outerPanel.addComponent (grid);
+    outerPanel.setScrollable (true);
+    outerLayout.addComponent (outerPanel);
+
+    final Panel invoiceDetailsPanel = new Panel ("Monetary Total Details");
+    invoiceDetailsPanel.setStyleName ("light");
+    invoiceDetailsPanel.setSizeFull ();
+    invoiceDetailsPanel.addComponent (createInvoiceMonetaryTotalTopForm ());
+    grid.addComponent (invoiceDetailsPanel, 0, 0, 3, 0);
+    grid.setSizeUndefined ();
+
+    setLayout (outerLayout);
+    outerPanel.requestRepaintAll ();
   }
-  
-  private MonetaryTotalType createMonetaryTotal() {
-    final MonetaryTotalType mt = new MonetaryTotalType();
+
+  private MonetaryTotalType createMonetaryTotal () {
+    final MonetaryTotalType mt = new MonetaryTotalType ();
     mt.setLineExtensionAmount (new LineExtensionAmountType ());
-    mt.getLineExtensionAmount ().setValue (new BigDecimal (0));
-    
+    mt.getLineExtensionAmount ().setValue (BigDecimal.ZERO);
+
     mt.setTaxExclusiveAmount (new TaxExclusiveAmountType ());
-    mt.getTaxExclusiveAmount ().setValue (new BigDecimal (0));
-    
+    mt.getTaxExclusiveAmount ().setValue (BigDecimal.ZERO);
+
     mt.setTaxInclusiveAmount (new TaxInclusiveAmountType ());
-    mt.getTaxInclusiveAmount ().setValue (new BigDecimal (0));
-    
+    mt.getTaxInclusiveAmount ().setValue (BigDecimal.ZERO);
+
     mt.setAllowanceTotalAmount (new AllowanceTotalAmountType ());
-    mt.getAllowanceTotalAmount ().setValue (new BigDecimal (0));
-    
+    mt.getAllowanceTotalAmount ().setValue (BigDecimal.ZERO);
+
     mt.setChargeTotalAmount (new ChargeTotalAmountType ());
-    mt.getChargeTotalAmount ().setValue (new BigDecimal (0));
-    
+    mt.getChargeTotalAmount ().setValue (BigDecimal.ZERO);
+
     mt.setPrepaidAmount (new PrepaidAmountType ());
-    mt.getPrepaidAmount ().setValue (new BigDecimal (0));
+    mt.getPrepaidAmount ().setValue (BigDecimal.ZERO);
 
     mt.setPayableRoundingAmount (new PayableRoundingAmountType ());
-    mt.getPayableRoundingAmount ().setValue (new BigDecimal (0));
-    
+    mt.getPayableRoundingAmount ().setValue (BigDecimal.ZERO);
+
     mt.setPayableAmount (new PayableAmountType ());
-    mt.getPayableAmount ().setValue (new BigDecimal (0));
-    
+    mt.getPayableAmount ().setValue (BigDecimal.ZERO);
+
     return mt;
-  }  
- 
-  public Form createInvoiceMonetaryTotalTopForm() {
-    final Form invoiceMonetaryTotalTopForm = new Form(new FormLayout(), new InvoiceMonetaryTotalFieldFactory());
-    invoiceMonetaryTotalTopForm.setImmediate(true);
-      
-    //TODO: Update fields automatically. Make them read only !
-    invoiceMonetaryTotalTopForm.addItemProperty ("Line Extension Amount", new NestedMethodProperty(monetaryTotal.getLineExtensionAmount (), "value") );
-    invoiceMonetaryTotalTopForm.addItemProperty ("Tax Exclusive Amount", new NestedMethodProperty(monetaryTotal.getTaxExclusiveAmount (), "value") );
-    invoiceMonetaryTotalTopForm.addItemProperty ("Tax Inclusive Amount", new NestedMethodProperty(monetaryTotal.getTaxInclusiveAmount (), "value") );
-    invoiceMonetaryTotalTopForm.addItemProperty ("Allowance Total Amount", new NestedMethodProperty(monetaryTotal.getAllowanceTotalAmount (), "value") );
-    invoiceMonetaryTotalTopForm.addItemProperty ("Charge Total Amount", new NestedMethodProperty(monetaryTotal.getChargeTotalAmount (), "value") );
-    invoiceMonetaryTotalTopForm.addItemProperty ("Prepaid Amount", new NestedMethodProperty(monetaryTotal.getPrepaidAmount (), "value") );
-    invoiceMonetaryTotalTopForm.addItemProperty ("Payable Rounding Amount", new NestedMethodProperty(monetaryTotal.getPayableRoundingAmount (), "value") );
-    invoiceMonetaryTotalTopForm.addItemProperty ("Payable Amount", new NestedMethodProperty(monetaryTotal.getPayableAmount (), "value") );
-    
+  }
+
+  public Form createInvoiceMonetaryTotalTopForm () {
+    final Form invoiceMonetaryTotalTopForm = new Form (new FormLayout (), new InvoiceMonetaryTotalFieldFactory ());
+    invoiceMonetaryTotalTopForm.setImmediate (true);
+
+    // TODO: Update fields automatically. Make them read only !
+    invoiceMonetaryTotalTopForm.addItemProperty ("Line Extension Amount",
+                                                 new NestedMethodProperty (monetaryTotal.getLineExtensionAmount (),
+                                                                           "value"));
+    invoiceMonetaryTotalTopForm.addItemProperty ("Tax Exclusive Amount",
+                                                 new NestedMethodProperty (monetaryTotal.getTaxExclusiveAmount (),
+                                                                           "value"));
+    invoiceMonetaryTotalTopForm.addItemProperty ("Tax Inclusive Amount",
+                                                 new NestedMethodProperty (monetaryTotal.getTaxInclusiveAmount (),
+                                                                           "value"));
+    invoiceMonetaryTotalTopForm.addItemProperty ("Allowance Total Amount",
+                                                 new NestedMethodProperty (monetaryTotal.getAllowanceTotalAmount (),
+                                                                           "value"));
+    invoiceMonetaryTotalTopForm.addItemProperty ("Charge Total Amount",
+                                                 new NestedMethodProperty (monetaryTotal.getChargeTotalAmount (),
+                                                                           "value"));
+    invoiceMonetaryTotalTopForm.addItemProperty ("Prepaid Amount",
+                                                 new NestedMethodProperty (monetaryTotal.getPrepaidAmount (), "value"));
+    invoiceMonetaryTotalTopForm.addItemProperty ("Payable Rounding Amount",
+                                                 new NestedMethodProperty (monetaryTotal.getPayableRoundingAmount (),
+                                                                           "value"));
+    invoiceMonetaryTotalTopForm.addItemProperty ("Payable Amount",
+                                                 new NestedMethodProperty (monetaryTotal.getPayableAmount (), "value"));
+
     return invoiceMonetaryTotalTopForm;
-  }  
-  
+  }
+
   @SuppressWarnings ("serial")
   class InvoiceMonetaryTotalFieldFactory implements FormFieldFactory {
 
-    public Field createField(final Item item, final Object propertyId, final Component uiContext) {
-        // Identify the fields by their Property ID.
-        final String pid = (String) propertyId;
+    public Field createField (final Item item, final Object propertyId, final Component uiContext) {
+      // Identify the fields by their Property ID.
+      final String pid = (String) propertyId;
 
-        final Field field = DefaultFieldFactory.get().createField(item, propertyId, uiContext);
-        if (field instanceof AbstractTextField) {
-            ((AbstractTextField) field).setNullRepresentation("");
-        }
-        return field;
+      final Field field = DefaultFieldFactory.get ().createField (item, propertyId, uiContext);
+      if (field instanceof AbstractTextField) {
+        ((AbstractTextField) field).setNullRepresentation ("");
+      }
+      return field;
     }
-  }    
+  }
 }
