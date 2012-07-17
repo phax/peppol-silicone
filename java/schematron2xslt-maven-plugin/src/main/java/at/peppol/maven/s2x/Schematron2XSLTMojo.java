@@ -40,6 +40,8 @@ import com.phloc.commons.xml.serialize.XMLWriter;
 import com.phloc.commons.xml.serialize.XMLWriterSettings;
 import com.phloc.commons.xml.transform.AbstractTransformErrorListener;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * Converts one or more Schematron schema files into XSLT scripts.
  * 
@@ -55,7 +57,7 @@ public final class Schematron2XSLTMojo extends AbstractMojo {
    * @required
    * @readonly
    */
-  @edu.umd.cs.findbugs.annotations.SuppressWarnings ({ "NP_UNWRITTEN_FIELD", "UWF_UNWRITTEN_FIELD" })
+  @SuppressFBWarnings ({ "NP_UNWRITTEN_FIELD", "UWF_UNWRITTEN_FIELD" })
   private MavenProject project;
 
   /**
