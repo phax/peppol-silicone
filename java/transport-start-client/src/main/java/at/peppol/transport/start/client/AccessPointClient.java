@@ -61,7 +61,7 @@ import org.w3._2009._02.ws_tra.FaultMessage;
 import org.w3._2009._02.ws_tra.Resource;
 import org.w3c.dom.Document;
 
-import at.peppol.commons.utils.HostnameVerifierAlwaysTrue;
+import at.peppol.commons.security.HostnameVerifierAlwaysTrue;
 import at.peppol.transport.IMessageMetadata;
 import at.peppol.transport.MessageMetadataHelper;
 import at.peppol.transport.cert.AccessPointX509TrustManager;

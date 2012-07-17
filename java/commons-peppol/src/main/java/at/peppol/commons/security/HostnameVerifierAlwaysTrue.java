@@ -35,7 +35,7 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.commons.utils;
+package at.peppol.commons.security;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSession;
@@ -53,9 +53,19 @@ import com.phloc.commons.GlobalDebug;
 public final class HostnameVerifierAlwaysTrue implements HostnameVerifier {
   private static final Logger s_aLogger = LoggerFactory.getLogger (HostnameVerifierAlwaysTrue.class);
 
+  private final boolean m_bDebug;
+
+  public HostnameVerifierAlwaysTrue () {
+    this (GlobalDebug.isDebugMode ());
+  }
+
+  public HostnameVerifierAlwaysTrue (final boolean bDebug) {
+    m_bDebug = bDebug;
+  }
+
   public boolean verify (final String sURLHostname, final SSLSession aSession) {
-    if (GlobalDebug.isDebugMode ())
-      s_aLogger.debug ("Hostname '" + sURLHostname + "' is accepted by default!");
+    if (m_bDebug)
+      s_aLogger.debug ("Hostname '" + sURLHostname + "' is accepted by default in SSL session " + aSession + "!");
     return true;
   }
 }

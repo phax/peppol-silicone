@@ -55,7 +55,7 @@ package com.google.gdata.util.common.base;
  * <i>"URI producers and normalizers should use uppercase hexadecimal digits for
  * all percent-encodings."</i>
  */
-public class PercentEscaper extends UnicodeEscaper {
+public class PercentEscaper extends AbstractUnicodeEscaper {
   /**
    * A string of safe characters that mimics the behavior of
    * {@link java.net.URLEncoder}.

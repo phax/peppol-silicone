@@ -23,7 +23,7 @@ public final class CharEscapers {
   private CharEscapers () {}
 
   /**
-   * Returns a {@link CharEscaper} instance that escapes special characters in a
+   * Returns a {@link AbstractCharEscaper} instance that escapes special characters in a
    * string so it can safely be included in an XML document in either element
    * content or attribute values.
    * <p>
@@ -32,7 +32,7 @@ public final class CharEscapers {
    * : silently removes null-characters and control characters, as there is no
    * way to represent them in XML.
    */
-  public static CharEscaper xmlEscaper () {
+  public static AbstractCharEscaper xmlEscaper () {
     return XML_ESCAPER;
   }
 
@@ -42,12 +42,12 @@ public final class CharEscapers {
    * null-characters and control characters, as there is no way to represent
    * them in XML.
    */
-  private static final CharEscaper XML_ESCAPER = newBasicXmlEscapeBuilder ().addEscape ('"', "&quot;")
+  private static final AbstractCharEscaper XML_ESCAPER = newBasicXmlEscapeBuilder ().addEscape ('"', "&quot;")
                                                                             .addEscape ('\'', "&apos;")
                                                                             .toEscaper ();
 
   /**
-   * Returns a {@link CharEscaper} instance that escapes special characters in a
+   * Returns a {@link AbstractCharEscaper} instance that escapes special characters in a
    * string so it can safely be included in an XML document in element content.
    * <p>
    * <b>Note</b>
@@ -58,7 +58,7 @@ public final class CharEscapers {
    * non-whitespace control characters, as there is no way to represent them in
    * XML.
    */
-  public static CharEscaper xmlContentEscaper () {
+  public static AbstractCharEscaper xmlContentEscaper () {
     return XML_CONTENT_ESCAPER;
   }
 
@@ -70,10 +70,10 @@ public final class CharEscapers {
    * removes non-whitespace control characters, as there is no way to represent
    * them in XML.
    */
-  private static final CharEscaper XML_CONTENT_ESCAPER = newBasicXmlEscapeBuilder ().toEscaper ();
+  private static final AbstractCharEscaper XML_CONTENT_ESCAPER = newBasicXmlEscapeBuilder ().toEscaper ();
 
   /**
-   * Returns an {@link Escaper} instance that escapes Java chars so they can be
+   * Returns an {@link IEscaper} instance that escapes Java chars so they can be
    * safely included in URIs. For details on escaping URIs, see section 2.4 of
    * <a href="http://www.ietf.org/rfc/rfc2396.txt">RFC 2396</a>.
    * <p>
@@ -104,12 +104,12 @@ public final class CharEscapers {
    * <p>
    * This method is equivalent to {@code uriEscaper(true)}.
    */
-  public static Escaper uriEscaper () {
+  public static IEscaper uriEscaper () {
     return uriEscaper (true);
   }
 
   /**
-   * Returns an {@link Escaper} instance that escapes Java chars so they can be
+   * Returns an {@link IEscaper} instance that escapes Java chars so they can be
    * safely included in URI path segments. For details on escaping URIs, see
    * section 2.4 of <a href="http://www.ietf.org/rfc/rfc3986.txt">RFC 3986</a>.
    * <p>
@@ -134,12 +134,12 @@ public final class CharEscapers {
    * <i>"URI producers and normalizers should use uppercase hexadecimal digits
    * for all percent-encodings."</i>
    */
-  public static Escaper uriPathEscaper () {
+  public static IEscaper uriPathEscaper () {
     return URI_PATH_ESCAPER;
   }
 
   /**
-   * Returns an {@link Escaper} instance that escapes Java chars so they can be
+   * Returns an {@link IEscaper} instance that escapes Java chars so they can be
    * safely included in URI query string segments. When the query string
    * consists of a sequence of name=value pairs separated by &amp;, the names
    * and values should be individually encoded. If you escape an entire query
@@ -175,12 +175,12 @@ public final class CharEscapers {
    * <i>"URI producers and normalizers should use uppercase hexadecimal digits
    * for all percent-encodings."</i>
    */
-  public static Escaper uriQueryStringEscaper () {
+  public static IEscaper uriQueryStringEscaper () {
     return URI_QUERY_STRING_ESCAPER;
   }
 
   /**
-   * Returns a {@link Escaper} instance that escapes Java characters so they can
+   * Returns a {@link IEscaper} instance that escapes Java characters so they can
    * be safely included in URIs. For details on escaping URIs, see section 2.4
    * of <a href="http://www.ietf.org/rfc/rfc2396.txt">RFC 2396</a>.
    * <p>
@@ -212,17 +212,17 @@ public final class CharEscapers {
    *        compatibility requires you to use plus signs.
    * @see #uriEscaper()
    */
-  public static Escaper uriEscaper (final boolean plusForSpace) {
+  public static IEscaper uriEscaper (final boolean plusForSpace) {
     return plusForSpace ? URI_ESCAPER : URI_ESCAPER_NO_PLUS;
   }
 
-  private static final Escaper URI_ESCAPER = new PercentEscaper (PercentEscaper.SAFECHARS_URLENCODER, true);
+  private static final IEscaper URI_ESCAPER = new PercentEscaper (PercentEscaper.SAFECHARS_URLENCODER, true);
 
-  private static final Escaper URI_ESCAPER_NO_PLUS = new PercentEscaper (PercentEscaper.SAFECHARS_URLENCODER, false);
+  private static final IEscaper URI_ESCAPER_NO_PLUS = new PercentEscaper (PercentEscaper.SAFECHARS_URLENCODER, false);
 
-  private static final Escaper URI_PATH_ESCAPER = new PercentEscaper (PercentEscaper.SAFEPATHCHARS_URLENCODER, false);
+  private static final IEscaper URI_PATH_ESCAPER = new PercentEscaper (PercentEscaper.SAFEPATHCHARS_URLENCODER, false);
 
-  private static final Escaper URI_QUERY_STRING_ESCAPER = new PercentEscaper (PercentEscaper.SAFEQUERYSTRINGCHARS_URLENCODER,
+  private static final IEscaper URI_QUERY_STRING_ESCAPER = new PercentEscaper (PercentEscaper.SAFEQUERYSTRINGCHARS_URLENCODER,
                                                                               false);
 
   private static CharEscaperBuilder newBasicXmlEscapeBuilder () {

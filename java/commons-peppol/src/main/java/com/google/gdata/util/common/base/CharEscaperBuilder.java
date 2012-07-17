@@ -25,13 +25,13 @@ import java.util.Map;
  * just a pseudo sparse array). The builder can also return a CharEscaper based
  * on the generated array.
  */
-public class CharEscaperBuilder {
+public final class CharEscaperBuilder {
 
   /**
    * Simple decorator that turns an array of replacement char[]s into a
    * CharEscaper, this results in a very fast escape method.
    */
-  private static class CharArrayDecorator extends CharEscaper {
+  private static final class CharArrayDecorator extends AbstractCharEscaper {
 
     private final char [][] m_aReplacements;
     private final int m_nReplaceLength;
@@ -118,7 +118,7 @@ public class CharEscaperBuilder {
    * 
    * @return an escaper that escapes based on the underlying array.
    */
-  public CharEscaper toEscaper () {
+  public AbstractCharEscaper toEscaper () {
     return new CharArrayDecorator (toArray ());
   }
 }
