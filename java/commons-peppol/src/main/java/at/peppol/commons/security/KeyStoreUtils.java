@@ -63,6 +63,7 @@ import com.phloc.commons.io.streams.StreamUtils;
  */
 @Immutable
 public final class KeyStoreUtils {
+  public static final String CLASSPATH_TRUSTSTORE = "truststore/global-truststore.jks";
   public static final String KEYSTORE_TYPE_JKS = "JKS";
 
   @PresentForCodeCoverage
