@@ -112,7 +112,7 @@ import com.sun.codemodel.writer.FileCodeWriter;
  */
 public final class MainCreateCodelistsFilesFromExcel {
   private static final Logger s_aLogger = LoggerFactory.getLogger (MainCreateCodelistsFilesFromExcel.class);
-  private static final Version CODELIST_VERSION = new Version (1, 1, 0);
+  private static final Version CODELIST_VERSION = new Version (1, 1, 1);
   private static final String EXCEL_FILE = "src/main/codelists/PEPPOL Code Lists 1.1.1.xls";
   private static final String SHEET_PARTICIPANT = "Participant";
   private static final String SHEET_DOCUMENT = "Document";
@@ -129,6 +129,24 @@ public final class MainCreateCodelistsFilesFromExcel {
     if (XMLWriter.writeToStream (aDoc, aFOS, XMLWriterSettings.SUGGESTED_XML_SETTINGS).isFailure ())
       throw new IllegalStateException ("Failed to write file " + sFilename);
     s_aLogger.info ("Wrote Genericode file " + sFilename);
+  }
+
+  private static void _writeValidationPartyIdFile (final Sheet aParticipantSheet) throws URISyntaxException {
+    // Read excel file
+    final ExcelReadOptions aReadOptions = new ExcelReadOptions ().setLinesToSkip (1).setLineIndexShortName (0);
+    aReadOptions.addColumn (0, "code", UseType.REQUIRED, "string", true);
+    aReadOptions.addColumn (2, "name", UseType.OPTIONAL, "string", false);
+
+    // Convert to GeneriCode
+    final CodeListDocument aCodeList = ExcelSheetToCodeList.convertToSimpleCodeList (aParticipantSheet,
+                                                                                     aReadOptions,
+                                                                                     "Scheme Agency",
+                                                                                     CODELIST_VERSION.getAsString (),
+                                                                                     new URI ("PEPPOL"),
+                                                                                     new URI ("PEPPOL-" +
+                                                                                              CODELIST_VERSION.getAsString ()),
+                                                                                     new URI ("PartyID.gc"));
+    _writeGenericodeFile (aCodeList, RESULT_DIRECTORY + "PartyID.gc");
   }
 
   private static void _emitIdentifierIssuingAgency (final Sheet aParticipantSheet) throws URISyntaxException,
@@ -151,6 +169,8 @@ public final class MainCreateCodelistsFilesFromExcel {
                                                                                      new URI ("urn:peppol.eu:names:identifier:issuingagencies-1.0"),
                                                                                      null);
     _writeGenericodeFile (aCodeList, RESULT_DIRECTORY + "PeppolIdentifierIssuingAgencies.gc");
+
+    _writeValidationPartyIdFile (aParticipantSheet);
 
     // Save data also as XML
     final IMicroDocument aDoc = new MicroDocument ();

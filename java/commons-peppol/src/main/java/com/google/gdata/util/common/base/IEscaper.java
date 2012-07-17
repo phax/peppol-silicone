@@ -46,10 +46,10 @@ public interface IEscaper {
    * href="http://en.wikipedia.org/wiki/UTF-16">UTF-16</a> correctly, including
    * surrogate character pairs. If the input is badly formed the escaper should
    * throw {@link IllegalArgumentException}.
-   * <li>{@link AbstractCharEscaper} handles Java characters independently and does not
-   * verify the input for well formed characters. A CharEscaper should not be
-   * used in situations where input is not guaranteed to be restricted to the
-   * Basic Multilingual Plane (BMP).
+   * <li>{@link AbstractCharEscaper} handles Java characters independently and
+   * does not verify the input for well formed characters. A CharEscaper should
+   * not be used in situations where input is not guaranteed to be restricted to
+   * the Basic Multilingual Plane (BMP).
    * </ul>
    * 
    * @param string
