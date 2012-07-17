@@ -45,6 +45,7 @@ import static org.junit.Assert.fail;
 import org.junit.Test;
 
 import at.peppol.commons.identifier.actorid.EPredefinedIdentifierIssuingAgency;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * Test class for class {@link IdentifierUtils}.
@@ -176,7 +177,7 @@ public final class IdentifierUtilsTest {
   }
 
   @Test
-  @edu.umd.cs.findbugs.annotations.SuppressWarnings ("NP_NONNULL_PARAM_VIOLATION")
+  @SuppressFBWarnings ("NP_NONNULL_PARAM_VIOLATION")
   public void getIdentifierURIEncoded () {
     final SimpleParticipantIdentifier aPI = SimpleParticipantIdentifier.createWithDefaultScheme ("0088:123abc");
     assertEquals ("iso6523-actorid-upis::0088:123abc", IdentifierUtils.getIdentifierURIEncoded (aPI));

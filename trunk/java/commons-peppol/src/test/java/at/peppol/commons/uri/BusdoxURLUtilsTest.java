@@ -51,6 +51,7 @@ import org.junit.Test;
 import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 import at.peppol.commons.sml.ESML;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * Test class for class {@link BusdoxURLUtils}.
@@ -69,7 +70,7 @@ public final class BusdoxURLUtilsTest {
   }
 
   @Test
-  @edu.umd.cs.findbugs.annotations.SuppressWarnings ("NP_NONNULL_PARAM_VIOLATION")
+  @SuppressFBWarnings ("NP_NONNULL_PARAM_VIOLATION")
   public void testGetDNSNameOfParticipant () {
     assertEquals ("B-f5e78500450d37de5aabe6648ac3bb70.iso6523-actorid-upis.sml.peppolcentral.org.",
                   BusdoxURLUtils.getDNSNameOfParticipant (SimpleParticipantIdentifier.createWithDefaultScheme ("0088:123abc"),

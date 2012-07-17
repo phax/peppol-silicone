@@ -47,6 +47,8 @@ import at.peppol.busdox.identifier.IDocumentTypeIdentifier;
 import com.phloc.commons.mock.PhlocTestUtils;
 import com.phloc.commons.string.StringHelper;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * Test class for class {@link SimpleDocumentTypeIdentifier}.
  * 
@@ -91,7 +93,7 @@ public final class SimpleDocumentTypeIdentifierTest {
   }
 
   @Test
-  @edu.umd.cs.findbugs.annotations.SuppressWarnings ("NP_NONNULL_PARAM_VIOLATION")
+  @SuppressFBWarnings ("NP_NONNULL_PARAM_VIOLATION")
   public void testConstraints () {
     try {
       // null key not allowed
