@@ -11,6 +11,19 @@
   <packaging>pom</packaging>
   <name>oxalis-distribution</name>
   <description>Creates a complete distribution which may be uploaded and made available.</description>
+
+  <repositories>
+    <repository>
+      <id>phloc</id>
+      <url>http://repo.phloc.com/maven2/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
   
   <build>
     <plugins>

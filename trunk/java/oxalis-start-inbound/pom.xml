@@ -12,6 +12,19 @@
   <packaging>war</packaging>
   <url>https://github.com/SendRegning/sr-peppol/oxalis-start-inbound/</url>
 
+  <repositories>
+    <repository>
+      <id>phloc</id>
+      <url>http://repo.phloc.com/maven2/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+
   <dependencies>
     <dependency>
       <groupId>at.peppol</groupId>
