@@ -121,6 +121,9 @@
             <exclude>src/main/webapp/css/**</exclude>
             <exclude>src/main/webapp/img/**</exclude>
             <exclude>src/main/webapp/js/**</exclude>
+            <exclude>src/main/webapp/VAADIN/**</exclude>
+            <exclude>nb-configuration.xml</exclude>
+            <exclude>nbactions.xml</exclude>
           </excludes>
         </configuration>
       </plugin>
