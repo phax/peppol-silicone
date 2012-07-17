@@ -187,8 +187,13 @@ public final class ConfigFile {
 
   @Nullable
   public final char [] getCharArray (@Nonnull final String sKey) {
-    final String ret = getString (sKey);
-    return ret == null ? null : ret.toCharArray ();
+    return getCharArray (sKey, null);
+  }
+
+  @Nullable
+  public final char [] getCharArray (@Nonnull final String sKey, final char [] aDefault) {
+    final String ret = getString (sKey, null);
+    return ret == null ? aDefault : ret.toCharArray ();
   }
 
   public final boolean getBoolean (@Nonnull final String sKey, final boolean bDefault) {
