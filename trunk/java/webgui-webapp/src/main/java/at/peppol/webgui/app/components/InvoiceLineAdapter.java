@@ -76,369 +76,315 @@ import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ValueTyp
 /**
  * An adapter class that ignores the list types found in InvoiceLineType and
  * wraps the lists with one element, that represents the first element of these
- * lists using simple Getters and Setters.
- * This is useful for making table representations.
- *
+ * lists using simple Getters and Setters. This is useful for making table
+ * representations.
+ * 
  * @author Jerouris
  */
 @SuppressWarnings ("serial")
 public class InvoiceLineAdapter extends InvoiceLineType {
-  //private final TaxSubtotalType VATTax;
+  // private final TaxSubtotalType VATTax;
 
-  public InvoiceLineAdapter() {
-    setID(new IDType());
-    setNote(new NoteType ());
+  public InvoiceLineAdapter () {
+    setID (new IDType ());
+    setNote (new NoteType ());
     setInvoicedQuantity (new InvoicedQuantityType ());
     setLineExtensionAmount (new LineExtensionAmountType ());
     setAccountingCost (new AccountingCostType ());
-    
+
     // --- +Invoice Line/Order Line Reference begins (0..N)
-    OrderLineReferenceType lr = new OrderLineReferenceType ();
+    final OrderLineReferenceType lr = new OrderLineReferenceType ();
     lr.setLineID (new LineIDType ());
-    getOrderLineReference().add(lr);
+    getOrderLineReference ().add (lr);
     // --- +Invoice Line/Order Line Reference ends
 
-    // --- +Invoice Line/Allowance Charge begins (0..N)   
-    //getAllowanceCharge ().add (new AllowanceChargeType ());
-    // --- +Invoice Line/Allowance Charge ends    
-    
-    // --- +Invoice Line/Tax Total begins       
-    TaxTotalType tt = new TaxTotalType ();
+    // --- +Invoice Line/Allowance Charge begins (0..N)
+    // getAllowanceCharge ().add (new AllowanceChargeType ());
+    // --- +Invoice Line/Allowance Charge ends
+
+    // --- +Invoice Line/Tax Total begins
+    final TaxTotalType tt = new TaxTotalType ();
     tt.setTaxAmount (new TaxAmountType ());
-    getTaxTotal().add(tt);
-    // --- +Invoice Line/Tax Total ends     
-    
+    getTaxTotal ().add (tt);
+    // --- +Invoice Line/Tax Total ends
+
     // --- +Invoice Line/Item begins
-    ItemType item = new ItemType ();
+    final ItemType item = new ItemType ();
     item.getDescription ().add (new DescriptionType ());
     item.setName (new NameType ());
     item.setSellersItemIdentification (new ItemIdentificationType ());
-    item.getSellersItemIdentification().setID(new IDType());
+    item.getSellersItemIdentification ().setID (new IDType ());
     item.setStandardItemIdentification (new ItemIdentificationType ());
     item.getStandardItemIdentification ().setID (new IDType ());
-    TaxCategoryType ct = new TaxCategoryType ();
+    final TaxCategoryType ct = new TaxCategoryType ();
     ct.setID (new IDType ());
     ct.setPercent (new PercentType ());
-    TaxSchemeType tst = new TaxSchemeType ();
+    final TaxSchemeType tst = new TaxSchemeType ();
     tst.setID (new IDType ());
     ct.setTaxScheme (tst);
-    item.getClassifiedTaxCategory ().add(ct);
-    
+    item.getClassifiedTaxCategory ().add (ct);
+
     // --- +Item/Commodity Classification begins (0..N)
     // --- +Item/Commodity Classification ends
-    
+
     // --- +Item/Additional Item Property begins (0..N)
-    ItemPropertyType pt = new ItemPropertyType ();
+    final ItemPropertyType pt = new ItemPropertyType ();
     pt.setName (new NameType ());
     pt.setValue (new ValueType ());
     item.getAdditionalItemProperty ().add (pt);
     // --- +Item/Additional Item Property ends
-    
-    setItem(item);
+
+    setItem (item);
     // --- +Invoice Line/Item ends
-    
-    
+
     // --- +Invoice Line/Price begins
-    setPrice(new PriceType ());
-    getPrice().setPriceAmount (new PriceAmountType ());
-    getPrice().setBaseQuantity (new BaseQuantityType ());
-    
-    AllowanceChargeType ac = new AllowanceChargeType ();
+    setPrice (new PriceType ());
+    getPrice ().setPriceAmount (new PriceAmountType ());
+    getPrice ().setBaseQuantity (new BaseQuantityType ());
+
+    final AllowanceChargeType ac = new AllowanceChargeType ();
     ac.setID (new IDType ());
     ac.setChargeIndicator (new ChargeIndicatorType ());
     ac.setAllowanceChargeReason (new AllowanceChargeReasonType ());
     ac.setMultiplierFactorNumeric (new MultiplierFactorNumericType ());
     ac.setAmount (new AmountType ());
     ac.setBaseAmount (new BaseAmountType ());
-    getPrice().getAllowanceCharge ().add (ac);
+    getPrice ().getAllowanceCharge ().add (ac);
     // --- +Invoice Line/Price ends
-  
-  
-    /* jerry's old
-    // Initialization of required fields 
-    setItem(new ItemType());
-    setID(new IDType());
-    NoteType nt = new NoteType();
-    nt.setValue ("");
-    setNote (nt);
-    getItem().setName(new NameType());
-    getItem().setSellersItemIdentification(new ItemIdentificationType());
-    getItem().getSellersItemIdentification().setID(new IDType());
-    setInvoicedQuantity(new InvoicedQuantityType());
-    getInvoicedQuantity().setValue(BigDecimal.TEN);
-    // Price defaults
-    setPrice(new PriceType());
-    getPrice().setPriceAmount(new PriceAmountType());
-    
-    // Tax totals and subtotals
-    getTaxTotal().add(new TaxTotalType());
-    setItemDescription("");
 
-    //0. is the VAT Tax
-    VATTax = new TaxSubtotalType();
-    getTaxTotal().get(0).getTaxSubtotal().add(VATTax);
-    VATTax.setTaxableAmount(new TaxableAmountType());
-    VATTax.setTaxAmount(new TaxAmountType());
-    VATTax.setTaxCategory(new TaxCategoryType());
-    VATTax.getTaxCategory().setTaxScheme(new TaxSchemeType());
-    VATTax.getTaxCategory().getTaxScheme().setID(new IDType());
-    VATTax.getTaxCategory().getTaxScheme().getID().setSchemeID("UN/ECE 5153");
-    VATTax.getTaxCategory().getTaxScheme().getID().setSchemeAgencyID("6");
-    VATTax.getTaxCategory().getTaxScheme().getID().setValue("VAT");
-    VATTax.getTaxCategory().setPercent(new PercentType());
-    */
+    /*
+     * jerry's old // Initialization of required fields setItem(new ItemType());
+     * setID(new IDType()); NoteType nt = new NoteType(); nt.setValue ("");
+     * setNote (nt); getItem().setName(new NameType());
+     * getItem().setSellersItemIdentification(new ItemIdentificationType());
+     * getItem().getSellersItemIdentification().setID(new IDType());
+     * setInvoicedQuantity(new InvoicedQuantityType());
+     * getInvoicedQuantity().setValue(BigDecimal.TEN); // Price defaults
+     * setPrice(new PriceType()); getPrice().setPriceAmount(new
+     * PriceAmountType()); // Tax totals and subtotals getTaxTotal().add(new
+     * TaxTotalType()); setItemDescription(""); //0. is the VAT Tax VATTax = new
+     * TaxSubtotalType(); getTaxTotal().get(0).getTaxSubtotal().add(VATTax);
+     * VATTax.setTaxableAmount(new TaxableAmountType()); VATTax.setTaxAmount(new
+     * TaxAmountType()); VATTax.setTaxCategory(new TaxCategoryType());
+     * VATTax.getTaxCategory().setTaxScheme(new TaxSchemeType());
+     * VATTax.getTaxCategory().getTaxScheme().setID(new IDType());
+     * VATTax.getTaxCategory
+     * ().getTaxScheme().getID().setSchemeID("UN/ECE 5153");
+     * VATTax.getTaxCategory().getTaxScheme().getID().setSchemeAgencyID("6");
+     * VATTax.getTaxCategory().getTaxScheme().getID().setValue("VAT");
+     * VATTax.getTaxCategory().setPercent(new PercentType());
+     */
   }
-  
+
   // Pattern is: <set/get>InvLine<invoiceLineType-method name>(v)
-  public void setInvLineID(String v) {
-    getID().setValue (v);
+  public void setInvLineID (final String v) {
+    getID ().setValue (v);
   }
-  
-  public String getInvLineID() {
-    return getID().getValue ();
-  }   
-  
-  public void setInvLineNote(String v) {
-    getNote().setValue (v);
+
+  public String getInvLineID () {
+    return getID ().getValue ();
   }
-  
-  public String getInvLineNote() {
-    return getNote().getValue ();
-  } 
-  
-  public void setInvLineInvoicedQuantity(BigDecimal v) {
+
+  public void setInvLineNote (final String v) {
+    getNote ().setValue (v);
+  }
+
+  public String getInvLineNote () {
+    return getNote ().getValue ();
+  }
+
+  public void setInvLineInvoicedQuantity (final BigDecimal v) {
     getInvoicedQuantity ().setValue (v);
   }
-  
-  public BigDecimal getInvLineInvoicedQuantity() {
+
+  public BigDecimal getInvLineInvoicedQuantity () {
     return getInvoicedQuantity ().getValue ();
   }
-  
-  public void setInvLineLineExtensionAmount(BigDecimal v) {
+
+  public void setInvLineLineExtensionAmount (final BigDecimal v) {
     getLineExtensionAmount ().setValue (v);
   }
-  
-  public BigDecimal getInvLineLineExtensionAmount() {
+
+  public BigDecimal getInvLineLineExtensionAmount () {
     return getLineExtensionAmount ().getValue ();
   }
-  
-  public void setInvLineAccountingCost(String v) {
+
+  public void setInvLineAccountingCost (final String v) {
     getAccountingCost ().setValue (v);
   }
-  
-  public String getInvLineAccountingCost() {
+
+  public String getInvLineAccountingCost () {
     return getAccountingCost ().getValue ();
-  } 
-  
-  public void setInvLineTaxAmount(BigDecimal v) {
-    getTaxTotal().get(0).getTaxAmount ().setValue (v);
   }
-  
-  public BigDecimal getInvLineTaxAmount() {
-    return getTaxTotal().get(0).getTaxAmount ().getValue ();
-  }  
-  
-  /*pattern: <set/get>InvLineItem<function-name>*/
-  public void setInvLineItemDescription(String v) {
+
+  public void setInvLineTaxAmount (final BigDecimal v) {
+    getTaxTotal ().get (0).getTaxAmount ().setValue (v);
+  }
+
+  public BigDecimal getInvLineTaxAmount () {
+    return getTaxTotal ().get (0).getTaxAmount ().getValue ();
+  }
+
+  /* pattern: <set/get>InvLineItem<function-name> */
+  public void setInvLineItemDescription (final String v) {
     getItem ().getDescription ().get (0).setValue (v);
   }
-  
-  public String getInvLineItemDescription() {
+
+  public String getInvLineItemDescription () {
     return getItem ().getDescription ().get (0).getValue ();
   }
-  
-  public void setInvLineItemName(String v) {
+
+  public void setInvLineItemName (final String v) {
     getItem ().getName ().setValue (v);
   }
-  
-  public String getInvLineItemName() {
-    return getItem ().getName ().getValue ();
-  }   
-  
-  public void setInvLineItemSellersItemID(String v) {
-    getItem().getSellersItemIdentification().getID ().setValue (v);
-  }
-  
-  public String getInvLineItemSellersItemID() {
-    return getItem().getSellersItemIdentification().getID ().getValue ();
-  }   
 
-  public void setInvLineItemStandardItemID(String v) {
-    getItem().getStandardItemIdentification ().getID ().setValue (v);
+  public String getInvLineItemName () {
+    return getItem ().getName ().getValue ();
   }
-  
-  public String getInvLineItemStandardItemID() {
-    return getItem().getStandardItemIdentification().getID ().getValue ();
-  }   
-  
-  public void setInvLineItemTaxCategoryID(String v) {
-    getItem().getClassifiedTaxCategory ().get (0).getID ().setValue (v);
+
+  public void setInvLineItemSellersItemID (final String v) {
+    getItem ().getSellersItemIdentification ().getID ().setValue (v);
   }
-  
-  public String getInvLineItemTaxCategoryID() {
-    return getItem().getClassifiedTaxCategory ().get (0).getID ().getValue ();
+
+  public String getInvLineItemSellersItemID () {
+    return getItem ().getSellersItemIdentification ().getID ().getValue ();
   }
-  
-  public void setInvLineItemTaxCategoryPercent(BigDecimal v) {
-    getItem().getClassifiedTaxCategory ().get (0).getPercent ().setValue (v);
+
+  public void setInvLineItemStandardItemID (final String v) {
+    getItem ().getStandardItemIdentification ().getID ().setValue (v);
   }
-  
-  public BigDecimal getInvLineItemTaxCategoryPercent() {
-    return getItem().getClassifiedTaxCategory ().get (0).getPercent ().getValue ();
-  }  
-  
-  public void setInvLineItemTaxCategoryTaxSchemeID(String v) {
-    getItem().getClassifiedTaxCategory ().get (0).getTaxScheme ().getID ().setValue (v);
+
+  public String getInvLineItemStandardItemID () {
+    return getItem ().getStandardItemIdentification ().getID ().getValue ();
   }
-  
-  public String getInvLineItemTaxCategoryTaxSchemeID() {
-    return getItem().getClassifiedTaxCategory ().get (0).getTaxScheme ().getID ().getValue ();
+
+  public void setInvLineItemTaxCategoryID (final String v) {
+    getItem ().getClassifiedTaxCategory ().get (0).getID ().setValue (v);
   }
-  
-  /*pattern: <set/get>InvLine<function-name>*/
-  
-  public void setInvLinePriceAmount(BigDecimal v) {
+
+  public String getInvLineItemTaxCategoryID () {
+    return getItem ().getClassifiedTaxCategory ().get (0).getID ().getValue ();
+  }
+
+  public void setInvLineItemTaxCategoryPercent (final BigDecimal v) {
+    getItem ().getClassifiedTaxCategory ().get (0).getPercent ().setValue (v);
+  }
+
+  public BigDecimal getInvLineItemTaxCategoryPercent () {
+    return getItem ().getClassifiedTaxCategory ().get (0).getPercent ().getValue ();
+  }
+
+  public void setInvLineItemTaxCategoryTaxSchemeID (final String v) {
+    getItem ().getClassifiedTaxCategory ().get (0).getTaxScheme ().getID ().setValue (v);
+  }
+
+  public String getInvLineItemTaxCategoryTaxSchemeID () {
+    return getItem ().getClassifiedTaxCategory ().get (0).getTaxScheme ().getID ().getValue ();
+  }
+
+  /* pattern: <set/get>InvLine<function-name> */
+
+  public void setInvLinePriceAmount (final BigDecimal v) {
     getPrice ().getPriceAmount ().setValue (v);
   }
-  
-  public BigDecimal getInvLinePriceAmount() {
+
+  public BigDecimal getInvLinePriceAmount () {
     return getPrice ().getPriceAmount ().getValue ();
-  }   
-  
-  public void setInvLinePriceBaseQuantity(BigDecimal v) {
+  }
+
+  public void setInvLinePriceBaseQuantity (final BigDecimal v) {
     getPrice ().getBaseQuantity ().setValue (v);
   }
-  
-  public BigDecimal getInvLinePriceBaseQuantity() {
+
+  public BigDecimal getInvLinePriceBaseQuantity () {
     return getPrice ().getBaseQuantity ().getValue ();
-  }   
-  
-  /*pattern: <set/get>InvLinePriceAllowanceCharge<function-name>*/
-  public void setInvLinePriceAllowanceChargeID(String v) {
+  }
+
+  /* pattern: <set/get>InvLinePriceAllowanceCharge<function-name> */
+  public void setInvLinePriceAllowanceChargeID (final String v) {
     getPrice ().getAllowanceCharge ().get (0).getID ().setValue (v);
   }
-  
-  public String getInvLinePriceAllowanceChargeID() {
-    return getPrice ().getAllowanceCharge ().get (0).getID().getValue ();
-  } 
-  
-  public void setInvLinePriceAllowanceChargeIndicator(Boolean v) {
-    getPrice ().getAllowanceCharge ().get (0).getChargeIndicator().setValue (v);
+
+  public String getInvLinePriceAllowanceChargeID () {
+    return getPrice ().getAllowanceCharge ().get (0).getID ().getValue ();
   }
-  
-  public Boolean getInvLinePriceAllowanceChargeIndicator() {
-    if(getPrice ().getAllowanceCharge ().get (0).getChargeIndicator().isValue ())
-      return true;
-    return false;
+
+  public void setInvLinePriceAllowanceChargeIndicator (final Boolean v) {
+    getPrice ().getAllowanceCharge ().get (0).getChargeIndicator ().setValue (v.booleanValue ());
   }
-  
-  public void setInvLinePriceAllowanceChargeReason(String v) {
-    getPrice ().getAllowanceCharge ().get (0).getAllowanceChargeReason().setValue (v);
+
+  public Boolean getInvLinePriceAllowanceChargeIndicator () {
+    if (getPrice ().getAllowanceCharge ().get (0).getChargeIndicator ().isValue ())
+      return Boolean.TRUE;
+    return Boolean.FALSE;
   }
-  
-  public String getInvLinePriceAllowanceChargeReason() {
-    return getPrice ().getAllowanceCharge ().get (0).getAllowanceChargeReason().getValue ();
-  }    
-  
-  public void setInvLinePriceAllowanceChargeMultiplierFactorNumeric(BigDecimal v) {
+
+  public void setInvLinePriceAllowanceChargeReason (final String v) {
+    getPrice ().getAllowanceCharge ().get (0).getAllowanceChargeReason ().setValue (v);
+  }
+
+  public String getInvLinePriceAllowanceChargeReason () {
+    return getPrice ().getAllowanceCharge ().get (0).getAllowanceChargeReason ().getValue ();
+  }
+
+  public void setInvLinePriceAllowanceChargeMultiplierFactorNumeric (final BigDecimal v) {
     getPrice ().getAllowanceCharge ().get (0).getMultiplierFactorNumeric ().setValue (v);
   }
-  
-  public BigDecimal getInvLinePriceAllowanceChargeMultiplierFactorNumeric() {
+
+  public BigDecimal getInvLinePriceAllowanceChargeMultiplierFactorNumeric () {
     return getPrice ().getAllowanceCharge ().get (0).getMultiplierFactorNumeric ().getValue ();
   }
-  
-  public void setInvLinePriceAllowanceChargeAmount(BigDecimal v) {
+
+  public void setInvLinePriceAllowanceChargeAmount (final BigDecimal v) {
     getPrice ().getAllowanceCharge ().get (0).getAmount ().setValue (v);
   }
-  
-  public BigDecimal getInvLinePriceAllowanceChargeAmount() {
+
+  public BigDecimal getInvLinePriceAllowanceChargeAmount () {
     return getPrice ().getAllowanceCharge ().get (0).getAmount ().getValue ();
   }
-  
-  public void setInvLinePriceAllowanceChargeBaseAmount(BigDecimal v) {
+
+  public void setInvLinePriceAllowanceChargeBaseAmount (final BigDecimal v) {
     getPrice ().getAllowanceCharge ().get (0).getBaseAmount ().setValue (v);
   }
-  
-  public BigDecimal getInvLinePriceAllowanceChargeBaseAmount() {
+
+  public BigDecimal getInvLinePriceAllowanceChargeBaseAmount () {
     return getPrice ().getAllowanceCharge ().get (0).getBaseAmount ().getValue ();
-  }    
-  
-  /*
-  public void setInvLineAdditionalItemPropertyList(List<ItemPropertyType> v) {
-    getItem ().getAdditionalItemProperty ().add (v.get (0));
   }
-  */
-  
-  public List<ItemPropertyType> getInvLineAdditionalItemPropertyList() {
-    if (getItem ().getAdditionalItemProperty ().equals (null)){
+
+  /*
+   * public void setInvLineAdditionalItemPropertyList(List<ItemPropertyType> v)
+   * { getItem ().getAdditionalItemProperty ().add (v.get (0)); }
+   */
+
+  public List <ItemPropertyType> getInvLineAdditionalItemPropertyList () {
+    if (getItem ().getAdditionalItemProperty ().isEmpty ()) {
       getItem ().getAdditionalItemProperty ().add (new ItemPropertyType ());
     }
     return getItem ().getAdditionalItemProperty ();
   }
-  
-  
-  
+
   /*
-    jerry's old
-    public String getItemDescription() {
-        if (getItem().getDescription().isEmpty()) {
-            return null;
-        } else {
-            return getItem().getDescription().get(0).getValue();
-        }
-    }
-
-    public final void setItemDescription(String description) {
-
-        if (getItem().getDescription().isEmpty()) {
-            getItem().getDescription().add(new DescriptionType());
-        }
-        getItem().getDescription().get(0).setValue(description);
-    }
-    
-    public void setSellersItemID(String id) {
-        getItem().getSellersItemIdentification().getID().setValue(id);
-    }
-    
-    public String getSellersItemID() {
-        return getItem().getSellersItemIdentification().getID().getValue();
-    }
-    
-    public void setNotes(String n) {
-      getNote().setValue (n);
-    }
-    public String getNotes() {
-      return getNote().getValue ();
-    }
-    
-  
-    public void setPriceAmount(long amount)
-    {
-        getPrice().getPriceAmount().setValue(BigDecimal.valueOf(amount));
-    }
-    
-    public long getPriceAmount() throws Exception
-    {
-        BigDecimal val = getPrice().getPriceAmount().getValue();
-        if (val == null ) {
-            //throw new Exception("Value is null");
-            return 0;
-        }
-        return getPrice().getPriceAmount().getValue().longValue();
-    }
-    
-    public void setVatPercent(double percent) {
-        getTaxTotal();
-    }
-    
-    public int getQuantity()
-    {
-        return getInvoicedQuantity().getValue().intValue();
-    }
-    
-    public void setQuantity(int q) {
-        getInvoicedQuantity().setValue(BigDecimal.valueOf(q));
-    }
-    */
+   * jerry's old public String getItemDescription() { if
+   * (getItem().getDescription().isEmpty()) { return null; } else { return
+   * getItem().getDescription().get(0).getValue(); } } public final void
+   * setItemDescription(String description) { if
+   * (getItem().getDescription().isEmpty()) { getItem().getDescription().add(new
+   * DescriptionType()); }
+   * getItem().getDescription().get(0).setValue(description); } public void
+   * setSellersItemID(String id) {
+   * getItem().getSellersItemIdentification().getID().setValue(id); } public
+   * String getSellersItemID() { return
+   * getItem().getSellersItemIdentification().getID().getValue(); } public void
+   * setNotes(String n) { getNote().setValue (n); } public String getNotes() {
+   * return getNote().getValue (); } public void setPriceAmount(long amount) {
+   * getPrice().getPriceAmount().setValue(BigDecimal.valueOf(amount)); } public
+   * long getPriceAmount() throws Exception { BigDecimal val =
+   * getPrice().getPriceAmount().getValue(); if (val == null ) { //throw new
+   * Exception("Value is null"); return 0; } return
+   * getPrice().getPriceAmount().getValue().longValue(); } public void
+   * setVatPercent(double percent) { getTaxTotal(); } public int getQuantity() {
+   * return getInvoicedQuantity().getValue().intValue(); } public void
+   * setQuantity(int q) { getInvoicedQuantity().setValue(BigDecimal.valueOf(q));
+   * }
+   */
 }

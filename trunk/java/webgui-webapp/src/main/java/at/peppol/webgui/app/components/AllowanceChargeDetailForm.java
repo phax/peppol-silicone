@@ -57,73 +57,73 @@ import com.vaadin.ui.Select;
 
 @SuppressWarnings ("serial")
 public class AllowanceChargeDetailForm extends Panel {
-  
+
   private final InvoiceAllowanceChargeAdapter allowanceChargeBean;
   private final String titlePrefix;
-  
-  public AllowanceChargeDetailForm(String titlePrefix, InvoiceAllowanceChargeAdapter allowanceChargeBean) {
-      this.titlePrefix = titlePrefix;
-      this.allowanceChargeBean = allowanceChargeBean;
-      
-      initElements();
-  }  
-  
-  private void initElements() {
-    setCaption(titlePrefix + " Allowance / Charge");
-    setStyleName("light");
-    
-    PropertysetItem itemSet = new PropertysetItem();
-    
-    //initialize
-    InvoiceAllowanceChargeAdapter ac = new InvoiceAllowanceChargeAdapter ();
+
+  public AllowanceChargeDetailForm (final String titlePrefix, final InvoiceAllowanceChargeAdapter allowanceChargeBean) {
+    this.titlePrefix = titlePrefix;
+    this.allowanceChargeBean = allowanceChargeBean;
+
+    initElements ();
+  }
+
+  private void initElements () {
+    setCaption (titlePrefix + " Allowance / Charge");
+    setStyleName ("light");
+
+    final PropertysetItem itemSet = new PropertysetItem ();
+
+    // initialize
+    final InvoiceAllowanceChargeAdapter ac = new InvoiceAllowanceChargeAdapter ();
     ac.setChargeIndicator (new ChargeIndicatorType ());
     ac.setAllowanceChargeReason (new AllowanceChargeReasonType ());
     ac.setMultiplierFactorNumeric (new MultiplierFactorNumericType ());
     ac.setAmount (new AmountType ());
     ac.setBaseAmount (new BaseAmountType ());
-    
-   
-    //make fields
-    itemSet.addItemProperty ("Allowance/Charge Indicator", new NestedMethodProperty(ac, "indicator") );
-    itemSet.addItemProperty ("Allowance/Charge Reason", new NestedMethodProperty(ac, "reason") );
-    //itemSet.addItemProperty ("Allowance/Charge Multiplier Factor", new NestedMethodProperty(ac, "InvLinePriceAllowanceChargeMultiplierFactorNumeric") );
-    itemSet.addItemProperty ("Allowance/Charge Amount", new NestedMethodProperty(ac, "chargeAmount") );
-    //itemSet.addItemProperty ("Allowance/Charge Base Amount", new NestedMethodProperty(ac, "InvLinePriceAllowanceChargeBaseAmount") );
-    
 
-    //make form
-    final Form allowanceChargeForm = new Form();
-    allowanceChargeForm.setFormFieldFactory(new AllowanceChargeFieldFactory());
-    allowanceChargeForm.setItemDataSource(itemSet);
-    allowanceChargeForm.setImmediate(true);
-    
-    addComponent(allowanceChargeForm);
-  }  
+    // make fields
+    itemSet.addItemProperty ("Allowance/Charge Indicator", new NestedMethodProperty (ac, "indicator"));
+    itemSet.addItemProperty ("Allowance/Charge Reason", new NestedMethodProperty (ac, "reason"));
+    // itemSet.addItemProperty ("Allowance/Charge Multiplier Factor", new
+    // NestedMethodProperty(ac,
+    // "InvLinePriceAllowanceChargeMultiplierFactorNumeric") );
+    itemSet.addItemProperty ("Allowance/Charge Amount", new NestedMethodProperty (ac, "chargeAmount"));
+    // itemSet.addItemProperty ("Allowance/Charge Base Amount", new
+    // NestedMethodProperty(ac, "InvLinePriceAllowanceChargeBaseAmount") );
+
+    // make form
+    final Form allowanceChargeForm = new Form ();
+    allowanceChargeForm.setFormFieldFactory (new AllowanceChargeFieldFactory ());
+    allowanceChargeForm.setItemDataSource (itemSet);
+    allowanceChargeForm.setImmediate (true);
+
+    addComponent (allowanceChargeForm);
+  }
 
   class AllowanceChargeFieldFactory implements FormFieldFactory {
 
     @Override
-    public Field createField(Item item, Object propertyId, Component uiContext) {
+    public Field createField (final Item item, final Object propertyId, final Component uiContext) {
       // Identify the fields by their Property ID.
-      String pid = (String) propertyId;
-      if ("Allowance/Charge Indicator".equals(pid)) {
-        Select indicatorSelect = new Select("Charge or Allowance?");
-        indicatorSelect.setNullSelectionAllowed(false);
-        indicatorSelect.addItem (true);
-        indicatorSelect.addItem (false);
-        indicatorSelect.setItemCaption(true, "Charge");
-        indicatorSelect.setItemCaption(false, "Allowance");
-        
+      final String pid = (String) propertyId;
+      if ("Allowance/Charge Indicator".equals (pid)) {
+        final Select indicatorSelect = new Select ("Charge or Allowance?");
+        indicatorSelect.setNullSelectionAllowed (false);
+        indicatorSelect.addItem (Boolean.TRUE);
+        indicatorSelect.addItem (Boolean.FALSE);
+        indicatorSelect.setItemCaption (Boolean.TRUE, "Charge");
+        indicatorSelect.setItemCaption (Boolean.FALSE, "Allowance");
+
         return indicatorSelect;
-      } 
-      Field field = DefaultFieldFactory.get().createField(item,propertyId, uiContext);
-      if (field instanceof AbstractTextField){
-          ((AbstractTextField) field).setNullRepresentation("");
       }
-      
+      final Field field = DefaultFieldFactory.get ().createField (item, propertyId, uiContext);
+      if (field instanceof AbstractTextField) {
+        ((AbstractTextField) field).setNullRepresentation ("");
+      }
+
       return field;
     }
-  }   
-  
-  
+  }
+
 }
