@@ -40,7 +40,6 @@ package at.peppol.commons.codelist;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.id.IHasID;
 import com.phloc.commons.lang.EnumHelper;

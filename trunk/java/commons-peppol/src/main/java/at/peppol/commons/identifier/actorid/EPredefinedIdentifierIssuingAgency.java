@@ -52,12 +52,17 @@ public enum EPredefinedIdentifierIssuingAgency implements IIdentifierIssuingAgen
   /**
    * @since code list 1.0.0
    */
-  FR_SIRET ("FR:SIRET", "Institut National de la Statistique et des Etudes Economiques, (I.N.S.E.E.)", "0002", false, new Version ("1.0.0")),
+  FR_SIRENE ("FR:SIRENE", "Institut National de la Statistique et des Etudes Economiques, (I.N.S.E.E.)", "0002", false, new Version ("1.0.0")),
 
   /**
    * @since code list 1.0.0
    */
   SE_ORGNR ("SE:ORGNR", "The National Tax Board", "0007", false, new Version ("1.0.0")),
+
+  /**
+   * @since code list 1.1.1
+   */
+  FR_SIRET ("FR:SIRET", "DU PONT DE NEMOURS", "0009", false, new Version ("1.1.1")),
 
   /**
    * @since code list 1.0.0
