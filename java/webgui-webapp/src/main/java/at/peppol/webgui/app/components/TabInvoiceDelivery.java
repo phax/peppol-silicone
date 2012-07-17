@@ -49,19 +49,10 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AddressType;
-import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.CountryType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.DeliveryType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.LocationType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ActualDeliveryDateType;
-import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AdditionalStreetNameType;
-import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.BuildingNumberType;
-import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CityNameType;
-import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CountrySubentityType;
-import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DepartmentType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IDType;
-import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IdentificationCodeType;
-import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PostalZoneType;
-import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.StreetNameType;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.util.NestedMethodProperty;

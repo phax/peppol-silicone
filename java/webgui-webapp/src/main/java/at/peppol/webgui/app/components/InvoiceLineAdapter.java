@@ -72,7 +72,6 @@ import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PercentT
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PriceAmountType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TaxAmountType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ValueType;
-import un.unece.uncefact.codelist.specification._54217._2001.CurrencyCodeContentType;
 
 /**
  * An adapter class that ignores the list types found in InvoiceLineType and

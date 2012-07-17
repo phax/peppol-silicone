@@ -47,7 +47,6 @@ import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AmountTy
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ChargeIndicatorType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IDType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PercentType;
-import un.unece.uncefact.codelist.specification._54217._2001.CurrencyCodeContentType;
 
 public class InvoiceAllowanceChargeAdapter extends AllowanceChargeType {
   

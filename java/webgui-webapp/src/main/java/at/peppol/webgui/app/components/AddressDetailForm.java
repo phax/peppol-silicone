@@ -49,7 +49,6 @@ import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PostalZo
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.StreetNameType;
 
 import com.vaadin.data.Item;
-import com.vaadin.data.Property;
 import com.vaadin.data.util.NestedMethodProperty;
 import com.vaadin.data.util.PropertysetItem;
 import com.vaadin.ui.AbstractTextField;

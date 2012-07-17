@@ -43,7 +43,6 @@ import java.util.List;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.InvoiceLineType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ItemPropertyType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IDType;
-import un.unece.uncefact.codelist.specification._54217._2001.CurrencyCodeContentType;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.util.NestedMethodProperty;
