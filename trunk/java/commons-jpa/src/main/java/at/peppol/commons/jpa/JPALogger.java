@@ -37,6 +37,8 @@
  */
 package at.peppol.commons.jpa;
 
+import javax.annotation.Nonnull;
+
 import org.eclipse.persistence.logging.AbstractSessionLog;
 import org.eclipse.persistence.logging.SessionLog;
 import org.eclipse.persistence.logging.SessionLogEntry;
@@ -56,7 +58,7 @@ public final class JPALogger extends AbstractSessionLog {
   private static final Logger s_aLogger = LoggerFactory.getLogger (JPALogger.class);
 
   @Override
-  public void log (final SessionLogEntry aSessionLogEntry) {
+  public void log (@Nonnull final SessionLogEntry aSessionLogEntry) {
     final int nLogLevel = aSessionLogEntry.getLevel ();
     // JPA uses the System property for adding line breaks
     final String [] aMsgLines = RegExHelper.getSplitToArray (aSessionLogEntry.getMessage (), CGlobal.LINE_SEPARATOR);

@@ -76,6 +76,7 @@ public abstract class AbstractJPAWrapper implements Closeable {
       throw new IllegalArgumentException ("persistenceUnitName");
 
     m_sPersistenceUnitName = sPersistenceUnitName;
+
     // Factory properties
     final Map <String, Object> aFactoryProps = new HashMap <String, Object> ();
     aFactoryProps.put (PersistenceUnitProperties.SESSION_CUSTOMIZER, JPASessionCustomizer.class.getName ());
