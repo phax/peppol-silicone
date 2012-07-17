@@ -10,6 +10,19 @@
   <name>Oxalis standalone CLI program</name>
   <description>Standalone CLI program which may be used for sending a PEPPOL document.</description>
 
+  <repositories>
+    <repository>
+      <id>phloc</id>
+      <url>http://repo.phloc.com/maven2/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+
   <dependencies>
     <dependency>
       <groupId>net.sf.jopt-simple</groupId>

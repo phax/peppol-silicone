@@ -16,6 +16,19 @@
     <developerConnection>scm:svn:https://peppol-silicone.googlecode.com/svn/trunk/java/sml-webapp</developerConnection>
   </scm>
 
+  <repositories>
+    <repository>
+      <id>phloc</id>
+      <url>http://repo.phloc.com/maven2/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+
   <dependencies>
     <dependency>
       <groupId>at.peppol</groupId>

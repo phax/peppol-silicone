@@ -14,6 +14,19 @@
     <connection>scm:svn:http://peppol-silicone.googlecode.com/svn/trunk/java/transport-start-server</connection>
     <developerConnection>scm:svn:https://peppol-silicone.googlecode.com/svn/trunk/java/transport-start-server</developerConnection>
   </scm>
+
+  <repositories>
+    <repository>
+      <id>phloc</id>
+      <url>http://repo.phloc.com/maven2/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
   
   <dependencies>
     <dependency>
