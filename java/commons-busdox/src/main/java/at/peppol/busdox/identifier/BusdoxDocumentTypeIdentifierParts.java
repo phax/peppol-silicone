@@ -173,6 +173,7 @@ public final class BusdoxDocumentTypeIdentifierParts implements IBusdoxDocumentT
   public static IBusdoxDocumentTypeIdentifierParts extractFromString (@Nonnull @Nonempty final String sDocTypeID) {
     if (StringHelper.hasNoText (sDocTypeID))
       throw new IllegalArgumentException ("The passed document identifier value may not be empty!");
+
     final String [] aMain = RegExHelper.getSplitToArray (sDocTypeID, SUBTYPE_SEPARATOR, 2);
     final String [] aFirst = RegExHelper.getSplitToArray (aMain[0], NAMESPACE_SEPARATOR, 2);
     if (aFirst.length < 2)

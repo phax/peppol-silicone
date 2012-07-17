@@ -37,6 +37,7 @@
  */
 package at.peppol.commons.jpa;
 
+import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
 import org.eclipse.persistence.config.PersistenceUnitProperties;
@@ -64,6 +65,7 @@ public final class JPAConfiguration {
 
   // Write SQL file only in debug mode, so that the production version can be
   // read-only!
+  @Nonnull
   public static String getDefaultDDLGenerationMode () {
     return GlobalDebug.isDebugMode () ? PersistenceUnitProperties.DDL_SQL_SCRIPT_GENERATION
                                      : PersistenceUnitProperties.NONE;
