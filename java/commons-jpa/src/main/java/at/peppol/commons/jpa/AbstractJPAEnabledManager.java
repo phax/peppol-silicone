@@ -41,6 +41,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.ThreadSafe;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.RollbackException;
@@ -56,10 +57,11 @@ import com.phloc.commons.state.ESuccess;
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
+@ThreadSafe
 public abstract class AbstractJPAEnabledManager {
   private static final Logger s_aLogger = LoggerFactory.getLogger (AbstractJPAEnabledManager.class);
 
-  private final Lock m_aLock = new ReentrantLock ();
+  protected final Lock m_aLock = new ReentrantLock ();
   private final AbstractJPAWrapper m_aWrapper;
 
   protected AbstractJPAEnabledManager (@Nonnull final AbstractJPAWrapper aWrapper) {
