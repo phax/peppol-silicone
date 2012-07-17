@@ -60,7 +60,7 @@ import com.phloc.commons.messagedigest.MessageDigestGenerator;
 import com.phloc.commons.string.StringHelper;
 
 /**
- * Utility methods for assembling URLs and URL elements required for Busdox.
+ * Utility methods for assembling URLs and URL elements required for BusDox.
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */

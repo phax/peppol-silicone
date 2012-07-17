@@ -38,8 +38,15 @@
 package at.peppol.commons.security;
 
 import java.security.cert.X509Certificate;
+import java.util.Arrays;
 
+import javax.annotation.Nullable;
 import javax.net.ssl.X509TrustManager;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.phloc.commons.GlobalDebug;
 
 /**
  * A trust manager that accepts all certificates.
@@ -47,11 +54,29 @@ import javax.net.ssl.X509TrustManager;
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class DoNothingTrustManager implements X509TrustManager {
+  private static final Logger s_aLogger = LoggerFactory.getLogger (DoNothingTrustManager.class);
+  private final boolean m_bDebug;
+
+  public DoNothingTrustManager () {
+    this (GlobalDebug.isDebugMode ());
+  }
+
+  public DoNothingTrustManager (final boolean bDebug) {
+    m_bDebug = bDebug;
+  }
+
+  @Nullable
   public X509Certificate [] getAcceptedIssuers () {
     return null;
   }
 
-  public void checkServerTrusted (final X509Certificate [] arg0, final String arg1) {}
+  public void checkServerTrusted (final X509Certificate [] aChain, final String sAuthType) {
+    if (m_bDebug)
+      s_aLogger.info ("checkServerTrusted (" + Arrays.toString (aChain) + ", " + sAuthType + ")");
+  }
 
-  public void checkClientTrusted (final X509Certificate [] arg0, final String arg1) {}
+  public void checkClientTrusted (final X509Certificate [] aChain, final String sAuthType) {
+    if (m_bDebug)
+      s_aLogger.info ("checkClientTrusted (" + Arrays.toString (aChain) + ", " + sAuthType + ")");
+  }
 }

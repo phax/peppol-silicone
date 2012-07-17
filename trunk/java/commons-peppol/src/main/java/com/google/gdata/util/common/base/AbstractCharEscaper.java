@@ -35,7 +35,7 @@ package com.google.gdata.util.common.base;
  * {@link CharEscaperBuilder}, or extend this class and implement the
  * {@link #escape(char)} method.
  */
-public abstract class CharEscaper implements Escaper {
+public abstract class AbstractCharEscaper implements IEscaper {
   /**
    * Returns the escaped form of a given literal string.
    * 

@@ -16,7 +16,7 @@
 package com.google.gdata.util.common.base;
 
 /**
- * An {@link Escaper} that converts literal text into a format safe for
+ * An {@link IEscaper} that converts literal text into a format safe for
  * inclusion in a particular context (such as an XML document). Typically (but
  * not always), the inverse process of "unescaping" the text is performed
  * automatically by the relevant parser.
@@ -27,7 +27,7 @@ package com.google.gdata.util.common.base;
  * parsed, the parser API will return this text as the original literal string
  * {@code "Foo<Bar>"}.
  * <p>
- * <b>Note:</b> This class is similar to {@link CharEscaper} but with one very
+ * <b>Note:</b> This class is similar to {@link AbstractCharEscaper} but with one very
  * important difference. A CharEscaper can only process Java <a
  * href="http://en.wikipedia.org/wiki/UTF-16">UTF16</a> characters in isolation
  * and may not cope when it encounters surrogate pairs. This class facilitates
@@ -44,7 +44,7 @@ package com.google.gdata.util.common.base;
  * {@link CharEscapers}. To create your own escapers extend this class and
  * implement the {@link #escape(int)} method.
  */
-public abstract class UnicodeEscaper implements Escaper {
+public abstract class AbstractUnicodeEscaper implements IEscaper {
   /** The amount of padding (chars) to use when growing the escape buffer. */
   private static final int DEST_PAD = 32;
 
