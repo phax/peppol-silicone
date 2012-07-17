@@ -330,7 +330,7 @@ public class TabInvoiceAllowanceCharge extends Form {
     dstItem.setTaxCategorySchemeID (srcItem.getTaxCategorySchemeID ());
   }
 
-  class InvoiceAllowanceChargeFieldFactory implements FormFieldFactory {
+  static final class InvoiceAllowanceChargeFieldFactory implements FormFieldFactory {
 
     public Field createField (final Item item, final Object propertyId, final Component uiContext) {
       // Identify the fields by their Property ID.

@@ -341,6 +341,7 @@ public class TabInvoiceTaxTotal extends Form {
     return ac;
   }
 
+  @SuppressWarnings ("unused")
   private void cloneInvoiceSubTaxtotalItem (final InvoiceTaxSubtotalAdapter srcItem,
                                             final InvoiceTaxSubtotalAdapter dstItem) {
     // TODO: // Enable buffering.
@@ -359,14 +360,14 @@ public class TabInvoiceTaxTotal extends Form {
   }
 
   private BigDecimal SumTaxSubtotalAmount () {
-    double sum = 0.0;
+    BigDecimal sum = BigDecimal.ZERO;
     final Iterator <TaxSubtotalType> iterator = taxSubtotalList.iterator ();
     while (iterator.hasNext ()) {
       final InvoiceTaxSubtotalAdapter ac = (InvoiceTaxSubtotalAdapter) iterator.next ();
-      sum += ac.getTaxAmount ().getValue ().doubleValue ();
+      sum = sum.add (ac.getTaxAmount ().getValue ());
     }
 
-    return new BigDecimal (sum);
+    return sum;
   }
 
   @SuppressWarnings ("serial")
