@@ -6,12 +6,12 @@
     <version>14</version>
   </parent>
   <artifactId>peppol-test-files</artifactId>
-  <version>2.3.0</version>
+  <version>2.3.1-SNAPSHOT</version>
   <name>peppol-test-files</name>
 
   <scm>
-    <connection>scm:svn:http://peppol-silicone.googlecode.com/svn/tags/peppol-test-files/peppol-test-files-2.3.0</connection>
-    <developerConnection>scm:svn:https://peppol-silicone.googlecode.com/svn/tags/peppol-test-files/peppol-test-files-2.3.0</developerConnection>
+    <connection>scm:svn:http://peppol-silicone.googlecode.com/svn/trunk/java/test-files</connection>
+    <developerConnection>scm:svn:https://peppol-silicone.googlecode.com/svn/trunk/java/test-files</developerConnection>
   </scm>
   
   <dependencies>
