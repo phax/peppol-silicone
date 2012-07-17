@@ -87,7 +87,7 @@
   <SimpleCodeList>
     <Row>
       <Value ColumnRef="schemeid">
-        <SimpleValue>FR:SIRET</SimpleValue>
+        <SimpleValue>FR:SIRENE</SimpleValue>
       </Value>
       <Value ColumnRef="iso6523">
         <SimpleValue>0002</SimpleValue>
@@ -123,6 +123,26 @@
       </Value>
       <Value ColumnRef="structure">
         <SimpleValue>1) 10 digits. 1st digit = Group number, 2nd - 9th digit = Ordinalnumber1st digit, = Group number, 10th digit = Check digit, 2) Last digit.</SimpleValue>
+      </Value>
+    </Row>
+    <Row>
+      <Value ColumnRef="schemeid">
+        <SimpleValue>FR:SIRET</SimpleValue>
+      </Value>
+      <Value ColumnRef="iso6523">
+        <SimpleValue>0009</SimpleValue>
+      </Value>
+      <Value ColumnRef="schemeagency">
+        <SimpleValue>DU PONT DE NEMOURS</SimpleValue>
+      </Value>
+      <Value ColumnRef="deprecated">
+        <SimpleValue>false</SimpleValue>
+      </Value>
+      <Value ColumnRef="since">
+        <SimpleValue>1.1.1</SimpleValue>
+      </Value>
+      <Value ColumnRef="structure">
+        <SimpleValue>1) 14 digits, 2) None</SimpleValue>
       </Value>
     </Row>
     <Row>

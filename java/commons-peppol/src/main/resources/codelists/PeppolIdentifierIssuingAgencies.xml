@@ -40,11 +40,14 @@
 -->
 <!--This file was automatically generated. Do NOT edit!-->
 <root version="1.1">
-  <issuingAgency schemeid="FR:SIRET" agencyname="Institut National de la Statistique et des Etudes Economiques, (I.N.S.E.E.)" iso6523="0002" since="1.0.0">
+  <issuingAgency schemeid="FR:SIRENE" agencyname="Institut National de la Statistique et des Etudes Economiques, (I.N.S.E.E.)" iso6523="0002" since="1.0.0">
     <structure>1) Number of characters: 9 characters (&quot;SIREN&quot;) 14 &quot; 9+5 (&quot;SIRET&quot;), The 9 character number designates an organization, The 14 character number designates a specific establishment of the organization designated by the first 9 characters. 2) Check digits: 9th &amp; 14th character respectively</structure>
   </issuingAgency>
   <issuingAgency schemeid="SE:ORGNR" agencyname="The National Tax Board" iso6523="0007" since="1.0.0">
     <structure>1) 10 digits. 1st digit = Group number, 2nd - 9th digit = Ordinalnumber1st digit, = Group number, 10th digit = Check digit, 2) Last digit.</structure>
+  </issuingAgency>
+  <issuingAgency schemeid="FR:SIRET" agencyname="DU PONT DE NEMOURS" iso6523="0009" since="1.1.1">
+    <structure>1) 14 digits, 2) None</structure>
   </issuingAgency>
   <issuingAgency schemeid="FI:OVT" agencyname="National Board of Taxes, (Verohallitus)" iso6523="0037" since="1.0.0">
     <structure>1) ICD 4 Digits, Organization code upto 11 characters, Organization name upto 250 characters, 2) None
