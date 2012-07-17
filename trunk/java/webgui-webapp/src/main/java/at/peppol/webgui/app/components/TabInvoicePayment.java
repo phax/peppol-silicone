@@ -58,6 +58,7 @@ import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IDType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PaymentChannelCodeType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PaymentDueDateType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PaymentMeansCodeType;
+
 import com.vaadin.data.Item;
 import com.vaadin.data.util.NestedMethodProperty;
 import com.vaadin.data.util.ObjectProperty;

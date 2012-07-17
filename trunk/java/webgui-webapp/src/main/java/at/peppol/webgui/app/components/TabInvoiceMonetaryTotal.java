@@ -38,6 +38,7 @@
 package at.peppol.webgui.app.components;
 
 import java.math.BigDecimal;
+
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.MonetaryTotalType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AllowanceTotalAmountType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ChargeTotalAmountType;
@@ -47,7 +48,7 @@ import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PayableR
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PrepaidAmountType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TaxExclusiveAmountType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TaxInclusiveAmountType;
-import un.unece.uncefact.codelist.specification._54217._2001.CurrencyCodeContentType;
+
 import com.vaadin.data.Item;
 import com.vaadin.data.util.NestedMethodProperty;
 import com.vaadin.ui.AbstractTextField;

@@ -42,6 +42,7 @@ import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AmountTy
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.BaseAmountType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ChargeIndicatorType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.MultiplierFactorNumericType;
+
 import com.vaadin.data.Item;
 import com.vaadin.data.util.NestedMethodProperty;
 import com.vaadin.data.util.PropertysetItem;

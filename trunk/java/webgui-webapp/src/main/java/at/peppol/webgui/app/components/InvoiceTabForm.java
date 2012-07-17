@@ -37,7 +37,6 @@
  */
 package at.peppol.webgui.app.components;
 
-import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
 import java.util.Iterator;
 import java.util.List;
@@ -60,7 +59,6 @@ import oasis.names.specification.ubl.schema.xsd.invoice_2.ObjectFactory;
 import org.slf4j.LoggerFactory;
 
 import un.unece.uncefact.codelist.specification._54217._2001.CurrencyCodeContentType;
-
 import at.peppol.commons.identifier.docid.EPredefinedDocumentTypeIdentifier;
 
 import com.phloc.ubl.AbstractUBLDocumentMarshaller;

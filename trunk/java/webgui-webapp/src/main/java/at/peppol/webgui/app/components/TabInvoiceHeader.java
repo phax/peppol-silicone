@@ -54,11 +54,11 @@ import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.Peri
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AccountingCostType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DocumentCurrencyCodeType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DocumentTypeType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.EndDateType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IDType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IssueDateType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.NoteType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.StartDateType;
-import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.EndDateType;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.util.NestedMethodProperty;

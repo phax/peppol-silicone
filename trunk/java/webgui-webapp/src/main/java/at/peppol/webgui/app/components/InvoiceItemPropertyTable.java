@@ -42,6 +42,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ItemPropertyType;
+
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.Table;
 
