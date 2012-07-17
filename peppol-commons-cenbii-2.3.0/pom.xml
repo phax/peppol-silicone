@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <parent>
+    <groupId>at.peppol</groupId>
+    <artifactId>parent-pom</artifactId>
+    <version>14</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>peppol-commons-cenbii</artifactId>
+  <version>2.3.0</version>
+  <name>peppol-commons-cenbii</name>
+
+  <scm>
+    <connection>scm:svn:http://peppol-silicone.googlecode.com/svn/tags/peppol-commons-cenbii/peppol-commons-cenbii-2.3.0</connection>
+    <developerConnection>scm:svn:https://peppol-silicone.googlecode.com/svn/tags/peppol-commons-cenbii/peppol-commons-cenbii-2.3.0</developerConnection>
+  </scm>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.phloc</groupId>
+      <artifactId>phloc-commons</artifactId>
+      <version>3.6.5</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <configuration>
+          <tagBase>https://peppol-silicone.googlecode.com/svn/tags/${project.name}</tagBase>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
