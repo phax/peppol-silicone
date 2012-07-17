@@ -62,6 +62,7 @@ public final class SMLJPAWrapper extends AbstractJPAWrapper {
   private static final String CONFIG_JDBC_PASSWORD = "jdbc.password";
   private static final String CONFIG_TARGET_DATABASE = "target-database";
   private static final String CONFIG_JDBC_READ_CONNECTIONS_MAX = "jdbc.read-connections.max";
+  private static final String CONFIG_DDL_GENERATION_MODE = PersistenceUnitProperties.DDL_GENERATION_MODE;
 
   private static final SMLJPAWrapper s_aInstance = new SMLJPAWrapper ();
 
@@ -86,9 +87,11 @@ public final class SMLJPAWrapper extends AbstractJPAWrapper {
     ret.put (PersistenceUnitProperties.DDL_GENERATION, PersistenceUnitProperties.DROP_AND_CREATE);
     // Write SQL file only in debug mode, so that the production version can be
     // read-only!
+    final String sDefaultDDLGenerationMode = GlobalDebug.isDebugMode ()
+                                                                       ? PersistenceUnitProperties.DDL_SQL_SCRIPT_GENERATION
+                                                                       : PersistenceUnitProperties.NONE;
     ret.put (PersistenceUnitProperties.DDL_GENERATION_MODE,
-             GlobalDebug.isDebugMode () ? PersistenceUnitProperties.DDL_SQL_SCRIPT_GENERATION
-                                       : PersistenceUnitProperties.NONE);
+             aCF.getString (CONFIG_DDL_GENERATION_MODE, sDefaultDDLGenerationMode));
     ret.put (PersistenceUnitProperties.CREATE_JDBC_DDL_FILE, "db-create-sml.sql");
     ret.put (PersistenceUnitProperties.DROP_JDBC_DDL_FILE, "db-drop-sml.sql");
 
