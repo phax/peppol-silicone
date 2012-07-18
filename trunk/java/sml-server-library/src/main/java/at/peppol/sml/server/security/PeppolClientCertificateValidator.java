@@ -54,6 +54,8 @@ import org.slf4j.LoggerFactory;
 
 import at.peppol.commons.utils.ConfigFile;
 
+import com.phloc.commons.collections.ArrayHelper;
+
 /**
  * Extract certificates from HTTP requests. These are the client certificates
  * submitted by the user.
@@ -122,8 +124,8 @@ public final class PeppolClientCertificateValidator {
     return isClientCertificateValid ((X509Certificate []) aValue);
   }
 
-  public static boolean isClientCertificateValid (final X509Certificate [] aRequestCerts) {
-    if (aRequestCerts == null || aRequestCerts.length == 0) {
+  public static boolean isClientCertificateValid (@Nullable final X509Certificate [] aRequestCerts) {
+    if (ArrayHelper.isEmpty (aRequestCerts)) {
       // Empty array
       s_aLogger.warn ("No client certificates passed for validation");
       return false;

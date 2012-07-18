@@ -40,6 +40,7 @@ package at.peppol.sml.server.security;
 import java.security.KeyStore;
 import java.security.cert.X509Certificate;
 
+import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
 import org.slf4j.Logger;
@@ -82,10 +83,12 @@ public final class PeppolRootCertificateProvider {
 
     if (s_aPeppolSMPRootCert == null)
       throw new InitializationException ("Failed to resolve alias '" + sTrustStoreAlias + "' in trust store!");
+    s_aLogger.info ("PEPPOL root certificate loaded successfully");
   }
 
   private PeppolRootCertificateProvider () {}
 
+  @Nonnull
   public static X509Certificate getPeppolSMPRootCertificate () {
     return s_aPeppolSMPRootCert;
   }

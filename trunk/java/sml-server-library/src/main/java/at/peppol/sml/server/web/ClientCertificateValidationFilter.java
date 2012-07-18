@@ -63,8 +63,8 @@ public final class ClientCertificateValidationFilter implements Filter {
 
   public void init (final FilterConfig filterConfig) throws ServletException {}
 
-  public void doFilter (final ServletRequest aRequest, final ServletResponse aResponse, final FilterChain chain) throws IOException,
-                                                                                                                ServletException {
+  public void doFilter (final ServletRequest aRequest, final ServletResponse aResponse, final FilterChain aFilterChain) throws IOException,
+                                                                                                                       ServletException {
     final HttpServletRequest aHttpRequest = (HttpServletRequest) aRequest;
 
     String sClientUniqueID;
@@ -79,16 +79,25 @@ public final class ClientCertificateValidationFilter implements Filter {
         throw new ServletException ("Error in unique ID from certficate extraction!");
     }
     else {
-      // Can only occur when using the http version in the BRZ internal LAN
+      // Can only occur when using the http version in the BRZ internal LAN (or
+      // the standalone version)
+      s_aLogger.info ("Insecure http access from " +
+                      aHttpRequest.getRemoteAddr () +
+                      ":" +
+                      aHttpRequest.getRemotePort () +
+                      " (" +
+                      aHttpRequest.getRemoteHost () +
+                      ")");
       sClientUniqueID = "debug-insecure-client-http-only";
     }
 
+    // Set in request
     WebRequestClientIdentifier.setClientUniqueID (aHttpRequest, sClientUniqueID);
     if (s_aLogger.isDebugEnabled ())
       s_aLogger.debug ("Client with ID '" + sClientUniqueID + "' acknowledged");
 
     // Next filter
-    chain.doFilter (aRequest, aResponse);
+    aFilterChain.doFilter (aRequest, aResponse);
   }
 
   public void destroy () {}

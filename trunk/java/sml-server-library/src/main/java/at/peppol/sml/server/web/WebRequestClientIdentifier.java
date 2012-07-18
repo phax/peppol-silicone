@@ -71,13 +71,18 @@ public final class WebRequestClientIdentifier {
     if (aHttpRequest == null)
       throw new NullPointerException ("httpRequest");
     final Object aClientUniqueID = aHttpRequest.getAttribute (REQUEST_PARAMETER_CERTIFICATE);
+    if (aClientUniqueID == null)
+      throw new IllegalStateException ("No client unique ID found in request");
     if (!(aClientUniqueID instanceof String))
-      throw new IllegalStateException ("No client unique ID found in request: " + aClientUniqueID);
+      throw new IllegalStateException ("Invalid client unique ID found in request: " +
+                                       aClientUniqueID.getClass () +
+                                       " -- " +
+                                       aClientUniqueID.toString ());
     return (String) aClientUniqueID;
   }
 
   @Nonnull
-  public static String getClientUniqueID (final WebServiceContext wsContext) {
+  public static String getClientUniqueID (@Nonnull final WebServiceContext wsContext) {
     final MessageContext aMessageContext = wsContext.getMessageContext ();
     final HttpServletRequest aHttpRequest = (HttpServletRequest) aMessageContext.get (MessageContext.SERVLET_REQUEST);
     return getClientUniqueID (aHttpRequest);
