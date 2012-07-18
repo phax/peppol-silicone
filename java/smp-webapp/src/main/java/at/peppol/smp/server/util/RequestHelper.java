@@ -43,9 +43,14 @@ import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 import javax.ws.rs.core.HttpHeaders;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
 import at.peppol.commons.utils.ReadonlyUsernamePWCredentials;
 import at.peppol.smp.server.exception.UnauthorizedException;
+
+import com.phloc.commons.collections.ContainerHelper;
 
 /**
  * This class is used for retrieving the HTTP BASIC AUTH header from the HTTP
@@ -55,18 +60,22 @@ import at.peppol.smp.server.exception.UnauthorizedException;
  */
 @Immutable
 public final class RequestHelper {
+  private static final Logger s_aLogger = LoggerFactory.getLogger (RequestHelper.class);
+
   private RequestHelper () {}
 
   @Nonnull
   public static IReadonlyUsernamePWCredentials getAuth (@Nonnull final HttpHeaders headers) throws UnauthorizedException {
-    final List <String> h = headers.getRequestHeader (HttpHeaders.AUTHORIZATION);
-    if (h == null || h.isEmpty ())
+    final List <String> aHeaders = headers.getRequestHeader (HttpHeaders.AUTHORIZATION);
+    if (ContainerHelper.isEmpty (aHeaders))
       throw new UnauthorizedException ("Missing required HTTP header for Authorization");
 
-    final String sAuthHeader = h.get (0);
-    final IReadonlyUsernamePWCredentials ret = ReadonlyUsernamePWCredentials.createFromBasicAuth (sAuthHeader);
-    if (ret == null)
+    final String sAuthHeader = ContainerHelper.getFirstElement (aHeaders);
+    final IReadonlyUsernamePWCredentials aCredentials = ReadonlyUsernamePWCredentials.createFromBasicAuth (sAuthHeader);
+    if (aCredentials == null) {
+      s_aLogger.warn ("Illegal credentials provided: " + sAuthHeader);
       throw new UnauthorizedException ("Only Basic authorization accepted.");
-    return ret;
+    }
+    return aCredentials;
   }
 }

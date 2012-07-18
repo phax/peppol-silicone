@@ -62,7 +62,7 @@ import com.phloc.commons.state.ESuccess;
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public class PostRegistrationFilter implements Filter {
+public final class PostRegistrationFilter implements Filter {
   /**
    * This response wrapper simply captures the status of the response in an
    * easily accessible way.
@@ -77,27 +77,27 @@ public class PostRegistrationFilter implements Filter {
     }
 
     @Override
-    public void sendError (final int sc) throws IOException {
-      super.sendError (sc);
-      m_nStatus = sc;
+    public void sendError (final int nStatusCode) throws IOException {
+      super.sendError (nStatusCode);
+      m_nStatus = nStatusCode;
     }
 
     @Override
-    public void sendError (final int sc, final String msg) throws IOException {
-      super.sendError (sc, msg);
-      m_nStatus = sc;
+    public void sendError (final int nStatusCode, final String msg) throws IOException {
+      super.sendError (nStatusCode, msg);
+      m_nStatus = nStatusCode;
     }
 
     @Override
-    public void setStatus (final int sc) {
-      super.setStatus (sc);
-      m_nStatus = sc;
+    public void setStatus (final int nStatusCode) {
+      super.setStatus (nStatusCode);
+      m_nStatus = nStatusCode;
     }
 
     @Override
-    public void setStatus (final int sc, final String sm) {
-      super.setStatus (sc, sm);
-      m_nStatus = sc;
+    public void setStatus (final int nStatusCode, final String sStatusMessage) {
+      super.setStatus (nStatusCode, sStatusMessage);
+      m_nStatus = nStatusCode;
     }
 
     public int getStatus () {
@@ -125,20 +125,20 @@ public class PostRegistrationFilter implements Filter {
     }
   }
 
-  public void doFilter (final ServletRequest req, final ServletResponse res, final FilterChain fc) throws IOException,
-                                                                                                  ServletException {
+  public void doFilter (final ServletRequest aRequest, final ServletResponse aResponse, final FilterChain aFilterChain) throws IOException,
+                                                                                                                       ServletException {
     // Wrap the response
-    final HttpServletResponseWrapperWithStatus r = new HttpServletResponseWrapperWithStatus ((HttpServletResponse) res);
+    final HttpServletResponseWrapperWithStatus aResponseWrapper = new HttpServletResponseWrapperWithStatus ((HttpServletResponse) aResponse);
     try {
-      fc.doFilter (req, r);
+      aFilterChain.doFilter (aRequest, aResponseWrapper);
 
       // Success or failure?
-      if (r.getStatus () >= 400) {
-        s_aLogger.debug ("Operation failed, status: " + r.getStatus ());
+      if (aResponseWrapper.getStatus () >= 400) {
+        s_aLogger.debug ("Operation failed, status: " + aResponseWrapper.getStatus ());
         _notifyRegistrationHook (ESuccess.FAILURE);
       }
       else {
-        s_aLogger.debug ("Operation ok, status: " + r.getStatus ());
+        s_aLogger.debug ("Operation ok, status: " + aResponseWrapper.getStatus ());
         _notifyRegistrationHook (ESuccess.SUCCESS);
       }
     }
