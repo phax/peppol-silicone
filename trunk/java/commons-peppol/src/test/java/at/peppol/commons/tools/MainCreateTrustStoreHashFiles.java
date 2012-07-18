@@ -61,16 +61,16 @@ public final class MainCreateTrustStoreHashFiles {
   private static final Logger s_aLogger = LoggerFactory.getLogger (MainCreateTrustStoreHashFiles.class);
 
   public static void main (final String [] args) {
-    final IReadableResource aTrustStore = new ClassPathResource (KeyStoreUtils.CLASSPATH_TRUSTSTORE);
+    final IReadableResource aTrustStore = new ClassPathResource (KeyStoreUtils.TRUSTSTORE_CLASSPATH);
 
     final byte [] aMD5 = MessageDigestGeneratorHelper.getDigestFromInputStream (aTrustStore.getInputStream (),
                                                                                 EMessageDigestAlgorithm.MD5);
-    SimpleFileIO.writeFile (new File ("src/main/resources/" + KeyStoreUtils.CLASSPATH_TRUSTSTORE + ".md5"),
+    SimpleFileIO.writeFile (new File ("src/main/resources/" + KeyStoreUtils.TRUSTSTORE_CLASSPATH + ".md5"),
                             MessageDigestGeneratorHelper.getHexValueFromDigest (aMD5),
                             CCharset.CHARSET_ISO_8859_1_OBJ);
     final byte [] aSHA1 = MessageDigestGeneratorHelper.getDigestFromInputStream (aTrustStore.getInputStream (),
                                                                                  EMessageDigestAlgorithm.SHA_1);
-    SimpleFileIO.writeFile (new File ("src/main/resources/" + KeyStoreUtils.CLASSPATH_TRUSTSTORE + ".sha1"),
+    SimpleFileIO.writeFile (new File ("src/main/resources/" + KeyStoreUtils.TRUSTSTORE_CLASSPATH + ".sha1"),
                             MessageDigestGeneratorHelper.getHexValueFromDigest (aSHA1),
                             CCharset.CHARSET_ISO_8859_1_OBJ);
 
