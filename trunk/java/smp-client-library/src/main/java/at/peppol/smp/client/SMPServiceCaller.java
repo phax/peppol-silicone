@@ -59,6 +59,7 @@ import org.busdox.servicemetadata.publishing._1.ServiceGroupType;
 import org.busdox.servicemetadata.publishing._1.ServiceInformationType;
 import org.busdox.servicemetadata.publishing._1.ServiceMetadataType;
 import org.busdox.servicemetadata.publishing._1.SignedServiceMetadataType;
+import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3._2000._09.xmldsig.X509DataType;
@@ -106,7 +107,7 @@ public final class SMPServiceCaller {
   private static final GenericType <JAXBElement <SignedServiceMetadataType>> TYPE_SIGNEDSERVICEMETADATA = new GenericType <JAXBElement <SignedServiceMetadataType>> () {};
 
   // Members - free to change from here on
-  private final ObjectFactory m_aObjFactory = new ObjectFactory ();
+  private static final ObjectFactory s_aObjFactory = new ObjectFactory ();
   private final WebResource m_aWebResource;
   private final WebResource m_aWebResourceWithSignatureCheck;
 
@@ -126,7 +127,7 @@ public final class SMPServiceCaller {
   }
 
   /**
-   * Constructor
+   * Constructor with SML lookup
    * 
    * @param aParticipantIdentifier
    *        The participant identifier to be used. Required to build the SMP
@@ -142,7 +143,7 @@ public final class SMPServiceCaller {
   }
 
   /**
-   * Constructor
+   * Constructor with SML lookup
    * 
    * @param aParticipantIdentifier
    *        The participant identifier to be used. Required to build the SMP
@@ -160,8 +161,8 @@ public final class SMPServiceCaller {
   }
 
   /**
-   * Constructs a new service caller for the specified host. Remember: must be
-   * HTTP and using port 80 only!
+   * Constructor with a direct SMP URL.<br>
+   * Remember: must be HTTP and using port 80 only!
    * 
    * @param aSMPHost
    *        The address of the SMP service. Must be port 80 and basic http only
@@ -170,6 +171,10 @@ public final class SMPServiceCaller {
   public SMPServiceCaller (@Nonnull final URI aSMPHost) {
     if (aSMPHost == null)
       throw new NullPointerException ("smpHost");
+    if (!"http".equals (aSMPHost.getScheme ()))
+      s_aLogger.warn ("SMP URI " + aSMPHost + " does not use the expected http scheme!");
+    if (aSMPHost.getPort () != 80)
+      s_aLogger.warn ("SMP URI " + aSMPHost + " is not running on port 80!");
     m_aWebResource = _getResource (aSMPHost);
     m_aWebResourceWithSignatureCheck = _getResourceWithSignatureCheck (aSMPHost);
   }
@@ -266,6 +271,31 @@ public final class SMPServiceCaller {
                                 @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
     final WebResource aFullResource = m_aWebResource.path (IdentifierUtils.getIdentifierURIPercentEncoded (aServiceGroup.getParticipantIdentifier ()));
     _saveServiceGroupResource (aFullResource, aServiceGroup, aCredentials);
+  }
+
+  /**
+   * Saves a service group. The metadata references should not be set and are
+   * not used.
+   * 
+   * @param aParticipantID
+   *        The participant identifier for which the service group is to save.
+   * @param aCredentials
+   *        The username and password to use as aCredentials.
+   * @throws UnauthorizedException
+   *         The username or password was not correct.
+   * @throws NotFoundException
+   *         A HTTP Not Found was received. This can happen if the service was
+   *         not found.
+   * @throws UnknownException
+   *         An unknown HTTP exception was received.
+   * @throws BadRequestException
+   *         The request was not well formed.
+   */
+  public void saveServiceGroup (@Nonnull final ParticipantIdentifierType aParticipantID,
+                                @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
+    final ServiceGroupType aServiceGroup = s_aObjFactory.createServiceGroupType ();
+    aServiceGroup.setParticipantIdentifier (aParticipantID);
+    saveServiceGroup (aServiceGroup, aCredentials);
   }
 
   /**
@@ -533,9 +563,9 @@ public final class SMPServiceCaller {
    *         not corresponding to the service group id in the service group
    *         object.
    */
-  public void saveServiceGroup (@Nonnull final URI aURI,
-                                @Nonnull final ServiceGroupType aServiceGroup,
-                                @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
+  public static void saveServiceGroup (@Nonnull final URI aURI,
+                                       @Nonnull final ServiceGroupType aServiceGroup,
+                                       @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
     _saveServiceGroupResource (_getResource (aURI), aServiceGroup, aCredentials);
   }
 
@@ -602,9 +632,9 @@ public final class SMPServiceCaller {
    *         not corresponding to the service group id or document type id in
    *         the service metadata object.
    */
-  public void saveServiceRegistration (@Nonnull final URI aURI,
-                                       @Nonnull final ServiceMetadataType aServiceMetadata,
-                                       @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
+  public static void saveServiceRegistration (@Nonnull final URI aURI,
+                                              @Nonnull final ServiceMetadataType aServiceMetadata,
+                                              @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
     _saveServiceRegistrationResource (_getResource (aURI), aServiceMetadata, aCredentials);
   }
 
@@ -752,15 +782,15 @@ public final class SMPServiceCaller {
     }
   }
 
-  private void _saveServiceGroupResource (@Nonnull final WebResource aFullResource,
-                                          @Nonnull final ServiceGroupType aServiceGroup,
-                                          @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
+  private static void _saveServiceGroupResource (@Nonnull final WebResource aFullResource,
+                                                 @Nonnull final ServiceGroupType aServiceGroup,
+                                                 @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
     try {
       final Builder aBuilderWithAuth = aFullResource.header (HttpHeaders.AUTHORIZATION,
                                                              aCredentials.getAsHTTPHeaderValue ());
 
       // Important to build a JAXBElement around the service group
-      aBuilderWithAuth.put (m_aObjFactory.createServiceGroup (aServiceGroup));
+      aBuilderWithAuth.put (s_aObjFactory.createServiceGroup (aServiceGroup));
     }
     catch (final UniformInterfaceException e) {
       throw _getConvertedException (e);
@@ -786,15 +816,16 @@ public final class SMPServiceCaller {
       // If the Redirect element is present, then follow 1 redirect.
       if (aMetadata.getServiceMetadata () != null && aMetadata.getServiceMetadata ().getRedirect () != null) {
         final RedirectType aRedirect = aMetadata.getServiceMetadata ().getRedirect ();
-        final WebResource aRedirectFullResource = _getResourceWithSignatureCheck (URI.create (aRedirect.getHref ()));
 
+        // Follow the redirect
+        final WebResource aRedirectFullResource = _getResourceWithSignatureCheck (URI.create (aRedirect.getHref ()));
         aMetadata = aRedirectFullResource.get (TYPE_SIGNEDSERVICEMETADATA).getValue ();
 
         // Check that the certificateUID is correct.
         boolean bCertificateSubjectFound = false;
-        final Iterator <Object> ki = aMetadata.getSignature ().getKeyInfo ().getContent ().iterator ();
-        OUTER: while (ki.hasNext ()) {
-          final JAXBElement <?> aInfo = (JAXBElement <?>) ki.next ();
+        final Iterator <Object> aKeyInfoIter = aMetadata.getSignature ().getKeyInfo ().getContent ().iterator ();
+        outer: while (aKeyInfoIter.hasNext ()) {
+          final JAXBElement <?> aInfo = (JAXBElement <?>) aKeyInfoIter.next ();
           final Object aInfoValue = aInfo.getValue ();
           if (aInfoValue instanceof X509DataType) {
             final X509DataType aX509Data = (X509DataType) aInfoValue;
@@ -812,7 +843,7 @@ public final class SMPServiceCaller {
                                               aRedirect.getCertificateUID ());
                 }
                 bCertificateSubjectFound = true;
-                break OUTER;
+                break outer;
               }
             }
           }
@@ -829,15 +860,15 @@ public final class SMPServiceCaller {
     }
   }
 
-  private void _saveServiceRegistrationResource (@Nonnull final WebResource aFullResource,
-                                                 @Nonnull final ServiceMetadataType aServiceMetadata,
-                                                 @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
+  private static void _saveServiceRegistrationResource (@Nonnull final WebResource aFullResource,
+                                                        @Nonnull final ServiceMetadataType aServiceMetadata,
+                                                        @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
     try {
       final Builder aBuilderWithAuth = aFullResource.header (HttpHeaders.AUTHORIZATION,
                                                              aCredentials.getAsHTTPHeaderValue ());
 
       // Create JAXBElement!
-      aBuilderWithAuth.put (m_aObjFactory.createServiceMetadata (aServiceMetadata));
+      aBuilderWithAuth.put (s_aObjFactory.createServiceMetadata (aServiceMetadata));
     }
     catch (final UniformInterfaceException e) {
       throw _getConvertedException (e);

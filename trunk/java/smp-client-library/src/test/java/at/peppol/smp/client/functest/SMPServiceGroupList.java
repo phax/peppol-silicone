@@ -43,6 +43,7 @@ import org.slf4j.LoggerFactory;
 
 import at.peppol.smp.client.SMPServiceCaller;
 import at.peppol.smp.client.exception.NotFoundException;
+import at.peppol.smp.client.tools.SMPUtils;
 
 /**
  * @author philip

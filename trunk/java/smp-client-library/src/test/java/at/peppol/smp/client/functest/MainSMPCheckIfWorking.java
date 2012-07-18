@@ -37,31 +37,50 @@
  */
 package at.peppol.smp.client.functest;
 
-import org.busdox.servicemetadata.publishing._1.SignedServiceMetadataType;
+import org.busdox.servicemetadata.publishing._1.ServiceGroupType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.peppol.commons.identifier.IdentifierUtils;
 import at.peppol.smp.client.SMPServiceCaller;
-import at.peppol.smp.client.tools.SMPUtils;
+import at.peppol.smp.client.exception.NotFoundException;
 
 /**
+ * Check if an SMP installation is working. Prior to executing this class, make
+ * sure that {@link CSMP} and {@link CAP} are filled correctly!
+ * 
  * @author philip
  */
-public final class SMPServiceRegistrationList {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (SMPServiceRegistrationList.class);
+public final class MainSMPCheckIfWorking {
+  private static final Logger s_aLogger = LoggerFactory.getLogger (MainSMPCheckIfWorking.class);
 
   public static void main (final String [] args) throws Exception {
     // The main SMP client
     final SMPServiceCaller aClient = new SMPServiceCaller (CSMP.SMP_URI);
 
-    // Get the service group reference list
-    final SignedServiceMetadataType aSignedServiceMetadata = aClient.getServiceRegistration (CSMP.PARTICIPANT_ID,
-                                                                                             CSMP.DOCUMENT_ID);
+    // Ensure that the service group does not exist
+    s_aLogger.info ("Ensuring that the service group is not existing!");
+    try {
+      aClient.getServiceGroup (CSMP.PARTICIPANT_ID);
+      s_aLogger.info ("Deleting existing service group for init");
+      aClient.deleteServiceGroup (CSMP.PARTICIPANT_ID, CSMP.SMP_CREDENTIALS);
+      s_aLogger.info ("Finished deletion of service group");
+    }
+    catch (final NotFoundException ex) {
+      // ServiceGroup does not exist
+    }
 
-    if (aSignedServiceMetadata == null)
-      s_aLogger.error ("Failed to get service registration for " + CSMP.PARTICIPANT_ID + " and " + CSMP.DOCUMENT_ID);
-    else
-      s_aLogger.info (SMPUtils.getAsString (aSignedServiceMetadata.getServiceMetadata ()));
+    // Create, read and delete the service group
+    s_aLogger.info ("Creating the new service group");
+    aClient.saveServiceGroup (CSMP.PARTICIPANT_ID, CSMP.SMP_CREDENTIALS);
+
+    s_aLogger.info ("Retrieving the service group");
+    final ServiceGroupType aSGT = aClient.getServiceGroup (CSMP.PARTICIPANT_ID);
+    if (!IdentifierUtils.areIdentifiersEqual (aSGT.getParticipantIdentifier (), CSMP.PARTICIPANT_ID))
+      throw new IllegalStateException ("Participant identifiers are not equal!");
+
+    s_aLogger.info ("Deleting the service group again");
+    aClient.deleteServiceGroup (CSMP.PARTICIPANT_ID, CSMP.SMP_CREDENTIALS);
 
     s_aLogger.info ("Done");
   }
