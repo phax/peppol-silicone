@@ -14,10 +14,10 @@ You must have a JRE 1.6.x installed. This software has not yet been tested with 
 
 = Metro =
 
-The software provided by this project makes heavy use of the Java Metro libraries. Currently the version Metro 2.1.1 from http://metro.dev.java.net/2.1.1 is required. Download the ZIP file and extract it locally to perform further steps.
+The software provided by this project makes heavy use of the Java Metro libraries. Currently the version Metro 2.1.1 from http://metro.java.net/2.1.1 is required. Download the ZIP file and extract it locally to perform further steps.
 The rest of the configuration depends on the application server you are using.
 
-*Important Note:* peppol-silicone has not yet been tested with Metro 2.2 which was released on February 20th, 2012!
+*Important Note:* peppol-silicone has only partially been tested with Metro 2.2. You may use Metro 2.2u1 from http://metro.java.net/2.2.0-1/ on your own risk, but currently it looks as if everything is working as expected!
 
 == Setup for Tomcat 6.x and 7.x ==
 
