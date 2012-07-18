@@ -40,9 +40,9 @@ package at.peppol.transport;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.busdox.transport.identifiers._1.DocumentIdentifierType;
-import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
-import org.busdox.transport.identifiers._1.ProcessIdentifierType;
+import at.peppol.commons.identifier.SimpleDocumentTypeIdentifier;
+import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+import at.peppol.commons.identifier.SimpleProcessIdentifier;
 
 /**
  * Read only interface for the Metadata object.
@@ -68,23 +68,23 @@ public interface IMessageMetadata {
    * @return the senderValue
    */
   @Nonnull
-  ParticipantIdentifierType getSenderID ();
+  SimpleParticipantIdentifier getSenderID ();
 
   /**
    * @return the recipientValue
    */
   @Nonnull
-  ParticipantIdentifierType getRecipientID ();
+  SimpleParticipantIdentifier getRecipientID ();
 
   /**
    * @return the documentIdValue
    */
   @Nonnull
-  DocumentIdentifierType getDocumentTypeID ();
+  SimpleDocumentTypeIdentifier getDocumentTypeID ();
 
   /**
    * @return the processIdValue
    */
   @Nonnull
-  ProcessIdentifierType getProcessID ();
+  SimpleProcessIdentifier getProcessID ();
 }
