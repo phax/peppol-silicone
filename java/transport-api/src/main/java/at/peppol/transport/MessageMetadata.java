@@ -41,10 +41,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
-import org.busdox.transport.identifiers._1.DocumentIdentifierType;
-import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
-import org.busdox.transport.identifiers._1.ProcessIdentifierType;
-
 import at.peppol.busdox.identifier.IReadonlyDocumentTypeIdentifier;
 import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
 import at.peppol.busdox.identifier.IReadonlyProcessIdentifier;
@@ -135,7 +131,7 @@ public final class MessageMetadata implements IMessageMetadata {
    * @return the senderValue
    */
   @Nonnull
-  public final ParticipantIdentifierType getSenderID () {
+  public final SimpleParticipantIdentifier getSenderID () {
     return m_aSenderID;
   }
 
@@ -143,7 +139,7 @@ public final class MessageMetadata implements IMessageMetadata {
    * @return the recipientValue
    */
   @Nonnull
-  public final ParticipantIdentifierType getRecipientID () {
+  public final SimpleParticipantIdentifier getRecipientID () {
     return m_aRecipientID;
   }
 
@@ -151,7 +147,7 @@ public final class MessageMetadata implements IMessageMetadata {
    * @return the documentIdValue
    */
   @Nonnull
-  public final DocumentIdentifierType getDocumentTypeID () {
+  public final SimpleDocumentTypeIdentifier getDocumentTypeID () {
     return m_aDocumentTypeID;
   }
 
@@ -159,7 +155,7 @@ public final class MessageMetadata implements IMessageMetadata {
    * @return the processIdValue
    */
   @Nonnull
-  public final ProcessIdentifierType getProcessID () {
+  public final SimpleProcessIdentifier getProcessID () {
     return m_aProcessID;
   }
 
