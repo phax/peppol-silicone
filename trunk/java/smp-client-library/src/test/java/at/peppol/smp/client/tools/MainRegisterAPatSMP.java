@@ -76,7 +76,7 @@ import com.phloc.commons.state.ESuccess;
 public final class MainRegisterAPatSMP {
   public static final Logger s_aLogger = LoggerFactory.getLogger (MainRegisterAPatSMP.class);
 
-  // Modify the following constants to fit your needs!
+  // Modify the following constants to fit your needs:
 
   // SMP user name and password (as found in the smp_user table)
   private static final String SMP_USERID = "mySMPUserID";
