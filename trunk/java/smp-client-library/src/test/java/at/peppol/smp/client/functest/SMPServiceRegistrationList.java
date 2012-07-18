@@ -55,8 +55,8 @@ public final class SMPServiceRegistrationList {
     final SMPServiceCaller aClient = new SMPServiceCaller (CSMP.SMP_URI);
 
     // Get the service group reference list
-    final SignedServiceMetadataType aSignedServiceMetadata = aClient.getServiceRegistration (CSMP.PARTICIPANT_ID,
-                                                                                             CSMP.DOCUMENT_ID);
+    final SignedServiceMetadataType aSignedServiceMetadata = aClient.getServiceRegistrationOrNull (CSMP.PARTICIPANT_ID,
+                                                                                                   CSMP.DOCUMENT_ID);
 
     if (aSignedServiceMetadata == null)
       s_aLogger.error ("Failed to get service registration for " + CSMP.PARTICIPANT_ID + " and " + CSMP.DOCUMENT_ID);

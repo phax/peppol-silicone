@@ -42,7 +42,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.peppol.smp.client.SMPServiceCaller;
-import at.peppol.smp.client.exception.NotFoundException;
 import at.peppol.smp.client.tools.SMPUtils;
 
 /**
@@ -56,14 +55,7 @@ public final class SMPServiceGroupList {
     final SMPServiceCaller aClient = new SMPServiceCaller (CSMP.SMP_URI);
 
     // Get the service group information
-    ServiceGroupType aServiceGroup = null;
-    try {
-      aServiceGroup = aClient.getServiceGroup (CSMP.PARTICIPANT_ID);
-    }
-    catch (final NotFoundException ex) {
-      // ServiceGroup does not exist
-    }
-
+    final ServiceGroupType aServiceGroup = aClient.getServiceGroupOrNull (CSMP.PARTICIPANT_ID);
     if (aServiceGroup == null)
       s_aLogger.error ("Failed to get service group infos for " + CSMP.PARTICIPANT_ID);
     else
