@@ -63,7 +63,16 @@ import com.phloc.commons.io.streams.StreamUtils;
  */
 @Immutable
 public final class KeyStoreUtils {
-  public static final String CLASSPATH_TRUSTSTORE = "truststore/global-truststore.jks";
+  /** The classpath entry referencing the global truststore */
+  public static final String TRUSTSTORE_CLASSPATH = "truststore/global-truststore.jks";
+  /** The password used to access the truststore */
+  public static final String TRUSTSTORE_PASSWORD = "peppol";
+  /** The truststore alias for the AP certificate */
+  public static final String TRUSTSTORE_ALIAS_AP = "peppol access point test ca (peppol root test ca)";
+  /** The truststore alias for the SMP certificate */
+  public static final String TRUSTSTORE_ALIAS_SMP = "peppol service metadata publisher test ca (peppol root test ca)";
+  @Deprecated
+  public static final String CLASSPATH_TRUSTSTORE = TRUSTSTORE_CLASSPATH;
   public static final String KEYSTORE_TYPE_JKS = "JKS";
 
   @PresentForCodeCoverage
