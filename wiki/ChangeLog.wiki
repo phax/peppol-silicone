@@ -26,6 +26,7 @@
   * Adopted the field lengths for identifier values according to the defined maximum length constraints
   * Using the maven-shade-plugin to build standalone runnable "smp-client-console"
   * Some improvements to the SMP client API
+  * Updated Jersey (REST libs) to 1.13
 ==Validation==
   * Added a new project "validation-webapp" that provides a minimum web application for validating your PEPPOL documents in the web
   * IValidationDocumentType interface is now more generic by only requiring to offer a Schema object (and not to force UBL usage)
