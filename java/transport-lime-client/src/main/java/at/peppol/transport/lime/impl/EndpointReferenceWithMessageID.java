@@ -39,10 +39,9 @@ package at.peppol.transport.lime.impl;
 
 import javax.annotation.Nullable;
 
-import org.busdox.transport.identifiers._1.DocumentIdentifierType;
-import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
-import org.busdox.transport.identifiers._1.ProcessIdentifierType;
-
+import at.peppol.commons.identifier.SimpleDocumentTypeIdentifier;
+import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+import at.peppol.commons.identifier.SimpleProcessIdentifier;
 import at.peppol.transport.IMessageMetadata;
 
 /**
@@ -60,22 +59,22 @@ public final class EndpointReferenceWithMessageID extends EndpointReference impl
   }
 
   @Nullable
-  public ParticipantIdentifierType getSenderID () {
+  public SimpleParticipantIdentifier getSenderID () {
     return null;
   }
 
   @Nullable
-  public ParticipantIdentifierType getRecipientID () {
+  public SimpleParticipantIdentifier getRecipientID () {
     return null;
   }
 
   @Nullable
-  public DocumentIdentifierType getDocumentTypeID () {
+  public SimpleDocumentTypeIdentifier getDocumentTypeID () {
     return null;
   }
 
   @Nullable
-  public ProcessIdentifierType getProcessID () {
+  public SimpleProcessIdentifier getProcessID () {
     return null;
   }
 }
