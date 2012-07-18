@@ -67,6 +67,7 @@ public final class CSMP {
   public static final IReadonlyUsernamePWCredentials SMP_CREDENTIALS = new ReadonlyUsernamePWCredentials (SMP_USERNAME,
                                                                                                           SMP_PASSWORD);
   public static final UserId SMP_USERID = new UserId (SMP_USERNAME);
+  private static final String SMP_URI_STR = "http://localhost/";
   public static final URI SMP_URI;
 
   public static final SimpleParticipantIdentifier PARTICIPANT_ID = EPredefinedIdentifierIssuingAgency.GLN.createParticipantIdentifier ("12345678");
@@ -81,7 +82,7 @@ public final class CSMP {
   static {
     try {
       // Use localhost for local testing only
-      SMP_URI = new URI ("http://localhost/");
+      SMP_URI = new URI (SMP_URI_STR);
     }
     catch (final URISyntaxException ex) {
       throw new InitializationException (ex);
