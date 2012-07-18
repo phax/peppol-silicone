@@ -50,6 +50,9 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.collections.ArrayHelper;
+import com.phloc.commons.collections.ContainerHelper;
+
 /**
  * Extract certificate principal from HTTP request.
  * 
@@ -83,8 +86,8 @@ public final class ClientUniqueIDProvider {
   }
 
   @Nullable
-  public static String getClientUniqueID (final X509Certificate [] aRequestCerts) {
-    if (aRequestCerts == null || aRequestCerts.length == 0) {
+  public static String getClientUniqueID (@Nullable final X509Certificate [] aRequestCerts) {
+    if (ArrayHelper.isEmpty (aRequestCerts)) {
       // Empty array
       return null;
     }
@@ -111,7 +114,10 @@ public final class ClientUniqueIDProvider {
       throw new IllegalStateException ("Found " +
                                        aNonIssuerCertList.size () +
                                        " certificates that are not issuer certificates!");
-    final X509Certificate aNonIssuerCert = aNonIssuerCertList.get (0);
+
+    final X509Certificate aNonIssuerCert = ContainerHelper.getFirstElement (aNonIssuerCertList);
+
+    // principal-name + ":" + serialnumber-hexstring
     return aNonIssuerCert.getSubjectX500Principal ().getName () + ':' + aNonIssuerCert.getSerialNumber ().toString (16);
   }
 }
