@@ -200,10 +200,22 @@ public final class SMPServiceCaller {
    * @throws BadRequestException
    *         The request was not well formed.
    */
+  @Nonnull
   public ServiceGroupReferenceListType getServiceGroupReferenceList (@Nonnull final UserId aUserID,
                                                                      @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
     final WebResource aFullResource = m_aWebResource.path ("/list/" + aUserID.getUserIdPercentEncoded ());
     return _getServiceGroupReferenceListResource (aFullResource, aCredentials);
+  }
+
+  @Nullable
+  public ServiceGroupReferenceListType getServiceGroupReferenceListOrNull (@Nonnull final UserId aUserID,
+                                                                           @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
+    try {
+      return getServiceGroupReferenceList (aUserID, aCredentials);
+    }
+    catch (final NotFoundException ex) {
+      return null;
+    }
   }
 
   /**
@@ -224,10 +236,21 @@ public final class SMPServiceCaller {
    * @throws BadRequestException
    *         The request was not well formed.
    */
+  @Nonnull
   public CompleteServiceGroupType getCompleteServiceGroup (@Nonnull final IReadonlyParticipantIdentifier aServiceGroupID) throws Exception {
     final WebResource aFullResource = m_aWebResource.path ("/complete/" +
                                                            IdentifierUtils.getIdentifierURIPercentEncoded (aServiceGroupID));
     return _getCompleteServiceGroupResource (aFullResource);
+  }
+
+  @Nullable
+  public CompleteServiceGroupType getCompleteServiceGroupOrNull (@Nonnull final IReadonlyParticipantIdentifier aServiceGroupID) throws Exception {
+    try {
+      return getCompleteServiceGroup (aServiceGroupID);
+    }
+    catch (final NotFoundException ex) {
+      return null;
+    }
   }
 
   /**
@@ -247,9 +270,20 @@ public final class SMPServiceCaller {
    * @throws BadRequestException
    *         The request was not well formed.
    */
+  @Nonnull
   public ServiceGroupType getServiceGroup (@Nonnull final IReadonlyParticipantIdentifier aServiceGroupID) throws Exception {
     final WebResource aFullResource = m_aWebResource.path (IdentifierUtils.getIdentifierURIPercentEncoded (aServiceGroupID));
     return _getServiceGroupResource (aFullResource);
+  }
+
+  @Nullable
+  public ServiceGroupType getServiceGroupOrNull (@Nonnull final IReadonlyParticipantIdentifier aServiceGroupID) throws Exception {
+    try {
+      return getServiceGroup (aServiceGroupID);
+    }
+    catch (final NotFoundException ex) {
+      return null;
+    }
   }
 
   /**
@@ -341,6 +375,7 @@ public final class SMPServiceCaller {
    * @throws BadRequestException
    *         The request was not well formed.
    */
+  @Nonnull
   public SignedServiceMetadataType getServiceRegistration (@Nonnull final IReadonlyParticipantIdentifier aServiceGroupID,
                                                            @Nonnull final IReadonlyDocumentTypeIdentifier aDocumentTypeID) throws Exception {
     final String path = IdentifierUtils.getIdentifierURIPercentEncoded (aServiceGroupID) +
@@ -349,6 +384,17 @@ public final class SMPServiceCaller {
     final WebResource aFullResource = m_aWebResourceWithSignatureCheck.path (path);
 
     return _getSignedServiceMetadataResource (aFullResource);
+  }
+
+  @Nullable
+  public SignedServiceMetadataType getServiceRegistrationOrNull (@Nonnull final IReadonlyParticipantIdentifier aServiceGroupID,
+                                                                 @Nonnull final IReadonlyDocumentTypeIdentifier aDocumentTypeID) throws Exception {
+    try {
+      return getServiceRegistration (aServiceGroupID, aDocumentTypeID);
+    }
+    catch (final NotFoundException ex) {
+      return null;
+    }
   }
 
   @Nullable

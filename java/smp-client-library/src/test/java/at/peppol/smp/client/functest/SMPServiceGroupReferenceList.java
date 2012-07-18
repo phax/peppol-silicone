@@ -55,8 +55,8 @@ public final class SMPServiceGroupReferenceList {
     final SMPServiceCaller aClient = new SMPServiceCaller (CSMP.SMP_URI);
 
     // Get the service group reference list
-    final ServiceGroupReferenceListType aServiceGroupReferenceList = aClient.getServiceGroupReferenceList (CSMP.SMP_USERID,
-                                                                                                           CSMP.SMP_CREDENTIALS);
+    final ServiceGroupReferenceListType aServiceGroupReferenceList = aClient.getServiceGroupReferenceListOrNull (CSMP.SMP_USERID,
+                                                                                                                 CSMP.SMP_CREDENTIALS);
 
     if (aServiceGroupReferenceList == null)
       s_aLogger.error ("Failed to get complete service group for " + CSMP.SMP_USERID.getUserIdPercentEncoded ());

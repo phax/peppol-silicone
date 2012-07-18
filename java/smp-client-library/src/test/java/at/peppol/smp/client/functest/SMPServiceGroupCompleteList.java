@@ -56,7 +56,7 @@ public final class SMPServiceGroupCompleteList {
     final SMPServiceCaller aClient = new SMPServiceCaller (CSMP.SMP_URI);
 
     // Get the service group reference list
-    final CompleteServiceGroupType aCompleteServiceGroup = aClient.getCompleteServiceGroup (CSMP.PARTICIPANT_ID);
+    final CompleteServiceGroupType aCompleteServiceGroup = aClient.getCompleteServiceGroupOrNull (CSMP.PARTICIPANT_ID);
 
     if (aCompleteServiceGroup == null)
       s_aLogger.error ("Failed to get complete service group for " + CSMP.PARTICIPANT_ID);

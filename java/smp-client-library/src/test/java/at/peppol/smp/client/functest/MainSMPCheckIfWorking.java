@@ -43,7 +43,6 @@ import org.slf4j.LoggerFactory;
 
 import at.peppol.commons.identifier.IdentifierUtils;
 import at.peppol.smp.client.SMPServiceCaller;
-import at.peppol.smp.client.exception.NotFoundException;
 
 /**
  * Check if an SMP installation is working. Prior to executing this class, make
@@ -60,14 +59,10 @@ public final class MainSMPCheckIfWorking {
 
     // Ensure that the service group does not exist
     s_aLogger.info ("Ensuring that the service group is not existing!");
-    try {
-      aClient.getServiceGroup (CSMP.PARTICIPANT_ID);
+    if (aClient.getServiceGroupOrNull (CSMP.PARTICIPANT_ID) != null) {
       s_aLogger.info ("Deleting existing service group for init");
       aClient.deleteServiceGroup (CSMP.PARTICIPANT_ID, CSMP.SMP_CREDENTIALS);
       s_aLogger.info ("Finished deletion of service group");
-    }
-    catch (final NotFoundException ex) {
-      // ServiceGroup does not exist
     }
 
     // Create, read and delete the service group
@@ -83,13 +78,8 @@ public final class MainSMPCheckIfWorking {
     aClient.deleteServiceGroup (CSMP.PARTICIPANT_ID, CSMP.SMP_CREDENTIALS);
 
     s_aLogger.info ("Checking if the service group is really deleted");
-    try {
-      aClient.getServiceGroup (CSMP.PARTICIPANT_ID);
+    if (aClient.getServiceGroupOrNull (CSMP.PARTICIPANT_ID) != null)
       throw new IllegalStateException ("Deletion of the service group failed!");
-    }
-    catch (final NotFoundException ex) {
-      // ServiceGroup does not exist as expected
-    }
 
     s_aLogger.info ("Seems like the SMP is working as expected!");
   }

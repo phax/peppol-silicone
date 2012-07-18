@@ -137,6 +137,10 @@ public final class ServiceGroupInterface {
        */
       return aObjFactory.createServiceGroup (aServiceGroup);
     }
+    catch (final NotFoundException ex) {
+      // No logging needed here - already logged in DB
+      throw ex;
+    }
     catch (final RuntimeException ex) {
       s_aLogger.error ("Error getting service group " + aServiceGroupID, ex);
       throw ex;
