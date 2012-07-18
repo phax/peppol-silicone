@@ -46,6 +46,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.NotThreadSafe;
 import javax.ws.rs.core.HttpHeaders;
 import javax.xml.bind.JAXBElement;
 
@@ -92,6 +93,7 @@ import com.sun.jersey.api.client.WebResource.Builder;
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
+@NotThreadSafe
 public final class SMPServiceCaller {
   public static final String BEGIN_CERTIFICATE = "-----BEGIN CERTIFICATE-----\n";
   public static final String END_CERTIFICATE = "\n-----END CERTIFICATE-----";
@@ -173,7 +175,8 @@ public final class SMPServiceCaller {
       throw new NullPointerException ("smpHost");
     if (!"http".equals (aSMPHost.getScheme ()))
       s_aLogger.warn ("SMP URI " + aSMPHost + " does not use the expected http scheme!");
-    if (aSMPHost.getPort () != 80)
+    // getPort () returns -1 if none was explicitly specified
+    if (aSMPHost.getPort () != 80 && aSMPHost.getPort () != -1)
       s_aLogger.warn ("SMP URI " + aSMPHost + " is not running on port 80!");
     m_aWebResource = _getResource (aSMPHost);
     m_aWebResourceWithSignatureCheck = _getResourceWithSignatureCheck (aSMPHost);

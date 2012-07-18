@@ -82,6 +82,15 @@ public final class MainSMPCheckIfWorking {
     s_aLogger.info ("Deleting the service group again");
     aClient.deleteServiceGroup (CSMP.PARTICIPANT_ID, CSMP.SMP_CREDENTIALS);
 
-    s_aLogger.info ("Done");
+    s_aLogger.info ("Checking if the service group is really deleted");
+    try {
+      aClient.getServiceGroup (CSMP.PARTICIPANT_ID);
+      throw new IllegalStateException ("Deletion of the service group failed!");
+    }
+    catch (final NotFoundException ex) {
+      // ServiceGroup does not exist as expected
+    }
+
+    s_aLogger.info ("Seems like the SMP is working as expected!");
   }
 }
