@@ -44,7 +44,10 @@
   <display-name>PEPPOL SMP REST service</display-name>
 
   <listener>
-    <listener-class>at.peppol.smp.server.util.TimeZoneCorrector</listener-class>
+    <listener-class>at.peppol.smp.server.util.LogStartupListener</listener-class>
+  </listener>
+  <listener>
+    <listener-class>at.peppol.smp.server.util.TimeZoneCorrectorListener</listener-class>
   </listener>
 
   <filter>

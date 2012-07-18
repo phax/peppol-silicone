@@ -35,36 +35,30 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.smp.server.hook;
+package at.peppol.smp.server.util;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.peppol.commons.utils.ConfigFile;
-
-import com.phloc.commons.lang.GenericReflection;
-
 /**
+ * This class is used for logging startup and shutdown
+ * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable
-public final class RegistrationHookFactory {
-  private static final Logger s_aLogger = LoggerFactory.getLogger (RegistrationHookFactory.class);
-  private static final String CONFIG_REGISTRATION_HOOK_CLASS = "registrationHook.class";
+public final class LogStartupListener implements ServletContextListener {
+  private static final Logger s_aLogger = LoggerFactory.getLogger (LogStartupListener.class);
 
-  private RegistrationHookFactory () {}
+  public void contextInitialized (@Nonnull final ServletContextEvent aServletContextEvent) {
+    s_aLogger.info ("SMP context started");
+  }
 
-  @Nonnull
-  public static IRegistrationHook getInstance () {
-    final String sRegHookName = ConfigFile.getInstance ().getString (CONFIG_REGISTRATION_HOOK_CLASS);
-    final IRegistrationHook aHook = GenericReflection.newInstance (sRegHookName, IRegistrationHook.class);
-    if (aHook == null)
-      throw new IllegalStateException ("Failed to create registration hook instance from class " + sRegHookName);
-    if (s_aLogger.isDebugEnabled ())
-      s_aLogger.debug ("Registration hook class '" + sRegHookName + "' instantiated");
-    return aHook;
+  public void contextDestroyed (@Nonnull final ServletContextEvent aServletContextEvent) {
+    s_aLogger.info ("SMP context stopped");
   }
 }

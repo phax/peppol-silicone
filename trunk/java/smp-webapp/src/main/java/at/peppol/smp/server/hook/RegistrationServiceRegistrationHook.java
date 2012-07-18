@@ -90,7 +90,7 @@ public final class RegistrationServiceRegistrationHook extends AbstractRegistrat
       s_aSMLEndpointURL = new URL (sURL);
     }
     catch (final MalformedURLException ex) {
-      throw new IllegalStateException ("Failed to init hook", ex);
+      throw new IllegalStateException ("Failed to init SML endpoint URL from '" + sURL + "'", ex);
     }
 
     // SMP ID
