@@ -29,11 +29,6 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.glassfish.metro</groupId>
-      <artifactId>webservices-rt</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
       <groupId>at.peppol</groupId>
       <artifactId>peppol-transport-start-client</artifactId>
       <version>${project.version}</version>
@@ -42,6 +37,11 @@
       <groupId>at.peppol</groupId>
       <artifactId>peppol-smp-client-library</artifactId>
       <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.metro</groupId>
+      <artifactId>webservices-rt</artifactId>
+      <scope>provided</scope>
     </dependency>
     
     <dependency>
