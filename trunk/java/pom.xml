@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>at.peppol</groupId>
-  <artifactId>parent-pom</artifactId>
+  <artifactId>peppol-parent-pom</artifactId>
   <version>15-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>parent-pom</name>
@@ -308,12 +308,17 @@
           <artifactId>maven-license-plugin</artifactId>
           <version>1.10.b1</version>
           <configuration>
+            <header>src/etc/license-template.txt</header>
             <strictCheck>true</strictCheck>
             <encoding>UTF-8</encoding>
             <mapping>
               <gc>XML_STYLE</gc>
+              <sch>XML_STYLE</sch>
+              <svxml>XML_STYLE</svxml>
+              <wsdl>XML_STYLE</wsdl>
               <xjb>XML_STYLE</xjb>
               <xslt>XML_STYLE</xslt>
+              <xvml>XML_STYLE</xvml>
             </mapping>
             <excludes>
               <exclude>**/NOTICE</exclude>
@@ -853,24 +858,10 @@
         <groupId>com.mycila.maven-license-plugin</groupId>
         <artifactId>maven-license-plugin</artifactId>
         <configuration>
-          <header>src/etc/license-template.txt</header>
-          <strictCheck>true</strictCheck>
-          <mapping>
-            <gc>XML_STYLE</gc>
-            <sch>XML_STYLE</sch>
-            <svxml>XML_STYLE</svxml>
-            <wsdl>XML_STYLE</wsdl>
-            <xjb>XML_STYLE</xjb>
-            <xvml>XML_STYLE</xvml>
-          </mapping>
           <keywords>
             <keyword>EUPL</keyword>
             <keyword>MPL</keyword>
           </keywords>
-          <excludes>
-            <exclude>**/*.jks</exclude>
-          </excludes>
-          <encoding>UTF-8</encoding>
         </configuration>
       </plugin>
       <plugin>
