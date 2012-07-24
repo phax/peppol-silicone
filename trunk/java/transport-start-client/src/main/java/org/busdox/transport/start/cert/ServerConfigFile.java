@@ -57,6 +57,7 @@ public final class ServerConfigFile {
   private static final String CONFIG_SERVER_TRUSTSTORE_PASSWORD = "server.truststore.password";
   private static final String CONFIG_SERVER_TRUSTSTORE_ALIAS = "server.truststore.alias";
   private static final String CONFIG_SERVER_TRUSTSTORE_ALIASPASSWORD = "server.truststore.aliaspassword";
+  private static final String CONFIG_SERVER_ENDPOINT_URL = "server.endpoint.url";
 
   private static final ConfigFile s_aConfigFile = new ConfigFile ("private-configServer.properties",
                                                                   "configServer.properties");
@@ -108,5 +109,10 @@ public final class ServerConfigFile {
   @Nullable
   public static char [] getTrustStoreAliasPassword () {
     return s_aConfigFile.getCharArray (CONFIG_SERVER_TRUSTSTORE_ALIASPASSWORD);
+  }
+
+  @Nullable
+  public static String getOwnAPURL () {
+    return s_aConfigFile.getString (CONFIG_SERVER_ENDPOINT_URL);
   }
 }

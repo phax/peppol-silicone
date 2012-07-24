@@ -281,7 +281,7 @@ public class AccessPointService {
         // Not a ping message
 
         // Get our public endpoint address from the config file
-        final String sOwnAPUrl = ServerConfigFile.getConfigFile ().getString ("server.endpoint.url");
+        final String sOwnAPUrl = ServerConfigFile.getOwnAPURL ();
 
         // In debug mode, use our recipient URL, so that the URL check will work
         final String sRecipientAPUrl = GlobalDebug.isDebugMode () ? sOwnAPUrl : _getAPURL (aMetadata);
