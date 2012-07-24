@@ -153,7 +153,8 @@ public final class SMPServiceCaller {
    * @param sSMLZoneName
    *        The SML DNS zone name to be used. Required to build the SMP access
    *        URI. Must end with a trailing dot (".") and may neither be
-   *        <code>null</code> nor empty to build a correct URL.
+   *        <code>null</code> nor empty to build a correct URL. May not start
+   *        with "http://". Example: <code>sml.peppolcentral.org.</code>
    * @see BusdoxURLUtils#getSMPURIOfParticipant(IReadonlyParticipantIdentifier,
    *      String)
    */
