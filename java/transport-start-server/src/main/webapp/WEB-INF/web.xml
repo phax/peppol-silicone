@@ -52,6 +52,9 @@
   <listener>
     <listener-class>com.sun.xml.ws.transport.http.servlet.WSServletContextListener</listener-class>
   </listener>
+  <listener>
+    <listener-class>com.phloc.scopes.web.servlet.WebScopeListener</listener-class>
+  </listener>
   
   <servlet>
     <servlet-name>accessPointService</servlet-name>
