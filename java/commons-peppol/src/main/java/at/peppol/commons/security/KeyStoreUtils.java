@@ -95,6 +95,24 @@ public final class KeyStoreUtils {
   public static KeyStore loadKeyStore (@Nonnull final String sKeyStorePath, @Nullable final String sKeyStorePassword) throws NoSuchAlgorithmException,
                                                                                                                      CertificateException,
                                                                                                                      IOException {
+    return loadKeyStore (sKeyStorePath, sKeyStorePassword == null ? null : sKeyStorePassword.toCharArray ());
+  }
+
+  /**
+   * Load a key store from a resource.
+   * 
+   * @param sKeyStorePath
+   *        The path pointing to the key store. May not be <code>null</code>.
+   * @param aKeyStorePassword
+   *        The key store password. May be <code>null</code> to indicate that no
+   *        password is required.
+   * @return The Java key-store object.
+   * @see KeyStore#load(InputStream, char[])
+   */
+  @Nonnull
+  public static KeyStore loadKeyStore (@Nonnull final String sKeyStorePath, @Nullable final char [] aKeyStorePassword) throws NoSuchAlgorithmException,
+                                                                                                                      CertificateException,
+                                                                                                                      IOException {
     // Open the resource stream
     InputStream aIS = ClassPathResource.getInputStream (sKeyStorePath);
     if (aIS == null) {
@@ -106,7 +124,7 @@ public final class KeyStoreUtils {
 
     try {
       final KeyStore aKeyStore = KeyStore.getInstance (KEYSTORE_TYPE_JKS);
-      aKeyStore.load (aIS, sKeyStorePassword == null ? null : sKeyStorePassword.toCharArray ());
+      aKeyStore.load (aIS, aKeyStorePassword);
       return aKeyStore;
     }
     catch (final KeyStoreException ex) {
