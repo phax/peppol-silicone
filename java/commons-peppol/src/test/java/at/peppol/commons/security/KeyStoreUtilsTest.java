@@ -98,7 +98,7 @@ public final class KeyStoreUtilsTest {
     final KeyPair aKeyPair = createKeyPair (1024);
     final Certificate [] certs = { createX509V1Certificate (aKeyPair), createX509V1Certificate (aKeyPair) };
 
-    KeyStore ks = KeyStoreUtils.loadKeyStore ("keystores/keystore-no-pw.jks", null);
+    KeyStore ks = KeyStoreUtils.loadKeyStore ("keystores/keystore-no-pw.jks", (String) null);
     assertEquals (KeyStoreUtils.KEYSTORE_TYPE_JKS, ks.getType ());
     assertEquals (1, ContainerHelper.newList (ks.aliases ()).size ());
     assertTrue (ks.containsAlias ("1"));
@@ -106,7 +106,7 @@ public final class KeyStoreUtilsTest {
     assertNotNull (c1);
     ks.setKeyEntry ("2", aKeyPair.getPrivate (), "key2".toCharArray (), certs);
 
-    ks = KeyStoreUtils.loadKeyStore ("keystores/keystore-pw-peppol.jks", null);
+    ks = KeyStoreUtils.loadKeyStore ("keystores/keystore-pw-peppol.jks", (String) null);
     assertEquals (1, ContainerHelper.newList (ks.aliases ()).size ());
     assertTrue (ks.containsAlias ("1"));
     final Certificate c2 = ks.getCertificate ("1");
@@ -124,7 +124,7 @@ public final class KeyStoreUtilsTest {
 
     try {
       // Non-existing file
-      KeyStoreUtils.loadKeyStore ("keystores/keystore-not-existing.jks", null);
+      KeyStoreUtils.loadKeyStore ("keystores/keystore-not-existing.jks", (String) null);
       fail ();
     }
     catch (final IllegalArgumentException ex) {}
