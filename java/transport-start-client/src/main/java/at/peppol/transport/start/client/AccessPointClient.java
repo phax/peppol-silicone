@@ -51,6 +51,7 @@ import javax.net.ssl.TrustManager;
 import javax.xml.bind.JAXBException;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.WebServiceException;
+import javax.xml.ws.wsaddressing.W3CEndpointReference;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,6 +63,7 @@ import org.w3._2009._02.ws_tra.Resource;
 import org.w3c.dom.Document;
 
 import at.peppol.commons.security.HostnameVerifierAlwaysTrue;
+import at.peppol.commons.wsaddr.W3CEndpointReferenceUtils;
 import at.peppol.transport.IMessageMetadata;
 import at.peppol.transport.MessageMetadataHelper;
 import at.peppol.transport.cert.AccessPointX509TrustManager;
@@ -198,12 +200,31 @@ public final class AccessPointClient {
       final List <Header> aHeaders = MessageMetadataHelper.createHeadersFromMetadata (aMetadata);
       ((WSBindingProvider) aPort).setOutboundHeaders (aHeaders);
 
-      // Main
+      // Main client call
       final CreateResponse aResponse = aPort.create (aBody);
-      s_aLogger.info ("Message " +
-                      aMetadata.getMessageID () +
-                      " has been successfully delivered! Response=" +
-                      aResponse);
+
+      // Build response log message
+      final StringBuilder aResponseMsg = new StringBuilder ();
+      aResponseMsg.append ("Message ").append (aMetadata.getMessageID ()).append (" has been successfully delivered!");
+      if (aResponse != null) {
+        if (aResponse.getResourceCreated () != null &&
+            !aResponse.getResourceCreated ().getEndpointReference ().isEmpty ()) {
+          aResponseMsg.append ("\n  EndpointReferences: ");
+          int nIndex = 0;
+          for (final W3CEndpointReference aEPRef : aResponse.getResourceCreated ().getEndpointReference ()) {
+            if (nIndex++ > 0)
+              aResponseMsg.append (", ");
+            aResponseMsg.append (W3CEndpointReferenceUtils.getAddress (aEPRef));
+          }
+        }
+        if (aResponse.getAny () != null)
+          aResponseMsg.append ("\n  Response content: ").append (aResponse.getAny ());
+        if (!aResponse.getOtherAttributes ().isEmpty ())
+          aResponseMsg.append ("\n  Response attributes: ").append (aResponse.getOtherAttributes ());
+      }
+      s_aLogger.info (aResponseMsg.toString ());
+
+      // Done
       return ESuccess.SUCCESS;
     }
     catch (final JAXBException ex) {
