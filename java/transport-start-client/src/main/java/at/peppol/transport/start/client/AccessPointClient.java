@@ -53,6 +53,7 @@ import javax.xml.ws.BindingProvider;
 import javax.xml.ws.WebServiceException;
 import javax.xml.ws.wsaddressing.W3CEndpointReference;
 
+import org.busdox.transport.start.saml.SAMLConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3._2009._02.ws_tra.AccessPointService;
@@ -188,6 +189,8 @@ public final class AccessPointClient {
       throw new NullPointerException ("metadata");
     if (aBody == null)
       throw new NullPointerException ("body");
+    if (!SAMLConfiguration.getInstance ().isConfigurationOK ())
+      throw new IllegalStateException ("SAML configuration is invalid - see log file for details!");
 
     s_aLogger.info ("Ready for sending message\n" +
                     MessageMetadataHelper.getDebugInfo (aMetadata) +
