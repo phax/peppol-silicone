@@ -39,6 +39,7 @@ package at.peppol.transport.start.server.filereceiver;
 
 import java.io.File;
 import java.util.Date;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -246,9 +247,9 @@ final class TransportChannel {
   public final String [] getMessageIDs (final String channelID) throws Exception {
 
     final File dir = getChannelInboxDir (channelID);
-    final File [] files = dir.listFiles (new FilenameFilterEndsWith (EXT_PAYLOAD));
+    final List <File> files = FileUtils.getDirectoryContent (dir, new FilenameFilterEndsWith (EXT_PAYLOAD));
 
-    final String [] messageIDs = new String [files.length];
+    final String [] messageIDs = new String [files.size ()];
     int i = 0;
     for (final File payloadFile : files) {
       final String curMessageId = getMessageIDFromPayloadFile (payloadFile);

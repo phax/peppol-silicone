@@ -40,6 +40,7 @@ package at.peppol.transport.lime.server.storage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -142,11 +143,10 @@ public final class LimeStorage {
   @Nonnull
   public String [] getMessageIDs (@Nonnull final String sChannelID) {
     final File aChannnelDir = _getChannelInboxDir (sChannelID);
-    final File [] aPayloadFiles = aChannnelDir.listFiles (new FilenameFilterEndsWith (EXT_PAYLOAD));
-    if (aPayloadFiles == null)
-      return new String [0];
+    final List <File> aPayloadFiles = FileUtils.getDirectoryContent (aChannnelDir,
+                                                                     new FilenameFilterEndsWith (EXT_PAYLOAD));
 
-    final String [] aMessageIDs = new String [aPayloadFiles.length];
+    final String [] aMessageIDs = new String [aPayloadFiles.size ()];
     int nMsgIdx = 0;
     for (final File aPayloadFile : aPayloadFiles) {
       final String sMsgID = _getMessageIDFromPayloadFile (aPayloadFile);
