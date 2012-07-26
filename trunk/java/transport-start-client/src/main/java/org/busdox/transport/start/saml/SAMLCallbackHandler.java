@@ -76,12 +76,11 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import at.peppol.commons.security.KeyStoreUtils;
-import at.peppol.commons.utils.ConfigFile;
 
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.annotations.DevelopersNote;
+import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.collections.ContainerHelper;
-import com.phloc.commons.string.StringHelper;
 import com.sun.xml.wss.impl.callback.SAMLCallback;
 import com.sun.xml.wss.impl.dsig.WSSPolicyConsumerImpl;
 import com.sun.xml.wss.saml.Assertion;
@@ -104,28 +103,10 @@ import com.sun.xml.wss.saml.SubjectConfirmation;
  *         Narvaez(jose@alfa1lab.com)<br>
  *         PEPPOL.AT, BRZ, Philip Helger
  */
+@UsedViaReflection
 public final class SAMLCallbackHandler implements CallbackHandler {
-
   /** Logger to follow this class behavior. */
   private static final Logger s_aLogger = LoggerFactory.getLogger (SAMLCallbackHandler.class);
-
-  /** Represents the Sender ID for an operation. */
-  public static final String CONFIG_SENDER_ID = "peppol.senderid";
-
-  /** Represents a SAML Issuer. */
-  public static final String CONFIG_SAML_TOKEN_ISSUER_NAME = "peppol.servicename";
-
-  /** Represents the TrustStore URL. */
-  public static final String CONFIG_KEYSTORE_FILE = "peppol.keystore";
-
-  /** Represents the TrustStore Password. */
-  public static final String CONFIG_KEYSTORE_PASSWORD = "peppol.password";
-
-  /** Represents the alias to select. */
-  public static final String CONFIG_KEY_ALIAS = "peppol.key-alias";
-
-  /** Represents the private key password to select. */
-  public static final String CONFIG_KEY_PASSWORD = "peppol.key-password";
 
   /** Assertion ID prefix. */
   private static final String SAML_ID_PREFIX = "SamlID";
@@ -196,36 +177,7 @@ public final class SAMLCallbackHandler implements CallbackHandler {
       s_aLogger.debug ("Creating and setting the SAML Sender Vouches Assertion.");
 
     // Read config file
-    final ConfigFile aConfig = new ConfigFile ("private-configSAML.properties", "configSAML.properties");
-
-    // Get configured properties
-    final String sSenderID = aConfig.getString (CONFIG_SENDER_ID);
-    if (StringHelper.hasNoText (sSenderID))
-      throw new IllegalStateException ("SAML configuration file is incomplete: " + CONFIG_SENDER_ID + " is missing");
-
-    final String sAccesspointName = aConfig.getString (CONFIG_SAML_TOKEN_ISSUER_NAME);
-    if (StringHelper.hasNoText (sAccesspointName))
-      throw new IllegalStateException ("SAML configuration file is incomplete: " +
-                                       CONFIG_SAML_TOKEN_ISSUER_NAME +
-                                       " is missing");
-
-    final String sKeyStoreFilename = aConfig.getString (CONFIG_KEYSTORE_FILE);
-    if (StringHelper.hasNoText (sKeyStoreFilename))
-      throw new IllegalStateException ("SAML configuration file is incomplete: " + CONFIG_KEYSTORE_FILE + " is missing");
-
-    final String sKeyStorePassword = aConfig.getString (CONFIG_KEYSTORE_PASSWORD);
-    if (StringHelper.hasNoText (sKeyStorePassword))
-      throw new IllegalStateException ("SAML configuration file is incomplete: " +
-                                       CONFIG_KEYSTORE_PASSWORD +
-                                       " is missing");
-
-    final String sKeyAlias = aConfig.getString (CONFIG_KEY_ALIAS);
-    if (StringHelper.hasNoText (sKeyAlias))
-      throw new IllegalStateException ("SAML configuration file is incomplete: " + CONFIG_KEY_ALIAS + " is missing");
-
-    final String sKeyPassword = aConfig.getString (CONFIG_KEY_PASSWORD);
-    if (StringHelper.hasNoText (sKeyPassword))
-      throw new IllegalStateException ("SAML configuration file is incomplete: " + CONFIG_KEY_PASSWORD + " is missing");
+    final SAMLConfiguration aSAMLConfig = SAMLConfiguration.getInstance ();
 
     // id must start with letters (WIF.NET)
     // necessary to support <sp:ProtectTokens>
@@ -252,10 +204,12 @@ public final class SAMLCallbackHandler implements CallbackHandler {
     final SAMLAssertionFactory aSAMLFactory = SAMLAssertionFactory.newInstance (SAMLAssertionFactory.SAML2_0);
 
     // Setup SenderNameID
-    final NameID aSenderNameID = aSAMLFactory.createNameID (sSenderID, null, SENDER_NAME_ID_SYNTAX);
+    final NameID aSenderNameID = aSAMLFactory.createNameID (aSAMLConfig.getSenderID (), null, SENDER_NAME_ID_SYNTAX);
 
     // Setup AccessPointID
-    final NameID aAccessPointNameID = aSAMLFactory.createNameID (sAccesspointName, null, ACCESSPOINT_NAME_ID_SYNTAX);
+    final NameID aAccessPointNameID = aSAMLFactory.createNameID (aSAMLConfig.getAccessPointName (),
+                                                                 null,
+                                                                 ACCESSPOINT_NAME_ID_SYNTAX);
 
     final SubjectConfirmation aSubjectConfirmation = aSAMLFactory.createSubjectConfirmation (null, CONFIRMATION_METHOD);
     final Subject aSubject = aSAMLFactory.createSubject (aSenderNameID, aSubjectConfirmation);
@@ -275,9 +229,10 @@ public final class SAMLCallbackHandler implements CallbackHandler {
                                                                aStatements);
 
     // Read certificates and private keys
-    final KeyStore aKeyStore = KeyStoreUtils.loadKeyStore (sKeyStoreFilename, sKeyStorePassword);
-    final X509Certificate aAPCertificate = (X509Certificate) aKeyStore.getCertificate (sKeyAlias);
-    final Key aKey = aKeyStore.getKey (sKeyAlias, sKeyPassword.toCharArray ());
+    final KeyStore aKeyStore = KeyStoreUtils.loadKeyStore (aSAMLConfig.getKeyStorePath (),
+                                                           aSAMLConfig.getKeyStorePassword ());
+    final X509Certificate aAPCertificate = (X509Certificate) aKeyStore.getCertificate (aSAMLConfig.getKeyAlias ());
+    final Key aKey = aKeyStore.getKey (aSAMLConfig.getKeyAlias (), aSAMLConfig.getKeyPassword ().toCharArray ());
     final PrivateKey aPrivateKey = aKey instanceof PrivateKey ? (PrivateKey) aKey : null;
 
     // Sign :)
@@ -318,7 +273,9 @@ public final class SAMLCallbackHandler implements CallbackHandler {
    * @throws SAMLException
    *         Throws a SAMLException.
    */
-  public static final Element sign (final Assertion assertion, final X509Certificate cert, final PrivateKey privKey) throws SAMLException {
+  public static final Element sign (@Nonnull final Assertion assertion,
+                                    final X509Certificate cert,
+                                    @Nonnull final PrivateKey privKey) throws SAMLException {
     try {
       final XMLSignatureFactory fac = WSSPolicyConsumerImpl.getInstance ().getSignatureFactory ();
       return sign (assertion, fac.newDigestMethod (DigestMethod.SHA1, null), SignatureMethod.RSA_SHA1, cert, privKey);
@@ -347,11 +304,12 @@ public final class SAMLCallbackHandler implements CallbackHandler {
    * @throws SAMLException
    *         Throws a SAMLException.
    */
-  public static final Element sign (final Assertion aAssertion,
+  @Nonnull
+  public static final Element sign (@Nonnull final Assertion aAssertion,
                                     final DigestMethod aDigestMethod,
                                     final String sSignatureMethod,
                                     final X509Certificate aCert,
-                                    final PrivateKey aPrivKey) throws SAMLException {
+                                    @Nonnull final PrivateKey aPrivKey) throws SAMLException {
 
     try {
       final XMLSignatureFactory aXMLSignatureFactory = WSSPolicyConsumerImpl.getInstance ().getSignatureFactory ();
@@ -408,7 +366,7 @@ public final class SAMLCallbackHandler implements CallbackHandler {
     for (int i = 1; i < aNodeList.getLength () - 1; i++)
       aMovingNodes.add (aNodeList.item (i));
 
-    // Remove all child nodes...
+    // Remove all selected child nodes...
     for (final Node aNode : aMovingNodes)
       assertionElement.removeChild (aNode);
 
