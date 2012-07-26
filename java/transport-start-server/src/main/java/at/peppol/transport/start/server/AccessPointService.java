@@ -332,18 +332,24 @@ public class AccessPointService {
 
             if (!aProcessingMessages.isEmpty ()) {
               // Log all messages from processing
-              s_aLogger.info ("Messages from processing the document " + aMetadata.getMessageID () + ":");
+              s_aLogger.info ("Messages from " +
+                              (eOverallSuccess.isSuccess () ? "successfuly" : "failed") +
+                              " processing of document " +
+                              aMetadata.getMessageID () +
+                              ":");
               for (final LogMessage aLogMsg : aProcessingMessages)
-                s_aLogger.info ('[' + aLogMsg.getErrorLevel ().getID () + "] " + aLogMsg.getMessage (),
+                s_aLogger.info ("  [" + aLogMsg.getErrorLevel ().getID () + "] " + aLogMsg.getMessage (),
                                 aLogMsg.getThrowable ());
             }
 
-            if (eOverallSuccess.isFailure ())
+            if (eOverallSuccess.isFailure ()) {
+              s_aLogger.error ("Failed to handle incoming document from PEPPOL");
               throw ExceptionUtils.createFaultMessage (new IllegalStateException ("Failure in processing document from PEPPOL"),
                                                        "Internal error in processing the incoming PEPPOL document");
+            }
 
             // Log success
-            s_aLogger.info ("Done handling document from PEPPOL");
+            s_aLogger.info ("Done handling incoming document from PEPPOL");
           }
           else {
             s_aLogger.error ("The received document is not for us!");
