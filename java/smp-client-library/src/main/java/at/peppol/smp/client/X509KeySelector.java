@@ -70,8 +70,11 @@ import at.peppol.commons.utils.ConfigFile;
  *      with the Java XML Digital Signature API</a>
  */
 public final class X509KeySelector extends KeySelector {
-  private static final String TRUSTSTORE_LOCATION = ConfigFile.getInstance ().getString ("truststore.location");
-  private static final String TRUSTSTORE_PASSWORD = ConfigFile.getInstance ().getString ("truststore.password");
+  private static final ConfigFile s_aConfigFile = ConfigFile.getInstance ();
+  private static final String TRUSTSTORE_LOCATION = s_aConfigFile.getString ("truststore.location",
+                                                                             KeyStoreUtils.TRUSTSTORE_CLASSPATH);
+  private static final String TRUSTSTORE_PASSWORD = s_aConfigFile.getString ("truststore.password",
+                                                                             KeyStoreUtils.TRUSTSTORE_PASSWORD);
 
   public X509KeySelector () {}
 
