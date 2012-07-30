@@ -37,12 +37,14 @@
  */
 package at.peppol.smp.client.functest;
 
+import java.net.URI;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 import javax.annotation.Nonnull;
+import javax.xml.ws.wsaddressing.W3CEndpointReference;
 
 import org.busdox.servicemetadata.publishing._1.EndpointType;
 import org.busdox.servicemetadata.publishing._1.ObjectFactory;
@@ -54,6 +56,10 @@ import org.busdox.servicemetadata.publishing._1.ServiceMetadataType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.peppol.commons.identifier.SimpleDocumentTypeIdentifier;
+import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+import at.peppol.commons.identifier.SimpleProcessIdentifier;
+import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
 import at.peppol.smp.client.CSMPIdentifier;
 import at.peppol.smp.client.SMPServiceCaller;
 
@@ -74,8 +80,19 @@ public final class SMPServiceRegistrationCreate {
   }
 
   public static void main (final String [] args) throws Exception {
+    final URI SMP_URI = CFunctestConfig.getSMPURI ();
+    final IReadonlyUsernamePWCredentials SMP_CREDENTIALS = CFunctestConfig.getSMPCredentials ();
+    final SimpleParticipantIdentifier PARTICIPANT_ID = CFunctestConfig.getParticipantID ();
+    final SimpleDocumentTypeIdentifier DOCUMENT_ID = CFunctestConfig.getDocumentTypeID ();
+    final SimpleProcessIdentifier PROCESS_ID = CFunctestConfig.getProcessTypeID ();
+    final W3CEndpointReference START_AP_ENDPOINTREF = CFunctestConfig.getAPEndpointRef ();
+    final String AP_CERT_STRING = CFunctestConfig.getAPCert ();
+    final String AP_SERVICE_DESCRIPTION = CFunctestConfig.getAPServiceDescription ();
+    final String AP_CONTACT_URL = CFunctestConfig.getAPContact ();
+    final String AP_INFO_URL = CFunctestConfig.getAPInfo ();
+
     // The main SMP client
-    final SMPServiceCaller aClient = new SMPServiceCaller (CSMP.SMP_URI);
+    final SMPServiceCaller aClient = new SMPServiceCaller (SMP_URI);
 
     // Create the service registration
     final ServiceMetadataType aServiceMetadata = s_aOF.createServiceMetadataType ();
@@ -89,30 +106,30 @@ public final class SMPServiceRegistrationCreate {
             final ServiceEndpointList aServiceEndpointList = s_aOF.createServiceEndpointList ();
             {
               final EndpointType aEndpoint = s_aOF.createEndpointType ();
-              aEndpoint.setEndpointReference (CAP.START_AP_ENDPOINTREF);
+              aEndpoint.setEndpointReference (START_AP_ENDPOINTREF);
               aEndpoint.setTransportProfile (CSMPIdentifier.TRANSPORT_PROFILE_START);
-              aEndpoint.setCertificate (CAP.AP_CERT_STRING);
+              aEndpoint.setCertificate (AP_CERT_STRING);
               aEndpoint.setServiceActivationDate (_createDate (2011, Calendar.JANUARY, 1));
               aEndpoint.setServiceExpirationDate (_createDate (2020, Calendar.DECEMBER, 31));
-              aEndpoint.setServiceDescription (CAP.AP_SERVICE_DESCRIPTION);
-              aEndpoint.setTechnicalContactUrl (CAP.AP_CONTACT_URL);
-              aEndpoint.setTechnicalInformationUrl (CAP.AP_INFO_URL);
+              aEndpoint.setServiceDescription (AP_SERVICE_DESCRIPTION);
+              aEndpoint.setTechnicalContactUrl (AP_CONTACT_URL);
+              aEndpoint.setTechnicalInformationUrl (AP_INFO_URL);
               aEndpoint.setMinimumAuthenticationLevel ("1");
               aEndpoint.setRequireBusinessLevelSignature (false);
               aServiceEndpointList.getEndpoint ().add (aEndpoint);
             }
-            aProcess.setProcessIdentifier (CSMP.PROCESS_ID);
+            aProcess.setProcessIdentifier (PROCESS_ID);
             aProcess.setServiceEndpointList (aServiceEndpointList);
           }
           aProcessList.getProcess ().add (aProcess);
         }
-        aServiceInformation.setDocumentIdentifier (CSMP.DOCUMENT_ID);
-        aServiceInformation.setParticipantIdentifier (CSMP.PARTICIPANT_ID);
+        aServiceInformation.setDocumentIdentifier (DOCUMENT_ID);
+        aServiceInformation.setParticipantIdentifier (PARTICIPANT_ID);
         aServiceInformation.setProcessList (aProcessList);
       }
       aServiceMetadata.setServiceInformation (aServiceInformation);
     }
-    aClient.saveServiceRegistration (aServiceMetadata, CSMP.SMP_CREDENTIALS);
+    aClient.saveServiceRegistration (aServiceMetadata, SMP_CREDENTIALS);
 
     s_aLogger.info ("Done");
   }

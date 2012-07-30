@@ -37,10 +37,14 @@
  */
 package at.peppol.smp.client.functest;
 
+import java.net.URI;
+
 import org.busdox.servicemetadata.publishing._1.SignedServiceMetadataType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.peppol.commons.identifier.SimpleDocumentTypeIdentifier;
+import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 import at.peppol.smp.client.SMPServiceCaller;
 import at.peppol.smp.client.tools.SMPUtils;
 
@@ -51,15 +55,19 @@ public final class SMPServiceRegistrationList {
   private static final Logger s_aLogger = LoggerFactory.getLogger (SMPServiceRegistrationList.class);
 
   public static void main (final String [] args) throws Exception {
+    final URI SMP_URI = CFunctestConfig.getSMPURI ();
+    final SimpleParticipantIdentifier PARTICIPANT_ID = CFunctestConfig.getParticipantID ();
+    final SimpleDocumentTypeIdentifier DOCUMENT_ID = CFunctestConfig.getDocumentTypeID ();
+
     // The main SMP client
-    final SMPServiceCaller aClient = new SMPServiceCaller (CSMP.SMP_URI);
+    final SMPServiceCaller aClient = new SMPServiceCaller (SMP_URI);
 
     // Get the service group reference list
-    final SignedServiceMetadataType aSignedServiceMetadata = aClient.getServiceRegistrationOrNull (CSMP.PARTICIPANT_ID,
-                                                                                                   CSMP.DOCUMENT_ID);
+    final SignedServiceMetadataType aSignedServiceMetadata = aClient.getServiceRegistrationOrNull (PARTICIPANT_ID,
+                                                                                                   DOCUMENT_ID);
 
     if (aSignedServiceMetadata == null)
-      s_aLogger.error ("Failed to get service registration for " + CSMP.PARTICIPANT_ID + " and " + CSMP.DOCUMENT_ID);
+      s_aLogger.error ("Failed to get service registration for " + PARTICIPANT_ID + " and " + DOCUMENT_ID);
     else
       s_aLogger.info (SMPUtils.getAsString (aSignedServiceMetadata.getServiceMetadata ()));
 

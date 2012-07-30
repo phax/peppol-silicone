@@ -37,12 +37,16 @@
  */
 package at.peppol.smp.client.functest;
 
+import java.net.URI;
+
 import org.busdox.servicemetadata.publishing._1.ServiceGroupReferenceListType;
 import org.busdox.servicemetadata.publishing._1.ServiceGroupReferenceType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
 import at.peppol.smp.client.SMPServiceCaller;
+import at.peppol.smp.client.UserId;
 
 /**
  * @author philip
@@ -51,17 +55,21 @@ public final class SMPServiceGroupReferenceList {
   private static final Logger s_aLogger = LoggerFactory.getLogger (SMPServiceGroupReferenceList.class);
 
   public static void main (final String [] args) throws Exception {
+    final URI SMP_URI = CFunctestConfig.getSMPURI ();
+    final IReadonlyUsernamePWCredentials SMP_CREDENTIALS = CFunctestConfig.getSMPCredentials ();
+    final UserId SMP_USERID = CFunctestConfig.getSMPUserId ();
+
     // The main SMP client
-    final SMPServiceCaller aClient = new SMPServiceCaller (CSMP.SMP_URI);
+    final SMPServiceCaller aClient = new SMPServiceCaller (SMP_URI);
 
     // Get the service group reference list
-    final ServiceGroupReferenceListType aServiceGroupReferenceList = aClient.getServiceGroupReferenceListOrNull (CSMP.SMP_USERID,
-                                                                                                                 CSMP.SMP_CREDENTIALS);
+    final ServiceGroupReferenceListType aServiceGroupReferenceList = aClient.getServiceGroupReferenceListOrNull (SMP_USERID,
+                                                                                                                 SMP_CREDENTIALS);
 
     if (aServiceGroupReferenceList == null)
-      s_aLogger.error ("Failed to get complete service group for " + CSMP.SMP_USERID.getUserIdPercentEncoded ());
+      s_aLogger.error ("Failed to get complete service group for " + SMP_USERID.getUserIdPercentEncoded ());
     else {
-      s_aLogger.info ("All service groups owned by " + CSMP.SMP_USERID.getUserIdPercentEncoded () + ":");
+      s_aLogger.info ("All service groups owned by " + SMP_USERID.getUserIdPercentEncoded () + ":");
       for (final ServiceGroupReferenceType aServiceGroupReference : aServiceGroupReferenceList.getServiceGroupReference ())
         s_aLogger.info ("  " + aServiceGroupReference.getHref ());
     }
