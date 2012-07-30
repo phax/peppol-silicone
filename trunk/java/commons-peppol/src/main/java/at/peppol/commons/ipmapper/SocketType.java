@@ -47,6 +47,7 @@ import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.string.StringParser;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
@@ -58,7 +59,7 @@ public final class SocketType implements ISocketType {
   private final Integer m_aPort;
 
   private SocketType (@Nonnull final String sHost, final String sPort) {
-    this (sHost, StringHelper.parseIntObj (sPort));
+    this (sHost, StringParser.parseIntObj (sPort));
     if ((sPort != null && m_aPort == null) || m_aPort.intValue () <= 0)
       throw new IllegalArgumentException ("The passed port " + sPort + " cannot be converted to a number!");
   }

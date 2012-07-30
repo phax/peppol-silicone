@@ -69,7 +69,7 @@ import com.phloc.commons.xml.serialize.XMLReader;
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public class MainSendDocument {
-  public static final String RECEIVER = "9914:ATU53309209";
+  public static final String RECEIVER = "9917:B2";
 
   @Nonnull
   private static IMessageMetadata _createMetadata () {
@@ -93,14 +93,14 @@ public class MainSendDocument {
 
   private static void _sendDocument (final IReadableResource aXmlRes) throws Exception {
     final IMessageMetadata aMetadata = _createMetadata ();
-    final String sAccessPointURL = false ? "http://localhost:8090/accessPointService" : _getAccessPointUrl (aMetadata);
+    final String sAccessPointURL = true ? "http://localhost:8090/accessPointService" : _getAccessPointUrl (aMetadata);
     final Document aXMLDoc = XMLReader.readXMLDOM (aXmlRes);
     AccessPointClient.send (sAccessPointURL, aMetadata, aXMLDoc);
   }
 
   public static void main (final String [] args) throws Exception {
     System.setProperty ("java.net.useSystemProxies", "true");
-    if (false) {
+    if (true) {
       System.setProperty ("http.proxyHost", "172.30.9.12");
       System.setProperty ("http.proxyPort", "8080");
       System.setProperty ("https.proxyHost", "172.30.9.12");

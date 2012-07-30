@@ -42,8 +42,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import at.peppol.commons.identifier.actorid.EPredefinedIdentifierIssuingAgency;
-
 import com.phloc.commons.string.StringHelper;
 
 /**

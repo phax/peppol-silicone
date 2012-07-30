@@ -60,6 +60,7 @@ import com.phloc.commons.io.resource.FileSystemResource;
 import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.state.ESuccess;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.string.StringParser;
 
 /**
  * Used for accessing configuration files based on properties. By default first
@@ -197,11 +198,11 @@ public final class ConfigFile {
   }
 
   public final boolean getBoolean (@Nonnull final String sKey, final boolean bDefault) {
-    return StringHelper.parseBool (getString (sKey), bDefault);
+    return StringParser.parseBool (getString (sKey), bDefault);
   }
 
   public final int getInt (@Nonnull final String sKey, final int nDefault) {
-    return StringHelper.parseInt (getString (sKey), nDefault);
+    return StringParser.parseInt (getString (sKey), nDefault);
   }
 
   /**

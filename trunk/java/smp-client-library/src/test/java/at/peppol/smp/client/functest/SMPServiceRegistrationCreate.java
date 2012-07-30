@@ -54,6 +54,7 @@ import org.busdox.servicemetadata.publishing._1.ServiceMetadataType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.peppol.smp.client.CSMPIdentifier;
 import at.peppol.smp.client.SMPServiceCaller;
 
 /**
@@ -89,7 +90,7 @@ public final class SMPServiceRegistrationCreate {
             {
               final EndpointType aEndpoint = s_aOF.createEndpointType ();
               aEndpoint.setEndpointReference (CAP.START_AP_ENDPOINTREF);
-              aEndpoint.setTransportProfile ("busdox-transport-start");
+              aEndpoint.setTransportProfile (CSMPIdentifier.TRANSPORT_PROFILE_START);
               aEndpoint.setCertificate (CAP.AP_CERT_STRING);
               aEndpoint.setServiceActivationDate (_createDate (2011, Calendar.JANUARY, 1));
               aEndpoint.setServiceExpirationDate (_createDate (2020, Calendar.DECEMBER, 31));

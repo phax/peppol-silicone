@@ -84,6 +84,7 @@ import com.phloc.commons.microdom.impl.MicroDocument;
 import com.phloc.commons.microdom.serialize.MicroWriter;
 import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
+import com.phloc.commons.string.StringParser;
 import com.phloc.commons.version.Version;
 import com.phloc.commons.xml.serialize.XMLWriter;
 import com.phloc.commons.xml.serialize.XMLWriterSettings;
@@ -182,7 +183,7 @@ public final class MainCreateCodelistsFilesFromExcel {
       final String sAgency = Genericode10Utils.getRowValue (aRow, "schemeagency");
       final String sISO6523 = Genericode10Utils.getRowValue (aRow, "iso6523");
       final String sDeprecated = Genericode10Utils.getRowValue (aRow, "deprecated");
-      final boolean bDeprecated = StringHelper.parseBool (sDeprecated, false);
+      final boolean bDeprecated = StringParser.parseBool (sDeprecated, false);
       final String sSince = Genericode10Utils.getRowValue (aRow, "since");
       final String sStructure = Genericode10Utils.getRowValue (aRow, "structure");
 
@@ -216,7 +217,7 @@ public final class MainCreateCodelistsFilesFromExcel {
         final String sAgency = Genericode10Utils.getRowValue (aRow, "schemeagency");
         final String sISO6523 = Genericode10Utils.getRowValue (aRow, "iso6523");
         final String sDeprecated = Genericode10Utils.getRowValue (aRow, "deprecated");
-        final boolean bDeprecated = StringHelper.parseBool (sDeprecated, false);
+        final boolean bDeprecated = StringParser.parseBool (sDeprecated, false);
         final String sSince = Genericode10Utils.getRowValue (aRow, "since");
 
         if (StringHelper.hasNoText (sSchemeID))

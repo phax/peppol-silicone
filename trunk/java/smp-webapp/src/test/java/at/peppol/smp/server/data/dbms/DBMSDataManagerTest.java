@@ -71,6 +71,7 @@ import at.peppol.commons.utils.ExtensionConverter;
 import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
 import at.peppol.commons.utils.ReadonlyUsernamePWCredentials;
 import at.peppol.commons.wsaddr.W3CEndpointReferenceUtils;
+import at.peppol.smp.client.CSMPIdentifier;
 import at.peppol.smp.server.exception.UnauthorizedException;
 import at.peppol.smp.server.exception.UnknownUserException;
 import at.peppol.smp.server.hook.DoNothingRegistrationHook;
@@ -106,7 +107,7 @@ public class DBMSDataManagerTest {
   private static final Date EXPIRATION_DATE = new Date ();
   private static final String TECH_CONTACT = "fake@peppol.eu";
   private static final String TECH_INFO = "http://fake.peppol.eu/";
-  private static final String TRANSPORT_PROFILE = "busdox-transport-start";
+  private static final String TRANSPORT_PROFILE = CSMPIdentifier.TRANSPORT_PROFILE_START;
 
   private static final ParticipantIdentifierType PARTY_ID = SimpleParticipantIdentifier.createWithDefaultScheme (PARTICIPANT_IDENTIFIER1);
   private static final ParticipantIdentifierType SERVICEGROUP_ID = PARTY_ID;

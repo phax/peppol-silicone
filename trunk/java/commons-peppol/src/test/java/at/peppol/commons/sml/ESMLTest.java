@@ -43,8 +43,6 @@ import static org.junit.Assert.assertSame;
 
 import org.junit.Test;
 
-import at.peppol.commons.sml.ESML;
-
 /**
  * Test class for class {@link ESML}.
  * 
