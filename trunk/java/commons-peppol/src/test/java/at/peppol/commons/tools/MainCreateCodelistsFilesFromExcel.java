@@ -235,6 +235,15 @@ public final class MainCreateCodelistsFilesFromExcel {
         jEnumConst.arg (JExpr.lit (sISO6523));
         jEnumConst.arg (bDeprecated ? JExpr.TRUE : JExpr.FALSE);
         jEnumConst.arg (JExpr._new (s_aCodeModel.ref (Version.class)).arg (JExpr.lit (sSince)));
+
+        jEnumConst.javadoc ().add ("Prefix <code>" +
+                                   sISO6523 +
+                                   "</code>, scheme ID <code>" +
+                                   sSchemeID +
+                                   "</code><br>\n");
+        if (bDeprecated)
+          jEnumConst.javadoc ()
+                    .add ("<b>This item is deprecated and should not be used to issue new identifiers!</b><br>\n");
         jEnumConst.javadoc ().add ("@since code list " + sSince);
       }
 
@@ -373,7 +382,8 @@ public final class MainCreateCodelistsFilesFromExcel {
         for (final String sExtensionID : aDocIDParts.getExtensionIDs ())
           jExtensions.arg (JExpr.lit (sExtensionID));
 
-        final JEnumConstant jEnumConst = s_jEnumPredefinedDoc.enumConstant (RegExHelper.getAsIdentifier (sDocID));
+        final String sEnumConstName = RegExHelper.getAsIdentifier (sDocID);
+        final JEnumConstant jEnumConst = s_jEnumPredefinedDoc.enumConstant (sEnumConstName);
         jEnumConst.arg (JExpr._new (s_aCodeModel.ref (PEPPOLDocumentTypeIdentifierParts.class))
                              .arg (JExpr.lit (aDocIDParts.getRootNS ()))
                              .arg (JExpr.lit (aDocIDParts.getLocalName ()))
@@ -382,8 +392,8 @@ public final class MainCreateCodelistsFilesFromExcel {
                              .arg (JExpr.lit (aDocIDParts.getVersion ())));
         jEnumConst.arg (JExpr.lit (sName));
         jEnumConst.arg (JExpr._new (s_aCodeModel.ref (Version.class)).arg (JExpr.lit (sSince)));
-        jEnumConst.javadoc ().add (sDocID);
-        jEnumConst.javadoc ().add ("\n@since code list " + sSince);
+        jEnumConst.javadoc ().add ("<code>" + sDocID + "</code>\n");
+        jEnumConst.javadoc ().add ("@since code list " + sSince);
 
         // Also create a shortcut for more readable names
         final String sShortcutName = CodeGenerationUtils.createShortcutDocumentTypeIDName (aDocIDParts);
@@ -393,10 +403,11 @@ public final class MainCreateCodelistsFilesFromExcel {
                                            " is already used for " +
                                            aDocIDParts.toString () +
                                            ". Please update the algorithm!");
-        s_jEnumPredefinedDoc.field (JMod.PUBLIC | JMod.STATIC | JMod.FINAL,
-                                    s_jEnumPredefinedDoc,
-                                    sShortcutName,
-                                    jEnumConst);
+        final JFieldVar aShortcut = s_jEnumPredefinedDoc.field (JMod.PUBLIC | JMod.STATIC | JMod.FINAL,
+                                                                s_jEnumPredefinedDoc,
+                                                                sShortcutName,
+                                                                jEnumConst);
+        aShortcut.javadoc ().add ("Same as {@link #" + sEnumConstName + "}");
       }
 
       // fields
@@ -564,7 +575,8 @@ public final class MainCreateCodelistsFilesFromExcel {
         final String sDocTypeIDs = Genericode10Utils.getRowValue (aRow, "docids");
         final String sSince = Genericode10Utils.getRowValue (aRow, "since");
 
-        final JEnumConstant jEnumConst = jEnum.enumConstant (RegExHelper.getAsIdentifier (sID));
+        final String sEnumConstName = RegExHelper.getAsIdentifier (sID);
+        final JEnumConstant jEnumConst = jEnum.enumConstant (sEnumConstName);
         jEnumConst.arg (JExpr.lit (sID));
         jEnumConst.arg (JExpr.lit (sBISID));
         final JArray jArray = JExpr.newArray (s_jEnumPredefinedDoc);
@@ -586,7 +598,11 @@ public final class MainCreateCodelistsFilesFromExcel {
           throw new IllegalStateException ("The BIS ID shortcut '" +
                                            sShortcutName +
                                            "' is already used - please review the algorithm!");
-        jEnum.field (JMod.PUBLIC | JMod.STATIC | JMod.FINAL, jEnum, sShortcutName, jEnumConst);
+        final JFieldVar aShortcut = jEnum.field (JMod.PUBLIC | JMod.STATIC | JMod.FINAL,
+                                                 jEnum,
+                                                 sShortcutName,
+                                                 jEnumConst);
+        aShortcut.javadoc ().add ("Same as {@link #" + sEnumConstName + "}");
       }
 
       // fields

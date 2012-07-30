@@ -35,7 +35,6 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-
 package at.peppol.commons.identifier.procid;
 
 import java.util.List;
@@ -100,10 +99,25 @@ public enum EPredefinedProcessIdentifier implements IPredefinedProcessIdentifier
                                                                                                                                                                        EPredefinedDocumentTypeIdentifier.INVOICE_T010_BIS6A,
                                                                                                                                                                        EPredefinedDocumentTypeIdentifier.CREDITNOTE_T014_BIS6A,
                                                                                                                                                                        EPredefinedDocumentTypeIdentifier.INVOICE_T015_BIS6A }, new Version ("1.0.0"));
+  /**
+   * Same as {@link #urn_www_cenbii_eu_profile_bii01_ver1_0}
+   */
   public final static EPredefinedProcessIdentifier BIS1A = EPredefinedProcessIdentifier.urn_www_cenbii_eu_profile_bii01_ver1_0;
+  /**
+   * Same as {@link #urn_www_cenbii_eu_profile_bii03_ver1_0}
+   */
   public final static EPredefinedProcessIdentifier BIS3A = EPredefinedProcessIdentifier.urn_www_cenbii_eu_profile_bii03_ver1_0;
+  /**
+   * Same as {@link #urn_www_cenbii_eu_profile_bii04_ver1_0}
+   */
   public final static EPredefinedProcessIdentifier BIS4A = EPredefinedProcessIdentifier.urn_www_cenbii_eu_profile_bii04_ver1_0;
+  /**
+   * Same as {@link #urn_www_cenbii_eu_profile_bii05_ver1_0}
+   */
   public final static EPredefinedProcessIdentifier BIS5A = EPredefinedProcessIdentifier.urn_www_cenbii_eu_profile_bii05_ver1_0;
+  /**
+   * Same as {@link #urn_www_cenbii_eu_profile_bii06_ver1_0}
+   */
   public final static EPredefinedProcessIdentifier BIS6A = EPredefinedProcessIdentifier.urn_www_cenbii_eu_profile_bii06_ver1_0;
   private final String m_sID;
   private final String m_sBISID;
