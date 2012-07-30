@@ -63,6 +63,7 @@ import at.peppol.commons.sml.ESML;
 import at.peppol.commons.sml.ISMLInfo;
 import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
 import at.peppol.commons.utils.UsernamePWCredentials;
+import at.peppol.smp.client.CSMPIdentifier;
 import at.peppol.smp.client.SMPServiceCaller;
 
 import com.phloc.commons.state.ESuccess;
@@ -155,7 +156,7 @@ public final class MainRegisterAPatSMP {
               {
                 final EndpointType aEndpoint = aObjFactory.createEndpointType ();
                 aEndpoint.setEndpointReference (new W3CEndpointReferenceBuilder ().address (AP_ENDPOINTREF).build ());
-                aEndpoint.setTransportProfile ("busdox-transport-start");
+                aEndpoint.setTransportProfile (CSMPIdentifier.TRANSPORT_PROFILE_START);
                 aEndpoint.setCertificate (AP_CERT_STRING);
                 aEndpoint.setServiceActivationDate (aStartDate);
                 aEndpoint.setServiceExpirationDate (aEndDate);

@@ -221,7 +221,7 @@ public final class ClientTest {
               final W3CEndpointReference aEndpointReferenceType = new W3CEndpointReferenceBuilder ().address ("http://peppol.eu/sampleService/")
                                                                                                     .build ();
               aEndpoint.setEndpointReference (aEndpointReferenceType);
-              aEndpoint.setTransportProfile ("http://peppol.eu/profiles/serviceMetadata/1.0/fullProfile/1.0/");
+              aEndpoint.setTransportProfile (CSMPIdentifier.TRANSPORT_PROFILE_START);
               // Certificate: Base64.encodeBytes (certificate.getEncoded ());
               aEndpoint.setCertificate ("1234567890");
               aEndpoint.setServiceActivationDate (new Date (System.currentTimeMillis ()));

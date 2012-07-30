@@ -41,8 +41,6 @@ import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
-import at.peppol.commons.security.DoNothingTrustManager;
-
 /**
  * Test class for class {@link DoNothingTrustManager}.
  * 

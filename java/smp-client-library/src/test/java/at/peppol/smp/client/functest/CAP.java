@@ -37,6 +37,7 @@
  */
 package at.peppol.smp.client.functest;
 
+import java.io.File;
 import java.security.cert.CertificateException;
 
 import javax.annotation.concurrent.Immutable;
@@ -45,25 +46,31 @@ import javax.xml.ws.wsaddressing.W3CEndpointReference;
 import at.peppol.commons.wsaddr.W3CEndpointReferenceUtils;
 import at.peppol.smp.client.SMPServiceCaller;
 
+import com.phloc.commons.base64.Base64;
 import com.phloc.commons.exceptions.InitializationException;
+import com.phloc.commons.io.file.SimpleFileIO;
 
 @Immutable
 public final class CAP {
-  public static final String START_AP_ADDRESS = "https://peppol-ap.example.org/accessPointService/";
+  public static final String START_AP_ADDRESS = "http://infra.peppol.at/transport-start-server-1.0.1/accessPointService/";
   public static final W3CEndpointReference START_AP_ENDPOINTREF = W3CEndpointReferenceUtils.createEndpointReference (START_AP_ADDRESS);
 
   /**
-   * The Base64 encoded, DER encoded AP certificate. E.g. to be created by
+   * The Base64 encoded, DER encoded AP head certificate. E.g. to be created by
    * extracting the head certificate from the ap_keystore.jks using Portecle.
    * This certificate only contains the public key!
    */
-  public static final String AP_CERT_STRING = "TODO!!!!!";
-  public static final String AP_SERVICE_DESCRIPTION = "My Accesspoint Service";
-  public static final String AP_CONTACT_URL = "support@example.org";
-  public static final String AP_INFO_URL = "http://www.example.org";
+  public static final String AP_CERT_STRING = "MIIEfTCCA2WgAwIBAgIQe0Rpx6UccgXzhYxrhM4KSTANBgkqhkiG9w0BAQUFADB9MQswCQYDVQQGEwJESzEnMCUGA1UEChMeTkFUSU9OQUwgSVQgQU5EIFRFTEVDT00gQUdFTkNZMR8wHQYDVQQLExZGT1IgVEVTVCBQVVJQT1NFUyBPTkxZMSQwIgYDVQQDExtQRVBQT0wgQUNDRVNTIFBPSU5UIFRFU1QgQ0EwHhcNMTAxMjIwMDAwMDAwWhcNMTIxMjE5MjM1OTU5WjBaMQswCQYDVQQGEwJBVDEyMDAGA1UECgwpQlJaIC0gRmVkZXJhbCBDb21wdXRpbmcgQ2VudGVyIG9mIEF1c3RyaWExFzAVBgNVBAMMDkFQUF8xMDAwMDAwMDAxMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA3Xk1bDdathIYWW6xBgLTg0rfrm+kk/E3/QoX+4qzlKfL5LcY85LOuikkZuiPTfX9DksVCI0m4bwzeBg+9HuIP2gcFvu2Sdux32Dgjn8gnwGtOPh7VEykwFUumBoj+45NE1zXMfW4Z5Jp3M/L46M5Wp2MT63PKjyZqXsfupTd4QFcaPqlofNBHDTbkAARNPXQUx2Qmmrfyt8MoPUKhi3+iZozbZYfxswUq+H0VSM8wSaAukDIKhDNydhbTdx8pFqJICKGi5uW34W8DL64nacFT4MO5Sn+wcIZSz0QOiLhpTSudaEsPuA1hvFVcG83bzVEEDy8phNc+BvB2I7JNOfGjwIDAQABo4IBGjCCARYwCQYDVR0TBAIwADALBgNVHQ8EBAMCA7gwawYDVR0fBGQwYjBgoF6gXIZaaHR0cDovL3BpbG90b25zaXRlY3JsLnZlcmlzaWduLmNvbS9JVG9nVGVsZXN0eXJlbHNlblBpbG90UEVQUE9MQUNDRVNTUE9JTlRDQS9MYXRlc3RDUkwuY3JsMB8GA1UdIwQYMBaAFPeWixlMruJWIQC+hv16R6ydygV1MB0GA1UdDgQWBBTXpLss6GgZvDIF/I4yxyKk8KdyYzA6BggrBgEFBQcBAQQuMCwwKgYIKwYBBQUHMAGGHmh0dHA6Ly9waWxvdC1vY3NwLnZlcmlzaWduLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDAjANBgkqhkiG9w0BAQUFAAOCAQEAUn4AoUnR/LtaTUQWhyTTPavTCIoUYQvCMT61KBJu0HACg01s6Yf+T2rtzrNZA6bnh9OyJM+gcvqwkxxG0hvvd+kEcFFKC8++HvSo5e6a5pLnDUJk7haKk52upevaK/NXLFn9X8wU/53nzZQbw+g9KfQANbe7MM+75DD7FkWcFCX/aMDDrnog8dKTGpMYsYpAXrntDRGA3fh4DYCdtWunqLiNKNdakUAVRymr0yjaz6kofnLjczGVsZl75ems6i9siJL7vpSz0XCyu6IXLn+5mWnrO35tmfOcL2ttapDqubZulRLmZPG79te902IFzshsPEbWNRuI7NL53W6Ow7z/4w==";
+  public static final String AP_SERVICE_DESCRIPTION = "Austrian Government PEPPOL AP";
+  public static final String AP_CONTACT_URL = "support@peppol.at";
+  public static final String AP_INFO_URL = "http://www.peppol.at";
 
   // init
   static {
+    // How to get the Cert String:
+    if (false)
+      System.out.println (Base64.encodeBytes (SimpleFileIO.readFileBytes (new File ("AP Public Key.cer"))));
+
     try {
       if (SMPServiceCaller.convertStringToCertficate (AP_CERT_STRING) == null)
         throw new InitializationException ("Failed to convert certificate string to a certificate!");

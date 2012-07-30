@@ -44,9 +44,6 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-import at.peppol.commons.utils.IUsernamePWCredentials;
-import at.peppol.commons.utils.UsernamePWCredentials;
-
 import com.phloc.commons.mock.PhlocTestUtils;
 
 /**

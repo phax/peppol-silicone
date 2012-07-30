@@ -73,6 +73,7 @@ import at.peppol.commons.security.DoNothingTrustManager;
 import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
 import at.peppol.commons.utils.ReadonlyUsernamePWCredentials;
 import at.peppol.commons.wsaddr.W3CEndpointReferenceUtils;
+import at.peppol.smp.client.CSMPIdentifier;
 import at.peppol.smp.client.SMPServiceCaller;
 import at.peppol.smp.client.UserId;
 
@@ -354,7 +355,7 @@ public final class SMPClient {
           {
             final EndpointType aEndpoint = aObjFactory.createEndpointType ();
             aEndpoint.setEndpointReference (endpointReferenceType);
-            aEndpoint.setTransportProfile ("busdox-transport-start");
+            aEndpoint.setTransportProfile (CSMPIdentifier.TRANSPORT_PROFILE_START);
 
             aEndpoint.setCertificate (m_sCertificateContent);
             aEndpoint.setServiceActivationDate (new Date (System.currentTimeMillis ()));

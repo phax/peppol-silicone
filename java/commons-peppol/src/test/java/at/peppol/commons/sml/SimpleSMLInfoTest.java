@@ -43,9 +43,6 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-import at.peppol.commons.sml.ESML;
-import at.peppol.commons.sml.SimpleSMLInfo;
-
 import com.phloc.commons.mock.PhlocTestUtils;
 
 /**

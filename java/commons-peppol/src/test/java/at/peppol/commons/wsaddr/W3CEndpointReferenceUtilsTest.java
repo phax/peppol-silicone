@@ -49,8 +49,6 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import at.peppol.commons.wsaddr.W3CEndpointReferenceUtils;
-
 import com.phloc.commons.xml.XMLFactory;
 
 /**

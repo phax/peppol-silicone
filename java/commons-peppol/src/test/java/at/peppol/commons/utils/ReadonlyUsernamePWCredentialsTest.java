@@ -43,9 +43,6 @@ import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
-import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
-import at.peppol.commons.utils.ReadonlyUsernamePWCredentials;
-
 import com.phloc.commons.mock.PhlocTestUtils;
 
 /**
