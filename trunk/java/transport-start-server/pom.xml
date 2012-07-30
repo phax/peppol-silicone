@@ -35,18 +35,18 @@
       <version>${project.version}</version>
     </dependency>
     <!-- Dummy, so that any receiver is present :) -->
-    <!-- 
     <dependency>
       <groupId>at.peppol</groupId>
       <artifactId>peppol-transport-start-filereceiver</artifactId>
       <version>${project.version}</version>
     </dependency>
-     -->
+    <!-- 
     <dependency>
-      <groupId>at.peppol.mw2</groupId>
-      <artifactId>mw2-start-module</artifactId>
-      <version>1.0.0-SNAPSHOT</version>
+      <groupId>at.peppol</groupId>
+      <artifactId>mw-transport-start-server</artifactId>
+      <version>1.2-SNAPSHOT</version>
     </dependency>
+     -->
     <dependency>
       <groupId>at.peppol</groupId>
       <artifactId>peppol-smp-client-library</artifactId>
