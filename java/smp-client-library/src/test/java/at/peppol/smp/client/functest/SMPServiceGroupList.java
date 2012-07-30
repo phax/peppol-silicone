@@ -37,10 +37,13 @@
  */
 package at.peppol.smp.client.functest;
 
+import java.net.URI;
+
 import org.busdox.servicemetadata.publishing._1.ServiceGroupType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 import at.peppol.smp.client.SMPServiceCaller;
 import at.peppol.smp.client.tools.SMPUtils;
 
@@ -51,13 +54,16 @@ public final class SMPServiceGroupList {
   private static final Logger s_aLogger = LoggerFactory.getLogger (SMPServiceGroupList.class);
 
   public static void main (final String [] args) throws Exception {
+    final URI SMP_URI = CFunctestConfig.getSMPURI ();
+    final SimpleParticipantIdentifier PARTICIPANT_ID = CFunctestConfig.getParticipantID ();
+
     // The main SMP client
-    final SMPServiceCaller aClient = new SMPServiceCaller (CSMP.SMP_URI);
+    final SMPServiceCaller aClient = new SMPServiceCaller (SMP_URI);
 
     // Get the service group information
-    final ServiceGroupType aServiceGroup = aClient.getServiceGroupOrNull (CSMP.PARTICIPANT_ID);
+    final ServiceGroupType aServiceGroup = aClient.getServiceGroupOrNull (PARTICIPANT_ID);
     if (aServiceGroup == null)
-      s_aLogger.error ("Failed to get service group infos for " + CSMP.PARTICIPANT_ID);
+      s_aLogger.error ("Failed to get service group infos for " + PARTICIPANT_ID);
     else
       s_aLogger.info (SMPUtils.getAsString (aServiceGroup));
 

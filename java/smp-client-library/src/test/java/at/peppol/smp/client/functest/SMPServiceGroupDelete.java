@@ -37,9 +37,13 @@
  */
 package at.peppol.smp.client.functest;
 
+import java.net.URI;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
 import at.peppol.smp.client.SMPServiceCaller;
 
 /**
@@ -49,11 +53,15 @@ public final class SMPServiceGroupDelete {
   private static final Logger s_aLogger = LoggerFactory.getLogger (SMPServiceGroupDelete.class);
 
   public static void main (final String [] args) throws Exception {
+    final URI SMP_URI = CFunctestConfig.getSMPURI ();
+    final IReadonlyUsernamePWCredentials SMP_CREDENTIALS = CFunctestConfig.getSMPCredentials ();
+    final SimpleParticipantIdentifier PARTICIPANT_ID = CFunctestConfig.getParticipantID ();
+
     // The main SMP client
-    final SMPServiceCaller aClient = new SMPServiceCaller (CSMP.SMP_URI);
+    final SMPServiceCaller aClient = new SMPServiceCaller (SMP_URI);
 
     // Delete the service group
-    aClient.deleteServiceGroup (CSMP.PARTICIPANT_ID, CSMP.SMP_CREDENTIALS);
+    aClient.deleteServiceGroup (PARTICIPANT_ID, SMP_CREDENTIALS);
 
     s_aLogger.info ("Done");
   }
