@@ -40,7 +40,7 @@
 -->
 <!-- This file is generated automatically! Do NOT edit! -->
 <!-- Genericode File AllowanceChargeReasonCode -->
-<CodeList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.oasis-open.org/codelist/ns/genericode/1.0/ ../xsd/genericode.xsd" xmlns="http://docs.oasis-open.org/codelist/ns/genericode/1.0/">
+<CodeList xmlns="http://docs.oasis-open.org/codelist/ns/genericode/1.0/" xsi:schemaLocation="http://docs.oasis-open.org/codelist/ns/genericode/1.0/ ../xsd/genericode.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Identification xmlns="">
     <ShortName>AllowanceChargeReasonCode</ShortName>
     <Version>D08B</Version>

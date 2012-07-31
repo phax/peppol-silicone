@@ -39,7 +39,7 @@
 -->
 <!-- This file is generated automatically! Do NOT edit! -->
 <!-- Schematron data binding rules to UBL syntax for T19 -->
-<pattern is-a="T19" xmlns="http://purl.oclc.org/dsdl/schematron" id="UBL-T19">
+<pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="UBL-T19" is-a="T19">
   <param value="(cbc:UBLVersionID)" name="EUGEN-T19-R001"/>
   <param value="(cbc:CustomizationID)" name="EUGEN-T19-R002"/>
   <param value="(cbc:ProfileID)" name="EUGEN-T19-R003"/>

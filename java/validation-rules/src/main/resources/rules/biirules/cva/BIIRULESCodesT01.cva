@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- This file is generated automatically! Do NOT edit! -->
 <!-- CVA File T01 -->
-<ValueListConstraints xmlns:stat="urn:oasis:names:specification:ubl:schema:xsd:DocumentStatusCode-1.0" xmlns:cct="urn:oasis:names:specification:ubl:schema:xsd:CoreComponentParameters-2" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:qdt="urn:oasis:names:specification:ubl:schema:xsd:QualifiedDatatypes-2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:udt="urn:un:unece:uncefact:data:draft:UnqualifiedDataTypesSchemaModule:2" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns="http://docs.oasis-open.org/codelist/ns/ContextValueAssociation/cd2-1.0/" name="CodesT01" version="Version 0.3">
+<ValueListConstraints xmlns:qdt="urn:oasis:names:specification:ubl:schema:xsd:QualifiedDatatypes-2" xmlns="http://docs.oasis-open.org/codelist/ns/ContextValueAssociation/cd2-1.0/" xmlns:udt="urn:un:unece:uncefact:data:draft:UnqualifiedDataTypesSchemaModule:2" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:cct="urn:oasis:names:specification:ubl:schema:xsd:CoreComponentParameters-2" name="CodesT01" version="Version 0.3" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:stat="urn:oasis:names:specification:ubl:schema:xsd:DocumentStatusCode-1.0">
   <ValueLists>
     <ValueList xml:id="AddressFormatCode" uri="../gc/AddressFormatCode.gc"/>
     <ValueList xml:id="AllowanceChargeReasonCode" uri="../gc/AllowanceChargeReasonCode.gc"/>

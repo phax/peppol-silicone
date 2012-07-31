@@ -39,7 +39,7 @@
 -->
 <!-- This file is generated automatically! Do NOT edit! -->
 <!-- Schematron data binding rules to UBL syntax for T15 -->
-<pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="UBL-T15" is-a="T15">
+<pattern is-a="T15" xmlns="http://purl.oclc.org/dsdl/schematron" id="UBL-T15">
   <param value="(cac:PostalAddress/cbc:StreetName and cac:PostalAddress/cbc:CityName and cac:PostalAddress/cbc:PostalZone and cac:PostalAddress/cac:Country/cbc:IdentificationCode)" name="EUGEN-T15-R001"/>
   <param value="(cac:PostalAddress/cbc:StreetName and cac:PostalAddress/cbc:CityName and cac:PostalAddress/cbc:PostalZone and cac:PostalAddress/cac:Country/cbc:IdentificationCode)" name="EUGEN-T15-R002"/>
   <param value="(cbc:InvoicedQuantity and cbc:InvoicedQuantity/@unitCode)" name="EUGEN-T15-R003"/>
