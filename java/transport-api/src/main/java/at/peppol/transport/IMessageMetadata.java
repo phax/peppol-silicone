@@ -40,9 +40,9 @@ package at.peppol.transport;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import at.peppol.commons.identifier.SimpleDocumentTypeIdentifier;
-import at.peppol.commons.identifier.SimpleParticipantIdentifier;
-import at.peppol.commons.identifier.SimpleProcessIdentifier;
+import at.peppol.commons.identifier.doctype.SimpleDocumentTypeIdentifier;
+import at.peppol.commons.identifier.participant.SimpleParticipantIdentifier;
+import at.peppol.commons.identifier.process.SimpleProcessIdentifier;
 
 /**
  * Read only interface for the Metadata object.

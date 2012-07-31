@@ -42,9 +42,9 @@ import javax.annotation.concurrent.Immutable;
 
 import at.peppol.commons.identifier.CIdentifier;
 import at.peppol.commons.identifier.IdentifierUtils;
-import at.peppol.commons.identifier.ReadonlyDocumentTypeIdentifier;
-import at.peppol.commons.identifier.ReadonlyParticipantIdentifier;
-import at.peppol.commons.identifier.ReadonlyProcessIdentifier;
+import at.peppol.commons.identifier.doctype.ReadonlyDocumentTypeIdentifier;
+import at.peppol.commons.identifier.participant.ReadonlyParticipantIdentifier;
+import at.peppol.commons.identifier.process.ReadonlyProcessIdentifier;
 
 /**
  * This file contains the PING message specific codes

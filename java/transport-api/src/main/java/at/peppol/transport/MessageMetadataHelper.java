@@ -56,9 +56,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import at.peppol.commons.identifier.IdentifierUtils;
-import at.peppol.commons.identifier.SimpleDocumentTypeIdentifier;
-import at.peppol.commons.identifier.SimpleParticipantIdentifier;
-import at.peppol.commons.identifier.SimpleProcessIdentifier;
+import at.peppol.commons.identifier.doctype.SimpleDocumentTypeIdentifier;
+import at.peppol.commons.identifier.participant.SimpleParticipantIdentifier;
+import at.peppol.commons.identifier.process.SimpleProcessIdentifier;
 
 import com.phloc.commons.jaxb.JAXBContextCache;
 import com.phloc.commons.string.StringHelper;
@@ -119,7 +119,7 @@ public final class MessageMetadataHelper {
     final ObjectFactory aObjFactory = new ObjectFactory ();
     final Document aDoc = XMLFactory.newDocument ();
     final Element eRoot = (Element) aDoc.appendChild (aDoc.createElementNS (CTransportIdentifiers.NAMESPACE_TRANSPORT_IDS,
-                                                                            "Headers"));
+                                                                            CTransportIdentifiers.ELEMENT_HEADERS));
     Marshaller aMarshaller;
 
     // Write message ID (may be null for LIME)

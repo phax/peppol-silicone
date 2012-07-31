@@ -53,7 +53,7 @@ import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
 import at.peppol.commons.identifier.CIdentifier;
 import at.peppol.commons.identifier.IdentifierUtils;
-import at.peppol.commons.identifier.actorid.IdentifierIssuingAgencyManager;
+import at.peppol.commons.identifier.issuingagency.IdentifierIssuingAgencyManager;
 import at.peppol.commons.sml.CSMLDefault;
 import at.peppol.sml.server.exceptions.BadRequestException;
 

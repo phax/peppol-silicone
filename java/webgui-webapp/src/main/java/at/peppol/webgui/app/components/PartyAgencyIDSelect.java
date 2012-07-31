@@ -37,7 +37,7 @@
  */
 package at.peppol.webgui.app.components;
 
-import at.peppol.commons.identifier.actorid.EPredefinedIdentifierIssuingAgency;
+import at.peppol.commons.identifier.issuingagency.EPredefinedIdentifierIssuingAgency;
 
 import com.vaadin.ui.ComboBox;
 

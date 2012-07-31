@@ -49,10 +49,10 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import at.peppol.commons.identifier.SimpleDocumentTypeIdentifier;
-import at.peppol.commons.identifier.SimpleParticipantIdentifier;
-import at.peppol.commons.identifier.actorid.EPredefinedIdentifierIssuingAgency;
-import at.peppol.commons.identifier.docid.EPredefinedDocumentTypeIdentifier;
+import at.peppol.commons.identifier.doctype.EPredefinedDocumentTypeIdentifier;
+import at.peppol.commons.identifier.doctype.SimpleDocumentTypeIdentifier;
+import at.peppol.commons.identifier.issuingagency.EPredefinedIdentifierIssuingAgency;
+import at.peppol.commons.identifier.participant.SimpleParticipantIdentifier;
 import at.peppol.commons.sml.ESML;
 import at.peppol.commons.sml.ISMLInfo;
 import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;

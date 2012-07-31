@@ -49,7 +49,7 @@ import org.busdox.servicemetadata.locator._1.ParticipantIdentifierPageType;
 import org.busdox.servicemetadata.locator._1.ServiceMetadataPublisherServiceType;
 import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 
-import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+import at.peppol.commons.identifier.participant.SimpleParticipantIdentifier;
 import at.peppol.commons.sml.ISMLInfo;
 import at.peppol.sml.client.ManageParticipantIdentifierServiceCaller;
 import at.peppol.sml.client.ManageServiceMetadataServiceCaller;

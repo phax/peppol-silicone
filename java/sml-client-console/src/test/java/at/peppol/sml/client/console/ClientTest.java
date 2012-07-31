@@ -49,10 +49,9 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import at.peppol.commons.identifier.CIdentifier;
-import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+import at.peppol.commons.identifier.participant.SimpleParticipantIdentifier;
 import at.peppol.commons.sml.ESML;
 import at.peppol.commons.sml.ISMLInfo;
-import at.peppol.sml.client.console.Main;
 
 import com.phloc.commons.annotations.DevelopersNote;
 

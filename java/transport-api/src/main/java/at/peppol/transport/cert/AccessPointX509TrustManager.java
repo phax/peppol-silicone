@@ -50,6 +50,7 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.collections.ArrayHelper;
 import com.phloc.commons.regex.RegExHelper;
+import com.phloc.commons.string.StringHelper;
 
 /**
  * The AccessPointX509TrustManager is pointed to authenticate the remote side
@@ -156,14 +157,11 @@ public final class AccessPointX509TrustManager implements X509TrustManager {
       final String sPrincipal = aChain[0].getSubjectX500Principal ().toString ();
       final String [] aArray = RegExHelper.getSplitToArray (sPrincipal, ",");
       for (final String sToken : aArray) {
-        final int nIndex = sToken.indexOf ("CN=");
-        if (nIndex >= 0) {
-          final String sCurCN = sToken.substring (nIndex + 3);
-          if (m_aCommonNames.contains (sCurCN)) {
-            bCommonNameOK = true;
-            s_aLogger.info ("Accepted issuer: " + sCurCN);
-            break;
-          }
+        final String sCurCN = StringHelper.getFromExcl (sToken, "CN=");
+        if (m_aCommonNames.contains (sCurCN)) {
+          bCommonNameOK = true;
+          s_aLogger.info ("Accepted issuer: " + sCurCN);
+          break;
         }
       }
 

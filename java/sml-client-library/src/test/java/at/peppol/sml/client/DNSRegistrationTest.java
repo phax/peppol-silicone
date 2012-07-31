@@ -57,11 +57,9 @@ import org.xbill.DNS.Record;
 import org.xbill.DNS.SimpleResolver;
 import org.xbill.DNS.Type;
 
-import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+import at.peppol.commons.identifier.participant.SimpleParticipantIdentifier;
 import at.peppol.commons.uri.BusdoxURLUtils;
 import at.peppol.sml.AbstractSMLClientTest;
-import at.peppol.sml.client.ManageParticipantIdentifierServiceCaller;
-import at.peppol.sml.client.ManageServiceMetadataServiceCaller;
 
 /**
  * This class is for BRZ internal use only!

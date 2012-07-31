@@ -44,8 +44,8 @@ import javax.annotation.Nonnull;
 import org.busdox.transport.identifiers._1.DocumentIdentifierType;
 import org.busdox.transport.identifiers._1.ProcessIdentifierType;
 
-import at.peppol.commons.identifier.docid.EPredefinedDocumentTypeIdentifier;
-import at.peppol.commons.identifier.procid.EPredefinedProcessIdentifier;
+import at.peppol.commons.identifier.doctype.EPredefinedDocumentTypeIdentifier;
+import at.peppol.commons.identifier.process.EPredefinedProcessIdentifier;
 import eu.peppol.start.identifier.KeystoreManager;
 
 /**

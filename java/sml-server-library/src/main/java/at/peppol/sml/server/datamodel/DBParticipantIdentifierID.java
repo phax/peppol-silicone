@@ -46,7 +46,7 @@ import javax.persistence.Embeddable;
 import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
 import at.peppol.commons.identifier.CIdentifier;
 import at.peppol.commons.identifier.IdentifierUtils;
-import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+import at.peppol.commons.identifier.participant.SimpleParticipantIdentifier;
 
 import com.phloc.commons.annotations.DevelopersNote;
 import com.phloc.commons.equals.EqualsUtils;

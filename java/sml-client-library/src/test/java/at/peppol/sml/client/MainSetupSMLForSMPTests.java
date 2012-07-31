@@ -39,7 +39,7 @@ package at.peppol.sml.client;
 
 import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 
-import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+import at.peppol.commons.identifier.participant.SimpleParticipantIdentifier;
 import at.peppol.commons.sml.ESML;
 import at.peppol.commons.sml.ISMLInfo;
 import at.peppol.sml.AbstractSMLClientTest;
