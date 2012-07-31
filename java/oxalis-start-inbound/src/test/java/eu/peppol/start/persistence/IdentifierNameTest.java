@@ -37,7 +37,7 @@
  */
 package eu.peppol.start.persistence;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertSame;
 
 import org.junit.Test;
 
@@ -48,11 +48,9 @@ import org.junit.Test;
 public class IdentifierNameTest {
   @Test
   public void testValueOfIdentifier () throws Exception {
-
     for (final IdentifierName id : IdentifierName.values ()) {
-
-      final IdentifierName id2 = IdentifierName.valueOfIdentifier (id.stringValue ());
-      assertTrue ("Unknown identifier " + id.name (), id2 == id);
+      final IdentifierName id2 = IdentifierName.getFromIDOrThrow (id.getID ());
+      assertSame ("Unknown identifier " + id.name (), id2, id);
     }
   }
 }

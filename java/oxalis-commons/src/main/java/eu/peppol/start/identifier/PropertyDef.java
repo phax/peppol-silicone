@@ -39,6 +39,10 @@ package eu.peppol.start.identifier;
 
 import java.util.Properties;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.StringHelper;
 
 /**
@@ -63,34 +67,27 @@ enum PropertyDef {
   /**
    * Enum constructor
    * 
-   * @param propertyName
+   * @param sPropertyName
    *        name of property as it appears in your .properties file
    */
-  PropertyDef (final String propertyName, final boolean required) {
-    if (propertyName == null || propertyName.trim ().length () == 0) {
-      throw new IllegalArgumentException ("Property name is required");
-    }
-    this.m_sPropertyName = propertyName;
-    this.m_bRequired = required;
+  private PropertyDef (@Nonnull @Nonempty final String sPropertyName, final boolean required) {
+    m_sPropertyName = sPropertyName;
+    m_bRequired = required;
   }
 
   /**
    * Locates the value of this named property in the supplied collection of
    * properties.
    * 
-   * @param properties
+   * @param aProperties
    *        collection of properties to search
    * @return value of property
    */
-  public String getValue (final Properties properties) {
-    if (m_bRequired)
-      return required (properties.getProperty (m_sPropertyName));
-    return properties.getProperty (m_sPropertyName);
-  }
-
-  String required (final String value) {
-    if (StringHelper.hasNoTextAfterTrim (value))
+  @Nullable
+  public String getValue (final Properties aProperties) {
+    final String sValue = aProperties.getProperty (m_sPropertyName);
+    if (m_bRequired && StringHelper.hasNoTextAfterTrim (sValue))
       throw new IllegalStateException ("Property '" + m_sPropertyName + "' does not exist or is empty, check the file");
-    return value;
+    return sValue;
   }
 }
