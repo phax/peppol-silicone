@@ -41,7 +41,7 @@ import at.peppol.busdox.identifier.IReadonlyProcessIdentifier;
 import at.peppol.commons.identifier.IPeppolReadonlyIdentifier;
 
 /**
- * Base interface for an extended read-only process identifier.
+ * Base interface for a PEPPOL read-only process identifier.
  * 
  * @author philip
  */

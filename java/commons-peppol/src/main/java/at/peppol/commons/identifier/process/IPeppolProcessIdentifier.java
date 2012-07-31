@@ -41,7 +41,7 @@ import at.peppol.busdox.identifier.IProcessIdentifier;
 import at.peppol.commons.identifier.IPeppolIdentifier;
 
 /**
- * Base interface for an extended process identifier.
+ * Base interface for a PEPPOL process identifier.
  * 
  * @author philip
  */

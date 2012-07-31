@@ -43,7 +43,7 @@ import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
 import at.peppol.commons.identifier.IPeppolReadonlyIdentifier;
 
 /**
- * Base interface for an extended read-only participant identifier.
+ * Base interface for a PEPPOL read-only participant identifier.
  * 
  * @author philip
  */
