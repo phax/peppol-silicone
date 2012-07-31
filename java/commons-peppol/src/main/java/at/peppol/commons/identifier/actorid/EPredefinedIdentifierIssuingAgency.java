@@ -42,6 +42,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 
+import at.peppol.commons.identifier.participant.SimpleParticipantIdentifier;
+
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.version.Version;
 

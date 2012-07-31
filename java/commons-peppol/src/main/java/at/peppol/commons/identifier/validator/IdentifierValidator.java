@@ -47,7 +47,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.peppol.commons.identifier.CIdentifier;
-import at.peppol.commons.identifier.actorid.IPeppolParticipantIdentifier;
+import at.peppol.commons.identifier.participant.IPeppolParticipantIdentifier;
 
 import com.phloc.commons.lang.ServiceLoaderBackport;
 
