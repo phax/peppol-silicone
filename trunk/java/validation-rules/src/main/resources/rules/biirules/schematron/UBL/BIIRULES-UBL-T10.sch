@@ -37,9 +37,8 @@
     under either the MPL or the EUPL License.
 
 -->
-<!-- Schematron binding rules generated automatically. -->
-<!-- Data binding to UBL syntax for T10 -->
-<!-- (2009). Invinet Sistemes -->
+<!-- This file is generated automatically! Do NOT edit! -->
+<!-- Schematron data binding rules to UBL syntax for T10 -->
 <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="UBL-T10" is-a="T10">
   <param value="(cbc:StartDate and cbc:EndDate) and (number(translate(cbc:StartDate,'-','')) &lt;= number(translate(cbc:EndDate,'-','')))" name="BIIRULE-T10-R001"/>
   <param value="(cac:Party/cac:PostalAddress/cbc:CityName and cac:Party/cac:PostalAddress/cbc:PostalZone) or (cac:Party/cac:PostalAddress/cbc:ID)" name="BIIRULE-T10-R002"/>

@@ -37,16 +37,15 @@
     under either the MPL or the EUPL License.
 
 -->
-<!-- Schematron rules generated automatically. -->
-<!-- Abstract rules for T10 -->
-<!-- (2009). Invinet Sistemes -->
-<pattern abstract="true" id="T10" xmlns="http://purl.oclc.org/dsdl/schematron">
+<!-- This file is generated automatically! Do NOT edit! -->
+<!-- Abstract Schematron rules for T10 -->
+<pattern xmlns="http://purl.oclc.org/dsdl/schematron" abstract="true" id="T10">
   <rule context="$Tax_Category">
-    <assert test="$ATNAT-T10-R002" flag="fatal">[ATNAT-T10-R002]-If the tax percentage in a tax category is 0% then the tax category identifier MUST be &#8220;E&#8221; (UN-5305).</assert>
+    <assert flag="fatal" test="$ATNAT-T10-R002">[ATNAT-T10-R002]-If the tax percentage in a tax category is 0% then the tax category identifier MUST be &#8220;E&#8221; (UN-5305).</assert>
   </rule>
   <rule context="$Invoice">
-    <assert test="$ATNAT-T10-R001" flag="fatal">[ATNAT-T10-R001]-If the invoice total exceeds &#8364; 10.000, the VAT number of the customer MUST be provided, if the supplier has a registered office in Austria</assert>
-    <assert test="$ATNAT-T10-R003" flag="fatal">[ATNAT-T10-R003]-The invoice MUST contain either the actual delivery date or the delivery period.</assert>
-    <assert test="$ATNAT-T10-R004" flag="fatal">[ATNAT-T10-R004]-If products or services are subject to the Reverse Charge System (customer has to bear the tax, not the supplier - Austria: UStG &#167; 19) the VAT id number of the customer MUST be provided</assert>
+    <assert flag="fatal" test="$ATNAT-T10-R001">[ATNAT-T10-R001]-If the invoice total exceeds &#8364; 10.000, the VAT number of the customer MUST be provided, if the supplier has a registered office in Austria</assert>
+    <assert flag="fatal" test="$ATNAT-T10-R003">[ATNAT-T10-R003]-The invoice MUST contain either the actual delivery date or the delivery period.</assert>
+    <assert flag="fatal" test="$ATNAT-T10-R004">[ATNAT-T10-R004]-If products or services are subject to the Reverse Charge System (customer has to bear the tax, not the supplier - Austria: UStG &#167; 19) the VAT id number of the customer MUST be provided</assert>
   </rule>
 </pattern>

@@ -37,10 +37,9 @@
     under either the MPL or the EUPL License.
 
 -->
-<!-- Schematron binding rules generated automatically. -->
-<!-- Data binding to UBL syntax for T15 -->
-<!-- (2009). Invinet Sistemes -->
-<pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="UBL-T15" is-a="T15">
+<!-- This file is generated automatically! Do NOT edit! -->
+<!-- Schematron data binding rules to UBL syntax for T15 -->
+<pattern xmlns="http://purl.oclc.org/dsdl/schematron" is-a="T15" id="UBL-T15">
   <param value="(cac:PartyLegalEntity/cbc:CompanyID != '') and (//cac:AccountingSupplierParty/cac:Party/cac:PostalAddress/cac:Country/cbc:IdentificationCode = 'NO') or not((//cac:AccountingSupplierParty/cac:Party/cac:PostalAddress/cac:Country/cbc:IdentificationCode = 'NO'))" name="NONAT-T15-R001"/>
   <param value="(//cac:PaymentMeans/cbc:PaymentDueDate != '') and (//cac:AccountingSupplierParty/cac:Party/cac:PostalAddress/cac:Country/cbc:IdentificationCode = 'NO') or not((//cac:AccountingSupplierParty/cac:Party/cac:PostalAddress/cac:Country/cbc:IdentificationCode = 'NO'))" name="NONAT-T15-R002"/>
   <param value="(//cac:Delivery/cbc:ActualDeliveryDate != '') and (//cac:AccountingSupplierParty/cac:Party/cac:PostalAddress/cac:Country/cbc:IdentificationCode = 'NO') or not((//cac:AccountingSupplierParty/cac:Party/cac:PostalAddress/cac:Country/cbc:IdentificationCode = 'NO'))" name="NONAT-T15-R003"/>

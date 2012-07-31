@@ -37,9 +37,8 @@
     under either the MPL or the EUPL License.
 
 -->
-<!-- Schematron binding rules generated automatically. -->
-<!-- Data binding to FACTURAE syntax for T10 -->
-<!-- (2009). Invinet Sistemes -->
+<!-- This file is generated automatically! Do NOT edit! -->
+<!-- Schematron data binding rules to FACTURAE syntax for T10 -->
 <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="FACTURAE-T10" is-a="T10">
   <param value="(EndDate and  StartDate) and not(number(translate(StartDate,'-','')) &gt; number(translate(EndDate,'-',''))) or number(translate(StartDate,'-','')) = number(translate(EndDate,'-',''))" name="BIIRULE-T10-R001"/>
   <param value="((LegalEntity/AddressInSpain/Town and LegalEntity/AddressInSpain/PostCode) or

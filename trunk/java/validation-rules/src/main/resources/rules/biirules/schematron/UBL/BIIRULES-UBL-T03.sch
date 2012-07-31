@@ -37,10 +37,9 @@
     under either the MPL or the EUPL License.
 
 -->
-<!-- Schematron binding rules generated automatically. -->
-<!-- Data binding to UBL syntax for T03 -->
-<!-- (2009). Invinet Sistemes -->
-<pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="UBL-T03" is-a="T03">
+<!-- This file is generated automatically! Do NOT edit! -->
+<!-- Schematron data binding rules to UBL syntax for T03 -->
+<pattern is-a="T03" xmlns="http://purl.oclc.org/dsdl/schematron" id="UBL-T03">
   <param value="(cbc:UBLVersionID)" name="BIIRULE-T03-R001"/>
   <param value="(cbc:CustomizationID)" name="BIIRULE-T03-R002"/>
   <param value="(cbc:ProfileID)" name="BIIRULE-T03-R003"/>

@@ -37,15 +37,14 @@
     under either the MPL or the EUPL License.
 
 -->
-<!-- Schematron rules generated automatically. -->
-<!-- Abstract rules for T10 -->
-<!-- (2009). Invinet Sistemes -->
+<!-- This file is generated automatically! Do NOT edit! -->
+<!-- Abstract Schematron rules for T10 -->
 <pattern xmlns="http://purl.oclc.org/dsdl/schematron" abstract="true" id="T10">
   <rule context="$Supplier_Party">
-    <assert test="$DKNAT-T10-R001" flag="fatal">[DKNAT-T10-R001]-The Danish legal registration ID for the supplier MUST be provided</assert>
+    <assert flag="fatal" test="$DKNAT-T10-R001">[DKNAT-T10-R001]-The Danish legal registration ID for the supplier MUST be provided</assert>
   </rule>
   <rule context="$Customer_Party">
-    <assert test="$DKNAT-T10-R002" flag="fatal">[DKNAT-T10-R002]-The buyer&#8217;s Danish legal registration ID MUST be provided.</assert>
-    <assert test="$DKNAT-T10-R003" flag="fatal">[DKNAT-T10-R003]-A customer postal address in an invoice MUST contain at least, Street name and number, city name, zip code and country code.</assert>
+    <assert flag="fatal" test="$DKNAT-T10-R002">[DKNAT-T10-R002]-The buyer&#8217;s Danish legal registration ID MUST be provided.</assert>
+    <assert flag="fatal" test="$DKNAT-T10-R003">[DKNAT-T10-R003]-A customer postal address in an invoice MUST contain at least, Street name and number, city name, zip code and country code.</assert>
   </rule>
 </pattern>
