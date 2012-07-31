@@ -48,8 +48,8 @@ import org.junit.Test;
 
 import at.peppol.busdox.identifier.IDocumentTypeIdentifier;
 import at.peppol.busdox.identifier.IProcessIdentifier;
-import at.peppol.commons.identifier.SimpleParticipantIdentifier;
-import at.peppol.commons.identifier.docid.EPredefinedDocumentTypeIdentifier;
+import at.peppol.commons.identifier.doctype.EPredefinedDocumentTypeIdentifier;
+import at.peppol.commons.identifier.participant.SimpleParticipantIdentifier;
 
 /**
  * User: nigel Date: Oct 25, 2011 Time: 9:05:52 AM

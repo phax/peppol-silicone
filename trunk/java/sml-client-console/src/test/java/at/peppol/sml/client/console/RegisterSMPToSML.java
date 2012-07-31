@@ -40,7 +40,6 @@ package at.peppol.sml.client.console;
 import at.peppol.commons.sml.ESML;
 import at.peppol.commons.sml.ISMLInfo;
 import at.peppol.sml.client.AbstractSMLClientTest;
-import at.peppol.sml.client.console.Main;
 
 /**
  * This class simply register an SMP to SML.

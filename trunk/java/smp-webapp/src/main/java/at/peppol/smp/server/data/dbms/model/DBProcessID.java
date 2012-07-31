@@ -53,9 +53,9 @@ import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
 import at.peppol.busdox.identifier.IReadonlyProcessIdentifier;
 import at.peppol.commons.identifier.CIdentifier;
 import at.peppol.commons.identifier.IdentifierUtils;
-import at.peppol.commons.identifier.SimpleDocumentTypeIdentifier;
-import at.peppol.commons.identifier.SimpleParticipantIdentifier;
-import at.peppol.commons.identifier.SimpleProcessIdentifier;
+import at.peppol.commons.identifier.doctype.SimpleDocumentTypeIdentifier;
+import at.peppol.commons.identifier.participant.SimpleParticipantIdentifier;
+import at.peppol.commons.identifier.process.SimpleProcessIdentifier;
 
 import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.commons.equals.EqualsUtils;

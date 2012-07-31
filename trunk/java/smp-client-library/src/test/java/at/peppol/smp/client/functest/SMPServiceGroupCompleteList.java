@@ -44,7 +44,7 @@ import org.busdox.servicemetadata.publishing._1.ServiceMetadataType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+import at.peppol.commons.identifier.participant.SimpleParticipantIdentifier;
 import at.peppol.smp.client.SMPServiceCaller;
 import at.peppol.smp.client.tools.SMPUtils;
 

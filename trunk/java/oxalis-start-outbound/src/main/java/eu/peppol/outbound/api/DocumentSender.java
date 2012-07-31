@@ -53,7 +53,7 @@ import org.w3._2009._02.ws_tra.Create;
 import org.w3c.dom.Document;
 
 import at.peppol.busdox.CBusDox;
-import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+import at.peppol.commons.identifier.participant.SimpleParticipantIdentifier;
 import at.peppol.transport.IMessageMetadata;
 import at.peppol.transport.MessageMetadata;
 import at.peppol.transport.start.client.AccessPointClient;

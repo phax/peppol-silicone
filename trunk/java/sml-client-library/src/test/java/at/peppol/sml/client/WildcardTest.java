@@ -52,10 +52,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import at.peppol.commons.identifier.CIdentifier;
-import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+import at.peppol.commons.identifier.participant.SimpleParticipantIdentifier;
 import at.peppol.sml.AbstractSMLClientTest;
-import at.peppol.sml.client.ManageParticipantIdentifierServiceCaller;
-import at.peppol.sml.client.ManageServiceMetadataServiceCaller;
 
 /**
  * This class is used for generating test data.

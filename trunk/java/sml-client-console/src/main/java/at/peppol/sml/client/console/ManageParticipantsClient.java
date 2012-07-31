@@ -50,7 +50,7 @@ import org.busdox.servicemetadata.managebusinessidentifierservice._1.NotFoundFau
 import org.busdox.servicemetadata.managebusinessidentifierservice._1.UnauthorizedFault;
 import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 
-import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+import at.peppol.commons.identifier.participant.SimpleParticipantIdentifier;
 import at.peppol.sml.client.ManageParticipantIdentifierServiceCaller;
 
 public final class ManageParticipantsClient {

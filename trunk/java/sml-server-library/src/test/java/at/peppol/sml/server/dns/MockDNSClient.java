@@ -42,8 +42,6 @@ import java.util.List;
 import org.xbill.DNS.Record;
 import org.xbill.DNS.Resolver;
 
-import at.peppol.sml.server.dns.DNSClientImpl;
-
 /**
  * @author PEPPOL.AT, BRZ, Philip Helger
  */

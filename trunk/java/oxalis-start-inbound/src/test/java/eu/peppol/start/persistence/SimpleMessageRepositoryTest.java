@@ -44,7 +44,7 @@ import java.io.File;
 import org.junit.Before;
 import org.junit.Test;
 
-import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+import at.peppol.commons.identifier.participant.SimpleParticipantIdentifier;
 import at.peppol.transport.MutableMessageMetadata;
 
 /**

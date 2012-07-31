@@ -48,9 +48,9 @@ import org.busdox.transport.identifiers._1.ProcessIdentifierType;
 import org.w3c.dom.Document;
 
 import at.peppol.busdox.CBusDox;
-import at.peppol.commons.identifier.SimpleParticipantIdentifier;
-import at.peppol.commons.identifier.docid.EPredefinedDocumentTypeIdentifier;
-import at.peppol.commons.identifier.procid.EPredefinedProcessIdentifier;
+import at.peppol.commons.identifier.doctype.EPredefinedDocumentTypeIdentifier;
+import at.peppol.commons.identifier.participant.SimpleParticipantIdentifier;
+import at.peppol.commons.identifier.process.EPredefinedProcessIdentifier;
 import at.peppol.commons.sml.ESML;
 import at.peppol.smp.client.SMPServiceCaller;
 import at.peppol.transport.IMessageMetadata;

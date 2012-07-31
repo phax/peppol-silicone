@@ -44,9 +44,9 @@ import javax.annotation.concurrent.NotThreadSafe;
 import at.peppol.busdox.identifier.IReadonlyDocumentTypeIdentifier;
 import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
 import at.peppol.busdox.identifier.IReadonlyProcessIdentifier;
-import at.peppol.commons.identifier.SimpleDocumentTypeIdentifier;
-import at.peppol.commons.identifier.SimpleParticipantIdentifier;
-import at.peppol.commons.identifier.SimpleProcessIdentifier;
+import at.peppol.commons.identifier.doctype.SimpleDocumentTypeIdentifier;
+import at.peppol.commons.identifier.participant.SimpleParticipantIdentifier;
+import at.peppol.commons.identifier.process.SimpleProcessIdentifier;
 
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;

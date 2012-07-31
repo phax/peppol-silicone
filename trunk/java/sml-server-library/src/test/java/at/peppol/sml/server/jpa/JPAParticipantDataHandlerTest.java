@@ -52,7 +52,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import at.peppol.commons.identifier.CIdentifier;
-import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+import at.peppol.commons.identifier.participant.SimpleParticipantIdentifier;
 import at.peppol.sml.server.IParticipantDataHandler;
 import at.peppol.sml.server.ISMPDataHandler;
 import at.peppol.sml.server.exceptions.BadRequestException;

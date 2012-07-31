@@ -50,7 +50,7 @@ import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 import org.junit.Test;
 
 import at.peppol.commons.identifier.CIdentifier;
-import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+import at.peppol.commons.identifier.participant.SimpleParticipantIdentifier;
 import at.peppol.sml.server.exceptions.IllegalHostnameException;
 import at.peppol.sml.server.exceptions.IllegalIdentifierSchemeException;
 

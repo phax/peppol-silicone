@@ -58,7 +58,7 @@ import org.xml.sax.InputSource;
 
 import at.peppol.busdox.identifier.IDocumentTypeIdentifier;
 import at.peppol.commons.identifier.IdentifierUtils;
-import at.peppol.commons.identifier.SimpleProcessIdentifier;
+import at.peppol.commons.identifier.process.SimpleProcessIdentifier;
 import at.peppol.commons.uri.BusdoxURLUtils;
 import at.peppol.commons.wsaddr.W3CEndpointReferenceUtils;
 

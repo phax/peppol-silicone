@@ -66,9 +66,9 @@ import org.busdox.servicemetadata.publishing._1.ServiceMetadataType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.peppol.commons.identifier.SimpleDocumentTypeIdentifier;
-import at.peppol.commons.identifier.SimpleParticipantIdentifier;
-import at.peppol.commons.identifier.SimpleProcessIdentifier;
+import at.peppol.commons.identifier.doctype.SimpleDocumentTypeIdentifier;
+import at.peppol.commons.identifier.participant.SimpleParticipantIdentifier;
+import at.peppol.commons.identifier.process.SimpleProcessIdentifier;
 import at.peppol.commons.security.DoNothingTrustManager;
 import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
 import at.peppol.commons.utils.ReadonlyUsernamePWCredentials;
