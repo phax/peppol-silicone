@@ -72,10 +72,10 @@ public enum ESML implements ISMLInfo {
 
   private ESML (@Nonnull @Nonempty final String sDNSZone,
                 @Nonnull @Nonempty final String sManagementHostName,
-                @Nonnull @Nonempty final String sManagementService) {
+                @Nonnull @Nonempty final String sManagementServiceURL) {
     m_sDNSZone = sDNSZone;
     m_sManagementHostName = sManagementHostName;
-    m_sManagementServiceURL = sManagementService;
+    m_sManagementServiceURL = sManagementServiceURL;
   }
 
   @Nonnull

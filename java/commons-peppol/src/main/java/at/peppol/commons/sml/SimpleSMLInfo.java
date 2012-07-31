@@ -160,9 +160,9 @@ public class SimpleSMLInfo implements ISMLInfo {
   @Override
   public String toString () {
     return new ToStringGenerator (this).append ("dnsZone", m_sDNSZone)
-                                       .append ("host", m_sManagementHostName)
-                                       .append ("service", m_sManagementServiceURL)
-                                       .append ("clientCert", m_bRequiresClientCertficate)
+                                       .append ("hostName", m_sManagementHostName)
+                                       .append ("serviceURL", m_sManagementServiceURL)
+                                       .append ("requiresClientCert", m_bRequiresClientCertficate)
                                        .toString ();
   }
 }
