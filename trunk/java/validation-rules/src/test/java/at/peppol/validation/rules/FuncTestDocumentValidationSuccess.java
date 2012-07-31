@@ -50,6 +50,8 @@ import oasis.names.specification.ubl.schema.xsd.orderresponsesimple_2.OrderRespo
 
 import org.junit.Test;
 import org.oclc.purl.dsdl.svrl.SchematronOutputType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 import at.peppol.commons.cenbii.profiles.ETransaction;
@@ -76,6 +78,8 @@ import com.phloc.ubl.UBL20DocumentMarshaller;
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class FuncTestDocumentValidationSuccess {
+  private static final Logger s_aLogger = LoggerFactory.getLogger (FuncTestDocumentValidationSuccess.class);
+
   @Test
   public void testReadCataloguesSuccess () throws SAXException {
     // For all available catalogues
@@ -98,7 +102,7 @@ public final class FuncTestDocumentValidationSuccess {
 
         if (false) {
           // For debugging purposes: print the SVRL
-          System.out.println (XMLWriter.getXMLString (SVRLWriter.createXML (aSVRL)));
+          s_aLogger.info (XMLWriter.getXMLString (SVRLWriter.createXML (aSVRL)));
         }
 
         // Check that all failed assertions are only warnings
@@ -131,7 +135,7 @@ public final class FuncTestDocumentValidationSuccess {
 
         if (false) {
           // For debugging purposes: print the SVRL
-          System.out.println (XMLWriter.getXMLString (SVRLWriter.createXML (aSVRL)));
+          s_aLogger.info (XMLWriter.getXMLString (SVRLWriter.createXML (aSVRL)));
         }
 
         // Check that all failed assertions are only warnings
@@ -166,7 +170,7 @@ public final class FuncTestDocumentValidationSuccess {
 
         if (false) {
           // For debugging purposes: print the SVRL
-          System.out.println (XMLWriter.getXMLString (SVRLWriter.createXML (aSVRL)));
+          s_aLogger.info (XMLWriter.getXMLString (SVRLWriter.createXML (aSVRL)));
         }
 
         // Check that all failed assertions are only warnings
@@ -183,7 +187,6 @@ public final class FuncTestDocumentValidationSuccess {
   public void testReadCreditNotesSuccess () throws SAXException {
     // For all available credit notes
     for (final IReadableResource aTestFile : TestFiles.getSuccessFiles (ETestFileType.CREDITNOTE)) {
-      System.out.println (aTestFile.getPath ());
       // Ensure the UBL file validates against the scheme
       final CreditNoteType aUBLCreditNote = UBL20DocumentMarshaller.readCreditNote (XMLReader.readXMLDOM (aTestFile));
       assertNotNull (aUBLCreditNote);
@@ -202,7 +205,7 @@ public final class FuncTestDocumentValidationSuccess {
 
         if (false) {
           // For debugging purposes: print the SVRL
-          System.out.println (XMLWriter.getXMLString (SVRLWriter.createXML (aSVRL)));
+          s_aLogger.info (XMLWriter.getXMLString (SVRLWriter.createXML (aSVRL)));
         }
 
         // Check that all failed assertions are only warnings
@@ -238,7 +241,7 @@ public final class FuncTestDocumentValidationSuccess {
 
         if (false) {
           // For debugging purposes: print the SVRL
-          System.out.println (XMLWriter.getXMLString (SVRLWriter.createXML (aSVRL)));
+          s_aLogger.info (XMLWriter.getXMLString (SVRLWriter.createXML (aSVRL)));
         }
 
         // Check that all failed assertions are only warnings
@@ -274,7 +277,7 @@ public final class FuncTestDocumentValidationSuccess {
 
         if (false) {
           // For debugging purposes: print the SVRL
-          System.out.println (XMLWriter.getXMLString (SVRLWriter.createXML (aSVRL)));
+          s_aLogger.info (XMLWriter.getXMLString (SVRLWriter.createXML (aSVRL)));
         }
 
         // Check that all failed assertions are only warnings

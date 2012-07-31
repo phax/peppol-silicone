@@ -44,6 +44,8 @@ import static org.junit.Assert.assertTrue;
 import java.util.Locale;
 
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import at.peppol.commons.cenbii.profiles.ETransaction;
 import at.peppol.test.ETestFileType;
@@ -62,6 +64,8 @@ import com.phloc.commons.locale.country.CountryCache;
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public final class ValidationPyramidTest {
+  private static final Logger s_aLogger = LoggerFactory.getLogger (ValidationPyramidTest.class);
+
   @Test
   public void testInvoice () {
     final ValidationPyramid vp = new ValidationPyramid (EValidationDocumentType.INVOICE,
@@ -70,7 +74,7 @@ public final class ValidationPyramidTest {
       for (final ValidationPyramidResultLayer aResultLayer : vp.applyValidation (aTestFile)
                                                                .getAllValidationResultLayers ())
         for (final IResourceError aError : aResultLayer.getValidationErrors ())
-          System.out.println (aResultLayer.getValidationLevel () + " " + aError.getAsString (Locale.US));
+          s_aLogger.info (aResultLayer.getValidationLevel () + " " + aError.getAsString (Locale.US));
     }
   }
 
@@ -101,7 +105,7 @@ public final class ValidationPyramidTest {
         assertNotNull (aResultLayer.getValidationErrors ());
 
         for (final IResourceError aError : aResultLayer.getValidationErrors ()) {
-          System.out.println (aResultLayer.getValidationLevel () + " " + aError.getAsString (Locale.US));
+          s_aLogger.info (aResultLayer.getValidationLevel () + " " + aError.getAsString (Locale.US));
           nItems++;
         }
       }
