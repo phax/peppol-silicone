@@ -37,6 +37,12 @@
  */
 package eu.peppol.start.persistence;
 
+import javax.annotation.Nonnull;
+
+import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.id.IHasID;
+import com.phloc.commons.lang.EnumHelper;
+
 /**
  * Represents the identifiers used in the START SOAP Headers, which are used for
  * routing, thus preventing the need to open the XML messages.
@@ -44,7 +50,7 @@ package eu.peppol.start.persistence;
  * @author Steinar Overbeck Cook Created by User: steinar Date: 29.11.11 Time:
  *         13:44
  */
-enum IdentifierName {
+enum IdentifierName implements IHasID <String> {
   MESSAGE_ID ("MessageIdentifier"),
   CHANNEL_ID ("ChannelIdentifier"),
   RECIPIENT_ID ("RecipientIdentifier"),
@@ -53,22 +59,20 @@ enum IdentifierName {
   PROCESS_ID ("ProcessIdentifier"),
   SCHEME ("scheme");
 
-  private final String m_sValue;
+  private final String m_sID;
 
-  private IdentifierName (final String sValue) {
-    this.m_sValue = sValue;
+  private IdentifierName (@Nonnull @Nonempty final String sValue) {
+    m_sID = sValue;
   }
 
-  public String stringValue () {
-    return m_sValue;
+  @Nonnull
+  @Nonempty
+  public String getID () {
+    return m_sID;
   }
 
-  public static IdentifierName valueOfIdentifier (final String stringValue) {
-    for (final IdentifierName id : IdentifierName.values ()) {
-      if (id.m_sValue.equals (stringValue))
-        return id;
-    }
-
-    throw new IllegalArgumentException ("Unknown identifer: " + stringValue);
+  @Nonnull
+  public static IdentifierName getFromIDOrThrow (final String stringValue) {
+    return EnumHelper.getFromIDOrThrow (IdentifierName.class, stringValue);
   }
 }

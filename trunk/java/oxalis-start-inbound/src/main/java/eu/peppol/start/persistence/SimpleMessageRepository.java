@@ -49,7 +49,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
-import at.peppol.commons.identifier.IdentifierUtils;
 import at.peppol.transport.IMessageMetadata;
 
 import com.phloc.commons.io.file.FileUtils;
@@ -115,29 +114,29 @@ public class SimpleMessageRepository implements MessageRepository {
       pw.append ("TimeStamp=").format ("%tFT%tT%tz\n", date, date, date);
 
       pw.append ("MessageFileName=").append (messageFullPath.toString ()).append ('\n');
-      pw.append (IdentifierName.MESSAGE_ID.stringValue ())
+      pw.append (IdentifierName.MESSAGE_ID.getID ())
         .append ("=")
         .append (peppolMessageHeader.getMessageID ())
         .append ('\n');
-      pw.append (IdentifierName.CHANNEL_ID.stringValue ())
+      pw.append (IdentifierName.CHANNEL_ID.getID ())
         .append ("=")
         .append (peppolMessageHeader.getChannelID ())
         .append ('\n');
-      pw.append (IdentifierName.RECIPIENT_ID.stringValue ())
+      pw.append (IdentifierName.RECIPIENT_ID.getID ())
         .append ('=')
-        .append (IdentifierUtils.getIdentifierURIEncoded (peppolMessageHeader.getRecipientID ()))
+        .append (peppolMessageHeader.getRecipientID ().getURIEncoded ())
         .append ('\n');
-      pw.append (IdentifierName.SENDER_ID.stringValue ())
+      pw.append (IdentifierName.SENDER_ID.getID ())
         .append ('=')
-        .append (IdentifierUtils.getIdentifierURIEncoded (peppolMessageHeader.getSenderID ()))
+        .append (peppolMessageHeader.getSenderID ().getURIEncoded ())
         .append ('\n');
-      pw.append (IdentifierName.DOCUMENT_ID.stringValue ())
+      pw.append (IdentifierName.DOCUMENT_ID.getID ())
         .append ('=')
-        .append (IdentifierUtils.getIdentifierURIEncoded (peppolMessageHeader.getDocumentTypeID ()))
+        .append (peppolMessageHeader.getDocumentTypeID ().getURIEncoded ())
         .append ('\n');
-      pw.append (IdentifierName.PROCESS_ID.stringValue ())
+      pw.append (IdentifierName.PROCESS_ID.getID ())
         .append ('=')
-        .append (IdentifierUtils.getIdentifierURIEncoded (peppolMessageHeader.getProcessID ()))
+        .append (peppolMessageHeader.getProcessID ().getURIEncoded ())
         .append ('\n');
       pw.close ();
       log.debug ("File " + messageHeaderFilerPath + " written");

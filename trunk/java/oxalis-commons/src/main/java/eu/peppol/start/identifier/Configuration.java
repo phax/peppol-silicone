@@ -133,7 +133,7 @@ public final class Configuration {
   }
 
   @Nullable
-  public String getKeyStoreFileName () {
+  public String getKeyStoreFilename () {
     final String s = PropertyDef.KEYSTORE_PATH.getValue (m_aProperties);
     return s == null ? null : s.trim ();
   }

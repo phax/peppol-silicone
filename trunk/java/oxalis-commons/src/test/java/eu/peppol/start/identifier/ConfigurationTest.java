@@ -75,7 +75,7 @@ public class ConfigurationTest {
     // This requires the presence of the resource named by
     // Configuration#CUSTOM_PROPERTIES_PATH,
     // which needs to hold oxalis.keystore property
-    assertNotNull (configuration.getKeyStoreFileName ());
+    assertNotNull (configuration.getKeyStoreFilename ());
 
     assertEquals ("TEST", configuration.getInboundMessageStore ());
   }

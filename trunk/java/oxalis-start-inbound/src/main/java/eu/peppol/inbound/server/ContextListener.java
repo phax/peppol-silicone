@@ -54,6 +54,18 @@ import eu.peppol.start.identifier.KeystoreManager;
 public class ContextListener implements ServletContextListener {
   private static final Logger log = LoggerFactory.getLogger ("oxalis-inb");
 
+  private static File _locateKeystore (final Configuration configuration) {
+    final String keystoreFileName = configuration.getKeyStoreFilename ();
+    final File keystoreFile = new File (keystoreFileName);
+    if (!keystoreFile.exists ()) {
+      throw new IllegalStateException ("Keystore file does not exist:" + keystoreFileName);
+    }
+    if (!keystoreFile.canRead ()) {
+      throw new IllegalStateException ("Unable to read keystore in:" + keystoreFileName + ", check permissions");
+    }
+    return keystoreFile;
+  }
+
   public void contextInitialized (final ServletContextEvent event) {
     event.getServletContext ().log ("Oxalis messages are emitted using SLF4J, search for oxalis.log");
 
@@ -64,7 +76,7 @@ public class ContextListener implements ServletContextListener {
       final KeystoreManager keystoreManager = new KeystoreManager ();
       final Configuration configuration = Configuration.getInstance ();
 
-      final File keystore = locateKeystore (configuration);
+      final File keystore = _locateKeystore (configuration);
 
       final String keystorePassword = configuration.getKeyStorePassword ();
       keystoreManager.initialiseKeystore (keystore, keystorePassword);
@@ -77,18 +89,6 @@ public class ContextListener implements ServletContextListener {
       event.getServletContext ().log ("ERROR: Unable to initialize: " + e, e);
       throw e;
     }
-  }
-
-  File locateKeystore (final Configuration configuration) {
-    final String keystoreFileName = configuration.getKeyStoreFileName ();
-    final File keystoreFile = new File (keystoreFileName);
-    if (!keystoreFile.exists ()) {
-      throw new IllegalStateException ("Keystore file does not exist:" + keystoreFileName);
-    }
-    if (!keystoreFile.canRead ()) {
-      throw new IllegalStateException ("Unable to read keystore in:" + keystoreFileName + ", check permissions");
-    }
-    return keystoreFile;
   }
 
   public void contextDestroyed (final ServletContextEvent event) {
