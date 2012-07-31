@@ -46,7 +46,7 @@ import at.peppol.commons.identifier.IPeppolReadonlyIdentifier;
  * @author philip
  */
 public interface IPeppolReadonlyDocumentTypeIdentifier extends
-                                                        IPeppolReadonlyIdentifier,
-                                                        IReadonlyDocumentTypeIdentifier {
+                                                      IPeppolReadonlyIdentifier,
+                                                      IReadonlyDocumentTypeIdentifier {
   /* empty */
 }

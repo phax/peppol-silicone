@@ -42,7 +42,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import at.peppol.commons.identifier.actorid.EPredefinedIdentifierIssuingAgency;
+import at.peppol.commons.identifier.issuingagency.EPredefinedIdentifierIssuingAgency;
 
 /**
  * Test class for class {@link IdentifierValidator}.

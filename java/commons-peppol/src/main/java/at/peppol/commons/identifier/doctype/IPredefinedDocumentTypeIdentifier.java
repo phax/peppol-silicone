@@ -40,7 +40,6 @@ package at.peppol.commons.identifier.doctype;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-
 import com.phloc.commons.version.Version;
 
 /**

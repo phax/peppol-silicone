@@ -46,8 +46,8 @@ import at.peppol.commons.identifier.IPeppolIdentifier;
  * @author philip
  */
 public interface IPeppolParticipantIdentifier extends
-                                               IPeppolReadonlyParticipantIdentifier,
-                                               IPeppolIdentifier,
-                                               IParticipantIdentifier {
+                                             IPeppolReadonlyParticipantIdentifier,
+                                             IPeppolIdentifier,
+                                             IParticipantIdentifier {
   /* empty */
 }

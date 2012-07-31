@@ -46,8 +46,8 @@ import at.peppol.commons.identifier.IPeppolIdentifier;
  * @author philip
  */
 public interface IPeppolProcessIdentifier extends
-                                           IPeppolReadonlyProcessIdentifier,
-                                           IPeppolIdentifier,
-                                           IProcessIdentifier {
+                                         IPeppolReadonlyProcessIdentifier,
+                                         IPeppolIdentifier,
+                                         IProcessIdentifier {
   /* empty */
 }
