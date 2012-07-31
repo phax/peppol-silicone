@@ -40,7 +40,7 @@ package at.peppol.commons.identifier;
 import at.peppol.busdox.identifier.IIdentifier;
 
 /**
- * Base interface for all extended identifiers
+ * Base interface for all PEPPOL identifiers
  * 
  * @author philip
  */

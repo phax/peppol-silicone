@@ -41,7 +41,7 @@ import at.peppol.busdox.identifier.IParticipantIdentifier;
 import at.peppol.commons.identifier.IPeppolIdentifier;
 
 /**
- * Base interface for an extended participant identifier.
+ * Base interface for a PEPPOL participant identifier.
  * 
  * @author philip
  */

@@ -41,7 +41,7 @@ import at.peppol.busdox.identifier.IReadonlyDocumentTypeIdentifier;
 import at.peppol.commons.identifier.IPeppolReadonlyIdentifier;
 
 /**
- * Base interface for an extended read-only document type identifier.
+ * Base interface for a PEPPOL read-only document type identifier.
  * 
  * @author philip
  */

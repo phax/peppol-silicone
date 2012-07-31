@@ -42,7 +42,7 @@ import javax.annotation.Nonnull;
 import at.peppol.busdox.identifier.IReadonlyIdentifier;
 
 /**
- * Base interface for all extended read-only identifiers
+ * Base interface for all PEPPOL read-only identifiers
  * 
  * @author philip
  */

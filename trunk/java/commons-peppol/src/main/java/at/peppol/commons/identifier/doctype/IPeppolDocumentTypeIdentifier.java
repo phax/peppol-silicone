@@ -41,7 +41,7 @@ import at.peppol.busdox.identifier.IDocumentTypeIdentifier;
 import at.peppol.commons.identifier.IPeppolIdentifier;
 
 /**
- * Base interface for an extended document type identifier.
+ * Base interface for a PEPPOL document type identifier.
  * 
  * @author philip
  */
