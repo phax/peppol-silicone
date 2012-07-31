@@ -35,17 +35,66 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.commons.identifier;
+package at.peppol.commons.identifier.docid;
 
-import at.peppol.busdox.identifier.IReadonlyDocumentTypeIdentifier;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
+import at.peppol.busdox.identifier.IBusdoxDocumentTypeIdentifierParts;
+
+import com.phloc.commons.annotations.Nonempty;
 
 /**
- * Base interface for an extended read-only document type identifier.
+ * Contains all the different fields of a document identifier for PEPPOL. Note:
+ * the sub type identifier is specified in more detail than in BusDox:
+ * <code>&lt;customization id>::&lt;version></code> even more detailed the
+ * customization ID can be split further:
+ * <code>&lt;transactionId>:#&lt;extensionId>[#&lt;extensionId>]::&lt;version></code>
  * 
- * @author philip
+ * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public interface IExtendedReadonlyDocumentTypeIdentifier extends
-                                                        IExtendedReadonlyIdentifier,
-                                                        IReadonlyDocumentTypeIdentifier {
-  /* empty */
+public interface IPeppol_DocumentTypeIdentifierParts extends IBusdoxDocumentTypeIdentifierParts {
+  /**
+   * Separates the transaction ID from the extensions
+   */
+  String TRANSACTIONID_SEPARATOR = ":#";
+
+  /**
+   * Separates the different extensions from each other
+   */
+  String EXTENSION_SEPARATOR = "#";
+
+  /**
+   * Separates the customization ID from the version
+   */
+  String VERSION_SEPARATOR = "::";
+
+  /**
+   * @return The transaction ID
+   */
+  @Nonnull
+  @Nonempty
+  String getTransactionID ();
+
+  /**
+   * @return The contained extension IDs
+   */
+  @Nonnull
+  @Nonempty
+  List <String> getExtensionIDs ();
+
+  /**
+   * @return The version number
+   */
+  @Nonnull
+  @Nonempty
+  String getVersion ();
+
+  /**
+   * @return transaction ID + extension IDs (no version number)
+   */
+  @Nonnull
+  @Nonempty
+  String getAsUBLCustomizationID ();
 }

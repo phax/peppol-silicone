@@ -65,7 +65,7 @@ import com.phloc.commons.string.ToStringGenerator;
  */
 @Immutable
 public final class ReadonlyParticipantIdentifier extends ParticipantIdentifierType implements
-                                                                                  IExtendedParticipantIdentifier {
+                                                                                  IPeppolParticipantIdentifier {
   public ReadonlyParticipantIdentifier (@Nonnull final IReadonlyIdentifier aIdentifier) {
     this (aIdentifier.getScheme (), aIdentifier.getValue ());
   }

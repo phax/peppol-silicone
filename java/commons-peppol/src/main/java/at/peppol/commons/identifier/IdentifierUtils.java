@@ -503,7 +503,7 @@ public final class IdentifierUtils {
    *         the identifier is malformed.
    */
   @Nullable
-  public static String getIssuingAgencyIDFromParticipantIDValue (@Nonnull final IExtendedParticipantIdentifier aIdentifier) {
+  public static String getIssuingAgencyIDFromParticipantIDValue (@Nonnull final IPeppolParticipantIdentifier aIdentifier) {
     if (aIdentifier == null)
       throw new NullPointerException ("identifier");
 
@@ -526,7 +526,7 @@ public final class IdentifierUtils {
    *         the identifier is malformed.
    */
   @Nullable
-  public static String getLocalParticipantIDFromParticipantIDValue (@Nonnull final IExtendedParticipantIdentifier aIdentifier) {
+  public static String getLocalParticipantIDFromParticipantIDValue (@Nonnull final IPeppolParticipantIdentifier aIdentifier) {
     if (aIdentifier == null)
       throw new NullPointerException ("identifier");
 

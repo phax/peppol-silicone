@@ -41,7 +41,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import at.peppol.commons.identifier.IExtendedReadonlyProcessIdentifier;
+import at.peppol.commons.identifier.IPeppolReadonlyProcessIdentifier;
 import at.peppol.commons.identifier.SimpleProcessIdentifier;
 import at.peppol.commons.identifier.docid.IPredefinedDocumentTypeIdentifier;
 
@@ -52,7 +52,7 @@ import com.phloc.commons.version.Version;
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public interface IPredefinedProcessIdentifier extends IExtendedReadonlyProcessIdentifier {
+public interface IPredefinedProcessIdentifier extends IPeppolReadonlyProcessIdentifier {
   /**
    * @return The ID of the corresponding PEPPOL BIS.
    */

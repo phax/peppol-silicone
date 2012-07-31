@@ -44,7 +44,7 @@ import static org.junit.Assert.fail;
 import org.junit.Test;
 
 /**
- * Test class for class {@link PEPPOLDocumentTypeIdentifierParts}.
+ * Test class for class {@link Peppol_DocumentTypeIdentifierParts}.
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
@@ -52,7 +52,7 @@ public final class PEPPOLDocumentTypeIdentifierPartsTest {
   @Test
   public void testPredefined () {
     for (final EPredefinedDocumentTypeIdentifier e : EPredefinedDocumentTypeIdentifier.values ()) {
-      final IPEPPOLDocumentTypeIdentifierParts aParts = PEPPOLDocumentTypeIdentifierParts.extractFromString (e.getValue ());
+      final IPeppol_DocumentTypeIdentifierParts aParts = Peppol_DocumentTypeIdentifierParts.extractFromString (e.getValue ());
       assertNotNull (aParts);
 
       // Check BusDox parts
@@ -72,56 +72,56 @@ public final class PEPPOLDocumentTypeIdentifierPartsTest {
   public void testInvalid () {
     try {
       // No subtype present
-      PEPPOLDocumentTypeIdentifierParts.extractFromString ("root::local");
+      Peppol_DocumentTypeIdentifierParts.extractFromString ("root::local");
       fail ();
     }
     catch (final IllegalArgumentException ex) {}
 
     try {
       // No version separator
-      PEPPOLDocumentTypeIdentifierParts.extractFromString ("root::local##subtype");
+      Peppol_DocumentTypeIdentifierParts.extractFromString ("root::local##subtype");
       fail ();
     }
     catch (final IllegalArgumentException ex) {}
 
     try {
       // No transaction separator
-      PEPPOLDocumentTypeIdentifierParts.extractFromString ("root::local##subtype::");
+      Peppol_DocumentTypeIdentifierParts.extractFromString ("root::local##subtype::");
       fail ();
     }
     catch (final IllegalArgumentException ex) {}
 
     try {
       // No transaction separator
-      PEPPOLDocumentTypeIdentifierParts.extractFromString ("root::local##subtype::version");
+      Peppol_DocumentTypeIdentifierParts.extractFromString ("root::local##subtype::version");
       fail ();
     }
     catch (final IllegalArgumentException ex) {}
 
     try {
       // No transactions
-      PEPPOLDocumentTypeIdentifierParts.extractFromString ("root::local##subtype:#::version");
+      Peppol_DocumentTypeIdentifierParts.extractFromString ("root::local##subtype:#::version");
       fail ();
     }
     catch (final IllegalArgumentException ex) {}
 
     try {
       // empty transaction (between ext2 and ext3)
-      PEPPOLDocumentTypeIdentifierParts.extractFromString ("root::local##subtype:#ext1#ext2##ext3::version");
+      Peppol_DocumentTypeIdentifierParts.extractFromString ("root::local##subtype:#ext1#ext2##ext3::version");
       fail ();
     }
     catch (final IllegalArgumentException ex) {}
 
     try {
       // empty transaction ID
-      PEPPOLDocumentTypeIdentifierParts.extractFromString ("root::local##:#ext1#ext2::version");
+      Peppol_DocumentTypeIdentifierParts.extractFromString ("root::local##:#ext1#ext2::version");
       fail ();
     }
     catch (final IllegalArgumentException ex) {}
 
     try {
       // empty version
-      PEPPOLDocumentTypeIdentifierParts.extractFromString ("root::local##subtype:#ext1#ext2::");
+      Peppol_DocumentTypeIdentifierParts.extractFromString ("root::local##subtype:#ext1#ext2::");
       fail ();
     }
     catch (final IllegalArgumentException ex) {}

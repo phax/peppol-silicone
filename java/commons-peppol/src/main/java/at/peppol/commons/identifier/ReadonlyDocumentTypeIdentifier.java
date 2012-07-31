@@ -63,7 +63,7 @@ import com.phloc.commons.string.ToStringGenerator;
  */
 @Immutable
 public final class ReadonlyDocumentTypeIdentifier extends DocumentIdentifierType implements
-                                                                                IExtendedDocumentTypeIdentifier {
+                                                                                IPeppolDocumentTypeIdentifier {
   public ReadonlyDocumentTypeIdentifier (@Nonnull final IReadonlyIdentifier aIdentifier) {
     this (aIdentifier.getScheme (), aIdentifier.getValue ());
   }

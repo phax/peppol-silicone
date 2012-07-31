@@ -59,7 +59,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public class SimpleParticipantIdentifier extends ParticipantIdentifierType implements IExtendedParticipantIdentifier {
+public class SimpleParticipantIdentifier extends ParticipantIdentifierType implements IPeppolParticipantIdentifier {
   public SimpleParticipantIdentifier (@Nonnull final IReadonlyParticipantIdentifier aIdentifier) {
     this (aIdentifier.getScheme (), aIdentifier.getValue ());
   }
