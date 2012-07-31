@@ -44,6 +44,6 @@ import at.peppol.busdox.identifier.IProcessIdentifier;
  * 
  * @author philip
  */
-public interface IExtendedProcessIdentifier extends IExtendedIdentifier, IProcessIdentifier {
+public interface IExtendedProcessIdentifier extends IExtendedReadonlyProcessIdentifier, IProcessIdentifier {
   /* empty */
 }

@@ -37,13 +37,13 @@
  */
 package at.peppol.commons.identifier;
 
-import at.peppol.busdox.identifier.IIdentifier;
+import at.peppol.busdox.identifier.IReadonlyProcessIdentifier;
 
 /**
- * Base interface for all extended identifiers
+ * Base interface for an extended read-only process identifier.
  * 
  * @author philip
  */
-public interface IExtendedIdentifier extends IExtendedReadonlyIdentifier, IIdentifier {
+public interface IExtendedReadonlyProcessIdentifier extends IExtendedReadonlyIdentifier, IReadonlyProcessIdentifier {
   /* empty */
 }

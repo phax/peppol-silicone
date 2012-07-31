@@ -37,13 +37,41 @@
  */
 package at.peppol.commons.identifier;
 
-import at.peppol.busdox.identifier.IIdentifier;
+import javax.annotation.Nonnull;
+
+import at.peppol.busdox.identifier.IReadonlyIdentifier;
 
 /**
- * Base interface for all extended identifiers
+ * Base interface for all extended read-only identifiers
  * 
  * @author philip
  */
-public interface IExtendedIdentifier extends IExtendedReadonlyIdentifier, IIdentifier {
-  /* empty */
+public interface IExtendedReadonlyIdentifier extends IReadonlyIdentifier {
+  /**
+   * Check if this identifier uses the default scheme. E.g. for participant
+   * identifiers this would be <code>true</code> if the scheme equals
+   * {@link CIdentifier#DEFAULT_PARTICIPANT_IDENTIFIER_SCHEME}.
+   * 
+   * @return <code>true</code> if is the default scheme, <code>false</code>
+   *         otherwise.
+   */
+  boolean isDefaultScheme ();
+
+  /**
+   * Get the identifier URI encoded (without percent encoding).
+   * 
+   * @return The URI encoded identifier value. (E.g.
+   *         <code>iso6523-actorid-upis::0088:123456</code>)
+   */
+  @Nonnull
+  String getURIEncoded ();
+
+  /**
+   * Get the identifier URI and percent encoded (with percent encoding).
+   * 
+   * @return The URI encoded identifier value. (E.g.
+   *         <code>iso6523-actorid-upis%3A%3A0088%3A123456</code>)
+   */
+  @Nonnull
+  String getURIPercentEncoded ();
 }
