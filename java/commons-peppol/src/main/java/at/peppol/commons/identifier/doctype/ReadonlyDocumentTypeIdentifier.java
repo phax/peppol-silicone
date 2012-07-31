@@ -110,6 +110,11 @@ public final class ReadonlyDocumentTypeIdentifier extends DocumentIdentifierType
     return IdentifierUtils.getIdentifierURIPercentEncoded (this);
   }
 
+  @Nonnull
+  public IPeppolDocumentTypeIdentifierParts getParts () {
+    return PeppolDocumentTypeIdentifierParts.extractFromString (getValue ());
+  }
+
   /*
    * Note: this method does compare case sensitive!!!! Otherwise the required
    * semantics of #equals would not be fulfilled!

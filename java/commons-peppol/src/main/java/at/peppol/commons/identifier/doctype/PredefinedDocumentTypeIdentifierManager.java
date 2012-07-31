@@ -63,7 +63,7 @@ import com.phloc.commons.annotations.ReturnsImmutableObject;
  */
 @Immutable
 public final class PredefinedDocumentTypeIdentifierManager {
-  private static final Map <String, IPredefinedDocumentTypeIdentifier> s_aCodes = new HashMap <String, IPredefinedDocumentTypeIdentifier> ();
+  private static final Map <String, IPeppolPredefinedDocumentTypeIdentifier> s_aCodes = new HashMap <String, IPeppolPredefinedDocumentTypeIdentifier> ();
 
   static {
     // Add all predefined document identifier
@@ -82,7 +82,7 @@ public final class PredefinedDocumentTypeIdentifierManager {
   @Nonnull
   @Nonempty
   @ReturnsImmutableObject
-  public static Collection <IPredefinedDocumentTypeIdentifier> getAllDocumentTypeIdentifiers () {
+  public static Collection <IPeppolPredefinedDocumentTypeIdentifier> getAllDocumentTypeIdentifiers () {
     return Collections.unmodifiableCollection (s_aCodes.values ());
   }
 
@@ -96,9 +96,9 @@ public final class PredefinedDocumentTypeIdentifierManager {
    * @return <code>null</code> if no such document identifier exists.
    */
   @Nullable
-  public static IPredefinedDocumentTypeIdentifier getDocumentTypeIdentifierOfID (@Nullable final String sDocTypeIDValue) {
+  public static IPeppolPredefinedDocumentTypeIdentifier getDocumentTypeIdentifierOfID (@Nullable final String sDocTypeIDValue) {
     if (sDocTypeIDValue != null)
-      for (final Map.Entry <String, IPredefinedDocumentTypeIdentifier> aEntry : s_aCodes.entrySet ()) {
+      for (final Map.Entry <String, IPeppolPredefinedDocumentTypeIdentifier> aEntry : s_aCodes.entrySet ()) {
         // Use case insensitive identifier value comparison
         if (IdentifierUtils.areDocumentIdentifierValuesEqual (sDocTypeIDValue, aEntry.getKey ()))
           return aEntry.getValue ();

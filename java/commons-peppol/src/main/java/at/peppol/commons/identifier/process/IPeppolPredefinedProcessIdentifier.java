@@ -41,7 +41,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import at.peppol.commons.identifier.doctype.IPredefinedDocumentTypeIdentifier;
+import at.peppol.commons.identifier.doctype.IPeppolPredefinedDocumentTypeIdentifier;
 
 import com.phloc.commons.version.Version;
 
@@ -50,7 +50,7 @@ import com.phloc.commons.version.Version;
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public interface IPredefinedProcessIdentifier extends IPeppolReadonlyProcessIdentifier {
+public interface IPeppolPredefinedProcessIdentifier extends IPeppolReadonlyProcessIdentifier {
   /**
    * @return The ID of the corresponding PEPPOL BIS.
    */
@@ -61,7 +61,7 @@ public interface IPredefinedProcessIdentifier extends IPeppolReadonlyProcessIden
    * @return A list of all document identifiers that are valid in this scenario
    */
   @Nonnull
-  List <? extends IPredefinedDocumentTypeIdentifier> getDocumentTypeIdentifiers ();
+  List <? extends IPeppolPredefinedDocumentTypeIdentifier> getDocumentTypeIdentifiers ();
 
   /**
    * @return The {@link SimpleProcessIdentifier} version of this predefined

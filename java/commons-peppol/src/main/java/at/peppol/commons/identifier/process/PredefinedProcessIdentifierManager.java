@@ -62,7 +62,7 @@ import com.phloc.commons.annotations.ReturnsImmutableObject;
  */
 @Immutable
 public final class PredefinedProcessIdentifierManager {
-  private static final Map <String, IPredefinedProcessIdentifier> s_aCodes = new HashMap <String, IPredefinedProcessIdentifier> ();
+  private static final Map <String, IPeppolPredefinedProcessIdentifier> s_aCodes = new HashMap <String, IPeppolPredefinedProcessIdentifier> ();
 
   static {
     // Add all predefined process identifiers
@@ -81,7 +81,7 @@ public final class PredefinedProcessIdentifierManager {
   @Nonnull
   @Nonempty
   @ReturnsImmutableObject
-  public static Collection <IPredefinedProcessIdentifier> getAllProcessIdentifiers () {
+  public static Collection <IPeppolPredefinedProcessIdentifier> getAllProcessIdentifiers () {
     return Collections.unmodifiableCollection (s_aCodes.values ());
   }
 
@@ -95,9 +95,9 @@ public final class PredefinedProcessIdentifierManager {
    * @return <code>null</code> if no such process identifier exists.
    */
   @Nullable
-  public static IPredefinedProcessIdentifier getProcessIdentifierOfID (@Nullable final String sProcIDValue) {
+  public static IPeppolPredefinedProcessIdentifier getProcessIdentifierOfID (@Nullable final String sProcIDValue) {
     if (sProcIDValue != null)
-      for (final Map.Entry <String, IPredefinedProcessIdentifier> aEntry : s_aCodes.entrySet ()) {
+      for (final Map.Entry <String, IPeppolPredefinedProcessIdentifier> aEntry : s_aCodes.entrySet ()) {
         // Use case insensitive identifier value comparison
         if (IdentifierUtils.areProcessIdentifierValuesEqual (sProcIDValue, aEntry.getKey ()))
           return aEntry.getValue ();

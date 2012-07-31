@@ -47,9 +47,9 @@ import com.phloc.commons.version.Version;
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public interface IPredefinedDocumentTypeIdentifier extends
-                                                  IPeppolReadonlyDocumentTypeIdentifier,
-                                                  IPeppolDocumentTypeIdentifierParts {
+public interface IPeppolPredefinedDocumentTypeIdentifier extends
+                                                        IPeppolReadonlyDocumentTypeIdentifier,
+                                                        IPeppolDocumentTypeIdentifierParts {
   /**
    * @return The common name under which a document is known. This is e.g.
    *         "Order" or "Invoice".
