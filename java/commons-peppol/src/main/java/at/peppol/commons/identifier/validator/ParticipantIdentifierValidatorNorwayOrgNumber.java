@@ -44,6 +44,12 @@ import at.peppol.commons.identifier.actorid.EPredefinedIdentifierIssuingAgency;
 import com.phloc.commons.annotations.IsSPIImplementation;
 import com.phloc.commons.string.StringHelper;
 
+/**
+ * Implementation of {@link IParticipantIdentifierValidatorSPI} for the
+ * Norwegian Organisation Number.
+ * 
+ * @author philip
+ */
 @IsSPIImplementation
 public final class ParticipantIdentifierValidatorNorwayOrgNumber implements IParticipantIdentifierValidatorSPI {
   private static final int [] WEIGHTS = new int [] { 3, 2, 7, 6, 5, 4, 3, 2 };
@@ -57,6 +63,14 @@ public final class ParticipantIdentifierValidatorNorwayOrgNumber implements IPar
     return isValidOrganisationNumber (sValue);
   }
 
+  /**
+   * Static check method.
+   * 
+   * @param sValue
+   *        The value to be checked.
+   * @return <code>true</code> if the passed value is a valid NO organisation
+   *         number.
+   */
   public static boolean isValidOrganisationNumber (@Nullable final String sValue) {
     if (StringHelper.getLength (sValue) != 9)
       return false;

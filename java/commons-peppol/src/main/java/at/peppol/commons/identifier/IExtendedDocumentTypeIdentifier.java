@@ -39,6 +39,11 @@ package at.peppol.commons.identifier;
 
 import at.peppol.busdox.identifier.IDocumentTypeIdentifier;
 
+/**
+ * Base interface for an extended document type identifier.
+ * 
+ * @author philip
+ */
 public interface IExtendedDocumentTypeIdentifier extends IExtendedIdentifier, IDocumentTypeIdentifier {
   /* empty */
 }

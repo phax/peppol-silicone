@@ -447,8 +447,21 @@ public final class IdentifierUtils {
     return sValue == null ? null : sValue.toLowerCase (Locale.US);
   }
 
+  /**
+   * Extract the issuing agency ID from the passed participant identifier value.<br>
+   * Example: extract the <code>0088</code> from the participant identifier
+   * <code>iso6523-actorid-upis::0088:123456</code>
+   * 
+   * @param aIdentifier
+   *        The participant identifier to extract the value from.
+   * @return <code>null</code> if the identifier is not of default scheme or if
+   *         the identifier is malformed.
+   */
   @Nullable
   public static String getIssuingAgencyIDFromParticipantIDValue (@Nonnull final IExtendedParticipantIdentifier aIdentifier) {
+    if (aIdentifier == null)
+      throw new NullPointerException ("identifier");
+
     if (!aIdentifier.isDefaultScheme ())
       return null;
     return ArrayHelper.getSafeElement (RegExHelper.getAllMatchingGroupValues (PATTERN_PARTICIPANT_ID,
@@ -456,8 +469,22 @@ public final class IdentifierUtils {
                                        0);
   }
 
+  /**
+   * Extract the local participant ID from the passed participant identifier
+   * value.<br>
+   * Example: extract the <code>123456</code> from the participant identifier
+   * <code>iso6523-actorid-upis::0088:123456</code>
+   * 
+   * @param aIdentifier
+   *        The participant identifier to extract the value from.
+   * @return <code>null</code> if the identifier is not of default scheme or if
+   *         the identifier is malformed.
+   */
   @Nullable
   public static String getLocalParticipantIDFromParticipantIDValue (@Nonnull final IExtendedParticipantIdentifier aIdentifier) {
+    if (aIdentifier == null)
+      throw new NullPointerException ("identifier");
+
     if (!aIdentifier.isDefaultScheme ())
       return null;
     return ArrayHelper.getSafeElement (RegExHelper.getAllMatchingGroupValues (PATTERN_PARTICIPANT_ID,
