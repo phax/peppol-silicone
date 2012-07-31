@@ -37,13 +37,46 @@
  */
 package at.peppol.commons.identifier;
 
-import at.peppol.busdox.identifier.IIdentifier;
+import javax.annotation.Nullable;
+
+import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
 
 /**
- * Base interface for all extended identifiers
+ * Base interface for an extended read-only participant identifier.
  * 
  * @author philip
  */
-public interface IExtendedIdentifier extends IExtendedReadonlyIdentifier, IIdentifier {
-  /* empty */
+public interface IExtendedReadonlyParticipantIdentifier extends
+                                                       IExtendedReadonlyIdentifier,
+                                                       IReadonlyParticipantIdentifier {
+  /**
+   * @return <code>true</code> if the identifier is valid according to the
+   *         internal and external validation rules as defined by
+   *         {@link at.peppol.commons.identifier.validator.IParticipantIdentifierValidatorSPI}
+   *         implementations.
+   */
+  boolean isValid ();
+
+  /**
+   * Extract the issuing agency ID from the passed participant identifier value.<br>
+   * Example: extract the <code>0088</code> from the participant identifier
+   * <code>iso6523-actorid-upis::0088:123456</code>
+   * 
+   * @return <code>null</code> if the identifier is not of default scheme or if
+   *         the identifier is malformed.
+   */
+  @Nullable
+  String getIssuingAgencyID ();
+
+  /**
+   * Extract the local participant ID from the passed participant identifier
+   * value.<br>
+   * Example: extract the <code>123456</code> from the participant identifier
+   * <code>iso6523-actorid-upis::0088:123456</code>
+   * 
+   * @return <code>null</code> if the identifier is not of default scheme or if
+   *         the identifier is malformed.
+   */
+  @Nullable
+  String getLocalParticipantID ();
 }

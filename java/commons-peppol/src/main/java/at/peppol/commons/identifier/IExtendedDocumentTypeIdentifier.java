@@ -44,6 +44,6 @@ import at.peppol.busdox.identifier.IDocumentTypeIdentifier;
  * 
  * @author philip
  */
-public interface IExtendedDocumentTypeIdentifier extends IExtendedIdentifier, IDocumentTypeIdentifier {
+public interface IExtendedDocumentTypeIdentifier extends IExtendedReadonlyIdentifier, IDocumentTypeIdentifier {
   /* empty */
 }
