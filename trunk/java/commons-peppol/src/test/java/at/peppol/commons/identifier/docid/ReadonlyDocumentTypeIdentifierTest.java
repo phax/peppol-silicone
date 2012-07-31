@@ -35,38 +35,41 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.commons.identifier;
+package at.peppol.commons.identifier.docid;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
+import at.peppol.commons.identifier.CIdentifier;
+import at.peppol.commons.identifier.docid.ReadonlyDocumentTypeIdentifier;
+
 import com.phloc.commons.mock.PhlocTestUtils;
 import com.phloc.commons.string.StringHelper;
 
 /**
- * Test class for class {@link ReadonlyProcessIdentifier}.
+ * Test class for class {@link ReadonlyDocumentTypeIdentifier}.
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public final class ReadonlyProcessIdentifierTest {
+public final class ReadonlyDocumentTypeIdentifierTest {
   @Test
   public void testCtor () {
-    final ReadonlyProcessIdentifier aID = new ReadonlyProcessIdentifier ("scheme", "value");
+    final ReadonlyDocumentTypeIdentifier aID = new ReadonlyDocumentTypeIdentifier ("scheme", "value");
     assertEquals ("scheme", aID.getScheme ());
     assertEquals ("value", aID.getValue ());
 
-    final ReadonlyProcessIdentifier aID2 = new ReadonlyProcessIdentifier (aID);
+    final ReadonlyDocumentTypeIdentifier aID2 = new ReadonlyDocumentTypeIdentifier (aID);
     assertEquals ("scheme", aID2.getScheme ());
     assertEquals ("value", aID2.getValue ());
   }
 
   @Test
   public void testBasicMethods () {
-    final ReadonlyProcessIdentifier aID1 = new ReadonlyProcessIdentifier ("scheme", "value");
-    final ReadonlyProcessIdentifier aID2 = new ReadonlyProcessIdentifier ("scheme", "value");
-    final ReadonlyProcessIdentifier aID3 = new ReadonlyProcessIdentifier ("scheme2", "value");
+    final ReadonlyDocumentTypeIdentifier aID1 = new ReadonlyDocumentTypeIdentifier ("scheme", "value");
+    final ReadonlyDocumentTypeIdentifier aID2 = new ReadonlyDocumentTypeIdentifier ("scheme", "value");
+    final ReadonlyDocumentTypeIdentifier aID3 = new ReadonlyDocumentTypeIdentifier ("scheme2", "value");
     PhlocTestUtils.testDefaultImplementationWithEqualContentObject (aID1, aID2);
     PhlocTestUtils.testDefaultImplementationWithDifferentContentObject (aID1, aID3);
     PhlocTestUtils.testDefaultImplementationWithDifferentContentObject (aID2, aID3);
@@ -74,7 +77,7 @@ public final class ReadonlyProcessIdentifierTest {
 
   @Test
   public void testURIStuff () {
-    final ReadonlyProcessIdentifier aID1 = new ReadonlyProcessIdentifier ("scheme1", "value1");
+    final ReadonlyDocumentTypeIdentifier aID1 = new ReadonlyDocumentTypeIdentifier ("scheme1", "value1");
     assertEquals ("scheme1::value1", aID1.getURIEncoded ());
     assertEquals ("scheme1%3A%3Avalue1", aID1.getURIPercentEncoded ());
   }
@@ -83,51 +86,52 @@ public final class ReadonlyProcessIdentifierTest {
   public void testConstraints () {
     try {
       // null key not allowed
-      new ReadonlyProcessIdentifier (null, "value");
+      new ReadonlyDocumentTypeIdentifier (null, "value");
       fail ();
     }
     catch (final IllegalArgumentException ex) {}
 
     try {
       // null value not allowed
-      new ReadonlyProcessIdentifier ("scheme", null);
+      new ReadonlyDocumentTypeIdentifier ("scheme", null);
       fail ();
     }
     catch (final IllegalArgumentException ex) {}
 
     try {
       // Both null not allowed
-      new ReadonlyProcessIdentifier (null, null);
+      new ReadonlyDocumentTypeIdentifier (null, null);
       fail ();
     }
     catch (final IllegalArgumentException ex) {}
 
     try {
       // Empty is not allowed
-      new ReadonlyProcessIdentifier ("scheme", "");
+      new ReadonlyDocumentTypeIdentifier ("scheme", "");
       fail ();
     }
     catch (final IllegalArgumentException ex) {}
 
     try {
       // Cannot be mapped to ISO-8859-1:
-      new ReadonlyProcessIdentifier ("scheme", "Љ");
+      new ReadonlyDocumentTypeIdentifier ("scheme", "Љ");
       fail ();
     }
     catch (final IllegalArgumentException ex) {}
 
     try {
       // Scheme too long
-      new ReadonlyProcessIdentifier (StringHelper.getRepeated ('a', CIdentifier.MAX_IDENTIFIER_SCHEME_LENGTH + 1),
-                                     "abc");
+      new ReadonlyDocumentTypeIdentifier (StringHelper.getRepeated ('a', CIdentifier.MAX_IDENTIFIER_SCHEME_LENGTH + 1),
+                                          "abc");
       fail ();
     }
     catch (final IllegalArgumentException ex) {}
 
     try {
       // Value too long
-      new ReadonlyProcessIdentifier ("scheme",
-                                     StringHelper.getRepeated ('a', CIdentifier.MAX_PROCESS_IDENTIFIER_VALUE_LENGTH + 1));
+      new ReadonlyDocumentTypeIdentifier ("scheme",
+                                          StringHelper.getRepeated ('a',
+                                                                    CIdentifier.MAX_DOCUMENT_TYPE_IDENTIFIER_VALUE_LENGTH + 1));
       fail ();
     }
     catch (final IllegalArgumentException ex) {}

@@ -35,38 +35,41 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.commons.identifier;
+package at.peppol.commons.identifier.actorid;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
+import at.peppol.commons.identifier.CIdentifier;
+import at.peppol.commons.identifier.actorid.SimpleParticipantIdentifier;
+
 import com.phloc.commons.mock.PhlocTestUtils;
 import com.phloc.commons.string.StringHelper;
 
 /**
- * Test class for class {@link ReadonlyParticipantIdentifier}.
+ * Test class for class {@link SimpleParticipantIdentifier}.
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public final class ReadonlyParticipantIdentifierTest {
+public final class SimpleParticipantIdentifierTest {
   @Test
   public void testCtor () {
-    final ReadonlyParticipantIdentifier aID = new ReadonlyParticipantIdentifier ("scheme-actorid-test", "value");
+    final SimpleParticipantIdentifier aID = new SimpleParticipantIdentifier ("scheme-actorid-test", "value");
     assertEquals ("scheme-actorid-test", aID.getScheme ());
     assertEquals ("value", aID.getValue ());
 
-    final ReadonlyParticipantIdentifier aID2 = new ReadonlyParticipantIdentifier (aID);
+    final SimpleParticipantIdentifier aID2 = new SimpleParticipantIdentifier (aID);
     assertEquals ("scheme-actorid-test", aID2.getScheme ());
     assertEquals ("value", aID2.getValue ());
   }
 
   @Test
   public void testBasicMethods () {
-    final ReadonlyParticipantIdentifier aID1 = new ReadonlyParticipantIdentifier ("scheme-actorid-test", "value");
-    final ReadonlyParticipantIdentifier aID2 = new ReadonlyParticipantIdentifier ("scheme-actorid-test", "value");
-    final ReadonlyParticipantIdentifier aID3 = new ReadonlyParticipantIdentifier ("scheme2-actorid-test", "value");
+    final SimpleParticipantIdentifier aID1 = new SimpleParticipantIdentifier ("scheme-actorid-test", "value");
+    final SimpleParticipantIdentifier aID2 = new SimpleParticipantIdentifier ("scheme-actorid-test", "value");
+    final SimpleParticipantIdentifier aID3 = new SimpleParticipantIdentifier ("scheme2-actorid-test", "value");
     PhlocTestUtils.testDefaultImplementationWithEqualContentObject (aID1, aID2);
     PhlocTestUtils.testDefaultImplementationWithDifferentContentObject (aID1, aID3);
     PhlocTestUtils.testDefaultImplementationWithDifferentContentObject (aID2, aID3);
@@ -74,61 +77,70 @@ public final class ReadonlyParticipantIdentifierTest {
 
   @Test
   public void testURIStuff () {
-    final ReadonlyParticipantIdentifier aID1 = new ReadonlyParticipantIdentifier ("scheme-actorid-test", "value1");
+    final SimpleParticipantIdentifier aID1 = new SimpleParticipantIdentifier ("scheme-actorid-test", "value1");
     assertEquals ("scheme-actorid-test::value1", aID1.getURIEncoded ());
     assertEquals ("scheme-actorid-test%3A%3Avalue1", aID1.getURIPercentEncoded ());
+    final SimpleParticipantIdentifier aID2 = SimpleParticipantIdentifier.createFromURIPart ("scheme-actorid-test::value1");
+    assertEquals (aID1, aID2);
+
+    try {
+      // No separator
+      SimpleParticipantIdentifier.createFromURIPart ("scheme1");
+      fail ();
+    }
+    catch (final IllegalArgumentException ex) {}
   }
 
   @Test
   public void testConstraints () {
     try {
       // null key not allowed
-      new ReadonlyParticipantIdentifier (null, "value");
+      new SimpleParticipantIdentifier (null, "value");
       fail ();
     }
     catch (final IllegalArgumentException ex) {}
 
     try {
       // null value not allowed
-      new ReadonlyParticipantIdentifier ("scheme", null);
+      new SimpleParticipantIdentifier ("scheme", null);
       fail ();
     }
     catch (final IllegalArgumentException ex) {}
 
     try {
       // Both null not allowed
-      new ReadonlyParticipantIdentifier (null, null);
+      new SimpleParticipantIdentifier (null, null);
       fail ();
     }
     catch (final IllegalArgumentException ex) {}
 
     try {
       // Empty is not allowed
-      new ReadonlyParticipantIdentifier ("scheme", "");
+      new SimpleParticipantIdentifier ("scheme", "");
       fail ();
     }
     catch (final IllegalArgumentException ex) {}
 
     try {
       // Cannot be mapped to ISO-8859-1:
-      new ReadonlyParticipantIdentifier ("scheme", "Љ");
+      new SimpleParticipantIdentifier ("scheme", "Љ");
       fail ();
     }
     catch (final IllegalArgumentException ex) {}
 
     try {
       // Scheme too long
-      new ReadonlyParticipantIdentifier (StringHelper.getRepeated ('a', CIdentifier.MAX_IDENTIFIER_SCHEME_LENGTH + 1),
-                                         "abc");
+      new SimpleParticipantIdentifier (StringHelper.getRepeated ('a', CIdentifier.MAX_IDENTIFIER_SCHEME_LENGTH + 1),
+                                       "abc");
       fail ();
     }
     catch (final IllegalArgumentException ex) {}
 
     try {
       // Value too long
-      new ReadonlyParticipantIdentifier ("scheme",
-                                         StringHelper.getRepeated ('a',
-                                                                   CIdentifier.MAX_PARTICIPANT_IDENTIFIER_VALUE_LENGTH + 1));
+      new SimpleParticipantIdentifier ("scheme",
+                                       StringHelper.getRepeated ('a',
+                                                                 CIdentifier.MAX_PARTICIPANT_IDENTIFIER_VALUE_LENGTH + 1));
       fail ();
     }
     catch (final IllegalArgumentException ex) {}

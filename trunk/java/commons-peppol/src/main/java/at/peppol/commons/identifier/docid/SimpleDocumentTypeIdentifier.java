@@ -35,62 +35,43 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.commons.identifier;
+package at.peppol.commons.identifier.docid;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.concurrent.Immutable;
 
-import org.busdox.transport.identifiers._1.ProcessIdentifierType;
+import org.busdox.transport.identifiers._1.DocumentIdentifierType;
 
-import at.peppol.busdox.identifier.IReadonlyIdentifier;
+import at.peppol.busdox.identifier.IReadonlyDocumentTypeIdentifier;
+import at.peppol.commons.identifier.CIdentifier;
+import at.peppol.commons.identifier.IdentifierUtils;
 
-import com.phloc.commons.annotations.UnsupportedOperation;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
- * This is an immutable sanity class around the {@link ProcessIdentifierType}
- * class with easier construction and some sanity access methods. It may be used
- * in all places where {@link ProcessIdentifierType} objects are required.<br>
+ * This is a sanity class around the {@link DocumentIdentifierType} class with
+ * easier construction and some sanity access methods. It may be used in all
+ * places where {@link DocumentIdentifierType} objects are required.<br>
  * Important note: this class implements {@link #equals(Object)} and
  * {@link #hashCode()} where its base class does not. So be careful when mixing
- * this class and its base class!<br>
- * For a mutable version, please check {@link SimpleProcessIdentifier}.
+ * this class and its base class!
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-@Immutable
-public final class ReadonlyProcessIdentifier extends ProcessIdentifierType implements IPeppolProcessIdentifier {
-  public ReadonlyProcessIdentifier (@Nonnull final IReadonlyIdentifier aIdentifier) {
+public class SimpleDocumentTypeIdentifier extends DocumentIdentifierType implements IPeppolDocumentTypeIdentifier {
+  public SimpleDocumentTypeIdentifier (@Nonnull final IReadonlyDocumentTypeIdentifier aIdentifier) {
     this (aIdentifier.getScheme (), aIdentifier.getValue ());
   }
 
-  public ReadonlyProcessIdentifier (@Nullable final String sScheme, @Nullable final String sValue) {
+  public SimpleDocumentTypeIdentifier (@Nullable final String sScheme, @Nonnull final String sValue) {
     if (!IdentifierUtils.isValidIdentifierScheme (sScheme))
-      throw new IllegalArgumentException ("Process identifier scheme '" + sScheme + "' is invalid!");
-    if (!IdentifierUtils.isValidProcessIdentifierValue (sValue))
-      throw new IllegalArgumentException ("Process identifier value '" + sValue + "' is invalid!");
-
-    // Explicitly use the super methods, as the methods of this class throw an
-    // exception!
-    super.setScheme (sScheme);
-    super.setValue (sValue);
-  }
-
-  @Override
-  @UnsupportedOperation
-  public void setValue (final String sValue) {
-    // This is how we make things read-only :)
-    throw new UnsupportedOperationException ("setValue is forbidden on this class!");
-  }
-
-  @Override
-  @UnsupportedOperation
-  public void setScheme (final String sScheme) {
-    // This is how we make things read-only :)
-    throw new UnsupportedOperationException ("setScheme is forbidden on this class!");
+      throw new IllegalArgumentException ("Document Type identifier scheme '" + sScheme + "' is invalid!");
+    if (!IdentifierUtils.isValidDocumentTypeIdentifierValue (sValue))
+      throw new IllegalArgumentException ("Document Type identifier value '" + sValue + "' is invalid!");
+    setScheme (sScheme);
+    setValue (sValue);
   }
 
   public boolean isDefaultScheme () {
@@ -116,9 +97,9 @@ public final class ReadonlyProcessIdentifier extends ProcessIdentifierType imple
   public boolean equals (final Object o) {
     if (o == this)
       return true;
-    if (!(o instanceof ReadonlyProcessIdentifier))
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
-    final ReadonlyProcessIdentifier rhs = (ReadonlyProcessIdentifier) o;
+    final SimpleDocumentTypeIdentifier rhs = (SimpleDocumentTypeIdentifier) o;
     return EqualsUtils.equals (scheme, rhs.scheme) && EqualsUtils.equals (value, rhs.value);
   }
 
@@ -133,7 +114,12 @@ public final class ReadonlyProcessIdentifier extends ProcessIdentifierType imple
   }
 
   @Nonnull
-  public static ReadonlyProcessIdentifier createWithDefaultScheme (@Nullable final String sValue) {
-    return new ReadonlyProcessIdentifier (CIdentifier.DEFAULT_PROCESS_IDENTIFIER_SCHEME, sValue);
+  public static SimpleDocumentTypeIdentifier createWithDefaultScheme (@Nonnull final String sValue) {
+    return new SimpleDocumentTypeIdentifier (CIdentifier.DEFAULT_DOCUMENT_TYPE_IDENTIFIER_SCHEME, sValue);
+  }
+
+  @Nonnull
+  public static SimpleDocumentTypeIdentifier createFromURIPart (@Nonnull final String sURIPart) {
+    return IdentifierUtils.createDocumentTypeIdentifierFromURIPart (sURIPart);
   }
 }

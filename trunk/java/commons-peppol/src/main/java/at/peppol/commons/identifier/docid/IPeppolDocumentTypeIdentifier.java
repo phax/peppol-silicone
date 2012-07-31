@@ -35,15 +35,19 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.commons.identifier;
+package at.peppol.commons.identifier.docid;
 
-import at.peppol.busdox.identifier.IReadonlyProcessIdentifier;
+import at.peppol.busdox.identifier.IDocumentTypeIdentifier;
+import at.peppol.commons.identifier.IPeppolIdentifier;
 
 /**
- * Base interface for an extended read-only process identifier.
+ * Base interface for an extended document type identifier.
  * 
  * @author philip
  */
-public interface IPeppolReadonlyProcessIdentifier extends IPeppolReadonlyIdentifier, IReadonlyProcessIdentifier {
+public interface IPeppolDocumentTypeIdentifier extends
+                                                IPeppolReadonlyDocumentTypeIdentifier,
+                                                IPeppolIdentifier,
+                                                IDocumentTypeIdentifier {
   /* empty */
 }

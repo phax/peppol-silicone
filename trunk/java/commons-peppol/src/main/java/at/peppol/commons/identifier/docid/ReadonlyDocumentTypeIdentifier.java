@@ -35,7 +35,7 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.commons.identifier;
+package at.peppol.commons.identifier.docid;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -44,6 +44,8 @@ import javax.annotation.concurrent.Immutable;
 import org.busdox.transport.identifiers._1.DocumentIdentifierType;
 
 import at.peppol.busdox.identifier.IReadonlyIdentifier;
+import at.peppol.commons.identifier.CIdentifier;
+import at.peppol.commons.identifier.IdentifierUtils;
 
 import com.phloc.commons.annotations.UnsupportedOperation;
 import com.phloc.commons.equals.EqualsUtils;

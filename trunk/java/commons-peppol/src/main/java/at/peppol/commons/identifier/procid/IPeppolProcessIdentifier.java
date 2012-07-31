@@ -35,9 +35,10 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.commons.identifier;
+package at.peppol.commons.identifier.procid;
 
 import at.peppol.busdox.identifier.IProcessIdentifier;
+import at.peppol.commons.identifier.IPeppolIdentifier;
 
 /**
  * Base interface for an extended process identifier.

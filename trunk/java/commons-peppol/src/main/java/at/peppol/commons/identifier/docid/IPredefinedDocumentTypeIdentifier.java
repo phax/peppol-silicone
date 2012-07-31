@@ -40,8 +40,6 @@ package at.peppol.commons.identifier.docid;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import at.peppol.commons.identifier.IPeppolReadonlyDocumentTypeIdentifier;
-import at.peppol.commons.identifier.SimpleDocumentTypeIdentifier;
 
 import com.phloc.commons.version.Version;
 

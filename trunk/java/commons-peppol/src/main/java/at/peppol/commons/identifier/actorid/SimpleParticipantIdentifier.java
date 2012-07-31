@@ -35,39 +35,42 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.commons.identifier;
+package at.peppol.commons.identifier.actorid;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.busdox.transport.identifiers._1.DocumentIdentifierType;
+import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 
-import at.peppol.busdox.identifier.IReadonlyDocumentTypeIdentifier;
+import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
+import at.peppol.commons.identifier.CIdentifier;
+import at.peppol.commons.identifier.IdentifierUtils;
+import at.peppol.commons.identifier.validator.IdentifierValidator;
 
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
- * This is a sanity class around the {@link DocumentIdentifierType} class with
- * easier construction and some sanity access methods. It may be used in all
- * places where {@link DocumentIdentifierType} objects are required.<br>
+ * This is a sanity class around the {@link ParticipantIdentifierType} class
+ * with easier construction and some sanity access methods. It may be used in
+ * all places where {@link ParticipantIdentifierType} objects are required.<br>
  * Important note: this class implements {@link #equals(Object)} and
  * {@link #hashCode()} where its base class does not. So be careful when mixing
  * this class and its base class!
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public class SimpleDocumentTypeIdentifier extends DocumentIdentifierType implements IPeppolDocumentTypeIdentifier {
-  public SimpleDocumentTypeIdentifier (@Nonnull final IReadonlyDocumentTypeIdentifier aIdentifier) {
+public class SimpleParticipantIdentifier extends ParticipantIdentifierType implements IPeppolParticipantIdentifier {
+  public SimpleParticipantIdentifier (@Nonnull final IReadonlyParticipantIdentifier aIdentifier) {
     this (aIdentifier.getScheme (), aIdentifier.getValue ());
   }
 
-  public SimpleDocumentTypeIdentifier (@Nullable final String sScheme, @Nonnull final String sValue) {
-    if (!IdentifierUtils.isValidIdentifierScheme (sScheme))
-      throw new IllegalArgumentException ("Document Type identifier scheme '" + sScheme + "' is invalid!");
-    if (!IdentifierUtils.isValidDocumentTypeIdentifierValue (sValue))
-      throw new IllegalArgumentException ("Document Type identifier value '" + sValue + "' is invalid!");
+  public SimpleParticipantIdentifier (@Nullable final String sScheme, @Nonnull final String sValue) {
+    if (!IdentifierUtils.isValidParticipantIdentifierScheme (sScheme))
+      throw new IllegalArgumentException ("Participant identifier scheme '" + sScheme + "' is invalid!");
+    if (!IdentifierUtils.isValidParticipantIdentifierValue (sValue))
+      throw new IllegalArgumentException ("Participant identifier value '" + sValue + "' is invalid!");
     setScheme (sScheme);
     setValue (sValue);
   }
@@ -86,6 +89,20 @@ public class SimpleDocumentTypeIdentifier extends DocumentIdentifierType impleme
     return IdentifierUtils.getIdentifierURIPercentEncoded (this);
   }
 
+  public boolean isValid () {
+    return IdentifierValidator.isValidParticipantIdentifier (this);
+  }
+
+  @Nullable
+  public String getIssuingAgencyID () {
+    return IdentifierUtils.getIssuingAgencyIDFromParticipantIDValue (this);
+  }
+
+  @Nullable
+  public String getLocalParticipantID () {
+    return IdentifierUtils.getLocalParticipantIDFromParticipantIDValue (this);
+  }
+
   /*
    * Note: this method does compare case sensitive!!!! Otherwise the required
    * semantics of #equals would not be fulfilled!
@@ -97,7 +114,7 @@ public class SimpleDocumentTypeIdentifier extends DocumentIdentifierType impleme
       return true;
     if (o == null || !getClass ().equals (o.getClass ()))
       return false;
-    final SimpleDocumentTypeIdentifier rhs = (SimpleDocumentTypeIdentifier) o;
+    final SimpleParticipantIdentifier rhs = (SimpleParticipantIdentifier) o;
     return EqualsUtils.equals (scheme, rhs.scheme) && EqualsUtils.equals (value, rhs.value);
   }
 
@@ -112,12 +129,12 @@ public class SimpleDocumentTypeIdentifier extends DocumentIdentifierType impleme
   }
 
   @Nonnull
-  public static SimpleDocumentTypeIdentifier createWithDefaultScheme (@Nonnull final String sValue) {
-    return new SimpleDocumentTypeIdentifier (CIdentifier.DEFAULT_DOCUMENT_TYPE_IDENTIFIER_SCHEME, sValue);
+  public static SimpleParticipantIdentifier createWithDefaultScheme (@Nonnull final String sValue) {
+    return new SimpleParticipantIdentifier (CIdentifier.DEFAULT_PARTICIPANT_IDENTIFIER_SCHEME, sValue);
   }
 
   @Nonnull
-  public static SimpleDocumentTypeIdentifier createFromURIPart (@Nonnull final String sURIPart) {
-    return IdentifierUtils.createDocumentTypeIdentifierFromURIPart (sURIPart);
+  public static SimpleParticipantIdentifier createFromURIPart (@Nonnull final String sURIPart) {
+    return IdentifierUtils.createParticipantIdentifierFromURIPart (sURIPart);
   }
 }
