@@ -40,7 +40,10 @@ package at.peppol.commons.identifier.actorid;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.version.Version;
 
 /**
  * Base interface for a single identifier issuing agency.
@@ -72,8 +75,40 @@ public interface IIdentifierIssuingAgency {
   String getISO6523Code ();
 
   /**
+   * Get the real participant identifier value for the given local identifier.<br>
+   * Example: <code>GLN.createIdentifierValue ("123456")</code> results in
+   * <code>0088:123456</code>
+   * 
+   * @param sIdentifier
+   *        The local participant identifier to be used.
+   * @return The participant identifier value part. Never <code>null</code>.
+   */
+  @Nonnull
+  @Nonempty
+  String createIdentifierValue (@Nonnull @Nonempty String sIdentifier);
+
+  /**
+   * Get the real participant identifier for the given local identifier.<br>
+   * Example: <code>GLN.createParticipantIdentifier ("123456")</code> results in
+   * the wrapped object for <code>iso6523-actorid-upis::0088:123456</code>
+   * 
+   * @param sIdentifier
+   *        The local participant identifier to be used.
+   * @return The participant identifier. Never <code>null</code>.
+   */
+  @Nonnull
+  SimpleParticipantIdentifier createParticipantIdentifier (@Nonnull @Nonempty String sIdentifier);
+
+  /**
    * @return <code>true</code> if the agency is deprecated and should not be
    *         used any longer, <code>false</code> otherwise.
    */
   boolean isDeprecated ();
+
+  /**
+   * @return The internal code list version in which the identifier was added.
+   *         Never <code>null</code>.
+   */
+  @Nonnull
+  Version getSince ();
 }

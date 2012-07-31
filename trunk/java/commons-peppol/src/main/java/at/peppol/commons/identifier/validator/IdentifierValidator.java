@@ -43,6 +43,10 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import at.peppol.commons.identifier.CIdentifier;
 import at.peppol.commons.identifier.IExtendedParticipantIdentifier;
 
 import com.phloc.commons.lang.ServiceLoaderBackport;
@@ -54,15 +58,35 @@ import com.phloc.commons.lang.ServiceLoaderBackport;
  */
 @Immutable
 public final class IdentifierValidator {
+  private static final Logger s_aLogger = LoggerFactory.getLogger (IdentifierValidator.class);
   private static final List <IParticipantIdentifierValidatorSPI> s_aParticipantIDValidators = new ArrayList <IParticipantIdentifierValidatorSPI> ();
 
   static {
     for (final IParticipantIdentifierValidatorSPI aValidator : ServiceLoaderBackport.load (IParticipantIdentifierValidatorSPI.class))
       s_aParticipantIDValidators.add (aValidator);
+    if (!s_aParticipantIDValidators.isEmpty ())
+      s_aLogger.info ("Loaded " +
+                      s_aParticipantIDValidators.size () +
+                      " SPI implementations of IParticipantIdentifierValidatorSPI");
   }
 
   private IdentifierValidator () {}
 
+  /**
+   * Check if the passed participant ID matches all custom rules. But only
+   * participant IDs with the default scheme
+   * {@link CIdentifier#DEFAULT_PARTICIPANT_IDENTIFIER_SCHEME} are validated, as
+   * we don't know the details of the other schemes.<br>
+   * This method can be used to generically check the consistency of certain
+   * numbering schemes.
+   * 
+   * @param aParticipantID
+   *        The participant ID to validate. May not be <code>null</code>.
+   * @return <code>true</code> if a) the identifier is not the default scheme,
+   *         b) if at least one validator matched or c) if no matching validator
+   *         was found at all. The method returns <code>false</code> if a
+   *         matching validator was found, but the ID did not match.
+   */
   public static boolean isValidParticipantIdentifier (@Nonnull final IExtendedParticipantIdentifier aParticipantID) {
     if (aParticipantID == null)
       throw new NullPointerException ("participantID");
@@ -74,6 +98,8 @@ public final class IdentifierValidator {
     boolean bAtLeastOneSupported = false;
     final String sIssuingAgencyID = aParticipantID.getIssuingAgencyID ();
     final String sLocal = aParticipantID.getLocalParticipantID ();
+
+    // For all SPI instances
     for (final IParticipantIdentifierValidatorSPI aValidator : s_aParticipantIDValidators)
       if (aValidator.isSupportedIssuingAgency (sIssuingAgencyID)) {
         if (aValidator.isValueValid (sLocal)) {

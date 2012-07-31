@@ -39,6 +39,11 @@ package at.peppol.commons.identifier;
 
 import at.peppol.busdox.identifier.IProcessIdentifier;
 
+/**
+ * Base interface for an extended process identifier.
+ * 
+ * @author philip
+ */
 public interface IExtendedProcessIdentifier extends IExtendedIdentifier, IProcessIdentifier {
   /* empty */
 }
