@@ -35,12 +35,14 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.commons.identifier.actorid;
+package at.peppol.commons.identifier.issuingagency;
 
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
+
+import at.peppol.commons.identifier.issuingagency.EPredefinedIdentifierIssuingAgency;
 
 import com.phloc.commons.string.StringHelper;
 

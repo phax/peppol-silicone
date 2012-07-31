@@ -39,12 +39,9 @@
 package at.peppol.commons.identifier.doctype;
 
 import java.util.List;
-
 import javax.annotation.Nonnull;
-
 import at.peppol.commons.identifier.CIdentifier;
 import at.peppol.commons.identifier.IdentifierUtils;
-
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;

@@ -40,7 +40,6 @@ package at.peppol.commons.tools;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashSet;
@@ -62,11 +61,11 @@ import org.w3c.dom.Document;
 
 import at.peppol.commons.identifier.CIdentifier;
 import at.peppol.commons.identifier.IdentifierUtils;
-import at.peppol.commons.identifier.actorid.IIdentifierIssuingAgency;
 import at.peppol.commons.identifier.doctype.IPeppolDocumentTypeIdentifierParts;
 import at.peppol.commons.identifier.doctype.IPredefinedDocumentTypeIdentifier;
 import at.peppol.commons.identifier.doctype.PeppolDocumentTypeIdentifierParts;
 import at.peppol.commons.identifier.doctype.SimpleDocumentTypeIdentifier;
+import at.peppol.commons.identifier.issuingagency.IIdentifierIssuingAgency;
 import at.peppol.commons.identifier.participant.SimpleParticipantIdentifier;
 import at.peppol.commons.identifier.process.IPredefinedProcessIdentifier;
 import at.peppol.commons.identifier.process.SimpleProcessIdentifier;
@@ -151,8 +150,7 @@ public final class MainCreateCodelistsFilesFromExcel {
     _writeGenericodeFile (aCodeList, RESULT_DIRECTORY + "PartyID.gc");
   }
 
-  private static void _emitIdentifierIssuingAgency (final Sheet aParticipantSheet) throws URISyntaxException,
-                                                                                  UnsupportedEncodingException {
+  private static void _emitIdentifierIssuingAgency (final Sheet aParticipantSheet) throws URISyntaxException {
     // Read excel file
     final ExcelReadOptions aReadOptions = new ExcelReadOptions ().setLinesToSkip (1).setLineIndexShortName (0);
     aReadOptions.addColumn (0, "schemeid", UseType.REQUIRED, "string", true);
@@ -203,11 +201,12 @@ public final class MainCreateCodelistsFilesFromExcel {
     }
     final String sXML = MicroWriter.getXMLString (aDoc);
     SimpleFileIO.writeFile (new File (RESULT_DIRECTORY + "PeppolIdentifierIssuingAgencies.xml"),
-                            sXML.getBytes (CCharset.CHARSET_UTF_8));
+                            sXML,
+                            CCharset.CHARSET_UTF_8_OBJ);
 
     // Create Java source
     try {
-      final JDefinedClass jEnum = s_aCodeModel._package ("at.peppol.commons.identifier.actorid")
+      final JDefinedClass jEnum = s_aCodeModel._package ("at.peppol.commons.identifier.issuingagency")
                                               ._enum ("EPredefinedIdentifierIssuingAgency")
                                               ._implements (IIdentifierIssuingAgency.class);
       jEnum.javadoc ().add ("This file is generated. Do NOT edit!");
@@ -325,8 +324,7 @@ public final class MainCreateCodelistsFilesFromExcel {
     }
   }
 
-  private static void _emitDocumentIdentifiers (final Sheet aDocumentSheet) throws URISyntaxException,
-                                                                           UnsupportedEncodingException {
+  private static void _emitDocumentIdentifiers (final Sheet aDocumentSheet) throws URISyntaxException {
     // Create GeneriCode file
     final ExcelReadOptions aReadOptions = new ExcelReadOptions ().setLinesToSkip (1).setLineIndexShortName (0);
     aReadOptions.addColumn (0, "name", UseType.OPTIONAL, "string", false);
@@ -358,11 +356,12 @@ public final class MainCreateCodelistsFilesFromExcel {
     }
     final String sXML = MicroWriter.getXMLString (aDoc);
     SimpleFileIO.writeFile (new File (RESULT_DIRECTORY + "PeppolDocumentTypeIdentifier.xml"),
-                            sXML.getBytes (CCharset.CHARSET_UTF_8));
+                            sXML,
+                            CCharset.CHARSET_UTF_8_OBJ);
 
     // Create Java source
     try {
-      s_jEnumPredefinedDoc = s_aCodeModel._package ("at.peppol.commons.identifier.docid")
+      s_jEnumPredefinedDoc = s_aCodeModel._package ("at.peppol.commons.identifier.doctype")
                                          ._enum ("EPredefinedDocumentTypeIdentifier")
                                          ._implements (IPredefinedDocumentTypeIdentifier.class);
       s_jEnumPredefinedDoc.javadoc ().add ("This file is generated. Do NOT edit!");
@@ -538,8 +537,7 @@ public final class MainCreateCodelistsFilesFromExcel {
     }
   }
 
-  private static void _emitProcessIdentifier (final Sheet aProcessSheet) throws URISyntaxException,
-                                                                        UnsupportedEncodingException {
+  private static void _emitProcessIdentifier (final Sheet aProcessSheet) throws URISyntaxException {
     final ExcelReadOptions aReadOptions = new ExcelReadOptions ().setLinesToSkip (1).setLineIndexShortName (0);
     aReadOptions.addColumn (0, "name", UseType.REQUIRED, "string", true);
     aReadOptions.addColumn (1, "id", UseType.REQUIRED, "string", true);
@@ -578,11 +576,12 @@ public final class MainCreateCodelistsFilesFromExcel {
     }
     final String sXML = MicroWriter.getXMLString (aDoc);
     SimpleFileIO.writeFile (new File (RESULT_DIRECTORY + "PeppolProcessIdentifier.xml"),
-                            sXML.getBytes (CCharset.CHARSET_UTF_8));
+                            sXML,
+                            CCharset.CHARSET_UTF_8_OBJ);
 
     // Create Java source
     try {
-      final JDefinedClass jEnum = s_aCodeModel._package ("at.peppol.commons.identifier.procid")
+      final JDefinedClass jEnum = s_aCodeModel._package ("at.peppol.commons.identifier.process")
                                               ._enum ("EPredefinedProcessIdentifier")
                                               ._implements (IPredefinedProcessIdentifier.class);
       jEnum.javadoc ().add ("This file is generated. Do NOT edit!");

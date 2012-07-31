@@ -39,7 +39,7 @@ package at.peppol.commons.identifier.validator;
 
 import javax.annotation.Nullable;
 
-import at.peppol.commons.identifier.actorid.EPredefinedIdentifierIssuingAgency;
+import at.peppol.commons.identifier.issuingagency.EPredefinedIdentifierIssuingAgency;
 
 import com.phloc.commons.annotations.IsSPIImplementation;
 import com.phloc.commons.string.StringHelper;

@@ -35,7 +35,7 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.commons.identifier.actorid;
+package at.peppol.commons.identifier.issuingagency;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -44,6 +44,8 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
+
+import at.peppol.commons.identifier.issuingagency.IdentifierIssuingAgencyManager;
 
 import com.phloc.commons.state.ETriState;
 

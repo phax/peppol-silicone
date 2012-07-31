@@ -44,8 +44,8 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-import at.peppol.commons.identifier.actorid.EPredefinedIdentifierIssuingAgency;
 import at.peppol.commons.identifier.doctype.SimpleDocumentTypeIdentifier;
+import at.peppol.commons.identifier.issuingagency.EPredefinedIdentifierIssuingAgency;
 import at.peppol.commons.identifier.participant.SimpleParticipantIdentifier;
 import at.peppol.commons.identifier.process.SimpleProcessIdentifier;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;

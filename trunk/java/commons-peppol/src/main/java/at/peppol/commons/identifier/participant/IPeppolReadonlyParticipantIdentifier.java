@@ -47,9 +47,7 @@ import at.peppol.commons.identifier.IPeppolReadonlyIdentifier;
  * 
  * @author philip
  */
-public interface IPeppolReadonlyParticipantIdentifier extends
-                                                       IPeppolReadonlyIdentifier,
-                                                       IReadonlyParticipantIdentifier {
+public interface IPeppolReadonlyParticipantIdentifier extends IPeppolReadonlyIdentifier, IReadonlyParticipantIdentifier {
   /**
    * @return <code>true</code> if the identifier is valid according to the
    *         internal and external validation rules as defined by
