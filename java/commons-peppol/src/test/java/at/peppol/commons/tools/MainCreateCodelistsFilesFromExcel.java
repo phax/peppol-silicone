@@ -66,9 +66,9 @@ import at.peppol.commons.identifier.SimpleDocumentTypeIdentifier;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 import at.peppol.commons.identifier.SimpleProcessIdentifier;
 import at.peppol.commons.identifier.actorid.IIdentifierIssuingAgency;
-import at.peppol.commons.identifier.docid.IPeppol_DocumentTypeIdentifierParts;
+import at.peppol.commons.identifier.docid.IPeppolDocumentTypeIdentifierParts;
 import at.peppol.commons.identifier.docid.IPredefinedDocumentTypeIdentifier;
-import at.peppol.commons.identifier.docid.Peppol_DocumentTypeIdentifierParts;
+import at.peppol.commons.identifier.docid.PeppolDocumentTypeIdentifierParts;
 import at.peppol.commons.identifier.procid.IPredefinedProcessIdentifier;
 
 import com.phloc.commons.annotations.Nonempty;
@@ -376,7 +376,7 @@ public final class MainCreateCodelistsFilesFromExcel {
         final String sSince = Genericode10Utils.getRowValue (aRow, "since");
 
         // Split ID in it's pieces
-        final IPeppol_DocumentTypeIdentifierParts aDocIDParts = Peppol_DocumentTypeIdentifierParts.extractFromString (sDocID);
+        final IPeppolDocumentTypeIdentifierParts aDocIDParts = PeppolDocumentTypeIdentifierParts.extractFromString (sDocID);
 
         // Assemble extensions
         final JInvocation jExtensions = s_aCodeModel.ref (ContainerHelper.class).staticInvoke ("newList");
@@ -385,7 +385,7 @@ public final class MainCreateCodelistsFilesFromExcel {
 
         final String sEnumConstName = RegExHelper.getAsIdentifier (sDocID);
         final JEnumConstant jEnumConst = s_jEnumPredefinedDoc.enumConstant (sEnumConstName);
-        jEnumConst.arg (JExpr._new (s_aCodeModel.ref (Peppol_DocumentTypeIdentifierParts.class))
+        jEnumConst.arg (JExpr._new (s_aCodeModel.ref (PeppolDocumentTypeIdentifierParts.class))
                              .arg (JExpr.lit (aDocIDParts.getRootNS ()))
                              .arg (JExpr.lit (aDocIDParts.getLocalName ()))
                              .arg (JExpr.lit (aDocIDParts.getTransactionID ()))
@@ -413,7 +413,7 @@ public final class MainCreateCodelistsFilesFromExcel {
 
       // fields
       final JFieldVar fParts = s_jEnumPredefinedDoc.field (JMod.PRIVATE | JMod.FINAL,
-                                                           IPeppol_DocumentTypeIdentifierParts.class,
+                                                           IPeppolDocumentTypeIdentifierParts.class,
                                                            "m_aParts");
       final JFieldVar fID = s_jEnumPredefinedDoc.field (JMod.PRIVATE | JMod.FINAL, String.class, "m_sID");
       final JFieldVar fCommonName = s_jEnumPredefinedDoc.field (JMod.PRIVATE | JMod.FINAL,
@@ -423,7 +423,7 @@ public final class MainCreateCodelistsFilesFromExcel {
 
       // Constructor
       final JMethod jCtor = s_jEnumPredefinedDoc.constructor (JMod.PRIVATE);
-      final JVar jParts = jCtor.param (JMod.FINAL, IPeppol_DocumentTypeIdentifierParts.class, "aParts");
+      final JVar jParts = jCtor.param (JMod.FINAL, IPeppolDocumentTypeIdentifierParts.class, "aParts");
       jParts.annotate (Nonnull.class);
       final JVar jCommonName = jCtor.param (JMod.FINAL, String.class, "sCommonName");
       jCommonName.annotate (Nonnull.class);
@@ -603,7 +603,7 @@ public final class MainCreateCodelistsFilesFromExcel {
         for (final String sDocTypeID : RegExHelper.getSplitToList (sDocTypeIDs, "\n")) {
           // Use the short name for better readability
           final String sIdentifier = true
-                                         ? CodeGenerationUtils.createShortcutDocumentTypeIDName (Peppol_DocumentTypeIdentifierParts.extractFromString (sDocTypeID))
+                                         ? CodeGenerationUtils.createShortcutDocumentTypeIDName (PeppolDocumentTypeIdentifierParts.extractFromString (sDocTypeID))
                                          : RegExHelper.getAsIdentifier (sDocTypeID);
           jArray.add (s_jEnumPredefinedDoc.staticRef (sIdentifier));
         }

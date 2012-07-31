@@ -54,7 +54,7 @@ import com.phloc.commons.annotations.Nonempty;
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public interface IPeppol_DocumentTypeIdentifierParts extends IBusdoxDocumentTypeIdentifierParts {
+public interface IPeppolDocumentTypeIdentifierParts extends IBusdoxDocumentTypeIdentifierParts {
   /**
    * Separates the transaction ID from the extensions
    */
