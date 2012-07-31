@@ -49,6 +49,10 @@ import at.peppol.busdox.identifier.IReadonlyDocumentTypeIdentifier;
 import at.peppol.busdox.identifier.IReadonlyIdentifier;
 import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
 import at.peppol.busdox.identifier.IReadonlyProcessIdentifier;
+import at.peppol.commons.identifier.actorid.IPeppolReadonlyParticipantIdentifier;
+import at.peppol.commons.identifier.actorid.SimpleParticipantIdentifier;
+import at.peppol.commons.identifier.docid.SimpleDocumentTypeIdentifier;
+import at.peppol.commons.identifier.procid.SimpleProcessIdentifier;
 import at.peppol.commons.uri.BusdoxURLUtils;
 
 import com.phloc.commons.charset.CCharset;
@@ -503,7 +507,7 @@ public final class IdentifierUtils {
    *         the identifier is malformed.
    */
   @Nullable
-  public static String getIssuingAgencyIDFromParticipantIDValue (@Nonnull final IPeppolParticipantIdentifier aIdentifier) {
+  public static String getIssuingAgencyIDFromParticipantIDValue (@Nonnull final IPeppolReadonlyParticipantIdentifier aIdentifier) {
     if (aIdentifier == null)
       throw new NullPointerException ("identifier");
 
@@ -526,7 +530,7 @@ public final class IdentifierUtils {
    *         the identifier is malformed.
    */
   @Nullable
-  public static String getLocalParticipantIDFromParticipantIDValue (@Nonnull final IPeppolParticipantIdentifier aIdentifier) {
+  public static String getLocalParticipantIDFromParticipantIDValue (@Nonnull final IPeppolReadonlyParticipantIdentifier aIdentifier) {
     if (aIdentifier == null)
       throw new NullPointerException ("identifier");
 

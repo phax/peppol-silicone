@@ -35,38 +35,42 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.commons.identifier;
+package at.peppol.commons.identifier.procid;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
+import at.peppol.commons.identifier.CIdentifier;
+import at.peppol.commons.identifier.procid.SimpleProcessIdentifier;
+
 import com.phloc.commons.mock.PhlocTestUtils;
 import com.phloc.commons.string.StringHelper;
 
 /**
- * Test class for class {@link SimpleParticipantIdentifier}.
+ * Test class for class {@link SimpleProcessIdentifier}.
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public final class SimpleParticipantIdentifierTest {
+public final class SimpleProcessIdentifierTest {
   @Test
   public void testCtor () {
-    final SimpleParticipantIdentifier aID = new SimpleParticipantIdentifier ("scheme-actorid-test", "value");
-    assertEquals ("scheme-actorid-test", aID.getScheme ());
+    final SimpleProcessIdentifier aID = new SimpleProcessIdentifier ("scheme", "value");
+    assertEquals ("scheme", aID.getScheme ());
     assertEquals ("value", aID.getValue ());
 
-    final SimpleParticipantIdentifier aID2 = new SimpleParticipantIdentifier (aID);
-    assertEquals ("scheme-actorid-test", aID2.getScheme ());
+    // Create a copy
+    final SimpleProcessIdentifier aID2 = new SimpleProcessIdentifier (aID);
+    assertEquals ("scheme", aID2.getScheme ());
     assertEquals ("value", aID2.getValue ());
   }
 
   @Test
   public void testBasicMethods () {
-    final SimpleParticipantIdentifier aID1 = new SimpleParticipantIdentifier ("scheme-actorid-test", "value");
-    final SimpleParticipantIdentifier aID2 = new SimpleParticipantIdentifier ("scheme-actorid-test", "value");
-    final SimpleParticipantIdentifier aID3 = new SimpleParticipantIdentifier ("scheme2-actorid-test", "value");
+    final SimpleProcessIdentifier aID1 = new SimpleProcessIdentifier ("scheme", "value");
+    final SimpleProcessIdentifier aID2 = new SimpleProcessIdentifier ("scheme", "value");
+    final SimpleProcessIdentifier aID3 = new SimpleProcessIdentifier ("scheme2", "value");
     PhlocTestUtils.testDefaultImplementationWithEqualContentObject (aID1, aID2);
     PhlocTestUtils.testDefaultImplementationWithDifferentContentObject (aID1, aID3);
     PhlocTestUtils.testDefaultImplementationWithDifferentContentObject (aID2, aID3);
@@ -74,15 +78,15 @@ public final class SimpleParticipantIdentifierTest {
 
   @Test
   public void testURIStuff () {
-    final SimpleParticipantIdentifier aID1 = new SimpleParticipantIdentifier ("scheme-actorid-test", "value1");
-    assertEquals ("scheme-actorid-test::value1", aID1.getURIEncoded ());
-    assertEquals ("scheme-actorid-test%3A%3Avalue1", aID1.getURIPercentEncoded ());
-    final SimpleParticipantIdentifier aID2 = SimpleParticipantIdentifier.createFromURIPart ("scheme-actorid-test::value1");
+    final SimpleProcessIdentifier aID1 = new SimpleProcessIdentifier ("scheme1", "value1");
+    assertEquals ("scheme1::value1", aID1.getURIEncoded ());
+    assertEquals ("scheme1%3A%3Avalue1", aID1.getURIPercentEncoded ());
+    final SimpleProcessIdentifier aID2 = SimpleProcessIdentifier.createFromURIPart ("scheme1::value1");
     assertEquals (aID1, aID2);
 
     try {
       // No separator
-      SimpleParticipantIdentifier.createFromURIPart ("scheme1");
+      SimpleProcessIdentifier.createFromURIPart ("scheme1");
       fail ();
     }
     catch (final IllegalArgumentException ex) {}
@@ -92,52 +96,50 @@ public final class SimpleParticipantIdentifierTest {
   public void testConstraints () {
     try {
       // null key not allowed
-      new SimpleParticipantIdentifier (null, "value");
+      new SimpleProcessIdentifier (null, "value");
       fail ();
     }
     catch (final IllegalArgumentException ex) {}
 
     try {
       // null value not allowed
-      new SimpleParticipantIdentifier ("scheme", null);
+      new SimpleProcessIdentifier ("scheme", null);
       fail ();
     }
     catch (final IllegalArgumentException ex) {}
 
     try {
       // Both null not allowed
-      new SimpleParticipantIdentifier (null, null);
+      new SimpleProcessIdentifier (null, null);
       fail ();
     }
     catch (final IllegalArgumentException ex) {}
 
     try {
       // Empty is not allowed
-      new SimpleParticipantIdentifier ("scheme", "");
+      new SimpleProcessIdentifier ("scheme", "");
       fail ();
     }
     catch (final IllegalArgumentException ex) {}
 
     try {
       // Cannot be mapped to ISO-8859-1:
-      new SimpleParticipantIdentifier ("scheme", "Љ");
+      new SimpleProcessIdentifier ("scheme", "Љ");
       fail ();
     }
     catch (final IllegalArgumentException ex) {}
 
     try {
       // Scheme too long
-      new SimpleParticipantIdentifier (StringHelper.getRepeated ('a', CIdentifier.MAX_IDENTIFIER_SCHEME_LENGTH + 1),
-                                       "abc");
+      new SimpleProcessIdentifier (StringHelper.getRepeated ('a', CIdentifier.MAX_IDENTIFIER_SCHEME_LENGTH + 1), "abc");
       fail ();
     }
     catch (final IllegalArgumentException ex) {}
 
     try {
       // Value too long
-      new SimpleParticipantIdentifier ("scheme",
-                                       StringHelper.getRepeated ('a',
-                                                                 CIdentifier.MAX_PARTICIPANT_IDENTIFIER_VALUE_LENGTH + 1));
+      new SimpleProcessIdentifier ("scheme",
+                                   StringHelper.getRepeated ('a', CIdentifier.MAX_PROCESS_IDENTIFIER_VALUE_LENGTH + 1));
       fail ();
     }
     catch (final IllegalArgumentException ex) {}

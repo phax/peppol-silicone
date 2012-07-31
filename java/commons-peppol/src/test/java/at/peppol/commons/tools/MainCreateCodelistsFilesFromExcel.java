@@ -62,14 +62,14 @@ import org.w3c.dom.Document;
 
 import at.peppol.commons.identifier.CIdentifier;
 import at.peppol.commons.identifier.IdentifierUtils;
-import at.peppol.commons.identifier.SimpleDocumentTypeIdentifier;
-import at.peppol.commons.identifier.SimpleParticipantIdentifier;
-import at.peppol.commons.identifier.SimpleProcessIdentifier;
 import at.peppol.commons.identifier.actorid.IIdentifierIssuingAgency;
+import at.peppol.commons.identifier.actorid.SimpleParticipantIdentifier;
 import at.peppol.commons.identifier.docid.IPeppolDocumentTypeIdentifierParts;
 import at.peppol.commons.identifier.docid.IPredefinedDocumentTypeIdentifier;
 import at.peppol.commons.identifier.docid.PeppolDocumentTypeIdentifierParts;
+import at.peppol.commons.identifier.docid.SimpleDocumentTypeIdentifier;
 import at.peppol.commons.identifier.procid.IPredefinedProcessIdentifier;
+import at.peppol.commons.identifier.procid.SimpleProcessIdentifier;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;

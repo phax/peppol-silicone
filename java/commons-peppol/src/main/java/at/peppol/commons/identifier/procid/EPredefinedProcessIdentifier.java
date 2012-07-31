@@ -44,7 +44,6 @@ import javax.annotation.Nonnull;
 
 import at.peppol.commons.identifier.CIdentifier;
 import at.peppol.commons.identifier.IdentifierUtils;
-import at.peppol.commons.identifier.SimpleProcessIdentifier;
 import at.peppol.commons.identifier.docid.EPredefinedDocumentTypeIdentifier;
 import at.peppol.commons.identifier.docid.IPredefinedDocumentTypeIdentifier;
 

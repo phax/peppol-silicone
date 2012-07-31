@@ -35,42 +35,64 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.commons.identifier;
+package at.peppol.commons.identifier.procid;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 
-import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
+import org.busdox.transport.identifiers._1.ProcessIdentifierType;
 
-import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
-import at.peppol.commons.identifier.validator.IdentifierValidator;
+import at.peppol.busdox.identifier.IReadonlyIdentifier;
+import at.peppol.commons.identifier.CIdentifier;
+import at.peppol.commons.identifier.IdentifierUtils;
 
+import com.phloc.commons.annotations.UnsupportedOperation;
 import com.phloc.commons.equals.EqualsUtils;
 import com.phloc.commons.hash.HashCodeGenerator;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
- * This is a sanity class around the {@link ParticipantIdentifierType} class
- * with easier construction and some sanity access methods. It may be used in
- * all places where {@link ParticipantIdentifierType} objects are required.<br>
+ * This is an immutable sanity class around the {@link ProcessIdentifierType}
+ * class with easier construction and some sanity access methods. It may be used
+ * in all places where {@link ProcessIdentifierType} objects are required.<br>
  * Important note: this class implements {@link #equals(Object)} and
  * {@link #hashCode()} where its base class does not. So be careful when mixing
- * this class and its base class!
+ * this class and its base class!<br>
+ * For a mutable version, please check {@link SimpleProcessIdentifier}.
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public class SimpleParticipantIdentifier extends ParticipantIdentifierType implements IPeppolParticipantIdentifier {
-  public SimpleParticipantIdentifier (@Nonnull final IReadonlyParticipantIdentifier aIdentifier) {
+@Immutable
+public final class ReadonlyProcessIdentifier extends ProcessIdentifierType implements IPeppolProcessIdentifier {
+  public ReadonlyProcessIdentifier (@Nonnull final IReadonlyIdentifier aIdentifier) {
     this (aIdentifier.getScheme (), aIdentifier.getValue ());
   }
 
-  public SimpleParticipantIdentifier (@Nullable final String sScheme, @Nonnull final String sValue) {
-    if (!IdentifierUtils.isValidParticipantIdentifierScheme (sScheme))
-      throw new IllegalArgumentException ("Participant identifier scheme '" + sScheme + "' is invalid!");
-    if (!IdentifierUtils.isValidParticipantIdentifierValue (sValue))
-      throw new IllegalArgumentException ("Participant identifier value '" + sValue + "' is invalid!");
-    setScheme (sScheme);
-    setValue (sValue);
+  public ReadonlyProcessIdentifier (@Nullable final String sScheme, @Nullable final String sValue) {
+    if (!IdentifierUtils.isValidIdentifierScheme (sScheme))
+      throw new IllegalArgumentException ("Process identifier scheme '" + sScheme + "' is invalid!");
+    if (!IdentifierUtils.isValidProcessIdentifierValue (sValue))
+      throw new IllegalArgumentException ("Process identifier value '" + sValue + "' is invalid!");
+
+    // Explicitly use the super methods, as the methods of this class throw an
+    // exception!
+    super.setScheme (sScheme);
+    super.setValue (sValue);
+  }
+
+  @Override
+  @UnsupportedOperation
+  public void setValue (final String sValue) {
+    // This is how we make things read-only :)
+    throw new UnsupportedOperationException ("setValue is forbidden on this class!");
+  }
+
+  @Override
+  @UnsupportedOperation
+  public void setScheme (final String sScheme) {
+    // This is how we make things read-only :)
+    throw new UnsupportedOperationException ("setScheme is forbidden on this class!");
   }
 
   public boolean isDefaultScheme () {
@@ -87,20 +109,6 @@ public class SimpleParticipantIdentifier extends ParticipantIdentifierType imple
     return IdentifierUtils.getIdentifierURIPercentEncoded (this);
   }
 
-  public boolean isValid () {
-    return IdentifierValidator.isValidParticipantIdentifier (this);
-  }
-
-  @Nullable
-  public String getIssuingAgencyID () {
-    return IdentifierUtils.getIssuingAgencyIDFromParticipantIDValue (this);
-  }
-
-  @Nullable
-  public String getLocalParticipantID () {
-    return IdentifierUtils.getLocalParticipantIDFromParticipantIDValue (this);
-  }
-
   /*
    * Note: this method does compare case sensitive!!!! Otherwise the required
    * semantics of #equals would not be fulfilled!
@@ -110,9 +118,9 @@ public class SimpleParticipantIdentifier extends ParticipantIdentifierType imple
   public boolean equals (final Object o) {
     if (o == this)
       return true;
-    if (o == null || !getClass ().equals (o.getClass ()))
+    if (!(o instanceof ReadonlyProcessIdentifier))
       return false;
-    final SimpleParticipantIdentifier rhs = (SimpleParticipantIdentifier) o;
+    final ReadonlyProcessIdentifier rhs = (ReadonlyProcessIdentifier) o;
     return EqualsUtils.equals (scheme, rhs.scheme) && EqualsUtils.equals (value, rhs.value);
   }
 
@@ -127,12 +135,7 @@ public class SimpleParticipantIdentifier extends ParticipantIdentifierType imple
   }
 
   @Nonnull
-  public static SimpleParticipantIdentifier createWithDefaultScheme (@Nonnull final String sValue) {
-    return new SimpleParticipantIdentifier (CIdentifier.DEFAULT_PARTICIPANT_IDENTIFIER_SCHEME, sValue);
-  }
-
-  @Nonnull
-  public static SimpleParticipantIdentifier createFromURIPart (@Nonnull final String sURIPart) {
-    return IdentifierUtils.createParticipantIdentifierFromURIPart (sURIPart);
+  public static ReadonlyProcessIdentifier createWithDefaultScheme (@Nullable final String sValue) {
+    return new ReadonlyProcessIdentifier (CIdentifier.DEFAULT_PROCESS_IDENTIFIER_SCHEME, sValue);
   }
 }

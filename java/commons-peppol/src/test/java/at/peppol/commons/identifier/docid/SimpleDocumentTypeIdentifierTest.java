@@ -35,7 +35,7 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.commons.identifier;
+package at.peppol.commons.identifier.docid;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -43,6 +43,8 @@ import static org.junit.Assert.fail;
 import org.junit.Test;
 
 import at.peppol.busdox.identifier.IDocumentTypeIdentifier;
+import at.peppol.commons.identifier.CIdentifier;
+import at.peppol.commons.identifier.docid.SimpleDocumentTypeIdentifier;
 
 import com.phloc.commons.mock.PhlocTestUtils;
 import com.phloc.commons.string.StringHelper;

@@ -35,18 +35,19 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.commons.identifier;
+package at.peppol.commons.identifier.actorid;
 
-import at.peppol.busdox.identifier.IDocumentTypeIdentifier;
+import at.peppol.busdox.identifier.IParticipantIdentifier;
+import at.peppol.commons.identifier.IPeppolIdentifier;
 
 /**
- * Base interface for an extended document type identifier.
+ * Base interface for an extended participant identifier.
  * 
  * @author philip
  */
-public interface IPeppolDocumentTypeIdentifier extends
-                                                IPeppolReadonlyDocumentTypeIdentifier,
-                                                IPeppolIdentifier,
-                                                IDocumentTypeIdentifier {
+public interface IPeppolParticipantIdentifier extends
+                                               IPeppolReadonlyParticipantIdentifier,
+                                               IPeppolIdentifier,
+                                               IParticipantIdentifier {
   /* empty */
 }

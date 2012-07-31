@@ -41,8 +41,6 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import at.peppol.commons.identifier.IPeppolReadonlyProcessIdentifier;
-import at.peppol.commons.identifier.SimpleProcessIdentifier;
 import at.peppol.commons.identifier.docid.IPredefinedDocumentTypeIdentifier;
 
 import com.phloc.commons.version.Version;

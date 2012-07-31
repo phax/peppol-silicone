@@ -49,7 +49,7 @@ import java.net.URL;
 import org.junit.Test;
 
 import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
-import at.peppol.commons.identifier.SimpleParticipantIdentifier;
+import at.peppol.commons.identifier.actorid.SimpleParticipantIdentifier;
 import at.peppol.commons.sml.ESML;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
