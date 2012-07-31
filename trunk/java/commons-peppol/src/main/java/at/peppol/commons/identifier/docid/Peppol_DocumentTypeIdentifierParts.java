@@ -52,13 +52,13 @@ import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.string.ToStringGenerator;
 
 /**
- * A standalone wrapper class for the {@link IPEPPOLDocumentTypeIdentifierParts}
+ * A standalone wrapper class for the {@link IPeppol_DocumentTypeIdentifierParts}
  * interface.
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 @Immutable
-public final class PEPPOLDocumentTypeIdentifierParts implements IPEPPOLDocumentTypeIdentifierParts {
+public final class Peppol_DocumentTypeIdentifierParts implements IPeppol_DocumentTypeIdentifierParts {
   private final IBusdoxDocumentTypeIdentifierParts m_aBusdoxParts;
   private final String m_sTransactionID;
   private final List <String> m_aExtensionIDs;
@@ -86,7 +86,7 @@ public final class PEPPOLDocumentTypeIdentifierParts implements IPEPPOLDocumentT
            sVersion;
   }
 
-  private PEPPOLDocumentTypeIdentifierParts (@Nonnull final IBusdoxDocumentTypeIdentifierParts aBusdoxParts,
+  private Peppol_DocumentTypeIdentifierParts (@Nonnull final IBusdoxDocumentTypeIdentifierParts aBusdoxParts,
                                              @Nonnull @Nonempty final String sTransactionID,
                                              @Nonnull @Nonempty final List <String> aExtensionIDs,
                                              @Nonnull @Nonempty final String sVersion) {
@@ -106,7 +106,7 @@ public final class PEPPOLDocumentTypeIdentifierParts implements IPEPPOLDocumentT
     m_sVersion = sVersion;
   }
 
-  public PEPPOLDocumentTypeIdentifierParts (@Nonnull @Nonempty final String sRootNS,
+  public Peppol_DocumentTypeIdentifierParts (@Nonnull @Nonempty final String sRootNS,
                                             @Nonnull @Nonempty final String sLocalName,
                                             @Nonnull @Nonempty final String sTransactionID,
                                             @Nonnull @Nonempty final List <String> aExtensionIDs,
@@ -196,7 +196,7 @@ public final class PEPPOLDocumentTypeIdentifierParts implements IPEPPOLDocumentT
    *         specifications
    */
   @Nonnull
-  public static IPEPPOLDocumentTypeIdentifierParts extractFromString (@Nonnull @Nonempty final String sDocTypeID) {
+  public static IPeppol_DocumentTypeIdentifierParts extractFromString (@Nonnull @Nonempty final String sDocTypeID) {
     // Extract the main 3 elements (root namespace, local name and sub-type)
     final IBusdoxDocumentTypeIdentifierParts aBusdoxParts = BusdoxDocumentTypeIdentifierParts.extractFromString (sDocTypeID);
 
@@ -225,6 +225,6 @@ public final class PEPPOLDocumentTypeIdentifierParts implements IPEPPOLDocumentT
     final String sTransactionID = aCustomizationIDs[0];
     final String sExtensionIDs = aCustomizationIDs[1];
     final List <String> aExtensionIDs = StringHelper.getExploded (EXTENSION_SEPARATOR, sExtensionIDs);
-    return new PEPPOLDocumentTypeIdentifierParts (aBusdoxParts, sTransactionID, aExtensionIDs, sVersion);
+    return new Peppol_DocumentTypeIdentifierParts (aBusdoxParts, sTransactionID, aExtensionIDs, sVersion);
   }
 }

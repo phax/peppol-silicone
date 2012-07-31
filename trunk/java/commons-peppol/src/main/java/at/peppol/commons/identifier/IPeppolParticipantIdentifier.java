@@ -37,13 +37,16 @@
  */
 package at.peppol.commons.identifier;
 
-import at.peppol.busdox.identifier.IIdentifier;
+import at.peppol.busdox.identifier.IParticipantIdentifier;
 
 /**
- * Base interface for all extended identifiers
+ * Base interface for an extended participant identifier.
  * 
  * @author philip
  */
-public interface IExtendedIdentifier extends IExtendedReadonlyIdentifier, IIdentifier {
+public interface IPeppolParticipantIdentifier extends
+                                               IPeppolReadonlyParticipantIdentifier,
+                                               IPeppolIdentifier,
+                                               IParticipantIdentifier {
   /* empty */
 }

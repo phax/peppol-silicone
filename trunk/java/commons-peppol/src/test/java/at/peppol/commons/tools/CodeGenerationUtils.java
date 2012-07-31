@@ -43,7 +43,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
-import at.peppol.commons.identifier.docid.IPEPPOLDocumentTypeIdentifierParts;
+import at.peppol.commons.identifier.docid.IPeppol_DocumentTypeIdentifierParts;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.StringHelper;
@@ -57,7 +57,7 @@ final class CodeGenerationUtils {
 
   @Nonnull
   @Nonempty
-  public static String createShortcutDocumentTypeIDName (@Nonnull final IPEPPOLDocumentTypeIdentifierParts aDocIDParts) {
+  public static String createShortcutDocumentTypeIDName (@Nonnull final IPeppol_DocumentTypeIdentifierParts aDocIDParts) {
     // Create a shortcut constant with a more readable name!
     String sTransactionID = "";
     if (aDocIDParts.getTransactionID ().startsWith (SKIP_TRANSACTION_PREFIX)) {

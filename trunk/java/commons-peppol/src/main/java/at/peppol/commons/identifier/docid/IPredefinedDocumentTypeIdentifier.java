@@ -40,7 +40,7 @@ package at.peppol.commons.identifier.docid;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import at.peppol.commons.identifier.IExtendedReadonlyDocumentTypeIdentifier;
+import at.peppol.commons.identifier.IPeppolReadonlyDocumentTypeIdentifier;
 import at.peppol.commons.identifier.SimpleDocumentTypeIdentifier;
 
 import com.phloc.commons.version.Version;
@@ -51,8 +51,8 @@ import com.phloc.commons.version.Version;
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public interface IPredefinedDocumentTypeIdentifier extends
-                                                  IExtendedReadonlyDocumentTypeIdentifier,
-                                                  IPEPPOLDocumentTypeIdentifierParts {
+                                                  IPeppolReadonlyDocumentTypeIdentifier,
+                                                  IPeppol_DocumentTypeIdentifierParts {
   /**
    * @return The common name under which a document is known. This is e.g.
    *         "Order" or "Invoice".

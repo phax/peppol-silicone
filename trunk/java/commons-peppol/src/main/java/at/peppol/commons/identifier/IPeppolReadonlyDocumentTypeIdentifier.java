@@ -37,16 +37,15 @@
  */
 package at.peppol.commons.identifier;
 
-import at.peppol.busdox.identifier.IDocumentTypeIdentifier;
+import at.peppol.busdox.identifier.IReadonlyDocumentTypeIdentifier;
 
 /**
- * Base interface for an extended document type identifier.
+ * Base interface for an extended read-only document type identifier.
  * 
  * @author philip
  */
-public interface IExtendedDocumentTypeIdentifier extends
-                                                IExtendedReadonlyDocumentTypeIdentifier,
-                                                IExtendedIdentifier,
-                                                IDocumentTypeIdentifier {
+public interface IPeppolReadonlyDocumentTypeIdentifier extends
+                                                        IPeppolReadonlyIdentifier,
+                                                        IReadonlyDocumentTypeIdentifier {
   /* empty */
 }

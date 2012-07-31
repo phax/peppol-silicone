@@ -37,46 +37,41 @@
  */
 package at.peppol.commons.identifier;
 
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 
-import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
+import at.peppol.busdox.identifier.IReadonlyIdentifier;
 
 /**
- * Base interface for an extended read-only participant identifier.
+ * Base interface for all extended read-only identifiers
  * 
  * @author philip
  */
-public interface IExtendedReadonlyParticipantIdentifier extends
-                                                       IExtendedReadonlyIdentifier,
-                                                       IReadonlyParticipantIdentifier {
+public interface IPeppolReadonlyIdentifier extends IReadonlyIdentifier {
   /**
-   * @return <code>true</code> if the identifier is valid according to the
-   *         internal and external validation rules as defined by
-   *         {@link at.peppol.commons.identifier.validator.IParticipantIdentifierValidatorSPI}
-   *         implementations.
+   * Check if this identifier uses the default scheme. E.g. for participant
+   * identifiers this would be <code>true</code> if the scheme equals
+   * {@link CIdentifier#DEFAULT_PARTICIPANT_IDENTIFIER_SCHEME}.
+   * 
+   * @return <code>true</code> if is the default scheme, <code>false</code>
+   *         otherwise.
    */
-  boolean isValid ();
+  boolean isDefaultScheme ();
 
   /**
-   * Extract the issuing agency ID from the passed participant identifier value.<br>
-   * Example: extract the <code>0088</code> from the participant identifier
-   * <code>iso6523-actorid-upis::0088:123456</code>
+   * Get the identifier URI encoded (without percent encoding).
    * 
-   * @return <code>null</code> if the identifier is not of default scheme or if
-   *         the identifier is malformed.
+   * @return The URI encoded identifier value. (E.g.
+   *         <code>iso6523-actorid-upis::0088:123456</code>)
    */
-  @Nullable
-  String getIssuingAgencyID ();
+  @Nonnull
+  String getURIEncoded ();
 
   /**
-   * Extract the local participant ID from the passed participant identifier
-   * value.<br>
-   * Example: extract the <code>123456</code> from the participant identifier
-   * <code>iso6523-actorid-upis::0088:123456</code>
+   * Get the identifier URI and percent encoded (with percent encoding).
    * 
-   * @return <code>null</code> if the identifier is not of default scheme or if
-   *         the identifier is malformed.
+   * @return The URI encoded identifier value. (E.g.
+   *         <code>iso6523-actorid-upis%3A%3A0088%3A123456</code>)
    */
-  @Nullable
-  String getLocalParticipantID ();
+  @Nonnull
+  String getURIPercentEncoded ();
 }

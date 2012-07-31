@@ -47,7 +47,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.peppol.commons.identifier.CIdentifier;
-import at.peppol.commons.identifier.IExtendedParticipantIdentifier;
+import at.peppol.commons.identifier.IPeppolParticipantIdentifier;
 
 import com.phloc.commons.lang.ServiceLoaderBackport;
 
@@ -87,7 +87,7 @@ public final class IdentifierValidator {
    *         was found at all. The method returns <code>false</code> if a
    *         matching validator was found, but the ID did not match.
    */
-  public static boolean isValidParticipantIdentifier (@Nonnull final IExtendedParticipantIdentifier aParticipantID) {
+  public static boolean isValidParticipantIdentifier (@Nonnull final IPeppolParticipantIdentifier aParticipantID) {
     if (aParticipantID == null)
       throw new NullPointerException ("participantID");
 
