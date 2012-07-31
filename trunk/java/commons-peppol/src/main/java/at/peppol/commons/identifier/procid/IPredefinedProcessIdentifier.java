@@ -41,7 +41,8 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import at.peppol.busdox.identifier.IReadonlyProcessIdentifier;
+import at.peppol.commons.identifier.IExtendedReadonlyProcessIdentifier;
+import at.peppol.commons.identifier.SimpleProcessIdentifier;
 import at.peppol.commons.identifier.docid.IPredefinedDocumentTypeIdentifier;
 
 import com.phloc.commons.version.Version;
@@ -51,7 +52,7 @@ import com.phloc.commons.version.Version;
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public interface IPredefinedProcessIdentifier extends IReadonlyProcessIdentifier {
+public interface IPredefinedProcessIdentifier extends IExtendedReadonlyProcessIdentifier {
   /**
    * @return The ID of the corresponding PEPPOL BIS.
    */
@@ -63,6 +64,13 @@ public interface IPredefinedProcessIdentifier extends IReadonlyProcessIdentifier
    */
   @Nonnull
   List <? extends IPredefinedDocumentTypeIdentifier> getDocumentTypeIdentifiers ();
+
+  /**
+   * @return The {@link SimpleProcessIdentifier} version of this predefined
+   *         process identifier.
+   */
+  @Nonnull
+  SimpleProcessIdentifier getAsProcessIdentifier ();
 
   /**
    * @return The internal code list version in which the identifier was added.

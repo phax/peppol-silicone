@@ -72,7 +72,7 @@ public class SimpleProcessIdentifier extends ProcessIdentifierType implements IE
   }
 
   public boolean isDefaultScheme () {
-    return CIdentifier.DEFAULT_PROCESS_IDENTIFIER_SCHEME.equals (getScheme ());
+    return IdentifierUtils.hasDefaultScheme (this);
   }
 
   @Nonnull

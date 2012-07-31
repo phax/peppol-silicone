@@ -35,6 +35,7 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
+
 package at.peppol.commons.identifier.docid;
 
 import java.util.List;
@@ -42,6 +43,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import at.peppol.commons.identifier.CIdentifier;
+import at.peppol.commons.identifier.IdentifierUtils;
 import at.peppol.commons.identifier.SimpleDocumentTypeIdentifier;
 
 import com.phloc.commons.annotations.Nonempty;
@@ -447,6 +449,21 @@ public enum EPredefinedDocumentTypeIdentifier implements IPredefinedDocumentType
   @Nonnull
   public Version getSince () {
     return m_aSince;
+  }
+
+  @Nonnull
+  public boolean isDefaultScheme () {
+    return true;
+  }
+
+  @Nonnull
+  public String getURIEncoded () {
+    return IdentifierUtils.getIdentifierURIEncoded (this);
+  }
+
+  @Nonnull
+  public String getURIPercentEncoded () {
+    return IdentifierUtils.getIdentifierURIPercentEncoded (this);
   }
 
 }

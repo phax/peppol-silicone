@@ -44,6 +44,7 @@ import org.busdox.servicemetadata.publishing._1.ExtensionType;
 import org.busdox.servicemetadata.publishing._1.ObjectFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+import org.xml.sax.SAXException;
 
 import com.phloc.commons.typeconvert.TypeConverter;
 import com.phloc.commons.typeconvert.TypeConverterException;
@@ -83,10 +84,11 @@ public final class ExtensionConverter {
       return null;
 
     // Handle nodes directly
-    if (aExtensionElement instanceof Node)
+    if (aExtensionElement instanceof Node) {
       return XMLWriter.getNodeAsString ((Node) aExtensionElement,
                                         new XMLWriterSettings ().setSerializeDocType (EXMLSerializeDocType.IGNORE)
                                                                 .setIndent (EXMLSerializeIndent.NONE));
+    }
 
     try {
       // Call the global type converter - maybe it helps :)
@@ -111,7 +113,7 @@ public final class ExtensionConverter {
   public static ExtensionType convert (@Nullable final String sXML) {
     if (sXML != null) {
       try {
-        // Try to interprete as XML
+        // Try to interpret as XML
         final Document aDoc = XMLReader.readXMLDOM (sXML);
         if (aDoc != null) {
           final ExtensionType aExtension = new ObjectFactory ().createExtensionType ();
@@ -119,8 +121,8 @@ public final class ExtensionConverter {
           return aExtension;
         }
       }
-      catch (final Exception ex) {
-        throw new IllegalArgumentException ("Error in parsing extension XML", ex);
+      catch (final SAXException ex) {
+        throw new IllegalArgumentException ("Error in parsing extension XML '" + sXML + "'", ex);
       }
     }
 
