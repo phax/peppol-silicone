@@ -74,7 +74,7 @@ public class SimpleParticipantIdentifier extends ParticipantIdentifierType imple
   }
 
   public boolean isDefaultScheme () {
-    return CIdentifier.DEFAULT_PARTICIPANT_IDENTIFIER_SCHEME.equals (getScheme ());
+    return IdentifierUtils.hasDefaultScheme (this);
   }
 
   @Nonnull

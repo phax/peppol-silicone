@@ -61,6 +61,7 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
 import at.peppol.commons.identifier.CIdentifier;
+import at.peppol.commons.identifier.IdentifierUtils;
 import at.peppol.commons.identifier.SimpleDocumentTypeIdentifier;
 import at.peppol.commons.identifier.SimpleParticipantIdentifier;
 import at.peppol.commons.identifier.SimpleProcessIdentifier;
@@ -512,6 +513,25 @@ public final class MainCreateCodelistsFilesFromExcel {
       m = s_jEnumPredefinedDoc.method (JMod.PUBLIC, Version.class, "getSince");
       m.annotate (Nonnull.class);
       m.body ()._return (fSince);
+
+      // public boolean isDefaultScheme ()
+      m = s_jEnumPredefinedDoc.method (JMod.PUBLIC, boolean.class, "isDefaultScheme");
+      m.annotate (Nonnull.class);
+      m.body ()._return (JExpr.lit (true));
+
+      // public String getURIEncoded
+      m = s_jEnumPredefinedDoc.method (JMod.PUBLIC, String.class, "getURIEncoded");
+      m.annotate (Nonnull.class);
+      m.body ()._return (s_aCodeModel.ref (IdentifierUtils.class)
+                                     .staticInvoke ("getIdentifierURIEncoded")
+                                     .arg (JExpr._this ()));
+
+      // public String getURIPercentEncoded
+      m = s_jEnumPredefinedDoc.method (JMod.PUBLIC, String.class, "getURIPercentEncoded");
+      m.annotate (Nonnull.class);
+      m.body ()._return (s_aCodeModel.ref (IdentifierUtils.class)
+                                     .staticInvoke ("getIdentifierURIPercentEncoded")
+                                     .arg (JExpr._this ()));
     }
     catch (final Exception ex) {
       s_aLogger.warn ("Failed to create source", ex);
@@ -663,6 +683,25 @@ public final class MainCreateCodelistsFilesFromExcel {
       m = jEnum.method (JMod.PUBLIC, Version.class, "getSince");
       m.annotate (Nonnull.class);
       m.body ()._return (fSince);
+
+      // public boolean isDefaultScheme ()
+      m = jEnum.method (JMod.PUBLIC, boolean.class, "isDefaultScheme");
+      m.annotate (Nonnull.class);
+      m.body ()._return (JExpr.lit (true));
+
+      // public String getURIEncoded
+      m = jEnum.method (JMod.PUBLIC, String.class, "getURIEncoded");
+      m.annotate (Nonnull.class);
+      m.body ()._return (s_aCodeModel.ref (IdentifierUtils.class)
+                                     .staticInvoke ("getIdentifierURIEncoded")
+                                     .arg (JExpr._this ()));
+
+      // public String getURIPercentEncoded
+      m = jEnum.method (JMod.PUBLIC, String.class, "getURIPercentEncoded");
+      m.annotate (Nonnull.class);
+      m.body ()._return (s_aCodeModel.ref (IdentifierUtils.class)
+                                     .staticInvoke ("getIdentifierURIPercentEncoded")
+                                     .arg (JExpr._this ()));
     }
     catch (final Exception ex) {
       s_aLogger.warn ("Failed to create source", ex);

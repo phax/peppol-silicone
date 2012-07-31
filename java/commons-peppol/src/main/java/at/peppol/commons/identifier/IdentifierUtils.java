@@ -317,6 +317,51 @@ public final class IdentifierUtils {
   }
 
   /**
+   * Check if the passed document type identifier is using the default scheme.
+   * 
+   * @param aIdentifier
+   *        The identifier to be checked. May not be <code>null</code>.
+   * @return <code>true</code> if the passed identifier uses the default scheme,
+   *         <code>false</code> otherwise
+   */
+  public static boolean hasDefaultScheme (@Nonnull final IReadonlyDocumentTypeIdentifier aIdentifier) {
+    if (aIdentifier == null)
+      throw new NullPointerException ("documentTypeIdentifier");
+
+    return CIdentifier.DEFAULT_DOCUMENT_TYPE_IDENTIFIER_SCHEME.equals (aIdentifier.getScheme ());
+  }
+
+  /**
+   * Check if the passed participant identifier is using the default scheme.
+   * 
+   * @param aIdentifier
+   *        The identifier to be checked. May not be <code>null</code>.
+   * @return <code>true</code> if the passed identifier uses the default scheme,
+   *         <code>false</code> otherwise
+   */
+  public static boolean hasDefaultScheme (@Nonnull final IReadonlyParticipantIdentifier aIdentifier) {
+    if (aIdentifier == null)
+      throw new NullPointerException ("participantIdentifier");
+
+    return CIdentifier.DEFAULT_PARTICIPANT_IDENTIFIER_SCHEME.equals (aIdentifier.getScheme ());
+  }
+
+  /**
+   * Check if the passed process identifier is using the default scheme.
+   * 
+   * @param aIdentifier
+   *        The identifier to be checked. May not be <code>null</code>.
+   * @return <code>true</code> if the passed identifier uses the default scheme,
+   *         <code>false</code> otherwise
+   */
+  public static boolean hasDefaultScheme (@Nonnull final IReadonlyProcessIdentifier aIdentifier) {
+    if (aIdentifier == null)
+      throw new NullPointerException ("processIdentifier");
+
+    return CIdentifier.DEFAULT_PROCESS_IDENTIFIER_SCHEME.equals (aIdentifier.getScheme ());
+  }
+
+  /**
    * Get the identifier suitable for an URI but NOT percent encoded.
    * 
    * @param aIdentifier

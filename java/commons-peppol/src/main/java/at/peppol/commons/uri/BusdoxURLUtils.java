@@ -56,7 +56,7 @@ import at.peppol.commons.sml.ISMLInfo;
 import com.google.gdata.util.common.base.CharEscapers;
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.messagedigest.EMessageDigestAlgorithm;
-import com.phloc.commons.messagedigest.MessageDigestGenerator;
+import com.phloc.commons.messagedigest.MessageDigestGeneratorHelper;
 import com.phloc.commons.string.StringHelper;
 
 /**
@@ -97,9 +97,11 @@ public final class BusdoxURLUtils {
   @Nonnull
   public static String getHashValueStringRepresentation (@Nonnull final String sValueToHash) {
     // Create the MD5 hash
-    final MessageDigestGenerator aMDGen = new MessageDigestGenerator (EMessageDigestAlgorithm.MD5);
-    aMDGen.update (sValueToHash.getBytes (URL_CHARSET));
-    return aMDGen.getDigestHexString ();
+    final byte [] aDigest = MessageDigestGeneratorHelper.getDigest (sValueToHash,
+                                                                    URL_CHARSET,
+                                                                    EMessageDigestAlgorithm.MD5);
+    // Convert to hex-encoded string
+    return MessageDigestGeneratorHelper.getHexValueFromDigest (aDigest);
   }
 
   /**
@@ -184,11 +186,12 @@ public final class BusdoxURLUtils {
   @Nonnull
   public static URI getSMPURIOfParticipant (@Nonnull final IReadonlyParticipantIdentifier aParticipantIdentifier,
                                             @Nullable final String sSMLZoneName) {
+    final String sURIString = "http://" + getDNSNameOfParticipant (aParticipantIdentifier, sSMLZoneName);
     try {
-      return new URI ("http://" + getDNSNameOfParticipant (aParticipantIdentifier, sSMLZoneName));
+      return new URI (sURIString);
     }
     catch (final URISyntaxException ex) {
-      throw new IllegalArgumentException ("Error building SMP URI", ex);
+      throw new IllegalArgumentException ("Error building SMP URI from string '" + sURIString + "'", ex);
     }
   }
 

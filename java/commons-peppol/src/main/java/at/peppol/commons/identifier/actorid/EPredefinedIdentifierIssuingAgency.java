@@ -35,6 +35,7 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
+
 package at.peppol.commons.identifier.actorid;
 
 import javax.annotation.Nonnull;

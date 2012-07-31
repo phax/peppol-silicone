@@ -44,6 +44,9 @@ import at.peppol.busdox.identifier.IParticipantIdentifier;
  * 
  * @author philip
  */
-public interface IExtendedParticipantIdentifier extends IExtendedReadonlyParticipantIdentifier, IParticipantIdentifier {
+public interface IExtendedParticipantIdentifier extends
+                                               IExtendedReadonlyParticipantIdentifier,
+                                               IExtendedIdentifier,
+                                               IParticipantIdentifier {
   /* empty */
 }
