@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- This file is generated automatically! Do NOT edit! -->
 <!-- CVA File T14 -->
-<ValueListConstraints xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:udt="urn:un:unece:uncefact:data:draft:UnqualifiedDataTypesSchemaModule:2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns="http://docs.oasis-open.org/codelist/ns/ContextValueAssociation/cd2-1.0/" xmlns:qdt="urn:oasis:names:specification:ubl:schema:xsd:QualifiedDatatypes-2" xmlns:cct="urn:oasis:names:specification:ubl:schema:xsd:CoreComponentParameters-2" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:stat="urn:oasis:names:specification:ubl:schema:xsd:DocumentStatusCode-1.0" name="CodesT14" version="Version 0.3">
+<ValueListConstraints xmlns="http://docs.oasis-open.org/codelist/ns/ContextValueAssociation/cd2-1.0/" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:cct="urn:oasis:names:specification:ubl:schema:xsd:CoreComponentParameters-2" xmlns:qdt="urn:oasis:names:specification:ubl:schema:xsd:QualifiedDatatypes-2" xmlns:udt="urn:un:unece:uncefact:data:draft:UnqualifiedDataTypesSchemaModule:2" name="CodesT14" version="Version 0.3" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:stat="urn:oasis:names:specification:ubl:schema:xsd:DocumentStatusCode-1.0">
   <ValueLists>
     <ValueList xml:id="LocationIdentifier" uri="../gc/LocationIdentifier.gc"/>
     <ValueList xml:id="PostalAddressIdentifier" uri="../gc/PostalAddressIdentifier.gc"/>
@@ -33,10 +33,10 @@
     <Context mark="fatal" values="TaxExemptionReasonCode" item="cbc:TaxExemptionReasonCode">
       <Message>[PCL-014-007]-Tax exemption reasons MUST be coded using Use CWA 15577 tax exemption code list. Version 2006</Message>
     </Context>
-    <Context mark="fatal" scope="cac:PartyIdentification/cbc:ID" values="PartyID " item="@schemeID">
+    <Context mark="fatal" scope="cac:PartyIdentification/cbc:ID" values="PartyID" item="@schemeID">
       <Message>[PCL-014-008]-Party Identifiers MUST use the PEPPOL PartyID list</Message>
     </Context>
-    <Context mark="fatal" scope="cbc:EndpointID" values="PartyID " item="@schemeID">
+    <Context mark="fatal" scope="cbc:EndpointID" values="PartyID" item="@schemeID">
       <Message>[PCL-014-009]-Endpoint Identifiers MUST use the PEPPOL PartyID list.</Message>
     </Context>
   </Contexts>

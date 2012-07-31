@@ -39,7 +39,7 @@
 -->
 <!-- This file is generated automatically! Do NOT edit! -->
 <!-- Schematron data binding rules to UBL syntax for T01 -->
-<pattern is-a="T01" xmlns="http://purl.oclc.org/dsdl/schematron" id="UBL-T01">
+<pattern xmlns="http://purl.oclc.org/dsdl/schematron" is-a="T01" id="UBL-T01">
   <param value="(cac:PostalAddress/cbc:StreetName and cac:PostalAddress/cbc:CityName and cac:PostalAddress/cbc:PostalZone and cac:PostalAddress/cac:Country/cbc:IdentificationCode)" name="EUGEN-T01-R001"/>
   <param value="(cac:PostalAddress/cbc:StreetName and cac:PostalAddress/cbc:CityName and cac:PostalAddress/cbc:PostalZone and cac:PostalAddress/cac:Country/cbc:IdentificationCode)" name="EUGEN-T01-R002"/>
   <param value="(cbc:CityName and cbc:PostalZone and cac:Country/cbc:IdentificationCode)" name="EUGEN-T01-R003"/>

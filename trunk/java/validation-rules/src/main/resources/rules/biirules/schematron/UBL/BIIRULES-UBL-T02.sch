@@ -39,7 +39,7 @@
 -->
 <!-- This file is generated automatically! Do NOT edit! -->
 <!-- Schematron data binding rules to UBL syntax for T02 -->
-<pattern is-a="T02" xmlns="http://purl.oclc.org/dsdl/schematron" id="UBL-T02">
+<pattern xmlns="http://purl.oclc.org/dsdl/schematron" is-a="T02" id="UBL-T02">
   <param value="(cbc:UBLVersionID)" name="BIIRULE-T02-R001"/>
   <param value="(cbc:CustomizationID)" name="BIIRULE-T02-R002"/>
   <param value="(cbc:ProfileID)" name="BIIRULE-T02-R003"/>
