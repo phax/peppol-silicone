@@ -49,10 +49,10 @@ import at.peppol.busdox.identifier.IReadonlyDocumentTypeIdentifier;
 import at.peppol.busdox.identifier.IReadonlyIdentifier;
 import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
 import at.peppol.busdox.identifier.IReadonlyProcessIdentifier;
-import at.peppol.commons.identifier.actorid.IPeppolReadonlyParticipantIdentifier;
-import at.peppol.commons.identifier.actorid.SimpleParticipantIdentifier;
-import at.peppol.commons.identifier.docid.SimpleDocumentTypeIdentifier;
-import at.peppol.commons.identifier.procid.SimpleProcessIdentifier;
+import at.peppol.commons.identifier.doctype.SimpleDocumentTypeIdentifier;
+import at.peppol.commons.identifier.participant.IPeppolReadonlyParticipantIdentifier;
+import at.peppol.commons.identifier.participant.SimpleParticipantIdentifier;
+import at.peppol.commons.identifier.process.SimpleProcessIdentifier;
 import at.peppol.commons.uri.BusdoxURLUtils;
 
 import com.phloc.commons.charset.CCharset;

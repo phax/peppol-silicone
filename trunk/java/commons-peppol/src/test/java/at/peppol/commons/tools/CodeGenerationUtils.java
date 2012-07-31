@@ -43,7 +43,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
-import at.peppol.commons.identifier.docid.IPeppolDocumentTypeIdentifierParts;
+import at.peppol.commons.identifier.doctype.IPeppolDocumentTypeIdentifierParts;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.StringHelper;
