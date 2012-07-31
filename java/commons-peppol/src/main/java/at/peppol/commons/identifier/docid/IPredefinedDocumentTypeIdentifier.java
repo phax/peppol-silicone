@@ -37,9 +37,13 @@
  */
 package at.peppol.commons.identifier.docid;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import at.peppol.busdox.identifier.IReadonlyDocumentTypeIdentifier;
+import at.peppol.commons.identifier.SimpleDocumentTypeIdentifier;
+
+import com.phloc.commons.version.Version;
 
 /**
  * Base interface for predefined document identifiers.
@@ -55,4 +59,18 @@ public interface IPredefinedDocumentTypeIdentifier extends
    */
   @Nullable
   String getCommonName ();
+
+  /**
+   * @return The {@link SimpleDocumentTypeIdentifier} version of this predefined
+   *         document type identifier.
+   */
+  @Nonnull
+  SimpleDocumentTypeIdentifier getAsDocumentTypeIdentifier ();
+
+  /**
+   * @return The internal code list version in which the identifier was added.
+   *         Never <code>null</code>.
+   */
+  @Nonnull
+  Version getSince ();
 }
