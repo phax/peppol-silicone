@@ -39,11 +39,14 @@
 package at.peppol.commons.identifier.process;
 
 import java.util.List;
+
 import javax.annotation.Nonnull;
+
 import at.peppol.commons.identifier.CIdentifier;
 import at.peppol.commons.identifier.IdentifierUtils;
 import at.peppol.commons.identifier.doctype.EPredefinedDocumentTypeIdentifier;
-import at.peppol.commons.identifier.doctype.IPredefinedDocumentTypeIdentifier;
+import at.peppol.commons.identifier.doctype.IPeppolPredefinedDocumentTypeIdentifier;
+
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
@@ -52,7 +55,7 @@ import com.phloc.commons.version.Version;
 /**
  * This file is generated. Do NOT edit!
  */
-public enum EPredefinedProcessIdentifier implements IPredefinedProcessIdentifier {
+public enum EPredefinedProcessIdentifier implements IPeppolPredefinedProcessIdentifier {
 
   /**
    * urn:www.cenbii.eu:profile:bii01:ver1.0
@@ -152,7 +155,7 @@ public enum EPredefinedProcessIdentifier implements IPredefinedProcessIdentifier
 
   @Nonnull
   @ReturnsMutableCopy
-  public List <? extends IPredefinedDocumentTypeIdentifier> getDocumentTypeIdentifiers () {
+  public List <? extends IPeppolPredefinedDocumentTypeIdentifier> getDocumentTypeIdentifiers () {
     return ContainerHelper.newList (m_aDocIDs);
   }
 

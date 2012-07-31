@@ -62,12 +62,12 @@ import org.w3c.dom.Document;
 import at.peppol.commons.identifier.CIdentifier;
 import at.peppol.commons.identifier.IdentifierUtils;
 import at.peppol.commons.identifier.doctype.IPeppolDocumentTypeIdentifierParts;
-import at.peppol.commons.identifier.doctype.IPredefinedDocumentTypeIdentifier;
+import at.peppol.commons.identifier.doctype.IPeppolPredefinedDocumentTypeIdentifier;
 import at.peppol.commons.identifier.doctype.PeppolDocumentTypeIdentifierParts;
 import at.peppol.commons.identifier.doctype.SimpleDocumentTypeIdentifier;
 import at.peppol.commons.identifier.issuingagency.IIdentifierIssuingAgency;
 import at.peppol.commons.identifier.participant.SimpleParticipantIdentifier;
-import at.peppol.commons.identifier.process.IPredefinedProcessIdentifier;
+import at.peppol.commons.identifier.process.IPeppolPredefinedProcessIdentifier;
 import at.peppol.commons.identifier.process.SimpleProcessIdentifier;
 
 import com.phloc.commons.annotations.Nonempty;
@@ -363,7 +363,7 @@ public final class MainCreateCodelistsFilesFromExcel {
     try {
       s_jEnumPredefinedDoc = s_aCodeModel._package ("at.peppol.commons.identifier.doctype")
                                          ._enum ("EPredefinedDocumentTypeIdentifier")
-                                         ._implements (IPredefinedDocumentTypeIdentifier.class);
+                                         ._implements (IPeppolPredefinedDocumentTypeIdentifier.class);
       s_jEnumPredefinedDoc.javadoc ().add ("This file is generated. Do NOT edit!");
 
       final Set <String> aAllShortcutNames = new HashSet <String> ();
@@ -531,6 +531,11 @@ public final class MainCreateCodelistsFilesFromExcel {
       m.body ()._return (s_aCodeModel.ref (IdentifierUtils.class)
                                      .staticInvoke ("getIdentifierURIPercentEncoded")
                                      .arg (JExpr._this ()));
+
+      // public IPeppolDocumentTypeIdentifierParts getParts
+      m = s_jEnumPredefinedDoc.method (JMod.PUBLIC, IPeppolDocumentTypeIdentifierParts.class, "getParts");
+      m.annotate (Nonnull.class);
+      m.body ()._return (JExpr._this ());
     }
     catch (final Exception ex) {
       s_aLogger.warn ("Failed to create source", ex);
@@ -583,7 +588,7 @@ public final class MainCreateCodelistsFilesFromExcel {
     try {
       final JDefinedClass jEnum = s_aCodeModel._package ("at.peppol.commons.identifier.process")
                                               ._enum ("EPredefinedProcessIdentifier")
-                                              ._implements (IPredefinedProcessIdentifier.class);
+                                              ._implements (IPeppolPredefinedProcessIdentifier.class);
       jEnum.javadoc ().add ("This file is generated. Do NOT edit!");
 
       // enum constants
@@ -667,7 +672,7 @@ public final class MainCreateCodelistsFilesFromExcel {
       // getDocumentTypeIdentifiers ()
       m = jEnum.method (JMod.PUBLIC,
                         s_aCodeModel.ref (List.class)
-                                    .narrow (s_aCodeModel.ref (IPredefinedDocumentTypeIdentifier.class).wildcard ()),
+                                    .narrow (s_aCodeModel.ref (IPeppolPredefinedDocumentTypeIdentifier.class).wildcard ()),
                         "getDocumentTypeIdentifiers");
       m.annotate (Nonnull.class);
       m.annotate (ReturnsMutableCopy.class);

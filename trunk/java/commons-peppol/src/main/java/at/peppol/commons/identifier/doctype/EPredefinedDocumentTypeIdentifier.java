@@ -39,9 +39,12 @@
 package at.peppol.commons.identifier.doctype;
 
 import java.util.List;
+
 import javax.annotation.Nonnull;
+
 import at.peppol.commons.identifier.CIdentifier;
 import at.peppol.commons.identifier.IdentifierUtils;
+
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
@@ -50,7 +53,7 @@ import com.phloc.commons.version.Version;
 /**
  * This file is generated. Do NOT edit!
  */
-public enum EPredefinedDocumentTypeIdentifier implements IPredefinedDocumentTypeIdentifier {
+public enum EPredefinedDocumentTypeIdentifier implements IPeppolPredefinedDocumentTypeIdentifier {
 
   /**
    * <code>urn:www.peppol.eu:schema:xsd:VirtualCompanyDossier-1::VirtualCompanyDossier##urn:www.cenbii.eu:transaction:biicoretrdm991:ver0.1:#urn:www.peppol.eu:bis:peppol991a:ver1.0::0.1</code>
@@ -460,6 +463,11 @@ public enum EPredefinedDocumentTypeIdentifier implements IPredefinedDocumentType
   @Nonnull
   public String getURIPercentEncoded () {
     return IdentifierUtils.getIdentifierURIPercentEncoded (this);
+  }
+
+  @Nonnull
+  public IPeppolDocumentTypeIdentifierParts getParts () {
+    return this;
   }
 
 }

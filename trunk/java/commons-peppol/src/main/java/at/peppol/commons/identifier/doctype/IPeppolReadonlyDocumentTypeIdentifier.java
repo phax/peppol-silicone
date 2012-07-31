@@ -37,6 +37,8 @@
  */
 package at.peppol.commons.identifier.doctype;
 
+import javax.annotation.Nonnull;
+
 import at.peppol.busdox.identifier.IReadonlyDocumentTypeIdentifier;
 import at.peppol.commons.identifier.IPeppolReadonlyIdentifier;
 
@@ -48,5 +50,13 @@ import at.peppol.commons.identifier.IPeppolReadonlyIdentifier;
 public interface IPeppolReadonlyDocumentTypeIdentifier extends
                                                       IPeppolReadonlyIdentifier,
                                                       IReadonlyDocumentTypeIdentifier {
-  /* empty */
+  /**
+   * Extract the different identifier parts that are contained in a PEPPOL
+   * document type identifier.
+   * 
+   * @return A new object encapsulating the different document type identifier
+   *         parts.
+   */
+  @Nonnull
+  IPeppolDocumentTypeIdentifierParts getParts ();
 }
