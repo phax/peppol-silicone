@@ -37,24 +37,23 @@
     under either the MPL or the EUPL License.
 
 -->
-<!-- Schematron rules generated automatically. -->
-<!-- Abstract rules for T10 -->
-<!-- (2009). Invinet Sistemes -->
-<pattern abstract="true" id="T10" xmlns="http://purl.oclc.org/dsdl/schematron">
+<!-- This file is generated automatically! Do NOT edit! -->
+<!-- Abstract Schematron rules for T10 -->
+<pattern xmlns="http://purl.oclc.org/dsdl/schematron" abstract="true" id="T10">
   <rule context="$Supplier">
-    <assert test="$ATGOV-T10-R001" flag="fatal">[ATGOV-T10-R001]-The email address of the biller is mandatory</assert>
+    <assert flag="fatal" test="$ATGOV-T10-R001">[ATGOV-T10-R001]-The email address of the biller is mandatory</assert>
   </rule>
   <rule context="$Invoice">
-    <assert test="$ATGOV-T10-R002" flag="fatal">[ATGOV-T10-R002]-A maximum number of 999 invoice lines must be present</assert>
-    <assert test="$ATGOV-T10-R003" flag="fatal">[ATGOV-T10-R003]-The order number must be present</assert>
-    <assert test="$ATGOV-T10-R004" flag="warning">[ATGOV-T10-R004]-An invoice should not specify textual payment terms</assert>
-    <assert test="$ATGOV-T10-R005" flag="warning">[ATGOV-T10-R005]-Exactly 1 beneficiary account may be present</assert>
-    <assert test="$ATGOV-T10-R006" flag="fatal">[ATGOV-T10-R006]-The "Buchungskreis" (accounting area code) must be present</assert>
+    <assert flag="fatal" test="$ATGOV-T10-R002">[ATGOV-T10-R002]-A maximum number of 999 invoice lines must be present</assert>
+    <assert flag="fatal" test="$ATGOV-T10-R003">[ATGOV-T10-R003]-The order number must be present</assert>
+    <assert flag="warning" test="$ATGOV-T10-R004">[ATGOV-T10-R004]-An invoice should not specify textual payment terms</assert>
+    <assert flag="warning" test="$ATGOV-T10-R005">[ATGOV-T10-R005]-Exactly 1 beneficiary account may be present</assert>
+    <assert flag="fatal" test="$ATGOV-T10-R006">[ATGOV-T10-R006]-The "Buchungskreis" (accounting area code) must be present</assert>
   </rule>
   <rule context="$Payment_Means">
-    <assert test="$ATGOV-T10-R007" flag="fatal">[ATGOV-T10-R007]-Only BIC and IBAN are allowed as beneficiary account information</assert>
+    <assert flag="fatal" test="$ATGOV-T10-R007">[ATGOV-T10-R007]-Only BIC and IBAN are allowed as beneficiary account information</assert>
   </rule>
   <rule context="$Invoice_Line">
-    <assert test="$ATGOV-T10-R008" flag="fatal">[ATGOV-T10-R008]-The order position number (per line item) must be present</assert>
+    <assert flag="fatal" test="$ATGOV-T10-R008">[ATGOV-T10-R008]-The order position number (per line item) must be present</assert>
   </rule>
 </pattern>

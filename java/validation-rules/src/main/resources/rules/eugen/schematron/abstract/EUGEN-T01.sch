@@ -37,32 +37,31 @@
     under either the MPL or the EUPL License.
 
 -->
-<!-- Schematron rules generated automatically. -->
-<!-- Abstract rules for T01 -->
-<!-- (2009). Invinet Sistemes -->
+<!-- This file is generated automatically! Do NOT edit! -->
+<!-- Abstract Schematron rules for T01 -->
 <pattern xmlns="http://purl.oclc.org/dsdl/schematron" abstract="true" id="T01">
   <rule context="$Supplier_Party">
-    <assert test="$EUGEN-T01-R001" flag="warning">[EUGEN-T01-R001]-A supplier postal address in an order SHOULD contain at least street name and number, city name, zip code and country code.</assert>
+    <assert flag="warning" test="$EUGEN-T01-R001">[EUGEN-T01-R001]-A supplier postal address in an order SHOULD contain at least street name and number, city name, zip code and country code.</assert>
   </rule>
   <rule context="$Order_Line">
-    <assert test="$EUGEN-T01-R005" flag="warning">[EUGEN-T01-R005]-Each order line SHOULD contain the quantity</assert>
-    <assert test="$EUGEN-T01-R009" flag="fatal">[EUGEN-T01-R009]-Line extension amount MUST NOT be negative</assert>
-    <assert test="$EUGEN-T01-R010" flag="fatal">[EUGEN-T01-R010]-Quantity ordered MUST not be negative</assert>
+    <assert flag="warning" test="$EUGEN-T01-R005">[EUGEN-T01-R005]-Each order line SHOULD contain the quantity</assert>
+    <assert flag="fatal" test="$EUGEN-T01-R009">[EUGEN-T01-R009]-Line extension amount MUST NOT be negative</assert>
+    <assert flag="fatal" test="$EUGEN-T01-R010">[EUGEN-T01-R010]-Quantity ordered MUST not be negative</assert>
   </rule>
   <rule context="$Monetary_Total">
-    <assert test="$EUGEN-T01-R008" flag="fatal">[EUGEN-T01-R008]-Total payable amount MUST NOT be negative</assert>
+    <assert flag="fatal" test="$EUGEN-T01-R008">[EUGEN-T01-R008]-Total payable amount MUST NOT be negative</assert>
   </rule>
   <rule context="$Delivery_Period">
-    <assert test="$EUGEN-T01-R007" flag="fatal">[EUGEN-T01-R007]-A delivery period MUST have either the start date or the end date </assert>
+    <assert flag="fatal" test="$EUGEN-T01-R007">[EUGEN-T01-R007]-A delivery period MUST have either the start date or the end date </assert>
   </rule>
   <rule context="$Delivery_Address">
-    <assert test="$EUGEN-T01-R003" flag="warning">[EUGEN-T01-R003]-A Delivery address  SHOULD contain at least, city, zip code and country code.</assert>
+    <assert flag="warning" test="$EUGEN-T01-R003">[EUGEN-T01-R003]-A Delivery address  SHOULD contain at least, city, zip code and country code.</assert>
   </rule>
   <rule context="$Customer_Party">
-    <assert test="$EUGEN-T01-R002" flag="warning">[EUGEN-T01-R002]-A customer postal address in an invoice SHOULD contain at least, Street name and number, city name, zip code and country code.</assert>
+    <assert flag="warning" test="$EUGEN-T01-R002">[EUGEN-T01-R002]-A customer postal address in an invoice SHOULD contain at least, Street name and number, city name, zip code and country code.</assert>
   </rule>
   <rule context="$Allowance_Charge">
-    <assert test="$EUGEN-T01-R004" flag="warning">[EUGEN-T01-R004]-Allowance Charge reason text SHOULD be specified for all allowances and charges</assert>
-    <assert test="$EUGEN-T01-R006" flag="fatal">[EUGEN-T01-R006]-An allowance amount MUST NOT be negative.</assert>
+    <assert flag="warning" test="$EUGEN-T01-R004">[EUGEN-T01-R004]-Allowance Charge reason text SHOULD be specified for all allowances and charges</assert>
+    <assert flag="fatal" test="$EUGEN-T01-R006">[EUGEN-T01-R006]-An allowance amount MUST NOT be negative.</assert>
   </rule>
 </pattern>

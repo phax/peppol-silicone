@@ -37,10 +37,9 @@
     under either the MPL or the EUPL License.
 
 -->
-<!-- Schematron binding rules generated automatically. -->
-<!-- Data binding to UBL syntax for T10 -->
-<!-- (2009). Invinet Sistemes -->
-<pattern id="UBL-T10" xmlns="http://purl.oclc.org/dsdl/schematron" is-a="T10">
+<!-- This file is generated automatically! Do NOT edit! -->
+<!-- Schematron data binding rules to UBL syntax for T10 -->
+<pattern xmlns="http://purl.oclc.org/dsdl/schematron" is-a="T10" id="UBL-T10">
   <param value="((number(//cbc:TaxInclusiveAmount[@currencyID='EUR']) &gt; 10000 and //cac:AccountingCustomerParty/cac:Party/cac:PartyTaxScheme/cbc:CompanyID) or (number(//cbc:TaxInclusiveAmount) &lt;= 10000)) and (//cac:AccountingSupplierParty/cac:Party/cac:PostalAddress/cac:Country/cbc:IdentificationCode = 'AT') or not((//cac:AccountingSupplierParty/cac:Party/cac:PostalAddress/cac:Country/cbc:IdentificationCode = 'AT'))" name="ATNAT-T10-R001"/>
   <param value="(//cac:TaxScheme/cbc:ID = 'VAT' and number(cbc:Percent)=0 and (cbc:ID = 'E')) or not(//cac:TaxScheme/cbc:ID='VAT') or (number(cbc:Percent) &gt; 0) and (//cac:AccountingSupplierParty/cac:Party/cac:PostalAddress/cac:Country/cbc:IdentificationCode = 'AT') or not((//cac:AccountingSupplierParty/cac:Party/cac:PostalAddress/cac:Country/cbc:IdentificationCode = 'AT'))" name="ATNAT-T10-R002"/>
   <param value="((//cac:Delivery/cbc:ActualDeliveryDate) or (//cac:InvoicePeriod/cbc:StartDate and //cac:InvoicePeriod/cbc:EndDate)) and (//cac:AccountingSupplierParty/cac:Party/cac:PostalAddress/cac:Country/cbc:IdentificationCode = 'AT') or not((//cac:AccountingSupplierParty/cac:Party/cac:PostalAddress/cac:Country/cbc:IdentificationCode = 'AT'))" name="ATNAT-T10-R003"/>

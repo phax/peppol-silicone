@@ -38,14 +38,9 @@
     under either the MPL or the EUPL License.
 
 -->
-<!-- 
-
-        	Genericode File ChannelCode
-        	
-        	Oriol Bausà
-
-     -->
-<CodeList xsi:schemaLocation="http://docs.oasis-open.org/codelist/ns/genericode/1.0/ ../xsd/genericode.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://docs.oasis-open.org/codelist/ns/genericode/1.0/">
+<!-- This file is generated automatically! Do NOT edit! -->
+<!-- Genericode File ChannelCode -->
+<CodeList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://docs.oasis-open.org/codelist/ns/genericode/1.0/ ../xsd/genericode.xsd" xmlns="http://docs.oasis-open.org/codelist/ns/genericode/1.0/">
   <Identification xmlns="">
     <ShortName>ChannelCode</ShortName>
     <Version>D08B</Version>

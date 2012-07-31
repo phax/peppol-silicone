@@ -37,10 +37,9 @@
     under either the MPL or the EUPL License.
 
 -->
-<!-- Schematron binding rules generated automatically. -->
-<!-- Data binding to UBL syntax for T10 -->
-<!-- (2009). Invinet Sistemes -->
-<pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="UBL-T10" is-a="T10">
+<!-- This file is generated automatically! Do NOT edit! -->
+<!-- Schematron data binding rules to UBL syntax for T10 -->
+<pattern is-a="T10" xmlns="http://purl.oclc.org/dsdl/schematron" id="UBL-T10">
   <param value="(cac:PartyLegalEntity/cbc:CompanyID != '') and (//cac:AccountingSupplierParty/cac:Party/cac:PostalAddress/cac:Country/cbc:IdentificationCode = 'DK') or not((//cac:AccountingSupplierParty/cac:Party/cac:PostalAddress/cac:Country/cbc:IdentificationCode = 'DK'))" name="DKNAT-T10-R001"/>
   <param value="(cac:PartyLegalEntity/cbc:CompanyID != '') and (//cac:AccountingSupplierParty/cac:Party/cac:PostalAddress/cac:Country/cbc:IdentificationCode = 'DK') or not((//cac:AccountingSupplierParty/cac:Party/cac:PostalAddress/cac:Country/cbc:IdentificationCode = 'DK'))" name="DKNAT-T10-R002"/>
   <param value="(cac:PostalAddress/cbc:StreetName and cac:PostalAddress/cbc:CityName and cac:PostalAddress/cbc:PostalZone and cac:PostalAddress/cac:Country/cbc:IdentificationCode) and (//cac:AccountingSupplierParty/cac:Party/cac:PostalAddress/cac:Country/cbc:IdentificationCode = 'DK') or not((//cac:AccountingSupplierParty/cac:Party/cac:PostalAddress/cac:Country/cbc:IdentificationCode = 'DK'))" name="DKNAT-T10-R003"/>

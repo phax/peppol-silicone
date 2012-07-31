@@ -38,13 +38,9 @@
     under either the MPL or the EUPL License.
 
 -->
-<!-- 
-
-        	UBL syntax binding to the T01   
-        	Author: Oriol Bausà
-
-     -->
-<schema xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:ubl="urn:oasis:names:specification:ubl:schema:xsd:Order-2" queryBinding="xslt2" xmlns="http://purl.oclc.org/dsdl/schematron">
+<!-- This file is generated automatically! Do NOT edit! -->
+<!-- UBL syntax binding to the T01   -->
+<schema queryBinding="xslt2" xmlns:ubl="urn:oasis:names:specification:ubl:schema:xsd:Order-2" xmlns="http://purl.oclc.org/dsdl/schematron" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2">
   <title>EUGEN  T01 bound to UBL</title>
   <ns prefix="cbc" uri="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"/>
   <ns prefix="cac" uri="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"/>
@@ -52,10 +48,8 @@
   <phase id="EUGENT01_phase">
     <active pattern="UBL-T01"/>
   </phase>
-  <!-- Abstract CEN BII patterns -->
-  <!-- ========================= -->
+  <!-- Including Abstract CEN BII patterns -->
   <include href="abstract/EUGEN-T01.sch"/>
-  <!-- Data Binding parameters -->
-  <!-- ======================= -->
+  <!-- Including Data Binding parameters -->
   <include href="UBL/EUGEN-UBL-T01.sch"/>
 </schema>
