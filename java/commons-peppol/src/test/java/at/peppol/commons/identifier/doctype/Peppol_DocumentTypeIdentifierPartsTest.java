@@ -52,7 +52,7 @@ import at.peppol.commons.identifier.doctype.PeppolDocumentTypeIdentifierParts;
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public final class PEPPOLDocumentTypeIdentifierPartsTest {
+public final class Peppol_DocumentTypeIdentifierPartsTest {
   @Test
   public void testPredefined () {
     for (final EPredefinedDocumentTypeIdentifier e : EPredefinedDocumentTypeIdentifier.values ()) {
