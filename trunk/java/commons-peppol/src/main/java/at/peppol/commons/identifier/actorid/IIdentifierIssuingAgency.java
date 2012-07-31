@@ -52,7 +52,10 @@ import com.phloc.commons.version.Version;
  */
 public interface IIdentifierIssuingAgency {
   /**
-   * @return The scheme ID of this issuing agency. E.g. "GLN". May neither be
+   * Get the scheme ID of this issuing agency.<br>
+   * Example for GLN <code>"GLN"</code> is returned.
+   * 
+   * @return The scheme ID of this issuing agency. May neither be
    *         <code>null</code> nor empty.
    */
   @Nonnull
@@ -60,15 +63,21 @@ public interface IIdentifierIssuingAgency {
   String getSchemeID ();
 
   /**
+   * Get the optional name of the agency. This is pure descriptive text without
+   * any predefined semantics.
+   * 
    * @return The optional name of this agency. May be <code>null</code>.
    */
   @Nullable
   String getSchemeAgency ();
 
   /**
-   * @return The ISO6523 based identifier of this agency. E.g. "0088". May
-   *         neither be <code>null</code> nor empty. Is currently always
-   *         numeric, but may contain characters in the future.
+   * Get the ISO-6523 based identifier value.<br>
+   * Example: this method returns "0088" for GLN.
+   * 
+   * @return The ISO6523 based identifier of this agency. May neither be
+   *         <code>null</code> nor empty. Is currently always numeric, but may
+   *         contain characters in the future.
    */
   @Nonnull
   @Nonempty

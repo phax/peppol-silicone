@@ -44,6 +44,8 @@ import javax.annotation.Nonnull;
 import at.peppol.busdox.identifier.IReadonlyProcessIdentifier;
 import at.peppol.commons.identifier.docid.IPredefinedDocumentTypeIdentifier;
 
+import com.phloc.commons.version.Version;
+
 /**
  * Base interface for predefined process identifiers.
  * 
@@ -61,4 +63,11 @@ public interface IPredefinedProcessIdentifier extends IReadonlyProcessIdentifier
    */
   @Nonnull
   List <? extends IPredefinedDocumentTypeIdentifier> getDocumentTypeIdentifiers ();
+
+  /**
+   * @return The internal code list version in which the identifier was added.
+   *         Never <code>null</code>.
+   */
+  @Nonnull
+  Version getSince ();
 }
