@@ -1,4 +1,4 @@
-package at.peppol.validation.tools;
+package at.peppol.validation.tools.sch;
 
 import javax.annotation.Nonnull;
 
