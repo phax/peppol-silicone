@@ -38,4 +38,15 @@ public final class RuleSourceBusinessRule {
   public String getFilePrefix () {
     return m_sFilePrefix;
   }
+
+  @Nonnull
+  public File getSchematronAbstractFile (@Nonnull @Nonempty final String sRuleID) {
+    return new File (m_aOutputDirectory, m_sFilePrefix + "-" + sRuleID + "-abstract.sch");
+  }
+
+  @Nonnull
+  public File getSchematronBindingFile (@Nonnull @Nonempty final String sBindingName,
+                                        @Nonnull @Nonempty final String sRuleID) {
+    return new File (m_aOutputDirectory, m_sFilePrefix + "-" + sBindingName + "-" + sRuleID + "-test.sch");
+  }
 }
