@@ -1,11 +1,15 @@
 package at.peppol.validation.tools.sch;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.io.file.FileOperations;
 import com.phloc.commons.string.StringHelper;
 
@@ -14,6 +18,7 @@ public final class RuleSourceBusinessRule {
   private final File m_aOutputDirectory;
   private final String m_sID;
   private final String m_sCodeList;
+  private final List <File> m_aResultSCHFiles = new ArrayList <File> ();
 
   public RuleSourceBusinessRule (@Nonnull final File aSourceFilename,
                                  @Nonnull final File aOutputDirectory,
@@ -72,5 +77,15 @@ public final class RuleSourceBusinessRule {
 
   public String getCodeList () {
     return m_sCodeList;
+  }
+
+  public void addResultSchematronFile (@Nonnull final File aSCHFile) {
+    m_aResultSCHFiles.add (aSCHFile);
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public List <File> getAllResultSchematronFiles () {
+    return ContainerHelper.newList (m_aResultSCHFiles);
   }
 }

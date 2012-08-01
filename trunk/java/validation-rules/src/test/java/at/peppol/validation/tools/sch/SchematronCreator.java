@@ -58,10 +58,10 @@ public final class SchematronCreator {
       final String sTransaction = aRuleEntry.getKey ();
       final File aSCHFile = aBusinessRule.getSchematronAbstractFile (sTransaction);
       Utils.log ("    Writing abstract Schematron file " +
-      aSCHFile.getName () +
-      " with " +
-      aRuleEntry.getValue ().getTotalValueCount () +
-      " rule(s)");
+                 aSCHFile.getName () +
+                 " with " +
+                 aRuleEntry.getValue ().getTotalValueCount () +
+                 " rule(s)");
 
       // Create the XML content
       final IMicroDocument aDoc = new MicroDocument ();
@@ -88,7 +88,7 @@ public final class SchematronCreator {
   }
 
   private static void _brExtractBindingTests (final RuleSourceBusinessRule aBusinessRule, final Sheet aSheet) {
-    final String sBindingName = aSheet.getName ();
+    final String sBindingName = aSheet.getName ().toUpperCase (Locale.US);
     Utils.log ("    Handling sheet for binding '" + sBindingName + "'");
     int nRow = 1;
     final IMultiMapListBased <String, RuleParam> aRules = new MultiHashMapArrayListBased <String, RuleParam> ();
@@ -109,12 +109,12 @@ public final class SchematronCreator {
       final String sTransaction = aRuleEntry.getKey ();
       final File aSCHFile = aBusinessRule.getSchematronBindingFile (sBindingName, sTransaction);
       Utils.log ("      Writing " +
-      sBindingName +
-      " Schematron file " +
-      aSCHFile.getName () +
-      " with " +
-      aRuleEntry.getValue ().size () +
-      " test(s)");
+                 sBindingName +
+                 " Schematron file " +
+                 aSCHFile.getName () +
+                 " with " +
+                 aRuleEntry.getValue ().size () +
+                 " test(s)");
 
       final IMicroDocument aDoc = new MicroDocument ();
       aDoc.appendComment ("This file is generated automatically! Do NOT edit!");
@@ -204,13 +204,16 @@ public final class SchematronCreator {
       }
       SimpleFileIO.writeFile (aSCHFile, MicroWriter.getXMLString (aDoc), XMLWriterSettings.DEFAULT_XML_CHARSET_OBJ);
 
+      // Remember file for XSLT creation
+      aBusinessRule.addResultSchematronFile (aSCHFile);
+
       ++nRow;
     }
   }
 
   public static void createSchematrons (final List <RuleSourceItem> aRuleSourceItems) throws IOException {
     for (final RuleSourceItem aRuleSourceItem : aRuleSourceItems) {
-      Utils.log ("Start processing " + aRuleSourceItem.getID ());
+      Utils.log ("Creating Schematron files for " + aRuleSourceItem.getID ());
 
       // Process all business rule files
       for (final RuleSourceBusinessRule aBusinessRule : aRuleSourceItem.getAllBusinessRuleFiles ()) {
