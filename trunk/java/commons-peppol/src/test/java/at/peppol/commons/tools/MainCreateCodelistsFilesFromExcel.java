@@ -52,9 +52,9 @@ import javax.annotation.Nullable;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.oasis_open.docs.codelist.ns.genericode._1.CodeListDocument;
-import org.oasis_open.docs.codelist.ns.genericode._1.Row;
-import org.oasis_open.docs.codelist.ns.genericode._1.UseType;
+import org.oasis.genericode.v10.CodeListDocument;
+import org.oasis.genericode.v10.Row;
+import org.oasis.genericode.v10.UseType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -672,7 +672,8 @@ public final class MainCreateCodelistsFilesFromExcel {
       // getDocumentTypeIdentifiers ()
       m = jEnum.method (JMod.PUBLIC,
                         s_aCodeModel.ref (List.class)
-                                    .narrow (s_aCodeModel.ref (IPeppolPredefinedDocumentTypeIdentifier.class).wildcard ()),
+                                    .narrow (s_aCodeModel.ref (IPeppolPredefinedDocumentTypeIdentifier.class)
+                                                         .wildcard ()),
                         "getDocumentTypeIdentifiers");
       m.annotate (Nonnull.class);
       m.annotate (ReturnsMutableCopy.class);
