@@ -81,6 +81,9 @@ public final class CodeListCreator {
                                      @Nonnull final SpreadsheetDocument aSpreadSheet) {
     final Set <String> aAllReferencedCodeListNames = new HashSet <String> ();
     final Table aCVASheet = aSpreadSheet.getSheetByName ("CVA");
+    if (aCVASheet == null)
+      throw new IllegalStateException ("No CVA sheet found!");
+
     Utils.log ("  Reading CVA data");
     int nRow = 2;
     while (!ODFUtils.isEmpty (aCVASheet, 0, nRow)) {
@@ -157,11 +160,16 @@ public final class CodeListCreator {
 
     // Handle CVA sheets
     final Set <String> aAllReferencedCodeListNames = _readCVAData (aCodeList, aSpreadSheet);
+    if (aAllReferencedCodeListNames.isEmpty ())
+      throw new IllegalStateException ("CVA was not referencing any code list!");
 
     // Create only the GC files that are referenced from the CVA sheet
     Utils.log ("  Reading codelists");
     for (final String sCodeListName : aAllReferencedCodeListNames) {
       final Table aSheet = aSpreadSheet.getSheetByName (sCodeListName);
+      if (aSheet == null)
+        throw new IllegalStateException ("Failed to resolve sheet with name '" + sCodeListName + "'");
+
       final File aGCFile = aCodeList.getGCFile (sCodeListName);
       Utils.log ("    Creating " + aGCFile.getName ());
 
