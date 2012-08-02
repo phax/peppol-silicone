@@ -3,6 +3,8 @@ package at.peppol.validation.tools.sch;
 import java.io.File;
 import java.util.List;
 
+import javax.annotation.concurrent.Immutable;
+
 import org.w3c.dom.Document;
 
 import at.peppol.validation.schematron.xslt.SchematronResourceSCHCache;
@@ -16,6 +18,7 @@ import com.phloc.commons.io.resource.FileSystemResource;
 import com.phloc.commons.xml.serialize.XMLWriter;
 import com.phloc.commons.xml.serialize.XMLWriterSettings;
 
+@Immutable
 public final class XSLTCreator {
   private XSLTCreator () {}
 
