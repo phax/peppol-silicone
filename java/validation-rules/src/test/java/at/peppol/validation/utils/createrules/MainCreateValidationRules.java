@@ -23,12 +23,10 @@ public final class MainCreateValidationRules {
     aRuleSourceItems.add (new RuleSourceItem (new File (aRuleSource, "atgov")).addBussinessRule ("businessrules/atgov-T10-BusinessRules-v01.ods"));
     aRuleSourceItems.add (new RuleSourceItem (new File (aRuleSource, "atnat")).addBussinessRule ("businessrules/atnat-T10-BusinessRules-v01.ods"));
     // XSLT creation takes forever
-    if (false)
-      aRuleSourceItems.add (new RuleSourceItem (new File (aRuleSource, "biicore")).addBussinessRule ("businessrules/biicore-T01-BusinessRules-v01.ods")
-                                                                                  .addBussinessRule ("businessrules/biicore-T10-BusinessRules-v01.ods")
-                                                                                  .addBussinessRule ("businessrules/biicore-T14-BusinessRules-v01.ods")
-                                                                                  .addBussinessRule ("businessrules/biicore-T15-BusinessRules-v01.ods"));
-    // businessrules/biiprofiles-T01-BusinessRules-v01.ods is corrupted
+    aRuleSourceItems.add (new RuleSourceItem (new File (aRuleSource, "biicore")).addBussinessRule ("businessrules/biicore-T01-BusinessRules-v01.ods")
+                                                                                .addBussinessRule ("businessrules/biicore-T10-BusinessRules-v01.ods")
+                                                                                .addBussinessRule ("businessrules/biicore-T14-BusinessRules-v01.ods")
+                                                                                .addBussinessRule ("businessrules/biicore-T15-BusinessRules-v01.ods"));
     aRuleSourceItems.add (new RuleSourceItem (new File (aRuleSource, "biiprofiles")).addBussinessRule ("businessrules/biiprofiles-T10-BusinessRules-v01.ods")
                                                                                     .addBussinessRule ("businessrules/biiprofiles-T14-BusinessRules-v01.ods")
                                                                                     .addBussinessRule ("businessrules/biiprofiles-T15-BusinessRules-v01.ods"));
