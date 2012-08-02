@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.annotation.concurrent.Immutable;
+
 import org.odftoolkit.simple.SpreadsheetDocument;
 import org.odftoolkit.simple.table.Table;
 
@@ -24,8 +26,11 @@ import com.phloc.commons.microdom.serialize.MicroWriter;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.xml.serialize.XMLWriterSettings;
 
+@Immutable
 public final class SchematronCreator {
   private static final String NS_SCHEMATRON = "http://purl.oclc.org/dsdl/schematron";
+
+  private SchematronCreator () {}
 
   private static String _makeID (final String s) {
     return s.replaceAll ("\\b[ \\t]+\\b", "_");
