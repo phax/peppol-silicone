@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import at.peppol.validation.tools.sch.RuleSourceItem;
+import org.jopendocument.dom.spreadsheet.Sheet;
+import org.jopendocument.dom.spreadsheet.SpreadSheet;
+
 import at.peppol.validation.tools.sch.SchematronCreator;
 import at.peppol.validation.tools.sch.XSLTCreator;
 
@@ -28,6 +30,7 @@ public final class MainCreateValidationRules {
     aRuleSourceItems.add (new RuleSourceItem (new File (aRuleSource, "biiprofiles")).addBussinessRule ("businessrules/biiprofiles-T10-BusinessRules-v01.ods")
                                                                                     .addBussinessRule ("businessrules/biiprofiles-T14-BusinessRules-v01.ods")
                                                                                     .addBussinessRule ("businessrules/biiprofiles-T15-BusinessRules-v01.ods"));
+    aRuleSourceItems.add (new RuleSourceItem (new File (aRuleSource, "biirules")).addCodeList ("businessrules/biirules-CodeLists-v01.ods"));
     aRuleSourceItems.add (new RuleSourceItem (new File (aRuleSource, "dknat")).addBussinessRule ("businessrules/dknat-T10-BusinessRules-v01.ods"));
     aRuleSourceItems.add (new RuleSourceItem (new File (aRuleSource, "itnat")).addBussinessRule ("businessrules/itnat-T10-BusinessRules-v03.ods"));
     aRuleSourceItems.add (new RuleSourceItem (new File (aRuleSource, "nogov")).addBussinessRule ("businessrules/nogov-T10-BusinessRules-v01.ods")
@@ -37,11 +40,32 @@ public final class MainCreateValidationRules {
                                                                               .addBussinessRule ("businessrules/nonat-T14-BusinessRules-v01.ods")
                                                                               .addBussinessRule ("businessrules/nonat-T15-BusinessRules-v01.ods"));
 
-    // Create Schematron
-    SchematronCreator.createSchematrons (aRuleSourceItems);
+    for (final RuleSourceItem aRuleSourceItem : aRuleSourceItems) {
+      // Process all code lists
+      for (final RuleSourceCodeList aCodeList : aRuleSourceItem.getAllCodeLists ()) {
+        Utils.log ("Reading code list file " + aCodeList.getSourceFile ());
+        final SpreadSheet aSpreadSheet = SpreadSheet.createFromFile (aCodeList.getSourceFile ());
+        for (int nSheetIndex = 0; nSheetIndex < aSpreadSheet.getSheetCount (); ++nSheetIndex) {
+          final Sheet aSheet = aSpreadSheet.getSheet (nSheetIndex);
+          final String sSheetName = aSheet.getName ();
+          if (!sSheetName.equals ("CVA")) {
+            final String sShortname = aSheet.getCellAt (0, 1).getTextValue ();
+            final String sVersion = aSheet.getCellAt (1, 1).getTextValue ();
+            final String sAgency = aSheet.getCellAt (2, 1).getTextValue ();
+            final String sLocationURI = aSheet.getCellAt (3, 1).getTextValue ();
+            final String sLocale = aSheet.getCellAt (4, 1).getTextValue ();
+          }
+        }
+      }
+    }
 
-    // Now create the validation XSLTs
-    XSLTCreator.createXSLTs (aRuleSourceItems);
+    if (false) {
+      // Create Schematron
+      SchematronCreator.createSchematrons (aRuleSourceItems);
+
+      // Now create the validation XSLTs
+      XSLTCreator.createXSLTs (aRuleSourceItems);
+    }
 
     Utils.log ("Finished building validation rules");
   }

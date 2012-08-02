@@ -6,6 +6,8 @@ import java.util.List;
 import org.w3c.dom.Document;
 
 import at.peppol.validation.schematron.xslt.SchematronResourceSCHCache;
+import at.peppol.validation.tools.RuleSourceBusinessRule;
+import at.peppol.validation.tools.RuleSourceItem;
 import at.peppol.validation.tools.Utils;
 
 import com.phloc.commons.io.file.FilenameHelper;
@@ -21,7 +23,7 @@ public final class XSLTCreator {
     for (final RuleSourceItem aRuleSourceItem : aRuleSourceItems) {
       Utils.log ("Creating XSLT files for " + aRuleSourceItem.getID ());
       // Process all business rules
-      for (final RuleSourceBusinessRule aBusinessRule : aRuleSourceItem.getAllBusinessRuleFiles ())
+      for (final RuleSourceBusinessRule aBusinessRule : aRuleSourceItem.getAllBusinessRules ())
         for (final File aSCHFile : aBusinessRule.getAllResultSchematronFiles ()) {
           Utils.log ("  Creating XSLT for " + aSCHFile.getName ());
           final Document aXSLTDoc = SchematronResourceSCHCache.createSchematronXSLTProvider (new FileSystemResource (aSCHFile),
@@ -29,9 +31,7 @@ public final class XSLTCreator {
                                                                                              null)
                                                               .getXSLTDocument ();
 
-          final File aXSLTFile = new File (aSCHFile.getParentFile (),
-                                           FilenameHelper.getWithoutExtension (aSCHFile.getName ()) + ".xslt");
-          Utils.log ("  Writing file " + aXSLTFile.getName ());
+          final File aXSLTFile = new File (FilenameHelper.getWithoutExtension (aSCHFile.getPath ()) + ".xslt");
           SimpleFileIO.writeFile (aXSLTFile,
                                   XMLWriter.getXMLString (aXSLTDoc),
                                   XMLWriterSettings.DEFAULT_XML_CHARSET_OBJ);

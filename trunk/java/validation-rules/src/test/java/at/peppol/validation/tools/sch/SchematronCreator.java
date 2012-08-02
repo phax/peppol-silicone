@@ -10,6 +10,8 @@ import java.util.Map;
 import org.jopendocument.dom.spreadsheet.Sheet;
 import org.jopendocument.dom.spreadsheet.SpreadSheet;
 
+import at.peppol.validation.tools.RuleSourceBusinessRule;
+import at.peppol.validation.tools.RuleSourceItem;
 import at.peppol.validation.tools.Utils;
 
 import com.phloc.commons.collections.multimap.IMultiMapListBased;
@@ -216,7 +218,7 @@ public final class SchematronCreator {
       Utils.log ("Creating Schematron files for " + aRuleSourceItem.getID ());
 
       // Process all business rule files
-      for (final RuleSourceBusinessRule aBusinessRule : aRuleSourceItem.getAllBusinessRuleFiles ()) {
+      for (final RuleSourceBusinessRule aBusinessRule : aRuleSourceItem.getAllBusinessRules ()) {
         // Read ODS file
         Utils.log ("  Reading business rule source file " + aBusinessRule.getSourceFile ());
         final SpreadSheet aSpreadSheet = SpreadSheet.createFromFile (aBusinessRule.getSourceFile ());
