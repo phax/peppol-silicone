@@ -224,7 +224,7 @@ public enum EValidationArtefact implements IValidationArtefact {
     // 3.3. The transaction ID
     final String sFileName = BASE_DIRECTORY +
                              m_sDirName +
-                             "/schematron/" +
+                             "/" +
                              m_sFileNamePrefix +
                              '-' +
                              aTransaction.getSyntaxBinding ().getFileNamePart () +
@@ -262,13 +262,13 @@ public enum EValidationArtefact implements IValidationArtefact {
     // 3.3. The transaction ID
     final String sFileName = BASE_DIRECTORY +
                              m_sDirName +
-                             "/validation-xslt/" +
+                             "/" +
                              m_sFileNamePrefix +
                              '-' +
                              aTransaction.getSyntaxBinding ().getFileNamePart () +
                              '-' +
                              aTransaction.getTransaction () +
-                             ".xsl";
+                             ".xslt";
     return new ClassPathResource (sFileName);
   }
 

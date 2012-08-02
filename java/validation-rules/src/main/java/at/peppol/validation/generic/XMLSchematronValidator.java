@@ -72,7 +72,7 @@ public final class XMLSchematronValidator extends AbstractXMLValidator {
     if (aSchematronRes == null)
       throw new NullPointerException ("schematronResource");
     if (!aSchematronRes.isValidSchematron ())
-      throw new IllegalArgumentException ("Passed schematronResource is invalid Schematron!");
+      throw new IllegalArgumentException ("Passed schematronResource is invalid Schematron: " + aSchematronRes);
     m_aSchematronRes = aSchematronRes;
   }
 

@@ -48,9 +48,4 @@ The other ones are country specific, where the first 2 characters reflect the IS
 * nat - general national rules (e.g. atnat)
 * gov - national government specific rules (e.g. atgov)
 
-
-Each ruleset has the following important layout
-* schematron      - contain the Schematron files and codelists
-* validation-xslt - contain the pre-build XSLT files from the Schematron files. Use these files to validate XML instances and generate SVRL (Schematron result)
-
-//Philip, 29.04.2011
+//Philip, 02.08.2012
