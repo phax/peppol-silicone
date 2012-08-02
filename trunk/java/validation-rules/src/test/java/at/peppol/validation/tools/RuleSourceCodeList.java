@@ -46,6 +46,6 @@ public final class RuleSourceCodeList {
 
   @Nonnull
   public File getCVAFile (@Nonnull @Nonempty final String sTransaction) {
-    return new File (m_aOutputDirectory, m_sID + "-" + sTransaction + ".cva");
+    return new File (m_aOutputDirectory, m_sID + "-" + sTransaction + "-codes.cva");
   }
 }

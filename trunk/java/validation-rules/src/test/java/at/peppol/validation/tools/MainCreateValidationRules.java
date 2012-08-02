@@ -37,6 +37,7 @@ public final class MainCreateValidationRules {
                                                                               .addBussinessRule ("businessrules/nonat-T14-BusinessRules-v01.ods")
                                                                               .addBussinessRule ("businessrules/nonat-T15-BusinessRules-v01.ods"));
 
+    // Create all codelists (GC + CVA)
     CodeListCreator.createCodeLists (aRuleSourceItems);
 
     if (false) {
