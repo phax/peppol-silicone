@@ -34,16 +34,17 @@ public final class RuleSourceItem implements IHasID <String> {
   }
 
   @Nonnull
-  public RuleSourceItem addCodeList (@Nonnull @Nonempty final String sSourceFilename) {
-    m_aCodeLists.add (new RuleSourceCodeList (new File (m_aDirectory, sSourceFilename),
-                                              getOutputCodeListDirectory (),
-                                              m_sID));
-    return this;
+  public File getOutputSchematronDirectory () {
+    return new File (m_aDirectory, "schematron");
   }
 
   @Nonnull
-  public File getOutputSchematronDirectory () {
-    return new File (m_aDirectory, "schematron");
+  public RuleSourceItem addCodeList (@Nonnull @Nonempty final String sSourceFilename) {
+    m_aCodeLists.add (new RuleSourceCodeList (new File (m_aDirectory, sSourceFilename),
+                                              getOutputCodeListDirectory (),
+                                              getOutputSchematronDirectory (),
+                                              m_sID));
+    return this;
   }
 
   @Nonnull
