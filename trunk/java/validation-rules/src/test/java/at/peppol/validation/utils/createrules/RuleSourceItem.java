@@ -1,4 +1,4 @@
-package at.peppol.validation.tools;
+package at.peppol.validation.utils.createrules;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -8,8 +8,8 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import at.peppol.validation.tools.codelist.RuleSourceCodeList;
-import at.peppol.validation.tools.sch.RuleSourceBusinessRule;
+import at.peppol.validation.utils.createrules.codelist.RuleSourceCodeList;
+import at.peppol.validation.utils.createrules.sch.RuleSourceBusinessRule;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.collections.ContainerHelper;

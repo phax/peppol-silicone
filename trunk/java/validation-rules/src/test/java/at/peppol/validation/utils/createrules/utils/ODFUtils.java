@@ -1,4 +1,4 @@
-package at.peppol.validation.tools.utils;
+package at.peppol.validation.utils.createrules.utils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

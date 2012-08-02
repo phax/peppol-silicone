@@ -1,9 +1,9 @@
-package at.peppol.validation.tools.sch;
+package at.peppol.validation.utils.createrules.sch;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
-import at.peppol.validation.tools.utils.Utils;
+import at.peppol.validation.utils.createrules.utils.Utils;
 
 import com.phloc.commons.annotations.Nonempty;
 

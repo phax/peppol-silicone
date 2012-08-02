@@ -1,4 +1,4 @@
-package at.peppol.validation.tools.sch;
+package at.peppol.validation.utils.createrules.sch;
 
 import java.io.File;
 import java.util.ArrayList;

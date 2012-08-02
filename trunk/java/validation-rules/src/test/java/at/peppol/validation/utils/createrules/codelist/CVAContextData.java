@@ -1,4 +1,4 @@
-package at.peppol.validation.tools.codelist;
+package at.peppol.validation.utils.createrules.codelist;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
