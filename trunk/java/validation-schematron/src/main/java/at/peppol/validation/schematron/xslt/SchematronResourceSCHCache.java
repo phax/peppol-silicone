@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.io.IReadableResource;
+import com.phloc.commons.xml.serialize.XMLWriter;
 
 /**
  * Factory for creating {@link ISchematronXSLTProvider} objects.
@@ -88,6 +89,10 @@ public final class SchematronResourceSCHCache {
     if (!aXSLTPreprocessor.isValidSchematron ()) {
       // Schematron is invalid -> parsing failed
       s_aLogger.warn ("The Schematron resource '" + aSchematronResource.getResourceID () + "' is invalid!");
+      if (GlobalDebug.isDebugMode () && aXSLTPreprocessor.getXSLTDocument () != null) {
+        // Log the created XSLT document for better error tracking
+        s_aLogger.warn ("  Created XSLT document:\n" + XMLWriter.getXMLString (aXSLTPreprocessor.getXSLTDocument ()));
+      }
       return null;
     }
 
