@@ -45,6 +45,36 @@ public final class SchematronResourceSCHCache {
 
   private SchematronResourceSCHCache () {}
 
+  /**
+   * Create a new Schematron validator for the passed resource without a custom
+   * error listener and without a custom URI resolver.
+   * 
+   * @param aSchematronResource
+   *        The resource of the Schematron rules. May not be <code>null</code>.
+   * @return <code>null</code> if the passed Schematron resource does not exist
+   *         or is invalid.
+   */
+  @Nullable
+  public static ISchematronXSLTProvider createSchematronXSLTProvider (@Nonnull final IReadableResource aSchematronResource) {
+    return createSchematronXSLTProvider (aSchematronResource, null, null);
+  }
+
+  /**
+   * Create a new Schematron validator for the passed resource.
+   * 
+   * @param aSchematronResource
+   *        The resource of the Schematron rules. May not be <code>null</code>.
+   * @param aCustomErrorListener
+   *        An optional custom XSLT error listener that is used when converting
+   *        the Schematron resource to an XSLT document. May be
+   *        <code>null</code>.
+   * @param aCustomURIResolver
+   *        An optional custom XSLT URI resolver that is used when converting
+   *        the Schematron resource to an XSLT document. May be
+   *        <code>null</code>.
+   * @return <code>null</code> if the passed Schematron resource does not exist
+   *         or is invalid.
+   */
   @Nullable
   public static ISchematronXSLTProvider createSchematronXSLTProvider (@Nonnull final IReadableResource aSchematronResource,
                                                                       @Nullable final ErrorListener aCustomErrorListener,
@@ -72,7 +102,21 @@ public final class SchematronResourceSCHCache {
   }
 
   /**
-   * Create a new Schematron validator for the passed resource.
+   * Get the Schematron validator for the passed resource without a custom error
+   * listener and without a custom URI resolver using a cache.
+   * 
+   * @param aSchematronResource
+   *        The resource of the Schematron rules. May not be <code>null</code>.
+   * @return <code>null</code> if the passed Schematron resource does not exist
+   *         or is invalid.
+   */
+  @Nullable
+  public static ISchematronXSLTProvider getSchematronXSLTProvider (@Nonnull final IReadableResource aSchematronResource) {
+    return getSchematronXSLTProvider (aSchematronResource, null, null);
+  }
+
+  /**
+   * Get the Schematron validator for the passed resource using a cache.
    * 
    * @param aSchematronResource
    *        The resource of the Schematron rules. May not be <code>null</code>.
@@ -84,7 +128,8 @@ public final class SchematronResourceSCHCache {
    *        An optional custom XSLT URI resolver that is used when converting
    *        the Schematron resource to an XSLT document. May be
    *        <code>null</code>.
-   * @return <code>null</code> if the passed Schematron resource does not exist.
+   * @return <code>null</code> if the passed Schematron resource does not exist
+   *         or is invalid.
    */
   @Nullable
   public static ISchematronXSLTProvider getSchematronXSLTProvider (@Nonnull final IReadableResource aSchematronResource,

@@ -24,6 +24,7 @@ import javax.xml.transform.URIResolver;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.resource.ClassPathResource;
+import com.phloc.commons.io.resource.FileSystemResource;
 
 /**
  * A Schematron resource that is based on an existing, pre-compiled XSLT script.
@@ -54,5 +55,17 @@ public final class SchematronResourceXSLT extends AbstractSchematronXSLTResource
                                                       @Nullable final ErrorListener aCustomErrorListener,
                                                       @Nullable final URIResolver aCustomURIResolver) {
     return new SchematronResourceXSLT (new ClassPathResource (sXSLTPath), aCustomErrorListener, aCustomURIResolver);
+  }
+
+  @Nonnull
+  public static SchematronResourceXSLT fromFile (@Nonnull @Nonempty final String sXSLTPath) {
+    return new SchematronResourceXSLT (new FileSystemResource (sXSLTPath));
+  }
+
+  @Nonnull
+  public static SchematronResourceXSLT fromFile (@Nonnull @Nonempty final String sXSLTPath,
+                                                 @Nullable final ErrorListener aCustomErrorListener,
+                                                 @Nullable final URIResolver aCustomURIResolver) {
+    return new SchematronResourceXSLT (new FileSystemResource (sXSLTPath), aCustomErrorListener, aCustomURIResolver);
   }
 }
