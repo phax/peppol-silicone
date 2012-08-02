@@ -41,6 +41,8 @@ public final class SVRLLocationBeautifierRegistry {
     // Load all SPI implementations
     for (final ISVRLLocationBeautifierSPI aBeautifier : ServiceLoaderBackport.load (ISVRLLocationBeautifierSPI.class))
       s_aList.add (aBeautifier);
+    if (!s_aList.isEmpty ())
+      s_aLogger.info ("Loaded " + s_aList.size () + " SVRL location beautifier");
   }
 
   private SVRLLocationBeautifierRegistry () {}
