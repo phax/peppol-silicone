@@ -7,6 +7,7 @@ import java.util.List;
 import at.peppol.validation.tools.codelist.CodeListCreator;
 import at.peppol.validation.tools.sch.SchematronCreator;
 import at.peppol.validation.tools.sch.XSLTCreator;
+import at.peppol.validation.tools.utils.Utils;
 
 public final class MainCreateValidationRules {
   public static void main (final String [] args) throws Exception {
