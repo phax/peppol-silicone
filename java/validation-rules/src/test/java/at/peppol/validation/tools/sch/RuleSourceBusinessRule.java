@@ -39,11 +39,6 @@ public final class RuleSourceBusinessRule {
   }
 
   @Nonnull
-  public File getOutputDirectory () {
-    return m_aOutputDirectory;
-  }
-
-  @Nonnull
   @Nonempty
   public String getID () {
     return m_sID;

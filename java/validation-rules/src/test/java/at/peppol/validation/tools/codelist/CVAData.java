@@ -7,7 +7,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.phloc.commons.annotations.Nonempty;
@@ -25,11 +24,10 @@ final class CVAData {
 
   public void addContext (@Nonnull @Nonempty final String sID,
                           @Nonnull @Nonempty final String sItem,
-                          @Nullable final String sScope,
                           @Nonnull @Nonempty final String sCodeListName,
                           @Nonnull @Nonempty final String sSeverity,
                           @Nonnull @Nonempty final String sMessage) {
-    m_aContexts.add (new CVAContextData (sID, sItem, sScope, sCodeListName, sSeverity, sMessage));
+    m_aContexts.add (new CVAContextData (sID, sItem, sCodeListName, sSeverity, sMessage));
   }
 
   public String getTransaction () {

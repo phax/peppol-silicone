@@ -11,6 +11,7 @@ import javax.annotation.concurrent.Immutable;
 import org.odftoolkit.simple.SpreadsheetDocument;
 import org.odftoolkit.simple.table.Table;
 
+import at.peppol.validation.schematron.CSchematron;
 import at.peppol.validation.tools.RuleSourceItem;
 import at.peppol.validation.tools.utils.ODFUtils;
 import at.peppol.validation.tools.utils.Utils;
@@ -27,7 +28,7 @@ import com.phloc.commons.xml.serialize.XMLWriterSettings;
 
 @Immutable
 public final class SchematronCreator {
-  private static final String NS_SCHEMATRON = "http://purl.oclc.org/dsdl/schematron";
+  private static final String NS_SCHEMATRON = CSchematron.NAMESPACE_SCHEMATRON;
 
   private SchematronCreator () {}
 
@@ -96,7 +97,7 @@ public final class SchematronCreator {
   }
 
   private static void _brExtractBindingTests (final RuleSourceBusinessRule aBusinessRule, final Table aSheet) {
-    final String sBindingName = aSheet.getTableName ().toUpperCase (Locale.US);
+    final String sBindingName = aSheet.getTableName ();
     Utils.log ("    Handling sheet for binding '" + sBindingName + "'");
     int nRow = 1;
     final IMultiMapListBased <String, RuleParam> aRules = new MultiHashMapArrayListBased <String, RuleParam> ();
@@ -128,8 +129,9 @@ public final class SchematronCreator {
       aDoc.appendComment ("This file is generated automatically! Do NOT edit!");
       aDoc.appendComment ("Schematron tests for binding " + sBindingName + " and transaction " + sTransaction);
       final IMicroElement ePattern = aDoc.appendElement (NS_SCHEMATRON, "pattern");
+      // Assign to the global pattern
       ePattern.setAttribute ("is-a", sTransaction);
-      ePattern.setAttribute ("id", sBindingName + "-" + sTransaction);
+      ePattern.setAttribute ("id", sBindingName.toUpperCase (Locale.US) + "-" + sTransaction);
       for (final RuleParam aRuleParam : aRuleEntry.getValue ()) {
         final IMicroElement eParam = ePattern.appendElement (NS_SCHEMATRON, "param");
         eParam.setAttribute ("name", _makeID (aRuleParam.getRuleID ()));
@@ -161,6 +163,8 @@ public final class SchematronCreator {
         throw new IllegalStateException ("Profile currently not supported! Found '" + sProfile + "'");
 
       final String sBindingPrefix = sBindingName.toLowerCase (Locale.US);
+      final String sBindingUC = sBindingName.toUpperCase (Locale.US);
+
       final IMicroDocument aDoc = new MicroDocument ();
       aDoc.appendComment ("This file is generated automatically! Do NOT edit!");
       aDoc.appendComment ("Schematron assembly for binding " + sBindingName + " and transaction " + sTransaction);
@@ -184,22 +188,22 @@ public final class SchematronCreator {
              .setAttribute ("prefix", sBindingPrefix)
              .setAttribute ("uri", sNamespace);
 
+      // Phases
       IMicroElement ePhase = eSchema.appendElement (NS_SCHEMATRON, "phase");
       ePhase.setAttribute ("id", aBusinessRule.getID () + "_" + sTransaction + "_phase");
-      ePhase.appendElement (NS_SCHEMATRON, "active").setAttribute ("pattern", sBindingName + "-" + sTransaction);
-
+      ePhase.appendElement (NS_SCHEMATRON, "active").setAttribute ("pattern", sBindingUC + "-" + sTransaction);
       if (StringHelper.hasText (sProfile)) {
         ePhase = eSchema.appendElement (NS_SCHEMATRON, "phase");
         ePhase.setAttribute ("id", aBusinessRule.getID () + "_" + sProfile + "_phase");
-        ePhase.appendElement (NS_SCHEMATRON, "active").setAttribute ("pattern", sBindingName + "-" + sProfile);
+        ePhase.appendElement (NS_SCHEMATRON, "active").setAttribute ("pattern", sBindingUC + "-" + sProfile);
       }
-
       if (aBusinessRule.hasCodeList ()) {
         ePhase = eSchema.appendElement (NS_SCHEMATRON, "phase");
         ePhase.setAttribute ("id", "codelist_phase");
-        ePhase.appendElement (NS_SCHEMATRON, "active").setAttribute ("pattern", "Codes" + sProfile);
+        ePhase.appendElement (NS_SCHEMATRON, "active").setAttribute ("pattern", "Codes-" + sTransaction);
       }
 
+      // Includes
       IMicroElement eInclude = eSchema.appendElement (NS_SCHEMATRON, "include");
       eInclude.setAttribute ("href", aBusinessRule.getSchematronAbstractFile (sTransaction).getName ());
       if (StringHelper.hasText (sProfile)) {

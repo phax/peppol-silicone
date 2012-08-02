@@ -1,7 +1,6 @@
 package at.peppol.validation.tools.codelist;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.phloc.commons.annotations.Nonempty;
@@ -11,14 +10,12 @@ import com.phloc.commons.string.StringHelper;
 final class CVAContextData {
   private final String m_sID;
   private final String m_sItem;
-  private final String m_sScope;
   private final String m_sCodeListName;
   private final String m_sSeverity;
   private final String m_sMessage;
 
   public CVAContextData (@Nonnull @Nonempty final String sID,
                          @Nonnull @Nonempty final String sItem,
-                         @Nullable final String sScope,
                          @Nonnull @Nonempty final String sCodeListName,
                          @Nonnull @Nonempty final String sSeverity,
                          @Nonnull @Nonempty final String sMessage) {
@@ -34,7 +31,6 @@ final class CVAContextData {
       throw new IllegalArgumentException ("message");
     m_sID = sID;
     m_sItem = sItem;
-    m_sScope = sScope;
     m_sCodeListName = sCodeListName;
     m_sSeverity = sSeverity;
     m_sMessage = sMessage;
@@ -50,11 +46,6 @@ final class CVAContextData {
   @Nonempty
   public String getItem () {
     return m_sItem;
-  }
-
-  @Nullable
-  public String getScope () {
-    return m_sScope;
   }
 
   @Nonnull

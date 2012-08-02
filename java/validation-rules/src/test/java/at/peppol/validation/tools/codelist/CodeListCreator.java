@@ -1,14 +1,13 @@
 package at.peppol.validation.tools.codelist;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
@@ -34,12 +33,19 @@ import org.odftoolkit.simple.SpreadsheetDocument;
 import org.odftoolkit.simple.table.Table;
 import org.w3c.dom.Document;
 
-import at.peppol.validation.tools.RuleSourceItem;
+import at.peppol.validation.schematron.CSchematron;
 import at.peppol.validation.tools.utils.ODFUtils;
 import at.peppol.validation.tools.utils.Utils;
 
+import com.phloc.commons.collections.multimap.IMultiMapSetBased;
+import com.phloc.commons.collections.multimap.MultiTreeMapTreeSetBased;
 import com.phloc.commons.io.file.FilenameHelper;
 import com.phloc.commons.io.file.SimpleFileIO;
+import com.phloc.commons.microdom.IMicroDocument;
+import com.phloc.commons.microdom.IMicroElement;
+import com.phloc.commons.microdom.impl.MicroDocument;
+import com.phloc.commons.microdom.serialize.MicroWriter;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.xml.XMLFactory;
 import com.phloc.commons.xml.serialize.XMLWriter;
 import com.phloc.commons.xml.serialize.XMLWriterSettings;
@@ -52,34 +58,50 @@ import com.phloc.genericode.Genericode10Utils;
 
 @Immutable
 public final class CodeListCreator {
-  private CodeListCreator () {}
+  private static final String NS_SCHEMATRON = CSchematron.NAMESPACE_SCHEMATRON;
 
-  private static void _createCVAandGC (final RuleSourceCodeList aCodeList, final List <String> aUsedTransaction) throws Exception {
-    Utils.log ("Reading code list file " + aCodeList.getSourceFile ());
-    final SpreadsheetDocument aSpreadSheet = SpreadsheetDocument.loadDocument (aCodeList.getSourceFile ());
+  private static Templates s_aCVA2SCH;
+  // From transaction to CVAData
+  private final Map <String, CVAData> m_aCVAs = new TreeMap <String, CVAData> ();
+  // From code list name to Set<Code>
+  private final IMultiMapSetBased <String, String> m_aAllCodes = new MultiTreeMapTreeSetBased <String, String> ();
 
-    // Handle CVA sheets
+  public CodeListCreator () {}
+
+  /**
+   * @param aCodeList
+   *        code list information
+   * @param aSpreadSheet
+   *        ODS spreadsheet
+   * @return A set with all required code list names, references from the CVA
+   *         sheet
+   */
+  @Nonnull
+  private Set <String> _readCVAData (@Nonnull final RuleSourceCodeList aCodeList,
+                                     @Nonnull final SpreadsheetDocument aSpreadSheet) {
     final Set <String> aAllReferencedCodeListNames = new HashSet <String> ();
     final Table aCVASheet = aSpreadSheet.getSheetByName ("CVA");
     Utils.log ("  Reading CVA data");
     int nRow = 2;
-    final Map <String, CVAData> aCVAs = new TreeMap <String, CVAData> ();
     while (!ODFUtils.isEmpty (aCVASheet, 0, nRow)) {
       final String sTransaction = ODFUtils.getText (aCVASheet, 0, nRow);
       final String sID = ODFUtils.getText (aCVASheet, 1, nRow);
-      final String sItem = ODFUtils.getText (aCVASheet, 2, nRow);
+      String sItem = ODFUtils.getText (aCVASheet, 2, nRow);
       final String sScope = ODFUtils.getText (aCVASheet, 3, nRow);
       final String sCodeListName = ODFUtils.getText (aCVASheet, 4, nRow);
       final String sMessage = ODFUtils.getText (aCVASheet, 5, nRow);
       final String sSeverity = ODFUtils.getText (aCVASheet, 6, nRow);
 
+      if (StringHelper.hasText (sScope))
+        sItem = sScope + "//" + sItem;
+
       // Save context per transaction
-      CVAData aCVAData = aCVAs.get (sTransaction);
+      CVAData aCVAData = m_aCVAs.get (sTransaction);
       if (aCVAData == null) {
         aCVAData = new CVAData (sTransaction);
-        aCVAs.put (sTransaction, aCVAData);
+        m_aCVAs.put (sTransaction, aCVAData);
       }
-      aCVAData.addContext (sID, sItem, sScope, sCodeListName, sSeverity, sMessage);
+      aCVAData.addContext (sID, sItem, sCodeListName, sSeverity, sMessage);
 
       // Remember that we require a codelist
       aAllReferencedCodeListNames.add (sCodeListName);
@@ -88,7 +110,7 @@ public final class CodeListCreator {
     }
 
     // Start creating CVA files (for each transaction)
-    for (final CVAData aCVAData : aCVAs.values ()) {
+    for (final CVAData aCVAData : m_aCVAs.values ()) {
       final File aCVAFile = aCodeList.getCVAFile (aCVAData.getTransaction ());
       Utils.log ("    Creating " + aCVAFile.getName ());
 
@@ -124,8 +146,17 @@ public final class CodeListCreator {
       aCVA.setContexts (aContexts);
       if (new CVA10Marshaller ().write (aCVA, aCVAFile).isFailure ())
         throw new IllegalStateException ("Failed to write " + aCVAFile);
-      aUsedTransaction.add (aCVAData.getTransaction ());
     }
+    return aAllReferencedCodeListNames;
+  }
+
+  @Nonnull
+  private void _createCVAandGC (final RuleSourceCodeList aCodeList) throws Exception {
+    Utils.log ("Reading code list file " + aCodeList.getSourceFile ());
+    final SpreadsheetDocument aSpreadSheet = SpreadsheetDocument.loadDocument (aCodeList.getSourceFile ());
+
+    // Handle CVA sheets
+    final Set <String> aAllReferencedCodeListNames = _readCVAData (aCodeList, aSpreadSheet);
 
     // Create only the GC files that are referenced from the CVA sheet
     Utils.log ("  Reading codelists");
@@ -168,7 +199,7 @@ public final class CodeListCreator {
 
       // Add values
       final SimpleCodeList aSimpleCodeList = aFactory.createSimpleCodeList ();
-      nRow = 4;
+      int nRow = 4;
       while (!ODFUtils.isEmpty (aSheet, 0, nRow)) {
         final String sCode = ODFUtils.getText (aSheet, 0, nRow);
         final String sValue = ODFUtils.getText (aSheet, 1, nRow);
@@ -185,6 +216,11 @@ public final class CodeListCreator {
         aRow.getValue ().add (aValue);
 
         aSimpleCodeList.getRow ().add (aRow);
+
+        // In code list name, a code is used
+        if (m_aAllCodes.putSingle (sCodeListName, sCode).isUnchanged ())
+          throw new IllegalStateException ("Found duplicate value '" + sCode + "' in code list " + sCodeListName);
+
         ++nRow;
       }
       aGC.setSimpleCodeList (aSimpleCodeList);
@@ -194,18 +230,52 @@ public final class CodeListCreator {
     }
   }
 
-  private static Templates s_aCVA2SCH;
+  private void _createCodelistSchematron (final RuleSourceCodeList aCodeList) {
+    Utils.log ("  Writing Schematron code lists");
+    // For all transactions
+    for (final Map.Entry <String, CVAData> aEntry : m_aCVAs.entrySet ()) {
+      final String sTransaction = aEntry.getKey ();
+      final CVAData aCVAData = aEntry.getValue ();
 
-  private static void _createSchematronXSLTs (final RuleSourceCodeList aCodeList, final List <String> aUsedTransaction) throws TransformerException {
+      final File aSCHFile = aCodeList.getSchematronFile (sTransaction);
+      Utils.log ("    Creating " + aSCHFile.getName ());
+
+      // Create the XML document
+      final IMicroDocument aDoc = new MicroDocument ();
+      aDoc.appendComment ("This file is generated automatically! Do NOT edit!");
+      aDoc.appendComment ("Code list Schematron rules for " + sTransaction);
+      final IMicroElement ePattern = aDoc.appendElement (NS_SCHEMATRON, "pattern");
+      ePattern.setAttribute ("id", "Codes-" + sTransaction);
+
+      for (final CVAContextData aCVAContextData : aCVAData.getAllContexts ()) {
+        final IMicroElement eRule = ePattern.appendElement (NS_SCHEMATRON, "rule");
+        eRule.setAttribute ("context", aCVAContextData.getItem ());
+
+        final IMicroElement eAssert = eRule.appendElement (NS_SCHEMATRON, "assert");
+        eAssert.setAttribute ("flag", aCVAContextData.getSeverity ());
+        final Set <String> aMatchingCodes = m_aAllCodes.get (aCVAContextData.getCodeListName ());
+        final String sTest = "contains('\u007f" +
+                             StringHelper.getImploded ("\u007f", aMatchingCodes) +
+                             "\u007f',concat('\u007f',.,'\u007f'))";
+        eAssert.setAttribute ("test", sTest);
+        eAssert.appendText ("[" + aCVAContextData.getID () + "]-" + aCVAContextData.getMessage ());
+      }
+      if (SimpleFileIO.writeFile (aSCHFile, MicroWriter.getXMLString (aDoc), XMLWriterSettings.DEFAULT_XML_CHARSET_OBJ)
+                      .isFailure ())
+        throw new IllegalStateException ("Failed to write " + aSCHFile);
+    }
+  }
+
+  private void _createSchematronXSLTs (final RuleSourceCodeList aCodeList) throws TransformerException {
     Utils.log ("  Converting CVA files to Schematron XSLT");
-    // Create only once
+    // Create only once (caching)
     if (s_aCVA2SCH == null) {
       final TransformerFactory aTF = XMLTransformerFactory.createTransformerFactory (null,
                                                                                      new DefaultTransformURIResolver ());
       s_aCVA2SCH = aTF.newTemplates (TransformSourceFactory.create (new File ("src/test/resources/rule-utils/Crane-cva2schXSLT.xsl")));
     }
     // Convert the CVA files for all transactions
-    for (final String sTransaction : aUsedTransaction) {
+    for (final String sTransaction : m_aCVAs.keySet ()) {
       final File aCVAFile = aCodeList.getCVAFile (sTransaction);
       final File aResultXSLT = aCodeList.getXSLTFile (sTransaction);
       Utils.log ("    Creating " + aResultXSLT.getName ());
@@ -216,17 +286,14 @@ public final class CodeListCreator {
     }
   }
 
-  public static void createCodeLists (final List <RuleSourceItem> aRuleSourceItems) throws Exception {
-    for (final RuleSourceItem aRuleSourceItem : aRuleSourceItems) {
-      // Process all code lists
-      for (final RuleSourceCodeList aCodeList : aRuleSourceItem.getAllCodeLists ()) {
-        // Create .CVA and .GC files
-        final List <String> aUsedTransaction = new ArrayList <String> ();
-        _createCVAandGC (aCodeList, aUsedTransaction);
+  public void createCodeLists (final RuleSourceCodeList aCodeList) throws Exception {
+    // Create .CVA and .GC files
+    _createCVAandGC (aCodeList);
 
-        // Convert CVAs to Schematron XSLTs
-        _createSchematronXSLTs (aCodeList, aUsedTransaction);
-      }
-    }
+    // Create Schematron code list files
+    _createCodelistSchematron (aCodeList);
+
+    // Convert CVAs to Schematron XSLTs
+    _createSchematronXSLTs (aCodeList);
   }
 }

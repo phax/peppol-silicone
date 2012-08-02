@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import at.peppol.validation.tools.codelist.CodeListCreator;
+import at.peppol.validation.tools.codelist.RuleSourceCodeList;
 import at.peppol.validation.tools.sch.SchematronCreator;
 import at.peppol.validation.tools.sch.XSLTCreator;
 import at.peppol.validation.tools.utils.Utils;
@@ -29,8 +30,16 @@ public final class MainCreateValidationRules {
                                                                                     .addBussinessRule ("businessrules/biiprofiles-T14-BusinessRules-v01.ods")
                                                                                     .addBussinessRule ("businessrules/biiprofiles-T15-BusinessRules-v01.ods"));
     aRuleSourceItems.add (new RuleSourceItem (new File (aRuleSource, "biirules")).addCodeList ("businessrules/biirules-CodeLists-v01.ods")
+                                                                                 .addBussinessRule ("businessrules/biirules-T01-BusinessRules-v02.ods",
+                                                                                                    "T01")
+                                                                                 .addBussinessRule ("businessrules/biirules-T02-BusinessRules-v01.ods")
+                                                                                 .addBussinessRule ("businessrules/biirules-T03-BusinessRules-v01.ods")
                                                                                  .addBussinessRule ("businessrules/biirules-T10-BusinessRules-v02.ods",
-                                                                                                    "T10"));
+                                                                                                    "T10")
+                                                                                 .addBussinessRule ("businessrules/biirules-T14-BusinessRules-v01.ods",
+                                                                                                    "T14")
+                                                                                 .addBussinessRule ("businessrules/biirules-T15-BusinessRules-v01.ods",
+                                                                                                    "T15"));
     aRuleSourceItems.add (new RuleSourceItem (new File (aRuleSource, "dknat")).addBussinessRule ("businessrules/dknat-T10-BusinessRules-v01.ods"));
     aRuleSourceItems.add (new RuleSourceItem (new File (aRuleSource, "itnat")).addBussinessRule ("businessrules/itnat-T10-BusinessRules-v03.ods"));
     aRuleSourceItems.add (new RuleSourceItem (new File (aRuleSource, "nogov")).addBussinessRule ("businessrules/nogov-T10-BusinessRules-v01.ods")
@@ -42,7 +51,11 @@ public final class MainCreateValidationRules {
 
     if (true) {
       // Create all codelists (GC + CVA)
-      CodeListCreator.createCodeLists (aRuleSourceItems);
+      for (final RuleSourceItem aRuleSourceItem : aRuleSourceItems) {
+        // Process all code lists
+        for (final RuleSourceCodeList aCodeList : aRuleSourceItem.getAllCodeLists ())
+          new CodeListCreator ().createCodeLists (aCodeList);
+      }
     }
 
     if (true) {

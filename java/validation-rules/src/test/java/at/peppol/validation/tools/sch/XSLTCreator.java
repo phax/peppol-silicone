@@ -31,6 +31,10 @@ public final class XSLTCreator {
           Utils.log ("  Creating XSLT for " + aSCHFile.getName ());
 
           final ISchematronXSLTProvider aXSLTProvider = SchematronResourceSCHCache.createSchematronXSLTProvider (new FileSystemResource (aSCHFile));
+          if (aXSLTProvider == null) {
+            // Error message already emitted!
+            continue;
+          }
           final Document aXSLTDoc = aXSLTProvider.getXSLTDocument ();
 
           final File aXSLTFile = new File (FilenameHelper.getWithoutExtension (aSCHFile.getPath ()) + ".xslt");
