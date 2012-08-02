@@ -189,15 +189,14 @@ public final class SchematronCreator {
     // cell 0 (profile) is optional!
     while (!ODFUtils.isEmpty (aLastSheet, 1, nRow)) {
       final String sProfile = ODFUtils.getText (aLastSheet, 0, nRow);
+      if (StringHelper.hasText (sProfile))
+        throw new IllegalStateException ("Profile currently not supported! Found '" + sProfile + "'");
       final String sTransaction = ODFUtils.getText (aLastSheet, 1, nRow);
       final String sBindingName = ODFUtils.getText (aLastSheet, 2, nRow);
       final String sNamespace = ODFUtils.getText (aLastSheet, 3, nRow);
 
       final File aSCHFile = aBusinessRule.getSchematronAssemblyFile (sBindingName, sTransaction);
       Utils.log ("      Writing " + sBindingName + " Schematron assembly file " + aSCHFile.getName ());
-
-      if (StringHelper.hasText (sProfile))
-        throw new IllegalStateException ("Profile currently not supported! Found '" + sProfile + "'");
 
       final String sBindingPrefix = sBindingName.toLowerCase (Locale.US);
       final String sBindingUC = sBindingName.toUpperCase (Locale.US);
@@ -229,11 +228,6 @@ public final class SchematronCreator {
       IMicroElement ePhase = eSchema.appendElement (NS_SCHEMATRON, "phase");
       ePhase.setAttribute ("id", aBusinessRule.getID () + "_" + sTransaction + "_phase");
       ePhase.appendElement (NS_SCHEMATRON, "active").setAttribute ("pattern", sBindingUC + "-" + sTransaction);
-      if (StringHelper.hasText (sProfile)) {
-        ePhase = eSchema.appendElement (NS_SCHEMATRON, "phase");
-        ePhase.setAttribute ("id", aBusinessRule.getID () + "_" + sProfile + "_phase");
-        ePhase.appendElement (NS_SCHEMATRON, "active").setAttribute ("pattern", sBindingUC + "-" + sProfile);
-      }
       if (aBusinessRule.hasCodeList ()) {
         ePhase = eSchema.appendElement (NS_SCHEMATRON, "phase");
         ePhase.setAttribute ("id", "codelist_phase");
@@ -242,21 +236,14 @@ public final class SchematronCreator {
 
       // Includes
       IMicroElement eInclude = eSchema.appendElement (NS_SCHEMATRON, "include");
-      eInclude.setAttribute ("href", aBusinessRule.getSchematronAbstractFile (sTransaction).getName ());
-      if (StringHelper.hasText (sProfile)) {
-        eInclude = eSchema.appendElement (NS_SCHEMATRON, "include");
-        eInclude.setAttribute ("href", aBusinessRule.getSchematronAbstractFile (sProfile).getName ());
-      }
+      eInclude.setAttribute ("href", "include/" + aBusinessRule.getSchematronAbstractFile (sTransaction).getName ());
       if (aBusinessRule.hasCodeList ()) {
         eInclude = eSchema.appendElement (NS_SCHEMATRON, "include");
-        eInclude.setAttribute ("href", aBusinessRule.getSchematronCodeListFile ().getName ());
+        eInclude.setAttribute ("href", "include/" + aBusinessRule.getSchematronCodeListFile ().getName ());
       }
       eInclude = eSchema.appendElement (NS_SCHEMATRON, "include");
-      eInclude.setAttribute ("href", aBusinessRule.getSchematronBindingFile (sBindingName, sTransaction).getName ());
-      if (StringHelper.hasText (sProfile)) {
-        eInclude = eSchema.appendElement (NS_SCHEMATRON, "include");
-        eInclude.setAttribute ("href", aBusinessRule.getSchematronBindingFile (sBindingName, sProfile).getName ());
-      }
+      eInclude.setAttribute ("href", "include/" +
+                                     aBusinessRule.getSchematronBindingFile (sBindingName, sTransaction).getName ());
       if (SimpleFileIO.writeFile (aSCHFile, MicroWriter.getXMLString (aDoc), XMLWriterSettings.DEFAULT_XML_CHARSET_OBJ)
                       .isFailure ())
         throw new IllegalStateException ("Failed to write " + aSCHFile);

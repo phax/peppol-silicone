@@ -27,6 +27,7 @@ public final class RuleSourceBusinessRule {
     if (!aSourceFilename.isFile ())
       throw new IllegalArgumentException ("Source file does not exist: " + aSourceFilename);
     FileOperations.createDirIfNotExisting (aOutputDirectory);
+    FileOperations.createDirIfNotExisting (new File (aOutputDirectory, "include"));
     m_aSourceFile = aSourceFilename;
     m_aOutputDirectory = aOutputDirectory;
     m_sID = sID;
@@ -46,18 +47,18 @@ public final class RuleSourceBusinessRule {
 
   @Nonnull
   public File getSchematronAbstractFile (@Nonnull @Nonempty final String sTransaction) {
-    return new File (m_aOutputDirectory, m_sID + "-" + sTransaction + "-abstract.sch");
+    return new File (m_aOutputDirectory, "include/" + m_sID + "-" + sTransaction + "-abstract.sch");
   }
 
   @Nonnull
   public File getSchematronBindingFile (@Nonnull @Nonempty final String sBindingName,
                                         @Nonnull @Nonempty final String sTransaction) {
-    return new File (m_aOutputDirectory, m_sID + "-" + sBindingName + "-" + sTransaction + "-test.sch");
+    return new File (m_aOutputDirectory, "include/" + m_sID + "-" + sBindingName + "-" + sTransaction + "-test.sch");
   }
 
   @Nonnull
   public File getSchematronCodeListFile () {
-    return new File (m_aOutputDirectory, m_sID + "-" + m_sCodeListTransaction + "-codes.sch");
+    return new File (m_aOutputDirectory, "include/" + m_sID + "-" + m_sCodeListTransaction + "-codes.sch");
   }
 
   @Nonnull

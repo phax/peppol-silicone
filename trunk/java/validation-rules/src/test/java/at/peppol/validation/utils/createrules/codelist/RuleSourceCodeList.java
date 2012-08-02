@@ -21,6 +21,7 @@ public final class RuleSourceCodeList {
       throw new IllegalArgumentException ("Source file does not exist: " + aSourceFilename);
     FileOperations.createDirIfNotExisting (aCodeListOutputDirectory);
     FileOperations.createDirIfNotExisting (aSchematronOutputDirectory);
+    FileOperations.createDirIfNotExisting (new File (aSchematronOutputDirectory, "include"));
     m_aSourceFile = aSourceFilename;
     m_aCodeListOutputDirectory = aCodeListOutputDirectory;
     m_aSchematronOutputDirectory = aSchematronOutputDirectory;
@@ -49,6 +50,6 @@ public final class RuleSourceCodeList {
 
   @Nonnull
   public File getSchematronFile (@Nonnull @Nonempty final String sTransaction) {
-    return new File (m_aSchematronOutputDirectory, m_sID + "-" + sTransaction + "-codes.sch");
+    return new File (m_aSchematronOutputDirectory, "include/" + m_sID + "-" + sTransaction + "-codes.sch");
   }
 }
