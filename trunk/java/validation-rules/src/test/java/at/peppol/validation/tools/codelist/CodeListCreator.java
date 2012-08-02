@@ -53,7 +53,7 @@ import com.phloc.genericode.Genericode10Utils;
 public final class CodeListCreator {
   private CodeListCreator () {}
 
-  private static void _createCVAandGC (final RuleSourceCodeList aCodeList, final List <File> aAllCVAFiles) throws Exception {
+  private static void _createCVAandGC (final RuleSourceCodeList aCodeList, final List <String> aUsedTransaction) throws Exception {
     Utils.log ("Reading code list file " + aCodeList.getSourceFile ());
     final SpreadsheetDocument aSpreadSheet = SpreadsheetDocument.loadDocument (aCodeList.getSourceFile ());
 
@@ -89,7 +89,7 @@ public final class CodeListCreator {
     // Start creating CVA files (for each transaction)
     for (final CVAData aCVAData : aCVAs.values ()) {
       final File aCVAFile = aCodeList.getCVAFile (aCVAData.getTransaction ());
-      Utils.log ("    Creating " + aCVAFile);
+      Utils.log ("    Creating " + aCVAFile.getName ());
 
       final org.oasis.cva.v10.ObjectFactory aFactory = new org.oasis.cva.v10.ObjectFactory ();
       final ContextValueAssociation aCVA = aFactory.createContextValueAssociation ();
@@ -123,14 +123,15 @@ public final class CodeListCreator {
       aCVA.setContexts (aContexts);
       if (new CVA10Marshaller ().write (aCVA, aCVAFile).isFailure ())
         throw new IllegalStateException ("Failed to write " + aCVAFile);
-      aAllCVAFiles.add (aCVAFile);
+      aUsedTransaction.add (aCVAData.getTransaction ());
     }
 
     // Create only the GC files that are referenced from the CVA sheet
+    Utils.log ("  Reading codelists");
     for (final String sCodeListName : aAllReferencedCodeListNames) {
       final Table aSheet = aSpreadSheet.getSheetByName (sCodeListName);
       final File aGCFile = aCodeList.getGCFile (sCodeListName);
-      Utils.log ("  Creating codelist file " + aGCFile.getName ());
+      Utils.log ("    Creating " + aGCFile.getName ());
 
       // Read data
       final String sShortname = ODFUtils.getText (aSheet, 0, 1);
@@ -200,18 +201,21 @@ public final class CodeListCreator {
     for (final RuleSourceItem aRuleSourceItem : aRuleSourceItems) {
       // Process all code lists
       for (final RuleSourceCodeList aCodeList : aRuleSourceItem.getAllCodeLists ()) {
-        final List <File> aAllCVAFiles = new ArrayList <File> ();
+        final List <String> aUsedTransaction = new ArrayList <String> ();
 
         // Create .CVA and .GC files
-        _createCVAandGC (aCodeList, aAllCVAFiles);
+        _createCVAandGC (aCodeList, aUsedTransaction);
 
         // Convert CVAs to Schematron XSLTs
-        for (final File aCVAFile : aAllCVAFiles) {
-          Utils.log ("  Converting " + aCVAFile.getName () + " to Schematron XSLT");
+        Utils.log ("  Converting CVA files to Schematron XSLT");
+        for (final String sTransaction : aUsedTransaction) {
+          final File aCVAFile = aCodeList.getCVAFile (sTransaction);
+          Utils.log ("    Converting " + aCVAFile.getName ());
           final Transformer aTransformer = aTemplates.newTransformer ();
           final Document aSCHDoc = XMLFactory.newDocument ();
           aTransformer.transform (TransformSourceFactory.create (aCVAFile), new DOMResult (aSCHDoc));
-          SimpleFileIO.writeFile (new File (FilenameHelper.getWithoutExtension (aCVAFile) + ".sch.xslt"),
+          final File aResultXSLT = aCodeList.getXSLTFile (sTransaction);
+          SimpleFileIO.writeFile (aResultXSLT,
                                   XMLWriter.getXMLString (aSCHDoc),
                                   XMLWriterSettings.DEFAULT_XML_CHARSET_OBJ);
         }

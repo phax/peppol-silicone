@@ -6,7 +6,7 @@ import javax.annotation.concurrent.Immutable;
 import com.phloc.commons.annotations.Nonempty;
 
 @Immutable
-public final class RuleParam {
+final class RuleParam {
   private final String m_sRuleID;
   private final String m_sTest;
 
