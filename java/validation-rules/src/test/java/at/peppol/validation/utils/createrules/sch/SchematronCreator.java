@@ -1,4 +1,4 @@
-package at.peppol.validation.tools.sch;
+package at.peppol.validation.utils.createrules.sch;
 
 import java.io.File;
 import java.util.HashMap;
@@ -13,9 +13,9 @@ import org.odftoolkit.simple.SpreadsheetDocument;
 import org.odftoolkit.simple.table.Table;
 
 import at.peppol.validation.schematron.CSchematron;
-import at.peppol.validation.tools.RuleSourceItem;
-import at.peppol.validation.tools.utils.ODFUtils;
-import at.peppol.validation.tools.utils.Utils;
+import at.peppol.validation.utils.createrules.RuleSourceItem;
+import at.peppol.validation.utils.createrules.utils.ODFUtils;
+import at.peppol.validation.utils.createrules.utils.Utils;
 
 import com.phloc.commons.collections.multimap.IMultiMapListBased;
 import com.phloc.commons.collections.multimap.MultiHashMapArrayListBased;

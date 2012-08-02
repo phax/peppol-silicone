@@ -1,14 +1,14 @@
-package at.peppol.validation.tools;
+package at.peppol.validation.utils.createrules;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import at.peppol.validation.tools.codelist.CodeListCreator;
-import at.peppol.validation.tools.codelist.RuleSourceCodeList;
-import at.peppol.validation.tools.sch.SchematronCreator;
-import at.peppol.validation.tools.sch.XSLTCreator;
-import at.peppol.validation.tools.utils.Utils;
+import at.peppol.validation.utils.createrules.codelist.CodeListCreator;
+import at.peppol.validation.utils.createrules.codelist.RuleSourceCodeList;
+import at.peppol.validation.utils.createrules.sch.SchematronCreator;
+import at.peppol.validation.utils.createrules.sch.XSLTCreator;
+import at.peppol.validation.utils.createrules.utils.Utils;
 
 import com.phloc.commons.GlobalDebug;
 

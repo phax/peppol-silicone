@@ -1,4 +1,4 @@
-package at.peppol.validation.tools.codelist;
+package at.peppol.validation.utils.createrules.codelist;
 
 import java.io.File;
 import java.util.HashMap;
@@ -34,8 +34,8 @@ import org.odftoolkit.simple.table.Table;
 import org.w3c.dom.Document;
 
 import at.peppol.validation.schematron.CSchematron;
-import at.peppol.validation.tools.utils.ODFUtils;
-import at.peppol.validation.tools.utils.Utils;
+import at.peppol.validation.utils.createrules.utils.ODFUtils;
+import at.peppol.validation.utils.createrules.utils.Utils;
 
 import com.phloc.commons.collections.multimap.IMultiMapSetBased;
 import com.phloc.commons.collections.multimap.MultiTreeMapTreeSetBased;

@@ -1,4 +1,4 @@
-package at.peppol.validation.tools.sch;
+package at.peppol.validation.utils.createrules.sch;
 
 import java.io.File;
 import java.util.List;
@@ -9,8 +9,8 @@ import org.w3c.dom.Document;
 
 import at.peppol.validation.schematron.xslt.ISchematronXSLTProvider;
 import at.peppol.validation.schematron.xslt.SchematronResourceSCHCache;
-import at.peppol.validation.tools.RuleSourceItem;
-import at.peppol.validation.tools.utils.Utils;
+import at.peppol.validation.utils.createrules.RuleSourceItem;
+import at.peppol.validation.utils.createrules.utils.Utils;
 
 import com.phloc.commons.io.file.FilenameHelper;
 import com.phloc.commons.io.file.SimpleFileIO;
