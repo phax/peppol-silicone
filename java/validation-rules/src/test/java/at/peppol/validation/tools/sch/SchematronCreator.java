@@ -134,14 +134,14 @@ public final class SchematronCreator {
         final String sContext = aEntryContext.getKey ();
         if (!_containsRuleID (aFoundRules, Utils.makeID (sContext))) {
           // Create an invalid context
-          Utils.log ("      Missing parameter for context '" + sContext + "'");
+          Utils.warn ("      Missing parameter for context '" + sContext + "'");
           aRules.putSingle (sTransaction, new RuleParam (sContext, "//NonExistingDummyNode"));
         }
         for (final RuleAssertion aRuleAssertion : aEntryContext.getValue ()) {
           final String sRuleID = aRuleAssertion.getRuleID ();
           if (!_containsRuleID (aFoundRules, sRuleID)) {
             // No test needed
-            Utils.log ("      Missing parameter for rule '" + sRuleID + "'");
+            Utils.warn ("      Missing parameter for rule '" + sRuleID + "'");
             aRules.putSingle (sTransaction, new RuleParam (sRuleID, "./false"));
           }
         }
@@ -156,6 +156,8 @@ public final class SchematronCreator {
                  sBindingName +
                  " Schematron file " +
                  aSCHFile.getName () +
+                 " for transaction " +
+                 sTransaction +
                  " with " +
                  aRuleEntry.getValue ().size () +
                  " test(s)");
@@ -275,7 +277,6 @@ public final class SchematronCreator {
         // Read ODS file
         Utils.log ("  Reading business rule source file " + aBusinessRule.getSourceFile ());
         final SpreadsheetDocument aSpreadSheet = SpreadsheetDocument.loadDocument (aBusinessRule.getSourceFile ());
-        Utils.log ("    Identified " + (aSpreadSheet.getSheetCount () - 2) + " syntax binding(s)");
 
         final SchematronCreator aSC = new SchematronCreator ();
 
