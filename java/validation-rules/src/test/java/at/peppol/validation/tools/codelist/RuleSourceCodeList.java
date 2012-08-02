@@ -48,4 +48,9 @@ public final class RuleSourceCodeList {
   public File getCVAFile (@Nonnull @Nonempty final String sTransaction) {
     return new File (m_aOutputDirectory, m_sID + "-" + sTransaction + "-codes.cva");
   }
+
+  @Nonnull
+  public File getXSLTFile (@Nonnull @Nonempty final String sTransaction) {
+    return new File (m_aOutputDirectory, m_sID + "-" + sTransaction + "-codes.sch.xslt");
+  }
 }

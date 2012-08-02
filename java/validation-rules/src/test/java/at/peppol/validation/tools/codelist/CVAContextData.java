@@ -8,7 +8,7 @@ import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.string.StringHelper;
 
 @Immutable
-public final class CVAContextData {
+final class CVAContextData {
   private final String m_sID;
   private final String m_sItem;
   private final String m_sScope;

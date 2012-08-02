@@ -6,7 +6,7 @@ import javax.annotation.concurrent.Immutable;
 import com.phloc.commons.annotations.Nonempty;
 
 @Immutable
-public final class RuleAssertion {
+final class RuleAssertion {
   private final String m_sRuleID;
   private final String m_sMessage;
   private final String m_sSeverity;
