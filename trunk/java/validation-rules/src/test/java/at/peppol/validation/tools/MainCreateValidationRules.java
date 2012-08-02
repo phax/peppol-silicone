@@ -1,18 +1,17 @@
 package at.peppol.validation.tools;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jopendocument.dom.spreadsheet.Sheet;
-import org.jopendocument.dom.spreadsheet.SpreadSheet;
+import org.odftoolkit.simple.SpreadsheetDocument;
+import org.odftoolkit.simple.table.Table;
 
 import at.peppol.validation.tools.sch.SchematronCreator;
 import at.peppol.validation.tools.sch.XSLTCreator;
 
 public final class MainCreateValidationRules {
-  public static void main (final String [] args) throws IOException {
+  public static void main (final String [] args) throws Exception {
     // Base directory for source rules
     final File aRuleSource = new File ("src/test/resources/rule-source");
 
@@ -44,22 +43,22 @@ public final class MainCreateValidationRules {
       // Process all code lists
       for (final RuleSourceCodeList aCodeList : aRuleSourceItem.getAllCodeLists ()) {
         Utils.log ("Reading code list file " + aCodeList.getSourceFile ());
-        final SpreadSheet aSpreadSheet = SpreadSheet.createFromFile (aCodeList.getSourceFile ());
+        final SpreadsheetDocument aSpreadSheet = SpreadsheetDocument.loadDocument (aCodeList.getSourceFile ());
         for (int nSheetIndex = 0; nSheetIndex < aSpreadSheet.getSheetCount (); ++nSheetIndex) {
-          final Sheet aSheet = aSpreadSheet.getSheet (nSheetIndex);
-          final String sSheetName = aSheet.getName ();
+          final Table aSheet = aSpreadSheet.getSheetByIndex (nSheetIndex);
+          final String sSheetName = aSheet.getTableName ();
           if (!sSheetName.equals ("CVA")) {
-            final String sShortname = aSheet.getCellAt (0, 1).getTextValue ();
-            final String sVersion = aSheet.getCellAt (1, 1).getTextValue ();
-            final String sAgency = aSheet.getCellAt (2, 1).getTextValue ();
-            final String sLocationURI = aSheet.getCellAt (3, 1).getTextValue ();
-            final String sLocale = aSheet.getCellAt (4, 1).getTextValue ();
+            final String sShortname = aSheet.getCellByPosition (0, 1).getStringValue ();
+            final String sVersion = aSheet.getCellByPosition (1, 1).getStringValue ();
+            final String sAgency = aSheet.getCellByPosition (2, 1).getStringValue ();
+            final String sLocationURI = aSheet.getCellByPosition (3, 1).getStringValue ();
+            final String sLocale = aSheet.getCellByPosition (4, 1).getStringValue ();
           }
         }
       }
     }
 
-    if (false) {
+    if (true) {
       // Create Schematron
       SchematronCreator.createSchematrons (aRuleSourceItems);
 

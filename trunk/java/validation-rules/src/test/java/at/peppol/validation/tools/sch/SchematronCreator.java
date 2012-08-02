@@ -1,14 +1,14 @@
 package at.peppol.validation.tools.sch;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import org.jopendocument.dom.spreadsheet.Sheet;
-import org.jopendocument.dom.spreadsheet.SpreadSheet;
+import org.odftoolkit.simple.SpreadsheetDocument;
+import org.odftoolkit.simple.table.Cell;
+import org.odftoolkit.simple.table.Table;
 
 import at.peppol.validation.tools.RuleSourceBusinessRule;
 import at.peppol.validation.tools.RuleSourceItem;
@@ -31,17 +31,21 @@ public final class SchematronCreator {
     return s.replaceAll ("\\b[ \\t]+\\b", "_");
   }
 
+  private static boolean _isEmpty (final Cell c) {
+    return c.getValueType () == null;
+  }
+
   private static void _brExtractAbstractRules (final RuleSourceBusinessRule aBusinessRule,
-                                               final SpreadSheet aSpreadSheet) {
-    final Sheet aFirstSheet = aSpreadSheet.getSheet (0);
+                                               final SpreadsheetDocument aSpreadSheet) {
+    final Table aFirstSheet = aSpreadSheet.getSheetByIndex (0);
     int nRow = 1;
     final Map <String, IMultiMapListBased <String, RuleAssertion>> aAbstractRules = new HashMap <String, IMultiMapListBased <String, RuleAssertion>> ();
-    while (!aFirstSheet.getCellAt (0, nRow).isEmpty ()) {
-      final String sRuleID = aFirstSheet.getCellAt (0, nRow).getTextValue ();
-      final String sMessage = aFirstSheet.getCellAt (1, nRow).getTextValue ();
-      final String sContext = aFirstSheet.getCellAt (2, nRow).getTextValue ();
-      final String sSeverity = aFirstSheet.getCellAt (3, nRow).getTextValue ();
-      final String sTransaction = aFirstSheet.getCellAt (4, nRow).getTextValue ();
+    while (!_isEmpty (aFirstSheet.getCellByPosition (0, nRow))) {
+      final String sRuleID = aFirstSheet.getCellByPosition (0, nRow).getStringValue ();
+      final String sMessage = aFirstSheet.getCellByPosition (1, nRow).getStringValue ();
+      final String sContext = aFirstSheet.getCellByPosition (2, nRow).getStringValue ();
+      final String sSeverity = aFirstSheet.getCellByPosition (3, nRow).getStringValue ();
+      final String sTransaction = aFirstSheet.getCellByPosition (4, nRow).getStringValue ();
 
       // Save in nested maps
       IMultiMapListBased <String, RuleAssertion> aTransactionRules = aAbstractRules.get (sTransaction);
@@ -89,16 +93,16 @@ public final class SchematronCreator {
     }
   }
 
-  private static void _brExtractBindingTests (final RuleSourceBusinessRule aBusinessRule, final Sheet aSheet) {
-    final String sBindingName = aSheet.getName ().toUpperCase (Locale.US);
+  private static void _brExtractBindingTests (final RuleSourceBusinessRule aBusinessRule, final Table aSheet) {
+    final String sBindingName = aSheet.getTableName ().toUpperCase (Locale.US);
     Utils.log ("    Handling sheet for binding '" + sBindingName + "'");
     int nRow = 1;
     final IMultiMapListBased <String, RuleParam> aRules = new MultiHashMapArrayListBased <String, RuleParam> ();
-    while (!aSheet.getCellAt (0, nRow).isEmpty ()) {
-      final String sTransaction = aSheet.getCellAt (0, nRow).getTextValue ();
-      final String sRuleID = aSheet.getCellAt (1, nRow).getTextValue ();
-      String sTest = aSheet.getCellAt (2, nRow).getTextValue ();
-      final String sPrerequisite = aSheet.getCellAt (3, nRow).getTextValue ();
+    while (!_isEmpty (aSheet.getCellByPosition (0, nRow))) {
+      final String sTransaction = aSheet.getCellByPosition (0, nRow).getStringValue ();
+      final String sRuleID = aSheet.getCellByPosition (1, nRow).getStringValue ();
+      String sTest = aSheet.getCellByPosition (2, nRow).getStringValue ();
+      final String sPrerequisite = aSheet.getCellByPosition (3, nRow).getStringValue ();
 
       if (StringHelper.hasText (sPrerequisite))
         sTest += " and " + sPrerequisite + " or not (" + sPrerequisite + ")";
@@ -133,17 +137,18 @@ public final class SchematronCreator {
     }
   }
 
-  private static void _brCreateAssemblyFiles (final RuleSourceBusinessRule aBusinessRule, final SpreadSheet aSpreadSheet) {
+  private static void _brCreateAssemblyFiles (final RuleSourceBusinessRule aBusinessRule,
+                                              final SpreadsheetDocument aSpreadSheet) {
     // Create assembled Schematron
     Utils.log ("    Creating assembly Schematron file(s)");
-    final Sheet aLastSheet = aSpreadSheet.getSheet (aSpreadSheet.getSheetCount () - 1);
+    final Table aLastSheet = aSpreadSheet.getSheetByIndex (aSpreadSheet.getSheetCount () - 1);
     int nRow = 1;
     // cell 0 (profile) is optional!
-    while (nRow < aLastSheet.getRowCount () && !aLastSheet.getCellAt (1, nRow).isEmpty ()) {
-      final String sProfile = aLastSheet.getCellAt (0, nRow).getTextValue ();
-      final String sTransaction = aLastSheet.getCellAt (1, nRow).getTextValue ();
-      final String sBindingName = aLastSheet.getCellAt (2, nRow).getTextValue ();
-      final String sNamespace = aLastSheet.getCellAt (3, nRow).getTextValue ();
+    while (nRow < aLastSheet.getRowCount () && !_isEmpty (aLastSheet.getCellByPosition (1, nRow))) {
+      final String sProfile = aLastSheet.getCellByPosition (0, nRow).getStringValue ();
+      final String sTransaction = aLastSheet.getCellByPosition (1, nRow).getStringValue ();
+      final String sBindingName = aLastSheet.getCellByPosition (2, nRow).getStringValue ();
+      final String sNamespace = aLastSheet.getCellByPosition (3, nRow).getStringValue ();
 
       final File aSCHFile = aBusinessRule.getSchematronAssemblyFile (sBindingName, sTransaction);
       Utils.log ("      Writing " + sBindingName + " Schematron assembly file " + aSCHFile.getName ());
@@ -213,7 +218,7 @@ public final class SchematronCreator {
     }
   }
 
-  public static void createSchematrons (final List <RuleSourceItem> aRuleSourceItems) throws IOException {
+  public static void createSchematrons (final List <RuleSourceItem> aRuleSourceItems) throws Exception {
     for (final RuleSourceItem aRuleSourceItem : aRuleSourceItems) {
       Utils.log ("Creating Schematron files for " + aRuleSourceItem.getID ());
 
@@ -221,7 +226,7 @@ public final class SchematronCreator {
       for (final RuleSourceBusinessRule aBusinessRule : aRuleSourceItem.getAllBusinessRules ()) {
         // Read ODS file
         Utils.log ("  Reading business rule source file " + aBusinessRule.getSourceFile ());
-        final SpreadSheet aSpreadSheet = SpreadSheet.createFromFile (aBusinessRule.getSourceFile ());
+        final SpreadsheetDocument aSpreadSheet = SpreadsheetDocument.loadDocument (aBusinessRule.getSourceFile ());
         Utils.log ("    Identified " + (aSpreadSheet.getSheetCount () - 2) + " syntax binding(s)");
 
         // Read abstract rules
@@ -230,7 +235,7 @@ public final class SchematronCreator {
         // Skip the first sheet (abstract rules) and skip the last sheet
         // (transaction information)
         for (int nSheetIndex = 1; nSheetIndex < aSpreadSheet.getSheetCount () - 1; ++nSheetIndex) {
-          final Sheet aSheet = aSpreadSheet.getSheet (nSheetIndex);
+          final Table aSheet = aSpreadSheet.getSheetByIndex (nSheetIndex);
           _brExtractBindingTests (aBusinessRule, aSheet);
         }
 
