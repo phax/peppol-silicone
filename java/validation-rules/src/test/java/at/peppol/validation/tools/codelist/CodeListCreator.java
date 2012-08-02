@@ -3,6 +3,8 @@ package at.peppol.validation.tools.codelist;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import javax.annotation.concurrent.Immutable;
 
@@ -23,6 +25,8 @@ import at.peppol.validation.tools.RuleSourceItem;
 import at.peppol.validation.tools.Utils;
 import at.peppol.validation.tools.sch.odf.ODFUtils;
 
+import com.phloc.commons.microdom.IMicroDocument;
+import com.phloc.commons.microdom.impl.MicroDocument;
 import com.phloc.genericode.Genericode10CodeListMarshaller;
 import com.phloc.genericode.Genericode10Utils;
 
@@ -42,6 +46,8 @@ public final class CodeListCreator {
         for (int nSheetIndex = 0; nSheetIndex < aSpreadSheet.getSheetCount (); ++nSheetIndex) {
           final Table aSheet = aSpreadSheet.getSheetByIndex (nSheetIndex);
           final String sSheetName = aSheet.getTableName ();
+
+          // Ignore CVA sheet
           if (!sSheetName.equals ("CVA")) {
             final File aGCFile = aCodeList.getGCFile (sSheetName);
             Utils.log ("  Creating codelist file " + aGCFile.getName ());
@@ -51,7 +57,7 @@ public final class CodeListCreator {
             final String sLocationURI = ODFUtils.getText (aSheet, 3, 1);
             // final String sLocale = _getText (aSheet, 4, 1);
 
-            // Start creating codelist
+            // Start creating Genericode
             final CodeListDocument aGC = aFactory.createCodeListDocument ();
 
             // create identification
@@ -105,10 +111,12 @@ public final class CodeListCreator {
           }
         }
 
+        // Handle CVA sheets
         final Table aCVASheet = aSpreadSheet.getSheetByName ("CVA");
         if (aCVASheet != null) {
-          Utils.log ("  CVA codelist!");
+          Utils.log ("  Creating CVAs");
           int nRow = 2;
+          final Map <String, CVA> aCVAs = new TreeMap <String, CVA> ();
           while (!ODFUtils.isEmpty (aCVASheet, 0, nRow)) {
             final String sTransaction = ODFUtils.getText (aCVASheet, 0, nRow);
             final String sID = ODFUtils.getText (aCVASheet, 1, nRow);
@@ -117,7 +125,25 @@ public final class CodeListCreator {
             final String sValue = ODFUtils.getText (aCVASheet, 4, nRow);
             final String sMessage = ODFUtils.getText (aCVASheet, 5, nRow);
             final String sSeverity = ODFUtils.getText (aCVASheet, 6, nRow);
+
+            CVA aCVA = aCVAs.get (sTransaction);
+            if (aCVA == null) {
+              aCVA = new CVA (sTransaction, aGCFiles);
+              aCVAs.put (sTransaction, aCVA);
+            }
+            aCVA.addContext (sID, sItem, sScope, sValue, sSeverity, sMessage);
+
             ++nRow;
+          }
+
+          // Start creating CVA files
+          for (final CVA aCVA : aCVAs.values ()) {
+            final File aCVAFile = aCodeList.getCVAFile (aCVA.getTransaction ());
+            Utils.log ("    Creating " + aCVAFile);
+
+            final IMicroDocument aDoc = new MicroDocument ();
+            aDoc.appendComment ("This file is generated automatically! Do NOT edit!");
+            aDoc.appendComment ("CVA file for " + aCodeList.getID () + " and transaction " + aCVA.getTransaction ());
           }
         }
       }
