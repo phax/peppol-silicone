@@ -1,4 +1,4 @@
-package at.peppol.validation.tools.sch;
+package at.peppol.validation.tools;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -14,6 +14,7 @@ import com.phloc.commons.id.IHasID;
 public final class RuleSourceItem implements IHasID <String> {
   private final File m_aDirectory;
   private final String m_sID;
+  private final List <RuleSourceCodeList> m_aCodeLists = new ArrayList <RuleSourceCodeList> ();
   private final List <RuleSourceBusinessRule> m_aBusinessRules = new ArrayList <RuleSourceBusinessRule> ();
 
   public RuleSourceItem (@Nonnull final File aDirectory) {
@@ -21,6 +22,13 @@ public final class RuleSourceItem implements IHasID <String> {
       throw new IllegalArgumentException (aDirectory + " is not a directory!");
     m_aDirectory = aDirectory;
     m_sID = aDirectory.getName ().toUpperCase (Locale.US);
+  }
+
+  @Nonnull
+  public RuleSourceItem addCodeList (@Nonnull @Nonempty final String sSourceFilename) {
+    m_aCodeLists.add (new RuleSourceCodeList (new File (m_aDirectory, sSourceFilename), new File (m_aDirectory,
+                                                                                                  "codelist"), m_sID));
+    return this;
   }
 
   @Nonnull
@@ -39,7 +47,12 @@ public final class RuleSourceItem implements IHasID <String> {
   }
 
   @Nonnull
-  public List <RuleSourceBusinessRule> getAllBusinessRuleFiles () {
+  public List <RuleSourceCodeList> getAllCodeLists () {
+    return ContainerHelper.newList (m_aCodeLists);
+  }
+
+  @Nonnull
+  public List <RuleSourceBusinessRule> getAllBusinessRules () {
     return ContainerHelper.newList (m_aBusinessRules);
   }
 }
