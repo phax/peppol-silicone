@@ -7,6 +7,7 @@ import javax.annotation.concurrent.Immutable;
 
 import org.w3c.dom.Document;
 
+import at.peppol.validation.schematron.xslt.ISchematronXSLTProvider;
 import at.peppol.validation.schematron.xslt.SchematronResourceSCHCache;
 import at.peppol.validation.tools.RuleSourceItem;
 import at.peppol.validation.tools.Utils;
@@ -28,10 +29,9 @@ public final class XSLTCreator {
       for (final RuleSourceBusinessRule aBusinessRule : aRuleSourceItem.getAllBusinessRules ())
         for (final File aSCHFile : aBusinessRule.getAllResultSchematronFiles ()) {
           Utils.log ("  Creating XSLT for " + aSCHFile.getName ());
-          final Document aXSLTDoc = SchematronResourceSCHCache.createSchematronXSLTProvider (new FileSystemResource (aSCHFile),
-                                                                                             null,
-                                                                                             null)
-                                                              .getXSLTDocument ();
+
+          final ISchematronXSLTProvider aXSLTProvider = SchematronResourceSCHCache.createSchematronXSLTProvider (new FileSystemResource (aSCHFile));
+          final Document aXSLTDoc = aXSLTProvider.getXSLTDocument ();
 
           final File aXSLTFile = new File (FilenameHelper.getWithoutExtension (aSCHFile.getPath ()) + ".xslt");
           if (SimpleFileIO.writeFile (aXSLTFile,

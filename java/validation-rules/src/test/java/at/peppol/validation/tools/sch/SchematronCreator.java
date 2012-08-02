@@ -157,6 +157,9 @@ public final class SchematronCreator {
       final File aSCHFile = aBusinessRule.getSchematronAssemblyFile (sBindingName, sTransaction);
       Utils.log ("      Writing " + sBindingName + " Schematron assembly file " + aSCHFile.getName ());
 
+      if (StringHelper.hasText (sProfile))
+        throw new IllegalStateException ("Profile currently not supported! Found '" + sProfile + "'");
+
       final String sBindingPrefix = sBindingName.toLowerCase (Locale.US);
       final IMicroDocument aDoc = new MicroDocument ();
       aDoc.appendComment ("This file is generated automatically! Do NOT edit!");
@@ -203,15 +206,15 @@ public final class SchematronCreator {
         eInclude = eSchema.appendElement (NS_SCHEMATRON, "include");
         eInclude.setAttribute ("href", aBusinessRule.getSchematronAbstractFile (sProfile).getName ());
       }
+      if (aBusinessRule.hasCodeList ()) {
+        eInclude = eSchema.appendElement (NS_SCHEMATRON, "include");
+        eInclude.setAttribute ("href", aBusinessRule.getSchematronCodeListFile ().getName ());
+      }
       eInclude = eSchema.appendElement (NS_SCHEMATRON, "include");
       eInclude.setAttribute ("href", aBusinessRule.getSchematronBindingFile (sBindingName, sTransaction).getName ());
       if (StringHelper.hasText (sProfile)) {
         eInclude = eSchema.appendElement (NS_SCHEMATRON, "include");
         eInclude.setAttribute ("href", aBusinessRule.getSchematronBindingFile (sBindingName, sProfile).getName ());
-      }
-      if (aBusinessRule.hasCodeList ()) {
-        eInclude = eSchema.appendElement (NS_SCHEMATRON, "include");
-        eInclude.setAttribute ("href", aBusinessRule.getSchematronCodeListFile ().getName ());
       }
       if (SimpleFileIO.writeFile (aSCHFile, MicroWriter.getXMLString (aDoc), XMLWriterSettings.DEFAULT_XML_CHARSET_OBJ)
                       .isFailure ())
