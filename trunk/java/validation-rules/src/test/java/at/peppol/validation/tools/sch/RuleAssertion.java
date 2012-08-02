@@ -3,6 +3,8 @@ package at.peppol.validation.tools.sch;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
+import at.peppol.validation.tools.utils.Utils;
+
 import com.phloc.commons.annotations.Nonempty;
 
 @Immutable
@@ -14,7 +16,7 @@ final class RuleAssertion {
   public RuleAssertion (@Nonnull @Nonempty final String sRuleID,
                         @Nonnull @Nonempty final String sMessage,
                         @Nonnull @Nonempty final String sSeverity) {
-    m_sRuleID = sRuleID;
+    m_sRuleID = Utils.makeID (sRuleID);
     m_sMessage = sMessage;
     m_sSeverity = sSeverity;
   }

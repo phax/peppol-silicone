@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
 import org.odftoolkit.simple.SpreadsheetDocument;
@@ -30,17 +31,14 @@ import com.phloc.commons.xml.serialize.XMLWriterSettings;
 public final class SchematronCreator {
   private static final String NS_SCHEMATRON = CSchematron.NAMESPACE_SCHEMATRON;
 
+  // Map from transaction to Map from context to list of assertions
+  final Map <String, IMultiMapListBased <String, RuleAssertion>> m_aAbstractRules = new HashMap <String, IMultiMapListBased <String, RuleAssertion>> ();
+
   private SchematronCreator () {}
 
-  private static String _makeID (final String s) {
-    return s.replaceAll ("\\b[ \\t]+\\b", "_");
-  }
-
-  private static void _brExtractAbstractRules (final RuleSourceBusinessRule aBusinessRule,
-                                               final SpreadsheetDocument aSpreadSheet) {
+  private void _extractAbstractRules (final RuleSourceBusinessRule aBusinessRule, final SpreadsheetDocument aSpreadSheet) {
     final Table aFirstSheet = aSpreadSheet.getSheetByIndex (0);
     int nRow = 1;
-    final Map <String, IMultiMapListBased <String, RuleAssertion>> aAbstractRules = new HashMap <String, IMultiMapListBased <String, RuleAssertion>> ();
     while (!ODFUtils.isEmpty (aFirstSheet, 0, nRow)) {
       final String sRuleID = ODFUtils.getText (aFirstSheet, 0, nRow);
       final String sMessage = ODFUtils.getText (aFirstSheet, 1, nRow);
@@ -49,10 +47,10 @@ public final class SchematronCreator {
       final String sTransaction = ODFUtils.getText (aFirstSheet, 4, nRow);
 
       // Save in nested maps
-      IMultiMapListBased <String, RuleAssertion> aTransactionRules = aAbstractRules.get (sTransaction);
+      IMultiMapListBased <String, RuleAssertion> aTransactionRules = m_aAbstractRules.get (sTransaction);
       if (aTransactionRules == null) {
         aTransactionRules = new MultiHashMapArrayListBased <String, RuleAssertion> ();
-        aAbstractRules.put (sTransaction, aTransactionRules);
+        m_aAbstractRules.put (sTransaction, aTransactionRules);
       }
       aTransactionRules.putSingle (sContext, new RuleAssertion (sRuleID, sMessage, sSeverity));
 
@@ -60,8 +58,11 @@ public final class SchematronCreator {
       ++nRow;
     }
 
+    if (m_aAbstractRules.isEmpty ())
+      throw new IllegalStateException ("No abstract rules found!");
+
     // Now iterate and assemble Schematron
-    for (final Map.Entry <String, IMultiMapListBased <String, RuleAssertion>> aRuleEntry : aAbstractRules.entrySet ()) {
+    for (final Map.Entry <String, IMultiMapListBased <String, RuleAssertion>> aRuleEntry : m_aAbstractRules.entrySet ()) {
       final String sTransaction = aRuleEntry.getKey ();
       final File aSCHFile = aBusinessRule.getSchematronAbstractFile (sTransaction);
       Utils.log ("    Writing abstract Schematron file " +
@@ -78,12 +79,12 @@ public final class SchematronCreator {
       ePattern.setAttribute ("abstract", "true");
       ePattern.setAttribute ("id", sTransaction);
       for (final Map.Entry <String, List <RuleAssertion>> aPatternEntry : aRuleEntry.getValue ().entrySet ()) {
-        final String sContext = '$' + _makeID (aPatternEntry.getKey ());
+        final String sContext = '$' + Utils.makeID (aPatternEntry.getKey ());
         final IMicroElement eRule = ePattern.appendElement (NS_SCHEMATRON, "rule");
         eRule.setAttribute ("context", sContext);
 
         for (final RuleAssertion aRuleAssertion : aPatternEntry.getValue ()) {
-          final String sTestID = _makeID (aRuleAssertion.getRuleID ());
+          final String sTestID = aRuleAssertion.getRuleID ();
           final IMicroElement eAssert = eRule.appendElement (NS_SCHEMATRON, "assert");
           eAssert.setAttribute ("flag", aRuleAssertion.getSeverity ());
           eAssert.setAttribute ("test", "$" + sTestID);
@@ -96,7 +97,14 @@ public final class SchematronCreator {
     }
   }
 
-  private static void _brExtractBindingTests (final RuleSourceBusinessRule aBusinessRule, final Table aSheet) {
+  private static boolean _containsRuleID (@Nonnull final List <RuleParam> aRuleParams, final String sRuleID) {
+    for (final RuleParam aRuleParam : aRuleParams)
+      if (aRuleParam.getRuleID ().equals (sRuleID))
+        return true;
+    return false;
+  }
+
+  private void _extractBindingTests (final RuleSourceBusinessRule aBusinessRule, final Table aSheet) {
     final String sBindingName = aSheet.getTableName ();
     Utils.log ("    Handling sheet for binding '" + sBindingName + "'");
     int nRow = 1;
@@ -111,6 +119,33 @@ public final class SchematronCreator {
         sTest += " and " + sPrerequisite + " or not (" + sPrerequisite + ")";
       aRules.putSingle (sTransaction, new RuleParam (sRuleID, sTest));
       nRow++;
+    }
+
+    // Check if all required rules derived from the abstract rules are present
+    for (final Map.Entry <String, IMultiMapListBased <String, RuleAssertion>> aEntryTransaction : m_aAbstractRules.entrySet ()) {
+      final String sTransaction = aEntryTransaction.getKey ();
+      final List <RuleParam> aFoundRules = aRules.get (sTransaction);
+      if (aFoundRules == null)
+        throw new IllegalStateException ("Found no rules for transaction " +
+                                         sTransaction +
+                                         " and binding " +
+                                         sBindingName);
+      for (final Map.Entry <String, List <RuleAssertion>> aEntryContext : aEntryTransaction.getValue ().entrySet ()) {
+        final String sContext = aEntryContext.getKey ();
+        if (!_containsRuleID (aFoundRules, Utils.makeID (sContext))) {
+          // Create an invalid context
+          Utils.log ("      Missing parameter for context '" + sContext + "'");
+          aRules.putSingle (sTransaction, new RuleParam (sContext, "//NonExistingDummyNode"));
+        }
+        for (final RuleAssertion aRuleAssertion : aEntryContext.getValue ()) {
+          final String sRuleID = aRuleAssertion.getRuleID ();
+          if (!_containsRuleID (aFoundRules, sRuleID)) {
+            // No test needed
+            Utils.log ("      Missing parameter for rule '" + sRuleID + "'");
+            aRules.putSingle (sTransaction, new RuleParam (sRuleID, "./false"));
+          }
+        }
+      }
     }
 
     // Now iterate rules and assemble Schematron
@@ -134,7 +169,7 @@ public final class SchematronCreator {
       ePattern.setAttribute ("id", sBindingName.toUpperCase (Locale.US) + "-" + sTransaction);
       for (final RuleParam aRuleParam : aRuleEntry.getValue ()) {
         final IMicroElement eParam = ePattern.appendElement (NS_SCHEMATRON, "param");
-        eParam.setAttribute ("name", _makeID (aRuleParam.getRuleID ()));
+        eParam.setAttribute ("name", aRuleParam.getRuleID ());
         eParam.setAttribute ("value", aRuleParam.getTest ());
       }
       if (SimpleFileIO.writeFile (aSCHFile, MicroWriter.getXMLString (aDoc), XMLWriterSettings.DEFAULT_XML_CHARSET_OBJ)
@@ -143,8 +178,8 @@ public final class SchematronCreator {
     }
   }
 
-  private static void _brCreateAssemblyFiles (final RuleSourceBusinessRule aBusinessRule,
-                                              final SpreadsheetDocument aSpreadSheet) {
+  private static void _createAssemblyFiles (final RuleSourceBusinessRule aBusinessRule,
+                                            final SpreadsheetDocument aSpreadSheet) {
     // Create assembled Schematron
     Utils.log ("    Creating assembly Schematron file(s)");
     final Table aLastSheet = aSpreadSheet.getSheetByIndex (aSpreadSheet.getSheetCount () - 1);
@@ -242,17 +277,19 @@ public final class SchematronCreator {
         final SpreadsheetDocument aSpreadSheet = SpreadsheetDocument.loadDocument (aBusinessRule.getSourceFile ());
         Utils.log ("    Identified " + (aSpreadSheet.getSheetCount () - 2) + " syntax binding(s)");
 
+        final SchematronCreator aSC = new SchematronCreator ();
+
         // Read abstract rules
-        _brExtractAbstractRules (aBusinessRule, aSpreadSheet);
+        aSC._extractAbstractRules (aBusinessRule, aSpreadSheet);
 
         // Skip the first sheet (abstract rules) and skip the last sheet
         // (transaction information)
         for (int nSheetIndex = 1; nSheetIndex < aSpreadSheet.getSheetCount () - 1; ++nSheetIndex) {
           final Table aSheet = aSpreadSheet.getSheetByIndex (nSheetIndex);
-          _brExtractBindingTests (aBusinessRule, aSheet);
+          aSC._extractBindingTests (aBusinessRule, aSheet);
         }
 
-        _brCreateAssemblyFiles (aBusinessRule, aSpreadSheet);
+        _createAssemblyFiles (aBusinessRule, aSpreadSheet);
       }
     }
   }
