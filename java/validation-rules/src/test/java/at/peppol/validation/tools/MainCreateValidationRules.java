@@ -27,7 +27,9 @@ public final class MainCreateValidationRules {
     aRuleSourceItems.add (new RuleSourceItem (new File (aRuleSource, "biiprofiles")).addBussinessRule ("businessrules/biiprofiles-T10-BusinessRules-v01.ods")
                                                                                     .addBussinessRule ("businessrules/biiprofiles-T14-BusinessRules-v01.ods")
                                                                                     .addBussinessRule ("businessrules/biiprofiles-T15-BusinessRules-v01.ods"));
-    aRuleSourceItems.add (new RuleSourceItem (new File (aRuleSource, "biirules")).addCodeList ("businessrules/biirules-CodeLists-v01.ods"));
+    aRuleSourceItems.add (new RuleSourceItem (new File (aRuleSource, "biirules")).addCodeList ("businessrules/biirules-CodeLists-v01.ods")
+                                                                                 .addBussinessRule ("businessrules/biirules-T10-BusinessRules-v02.ods",
+                                                                                                    "T10"));
     aRuleSourceItems.add (new RuleSourceItem (new File (aRuleSource, "dknat")).addBussinessRule ("businessrules/dknat-T10-BusinessRules-v01.ods"));
     aRuleSourceItems.add (new RuleSourceItem (new File (aRuleSource, "itnat")).addBussinessRule ("businessrules/itnat-T10-BusinessRules-v03.ods"));
     aRuleSourceItems.add (new RuleSourceItem (new File (aRuleSource, "nogov")).addBussinessRule ("businessrules/nogov-T10-BusinessRules-v01.ods")

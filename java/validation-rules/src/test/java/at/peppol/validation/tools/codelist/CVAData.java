@@ -15,7 +15,7 @@ import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 
 @NotThreadSafe
-public final class CVAData {
+final class CVAData {
   private final String m_sTransaction;
   private final List <CVAContextData> m_aContexts = new ArrayList <CVAContextData> ();
 

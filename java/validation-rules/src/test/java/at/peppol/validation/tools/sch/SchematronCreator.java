@@ -11,10 +11,9 @@ import javax.annotation.concurrent.Immutable;
 import org.odftoolkit.simple.SpreadsheetDocument;
 import org.odftoolkit.simple.table.Table;
 
-import at.peppol.validation.tools.RuleSourceBusinessRule;
 import at.peppol.validation.tools.RuleSourceItem;
 import at.peppol.validation.tools.Utils;
-import at.peppol.validation.tools.sch.odf.ODFUtils;
+import at.peppol.validation.tools.odf.ODFUtils;
 
 import com.phloc.commons.collections.multimap.IMultiMapListBased;
 import com.phloc.commons.collections.multimap.MultiHashMapArrayListBased;

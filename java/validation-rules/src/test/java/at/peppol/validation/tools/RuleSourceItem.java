@@ -6,6 +6,10 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import at.peppol.validation.tools.codelist.RuleSourceCodeList;
+import at.peppol.validation.tools.sch.RuleSourceBusinessRule;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.collections.ContainerHelper;
@@ -25,18 +29,35 @@ public final class RuleSourceItem implements IHasID <String> {
   }
 
   @Nonnull
+  public File getOutputCodeListDirectory () {
+    return new File (m_aDirectory, "codelist");
+  }
+
+  @Nonnull
   public RuleSourceItem addCodeList (@Nonnull @Nonempty final String sSourceFilename) {
-    m_aCodeLists.add (new RuleSourceCodeList (new File (m_aDirectory, sSourceFilename), new File (m_aDirectory,
-                                                                                                  "codelist"), m_sID));
+    m_aCodeLists.add (new RuleSourceCodeList (new File (m_aDirectory, sSourceFilename),
+                                              getOutputCodeListDirectory (),
+                                              m_sID));
     return this;
   }
 
   @Nonnull
+  public File getOutputSchematronDirectory () {
+    return new File (m_aDirectory, "schematron");
+  }
+
+  @Nonnull
   public RuleSourceItem addBussinessRule (@Nonnull @Nonempty final String sSourceFilename) {
+    return addBussinessRule (sSourceFilename, null);
+  }
+
+  @Nonnull
+  public RuleSourceItem addBussinessRule (@Nonnull @Nonempty final String sSourceFilename,
+                                          @Nullable final String sCodeListTransaction) {
     m_aBusinessRules.add (new RuleSourceBusinessRule (new File (m_aDirectory, sSourceFilename),
-                                                      new File (m_aDirectory, "schematron"),
+                                                      getOutputSchematronDirectory (),
                                                       m_sID,
-                                                      null));
+                                                      sCodeListTransaction));
     return this;
   }
 

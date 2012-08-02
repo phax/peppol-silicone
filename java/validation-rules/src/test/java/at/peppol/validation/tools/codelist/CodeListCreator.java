@@ -33,10 +33,9 @@ import org.odftoolkit.simple.SpreadsheetDocument;
 import org.odftoolkit.simple.table.Table;
 import org.w3c.dom.Document;
 
-import at.peppol.validation.tools.RuleSourceCodeList;
 import at.peppol.validation.tools.RuleSourceItem;
 import at.peppol.validation.tools.Utils;
-import at.peppol.validation.tools.sch.odf.ODFUtils;
+import at.peppol.validation.tools.odf.ODFUtils;
 
 import com.phloc.commons.io.file.FilenameHelper;
 import com.phloc.commons.io.file.SimpleFileIO;
@@ -202,8 +201,11 @@ public final class CodeListCreator {
       // Process all code lists
       for (final RuleSourceCodeList aCodeList : aRuleSourceItem.getAllCodeLists ()) {
         final List <File> aAllCVAFiles = new ArrayList <File> ();
+
+        // Create .CVA and .GC files
         _createCVAandGC (aCodeList, aAllCVAFiles);
 
+        // Convert CVAs to Schematron XSLTs
         for (final File aCVAFile : aAllCVAFiles) {
           Utils.log ("  Converting " + aCVAFile.getName () + " to Schematron XSLT");
           final Transformer aTransformer = aTemplates.newTransformer ();
