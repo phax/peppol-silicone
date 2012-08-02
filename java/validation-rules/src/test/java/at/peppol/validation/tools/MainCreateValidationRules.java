@@ -23,10 +23,11 @@ public final class MainCreateValidationRules {
     aRuleSourceItems.add (new RuleSourceItem (new File (aRuleSource, "atgov")).addBussinessRule ("businessrules/atgov-T10-BusinessRules-v01.ods"));
     aRuleSourceItems.add (new RuleSourceItem (new File (aRuleSource, "atnat")).addBussinessRule ("businessrules/atnat-T10-BusinessRules-v01.ods"));
     // XSLT creation takes forever
-    aRuleSourceItems.add (new RuleSourceItem (new File (aRuleSource, "biicore")).addBussinessRule ("businessrules/biicore-T01-BusinessRules-v01.ods")
-                                                                                .addBussinessRule ("businessrules/biicore-T10-BusinessRules-v01.ods")
-                                                                                .addBussinessRule ("businessrules/biicore-T14-BusinessRules-v01.ods")
-                                                                                .addBussinessRule ("businessrules/biicore-T15-BusinessRules-v01.ods"));
+    if (false)
+      aRuleSourceItems.add (new RuleSourceItem (new File (aRuleSource, "biicore")).addBussinessRule ("businessrules/biicore-T01-BusinessRules-v01.ods")
+                                                                                  .addBussinessRule ("businessrules/biicore-T10-BusinessRules-v01.ods")
+                                                                                  .addBussinessRule ("businessrules/biicore-T14-BusinessRules-v01.ods")
+                                                                                  .addBussinessRule ("businessrules/biicore-T15-BusinessRules-v01.ods"));
     // businessrules/biiprofiles-T01-BusinessRules-v01.ods is corrupted
     aRuleSourceItems.add (new RuleSourceItem (new File (aRuleSource, "biiprofiles")).addBussinessRule ("businessrules/biiprofiles-T10-BusinessRules-v01.ods")
                                                                                     .addBussinessRule ("businessrules/biiprofiles-T14-BusinessRules-v01.ods")
@@ -53,15 +54,15 @@ public final class MainCreateValidationRules {
                                                                                                  "T15")
                                                                               .addBussinessRule ("businessrules/eugen-T19-BusinessRules-v01.ods"));
     aRuleSourceItems.add (new RuleSourceItem (new File (aRuleSource, "itnat")).addBussinessRule ("businessrules/itnat-T10-BusinessRules-v03.ods"));
-    aRuleSourceItems.add (new RuleSourceItem (new File (aRuleSource, "no_reminder")).addCodeList ("businessrules/nonat-T17-CodeLists-v01.ods")
-                                                                                    .addBussinessRule ("businessrules/nonat-T17-BusinessRules-v01.ods",
-                                                                                                       "T17"));
     aRuleSourceItems.add (new RuleSourceItem (new File (aRuleSource, "nogov")).addBussinessRule ("businessrules/nogov-T10-BusinessRules-v01.ods")
                                                                               .addBussinessRule ("businessrules/nogov-T14-BusinessRules-v01.ods")
                                                                               .addBussinessRule ("businessrules/nogov-T15-BusinessRules-v01.ods"));
-    aRuleSourceItems.add (new RuleSourceItem (new File (aRuleSource, "nonat")).addBussinessRule ("businessrules/nonat-T10-BusinessRules-v01.ods")
+    aRuleSourceItems.add (new RuleSourceItem (new File (aRuleSource, "nonat")).addCodeList ("businessrules/nonat-T17-CodeLists-v01.ods")
+                                                                              .addBussinessRule ("businessrules/nonat-T10-BusinessRules-v01.ods")
                                                                               .addBussinessRule ("businessrules/nonat-T14-BusinessRules-v01.ods")
-                                                                              .addBussinessRule ("businessrules/nonat-T15-BusinessRules-v01.ods"));
+                                                                              .addBussinessRule ("businessrules/nonat-T15-BusinessRules-v01.ods")
+                                                                              .addBussinessRule ("businessrules/nonat-T17-BusinessRules-v01.ods",
+                                                                                                 "T17"));
 
     if (true) {
       // Create all codelists (GC + CVA)
