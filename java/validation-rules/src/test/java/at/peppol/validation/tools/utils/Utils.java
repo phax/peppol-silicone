@@ -1,4 +1,4 @@
-package at.peppol.validation.tools;
+package at.peppol.validation.tools.utils;
 
 
 public final class Utils {

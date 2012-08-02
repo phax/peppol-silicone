@@ -10,7 +10,7 @@ import org.w3c.dom.Document;
 import at.peppol.validation.schematron.xslt.ISchematronXSLTProvider;
 import at.peppol.validation.schematron.xslt.SchematronResourceSCHCache;
 import at.peppol.validation.tools.RuleSourceItem;
-import at.peppol.validation.tools.Utils;
+import at.peppol.validation.tools.utils.Utils;
 
 import com.phloc.commons.io.file.FilenameHelper;
 import com.phloc.commons.io.file.SimpleFileIO;

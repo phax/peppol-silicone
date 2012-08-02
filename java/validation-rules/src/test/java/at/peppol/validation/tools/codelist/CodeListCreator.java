@@ -35,8 +35,8 @@ import org.odftoolkit.simple.table.Table;
 import org.w3c.dom.Document;
 
 import at.peppol.validation.tools.RuleSourceItem;
-import at.peppol.validation.tools.Utils;
-import at.peppol.validation.tools.odf.ODFUtils;
+import at.peppol.validation.tools.utils.ODFUtils;
+import at.peppol.validation.tools.utils.Utils;
 
 import com.phloc.commons.io.file.FilenameHelper;
 import com.phloc.commons.io.file.SimpleFileIO;

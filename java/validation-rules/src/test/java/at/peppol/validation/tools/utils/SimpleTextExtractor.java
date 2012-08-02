@@ -1,4 +1,4 @@
-package at.peppol.validation.tools.odf;
+package at.peppol.validation.tools.utils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
