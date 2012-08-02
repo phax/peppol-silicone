@@ -7,12 +7,12 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.odftoolkit.simple.SpreadsheetDocument;
-import org.odftoolkit.simple.table.Cell;
 import org.odftoolkit.simple.table.Table;
 
 import at.peppol.validation.tools.RuleSourceBusinessRule;
 import at.peppol.validation.tools.RuleSourceItem;
 import at.peppol.validation.tools.Utils;
+import at.peppol.validation.tools.sch.odf.ODFUtils;
 
 import com.phloc.commons.collections.multimap.IMultiMapListBased;
 import com.phloc.commons.collections.multimap.MultiHashMapArrayListBased;
@@ -31,21 +31,17 @@ public final class SchematronCreator {
     return s.replaceAll ("\\b[ \\t]+\\b", "_");
   }
 
-  private static boolean _isEmpty (final Cell c) {
-    return c.getValueType () == null;
-  }
-
   private static void _brExtractAbstractRules (final RuleSourceBusinessRule aBusinessRule,
                                                final SpreadsheetDocument aSpreadSheet) {
     final Table aFirstSheet = aSpreadSheet.getSheetByIndex (0);
     int nRow = 1;
     final Map <String, IMultiMapListBased <String, RuleAssertion>> aAbstractRules = new HashMap <String, IMultiMapListBased <String, RuleAssertion>> ();
-    while (!_isEmpty (aFirstSheet.getCellByPosition (0, nRow))) {
-      final String sRuleID = aFirstSheet.getCellByPosition (0, nRow).getStringValue ();
-      final String sMessage = aFirstSheet.getCellByPosition (1, nRow).getStringValue ();
-      final String sContext = aFirstSheet.getCellByPosition (2, nRow).getStringValue ();
-      final String sSeverity = aFirstSheet.getCellByPosition (3, nRow).getStringValue ();
-      final String sTransaction = aFirstSheet.getCellByPosition (4, nRow).getStringValue ();
+    while (!ODFUtils.isEmpty (aFirstSheet, 0, nRow)) {
+      final String sRuleID = ODFUtils.getText (aFirstSheet, 0, nRow);
+      final String sMessage = ODFUtils.getText (aFirstSheet, 1, nRow);
+      final String sContext = ODFUtils.getText (aFirstSheet, 2, nRow);
+      final String sSeverity = ODFUtils.getText (aFirstSheet, 3, nRow);
+      final String sTransaction = ODFUtils.getText (aFirstSheet, 4, nRow);
 
       // Save in nested maps
       IMultiMapListBased <String, RuleAssertion> aTransactionRules = aAbstractRules.get (sTransaction);
@@ -89,7 +85,9 @@ public final class SchematronCreator {
           eAssert.appendText ("[" + sTestID + "]-" + aRuleAssertion.getMessage ());
         }
       }
-      SimpleFileIO.writeFile (aSCHFile, MicroWriter.getXMLString (aDoc), XMLWriterSettings.DEFAULT_XML_CHARSET_OBJ);
+      if (SimpleFileIO.writeFile (aSCHFile, MicroWriter.getXMLString (aDoc), XMLWriterSettings.DEFAULT_XML_CHARSET_OBJ)
+                      .isFailure ())
+        throw new IllegalStateException ("Failed to write " + aSCHFile);
     }
   }
 
@@ -98,11 +96,11 @@ public final class SchematronCreator {
     Utils.log ("    Handling sheet for binding '" + sBindingName + "'");
     int nRow = 1;
     final IMultiMapListBased <String, RuleParam> aRules = new MultiHashMapArrayListBased <String, RuleParam> ();
-    while (!_isEmpty (aSheet.getCellByPosition (0, nRow))) {
-      final String sTransaction = aSheet.getCellByPosition (0, nRow).getStringValue ();
-      final String sRuleID = aSheet.getCellByPosition (1, nRow).getStringValue ();
-      String sTest = aSheet.getCellByPosition (2, nRow).getStringValue ();
-      final String sPrerequisite = aSheet.getCellByPosition (3, nRow).getStringValue ();
+    while (!ODFUtils.isEmpty (aSheet, 0, nRow)) {
+      final String sTransaction = ODFUtils.getText (aSheet, 0, nRow);
+      final String sRuleID = ODFUtils.getText (aSheet, 1, nRow);
+      String sTest = ODFUtils.getText (aSheet, 2, nRow);
+      final String sPrerequisite = ODFUtils.getText (aSheet, 3, nRow);
 
       if (StringHelper.hasText (sPrerequisite))
         sTest += " and " + sPrerequisite + " or not (" + sPrerequisite + ")";
@@ -133,7 +131,9 @@ public final class SchematronCreator {
         eParam.setAttribute ("name", _makeID (aRuleParam.getRuleID ()));
         eParam.setAttribute ("value", aRuleParam.getTest ());
       }
-      SimpleFileIO.writeFile (aSCHFile, MicroWriter.getXMLString (aDoc), XMLWriterSettings.DEFAULT_XML_CHARSET_OBJ);
+      if (SimpleFileIO.writeFile (aSCHFile, MicroWriter.getXMLString (aDoc), XMLWriterSettings.DEFAULT_XML_CHARSET_OBJ)
+                      .isFailure ())
+        throw new IllegalStateException ("Failed to write " + aSCHFile);
     }
   }
 
@@ -144,11 +144,11 @@ public final class SchematronCreator {
     final Table aLastSheet = aSpreadSheet.getSheetByIndex (aSpreadSheet.getSheetCount () - 1);
     int nRow = 1;
     // cell 0 (profile) is optional!
-    while (nRow < aLastSheet.getRowCount () && !_isEmpty (aLastSheet.getCellByPosition (1, nRow))) {
-      final String sProfile = aLastSheet.getCellByPosition (0, nRow).getStringValue ();
-      final String sTransaction = aLastSheet.getCellByPosition (1, nRow).getStringValue ();
-      final String sBindingName = aLastSheet.getCellByPosition (2, nRow).getStringValue ();
-      final String sNamespace = aLastSheet.getCellByPosition (3, nRow).getStringValue ();
+    while (!ODFUtils.isEmpty (aLastSheet, 1, nRow)) {
+      final String sProfile = ODFUtils.getText (aLastSheet, 0, nRow);
+      final String sTransaction = ODFUtils.getText (aLastSheet, 1, nRow);
+      final String sBindingName = ODFUtils.getText (aLastSheet, 2, nRow);
+      final String sNamespace = ODFUtils.getText (aLastSheet, 3, nRow);
 
       final File aSCHFile = aBusinessRule.getSchematronAssemblyFile (sBindingName, sTransaction);
       Utils.log ("      Writing " + sBindingName + " Schematron assembly file " + aSCHFile.getName ());
@@ -209,7 +209,9 @@ public final class SchematronCreator {
         eInclude = eSchema.appendElement (NS_SCHEMATRON, "include");
         eInclude.setAttribute ("href", aBusinessRule.getSchematronCodeListFile ().getName ());
       }
-      SimpleFileIO.writeFile (aSCHFile, MicroWriter.getXMLString (aDoc), XMLWriterSettings.DEFAULT_XML_CHARSET_OBJ);
+      if (SimpleFileIO.writeFile (aSCHFile, MicroWriter.getXMLString (aDoc), XMLWriterSettings.DEFAULT_XML_CHARSET_OBJ)
+                      .isFailure ())
+        throw new IllegalStateException ("Failed to write " + aSCHFile);
 
       // Remember file for XSLT creation
       aBusinessRule.addResultSchematronFile (aSCHFile);

@@ -32,9 +32,10 @@ public final class XSLTCreator {
                                                               .getXSLTDocument ();
 
           final File aXSLTFile = new File (FilenameHelper.getWithoutExtension (aSCHFile.getPath ()) + ".xslt");
-          SimpleFileIO.writeFile (aXSLTFile,
-                                  XMLWriter.getXMLString (aXSLTDoc),
-                                  XMLWriterSettings.DEFAULT_XML_CHARSET_OBJ);
+          if (SimpleFileIO.writeFile (aXSLTFile,
+                                      XMLWriter.getXMLString (aXSLTDoc),
+                                      XMLWriterSettings.DEFAULT_XML_CHARSET_OBJ).isFailure ())
+            throw new IllegalStateException ("Failed to write " + aXSLTFile);
         }
     }
   }

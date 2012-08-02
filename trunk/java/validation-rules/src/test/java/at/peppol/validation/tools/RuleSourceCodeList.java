@@ -40,7 +40,7 @@ public final class RuleSourceCodeList {
   }
 
   @Nonnull
-  public File getSchematronAbstractFile (@Nonnull @Nonempty final String sTransaction) {
-    return new File (m_aOutputDirectory, m_sID + "-" + sTransaction + "-abstract.sch");
+  public File getGCFile (@Nonnull @Nonempty final String sCodeListName) {
+    return new File (m_aOutputDirectory, sCodeListName + ".gc");
   }
 }
