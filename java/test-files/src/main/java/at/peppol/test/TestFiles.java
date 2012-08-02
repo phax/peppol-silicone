@@ -220,7 +220,7 @@ public final class TestFiles {
                                                                                               new Warning ("BIIRULE-T10-R003"),
                                                                                               new Warning ("EUGEN-T10-R009")),
                                                                             new TestDocument ("TC10.18.TS1.xml",
-                                                                                              new FatalError ("PCL-010-008"),
+                                                                                              new FatalError ("PCL-010-007"),
                                                                                               new Warning ("BIICORE-T10-R114"),
                                                                                               new Warning ("BIICORE-T10-R185"),
                                                                                               new Warning ("EUGEN-T10-R023")) };
