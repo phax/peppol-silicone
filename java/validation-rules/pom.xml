@@ -9,7 +9,7 @@
   <artifactId>peppol-validation-rules</artifactId>
   <version>2.3.0-SNAPSHOT</version>
   <name>peppol-validation-rules</name>
-  
+
   <scm>
     <connection>scm:svn:http://peppol-silicone.googlecode.com/svn/trunk/java/validation-rules</connection>
     <developerConnection>scm:svn:https://peppol-silicone.googlecode.com/svn/trunk/java/validation-rules</developerConnection>
@@ -49,7 +49,7 @@
       <artifactId>phloc-ubl</artifactId>
       <version>2.6.5</version>
     </dependency>
-    
+
     <dependency>
       <groupId>at.peppol</groupId>
       <artifactId>peppol-test-files</artifactId>
@@ -62,9 +62,15 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.jopendocument</groupId>
-      <artifactId>jOpenDocument</artifactId>
-      <version>1.3b1</version>
+      <groupId>org.apache.odftoolkit</groupId>
+      <artifactId>simple-odf</artifactId>
+      <version>0.7-incubating</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>xerces</groupId>
+      <artifactId>xercesImpl</artifactId>
+      <version>2.10.0</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
