@@ -8,7 +8,6 @@ import javax.annotation.concurrent.Immutable;
 import org.w3c.dom.Document;
 
 import at.peppol.validation.schematron.xslt.SchematronResourceSCHCache;
-import at.peppol.validation.tools.RuleSourceBusinessRule;
 import at.peppol.validation.tools.RuleSourceItem;
 import at.peppol.validation.tools.Utils;
 

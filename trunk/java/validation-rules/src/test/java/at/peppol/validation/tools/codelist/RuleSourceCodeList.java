@@ -1,4 +1,4 @@
-package at.peppol.validation.tools;
+package at.peppol.validation.tools.codelist;
 
 import java.io.File;
 
