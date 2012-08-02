@@ -29,7 +29,7 @@ import com.phloc.commons.string.ToStringGenerator;
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-abstract class AbstractSchematronXSLTProvider implements ISchematronXSLTProvider {
+public abstract class AbstractSchematronXSLTProvider implements ISchematronXSLTProvider {
   // To be set be the implementing sub classes!
   protected Document m_aSchematronXSLTDoc;
   protected Templates m_aSchematronXSLT;

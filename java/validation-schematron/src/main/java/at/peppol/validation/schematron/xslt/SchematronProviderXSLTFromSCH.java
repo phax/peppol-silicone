@@ -25,7 +25,6 @@ import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.dom.DOMResult;
-import javax.xml.transform.dom.DOMSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +33,7 @@ import org.w3c.dom.Document;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.resource.ClassPathResource;
 import com.phloc.commons.xml.transform.LoggingTransformErrorListener;
-import com.phloc.commons.xml.transform.ResourceStreamSource;
+import com.phloc.commons.xml.transform.TransformSourceFactory;
 import com.phloc.commons.xml.transform.XMLTransformerFactory;
 
 /**
@@ -92,7 +91,7 @@ final class SchematronProviderXSLTFromSCH extends AbstractSchematronXSLTProvider
       aTransformer1.setErrorListener (aErrorListener);
       if (aURIResolver != null)
         aTransformer1.setURIResolver (aURIResolver);
-      aTransformer1.transform (new ResourceStreamSource (aSchematronResource), aResult1);
+      aTransformer1.transform (TransformSourceFactory.create (aSchematronResource), aResult1);
 
       // perform step 2 (ResultStep1 -> ResultStep2)
       final DOMResult aResult2 = new DOMResult ();
@@ -100,7 +99,7 @@ final class SchematronProviderXSLTFromSCH extends AbstractSchematronXSLTProvider
       aTransformer2.setErrorListener (aErrorListener);
       if (aURIResolver != null)
         aTransformer2.setURIResolver (aURIResolver);
-      aTransformer2.transform (new DOMSource (aResult1.getNode ()), aResult2);
+      aTransformer2.transform (TransformSourceFactory.create (aResult1.getNode ()), aResult2);
 
       // perform step 3 (ResultStep2 -> ResultStep3XSL)
       final DOMResult aResult3 = new DOMResult ();
@@ -108,17 +107,17 @@ final class SchematronProviderXSLTFromSCH extends AbstractSchematronXSLTProvider
       aTransformer3.setErrorListener (aErrorListener);
       if (aURIResolver != null)
         aTransformer3.setURIResolver (aURIResolver);
-      aTransformer3.transform (new DOMSource (aResult2.getNode ()), aResult3);
+      aTransformer3.transform (TransformSourceFactory.create (aResult2.getNode ()), aResult3);
 
       // Save the underlying XSLT document....
       // Note: Saxon 6.5.5 does not allow to clone the document node!!!!
       m_aSchematronXSLTDoc = (Document) aResult3.getNode ();
 
       // compile result of step 3
-      m_aSchematronXSLT = XMLTransformerFactory.newTemplates (new DOMSource (aResult3.getNode ()));
+      m_aSchematronXSLT = XMLTransformerFactory.newTemplates (TransformSourceFactory.create (m_aSchematronXSLTDoc));
     }
     catch (final Exception ex) {
-      s_aLogger.warn ("Schematron preprocessor error: " + ex.getMessage ());
+      s_aLogger.error ("Schematron preprocessor error", ex);
     }
   }
 }

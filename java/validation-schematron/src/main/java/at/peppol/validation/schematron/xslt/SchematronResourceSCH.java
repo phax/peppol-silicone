@@ -24,6 +24,7 @@ import javax.xml.transform.URIResolver;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.resource.ClassPathResource;
+import com.phloc.commons.io.resource.FileSystemResource;
 
 /**
  * A Schematron resource that is based on the original SCH file.
@@ -54,5 +55,17 @@ public final class SchematronResourceSCH extends AbstractSchematronXSLTResource 
                                                      @Nullable final ErrorListener aCustomErrorListener,
                                                      @Nullable final URIResolver aCustomURIResolver) {
     return new SchematronResourceSCH (new ClassPathResource (sSCHPath), aCustomErrorListener, aCustomURIResolver);
+  }
+
+  @Nonnull
+  public static SchematronResourceSCH fromFile (@Nonnull @Nonempty final String sSCHPath) {
+    return new SchematronResourceSCH (new FileSystemResource (sSCHPath));
+  }
+
+  @Nonnull
+  public static SchematronResourceSCH fromFile (@Nonnull @Nonempty final String sSCHPath,
+                                                @Nullable final ErrorListener aCustomErrorListener,
+                                                @Nullable final URIResolver aCustomURIResolver) {
+    return new SchematronResourceSCH (new FileSystemResource (sSCHPath), aCustomErrorListener, aCustomURIResolver);
   }
 }

@@ -20,7 +20,6 @@ package at.peppol.validation.schematron.xslt;
 import javax.annotation.Nullable;
 import javax.xml.transform.ErrorListener;
 import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.xml.serialize.XMLReader;
 import com.phloc.commons.xml.transform.DefaultTransformURIResolver;
+import com.phloc.commons.xml.transform.TransformSourceFactory;
 import com.phloc.commons.xml.transform.XMLTransformerFactory;
 
 /**
@@ -48,10 +48,10 @@ final class SchematronProviderXSLTPrebuild extends AbstractSchematronXSLTProvide
       // compile result of read file
       final TransformerFactory aTF = XMLTransformerFactory.createTransformerFactory (aCustomErrorListener,
                                                                                      new DefaultTransformURIResolver ());
-      m_aSchematronXSLT = aTF.newTemplates (new DOMSource (m_aSchematronXSLTDoc));
+      m_aSchematronXSLT = aTF.newTemplates (TransformSourceFactory.create (m_aSchematronXSLTDoc));
     }
     catch (final Exception ex) {
-      s_aLogger.warn ("XSLT read/compilation error", ex);
+      s_aLogger.error ("XSLT read/compilation error", ex);
     }
   }
 }
