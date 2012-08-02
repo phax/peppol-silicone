@@ -41,6 +41,15 @@ public final class MainCreateValidationRules {
                                                                                  .addBussinessRule ("businessrules/biirules-T15-BusinessRules-v01.ods",
                                                                                                     "T15"));
     aRuleSourceItems.add (new RuleSourceItem (new File (aRuleSource, "dknat")).addBussinessRule ("businessrules/dknat-T10-BusinessRules-v01.ods"));
+    aRuleSourceItems.add (new RuleSourceItem (new File (aRuleSource, "eugen")).addCodeList ("businessrules/eugen-CodeLists-v01.ods")
+                                                                              .addBussinessRule ("businessrules/eugen-T01-BusinessRules-v02.ods")
+                                                                              .addBussinessRule ("businessrules/eugen-T10-BusinessRules-v01.ods",
+                                                                                                 "T10")
+                                                                              .addBussinessRule ("businessrules/eugen-T14-BusinessRules-v01.ods",
+                                                                                                 "T14")
+                                                                              .addBussinessRule ("businessrules/eugen-T15-BusinessRules-v01.ods",
+                                                                                                 "T15")
+                                                                              .addBussinessRule ("businessrules/eugen-T19-BusinessRules-v01.ods"));
     aRuleSourceItems.add (new RuleSourceItem (new File (aRuleSource, "itnat")).addBussinessRule ("businessrules/itnat-T10-BusinessRules-v03.ods"));
     aRuleSourceItems.add (new RuleSourceItem (new File (aRuleSource, "nogov")).addBussinessRule ("businessrules/nogov-T10-BusinessRules-v01.ods")
                                                                               .addBussinessRule ("businessrules/nogov-T14-BusinessRules-v01.ods")
