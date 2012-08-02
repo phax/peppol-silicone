@@ -62,7 +62,7 @@ public final class RuleSourceBusinessRule {
 
   @Nonnull
   public File getSchematronCodeListFile () {
-    return new File (m_aOutputDirectory, m_sID + "-" + m_sCodeListTransaction + ".sch");
+    return new File (m_aOutputDirectory, m_sID + "-" + m_sCodeListTransaction + "-codes.sch");
   }
 
   @Nonnull

@@ -12,6 +12,7 @@ import java.util.TreeMap;
 import javax.annotation.concurrent.Immutable;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMResult;
 
@@ -193,32 +194,38 @@ public final class CodeListCreator {
     }
   }
 
-  public static void createCodeLists (final List <RuleSourceItem> aRuleSourceItems) throws Exception {
-    final TransformerFactory aTF = XMLTransformerFactory.createTransformerFactory (null,
-                                                                                   new DefaultTransformURIResolver ());
-    final Templates aTemplates = aTF.newTemplates (TransformSourceFactory.create (new File ("src/test/resources/rule-utils/Crane-cva2schXSLT.xsl")));
+  private static Templates s_aCVA2SCH;
 
+  private static void _createSchematronXSLTs (final RuleSourceCodeList aCodeList, final List <String> aUsedTransaction) throws TransformerException {
+    Utils.log ("  Converting CVA files to Schematron XSLT");
+    // Create only once
+    if (s_aCVA2SCH == null) {
+      final TransformerFactory aTF = XMLTransformerFactory.createTransformerFactory (null,
+                                                                                     new DefaultTransformURIResolver ());
+      s_aCVA2SCH = aTF.newTemplates (TransformSourceFactory.create (new File ("src/test/resources/rule-utils/Crane-cva2schXSLT.xsl")));
+    }
+    // Convert the CVA files for all transactions
+    for (final String sTransaction : aUsedTransaction) {
+      final File aCVAFile = aCodeList.getCVAFile (sTransaction);
+      final File aResultXSLT = aCodeList.getXSLTFile (sTransaction);
+      Utils.log ("    Creating " + aResultXSLT.getName ());
+      final Transformer aTransformer = s_aCVA2SCH.newTransformer ();
+      final Document aSCHDoc = XMLFactory.newDocument ();
+      aTransformer.transform (TransformSourceFactory.create (aCVAFile), new DOMResult (aSCHDoc));
+      SimpleFileIO.writeFile (aResultXSLT, XMLWriter.getXMLString (aSCHDoc), XMLWriterSettings.DEFAULT_XML_CHARSET_OBJ);
+    }
+  }
+
+  public static void createCodeLists (final List <RuleSourceItem> aRuleSourceItems) throws Exception {
     for (final RuleSourceItem aRuleSourceItem : aRuleSourceItems) {
       // Process all code lists
       for (final RuleSourceCodeList aCodeList : aRuleSourceItem.getAllCodeLists ()) {
-        final List <String> aUsedTransaction = new ArrayList <String> ();
-
         // Create .CVA and .GC files
+        final List <String> aUsedTransaction = new ArrayList <String> ();
         _createCVAandGC (aCodeList, aUsedTransaction);
 
         // Convert CVAs to Schematron XSLTs
-        Utils.log ("  Converting CVA files to Schematron XSLT");
-        for (final String sTransaction : aUsedTransaction) {
-          final File aCVAFile = aCodeList.getCVAFile (sTransaction);
-          Utils.log ("    Converting " + aCVAFile.getName ());
-          final Transformer aTransformer = aTemplates.newTransformer ();
-          final Document aSCHDoc = XMLFactory.newDocument ();
-          aTransformer.transform (TransformSourceFactory.create (aCVAFile), new DOMResult (aSCHDoc));
-          final File aResultXSLT = aCodeList.getXSLTFile (sTransaction);
-          SimpleFileIO.writeFile (aResultXSLT,
-                                  XMLWriter.getXMLString (aSCHDoc),
-                                  XMLWriterSettings.DEFAULT_XML_CHARSET_OBJ);
-        }
+        _createSchematronXSLTs (aCodeList, aUsedTransaction);
       }
     }
   }

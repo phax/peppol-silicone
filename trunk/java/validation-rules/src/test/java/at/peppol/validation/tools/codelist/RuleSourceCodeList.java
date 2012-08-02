@@ -50,7 +50,13 @@ public final class RuleSourceCodeList {
   }
 
   @Nonnull
+  public static String getXSLTFilename (@Nonnull @Nonempty final String sID,
+                                        @Nonnull @Nonempty final String sTransaction) {
+    return sID + "-" + sTransaction + "-codes.sch.xslt";
+  }
+
+  @Nonnull
   public File getXSLTFile (@Nonnull @Nonempty final String sTransaction) {
-    return new File (m_aOutputDirectory, m_sID + "-" + sTransaction + "-codes.sch.xslt");
+    return new File (m_aOutputDirectory, getXSLTFilename (m_sID, sTransaction));
   }
 }
