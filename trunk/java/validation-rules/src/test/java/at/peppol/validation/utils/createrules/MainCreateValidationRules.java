@@ -121,5 +121,6 @@ public final class MainCreateValidationRules {
     }
 
     Utils.log ("Finished building validation rules");
+    Utils.log ("Now run 'mvn license:format' on the commandline to add all the file headers!");
   }
 }
