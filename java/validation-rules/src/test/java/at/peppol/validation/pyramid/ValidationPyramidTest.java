@@ -54,7 +54,6 @@ import at.peppol.validation.rules.EValidationDocumentType;
 import at.peppol.validation.rules.EValidationLevel;
 import at.peppol.validation.rules.ValidationTransaction;
 
-import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.error.IResourceError;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.locale.country.CountryCache;
@@ -69,7 +68,6 @@ public final class ValidationPyramidTest {
 
   @Test
   public void testInvoice () {
-    GlobalDebug.setDebugModeDirect (true);
     final ValidationPyramid vp = new ValidationPyramid (EValidationDocumentType.INVOICE,
                                                         ValidationTransaction.createUBLTransaction (ETransaction.T10));
     for (final IReadableResource aTestFile : TestFiles.getSuccessFiles (ETestFileType.INVOICE)) {
