@@ -331,6 +331,7 @@
               <exclude>**/*.ppt*</exclude>
               <exclude>**/*.wiki</exclude>
               <exclude>**/*.jks</exclude>
+              <exclude>**/*.ods</exclude>
             </excludes>
           </configuration>
         </plugin>
@@ -465,12 +466,12 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.12</version>
+          <version>2.12.1</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-report-plugin</artifactId>
-          <version>2.12</version>
+          <version>2.12.1</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
