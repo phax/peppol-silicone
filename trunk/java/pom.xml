@@ -312,6 +312,7 @@
             <strictCheck>true</strictCheck>
             <encoding>UTF-8</encoding>
             <mapping>
+              <cva>XML_STYLE</cva>
               <gc>XML_STYLE</gc>
               <sch>XML_STYLE</sch>
               <svxml>XML_STYLE</svxml>
