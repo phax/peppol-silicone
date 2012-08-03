@@ -83,12 +83,33 @@
 
   <build>
     <plugins>
+      <!-- Remove mapping when using parent pom > v14: -->
       <plugin>
         <groupId>com.mycila.maven-license-plugin</groupId>
         <artifactId>maven-license-plugin</artifactId>
         <configuration>
+          <mapping>
+            <cva>XML_STYLE</cva>
+            <gc>XML_STYLE</gc>
+            <sch>XML_STYLE</sch>
+            <svxml>XML_STYLE</svxml>
+            <wsdl>XML_STYLE</wsdl>
+            <xjb>XML_STYLE</xjb>
+            <xslt>XML_STYLE</xslt>
+            <xvml>XML_STYLE</xvml>
+          </mapping>
           <excludes>
-            <exclude>src/main/resources/schematron/**</exclude>
+            <exclude>**/NOTICE</exclude>
+            <exclude>**/LICENSE</exclude>
+            <exclude>**/*.pmd</exclude>
+            <exclude>**/*.policy</exclude>
+            <exclude>**/*.jjt</exclude>
+            <exclude>**/*.xls*</exclude>
+            <exclude>**/*.doc*</exclude>
+            <exclude>**/*.ppt*</exclude>
+            <exclude>**/*.wiki</exclude>
+            <exclude>**/*.jks</exclude>
+            <exclude>**/*.ods</exclude>
           </excludes>
         </configuration>
       </plugin>

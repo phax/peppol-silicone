@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <!--
 
     Version: MPL 1.1/EUPL 1.1
@@ -38,35 +38,36 @@
     under either the MPL or the EUPL License.
 
 -->
-<!--
-  Document Type:     PeppolCommonBasicComponents
- Generated On:      Tue Oct 20  2010
--->
-<!-- ===== xsd:schema Element With Namespaces Declarations ===== -->
-<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-    targetNamespace="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
-    xmlns="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
-    xmlns:udt="urn:un:unece:uncefact:data:specification:UnqualifiedDataTypesSchemaModule:2"
-    xmlns:ccts="urn:un:unece:uncefact:documentation:2"
-    xmlns:qdt="urn:oasis:names:specification:ubl:schema:xsd:QualifiedDatatypes-2"
-    elementFormDefault="qualified"
-    attributeFormDefault="unqualified"
-    version="2.0">
-<!-- ===== Imports ===== -->
-  <xsd:import namespace="urn:un:unece:uncefact:data:specification:UnqualifiedDataTypesSchemaModule:2" schemaLocation="../common/UnqualifiedDataTypeSchemaModule-2.0.xsd"/>
-  <xsd:import namespace="urn:oasis:names:specification:ubl:schema:xsd:QualifiedDatatypes-2" schemaLocation="../common/UBL-QualifiedDatatypes-2.0.xsd"/>
- <!-- ===== Includes===== -->
-  <xsd:include schemaLocation="../common/UBL-CommonBasicComponents-2.0.xsd"/>
-
-	<!-- ===== Element Declarations ===== -->
- <xsd:element name="ContractFolderID" type="ContractFolderIDType"/>
- <xsd:element name="Type" type="CodeValueType"/>
- <xsd:element name="MaximumTaxExclusiveAmount" type="TaxExclusiveAmountType"/>
- <xsd:element name="MaximumTaxInclusiveAmount" type="TaxInclusiveAmountType"/>
- 
-<xsd:complexType name="ContractFolderIDType">
-    <xsd:simpleContent>
-      <xsd:extension base="udt:IdentifierType"/>
-    </xsd:simpleContent>
-  </xsd:complexType>	
-</xsd:schema>
+<ns2:CodeList xmlns:ns2="http://docs.oasis-open.org/codelist/ns/genericode/1.0/">
+  <Identification>
+    <ShortName>FinancialInstitutionIdentifier</ShortName>
+    <Version>0.1</Version>
+    <CanonicalUri>PEPPOL</CanonicalUri>
+    <CanonicalVersionUri>PEPPOL-0.1</CanonicalVersionUri>
+    <LocationUri>FinancialInstitutionIdentifier.gc</LocationUri>
+  </Identification>
+  <ColumnSet>
+    <Column Id="code" Use="required">
+      <ShortName>Code</ShortName>
+      <Data Type="normalizedString" />
+    </Column>
+    <Column Id="name" Use="optional">
+      <ShortName>Name</ShortName>
+      <Data Type="string" />
+    </Column>
+    <Key Id="codeKey">
+      <ShortName>CodeKey</ShortName>
+      <ColumnRef Ref="code" />
+    </Key>
+  </ColumnSet>
+  <SimpleCodeList>
+    <Row>
+      <Value ColumnRef="code">
+        <SimpleValue>BIC</SimpleValue>
+      </Value>
+      <Value ColumnRef="name">
+        <SimpleValue>BIC</SimpleValue>
+      </Value>
+    </Row>
+  </SimpleCodeList>
+</ns2:CodeList>

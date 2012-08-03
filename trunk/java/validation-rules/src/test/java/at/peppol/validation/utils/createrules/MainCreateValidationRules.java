@@ -51,7 +51,9 @@ import com.phloc.commons.GlobalDebug;
 
 public final class MainCreateValidationRules {
   public static void main (final String [] args) throws Exception {
-    GlobalDebug.setDebugModeDirect (true);
+    if (false)
+      GlobalDebug.setDebugModeDirect (true);
+
     // Base directory for source rules
     final File aRuleSource = new File ("src/test/resources/rule-source");
     final File aRuleTarget = new File ("src/main/resources/rules");
@@ -60,12 +62,11 @@ public final class MainCreateValidationRules {
     final List <RuleSourceItem> aRuleSourceItems = new ArrayList <RuleSourceItem> ();
     aRuleSourceItems.add (new RuleSourceItem (aRuleSource, aRuleTarget, "atgov").addBussinessRule ("businessrules/atgov-T10-BusinessRules-v01.ods"));
     aRuleSourceItems.add (new RuleSourceItem (aRuleSource, aRuleTarget, "atnat").addBussinessRule ("businessrules/atnat-T10-BusinessRules-v01.ods"));
-    // XSLT creation takes forever
-    if (false)
-      aRuleSourceItems.add (new RuleSourceItem (aRuleSource, aRuleTarget, "biicore").addBussinessRule ("businessrules/biicore-T01-BusinessRules-v01.ods")
-                                                                                    .addBussinessRule ("businessrules/biicore-T10-BusinessRules-v01.ods")
-                                                                                    .addBussinessRule ("businessrules/biicore-T14-BusinessRules-v01.ods")
-                                                                                    .addBussinessRule ("businessrules/biicore-T15-BusinessRules-v01.ods"));
+    // XSLT creation of biicore takes forever (approx. 25-30 minutes)!!!
+    aRuleSourceItems.add (new RuleSourceItem (aRuleSource, aRuleTarget, "biicore").addBussinessRule ("businessrules/biicore-T01-BusinessRules-v01.ods")
+                                                                                  .addBussinessRule ("businessrules/biicore-T10-BusinessRules-v01.ods")
+                                                                                  .addBussinessRule ("businessrules/biicore-T14-BusinessRules-v01.ods")
+                                                                                  .addBussinessRule ("businessrules/biicore-T15-BusinessRules-v01.ods"));
     aRuleSourceItems.add (new RuleSourceItem (aRuleSource, aRuleTarget, "biiprofiles").addBussinessRule ("businessrules/biiprofiles-T10-BusinessRules-v01.ods")
                                                                                       .addBussinessRule ("businessrules/biiprofiles-T14-BusinessRules-v01.ods")
                                                                                       .addBussinessRule ("businessrules/biiprofiles-T15-BusinessRules-v01.ods"));
@@ -101,20 +102,21 @@ public final class MainCreateValidationRules {
                                                                                 .addBussinessRule ("businessrules/nonat-T17-BusinessRules-v01.ods",
                                                                                                    "T17"));
 
-    if (true) {
-      // Create all codelists (GC + CVA)
-      for (final RuleSourceItem aRuleSourceItem : aRuleSourceItems) {
-        // Process all code lists
-        for (final RuleSourceCodeList aCodeList : aRuleSourceItem.getAllCodeLists ())
-          new CodeListCreator ().createCodeLists (aCodeList);
-      }
+    // Create all codelists (GC + CVA)
+    // Processing time: quite quick
+    for (final RuleSourceItem aRuleSourceItem : aRuleSourceItems) {
+      // Process all code lists
+      for (final RuleSourceCodeList aCodeList : aRuleSourceItem.getAllCodeLists ())
+        new CodeListCreator ().createCodeLists (aCodeList);
     }
 
     if (true) {
       // Create Schematron
+      // Processing time: quite OK
       SchematronCreator.createSchematrons (aRuleSourceItems);
 
       // Now create the validation XSLTs
+      // Processing time: terribly slow for biicore
       XSLTCreator.createXSLTs (aRuleSourceItems);
     }
 

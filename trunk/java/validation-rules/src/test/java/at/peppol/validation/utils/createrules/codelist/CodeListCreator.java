@@ -184,7 +184,15 @@ public final class CodeListCreator {
         aContexts.getContext ().add (aContext);
       }
       aCVA.setContexts (aContexts);
-      if (new CVA10Marshaller ().write (aCVA, aCVAFile).isFailure ())
+
+      // to XML
+      final Document aXML = new CVA10Marshaller ().write (aCVA);
+      if (aXML == null)
+        throw new IllegalStateException ("Failed to convert CVA to XML");
+
+      // to File
+      if (SimpleFileIO.writeFile (aCVAFile, XMLWriter.getXMLString (aXML), XMLWriterSettings.DEFAULT_XML_CHARSET_OBJ)
+                      .isFailure ())
         throw new IllegalStateException ("Failed to write " + aCVAFile);
     }
     return aAllReferencedCodeListNames;
@@ -270,7 +278,14 @@ public final class CodeListCreator {
       }
       aGC.setSimpleCodeList (aSimpleCodeList);
 
-      if (new Genericode10CodeListMarshaller ().write (aGC, aGCFile).isFailure ())
+      // to XML
+      final Document aXML = new Genericode10CodeListMarshaller ().write (aGC);
+      if (aXML == null)
+        throw new IllegalStateException ("Failed to convert CVA to XML");
+
+      // to File
+      if (SimpleFileIO.writeFile (aGCFile, XMLWriter.getXMLString (aXML), XMLWriterSettings.DEFAULT_XML_CHARSET_OBJ)
+                      .isFailure ())
         throw new IllegalStateException ("Failed to write " + aGCFile);
     }
   }
@@ -339,6 +354,9 @@ public final class CodeListCreator {
     _createCodelistSchematron (aCodeList);
 
     // Convert CVAs to Schematron XSLTs
-    _createSchematronXSLTs (aCodeList);
+    // Currently disabled because there is no real sense in it, as we're
+    // creating the Schematrons manually
+    if (false)
+      _createSchematronXSLTs (aCodeList);
   }
 }
