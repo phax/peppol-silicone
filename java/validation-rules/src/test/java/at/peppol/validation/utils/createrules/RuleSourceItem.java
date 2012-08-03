@@ -73,14 +73,12 @@ public final class RuleSourceItem implements IHasID <String> {
 
   @Nonnull
   public File getOutputCodeListDirectory () {
-    return new File (m_aRuleSrcDir, "codelist");
+    return new File (m_aRuleDstDir, "codelist");
   }
 
   @Nonnull
   public File getOutputSchematronDirectory () {
-    if (true)
-      return m_aRuleDstDir;
-    return new File (m_aRuleDstDir, "schematron");
+    return m_aRuleDstDir;
   }
 
   @Nonnull

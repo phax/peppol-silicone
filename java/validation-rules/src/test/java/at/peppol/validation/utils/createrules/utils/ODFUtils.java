@@ -63,6 +63,14 @@ public final class ODFUtils {
   @Nullable
   public static String getText (@Nonnull final Table aSheet, final int nCol, final int nRow) {
     final Cell aCell = getCell (aSheet, nCol, nRow);
-    return aCell == null ? null : SimpleTextExtractor.getText (aCell);
+    if (aCell == null)
+      return null;
+    String sText = SimpleTextExtractor.getText (aCell);
+    if (sText != null) {
+      // Unify line ending to "\n"
+      sText = sText.replace ("\r\n", "\n");
+      sText = sText.replace ("\r", "\n");
+    }
+    return sText;
   }
 }
