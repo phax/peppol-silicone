@@ -51,7 +51,6 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.PKIXParameters;
 import java.security.cert.TrustAnchor;
 import java.security.cert.X509Certificate;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -62,6 +61,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.peppol.commons.security.KeyStoreUtils;
+
+import com.phloc.commons.collections.ContainerHelper;
+
 import eu.peppol.security.OcspValidatorCache;
 
 /**
@@ -220,7 +222,7 @@ public final class KeystoreManager {
     }
 
     try {
-      final List <Certificate> certificates = Arrays.asList (new Certificate [] { certificate });
+      final List <? extends Certificate> certificates = ContainerHelper.newList (certificate);
       final CertPath certPath = CertificateFactory.getInstance ("X.509").generateCertPath (certificates);
       m_aCertPathValidator.validate (certPath, m_aPkixParameters);
       m_aOcspValidatorCache.setKnownValidCertificate (serialNumber);
