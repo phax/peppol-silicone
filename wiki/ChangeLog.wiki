@@ -3,19 +3,23 @@
 = v2.3.0 - in progress =
 
 ==All components==
-  * Updated [http://code.google.com/p/phloc-commons phloc-commons] to 3.6.5
+  * Updated [http://code.google.com/p/phloc-commons phloc-commons] to 3.7.0
   * Extracted new project "test-files" that contains all the available test files of several file types. This project can be easily reused from somewhere else
 ==Base libraries==
   * Removed all deprecated methods using "Document" instead of "DocumentType" in their names
   * Added length and Charset checks in (Simple|Readonly)(Participant|DocumentType|Process)Identifier classes, according to the Policy for the use of identifiers 2.3 DRAFT
   * Added some Codelists and generated Java enums that are to be used in UBL document instances
+  * Changed identifier hierarchy and package assignment (incompatible)
 ==START==
   * Improved the welcome page of the START AP service
   * Made OCSP check configurable
   * Made the OCSP responder URL configurable
+  * Provided a possibility to hook into the startup and processing
 ==LIME==
   * Improved exception handling when handling an incoming document
   * Move the contents of the "transport-lime-library" project into the "transport-lime-client" project and removed the "transport-lime-library" project so that the structure is consistent to the one of START
+  * LIME Server now using log4j - thanks to Benedikt
+  * Provided a possibility to hook into the startup and processing
 ==SML==
   * Split the project "sml-client-apps" into "sml-client-console" and "sml-client-swing"
   * Using the maven-shade-plugin to build standalone runnable projects "sml-client-console" and "sml-client-swing"
@@ -31,6 +35,7 @@
   * Added a new project "validation-webapp" that provides a minimum web application for validating your PEPPOL documents in the web
   * IValidationDocumentType interface is now more generic by only requiring to offer a Schema object (and not to force UBL usage)
   * Updated Saxon HE to 9.4.0_3
+  * Creating all the validation Schematron and XSLT files directly from the underlying business rules spreadsheets
 
 = v2.2.1 (2012-03-21, bugfix release) =
 
