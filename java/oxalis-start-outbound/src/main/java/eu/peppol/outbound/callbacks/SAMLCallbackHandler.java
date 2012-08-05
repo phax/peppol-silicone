@@ -110,6 +110,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.phloc.commons.CGlobal;
 import com.sun.xml.wss.impl.callback.SAMLCallback;
 import com.sun.xml.wss.impl.dsig.WSSPolicyConsumerImpl;
 import com.sun.xml.wss.saml.Assertion;
@@ -203,9 +204,9 @@ public final class SAMLCallbackHandler implements CallbackHandler {
     final String assertionID = "SamlID" + String.valueOf (System.currentTimeMillis ());
     samlCallback.setAssertionId (assertionID);
 
-    final GregorianCalendar oneHourAgo = getNowOffsetByHours (-1);
-    final GregorianCalendar now = getNowOffsetByHours (0);
-    final GregorianCalendar inOneHour = getNowOffsetByHours (1);
+    final GregorianCalendar oneHourAgo = _getNowOffsetByHours (-1);
+    final GregorianCalendar now = _getNowOffsetByHours (0);
+    final GregorianCalendar inOneHour = _getNowOffsetByHours (1);
 
     final SAMLAssertionFactory assertionFactory = SAMLAssertionFactory.newInstance (SAMLAssertionFactory.SAML2_0);
 
@@ -234,10 +235,9 @@ public final class SAMLCallbackHandler implements CallbackHandler {
     return sign (assertion, keystoreManager.getOurCertificate (), keystoreManager.getOurPrivateKey ());
   }
 
-  private GregorianCalendar getNowOffsetByHours (final int hours) {
+  private static GregorianCalendar _getNowOffsetByHours (final int hours) {
     final GregorianCalendar gregorianCalendar = new GregorianCalendar ();
-    final long now = gregorianCalendar.getTimeInMillis ();
-    final long then = now + (60L * 60L * 1000L * hours);
+    final long then = gregorianCalendar.getTimeInMillis () + CGlobal.MILLISECONDS_PER_HOUR * hours;
     gregorianCalendar.setTimeInMillis (then);
     return gregorianCalendar;
   }

@@ -41,9 +41,8 @@ import java.io.File;
 
 import javax.annotation.Nonnull;
 
-import org.busdox.transport.identifiers._1.DocumentIdentifierType;
-import org.busdox.transport.identifiers._1.ProcessIdentifierType;
-
+import at.peppol.busdox.identifier.IReadonlyDocumentTypeIdentifier;
+import at.peppol.busdox.identifier.IReadonlyProcessIdentifier;
 import at.peppol.commons.identifier.doctype.EPredefinedDocumentTypeIdentifier;
 import at.peppol.commons.identifier.process.EPredefinedProcessIdentifier;
 import eu.peppol.start.identifier.KeystoreManager;
@@ -55,8 +54,8 @@ import eu.peppol.start.identifier.KeystoreManager;
  * 10:38:35 AM
  */
 public class DocumentSenderBuilder {
-  private DocumentIdentifierType m_aDocumentTypeIdentifier = EPredefinedDocumentTypeIdentifier.INVOICE_T010_BIS5A.getAsDocumentTypeIdentifier ();
-  private ProcessIdentifierType m_aPeppolProcessTypeId = EPredefinedProcessIdentifier.BIS5A.getAsProcessIdentifier ();
+  private IReadonlyDocumentTypeIdentifier m_aDocumentTypeIdentifier = EPredefinedDocumentTypeIdentifier.INVOICE_T010_BIS5A;
+  private IReadonlyProcessIdentifier m_aPeppolProcessTypeId = EPredefinedProcessIdentifier.BIS5A;
   private File m_aKeystoreFile;
   private String m_sKeystorePassword;
   private boolean m_bSoapLogging;
@@ -69,7 +68,6 @@ public class DocumentSenderBuilder {
   public DocumentSender build () {
     final KeystoreManager keystoreManager = new KeystoreManager ();
     keystoreManager.initialiseKeystore (m_aKeystoreFile, m_sKeystorePassword);
-
     return new DocumentSender (m_aDocumentTypeIdentifier, m_aPeppolProcessTypeId, m_bSoapLogging);
   }
 
@@ -78,7 +76,7 @@ public class DocumentSenderBuilder {
    */
   @Nonnull
   public DocumentSenderBuilder enableSoapLogging () {
-    this.m_bSoapLogging = true;
+    m_bSoapLogging = true;
     return this;
   }
 
@@ -87,8 +85,8 @@ public class DocumentSenderBuilder {
    * invoice document.
    */
   @Nonnull
-  public DocumentSenderBuilder setDocumentTypeIdentifier (final DocumentIdentifierType documentTypeIdentifier) {
-    this.m_aDocumentTypeIdentifier = documentTypeIdentifier;
+  public DocumentSenderBuilder setDocumentTypeIdentifier (final IReadonlyDocumentTypeIdentifier documentTypeIdentifier) {
+    m_aDocumentTypeIdentifier = documentTypeIdentifier;
     return this;
   }
 
@@ -98,7 +96,7 @@ public class DocumentSenderBuilder {
    */
   @Nonnull
   public DocumentSenderBuilder setKeystoreFile (final File keystore) {
-    this.m_aKeystoreFile = keystore;
+    m_aKeystoreFile = keystore;
     return this;
   }
 
@@ -107,7 +105,7 @@ public class DocumentSenderBuilder {
    */
   @Nonnull
   public DocumentSenderBuilder setKeystorePassword (final String keystorePassword) {
-    this.m_sKeystorePassword = keystorePassword;
+    m_sKeystorePassword = keystorePassword;
     return this;
   }
 
@@ -117,8 +115,8 @@ public class DocumentSenderBuilder {
    * invoice.
    */
   @Nonnull
-  public DocumentSenderBuilder setPeppolProcessTypeId (final ProcessIdentifierType peppolProcessTypeId) {
-    this.m_aPeppolProcessTypeId = peppolProcessTypeId;
+  public DocumentSenderBuilder setPeppolProcessTypeId (final IReadonlyProcessIdentifier peppolProcessTypeId) {
+    m_aPeppolProcessTypeId = peppolProcessTypeId;
     return this;
   }
 }
