@@ -123,6 +123,7 @@
       <item groupid="at.peppol" artifactid="oxalis-start-inbound" />
       <item groupid="at.peppol" artifactid="oxalis-start-outbound" />
       <item groupid="at.peppol" artifactid="peppol-smp-client-console" />
+      <item groupid="at.peppol" artifactid="peppol-smp-webapp" />
       <item groupid="at.peppol" artifactid="peppol-transport-lime-server" />
       <item groupid="at.peppol" artifactid="peppol-transport-start-client" />
       <item groupid="at.peppol" artifactid="peppol-transport-start-server" />
@@ -239,14 +240,6 @@
       <item groupid="at.peppol" artifactid="peppol-sml-server-library" />
     </dependsOn>
   </project>
-  <project groupid="at.peppol" artifactid="peppol-smp-webapp">
-    <dependsOn>
-      <item groupid="at.peppol" artifactid="peppol-commons-busdox" />
-      <item groupid="at.peppol" artifactid="peppol-commons-jpa" />
-      <item groupid="at.peppol" artifactid="peppol-commons-peppol" />
-      <item groupid="at.peppol" artifactid="peppol-sml-client-library" />
-    </dependsOn>
-  </project>
   <project groupid="at.peppol" artifactid="peppol-transport-start-client">
     <dependsOn>
       <item groupid="at.peppol" artifactid="peppol-commons-busdox" />
@@ -276,6 +269,15 @@
       <item groupid="at.peppol" artifactid="peppol-commons-peppol" />
       <item groupid="at.peppol" artifactid="peppol-smp-client-library" />
       <item groupid="at.peppol" artifactid="peppol-transport-api" />
+    </dependsOn>
+  </project>
+  <project groupid="at.peppol" artifactid="peppol-smp-webapp">
+    <dependsOn>
+      <item groupid="at.peppol" artifactid="peppol-commons-busdox" />
+      <item groupid="at.peppol" artifactid="peppol-commons-jpa" />
+      <item groupid="at.peppol" artifactid="peppol-commons-peppol" />
+      <item groupid="at.peppol" artifactid="peppol-sml-client-library" />
+      <item groupid="at.peppol" artifactid="peppol-smp-client-library" />
     </dependsOn>
   </project>
   <project groupid="at.peppol" artifactid="peppol-webgui-webapp">
