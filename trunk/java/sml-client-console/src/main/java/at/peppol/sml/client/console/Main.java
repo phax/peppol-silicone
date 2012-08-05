@@ -375,6 +375,6 @@ public final class Main {
                         ESMLObjectType.METADATA.getName () +
                         "].");
     System.out.println ();
-    System.out.println ("Example: java -jar sml-client.jar -u TestUser -p Test1234 -h http://localhost:8080/registrylocatorservice/ read metadata");
+    System.out.println ("Example: java -jar peppol-sml-client-console.jar -u TestUser -p Test1234 -h http://localhost:8080/registrylocatorservice/ read metadata");
   }
 }
