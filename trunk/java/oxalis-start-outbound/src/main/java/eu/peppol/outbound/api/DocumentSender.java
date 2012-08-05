@@ -43,16 +43,16 @@ import java.net.URL;
 import java.util.UUID;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import org.busdox.transport.identifiers._1.DocumentIdentifierType;
 import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
-import org.busdox.transport.identifiers._1.ProcessIdentifierType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3._2009._02.ws_tra.Create;
 import org.w3c.dom.Document;
 
 import at.peppol.busdox.CBusDox;
+import at.peppol.busdox.identifier.IReadonlyDocumentTypeIdentifier;
+import at.peppol.busdox.identifier.IReadonlyProcessIdentifier;
 import at.peppol.commons.identifier.participant.SimpleParticipantIdentifier;
 import at.peppol.transport.IMessageMetadata;
 import at.peppol.transport.MessageMetadata;
@@ -78,18 +78,18 @@ import eu.peppol.outbound.smp.SmpLookupManager;
  * User: nigel Date: Oct 17, 2011 Time: 4:42:01 PM
  */
 public final class DocumentSender {
-  private static final Logger log = LoggerFactory.getLogger ("oxalis-out");
+  private static final Logger s_aLogger = LoggerFactory.getLogger ("oxalis-out");
 
-  private final DocumentIdentifierType m_aDocumentTypeIdentifier;
-  private final ProcessIdentifierType m_aPeppolProcessTypeId;
+  private final IReadonlyDocumentTypeIdentifier m_aDocumentTypeID;
+  private final IReadonlyProcessIdentifier m_aProcessID;
   private final boolean m_bSoapLogging;
 
-  DocumentSender (final DocumentIdentifierType documentTypeIdentifier,
-                  final ProcessIdentifierType processId,
-                  final boolean soapLogging) {
-    m_aDocumentTypeIdentifier = documentTypeIdentifier;
-    m_aPeppolProcessTypeId = processId;
-    m_bSoapLogging = soapLogging;
+  DocumentSender (final IReadonlyDocumentTypeIdentifier aDocumentTypeID,
+                  final IReadonlyProcessIdentifier aProcessId,
+                  final boolean bSoapLogging) {
+    m_aDocumentTypeID = aDocumentTypeID;
+    m_aProcessID = aProcessId;
+    m_bSoapLogging = bSoapLogging;
   }
 
   /**
@@ -106,11 +106,12 @@ public final class DocumentSender {
    *        holds the PEPPOL ChannelID to be used
    * @return message id assigned
    */
+  @Nullable
   public String sendInvoice (final InputStream xmlDocument,
                              final String sender,
                              final String recipient,
                              final String channelId) {
-    return sendInvoice (xmlDocument, sender, recipient, getEndpointAddress (recipient), channelId);
+    return sendInvoice (xmlDocument, sender, recipient, _getEndpointAddress (recipient), channelId);
   }
 
   /**
@@ -127,8 +128,9 @@ public final class DocumentSender {
    *        holds the PEPPOL ChannelID to be used
    * @return message id assigned
    */
+  @Nullable
   public String sendInvoice (final File xmlDocument, final String sender, final String recipient, final String channelId) {
-    return sendInvoice (xmlDocument, sender, recipient, getEndpointAddress (recipient), channelId);
+    return sendInvoice (xmlDocument, sender, recipient, _getEndpointAddress (recipient), channelId);
   }
 
   /**
@@ -148,6 +150,7 @@ public final class DocumentSender {
    *        holds the PEPPOL ChannelID to be used
    * @return message id assigned
    */
+  @Nullable
   public String sendInvoice (final InputStream xmlDocument,
                              final String sender,
                              final String recipient,
@@ -160,7 +163,7 @@ public final class DocumentSender {
     catch (final Exception e) {
       throw new IllegalStateException ("Unable to parse xml document from " + sender + " to " + recipient, e);
     }
-    return send (document, sender, recipient, destination, channelId);
+    return _send (document, sender, recipient, destination, channelId);
   }
 
   /**
@@ -192,15 +195,15 @@ public final class DocumentSender {
     catch (final Exception e) {
       throw new IllegalStateException ("Unable to parse XML Document in file " + xmlDocument, e);
     }
-    return send (document, sender, recipient, destination, channelId);
+    return _send (document, sender, recipient, destination, channelId);
   }
 
-  private URL getEndpointAddress (final String recipient) {
-    return SmpLookupManager.getEndpointAddress (getParticipantId (recipient), m_aDocumentTypeIdentifier);
+  private URL _getEndpointAddress (final String recipient) {
+    return SmpLookupManager.getEndpointAddress (_getParticipantId (recipient), m_aDocumentTypeID, m_aProcessID);
   }
 
   @Nonnull
-  private static ParticipantIdentifierType getParticipantId (final String sender) {
+  private static ParticipantIdentifierType _getParticipantId (final String sender) {
     final SimpleParticipantIdentifier aID = SimpleParticipantIdentifier.createWithDefaultScheme (sender);
     if (!aID.isValid ())
       throw new IllegalArgumentException ("Invalid participant " + sender);
@@ -208,30 +211,29 @@ public final class DocumentSender {
     return aID;
   }
 
-  private String send (final Document document,
-                       final String sender,
-                       final String recipient,
-                       final URL destination,
-                       final String channelId) {
+  private String _send (final Document document,
+                        final String sender,
+                        final String recipient,
+                        final URL destination,
+                        final String channelId) {
     System.setProperty ("com.sun.xml.ws.client.ContentNegotiation", "none");
     System.setProperty ("com.sun.xml.wss.debug", "FaultDetail");
 
-    log.debug ("Constructing document body");
-    final ParticipantIdentifierType senderId = getParticipantId (sender);
-    final ParticipantIdentifierType recipientId = getParticipantId (recipient);
-    final Create soapBody = new Create ();
-    soapBody.getAny ().add (document.getDocumentElement ());
+    s_aLogger.debug ("Constructing document body");
+    final ParticipantIdentifierType senderId = _getParticipantId (sender);
+    final ParticipantIdentifierType recipientId = _getParticipantId (recipient);
 
-    log.debug ("Constructing SOAP header");
+    s_aLogger.debug ("Constructing SOAP header");
     final IMessageMetadata messageHeader = new MessageMetadata ("uuid:" + UUID.randomUUID ().toString (),
                                                                 channelId,
                                                                 senderId,
                                                                 recipientId,
-                                                                m_aDocumentTypeIdentifier,
-                                                                m_aPeppolProcessTypeId);
+                                                                m_aDocumentTypeID,
+                                                                m_aProcessID);
 
     CBusDox.enableSoapLogging (m_bSoapLogging);
-    AccessPointClient.send (destination.toExternalForm (), messageHeader, soapBody);
+    if (AccessPointClient.send (destination.toExternalForm (), messageHeader, document).isFailure ())
+      return null;
     return messageHeader.getMessageID ();
   }
 }

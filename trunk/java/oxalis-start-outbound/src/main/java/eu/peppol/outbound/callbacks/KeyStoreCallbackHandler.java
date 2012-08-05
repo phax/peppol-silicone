@@ -60,17 +60,17 @@ public final class KeyStoreCallbackHandler implements CallbackHandler {
   public void handle (final Callback [] callbacks) {
     final KeystoreManager keystoreManager = new KeystoreManager ();
 
-    for (final Callback callback : callbacks) {
-      if (callback instanceof KeyStoreCallback) {
+    for (final Callback aCallback : callbacks) {
+      if (aCallback instanceof KeyStoreCallback) {
         log.debug ("Keystore callback handler: returning keystore");
         final KeyStore keystore = keystoreManager.getKeystore ();
-        ((KeyStoreCallback) callback).setKeystore (keystore);
+        ((KeyStoreCallback) aCallback).setKeystore (keystore);
       }
       else
-        if (callback instanceof PrivateKeyCallback) {
+        if (aCallback instanceof PrivateKeyCallback) {
           log.debug ("Keystore callback handler: returning private key");
           final PrivateKey privateKey = keystoreManager.getOurPrivateKey ();
-          ((PrivateKeyCallback) callback).setKey (privateKey);
+          ((PrivateKeyCallback) aCallback).setKey (privateKey);
         }
     }
   }

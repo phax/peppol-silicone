@@ -48,16 +48,15 @@ import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
 
 import org.busdox.transport.identifiers._1.DocumentIdentifierType;
-import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 import org.busdox.transport.identifiers._1.ProcessIdentifierType;
 
-import at.peppol.busdox.identifier.IDocumentTypeIdentifier;
+import at.peppol.busdox.identifier.IReadonlyDocumentTypeIdentifier;
+import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
 import at.peppol.commons.identifier.doctype.EPredefinedDocumentTypeIdentifier;
 import at.peppol.commons.identifier.participant.SimpleParticipantIdentifier;
 import eu.peppol.outbound.api.DocumentSender;
 import eu.peppol.outbound.api.DocumentSenderBuilder;
 import eu.peppol.outbound.smp.SmpLookupManager;
-import eu.peppol.outbound.smp.SmpSignedServiceMetaDataException;
 
 /**
  * @author ravnholt
@@ -80,9 +79,9 @@ public final class Main {
     final OptionParser optionParser = getOptionParser ();
 
     if (args.length == 0) {
-      System.out.println ("");
+      System.out.println ();
       optionParser.printHelpOn (System.out);
-      System.out.println ("");
+      System.out.println ();
       return;
     }
 
@@ -137,8 +136,8 @@ public final class Main {
     }
 
     try {
-      System.out.println ("");
-      System.out.println ("");
+      System.out.println ();
+      System.out.println ();
 
       // Holds the messageId assigned upon successful transmission
       String messageId = null;
@@ -165,20 +164,20 @@ public final class Main {
 
     }
     catch (final Exception e) {
-      System.out.println ("");
+      System.out.println ();
       e.printStackTrace ();
-      System.out.println ("");
+      System.out.println ();
     }
   }
 
   private static void printErrorMessage (final String message) {
-    System.out.println ("");
+    System.out.println ();
     System.out.println ("*** " + message);
-    System.out.println ("");
+    System.out.println ();
   }
 
-  private static ProcessIdentifierType getDefaultProcess (final ParticipantIdentifierType participantId,
-                                                          final IDocumentTypeIdentifier documentId) throws SmpSignedServiceMetaDataException {
+  private static ProcessIdentifierType getDefaultProcess (final IReadonlyParticipantIdentifier participantId,
+                                                          final IReadonlyDocumentTypeIdentifier documentId) throws Exception {
     return SmpLookupManager.getProcessIdentifierForDocumentType (participantId, documentId);
   }
 
