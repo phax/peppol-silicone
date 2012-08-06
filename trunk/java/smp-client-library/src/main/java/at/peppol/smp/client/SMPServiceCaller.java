@@ -347,7 +347,9 @@ public final class SMPServiceCaller {
 
   /**
    * Returns a complete service group. A complete service group contains both
-   * the service group and the service metadata.
+   * the service group and the service metadata. This method is handy when using
+   * the results from
+   * {@link #getServiceGroupReferenceList(String, IReadonlyUsernamePWCredentials)}
    * 
    * @param aURI
    *        The URI containing the complete service group
@@ -362,7 +364,6 @@ public final class SMPServiceCaller {
    * @throws BadRequestException
    *         The request was not well formed.
    */
-  @Deprecated
   public static CompleteServiceGroupType getCompleteServiceGroup (@Nonnull final URI aURI) throws Exception {
     return _getCompleteServiceGroup (_getResource (aURI));
   }
@@ -393,7 +394,11 @@ public final class SMPServiceCaller {
     return new SMPServiceCaller (aServiceGroupID, aSMLInfo).getCompleteServiceGroup (aServiceGroupID);
   }
 
+  @Nonnull
   private static ServiceGroupType _getServiceGroup (@Nonnull final WebResource aFullResource) throws Exception {
+    if (aFullResource == null)
+      throw new NullPointerException ("fullResource");
+
     try {
       return aFullResource.get (TYPE_SERVICEGROUP).getValue ();
     }
@@ -487,6 +492,13 @@ public final class SMPServiceCaller {
   private static void _saveServiceGroup (@Nonnull final WebResource aFullResource,
                                          @Nonnull final ServiceGroupType aServiceGroup,
                                          @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
+    if (aFullResource == null)
+      throw new NullPointerException ("fullResource");
+    if (aServiceGroup == null)
+      throw new NullPointerException ("serviceGroup");
+    if (aCredentials == null)
+      throw new NullPointerException ("credentials");
+
     try {
       final Builder aBuilderWithAuth = aFullResource.header (HttpHeaders.AUTHORIZATION,
                                                              aCredentials.getAsHTTPHeaderValue ());
@@ -589,6 +601,11 @@ public final class SMPServiceCaller {
 
   private static void _deleteServiceGroup (@Nonnull final WebResource aFullResource,
                                            @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
+    if (aFullResource == null)
+      throw new NullPointerException ("fullResource");
+    if (aCredentials == null)
+      throw new NullPointerException ("credentials");
+
     try {
       final Builder aBuilderWithAuth = aFullResource.header (HttpHeaders.AUTHORIZATION,
                                                              aCredentials.getAsHTTPHeaderValue ());
@@ -650,6 +667,9 @@ public final class SMPServiceCaller {
   }
 
   private static SignedServiceMetadataType _getSignedServiceMetadata (@Nonnull final WebResource aFullResource) throws Exception {
+    if (aFullResource == null)
+      throw new NullPointerException ("fullResource");
+
     try {
       SignedServiceMetadataType aMetadata = aFullResource.get (TYPE_SIGNEDSERVICEMETADATA).getValue ();
 
@@ -730,7 +750,6 @@ public final class SMPServiceCaller {
                          "/services/" +
                          IdentifierUtils.getIdentifierURIPercentEncoded (aDocumentTypeID);
     final WebResource aFullResource = m_aWebResourceWithSignatureCheck.path (sPath);
-
     return _getSignedServiceMetadata (aFullResource);
   }
 
@@ -797,14 +816,15 @@ public final class SMPServiceCaller {
                                    @Nonnull final IReadonlyDocumentTypeIdentifier aDocumentTypeID,
                                    @Nonnull final IReadonlyProcessIdentifier aProcessID) throws Exception {
     if (aServiceGroupID == null)
-      throw new NullPointerException ("serviceGroupIDID");
+      throw new NullPointerException ("serviceGroupID");
     if (aDocumentTypeID == null)
       throw new NullPointerException ("documentType");
     if (aProcessID == null)
       throw new NullPointerException ("processID");
 
     // Get meta data for participant/documentType
-    final SignedServiceMetadataType aSignedServiceMetadata = getServiceRegistration (aServiceGroupID, aDocumentTypeID);
+    final SignedServiceMetadataType aSignedServiceMetadata = getServiceRegistrationOrNull (aServiceGroupID,
+                                                                                           aDocumentTypeID);
     if (aSignedServiceMetadata != null) {
       // Iterate all processes
       final List <ProcessType> aAllProcesses = aSignedServiceMetadata.getServiceMetadata ()
@@ -859,6 +879,13 @@ public final class SMPServiceCaller {
   private static void _saveServiceRegistration (@Nonnull final WebResource aFullResource,
                                                 @Nonnull final ServiceMetadataType aServiceMetadata,
                                                 @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
+    if (aFullResource == null)
+      throw new NullPointerException ("fullResource");
+    if (aServiceMetadata == null)
+      throw new NullPointerException ("serviceMetadata");
+    if (aCredentials == null)
+      throw new NullPointerException ("credentials");
+
     try {
       final Builder aBuilderWithAuth = aFullResource.header (HttpHeaders.AUTHORIZATION,
                                                              aCredentials.getAsHTTPHeaderValue ());
@@ -943,6 +970,11 @@ public final class SMPServiceCaller {
 
   private static void _deleteServiceRegistration (@Nonnull final WebResource aFullResource,
                                                   @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
+    if (aFullResource == null)
+      throw new NullPointerException ("fullResource");
+    if (aCredentials == null)
+      throw new NullPointerException ("credentials");
+
     try {
       final Builder aBuilderWithAuth = aFullResource.header (HttpHeaders.AUTHORIZATION,
                                                              aCredentials.getAsHTTPHeaderValue ());
