@@ -43,11 +43,11 @@ package at.peppol.transport.start.server;
 
 import java.math.BigInteger;
 import java.security.KeyStore;
+import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.ServiceLoader;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -59,6 +59,7 @@ import javax.xml.ws.FaultAction;
 import javax.xml.ws.WebServiceContext;
 import javax.xml.ws.soap.Addressing;
 
+import org.busdox.servicemetadata.publishing._1.EndpointType;
 import org.busdox.transport.start.cert.ServerConfigFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,12 +75,12 @@ import org.w3._2009._02.ws_tra.Put;
 import org.w3._2009._02.ws_tra.PutResponse;
 
 import at.peppol.busdox.CBusDox;
-import at.peppol.busdox.identifier.IParticipantIdentifier;
-import at.peppol.commons.identifier.IdentifierUtils;
+import at.peppol.commons.identifier.participant.SimpleParticipantIdentifier;
 import at.peppol.commons.security.KeyStoreUtils;
 import at.peppol.commons.sml.ESML;
 import at.peppol.commons.sml.ISMLInfo;
 import at.peppol.commons.utils.ExceptionUtils;
+import at.peppol.smp.client.CertificateUtils;
 import at.peppol.smp.client.SMPServiceCaller;
 import at.peppol.transport.IMessageMetadata;
 import at.peppol.transport.MessageMetadataHelper;
@@ -92,6 +93,7 @@ import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.error.EErrorLevel;
 import com.phloc.commons.exceptions.InitializationException;
 import com.phloc.commons.io.misc.SizeHelper;
+import com.phloc.commons.lang.ServiceLoaderBackport;
 import com.phloc.commons.log.LogMessage;
 import com.phloc.commons.state.ESuccess;
 import com.phloc.commons.state.impl.SuccessWithValue;
@@ -120,7 +122,7 @@ public class AccessPointService {
 
   static {
     // Load all SPI implementations
-    s_aReceivers = ContainerHelper.newUnmodifiableList (ServiceLoader.load (IAccessPointServiceReceiverSPI.class));
+    s_aReceivers = ContainerHelper.newUnmodifiableList (ServiceLoaderBackport.load (IAccessPointServiceReceiverSPI.class));
     if (s_aReceivers.isEmpty ())
       s_aLogger.error ("No implementation of the SPI interface " +
                        IAccessPointServiceReceiverSPI.class +
@@ -150,46 +152,48 @@ public class AccessPointService {
    *         In case the endpoint address could not be resolved.
    */
   @Nullable
-  private static String _getAPURL (@Nonnull final IMessageMetadata aMetadata) throws FaultMessage {
-    final IParticipantIdentifier aRecipientID = aMetadata.getRecipientID ();
+  private static EndpointType _getRecipientEndpoint (@Nonnull final IMessageMetadata aMetadata) throws FaultMessage {
+    final SimpleParticipantIdentifier aRecipientID = aMetadata.getRecipientID ();
     try {
+      if (s_aLogger.isDebugEnabled ())
+        s_aLogger.debug ("Looking up the endpoint of recipient " + aRecipientID.getURIEncoded ());
+
       // Query the SMP
-      return new SMPServiceCaller (aRecipientID, SML_INFO).getEndpointAddress (aRecipientID,
-                                                                               aMetadata.getDocumentTypeID (),
-                                                                               aMetadata.getProcessID ());
+      final SMPServiceCaller aSMPClient = new SMPServiceCaller (aRecipientID, SML_INFO);
+      if (s_aLogger.isDebugEnabled ())
+        s_aLogger.debug ("Performing SMP lookup at " + aSMPClient.getSMPHost ());
+
+      return aSMPClient.getEndpoint (aRecipientID, aMetadata.getDocumentTypeID (), aMetadata.getProcessID ());
     }
     catch (final Throwable t) {
       throw ExceptionUtils.createFaultMessage (t,
-                                               "Failed to retrieve endpoint address of recipient " +
-                                                   IdentifierUtils.getIdentifierURIEncoded (aRecipientID));
+                                               "Failed to retrieve endpoint of recipient " +
+                                                   aRecipientID.getURIEncoded ());
     }
   }
 
   /**
    * Get the certificate of the recipient access point as stored in the SMP
    * 
-   * @param aMetadata
-   *        The current message meta data
+   * @param aRecipientEndpoint
+   *        The SMP endpoint retrieved previously
    * @return <code>null</code> if no such certificate was found
    * @throws FaultMessage
    *         In case of an error
    */
   @Nullable
-  private static X509Certificate _getRecipientCert (@Nonnull final IMessageMetadata aMetadata) throws FaultMessage {
-    final IParticipantIdentifier aRecipientID = aMetadata.getRecipientID ();
+  private static X509Certificate _getRecipientCert (@Nonnull final EndpointType aRecipientEndpoint) throws FaultMessage {
+    final String sCertString = SMPServiceCaller.getEndpointCertificateString (aRecipientEndpoint);
     try {
-      return new SMPServiceCaller (aRecipientID, SML_INFO).getEndpointCertificate (aRecipientID,
-                                                                                   aMetadata.getDocumentTypeID (),
-                                                                                   aMetadata.getProcessID ());
+      return CertificateUtils.convertStringToCertficate (sCertString);
     }
-    catch (final Throwable t) {
+    catch (final CertificateException t) {
       if (GlobalDebug.isDebugMode ()) {
         // In development mode it is okay, if this AccessPoint is not registered
-        // in an SML
+        // in an SMP
         return null;
       }
-      throw ExceptionUtils.createFaultMessage (t, "Failed to retrieve endpoint certificate of recipient " +
-                                                  IdentifierUtils.getIdentifierURIEncoded (aRecipientID));
+      throw ExceptionUtils.createFaultMessage (t, "Failed to convert endpoint certificate string '" + sCertString + "'");
     }
   }
 
@@ -208,18 +212,21 @@ public class AccessPointService {
     }
 
     if (aReceiverCert == null) {
-      s_aLogger.error ("No receiver certificate present");
+      // Log message was already emitted
       return false;
     }
 
+    // Compare serial numbers
     final BigInteger aMySerial = s_aConfiguredCert.getSerialNumber ();
     final BigInteger aReceiverSerial = aReceiverCert.getSerialNumber ();
     if (!aMySerial.equals (aReceiverSerial)) {
       s_aLogger.error ("Certificate serial number mismatch!");
-      s_aLogger.info ("My certificate serial number: " + aMySerial.toString ());
-      s_aLogger.info ("      Receiver serial number: " + aReceiverSerial.toString ());
+      s_aLogger.info ("Our certificate serial number: " + aMySerial.toString ());
+      s_aLogger.info ("       Receiver serial number: " + aReceiverSerial.toString ());
       return false;
     }
+
+    // Serial numbers match
     return true;
   }
 
@@ -259,12 +266,19 @@ public class AccessPointService {
            output = "http://www.w3.org/2009/02/ws-tra/CreateResponse",
            fault = { @FaultAction (className = FaultMessage.class, value = "http://busdox.org/2010/02/channel/fault") })
   public CreateResponse create (final Create aBody) throws FaultMessage {
-    s_aLogger.info ("AccesspointService.create called");
+    if (GlobalDebug.isDebugMode ())
+      s_aLogger.warn ("Receiving PEPPOL document in debug mode!");
+
+    if (s_aLogger.isDebugEnabled ())
+      s_aLogger.debug ("AccesspointService.create called");
 
     // Grabs the list of headers from the SOAP message
     final HeaderList aHeaderList = (HeaderList) webServiceContext.getMessageContext ()
                                                                  .get (JAXWSProperties.INBOUND_HEADER_LIST_PROPERTY);
     final IMessageMetadata aMetadata = MessageMetadataHelper.createMetadataFromHeaders (aHeaderList);
+    if (s_aLogger.isDebugEnabled ())
+      s_aLogger.debug ("Extracted the following metadata from the headers\n" +
+                       MessageMetadataHelper.getDebugInfo (aMetadata));
 
     // TODO do we need a check, whether the message ID was already received
     try {
@@ -280,30 +294,37 @@ public class AccessPointService {
       else {
         // Not a ping message
 
+        // Get the endpoint information required from the recipient
+        final EndpointType aRecipientEndpoint = _getRecipientEndpoint (aMetadata);
+
         // Get our public endpoint address from the config file
         final String sOwnAPUrl = ServerConfigFile.getOwnAPURL ();
+        if (s_aLogger.isDebugEnabled ())
+          s_aLogger.debug ("Our AP URL is " + sOwnAPUrl);
 
         // In debug mode, use our recipient URL, so that the URL check will work
-        final String sRecipientAPUrl = GlobalDebug.isDebugMode () ? sOwnAPUrl : _getAPURL (aMetadata);
+        final String sRecipientAPUrl = GlobalDebug.isDebugMode ()
+                                                                 ? sOwnAPUrl
+                                                                 : SMPServiceCaller.getEndpointAddress (aRecipientEndpoint);
+        if (s_aLogger.isDebugEnabled ())
+          s_aLogger.debug ("Recipient AP URL is " + sRecipientAPUrl);
 
         // Get the recipient certificate from the SMP
-        final X509Certificate aRecipientSMPCert = _getRecipientCert (aMetadata);
+        final X509Certificate aRecipientSMPCert = _getRecipientCert (aRecipientEndpoint);
         if (aRecipientSMPCert == null)
           s_aLogger.error ("No Metadata Certificate found! Is this AP maybe not contained in an SMP? Recipient ID is " +
-                           IdentifierUtils.getIdentifierURIEncoded (aMetadata.getRecipientID ()));
-
-        if (s_aLogger.isDebugEnabled ()) {
-          s_aLogger.debug ("Our endpoint: " + sOwnAPUrl);
-          s_aLogger.debug ("Recipient endpoint: " + sRecipientAPUrl);
-          if (aRecipientSMPCert == null)
-            s_aLogger.debug ("No Recipient certificate found");
-          else
+                           aMetadata.getRecipientID ().getURIEncoded ());
+        else {
+          if (s_aLogger.isDebugEnabled ())
             s_aLogger.debug ("Recipient certificate present: " + aRecipientSMPCert.toString ());
         }
 
         if (_isTheSameCert (aRecipientSMPCert)) {
+          if (s_aLogger.isDebugEnabled ())
+            s_aLogger.debug ("The certificate of the recipient matches our certificate");
+
           // Is it for us?
-          if (sRecipientAPUrl.indexOf (sOwnAPUrl) >= 0) {
+          if (sRecipientAPUrl.contains (sOwnAPUrl)) {
             s_aLogger.info ("This is a handled request for " + aMetadata.getRecipientID ().getValue ());
 
             // Invoke all available SPI implementations
@@ -311,10 +332,19 @@ public class AccessPointService {
             final List <LogMessage> aProcessingMessages = new ArrayList <LogMessage> ();
             try {
               // Invoke all available SPI implementations
+              if (s_aLogger.isDebugEnabled ())
+                s_aLogger.debug ("Now invoking " + s_aReceivers.size () + " SPI implementations");
+
               for (final IAccessPointServiceReceiverSPI aReceiver : s_aReceivers) {
+                if (s_aLogger.isDebugEnabled ())
+                  s_aLogger.debug ("Now invoking " + aReceiver.toString ());
+
                 final SuccessWithValue <AccessPointReceiveError> aSV = aReceiver.receiveDocument (webServiceContext,
                                                                                                   aMetadata,
                                                                                                   aBody);
+                if (s_aLogger.isDebugEnabled ())
+                  s_aLogger.debug ("Result of invoking " + aReceiver.toString () + ": " + aSV.toString ());
+
                 eOverallSuccess = eOverallSuccess.and (aSV);
                 final AccessPointReceiveError aError = aSV.get ();
                 if (aError != null) {
@@ -349,7 +379,7 @@ public class AccessPointService {
             }
 
             // Log success
-            s_aLogger.info ("Done handling incoming document from PEPPOL");
+            s_aLogger.info ("Done handling incoming document via START");
           }
           else {
             s_aLogger.error ("The received document is not for us!");
@@ -376,6 +406,7 @@ public class AccessPointService {
       if (GlobalDebug.isDebugMode ())
         _checkMemoryUsage ();
 
+      // Create an empty response
       final CreateResponse aResponse = new CreateResponse ();
       return aResponse;
     }
