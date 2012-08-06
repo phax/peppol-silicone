@@ -210,8 +210,8 @@ public final class SMPServiceCaller {
       throw new IllegalStateException ("Failed to resolve host from " + aSMPHost, ex);
     }
 
-    m_aWebResource = _getResource (aSMPHost);
-    m_aWebResourceWithSignatureCheck = _getResourceWithSignatureCheck (aSMPHost);
+    m_aWebResource = _getResource (m_aSMPHost);
+    m_aWebResourceWithSignatureCheck = _getResourceWithSignatureCheck (m_aSMPHost);
   }
 
   /**
