@@ -44,14 +44,12 @@ import java.security.Security;
 import java.security.cert.CertPath;
 import java.security.cert.CertPathValidator;
 import java.security.cert.CertPathValidatorException;
-import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.PKIXCertPathValidatorResult;
 import java.security.cert.PKIXParameters;
 import java.security.cert.TrustAnchor;
 import java.security.cert.X509Certificate;
-import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
@@ -80,8 +78,8 @@ final class OCSP {
   /**
    * Compares a thing to another thing.
    * 
-   * @param aCertList
-   *        List of Certificates.
+   * @param aCertificate
+   *        Certificate to check.
    * @param aTrustedCert
    *        Trusted Certificate.
    * @param sResponderUrl
@@ -89,7 +87,7 @@ final class OCSP {
    * @return {@link EValidity}
    */
   @Nonnull
-  public static EValidity check (final List <? extends Certificate> aCertList,
+  public static EValidity check (@Nonnull final X509Certificate aCertificate,
                                  @Nonnull final X509Certificate aTrustedCert,
                                  final String sResponderUrl) {
 
@@ -98,7 +96,7 @@ final class OCSP {
       final CertificateFactory cf = CertificateFactory.getInstance ("X.509");
 
       // Extract the certification path from the List of Certificates
-      final CertPath cp = cf.generateCertPath (aCertList);
+      final CertPath cp = cf.generateCertPath (ContainerHelper.newList (aCertificate));
 
       // Create CertPathValidator that implements the "PKIX" algorithm
       final CertPathValidator cpv = CertPathValidator.getInstance ("PKIX");
@@ -120,7 +118,8 @@ final class OCSP {
       final PKIXCertPathValidatorResult result = (PKIXCertPathValidatorResult) cpv.validate (cp, aParams);
       result.getPolicyTree ();
       result.getPublicKey ();
-      s_aLogger.debug ("Certificate is OCSP valid");
+      if (s_aLogger.isDebugEnabled ())
+        s_aLogger.debug ("Certificate " + aCertificate.getSerialNumber () + " is OCSP valid");
       return EValidity.VALID;
     }
     catch (final NoSuchAlgorithmException e) {
