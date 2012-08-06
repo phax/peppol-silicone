@@ -275,7 +275,7 @@ public class AccessPointService {
 
       if (PingMessageHelper.isPingMessage (aMetadata)) {
         // It's a PING message - no actions to be taken!
-        s_aLogger.info ("Got a ping message - discarding it!");
+        s_aLogger.info ("Got a ping message from " + aMetadata.getSenderID ().getURIEncoded () + " - discarding it!");
       }
       else {
         // Not a ping message
