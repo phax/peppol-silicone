@@ -54,8 +54,7 @@ import at.peppol.commons.utils.ConfigFile;
 import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
 import at.peppol.commons.utils.ReadonlyUsernamePWCredentials;
 import at.peppol.commons.wsaddr.W3CEndpointReferenceUtils;
-import at.peppol.smp.client.SMPServiceCaller;
-import at.peppol.smp.client.UserId;
+import at.peppol.smp.client.CertificateUtils;
 
 import com.phloc.commons.base64.Base64;
 import com.phloc.commons.exceptions.InitializationException;
@@ -77,7 +76,7 @@ public final class CFunctestConfig {
       System.out.println (Base64.encodeBytes (SimpleFileIO.readFileBytes (new File ("AP Public Key.cer"))));
 
     try {
-      if (SMPServiceCaller.convertStringToCertficate (getAPCert ()) == null)
+      if (CertificateUtils.convertStringToCertficate (getAPCert ()) == null)
         throw new InitializationException ("Failed to convert certificate string to a certificate!");
     }
     catch (final CertificateException ex) {
@@ -100,11 +99,6 @@ public final class CFunctestConfig {
   @Nonnull
   public static final IReadonlyUsernamePWCredentials getSMPCredentials () {
     return new ReadonlyUsernamePWCredentials (getSMPUserName (), getSMPPassword ());
-  }
-
-  @Nonnull
-  public static final UserId getSMPUserId () {
-    return new UserId (getSMPUserName ());
   }
 
   @Nonnull

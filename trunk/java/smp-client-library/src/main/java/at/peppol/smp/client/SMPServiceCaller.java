@@ -38,8 +38,6 @@
 package at.peppol.smp.client;
 
 import java.net.URI;
-import java.security.cert.CertificateException;
-import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.Iterator;
 import java.util.List;
@@ -60,7 +58,6 @@ import org.busdox.servicemetadata.publishing._1.ServiceGroupType;
 import org.busdox.servicemetadata.publishing._1.ServiceInformationType;
 import org.busdox.servicemetadata.publishing._1.ServiceMetadataType;
 import org.busdox.servicemetadata.publishing._1.SignedServiceMetadataType;
-import org.busdox.transport.identifiers._1.ParticipantIdentifierType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3._2000._09.xmldsig.X509DataType;
@@ -69,6 +66,7 @@ import at.peppol.busdox.identifier.IReadonlyDocumentTypeIdentifier;
 import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
 import at.peppol.busdox.identifier.IReadonlyProcessIdentifier;
 import at.peppol.commons.identifier.IdentifierUtils;
+import at.peppol.commons.identifier.participant.SimpleParticipantIdentifier;
 import at.peppol.commons.sml.ISMLInfo;
 import at.peppol.commons.uri.BusdoxURLUtils;
 import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
@@ -80,7 +78,7 @@ import at.peppol.smp.client.exception.UnknownException;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.collections.ContainerHelper;
-import com.phloc.commons.io.streams.NonBlockingByteArrayInputStream;
+import com.phloc.commons.string.StringHelper;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse.Status;
 import com.sun.jersey.api.client.GenericType;
@@ -95,9 +93,6 @@ import com.sun.jersey.api.client.WebResource.Builder;
  */
 @NotThreadSafe
 public final class SMPServiceCaller {
-  public static final String BEGIN_CERTIFICATE = "-----BEGIN CERTIFICATE-----\n";
-  public static final String END_CERTIFICATE = "\n-----END CERTIFICATE-----";
-
   private static final Logger s_aLogger = LoggerFactory.getLogger (SMPServiceCaller.class);
 
   // Don't think of changing anything here! This is very sensitive. Don't
@@ -115,6 +110,9 @@ public final class SMPServiceCaller {
 
   @Nonnull
   private static WebResource _getResourceWithSignatureCheck (@Nonnull final URI aURI) {
+    if (aURI == null)
+      throw new NullPointerException ("URI");
+
     final Client aClient = Client.create ();
     aClient.addFilter (new CheckSignatureFilter ());
     aClient.setFollowRedirects (Boolean.FALSE);
@@ -123,6 +121,9 @@ public final class SMPServiceCaller {
 
   @Nonnull
   private static WebResource _getResource (@Nonnull final URI aURI) {
+    if (aURI == null)
+      throw new NullPointerException ("URI");
+
     final Client aClient = Client.create ();
     aClient.setFollowRedirects (Boolean.FALSE);
     return aClient.resource (aURI);
@@ -187,7 +188,7 @@ public final class SMPServiceCaller {
    * Gets a list of references to the CompleteServiceGroup's owned by the
    * specified userId.
    * 
-   * @param aUserID
+   * @param sUserID
    *        The username for which to retrieve service groups.
    * @param aCredentials
    *        The username and password to use as aCredentials.
@@ -202,17 +203,22 @@ public final class SMPServiceCaller {
    *         The request was not well formed.
    */
   @Nonnull
-  public ServiceGroupReferenceListType getServiceGroupReferenceList (@Nonnull final UserId aUserID,
+  public ServiceGroupReferenceListType getServiceGroupReferenceList (@Nonnull final String sUserID,
                                                                      @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
-    final WebResource aFullResource = m_aWebResource.path ("/list/" + aUserID.getUserIdPercentEncoded ());
-    return _getServiceGroupReferenceListResource (aFullResource, aCredentials);
+    if (StringHelper.hasNoText (sUserID))
+      throw new IllegalArgumentException ("The user ID for which the listing should be created, must be supplied!");
+    if (aCredentials == null)
+      throw new NullPointerException ("credentials");
+
+    final WebResource aFullResource = m_aWebResource.path ("/list/" + BusdoxURLUtils.createPercentEncodedURL (sUserID));
+    return _getServiceGroupReferenceList (aFullResource, aCredentials);
   }
 
   @Nullable
-  public ServiceGroupReferenceListType getServiceGroupReferenceListOrNull (@Nonnull final UserId aUserID,
+  public ServiceGroupReferenceListType getServiceGroupReferenceListOrNull (@Nonnull final String sUserID,
                                                                            @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
     try {
-      return getServiceGroupReferenceList (aUserID, aCredentials);
+      return getServiceGroupReferenceList (sUserID, aCredentials);
     }
     catch (final NotFoundException ex) {
       return null;
@@ -239,9 +245,12 @@ public final class SMPServiceCaller {
    */
   @Nonnull
   public CompleteServiceGroupType getCompleteServiceGroup (@Nonnull final IReadonlyParticipantIdentifier aServiceGroupID) throws Exception {
+    if (aServiceGroupID == null)
+      throw new NullPointerException ("serviceGroupID");
+
     final WebResource aFullResource = m_aWebResource.path ("/complete/" +
                                                            IdentifierUtils.getIdentifierURIPercentEncoded (aServiceGroupID));
-    return _getCompleteServiceGroupResource (aFullResource);
+    return _getCompleteServiceGroup (aFullResource);
   }
 
   @Nullable
@@ -273,8 +282,11 @@ public final class SMPServiceCaller {
    */
   @Nonnull
   public ServiceGroupType getServiceGroup (@Nonnull final IReadonlyParticipantIdentifier aServiceGroupID) throws Exception {
+    if (aServiceGroupID == null)
+      throw new NullPointerException ("serviceGroupID");
+
     final WebResource aFullResource = m_aWebResource.path (IdentifierUtils.getIdentifierURIPercentEncoded (aServiceGroupID));
-    return _getServiceGroupResource (aFullResource);
+    return _getServiceGroup (aFullResource);
   }
 
   @Nullable
@@ -307,8 +319,13 @@ public final class SMPServiceCaller {
    */
   public void saveServiceGroup (@Nonnull final ServiceGroupType aServiceGroup,
                                 @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
+    if (aServiceGroup == null)
+      throw new NullPointerException ("serviceGroup");
+    if (aCredentials == null)
+      throw new NullPointerException ("credentials");
+
     final WebResource aFullResource = m_aWebResource.path (IdentifierUtils.getIdentifierURIPercentEncoded (aServiceGroup.getParticipantIdentifier ()));
-    _saveServiceGroupResource (aFullResource, aServiceGroup, aCredentials);
+    _saveServiceGroup (aFullResource, aServiceGroup, aCredentials);
   }
 
   /**
@@ -329,10 +346,15 @@ public final class SMPServiceCaller {
    * @throws BadRequestException
    *         The request was not well formed.
    */
-  public void saveServiceGroup (@Nonnull final ParticipantIdentifierType aParticipantID,
+  public void saveServiceGroup (@Nonnull final IReadonlyParticipantIdentifier aParticipantID,
                                 @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
+    if (aParticipantID == null)
+      throw new NullPointerException ("participantID");
+    if (aCredentials == null)
+      throw new NullPointerException ("credentials");
+
     final ServiceGroupType aServiceGroup = s_aObjFactory.createServiceGroupType ();
-    aServiceGroup.setParticipantIdentifier (aParticipantID);
+    aServiceGroup.setParticipantIdentifier (new SimpleParticipantIdentifier (aParticipantID));
     saveServiceGroup (aServiceGroup, aCredentials);
   }
 
@@ -354,8 +376,13 @@ public final class SMPServiceCaller {
    */
   public void deleteServiceGroup (@Nonnull final IReadonlyParticipantIdentifier aServiceGroupID,
                                   @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
+    if (aServiceGroupID == null)
+      throw new NullPointerException ("serviceGroupID");
+    if (aCredentials == null)
+      throw new NullPointerException ("credentials");
+
     final WebResource aFullResource = m_aWebResource.path (IdentifierUtils.getIdentifierURIPercentEncoded (aServiceGroupID));
-    _deleteServiceGroupResource (aFullResource, aCredentials);
+    _deleteServiceGroup (aFullResource, aCredentials);
   }
 
   /**
@@ -379,12 +406,17 @@ public final class SMPServiceCaller {
   @Nonnull
   public SignedServiceMetadataType getServiceRegistration (@Nonnull final IReadonlyParticipantIdentifier aServiceGroupID,
                                                            @Nonnull final IReadonlyDocumentTypeIdentifier aDocumentTypeID) throws Exception {
-    final String path = IdentifierUtils.getIdentifierURIPercentEncoded (aServiceGroupID) +
-                        "/services/" +
-                        IdentifierUtils.getIdentifierURIPercentEncoded (aDocumentTypeID);
-    final WebResource aFullResource = m_aWebResourceWithSignatureCheck.path (path);
+    if (aServiceGroupID == null)
+      throw new NullPointerException ("serviceGroupID");
+    if (aDocumentTypeID == null)
+      throw new NullPointerException ("documentType");
 
-    return _getSignedServiceMetadataResource (aFullResource);
+    final String sPath = IdentifierUtils.getIdentifierURIPercentEncoded (aServiceGroupID) +
+                         "/services/" +
+                         IdentifierUtils.getIdentifierURIPercentEncoded (aDocumentTypeID);
+    final WebResource aFullResource = m_aWebResourceWithSignatureCheck.path (sPath);
+
+    return _getSignedServiceMetadata (aFullResource);
   }
 
   @Nullable
@@ -402,6 +434,13 @@ public final class SMPServiceCaller {
   public EndpointType getEndpoint (@Nonnull final IReadonlyParticipantIdentifier aServiceGroupID,
                                    @Nonnull final IReadonlyDocumentTypeIdentifier aDocumentTypeID,
                                    @Nonnull final IReadonlyProcessIdentifier aProcessID) throws Exception {
+    if (aServiceGroupID == null)
+      throw new NullPointerException ("serviceGroupIDID");
+    if (aDocumentTypeID == null)
+      throw new NullPointerException ("documentType");
+    if (aProcessID == null)
+      throw new NullPointerException ("processID");
+
     // Get meta data for participant/documentType
     final SignedServiceMetadataType aSignedServiceMetadata = getServiceRegistration (aServiceGroupID, aDocumentTypeID);
     if (aSignedServiceMetadata != null) {
@@ -438,33 +477,16 @@ public final class SMPServiceCaller {
   public String getEndpointCertificateString (@Nonnull final IReadonlyParticipantIdentifier aServiceGroupID,
                                               @Nonnull final IReadonlyDocumentTypeIdentifier aDocumentTypeID,
                                               @Nonnull final IReadonlyProcessIdentifier aProcessID) throws Exception {
-
     final EndpointType aEndpoint = getEndpoint (aServiceGroupID, aDocumentTypeID, aProcessID);
     return aEndpoint == null ? null : aEndpoint.getCertificate ();
-  }
-
-  @Nullable
-  public static X509Certificate convertStringToCertficate (@Nullable final String sCertString) throws CertificateException {
-    if (sCertString == null)
-      return null;
-
-    // Convert certificate string to an object
-    String sRealCertString = sCertString;
-    if (!sRealCertString.startsWith (BEGIN_CERTIFICATE))
-      sRealCertString = BEGIN_CERTIFICATE + sRealCertString;
-    if (!sRealCertString.endsWith (END_CERTIFICATE))
-      sRealCertString += END_CERTIFICATE;
-    final CertificateFactory aCertificateFactory = CertificateFactory.getInstance ("X.509");
-    return (X509Certificate) aCertificateFactory.generateCertificate (new NonBlockingByteArrayInputStream (sRealCertString.getBytes ()));
   }
 
   @Nullable
   public X509Certificate getEndpointCertificate (@Nonnull final IReadonlyParticipantIdentifier aServiceGroupID,
                                                  @Nonnull final IReadonlyDocumentTypeIdentifier aDocumentTypeID,
                                                  @Nonnull final IReadonlyProcessIdentifier aProcessID) throws Exception {
-
     final String sCertString = getEndpointCertificateString (aServiceGroupID, aDocumentTypeID, aProcessID);
-    return convertStringToCertficate (sCertString);
+    return CertificateUtils.convertStringToCertficate (sCertString);
   }
 
   /**
@@ -487,15 +509,25 @@ public final class SMPServiceCaller {
    */
   public void saveServiceRegistration (@Nonnull final ServiceMetadataType aServiceMetadata,
                                        @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
+    if (aServiceMetadata == null)
+      throw new NullPointerException ("serviceMetadata");
+    if (aCredentials == null)
+      throw new NullPointerException ("credentials");
+
     final ServiceInformationType aServiceInformation = aServiceMetadata.getServiceInformation ();
+    if (aServiceInformation == null)
+      throw new IllegalArgumentException ("ServiceMetadata does not contain serviceInformation");
     final IReadonlyParticipantIdentifier aServiceGroupID = aServiceInformation.getParticipantIdentifier ();
+    if (aServiceGroupID == null)
+      throw new IllegalArgumentException ("ServiceInformation does not contain serviceGroupID");
     final IReadonlyDocumentTypeIdentifier aDocumentTypeID = aServiceInformation.getDocumentIdentifier ();
+    if (aDocumentTypeID == null)
+      throw new IllegalArgumentException ("ServiceInformation does not contain documentTypeID");
 
     final WebResource aFullResource = m_aWebResource.path (IdentifierUtils.getIdentifierURIPercentEncoded (aServiceGroupID) +
                                                            "/services/" +
                                                            IdentifierUtils.getIdentifierURIPercentEncoded (aDocumentTypeID));
-
-    _saveServiceRegistrationResource (aFullResource, aServiceMetadata, aCredentials);
+    _saveServiceRegistration (aFullResource, aServiceMetadata, aCredentials);
   }
 
   /**
@@ -520,11 +552,17 @@ public final class SMPServiceCaller {
   public void deleteServiceRegistration (@Nonnull final IReadonlyParticipantIdentifier aServiceGroupID,
                                          @Nonnull final IReadonlyDocumentTypeIdentifier aDocumentTypeID,
                                          @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
+    if (aServiceGroupID == null)
+      throw new NullPointerException ("serviceGroupID");
+    if (aDocumentTypeID == null)
+      throw new NullPointerException ("documentTypeID");
+    if (aCredentials == null)
+      throw new NullPointerException ("credentials");
+
     final WebResource aFullResource = m_aWebResource.path (IdentifierUtils.getIdentifierURIPercentEncoded (aServiceGroupID) +
                                                            "/services/" +
                                                            IdentifierUtils.getIdentifierURIPercentEncoded (aDocumentTypeID));
-
-    _deleteServiceRegistrationResource (aFullResource, aCredentials);
+    _deleteServiceRegistration (aFullResource, aCredentials);
   }
 
   /**
@@ -547,7 +585,7 @@ public final class SMPServiceCaller {
    */
   public static ServiceGroupReferenceListType getServiceGroupReferenceList (@Nonnull final URI aURI,
                                                                             @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
-    return _getServiceGroupReferenceListResource (_getResource (aURI), aCredentials);
+    return _getServiceGroupReferenceList (_getResource (aURI), aCredentials);
   }
 
   /**
@@ -568,7 +606,7 @@ public final class SMPServiceCaller {
    *         The request was not well formed.
    */
   public static CompleteServiceGroupType getCompleteServiceGroup (@Nonnull final URI aURI) throws Exception {
-    return _getCompleteServiceGroupResource (_getResource (aURI));
+    return _getCompleteServiceGroup (_getResource (aURI));
   }
 
   /**
@@ -588,7 +626,7 @@ public final class SMPServiceCaller {
    *         The request was not well formed.
    */
   public static ServiceGroupType getServiceGroup (@Nonnull final URI aURI) throws Exception {
-    return _getServiceGroupResource (_getResource (aURI));
+    return _getServiceGroup (_getResource (aURI));
   }
 
   /**
@@ -616,7 +654,7 @@ public final class SMPServiceCaller {
   public static void saveServiceGroup (@Nonnull final URI aURI,
                                        @Nonnull final ServiceGroupType aServiceGroup,
                                        @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
-    _saveServiceGroupResource (_getResource (aURI), aServiceGroup, aCredentials);
+    _saveServiceGroup (_getResource (aURI), aServiceGroup, aCredentials);
   }
 
   /**
@@ -638,7 +676,7 @@ public final class SMPServiceCaller {
    */
   public static void deleteServiceGroup (@Nonnull final URI aURI,
                                          @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
-    _deleteServiceGroupResource (_getResource (aURI), aCredentials);
+    _deleteServiceGroup (_getResource (aURI), aCredentials);
   }
 
   /**
@@ -657,7 +695,7 @@ public final class SMPServiceCaller {
    *         The request was not well formed.
    */
   public static SignedServiceMetadataType getServiceRegistration (@Nonnull final URI aURI) throws Exception {
-    return _getSignedServiceMetadataResource (_getResourceWithSignatureCheck (aURI));
+    return _getSignedServiceMetadata (_getResourceWithSignatureCheck (aURI));
   }
 
   /**
@@ -685,7 +723,7 @@ public final class SMPServiceCaller {
   public static void saveServiceRegistration (@Nonnull final URI aURI,
                                               @Nonnull final ServiceMetadataType aServiceMetadata,
                                               @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
-    _saveServiceRegistrationResource (_getResource (aURI), aServiceMetadata, aCredentials);
+    _saveServiceRegistration (_getResource (aURI), aServiceMetadata, aCredentials);
   }
 
   /**
@@ -706,7 +744,7 @@ public final class SMPServiceCaller {
    */
   public static void deleteServiceRegistration (@Nonnull final URI aURI,
                                                 @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
-    _deleteServiceRegistrationResource (_getResource (aURI), aCredentials);
+    _deleteServiceRegistration (_getResource (aURI), aCredentials);
   }
 
   /*
@@ -734,11 +772,16 @@ public final class SMPServiceCaller {
    */
   public static CompleteServiceGroupType getCompleteServiceGroupByDNS (@Nonnull final ISMLInfo aSMLInfo,
                                                                        @Nonnull final IReadonlyParticipantIdentifier aServiceGroupID) throws Exception {
+    if (aSMLInfo == null)
+      throw new NullPointerException ("SMLInfo");
+    if (aServiceGroupID == null)
+      throw new NullPointerException ("serviceGroupID");
+
     final String sFullPath = _convertServiceGroupToURI (aSMLInfo, aServiceGroupID) +
                              "/complete/" +
                              IdentifierUtils.getIdentifierURIPercentEncoded (aServiceGroupID);
     final WebResource aFullResource = _getResource (URI.create (sFullPath));
-    return _getCompleteServiceGroupResource (aFullResource);
+    return _getCompleteServiceGroup (aFullResource);
   }
 
   /**
@@ -766,7 +809,7 @@ public final class SMPServiceCaller {
                              "/" +
                              IdentifierUtils.getIdentifierURIPercentEncoded (aServiceGroupID);
     final WebResource aFullResource = _getResource (URI.create (sFullPath));
-    return _getServiceGroupResource (aFullResource);
+    return _getServiceGroup (aFullResource);
   }
 
   /**
@@ -792,6 +835,13 @@ public final class SMPServiceCaller {
   public static SignedServiceMetadataType getServiceRegistrationByDNS (@Nonnull final ISMLInfo aSMLInfo,
                                                                        @Nonnull final IReadonlyParticipantIdentifier aServiceGroupID,
                                                                        @Nonnull final IReadonlyDocumentTypeIdentifier aDocumentTypeID) throws Exception {
+    if (aSMLInfo == null)
+      throw new NullPointerException ("SMLInfo");
+    if (aServiceGroupID == null)
+      throw new NullPointerException ("serviceGroupID");
+    if (aDocumentTypeID == null)
+      throw new NullPointerException ("documentTypeID");
+
     final String sFullPath = _convertServiceGroupToURI (aSMLInfo, aServiceGroupID) +
                              "/" +
                              IdentifierUtils.getIdentifierURIPercentEncoded (aServiceGroupID) +
@@ -799,11 +849,16 @@ public final class SMPServiceCaller {
                              IdentifierUtils.getIdentifierURIPercentEncoded (aDocumentTypeID);
     final WebResource aFullResource = _getResourceWithSignatureCheck (URI.create (sFullPath));
 
-    return _getSignedServiceMetadataResource (aFullResource);
+    return _getSignedServiceMetadata (aFullResource);
   }
 
-  private static ServiceGroupReferenceListType _getServiceGroupReferenceListResource (@Nonnull final WebResource aFullResource,
-                                                                                      @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
+  private static ServiceGroupReferenceListType _getServiceGroupReferenceList (@Nonnull final WebResource aFullResource,
+                                                                              @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
+    if (aFullResource == null)
+      throw new NullPointerException ("fullResource");
+    if (aCredentials == null)
+      throw new NullPointerException ("credentials");
+
     try {
       final Builder aBuilderWithAuth = aFullResource.header (HttpHeaders.AUTHORIZATION,
                                                              aCredentials.getAsHTTPHeaderValue ());
@@ -814,7 +869,10 @@ public final class SMPServiceCaller {
     }
   }
 
-  private static CompleteServiceGroupType _getCompleteServiceGroupResource (@Nonnull final WebResource aFullResource) throws Exception {
+  private static CompleteServiceGroupType _getCompleteServiceGroup (@Nonnull final WebResource aFullResource) throws Exception {
+    if (aFullResource == null)
+      throw new NullPointerException ("fullResource");
+
     try {
       return aFullResource.get (TYPE_COMPLETESERVICEGROUP).getValue ();
     }
@@ -823,7 +881,7 @@ public final class SMPServiceCaller {
     }
   }
 
-  private static ServiceGroupType _getServiceGroupResource (@Nonnull final WebResource aFullResource) throws Exception {
+  private static ServiceGroupType _getServiceGroup (@Nonnull final WebResource aFullResource) throws Exception {
     try {
       return aFullResource.get (TYPE_SERVICEGROUP).getValue ();
     }
@@ -832,9 +890,9 @@ public final class SMPServiceCaller {
     }
   }
 
-  private static void _saveServiceGroupResource (@Nonnull final WebResource aFullResource,
-                                                 @Nonnull final ServiceGroupType aServiceGroup,
-                                                 @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
+  private static void _saveServiceGroup (@Nonnull final WebResource aFullResource,
+                                         @Nonnull final ServiceGroupType aServiceGroup,
+                                         @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
     try {
       final Builder aBuilderWithAuth = aFullResource.header (HttpHeaders.AUTHORIZATION,
                                                              aCredentials.getAsHTTPHeaderValue ());
@@ -847,8 +905,8 @@ public final class SMPServiceCaller {
     }
   }
 
-  private static void _deleteServiceGroupResource (@Nonnull final WebResource aFullResource,
-                                                   @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
+  private static void _deleteServiceGroup (@Nonnull final WebResource aFullResource,
+                                           @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
     try {
       final Builder aBuilderWithAuth = aFullResource.header (HttpHeaders.AUTHORIZATION,
                                                              aCredentials.getAsHTTPHeaderValue ());
@@ -859,7 +917,7 @@ public final class SMPServiceCaller {
     }
   }
 
-  private static SignedServiceMetadataType _getSignedServiceMetadataResource (@Nonnull final WebResource aFullResource) throws Exception {
+  private static SignedServiceMetadataType _getSignedServiceMetadata (@Nonnull final WebResource aFullResource) throws Exception {
     try {
       SignedServiceMetadataType aMetadata = aFullResource.get (TYPE_SIGNEDSERVICEMETADATA).getValue ();
 
@@ -910,9 +968,9 @@ public final class SMPServiceCaller {
     }
   }
 
-  private static void _saveServiceRegistrationResource (@Nonnull final WebResource aFullResource,
-                                                        @Nonnull final ServiceMetadataType aServiceMetadata,
-                                                        @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
+  private static void _saveServiceRegistration (@Nonnull final WebResource aFullResource,
+                                                @Nonnull final ServiceMetadataType aServiceMetadata,
+                                                @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
     try {
       final Builder aBuilderWithAuth = aFullResource.header (HttpHeaders.AUTHORIZATION,
                                                              aCredentials.getAsHTTPHeaderValue ());
@@ -925,8 +983,8 @@ public final class SMPServiceCaller {
     }
   }
 
-  private static void _deleteServiceRegistrationResource (@Nonnull final WebResource aFullResource,
-                                                          @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
+  private static void _deleteServiceRegistration (@Nonnull final WebResource aFullResource,
+                                                  @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
     try {
       final Builder aBuilderWithAuth = aFullResource.header (HttpHeaders.AUTHORIZATION,
                                                              aCredentials.getAsHTTPHeaderValue ());
