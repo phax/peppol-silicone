@@ -48,7 +48,6 @@ import org.slf4j.LoggerFactory;
 import at.peppol.commons.security.KeyStoreUtils;
 import at.peppol.commons.utils.ConfigFile;
 
-import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.state.EValidity;
 import com.phloc.commons.string.StringHelper;
 import com.sun.xml.wss.impl.callback.CertificateValidationCallback.CertificateValidator;
@@ -130,8 +129,7 @@ public final class Validator implements CertificateValidator {
         }
         else {
           // Start the main OCSP check
-          OCSP.check (ContainerHelper.newList (aCert), aRootCert, sResponderURL);
-          return EValidity.VALID;
+          return OCSP.check (aCert, aRootCert, sResponderURL);
         }
       }
     }

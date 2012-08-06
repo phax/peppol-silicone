@@ -46,13 +46,13 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.PKIXParameters;
 import java.security.cert.TrustAnchor;
 import java.security.cert.X509Certificate;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.phloc.commons.collections.ContainerHelper;
 import com.sun.xml.wss.impl.callback.CertificateValidationCallback.CertificateValidator;
 
 import eu.peppol.security.OcspValidatorCache;
@@ -86,7 +86,7 @@ public class OcspValidator implements CertificateValidator {
 
     try {
 
-      final List <Certificate> certificates = Arrays.asList (new Certificate [] { certificate });
+      final List <? extends Certificate> certificates = ContainerHelper.newList (certificate);
       final CertPath certPath = CertificateFactory.getInstance ("X.509").generateCertPath (certificates);
       s_aCertPathValidator.validate (certPath, s_aPkixParameters);
       s_aCache.setKnownValidCertificate (serialNumber);
