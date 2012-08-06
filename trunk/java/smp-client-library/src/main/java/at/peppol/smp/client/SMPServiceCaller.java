@@ -40,6 +40,7 @@ package at.peppol.smp.client;
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.UnknownHostException;
+import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Iterator;
 import java.util.List;
@@ -881,28 +882,37 @@ public final class SMPServiceCaller {
     // Get meta data for participant/documentType
     final SignedServiceMetadataType aSignedServiceMetadata = getServiceRegistrationOrNull (aServiceGroupID,
                                                                                            aDocumentTypeID);
-    if (aSignedServiceMetadata != null) {
-      // Iterate all processes
-      final List <ProcessType> aAllProcesses = aSignedServiceMetadata.getServiceMetadata ()
-                                                                     .getServiceInformation ()
-                                                                     .getProcessList ()
-                                                                     .getProcess ();
-      for (final ProcessType aProcessType : aAllProcesses) {
-        // Matches the requested one?
-        if (IdentifierUtils.areIdentifiersEqual (aProcessType.getProcessIdentifier (), aProcessID)) {
-          // Get all endpoints
-          final List <EndpointType> aEndpoints = aProcessType.getServiceEndpointList ().getEndpoint ();
-          if (aEndpoints.size () != 1)
-            s_aLogger.warn ("Found " +
-                            aEndpoints.size () +
-                            " endpoints for process " +
-                            aProcessID +
-                            ": " +
-                            aEndpoints.toString ());
+    return aSignedServiceMetadata == null ? null : getEndpoint (aSignedServiceMetadata, aProcessID);
+  }
 
-          // Extract the address
-          return ContainerHelper.getFirstElement (aEndpoints);
-        }
+  @Nullable
+  public EndpointType getEndpoint (@Nonnull final SignedServiceMetadataType aSignedServiceMetadata,
+                                   @Nonnull final IReadonlyProcessIdentifier aProcessID) throws Exception {
+    if (aSignedServiceMetadata == null)
+      throw new NullPointerException ("signedServiceMetadata");
+    if (aProcessID == null)
+      throw new NullPointerException ("processID");
+
+    // Iterate all processes
+    final List <ProcessType> aAllProcesses = aSignedServiceMetadata.getServiceMetadata ()
+                                                                   .getServiceInformation ()
+                                                                   .getProcessList ()
+                                                                   .getProcess ();
+    for (final ProcessType aProcessType : aAllProcesses) {
+      // Matches the requested one?
+      if (IdentifierUtils.areIdentifiersEqual (aProcessType.getProcessIdentifier (), aProcessID)) {
+        // Get all endpoints
+        final List <EndpointType> aEndpoints = aProcessType.getServiceEndpointList ().getEndpoint ();
+        if (aEndpoints.size () != 1)
+          s_aLogger.warn ("Found " +
+                          aEndpoints.size () +
+                          " endpoints for process " +
+                          aProcessID +
+                          ": " +
+                          aEndpoints.toString ());
+
+        // Extract the address
+        return ContainerHelper.getFirstElement (aEndpoints);
       }
     }
     return null;
@@ -913,6 +923,11 @@ public final class SMPServiceCaller {
                                     @Nonnull final IReadonlyDocumentTypeIdentifier aDocumentTypeID,
                                     @Nonnull final IReadonlyProcessIdentifier aProcessID) throws Exception {
     final EndpointType aEndpoint = getEndpoint (aServiceGroupID, aDocumentTypeID, aProcessID);
+    return getEndpointAddress (aEndpoint);
+  }
+
+  @Nullable
+  public static String getEndpointAddress (@Nullable final EndpointType aEndpoint) {
     return aEndpoint == null ? null : W3CEndpointReferenceUtils.getAddress (aEndpoint.getEndpointReference ());
   }
 
@@ -925,10 +940,21 @@ public final class SMPServiceCaller {
   }
 
   @Nullable
+  public static String getEndpointCertificateString (@Nullable final EndpointType aEndpoint) {
+    return aEndpoint == null ? null : aEndpoint.getCertificate ();
+  }
+
+  @Nullable
   public X509Certificate getEndpointCertificate (@Nonnull final IReadonlyParticipantIdentifier aServiceGroupID,
                                                  @Nonnull final IReadonlyDocumentTypeIdentifier aDocumentTypeID,
                                                  @Nonnull final IReadonlyProcessIdentifier aProcessID) throws Exception {
     final String sCertString = getEndpointCertificateString (aServiceGroupID, aDocumentTypeID, aProcessID);
+    return CertificateUtils.convertStringToCertficate (sCertString);
+  }
+
+  @Nullable
+  public static X509Certificate getEndpointCertificate (@Nullable final EndpointType aEndpoint) throws CertificateException {
+    final String sCertString = getEndpointCertificateString (aEndpoint);
     return CertificateUtils.convertStringToCertficate (sCertString);
   }
 
