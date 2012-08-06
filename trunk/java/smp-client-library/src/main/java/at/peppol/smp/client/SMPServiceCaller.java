@@ -105,6 +105,8 @@ public final class SMPServiceCaller {
 
   // Members - free to change from here on
   private static final ObjectFactory s_aObjFactory = new ObjectFactory ();
+
+  private final URI m_aSMPHost;
   private final WebResource m_aWebResource;
   private final WebResource m_aWebResourceWithSignatureCheck;
 
@@ -180,8 +182,17 @@ public final class SMPServiceCaller {
     // getPort () returns -1 if none was explicitly specified
     if (aSMPHost.getPort () != 80 && aSMPHost.getPort () != -1)
       s_aLogger.warn ("SMP URI " + aSMPHost + " is not running on port 80!");
+    m_aSMPHost = aSMPHost;
     m_aWebResource = _getResource (aSMPHost);
     m_aWebResourceWithSignatureCheck = _getResourceWithSignatureCheck (aSMPHost);
+  }
+
+  /**
+   * @return The SMP host URI we're operating on
+   */
+  @Nonnull
+  public URI getSMPHost () {
+    return m_aSMPHost;
   }
 
   /**
