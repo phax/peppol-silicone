@@ -41,10 +41,12 @@ import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.io.streams.StringInputStream;
+import com.phloc.commons.string.StringHelper;
 
 public final class CertificateUtils {
   public static final String BEGIN_CERTIFICATE = "-----BEGIN CERTIFICATE-----\n";
@@ -52,19 +54,37 @@ public final class CertificateUtils {
 
   private CertificateUtils () {}
 
-  @Nullable
-  public static X509Certificate convertStringToCertficate (@Nullable final String sCertString) throws CertificateException {
-    if (sCertString == null)
-      return null;
-
-    // Convert certificate string to an object
+  @Nonnull
+  private static String _ensureBeginAndEndArePresent (@Nonnull final String sCertString) {
     String sRealCertString = sCertString;
     if (!sRealCertString.startsWith (BEGIN_CERTIFICATE))
       sRealCertString = BEGIN_CERTIFICATE + sRealCertString;
     if (!sRealCertString.endsWith (END_CERTIFICATE))
       sRealCertString += END_CERTIFICATE;
+    return sRealCertString;
+  }
+
+  @Nullable
+  public static X509Certificate convertStringToCertficate (@Nullable final String sCertString) throws CertificateException {
+    if (sCertString == null)
+      return null;
+
     final CertificateFactory aCertificateFactory = CertificateFactory.getInstance ("X.509");
-    return (X509Certificate) aCertificateFactory.generateCertificate (new StringInputStream (sRealCertString,
-                                                                                             CCharset.CHARSET_ISO_8859_1_OBJ));
+
+    // Convert certificate string to an object
+    try {
+      final String sRealCertString = _ensureBeginAndEndArePresent (sCertString);
+      return (X509Certificate) aCertificateFactory.generateCertificate (new StringInputStream (sRealCertString,
+                                                                                               CCharset.CHARSET_ISO_8859_1_OBJ));
+    }
+    catch (final CertificateException ex) {
+      // In some weird configurations, the result string is a hex encoded
+      // certificate instead of the string
+      // -> Try to work around it
+      final String sRealCertString = _ensureBeginAndEndArePresent (new String (StringHelper.getHexDecoded (sCertString),
+                                                                               CCharset.CHARSET_ISO_8859_1_OBJ));
+      return (X509Certificate) aCertificateFactory.generateCertificate (new StringInputStream (sRealCertString,
+                                                                                               CCharset.CHARSET_ISO_8859_1_OBJ));
+    }
   }
 }

@@ -51,6 +51,7 @@ import org.busdox.servicemetadata.publishing._1.ServiceMetadataReferenceType;
 import org.busdox.servicemetadata.publishing._1.ServiceMetadataType;
 
 import at.peppol.busdox.identifier.IReadonlyIdentifier;
+import at.peppol.commons.identifier.IdentifierUtils;
 import at.peppol.commons.wsaddr.W3CEndpointReferenceUtils;
 
 @Immutable
@@ -59,7 +60,7 @@ public final class SMPUtils {
 
   @Nonnull
   public static String getAsString (@Nonnull final IReadonlyIdentifier aIdentifier) {
-    return aIdentifier.getScheme () + "::" + aIdentifier.getValue ();
+    return IdentifierUtils.getIdentifierURIEncoded (aIdentifier);
   }
 
   @Nonnull
