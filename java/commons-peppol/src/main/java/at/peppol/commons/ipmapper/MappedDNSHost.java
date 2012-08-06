@@ -54,15 +54,9 @@ import com.phloc.commons.string.ToStringGenerator;
  * @author PEPPOL.AT, BRZ, Andreas Haberl
  */
 @Immutable
-public final class SocketType implements ISocketType {
+public final class MappedDNSHost {
   private final String m_sHost;
   private final Integer m_aPort;
-
-  private SocketType (@Nonnull final String sHost, final String sPort) {
-    this (sHost, StringParser.parseIntObj (sPort));
-    if ((sPort != null && m_aPort == null) || m_aPort.intValue () <= 0)
-      throw new IllegalArgumentException ("The passed port " + sPort + " cannot be converted to a number!");
-  }
 
   /**
    * Constructor with no port
@@ -70,7 +64,7 @@ public final class SocketType implements ISocketType {
    * @param sHost
    *        The host name
    */
-  public SocketType (@Nonnull final String sHost) {
+  public MappedDNSHost (@Nonnull @Nonempty final String sHost) {
     this (sHost, (Integer) null);
   }
 
@@ -82,12 +76,12 @@ public final class SocketType implements ISocketType {
    * @param nPort
    *        Port number
    */
-  public SocketType (@Nonnull final String sHost, @Nonnegative final int nPort) {
+  public MappedDNSHost (@Nonnull @Nonempty final String sHost, @Nonnegative final int nPort) {
     this (sHost, Integer.valueOf (nPort));
   }
 
-  public SocketType (@Nonnull final String sHost, @Nonnegative @Nullable final Integer aPort) {
-    if (sHost == null)
+  public MappedDNSHost (@Nonnull @Nonempty final String sHost, @Nonnegative @Nullable final Integer aPort) {
+    if (StringHelper.hasNoText (sHost))
       throw new NullPointerException ("host must not be null...");
     if (aPort != null && aPort.intValue () <= 0)
       throw new IllegalArgumentException ("The passed port " + aPort + " is invalid!");
@@ -95,29 +89,56 @@ public final class SocketType implements ISocketType {
     m_aPort = aPort;
   }
 
+  /**
+   * @return The mapped host name
+   */
   @Nonnull
+  @Nonempty
   public String getHost () {
     return m_sHost;
   }
 
+  /**
+   * @return The mapped port. May be <code>null</code> if the original port
+   *         should be used
+   */
   @Nullable
   public Integer getPort () {
     return m_aPort;
   }
 
+  public int getPortToUse (final int nDefaultPort) {
+    return m_aPort != null ? m_aPort.intValue () : nDefaultPort;
+  }
+
   @Nonnull
   @Nonempty
-  public String getSocketString () {
+  public String getHostString () {
     return m_aPort == null ? m_sHost : m_sHost + ':' + m_aPort;
+  }
+
+  /**
+   * @param nDefaultPort
+   *        Default port to use, if none is specified
+   * @return <em>host</em>:<em>port</em> if a port &gt; 0 was found,
+   *         <em>host</em> otherwise
+   */
+  @Nonnull
+  @Nonempty
+  public String getHostString (final int nDefaultPort) {
+    final int nRealPort = getPortToUse (nDefaultPort);
+    if (nRealPort > 0)
+      return m_sHost + ':' + nRealPort;
+    return m_sHost;
   }
 
   @Override
   public boolean equals (final Object obj) {
     if (obj == this)
       return true;
-    if (!(obj instanceof SocketType))
+    if (!(obj instanceof MappedDNSHost))
       return false;
-    final SocketType other = (SocketType) obj;
+    final MappedDNSHost other = (MappedDNSHost) obj;
     return m_sHost.equals (other.m_sHost) && EqualsUtils.equals (m_aPort, other.m_aPort);
   }
 
@@ -128,26 +149,35 @@ public final class SocketType implements ISocketType {
 
   @Override
   public String toString () {
-    return new ToStringGenerator (this).append ("host", m_sHost).appendIfNotNull ("port", m_aPort).toString ();
+    return new ToStringGenerator (this).append ("host", m_sHost).append ("port", m_aPort).toString ();
   }
 
   /**
    * Create a socket part from a string having the layout "host:port" or "host"
    * only. Port must be numeric and must be a valid port number.
    * 
-   * @param sSocketString
+   * @param sStr
    *        The socket string to be parsed.
-   * @return The {@link SocketType} to be used.
+   * @return The {@link MappedDNSHost} to be used.
    */
   @Nonnull
-  public static SocketType createSocketType (@Nonnull final String sSocketString) {
-    if (StringHelper.hasNoText (sSocketString))
-      throw new IllegalArgumentException ("socketString may not be empty");
-    final String [] aParts = RegExHelper.getSplitToArray (sSocketString, ":", 2);
+  public static MappedDNSHost create (@Nonnull @Nonempty final String sStr) {
+    if (StringHelper.hasNoText (sStr))
+      throw new IllegalArgumentException ("string may not be empty");
+
+    final String [] aParts = RegExHelper.getSplitToArray (sStr, ":", 2);
     if (aParts.length == 0)
       throw new IllegalArgumentException ("invalid socketString - at least the host must be defined");
-    if (aParts.length == 1)
-      return new SocketType (aParts[0]);
-    return new SocketType (aParts[0], aParts[1]);
+    if (aParts.length == 1) {
+      // No port found
+      return new MappedDNSHost (aParts[0], null);
+    }
+
+    // Found a port
+    final String sPort = aParts[1];
+    final Integer aPort = StringParser.parseIntObj (sPort);
+    if ((sPort != null && aPort == null) || aPort.intValue () <= 0)
+      throw new IllegalArgumentException ("The passed port " + sPort + " cannot be converted to a number!");
+    return new MappedDNSHost (aParts[0], aPort);
   }
 }

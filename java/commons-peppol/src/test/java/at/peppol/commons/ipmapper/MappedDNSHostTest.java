@@ -49,55 +49,55 @@ import java.net.UnknownHostException;
 import org.junit.Test;
 
 /**
- * Test class for class {@link SocketType}.
+ * Test class for class {@link MappedDNSHost}.
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public final class SocketTypeTest {
+public final class MappedDNSHostTest {
   @Test
   public void testCtor () {
-    SocketType aST = new SocketType ("myhost");
+    MappedDNSHost aST = new MappedDNSHost ("myhost");
     assertEquals ("myhost", aST.getHost ());
     assertNull (aST.getPort ());
-    assertEquals ("myhost", aST.getSocketString ());
+    assertEquals ("myhost", aST.getHostString ());
 
-    aST = new SocketType ("myhost", 15);
+    aST = new MappedDNSHost ("myhost", 15);
     assertEquals ("myhost", aST.getHost ());
     assertEquals (15, aST.getPort ().intValue ());
-    assertEquals ("myhost:15", aST.getSocketString ());
+    assertEquals ("myhost:15", aST.getHostString ());
 
-    aST = new SocketType ("myhost", Integer.valueOf (27));
+    aST = new MappedDNSHost ("myhost", Integer.valueOf (27));
     assertEquals ("myhost", aST.getHost ());
     assertEquals (27, aST.getPort ().intValue ());
-    assertEquals ("myhost:27", aST.getSocketString ());
+    assertEquals ("myhost:27", aST.getHostString ());
   }
 
   @Test
   public void testCreateSocketType () {
     // Create with port
-    ISocketType aST = SocketType.createSocketType ("myhost:67");
+    MappedDNSHost aST = MappedDNSHost.create ("myhost:67");
     assertNotNull (aST);
     assertEquals ("myhost", aST.getHost ());
     assertEquals (67, aST.getPort ().intValue ());
-    assertEquals ("myhost:67", aST.getSocketString ());
+    assertEquals ("myhost:67", aST.getHostString ());
 
     // Check if bidirectional conversion works
-    assertEquals (aST, SocketType.createSocketType (aST.getSocketString ()));
+    assertEquals (aST, MappedDNSHost.create (aST.getHostString ()));
 
     // Create without port
-    aST = SocketType.createSocketType ("myhost67");
+    aST = MappedDNSHost.create ("myhost67");
     assertNotNull (aST);
     assertEquals ("myhost67", aST.getHost ());
     assertNull (aST.getPort ());
-    assertEquals ("myhost67", aST.getSocketString ());
+    assertEquals ("myhost67", aST.getHostString ());
 
-    aST = SocketType.createSocketType ("www.chello.at:80");
+    aST = MappedDNSHost.create ("www.chello.at:80");
     assertEquals ("www.chello.at", aST.getHost ());
     assertEquals (80, aST.getPort ().intValue ());
 
     // Create with weird syntax
     try {
-      SocketType.createSocketType ("myhost:69:test");
+      MappedDNSHost.create ("myhost:69:test");
       fail ();
     }
     catch (final IllegalArgumentException ex) {
@@ -105,7 +105,7 @@ public final class SocketTypeTest {
     }
 
     try {
-      SocketType.createSocketType ("");
+      MappedDNSHost.create ("");
       fail ();
     }
     catch (final IllegalArgumentException ex) {
@@ -114,32 +114,32 @@ public final class SocketTypeTest {
   }
 
   /**
-   * Test method for {@link at.peppol.commons.ipmapper.SocketType#hashCode()}.
+   * Test method for {@link at.peppol.commons.ipmapper.MappedDNSHost#hashCode()}
+   * .
    */
   @Test
   public void testHashCode () {
-    final SocketType st1 = SocketType.createSocketType ("1.1.1.1:28080");
-    SocketType st2 = SocketType.createSocketType ("1.1.1.1:28080");
+    final MappedDNSHost st1 = MappedDNSHost.create ("1.1.1.1:28080");
+    MappedDNSHost st2 = MappedDNSHost.create ("1.1.1.1:28080");
     assertEquals (st1.hashCode (), st2.hashCode ());
-    st2 = SocketType.createSocketType ("1.1.1.1");
-    assertEquals ("1.1.1.1".hashCode (), st2.getSocketString ().hashCode ());
+    st2 = MappedDNSHost.create ("1.1.1.1");
+    assertEquals ("1.1.1.1".hashCode (), st2.getHostString ().hashCode ());
     assertFalse (st1.hashCode () == st2.hashCode ());
-    st2 = SocketType.createSocketType ("1.1.1.:28080");
+    st2 = MappedDNSHost.create ("1.1.1.:28080");
     assertFalse (st1.hashCode () == st2.hashCode ());
-    st2 = SocketType.createSocketType ("1.1.1.1:28080");
+    st2 = MappedDNSHost.create ("1.1.1.1:28080");
     assertEquals (st1.hashCode (), st2.hashCode ());
   }
 
   /**
    * Test method for
-   * {@link at.peppol.commons.ipmapper.SocketType#createSocketType(java.lang.String)}
-   * .
+   * {@link at.peppol.commons.ipmapper.MappedDNSHost#create(java.lang.String)} .
    */
   @Test
   public void testCreateSocketTypeWithDnsResolution () {
     try {
       final String hostName = InetAddress.getByName ("www.chello.at").getHostName ();
-      final SocketType st = SocketType.createSocketType (hostName);
+      final MappedDNSHost st = MappedDNSHost.create (hostName);
       assertEquals ("www.chello.at", st.getHost ());
       assertNull (st.getPort ());
     }
@@ -150,42 +150,37 @@ public final class SocketTypeTest {
 
   /**
    * Test method for
-   * {@link at.peppol.commons.ipmapper.SocketType#equals(java.lang.Object)}.
+   * {@link at.peppol.commons.ipmapper.MappedDNSHost#equals(java.lang.Object)}.
    */
   @Test
   public void testEqualsObject () {
-    final SocketType st1 = SocketType.createSocketType ("1.1.1.1:28080");
-    SocketType st2 = SocketType.createSocketType ("1.1.1.1:28080");
+    final MappedDNSHost st1 = MappedDNSHost.create ("1.1.1.1:28080");
+    MappedDNSHost st2 = MappedDNSHost.create ("1.1.1.1:28080");
     assertEquals (st1.hashCode (), st2.hashCode ());
-    st2 = SocketType.createSocketType ("1.1.1.1");
+    st2 = MappedDNSHost.create ("1.1.1.1");
     assertFalse (st1.equals (st2));
-    assertEquals ("1.1.1.1", st2.getSocketString ());
-    st2 = SocketType.createSocketType ("1.1.1.:28080");
+    assertEquals ("1.1.1.1", st2.getHostString ());
+    st2 = MappedDNSHost.create ("1.1.1.:28080");
     assertFalse (st1.equals (st2));
-    st2 = SocketType.createSocketType ("1.1.1.1:28080");
+    st2 = MappedDNSHost.create ("1.1.1.1:28080");
     assertEquals (st1, st2);
   }
 
-  /**
-   * Test method for
-   * {@link at.peppol.commons.ipmapper.SocketType#SocketType(java.lang.String, int)}
-   * .
-   */
   @Test
   public void testSocketTypeStringInt () {
-    final SocketType st = new SocketType ("www.chello.at", 80);
-    final SocketType st1 = SocketType.createSocketType ("www.chello.at:80");
+    final MappedDNSHost st = new MappedDNSHost ("www.chello.at", 80);
+    final MappedDNSHost st1 = MappedDNSHost.create ("www.chello.at:80");
     assertEquals (st, st1);
   }
 
   /**
-   * Test method for {@link at.peppol.commons.ipmapper.SocketType#getHost()}.
+   * Test method for {@link at.peppol.commons.ipmapper.MappedDNSHost#getHost()}.
    */
   @Test
   public void testGetHost () {
-    final SocketType st = new SocketType ("www.chello.at", 80);
-    final SocketType st1 = new SocketType ("www.chello.at", 80);
-    final SocketType st2 = new SocketType ("www.chello.at", 1);
+    final MappedDNSHost st = new MappedDNSHost ("www.chello.at", 80);
+    final MappedDNSHost st1 = new MappedDNSHost ("www.chello.at", 80);
+    final MappedDNSHost st2 = new MappedDNSHost ("www.chello.at", 1);
     assertEquals (st, st1);
     assertFalse (st.equals (st2));
     assertEquals (st.getHost (), st1.getHost ());
@@ -193,13 +188,13 @@ public final class SocketTypeTest {
   }
 
   /**
-   * Test method for {@link at.peppol.commons.ipmapper.SocketType#getPort()}.
+   * Test method for {@link at.peppol.commons.ipmapper.MappedDNSHost#getPort()}.
    */
   @Test
   public void testGetPort () {
-    final SocketType st = new SocketType ("www.chello.at", 80);
-    final SocketType st1 = new SocketType ("www.chello.at", 80);
-    final SocketType st2 = new SocketType ("www.chello.at", 1);
+    final MappedDNSHost st = new MappedDNSHost ("www.chello.at", 80);
+    final MappedDNSHost st1 = new MappedDNSHost ("www.chello.at", 80);
+    final MappedDNSHost st2 = new MappedDNSHost ("www.chello.at", 1);
     assertEquals (st.getPort (), st1.getPort ());
     assertFalse (st.getPort ().equals (st2.getPort ()));
     // System.out.println(String.format("st.getPort='%d', st1.getPort='%d'",
@@ -209,15 +204,15 @@ public final class SocketTypeTest {
 
   /**
    * Test method for
-   * {@link at.peppol.commons.ipmapper.SocketType#getSocketString()}.
+   * {@link at.peppol.commons.ipmapper.MappedDNSHost#getHostString()}.
    */
   @Test
   public void testGetSocketString () {
-    final SocketType st = new SocketType ("1.1.1.1", 10);
-    final SocketType st1 = new SocketType ("1.1.1.1", 10);
-    final SocketType st2 = new SocketType ("1.1.2.1", 10);
-    final SocketType st3 = new SocketType ("1.1.1.1", 9);
-    assertEquals (st.getSocketString (), st1.getSocketString ());
+    final MappedDNSHost st = new MappedDNSHost ("1.1.1.1", 10);
+    final MappedDNSHost st1 = new MappedDNSHost ("1.1.1.1", 10);
+    final MappedDNSHost st2 = new MappedDNSHost ("1.1.2.1", 10);
+    final MappedDNSHost st3 = new MappedDNSHost ("1.1.1.1", 9);
+    assertEquals (st.getHostString (), st1.getHostString ());
     assertFalse (st1.equals (st2));
     assertFalse (st.equals (st3));
   }
