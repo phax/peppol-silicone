@@ -185,6 +185,52 @@ public final class SMPServiceCaller {
   }
 
   /**
+   * Convert the passed generic exception into a more specific exception.
+   * 
+   * @param ex
+   *        The generic exception
+   * @return A new SMP specific exception, using the passed exception as the
+   *         cause.
+   */
+  @Nonnull
+  private static Exception _getConvertedException (@Nonnull final UniformInterfaceException ex) {
+    final Status eHttpStatus = ex.getResponse ().getClientResponseStatus ();
+    switch (eHttpStatus) {
+      case FORBIDDEN:
+        return new UnauthorizedException (ex);
+      case NOT_FOUND:
+        return new NotFoundException (ex);
+      case BAD_REQUEST:
+        return new BadRequestException (ex);
+      default:
+        return new UnknownException ("Error thrown with status code: '" +
+                                     eHttpStatus +
+                                     "' (" +
+                                     eHttpStatus.getStatusCode () +
+                                     "), and message: " +
+                                     ex.getResponse ().getEntity (String.class));
+    }
+  }
+
+  @Nonnull
+  private static ServiceGroupReferenceListType _getServiceGroupReferenceList (@Nonnull final WebResource aFullResource,
+                                                                              @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
+    if (aFullResource == null)
+      throw new NullPointerException ("fullResource");
+    if (aCredentials == null)
+      throw new NullPointerException ("credentials");
+
+    try {
+      final Builder aBuilderWithAuth = aFullResource.header (HttpHeaders.AUTHORIZATION,
+                                                             aCredentials.getAsHTTPHeaderValue ());
+      return aBuilderWithAuth.get (TYPE_SERVICEGROUPREFERENCELIST).getValue ();
+    }
+    catch (final UniformInterfaceException e) {
+      throw _getConvertedException (e);
+    }
+  }
+
+  /**
    * Gets a list of references to the CompleteServiceGroup's owned by the
    * specified userId.
    * 
@@ -222,6 +268,42 @@ public final class SMPServiceCaller {
     }
     catch (final NotFoundException ex) {
       return null;
+    }
+  }
+
+  /**
+   * Gets a list of references to the CompleteServiceGroup's owned by the
+   * specified userId.
+   * 
+   * @param aURI
+   *        The URI containing the reference list.
+   * @param aCredentials
+   *        The username and password to use as aCredentials.
+   * @return A list of references to complete service groups.
+   * @throws UnauthorizedException
+   *         The username or password was not correct.
+   * @throws NotFoundException
+   *         The userId did not exist.
+   * @throws UnknownException
+   *         An unknown HTTP exception was received.
+   * @throws BadRequestException
+   *         The request was not well formed.
+   */
+  @Deprecated
+  public static ServiceGroupReferenceListType getServiceGroupReferenceList (@Nonnull final URI aURI,
+                                                                            @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
+    return _getServiceGroupReferenceList (_getResource (aURI), aCredentials);
+  }
+
+  private static CompleteServiceGroupType _getCompleteServiceGroup (@Nonnull final WebResource aFullResource) throws Exception {
+    if (aFullResource == null)
+      throw new NullPointerException ("fullResource");
+
+    try {
+      return aFullResource.get (TYPE_COMPLETESERVICEGROUP).getValue ();
+    }
+    catch (final UniformInterfaceException e) {
+      throw _getConvertedException (e);
     }
   }
 
@@ -264,6 +346,63 @@ public final class SMPServiceCaller {
   }
 
   /**
+   * Returns a complete service group. A complete service group contains both
+   * the service group and the service metadata.
+   * 
+   * @param aURI
+   *        The URI containing the complete service group
+   * @return The complete service group containing service group and service
+   *         metadata
+   * @throws UnauthorizedException
+   *         A HTTP Forbidden was received, should not happen.
+   * @throws NotFoundException
+   *         The service group id did not exist.
+   * @throws UnknownException
+   *         An unknown HTTP exception was received.
+   * @throws BadRequestException
+   *         The request was not well formed.
+   */
+  @Deprecated
+  public static CompleteServiceGroupType getCompleteServiceGroup (@Nonnull final URI aURI) throws Exception {
+    return _getCompleteServiceGroup (_getResource (aURI));
+  }
+
+  /**
+   * Returns a complete service group. A complete service group contains both
+   * the service group and the service metadata.
+   * 
+   * @param aSMLInfo
+   *        The SML object to be used
+   * @param aServiceGroupID
+   *        The service group id corresponding to the service group which one
+   *        wants to get.
+   * @return The complete service group containing service group and service
+   *         metadata
+   * @throws UnauthorizedException
+   *         A HTTP Forbidden was received, should not happen.
+   * @throws NotFoundException
+   *         The service group id did not exist.
+   * @throws UnknownException
+   *         An unknown HTTP exception was received.
+   * @throws BadRequestException
+   *         The request was not well formed.
+   */
+  @Nonnull
+  public static CompleteServiceGroupType getCompleteServiceGroupByDNS (@Nonnull final ISMLInfo aSMLInfo,
+                                                                       @Nonnull final IReadonlyParticipantIdentifier aServiceGroupID) throws Exception {
+    return new SMPServiceCaller (aServiceGroupID, aSMLInfo).getCompleteServiceGroup (aServiceGroupID);
+  }
+
+  private static ServiceGroupType _getServiceGroup (@Nonnull final WebResource aFullResource) throws Exception {
+    try {
+      return aFullResource.get (TYPE_SERVICEGROUP).getValue ();
+    }
+    catch (final UniformInterfaceException e) {
+      throw _getConvertedException (e);
+    }
+  }
+
+  /**
    * Returns a service group. A service group references to the service
    * metadata.
    * 
@@ -296,6 +435,67 @@ public final class SMPServiceCaller {
     }
     catch (final NotFoundException ex) {
       return null;
+    }
+  }
+
+  /**
+   * Returns a service group. A service group references to the service
+   * metadata.
+   * 
+   * @param aURI
+   *        The URI to the service group resource.
+   * @return The service group
+   * @throws UnauthorizedException
+   *         A HTTP Forbidden was received, should not happen.
+   * @throws NotFoundException
+   *         The service group id did not exist.
+   * @throws UnknownException
+   *         An unknown HTTP exception was received.
+   * @throws BadRequestException
+   *         The request was not well formed.
+   */
+  @Deprecated
+  public static ServiceGroupType getServiceGroup (@Nonnull final URI aURI) throws Exception {
+    return _getServiceGroup (_getResource (aURI));
+  }
+
+  /**
+   * Returns a service group. A service group references to the service
+   * metadata.
+   * 
+   * @param aSMLInfo
+   *        The SML object to be used
+   * @param aServiceGroupID
+   *        The service group id corresponding to the service group which one
+   *        wants to get.
+   * @return The service group
+   * @throws UnauthorizedException
+   *         A HTTP Forbidden was received, should not happen.
+   * @throws NotFoundException
+   *         The service group id did not exist.
+   * @throws UnknownException
+   *         An unknown HTTP exception was received.
+   * @throws BadRequestException
+   *         The request was not well formed.
+   */
+  @Nonnull
+  public static ServiceGroupType getServiceGroupByDNS (@Nonnull final ISMLInfo aSMLInfo,
+                                                       @Nonnull final IReadonlyParticipantIdentifier aServiceGroupID) throws Exception {
+    return new SMPServiceCaller (aServiceGroupID, aSMLInfo).getServiceGroup (aServiceGroupID);
+  }
+
+  private static void _saveServiceGroup (@Nonnull final WebResource aFullResource,
+                                         @Nonnull final ServiceGroupType aServiceGroup,
+                                         @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
+    try {
+      final Builder aBuilderWithAuth = aFullResource.header (HttpHeaders.AUTHORIZATION,
+                                                             aCredentials.getAsHTTPHeaderValue ());
+
+      // Important to build a JAXBElement around the service group
+      aBuilderWithAuth.put (s_aObjFactory.createServiceGroup (aServiceGroup));
+    }
+    catch (final UniformInterfaceException e) {
+      throw _getConvertedException (e);
     }
   }
 
@@ -359,6 +559,47 @@ public final class SMPServiceCaller {
   }
 
   /**
+   * Saves a service group. The metadata references should not be set and are
+   * not used.
+   * 
+   * @param aURI
+   *        The URI to the service group resource.
+   * @param aServiceGroup
+   *        The service group to save.
+   * @param aCredentials
+   *        The username and password to use as aCredentials.
+   * @throws UnauthorizedException
+   *         The username or password was not correct.
+   * @throws NotFoundException
+   *         A HTTP Not Found was received. This can happen if the service was
+   *         not found.
+   * @throws UnknownException
+   *         An unknown HTTP exception was received.
+   * @throws BadRequestException
+   *         The request was not well formed. This could be caused by the URI
+   *         not corresponding to the service group id in the service group
+   *         object.
+   */
+  @Deprecated
+  public static void saveServiceGroup (@Nonnull final URI aURI,
+                                       @Nonnull final ServiceGroupType aServiceGroup,
+                                       @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
+    _saveServiceGroup (_getResource (aURI), aServiceGroup, aCredentials);
+  }
+
+  private static void _deleteServiceGroup (@Nonnull final WebResource aFullResource,
+                                           @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
+    try {
+      final Builder aBuilderWithAuth = aFullResource.header (HttpHeaders.AUTHORIZATION,
+                                                             aCredentials.getAsHTTPHeaderValue ());
+      aBuilderWithAuth.delete ();
+    }
+    catch (final UniformInterfaceException ex) {
+      throw _getConvertedException (ex);
+    }
+  }
+
+  /**
    * Deletes a service group given by its service group id.
    * 
    * @param aServiceGroupID
@@ -386,278 +627,6 @@ public final class SMPServiceCaller {
   }
 
   /**
-   * Gets a signed service metadata object given by its service group id and its
-   * document type.
-   * 
-   * @param aServiceGroupID
-   *        The service group id of the service metadata to get.
-   * @param aDocumentTypeID
-   *        The document type of the service metadata to get.
-   * @return A signed service metadata object.
-   * @throws UnauthorizedException
-   *         A HTTP Forbidden was received, should not happen.
-   * @throws NotFoundException
-   *         The service group id or document type did not exist.
-   * @throws UnknownException
-   *         An unknown HTTP exception was received.
-   * @throws BadRequestException
-   *         The request was not well formed.
-   */
-  @Nonnull
-  public SignedServiceMetadataType getServiceRegistration (@Nonnull final IReadonlyParticipantIdentifier aServiceGroupID,
-                                                           @Nonnull final IReadonlyDocumentTypeIdentifier aDocumentTypeID) throws Exception {
-    if (aServiceGroupID == null)
-      throw new NullPointerException ("serviceGroupID");
-    if (aDocumentTypeID == null)
-      throw new NullPointerException ("documentType");
-
-    final String sPath = IdentifierUtils.getIdentifierURIPercentEncoded (aServiceGroupID) +
-                         "/services/" +
-                         IdentifierUtils.getIdentifierURIPercentEncoded (aDocumentTypeID);
-    final WebResource aFullResource = m_aWebResourceWithSignatureCheck.path (sPath);
-
-    return _getSignedServiceMetadata (aFullResource);
-  }
-
-  @Nullable
-  public SignedServiceMetadataType getServiceRegistrationOrNull (@Nonnull final IReadonlyParticipantIdentifier aServiceGroupID,
-                                                                 @Nonnull final IReadonlyDocumentTypeIdentifier aDocumentTypeID) throws Exception {
-    try {
-      return getServiceRegistration (aServiceGroupID, aDocumentTypeID);
-    }
-    catch (final NotFoundException ex) {
-      return null;
-    }
-  }
-
-  @Nullable
-  public EndpointType getEndpoint (@Nonnull final IReadonlyParticipantIdentifier aServiceGroupID,
-                                   @Nonnull final IReadonlyDocumentTypeIdentifier aDocumentTypeID,
-                                   @Nonnull final IReadonlyProcessIdentifier aProcessID) throws Exception {
-    if (aServiceGroupID == null)
-      throw new NullPointerException ("serviceGroupIDID");
-    if (aDocumentTypeID == null)
-      throw new NullPointerException ("documentType");
-    if (aProcessID == null)
-      throw new NullPointerException ("processID");
-
-    // Get meta data for participant/documentType
-    final SignedServiceMetadataType aSignedServiceMetadata = getServiceRegistration (aServiceGroupID, aDocumentTypeID);
-    if (aSignedServiceMetadata != null) {
-      // Iterate all processes
-      final List <ProcessType> aAllProcesses = aSignedServiceMetadata.getServiceMetadata ()
-                                                                     .getServiceInformation ()
-                                                                     .getProcessList ()
-                                                                     .getProcess ();
-      for (final ProcessType aProcessType : aAllProcesses) {
-        // Matches the requested one?
-        if (IdentifierUtils.areIdentifiersEqual (aProcessType.getProcessIdentifier (), aProcessID)) {
-          // Get all endpoints
-          final List <EndpointType> aEndpoints = aProcessType.getServiceEndpointList ().getEndpoint ();
-          if (aEndpoints.size () != 1)
-            s_aLogger.warn ("Found " + aEndpoints.size () + " endpoints for process " + aProcessID);
-
-          // Extract the address
-          return ContainerHelper.getFirstElement (aEndpoints);
-        }
-      }
-    }
-    return null;
-  }
-
-  @Nullable
-  public String getEndpointAddress (@Nonnull final IReadonlyParticipantIdentifier aServiceGroupID,
-                                    @Nonnull final IReadonlyDocumentTypeIdentifier aDocumentTypeID,
-                                    @Nonnull final IReadonlyProcessIdentifier aProcessID) throws Exception {
-    final EndpointType aEndpoint = getEndpoint (aServiceGroupID, aDocumentTypeID, aProcessID);
-    return aEndpoint == null ? null : W3CEndpointReferenceUtils.getAddress (aEndpoint.getEndpointReference ());
-  }
-
-  @Nullable
-  public String getEndpointCertificateString (@Nonnull final IReadonlyParticipantIdentifier aServiceGroupID,
-                                              @Nonnull final IReadonlyDocumentTypeIdentifier aDocumentTypeID,
-                                              @Nonnull final IReadonlyProcessIdentifier aProcessID) throws Exception {
-    final EndpointType aEndpoint = getEndpoint (aServiceGroupID, aDocumentTypeID, aProcessID);
-    return aEndpoint == null ? null : aEndpoint.getCertificate ();
-  }
-
-  @Nullable
-  public X509Certificate getEndpointCertificate (@Nonnull final IReadonlyParticipantIdentifier aServiceGroupID,
-                                                 @Nonnull final IReadonlyDocumentTypeIdentifier aDocumentTypeID,
-                                                 @Nonnull final IReadonlyProcessIdentifier aProcessID) throws Exception {
-    final String sCertString = getEndpointCertificateString (aServiceGroupID, aDocumentTypeID, aProcessID);
-    return CertificateUtils.convertStringToCertficate (sCertString);
-  }
-
-  /**
-   * Saves a service metadata object. The ServiceGroupReference value is
-   * ignored.
-   * 
-   * @param aServiceMetadata
-   *        The service metadata object to save.
-   * @param aCredentials
-   *        The username and password to use as aCredentials.
-   * @throws UnauthorizedException
-   *         The username or password was not correct.
-   * @throws NotFoundException
-   *         A HTTP Not Found was received. This can happen if the service was
-   *         not found.
-   * @throws UnknownException
-   *         An unknown HTTP exception was received.
-   * @throws BadRequestException
-   *         The request was not well formed.
-   */
-  public void saveServiceRegistration (@Nonnull final ServiceMetadataType aServiceMetadata,
-                                       @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
-    if (aServiceMetadata == null)
-      throw new NullPointerException ("serviceMetadata");
-    if (aCredentials == null)
-      throw new NullPointerException ("credentials");
-
-    final ServiceInformationType aServiceInformation = aServiceMetadata.getServiceInformation ();
-    if (aServiceInformation == null)
-      throw new IllegalArgumentException ("ServiceMetadata does not contain serviceInformation");
-    final IReadonlyParticipantIdentifier aServiceGroupID = aServiceInformation.getParticipantIdentifier ();
-    if (aServiceGroupID == null)
-      throw new IllegalArgumentException ("ServiceInformation does not contain serviceGroupID");
-    final IReadonlyDocumentTypeIdentifier aDocumentTypeID = aServiceInformation.getDocumentIdentifier ();
-    if (aDocumentTypeID == null)
-      throw new IllegalArgumentException ("ServiceInformation does not contain documentTypeID");
-
-    final WebResource aFullResource = m_aWebResource.path (IdentifierUtils.getIdentifierURIPercentEncoded (aServiceGroupID) +
-                                                           "/services/" +
-                                                           IdentifierUtils.getIdentifierURIPercentEncoded (aDocumentTypeID));
-    _saveServiceRegistration (aFullResource, aServiceMetadata, aCredentials);
-  }
-
-  /**
-   * Deletes a service metadata object given by its service group id and its
-   * document type.
-   * 
-   * @param aServiceGroupID
-   *        The service group id of the service metadata to delete.
-   * @param aDocumentTypeID
-   *        The document type of the service metadata to delete.
-   * @param aCredentials
-   *        The username and password to use as aCredentials.
-   * @throws UnauthorizedException
-   *         The username or password was not correct.
-   * @throws NotFoundException
-   *         The service metadata object did not exist.
-   * @throws UnknownException
-   *         An unknown HTTP exception was received.
-   * @throws BadRequestException
-   *         The request was not well formed.
-   */
-  public void deleteServiceRegistration (@Nonnull final IReadonlyParticipantIdentifier aServiceGroupID,
-                                         @Nonnull final IReadonlyDocumentTypeIdentifier aDocumentTypeID,
-                                         @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
-    if (aServiceGroupID == null)
-      throw new NullPointerException ("serviceGroupID");
-    if (aDocumentTypeID == null)
-      throw new NullPointerException ("documentTypeID");
-    if (aCredentials == null)
-      throw new NullPointerException ("credentials");
-
-    final WebResource aFullResource = m_aWebResource.path (IdentifierUtils.getIdentifierURIPercentEncoded (aServiceGroupID) +
-                                                           "/services/" +
-                                                           IdentifierUtils.getIdentifierURIPercentEncoded (aDocumentTypeID));
-    _deleteServiceRegistration (aFullResource, aCredentials);
-  }
-
-  /**
-   * Gets a list of references to the CompleteServiceGroup's owned by the
-   * specified userId.
-   * 
-   * @param aURI
-   *        The URI containing the reference list.
-   * @param aCredentials
-   *        The username and password to use as aCredentials.
-   * @return A list of references to complete service groups.
-   * @throws UnauthorizedException
-   *         The username or password was not correct.
-   * @throws NotFoundException
-   *         The userId did not exist.
-   * @throws UnknownException
-   *         An unknown HTTP exception was received.
-   * @throws BadRequestException
-   *         The request was not well formed.
-   */
-  public static ServiceGroupReferenceListType getServiceGroupReferenceList (@Nonnull final URI aURI,
-                                                                            @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
-    return _getServiceGroupReferenceList (_getResource (aURI), aCredentials);
-  }
-
-  /**
-   * Returns a complete service group. A complete service group contains both
-   * the service group and the service metadata.
-   * 
-   * @param aURI
-   *        The URI containing the complete service group
-   * @return The complete service group containing service group and service
-   *         metadata
-   * @throws UnauthorizedException
-   *         A HTTP Forbidden was received, should not happen.
-   * @throws NotFoundException
-   *         The service group id did not exist.
-   * @throws UnknownException
-   *         An unknown HTTP exception was received.
-   * @throws BadRequestException
-   *         The request was not well formed.
-   */
-  public static CompleteServiceGroupType getCompleteServiceGroup (@Nonnull final URI aURI) throws Exception {
-    return _getCompleteServiceGroup (_getResource (aURI));
-  }
-
-  /**
-   * Returns a service group. A service group references to the service
-   * metadata.
-   * 
-   * @param aURI
-   *        The URI to the service group resource.
-   * @return The service group
-   * @throws UnauthorizedException
-   *         A HTTP Forbidden was received, should not happen.
-   * @throws NotFoundException
-   *         The service group id did not exist.
-   * @throws UnknownException
-   *         An unknown HTTP exception was received.
-   * @throws BadRequestException
-   *         The request was not well formed.
-   */
-  public static ServiceGroupType getServiceGroup (@Nonnull final URI aURI) throws Exception {
-    return _getServiceGroup (_getResource (aURI));
-  }
-
-  /**
-   * Saves a service group. The metadata references should not be set and are
-   * not used.
-   * 
-   * @param aURI
-   *        The URI to the service group resource.
-   * @param aServiceGroup
-   *        The service group to save.
-   * @param aCredentials
-   *        The username and password to use as aCredentials.
-   * @throws UnauthorizedException
-   *         The username or password was not correct.
-   * @throws NotFoundException
-   *         A HTTP Not Found was received. This can happen if the service was
-   *         not found.
-   * @throws UnknownException
-   *         An unknown HTTP exception was received.
-   * @throws BadRequestException
-   *         The request was not well formed. This could be caused by the URI
-   *         not corresponding to the service group id in the service group
-   *         object.
-   */
-  public static void saveServiceGroup (@Nonnull final URI aURI,
-                                       @Nonnull final ServiceGroupType aServiceGroup,
-                                       @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
-    _saveServiceGroup (_getResource (aURI), aServiceGroup, aCredentials);
-  }
-
-  /**
    * Deletes a service metadata object given by its service group id and its
    * document type.
    * 
@@ -674,247 +643,10 @@ public final class SMPServiceCaller {
    * @throws BadRequestException
    *         The request was not well formed.
    */
+  @Deprecated
   public static void deleteServiceGroup (@Nonnull final URI aURI,
                                          @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
     _deleteServiceGroup (_getResource (aURI), aCredentials);
-  }
-
-  /**
-   * Gets a signed service metadata object given by its URI.
-   * 
-   * @param aURI
-   *        The URI to the service metadata resource.
-   * @return A signed service metadata object.
-   * @throws UnauthorizedException
-   *         A HTTP Forbidden was received, should not happen.
-   * @throws NotFoundException
-   *         The service group id or document type did not exist.
-   * @throws UnknownException
-   *         An unknown HTTP exception was received.
-   * @throws BadRequestException
-   *         The request was not well formed.
-   */
-  public static SignedServiceMetadataType getServiceRegistration (@Nonnull final URI aURI) throws Exception {
-    return _getSignedServiceMetadata (_getResourceWithSignatureCheck (aURI));
-  }
-
-  /**
-   * Saves a service metadata object. The ServiceGroupReference value is
-   * ignored.
-   * 
-   * @param aURI
-   *        The URI to the service metadata resource.
-   * @param aServiceMetadata
-   *        The service metadata object to save.
-   * @param aCredentials
-   *        The username and password to use as aCredentials.
-   * @throws UnauthorizedException
-   *         The username or password was not correct.
-   * @throws NotFoundException
-   *         A HTTP Not Found was received. This can happen if the service was
-   *         not found.
-   * @throws UnknownException
-   *         An unknown HTTP exception was received.
-   * @throws BadRequestException
-   *         The request was not well formed. This could be caused by the URI
-   *         not corresponding to the service group id or document type id in
-   *         the service metadata object.
-   */
-  public static void saveServiceRegistration (@Nonnull final URI aURI,
-                                              @Nonnull final ServiceMetadataType aServiceMetadata,
-                                              @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
-    _saveServiceRegistration (_getResource (aURI), aServiceMetadata, aCredentials);
-  }
-
-  /**
-   * Deletes a service metadata object given by the URI.
-   * 
-   * @param aURI
-   *        The URI to the service metadata resource.
-   * @param aCredentials
-   *        The username and password to use as aCredentials.
-   * @throws UnauthorizedException
-   *         The username or password was not correct.
-   * @throws NotFoundException
-   *         The service metadata object did not exist.
-   * @throws UnknownException
-   *         An unknown HTTP exception was received.
-   * @throws BadRequestException
-   *         The request was not well formed.
-   */
-  public static void deleteServiceRegistration (@Nonnull final URI aURI,
-                                                @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
-    _deleteServiceRegistration (_getResource (aURI), aCredentials);
-  }
-
-  /*
-   * Methods that make use of DNS lookup
-   */
-  /**
-   * Returns a complete service group. A complete service group contains both
-   * the service group and the service metadata.
-   * 
-   * @param aSMLInfo
-   *        The SML object to be used
-   * @param aServiceGroupID
-   *        The service group id corresponding to the service group which one
-   *        wants to get.
-   * @return The complete service group containing service group and service
-   *         metadata
-   * @throws UnauthorizedException
-   *         A HTTP Forbidden was received, should not happen.
-   * @throws NotFoundException
-   *         The service group id did not exist.
-   * @throws UnknownException
-   *         An unknown HTTP exception was received.
-   * @throws BadRequestException
-   *         The request was not well formed.
-   */
-  public static CompleteServiceGroupType getCompleteServiceGroupByDNS (@Nonnull final ISMLInfo aSMLInfo,
-                                                                       @Nonnull final IReadonlyParticipantIdentifier aServiceGroupID) throws Exception {
-    if (aSMLInfo == null)
-      throw new NullPointerException ("SMLInfo");
-    if (aServiceGroupID == null)
-      throw new NullPointerException ("serviceGroupID");
-
-    final String sFullPath = _convertServiceGroupToURI (aSMLInfo, aServiceGroupID) +
-                             "/complete/" +
-                             IdentifierUtils.getIdentifierURIPercentEncoded (aServiceGroupID);
-    final WebResource aFullResource = _getResource (URI.create (sFullPath));
-    return _getCompleteServiceGroup (aFullResource);
-  }
-
-  /**
-   * Returns a service group. A service group references to the service
-   * metadata.
-   * 
-   * @param aSMLInfo
-   *        The SML object to be used
-   * @param aServiceGroupID
-   *        The service group id corresponding to the service group which one
-   *        wants to get.
-   * @return The service group
-   * @throws UnauthorizedException
-   *         A HTTP Forbidden was received, should not happen.
-   * @throws NotFoundException
-   *         The service group id did not exist.
-   * @throws UnknownException
-   *         An unknown HTTP exception was received.
-   * @throws BadRequestException
-   *         The request was not well formed.
-   */
-  public static ServiceGroupType getServiceGroupByDNS (@Nonnull final ISMLInfo aSMLInfo,
-                                                       @Nonnull final IReadonlyParticipantIdentifier aServiceGroupID) throws Exception {
-    final String sFullPath = _convertServiceGroupToURI (aSMLInfo, aServiceGroupID) +
-                             "/" +
-                             IdentifierUtils.getIdentifierURIPercentEncoded (aServiceGroupID);
-    final WebResource aFullResource = _getResource (URI.create (sFullPath));
-    return _getServiceGroup (aFullResource);
-  }
-
-  /**
-   * Gets a signed service metadata object given by its service group id and its
-   * document type.
-   * 
-   * @param aSMLInfo
-   *        The SML object to be used
-   * @param aServiceGroupID
-   *        The service group id of the service metadata to get.
-   * @param aDocumentTypeID
-   *        The document type of the service metadata to get.
-   * @return A signed service metadata object.
-   * @throws UnauthorizedException
-   *         A HTTP Forbidden was received, should not happen.
-   * @throws NotFoundException
-   *         The service group id or document type did not exist.
-   * @throws UnknownException
-   *         An unknown HTTP exception was received.
-   * @throws BadRequestException
-   *         The request was not well formed.
-   */
-  public static SignedServiceMetadataType getServiceRegistrationByDNS (@Nonnull final ISMLInfo aSMLInfo,
-                                                                       @Nonnull final IReadonlyParticipantIdentifier aServiceGroupID,
-                                                                       @Nonnull final IReadonlyDocumentTypeIdentifier aDocumentTypeID) throws Exception {
-    if (aSMLInfo == null)
-      throw new NullPointerException ("SMLInfo");
-    if (aServiceGroupID == null)
-      throw new NullPointerException ("serviceGroupID");
-    if (aDocumentTypeID == null)
-      throw new NullPointerException ("documentTypeID");
-
-    final String sFullPath = _convertServiceGroupToURI (aSMLInfo, aServiceGroupID) +
-                             "/" +
-                             IdentifierUtils.getIdentifierURIPercentEncoded (aServiceGroupID) +
-                             "/services/" +
-                             IdentifierUtils.getIdentifierURIPercentEncoded (aDocumentTypeID);
-    final WebResource aFullResource = _getResourceWithSignatureCheck (URI.create (sFullPath));
-
-    return _getSignedServiceMetadata (aFullResource);
-  }
-
-  private static ServiceGroupReferenceListType _getServiceGroupReferenceList (@Nonnull final WebResource aFullResource,
-                                                                              @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
-    if (aFullResource == null)
-      throw new NullPointerException ("fullResource");
-    if (aCredentials == null)
-      throw new NullPointerException ("credentials");
-
-    try {
-      final Builder aBuilderWithAuth = aFullResource.header (HttpHeaders.AUTHORIZATION,
-                                                             aCredentials.getAsHTTPHeaderValue ());
-      return aBuilderWithAuth.get (TYPE_SERVICEGROUPREFERENCELIST).getValue ();
-    }
-    catch (final UniformInterfaceException e) {
-      throw _getConvertedException (e);
-    }
-  }
-
-  private static CompleteServiceGroupType _getCompleteServiceGroup (@Nonnull final WebResource aFullResource) throws Exception {
-    if (aFullResource == null)
-      throw new NullPointerException ("fullResource");
-
-    try {
-      return aFullResource.get (TYPE_COMPLETESERVICEGROUP).getValue ();
-    }
-    catch (final UniformInterfaceException e) {
-      throw _getConvertedException (e);
-    }
-  }
-
-  private static ServiceGroupType _getServiceGroup (@Nonnull final WebResource aFullResource) throws Exception {
-    try {
-      return aFullResource.get (TYPE_SERVICEGROUP).getValue ();
-    }
-    catch (final UniformInterfaceException e) {
-      throw _getConvertedException (e);
-    }
-  }
-
-  private static void _saveServiceGroup (@Nonnull final WebResource aFullResource,
-                                         @Nonnull final ServiceGroupType aServiceGroup,
-                                         @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
-    try {
-      final Builder aBuilderWithAuth = aFullResource.header (HttpHeaders.AUTHORIZATION,
-                                                             aCredentials.getAsHTTPHeaderValue ());
-
-      // Important to build a JAXBElement around the service group
-      aBuilderWithAuth.put (s_aObjFactory.createServiceGroup (aServiceGroup));
-    }
-    catch (final UniformInterfaceException e) {
-      throw _getConvertedException (e);
-    }
-  }
-
-  private static void _deleteServiceGroup (@Nonnull final WebResource aFullResource,
-                                           @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
-    try {
-      final Builder aBuilderWithAuth = aFullResource.header (HttpHeaders.AUTHORIZATION,
-                                                             aCredentials.getAsHTTPHeaderValue ());
-      aBuilderWithAuth.delete ();
-    }
-    catch (final UniformInterfaceException ex) {
-      throw _getConvertedException (ex);
-    }
   }
 
   private static SignedServiceMetadataType _getSignedServiceMetadata (@Nonnull final WebResource aFullResource) throws Exception {
@@ -968,6 +700,162 @@ public final class SMPServiceCaller {
     }
   }
 
+  /**
+   * Gets a signed service metadata object given by its service group id and its
+   * document type.
+   * 
+   * @param aServiceGroupID
+   *        The service group id of the service metadata to get.
+   * @param aDocumentTypeID
+   *        The document type of the service metadata to get.
+   * @return A signed service metadata object.
+   * @throws UnauthorizedException
+   *         A HTTP Forbidden was received, should not happen.
+   * @throws NotFoundException
+   *         The service group id or document type did not exist.
+   * @throws UnknownException
+   *         An unknown HTTP exception was received.
+   * @throws BadRequestException
+   *         The request was not well formed.
+   */
+  @Nonnull
+  public SignedServiceMetadataType getServiceRegistration (@Nonnull final IReadonlyParticipantIdentifier aServiceGroupID,
+                                                           @Nonnull final IReadonlyDocumentTypeIdentifier aDocumentTypeID) throws Exception {
+    if (aServiceGroupID == null)
+      throw new NullPointerException ("serviceGroupID");
+    if (aDocumentTypeID == null)
+      throw new NullPointerException ("documentType");
+
+    final String sPath = IdentifierUtils.getIdentifierURIPercentEncoded (aServiceGroupID) +
+                         "/services/" +
+                         IdentifierUtils.getIdentifierURIPercentEncoded (aDocumentTypeID);
+    final WebResource aFullResource = m_aWebResourceWithSignatureCheck.path (sPath);
+
+    return _getSignedServiceMetadata (aFullResource);
+  }
+
+  @Nullable
+  public SignedServiceMetadataType getServiceRegistrationOrNull (@Nonnull final IReadonlyParticipantIdentifier aServiceGroupID,
+                                                                 @Nonnull final IReadonlyDocumentTypeIdentifier aDocumentTypeID) throws Exception {
+    try {
+      return getServiceRegistration (aServiceGroupID, aDocumentTypeID);
+    }
+    catch (final NotFoundException ex) {
+      return null;
+    }
+  }
+
+  /**
+   * Gets a signed service metadata object given by its URI.
+   * 
+   * @param aURI
+   *        The URI to the service metadata resource.
+   * @return A signed service metadata object.
+   * @throws UnauthorizedException
+   *         A HTTP Forbidden was received, should not happen.
+   * @throws NotFoundException
+   *         The service group id or document type did not exist.
+   * @throws UnknownException
+   *         An unknown HTTP exception was received.
+   * @throws BadRequestException
+   *         The request was not well formed.
+   */
+  @Deprecated
+  public static SignedServiceMetadataType getServiceRegistration (@Nonnull final URI aURI) throws Exception {
+    return _getSignedServiceMetadata (_getResourceWithSignatureCheck (aURI));
+  }
+
+  /**
+   * Gets a signed service metadata object given by its service group id and its
+   * document type.
+   * 
+   * @param aSMLInfo
+   *        The SML object to be used
+   * @param aServiceGroupID
+   *        The service group id of the service metadata to get.
+   * @param aDocumentTypeID
+   *        The document type of the service metadata to get.
+   * @return A signed service metadata object.
+   * @throws UnauthorizedException
+   *         A HTTP Forbidden was received, should not happen.
+   * @throws NotFoundException
+   *         The service group id or document type did not exist.
+   * @throws UnknownException
+   *         An unknown HTTP exception was received.
+   * @throws BadRequestException
+   *         The request was not well formed.
+   */
+  @Nonnull
+  public static SignedServiceMetadataType getServiceRegistrationByDNS (@Nonnull final ISMLInfo aSMLInfo,
+                                                                       @Nonnull final IReadonlyParticipantIdentifier aServiceGroupID,
+                                                                       @Nonnull final IReadonlyDocumentTypeIdentifier aDocumentTypeID) throws Exception {
+    return new SMPServiceCaller (aServiceGroupID, aSMLInfo).getServiceRegistration (aServiceGroupID, aDocumentTypeID);
+  }
+
+  @Nullable
+  public EndpointType getEndpoint (@Nonnull final IReadonlyParticipantIdentifier aServiceGroupID,
+                                   @Nonnull final IReadonlyDocumentTypeIdentifier aDocumentTypeID,
+                                   @Nonnull final IReadonlyProcessIdentifier aProcessID) throws Exception {
+    if (aServiceGroupID == null)
+      throw new NullPointerException ("serviceGroupIDID");
+    if (aDocumentTypeID == null)
+      throw new NullPointerException ("documentType");
+    if (aProcessID == null)
+      throw new NullPointerException ("processID");
+
+    // Get meta data for participant/documentType
+    final SignedServiceMetadataType aSignedServiceMetadata = getServiceRegistration (aServiceGroupID, aDocumentTypeID);
+    if (aSignedServiceMetadata != null) {
+      // Iterate all processes
+      final List <ProcessType> aAllProcesses = aSignedServiceMetadata.getServiceMetadata ()
+                                                                     .getServiceInformation ()
+                                                                     .getProcessList ()
+                                                                     .getProcess ();
+      for (final ProcessType aProcessType : aAllProcesses) {
+        // Matches the requested one?
+        if (IdentifierUtils.areIdentifiersEqual (aProcessType.getProcessIdentifier (), aProcessID)) {
+          // Get all endpoints
+          final List <EndpointType> aEndpoints = aProcessType.getServiceEndpointList ().getEndpoint ();
+          if (aEndpoints.size () != 1)
+            s_aLogger.warn ("Found " +
+                            aEndpoints.size () +
+                            " endpoints for process " +
+                            aProcessID +
+                            ": " +
+                            aEndpoints.toString ());
+
+          // Extract the address
+          return ContainerHelper.getFirstElement (aEndpoints);
+        }
+      }
+    }
+    return null;
+  }
+
+  @Nullable
+  public String getEndpointAddress (@Nonnull final IReadonlyParticipantIdentifier aServiceGroupID,
+                                    @Nonnull final IReadonlyDocumentTypeIdentifier aDocumentTypeID,
+                                    @Nonnull final IReadonlyProcessIdentifier aProcessID) throws Exception {
+    final EndpointType aEndpoint = getEndpoint (aServiceGroupID, aDocumentTypeID, aProcessID);
+    return aEndpoint == null ? null : W3CEndpointReferenceUtils.getAddress (aEndpoint.getEndpointReference ());
+  }
+
+  @Nullable
+  public String getEndpointCertificateString (@Nonnull final IReadonlyParticipantIdentifier aServiceGroupID,
+                                              @Nonnull final IReadonlyDocumentTypeIdentifier aDocumentTypeID,
+                                              @Nonnull final IReadonlyProcessIdentifier aProcessID) throws Exception {
+    final EndpointType aEndpoint = getEndpoint (aServiceGroupID, aDocumentTypeID, aProcessID);
+    return aEndpoint == null ? null : aEndpoint.getCertificate ();
+  }
+
+  @Nullable
+  public X509Certificate getEndpointCertificate (@Nonnull final IReadonlyParticipantIdentifier aServiceGroupID,
+                                                 @Nonnull final IReadonlyDocumentTypeIdentifier aDocumentTypeID,
+                                                 @Nonnull final IReadonlyProcessIdentifier aProcessID) throws Exception {
+    final String sCertString = getEndpointCertificateString (aServiceGroupID, aDocumentTypeID, aProcessID);
+    return CertificateUtils.convertStringToCertficate (sCertString);
+  }
+
   private static void _saveServiceRegistration (@Nonnull final WebResource aFullResource,
                                                 @Nonnull final ServiceMetadataType aServiceMetadata,
                                                 @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
@@ -983,6 +871,76 @@ public final class SMPServiceCaller {
     }
   }
 
+  /**
+   * Saves a service metadata object. The ServiceGroupReference value is
+   * ignored.
+   * 
+   * @param aServiceMetadata
+   *        The service metadata object to save.
+   * @param aCredentials
+   *        The username and password to use as aCredentials.
+   * @throws UnauthorizedException
+   *         The username or password was not correct.
+   * @throws NotFoundException
+   *         A HTTP Not Found was received. This can happen if the service was
+   *         not found.
+   * @throws UnknownException
+   *         An unknown HTTP exception was received.
+   * @throws BadRequestException
+   *         The request was not well formed.
+   */
+  public void saveServiceRegistration (@Nonnull final ServiceMetadataType aServiceMetadata,
+                                       @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
+    if (aServiceMetadata == null)
+      throw new NullPointerException ("serviceMetadata");
+    if (aCredentials == null)
+      throw new NullPointerException ("credentials");
+
+    final ServiceInformationType aServiceInformation = aServiceMetadata.getServiceInformation ();
+    if (aServiceInformation == null)
+      throw new IllegalArgumentException ("ServiceMetadata does not contain serviceInformation");
+    final IReadonlyParticipantIdentifier aServiceGroupID = aServiceInformation.getParticipantIdentifier ();
+    if (aServiceGroupID == null)
+      throw new IllegalArgumentException ("ServiceInformation does not contain serviceGroupID");
+    final IReadonlyDocumentTypeIdentifier aDocumentTypeID = aServiceInformation.getDocumentIdentifier ();
+    if (aDocumentTypeID == null)
+      throw new IllegalArgumentException ("ServiceInformation does not contain documentTypeID");
+
+    final WebResource aFullResource = m_aWebResource.path (IdentifierUtils.getIdentifierURIPercentEncoded (aServiceGroupID) +
+                                                           "/services/" +
+                                                           IdentifierUtils.getIdentifierURIPercentEncoded (aDocumentTypeID));
+    _saveServiceRegistration (aFullResource, aServiceMetadata, aCredentials);
+  }
+
+  /**
+   * Saves a service metadata object. The ServiceGroupReference value is
+   * ignored.
+   * 
+   * @param aURI
+   *        The URI to the service metadata resource.
+   * @param aServiceMetadata
+   *        The service metadata object to save.
+   * @param aCredentials
+   *        The username and password to use as aCredentials.
+   * @throws UnauthorizedException
+   *         The username or password was not correct.
+   * @throws NotFoundException
+   *         A HTTP Not Found was received. This can happen if the service was
+   *         not found.
+   * @throws UnknownException
+   *         An unknown HTTP exception was received.
+   * @throws BadRequestException
+   *         The request was not well formed. This could be caused by the URI
+   *         not corresponding to the service group id or document type id in
+   *         the service metadata object.
+   */
+  @Deprecated
+  public static void saveServiceRegistration (@Nonnull final URI aURI,
+                                              @Nonnull final ServiceMetadataType aServiceMetadata,
+                                              @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
+    _saveServiceRegistration (_getResource (aURI), aServiceMetadata, aCredentials);
+  }
+
   private static void _deleteServiceRegistration (@Nonnull final WebResource aFullResource,
                                                   @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
     try {
@@ -996,46 +954,59 @@ public final class SMPServiceCaller {
   }
 
   /**
-   * Get the URL of the passed service group's SMP using the specified SML zone.
+   * Deletes a service metadata object given by its service group id and its
+   * document type.
    * 
-   * @param aSMLInfo
-   *        The SML zone to use.
    * @param aServiceGroupID
-   *        The service group to get the SMP URL from.
-   * @return The non-<code>null</code> URL of the passed service group's SMP.
+   *        The service group id of the service metadata to delete.
+   * @param aDocumentTypeID
+   *        The document type of the service metadata to delete.
+   * @param aCredentials
+   *        The username and password to use as aCredentials.
+   * @throws UnauthorizedException
+   *         The username or password was not correct.
+   * @throws NotFoundException
+   *         The service metadata object did not exist.
+   * @throws UnknownException
+   *         An unknown HTTP exception was received.
+   * @throws BadRequestException
+   *         The request was not well formed.
    */
-  @Nonnull
-  private static String _convertServiceGroupToURI (@Nonnull final ISMLInfo aSMLInfo,
-                                                   @Nonnull final IReadonlyParticipantIdentifier aServiceGroupID) {
-    final String sHost = BusdoxURLUtils.getDNSNameOfParticipant (aServiceGroupID, aSMLInfo);
-    return "http://" + sHost;
+  public void deleteServiceRegistration (@Nonnull final IReadonlyParticipantIdentifier aServiceGroupID,
+                                         @Nonnull final IReadonlyDocumentTypeIdentifier aDocumentTypeID,
+                                         @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
+    if (aServiceGroupID == null)
+      throw new NullPointerException ("serviceGroupID");
+    if (aDocumentTypeID == null)
+      throw new NullPointerException ("documentTypeID");
+    if (aCredentials == null)
+      throw new NullPointerException ("credentials");
+
+    final WebResource aFullResource = m_aWebResource.path (IdentifierUtils.getIdentifierURIPercentEncoded (aServiceGroupID) +
+                                                           "/services/" +
+                                                           IdentifierUtils.getIdentifierURIPercentEncoded (aDocumentTypeID));
+    _deleteServiceRegistration (aFullResource, aCredentials);
   }
 
   /**
-   * Convert the passed generic exception into a more specific exception.
+   * Deletes a service metadata object given by the URI.
    * 
-   * @param ex
-   *        The generic exception
-   * @return A new SMP specific exception, using the passed exception as the
-   *         cause.
+   * @param aURI
+   *        The URI to the service metadata resource.
+   * @param aCredentials
+   *        The username and password to use as aCredentials.
+   * @throws UnauthorizedException
+   *         The username or password was not correct.
+   * @throws NotFoundException
+   *         The service metadata object did not exist.
+   * @throws UnknownException
+   *         An unknown HTTP exception was received.
+   * @throws BadRequestException
+   *         The request was not well formed.
    */
-  @Nonnull
-  private static Exception _getConvertedException (@Nonnull final UniformInterfaceException ex) {
-    final Status eHttpStatus = ex.getResponse ().getClientResponseStatus ();
-    switch (eHttpStatus) {
-      case FORBIDDEN:
-        return new UnauthorizedException (ex);
-      case NOT_FOUND:
-        return new NotFoundException (ex);
-      case BAD_REQUEST:
-        return new BadRequestException (ex);
-      default:
-        return new UnknownException ("Error thrown with status code: '" +
-                                     eHttpStatus +
-                                     "' (" +
-                                     eHttpStatus.getStatusCode () +
-                                     "), and message: " +
-                                     ex.getResponse ().getEntity (String.class));
-    }
+  @Deprecated
+  public static void deleteServiceRegistration (@Nonnull final URI aURI,
+                                                @Nonnull final IReadonlyUsernamePWCredentials aCredentials) throws Exception {
+    _deleteServiceRegistration (_getResource (aURI), aCredentials);
   }
 }
