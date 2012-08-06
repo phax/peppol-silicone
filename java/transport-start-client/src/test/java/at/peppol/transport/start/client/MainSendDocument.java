@@ -68,8 +68,13 @@ import com.phloc.commons.xml.serialize.XMLReader;
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
-public class MainSendDocument {
-  public static final String RECEIVER = "9917:B2";
+public final class MainSendDocument {
+  public static final boolean USE_PROXY = true;
+  public static final String PROXY_HOST = "172.30.9.12";
+  public static final String PROXY_PORT = "8080";
+  public static final boolean USE_LOCAL_AP = false;
+  public static final boolean METRO_DEBUG = false;
+  public static final String RECEIVER = "9915:B";
 
   @Nonnull
   private static IMessageMetadata _createMetadata () {
@@ -93,22 +98,23 @@ public class MainSendDocument {
 
   private static void _sendDocument (final IReadableResource aXmlRes) throws Exception {
     final IMessageMetadata aMetadata = _createMetadata ();
-    final String sAccessPointURL = true ? "http://localhost:8090/accessPointService" : _getAccessPointUrl (aMetadata);
+    final String sAccessPointURL = USE_LOCAL_AP ? "http://localhost:8090/accessPointService"
+                                               : _getAccessPointUrl (aMetadata);
     final Document aXMLDoc = XMLReader.readXMLDOM (aXmlRes);
     AccessPointClient.send (sAccessPointURL, aMetadata, aXMLDoc);
   }
 
   public static void main (final String [] args) throws Exception {
     System.setProperty ("java.net.useSystemProxies", "true");
-    if (true) {
-      System.setProperty ("http.proxyHost", "172.30.9.12");
-      System.setProperty ("http.proxyPort", "8080");
-      System.setProperty ("https.proxyHost", "172.30.9.12");
-      System.setProperty ("https.proxyPort", "8080");
+    if (USE_PROXY) {
+      System.setProperty ("http.proxyHost", PROXY_HOST);
+      System.setProperty ("http.proxyPort", PROXY_PORT);
+      System.setProperty ("https.proxyHost", PROXY_HOST);
+      System.setProperty ("https.proxyPort", PROXY_PORT);
     }
 
     // enable debugging info?
-    CBusDox.setMetroDebugSystemProperties (false);
+    CBusDox.setMetroDebugSystemProperties (METRO_DEBUG);
     if (false) {
       // Debug logging
       SystemProperties.setPropertyValue ("com.sun.xml.ws.transport.http.client.HttpTransportPipe.dump",

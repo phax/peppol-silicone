@@ -70,7 +70,12 @@ import com.phloc.commons.xml.serialize.XMLReader;
  *         PEPPOL.AT, BRZ, Andreas Haberl
  */
 public class MainPingAccessPoint {
-  public static final ParticipantIdentifierType RECEIVER = SimpleParticipantIdentifier.createWithDefaultScheme ("9908:976098897");
+  public static final boolean USE_PROXY = true;
+  public static final String PROXY_HOST = "172.30.9.12";
+  public static final String PROXY_PORT = "8080";
+  public static final boolean USE_LOCAL_AP = false;
+  public static final boolean METRO_DEBUG = false;
+  public static final String RECEIVER = "9915:B";
 
   @Nonnull
   private static IMessageMetadata _createPingMetadata () {
@@ -84,16 +89,17 @@ public class MainPingAccessPoint {
 
   @Nullable
   private static String _getAccessPointUrl () throws Exception {
+    final SimpleParticipantIdentifier aPI = SimpleParticipantIdentifier.createWithDefaultScheme (RECEIVER);
     // SMP client
-    final SMPServiceCaller aServiceCaller = new SMPServiceCaller (RECEIVER, ESML.PRODUCTION);
+    final SMPServiceCaller aServiceCaller = new SMPServiceCaller (aPI, ESML.PRODUCTION);
     // get service info
-    return aServiceCaller.getEndpointAddress (RECEIVER,
+    return aServiceCaller.getEndpointAddress (aPI,
                                               EPredefinedDocumentTypeIdentifier.INVOICE_T010_BIS4A,
                                               EPredefinedProcessIdentifier.BIS4A);
   }
 
   private static void _sendDocument (final IReadableResource aXmlRes) throws Exception {
-    final String sAccessPointURL = false ? "http://localhost:8090/accessPointService" : _getAccessPointUrl ();
+    final String sAccessPointURL = USE_LOCAL_AP ? "http://localhost:8090/accessPointService" : _getAccessPointUrl ();
     final IMessageMetadata aMetadata = _createPingMetadata ();
     final Document aXMLDoc = XMLReader.readXMLDOM (aXmlRes);
     AccessPointClient.send (sAccessPointURL, aMetadata, aXMLDoc);
@@ -101,15 +107,15 @@ public class MainPingAccessPoint {
 
   public static void main (final String [] args) throws Exception {
     System.setProperty ("java.net.useSystemProxies", "true");
-    if (true) {
-      System.setProperty ("http.proxyHost", "172.30.9.12");
-      System.setProperty ("http.proxyPort", "8080");
-      System.setProperty ("https.proxyHost", "172.30.9.12");
-      System.setProperty ("https.proxyPort", "8080");
+    if (USE_PROXY) {
+      System.setProperty ("http.proxyHost", PROXY_HOST);
+      System.setProperty ("http.proxyPort", PROXY_PORT);
+      System.setProperty ("https.proxyHost", PROXY_HOST);
+      System.setProperty ("https.proxyPort", PROXY_PORT);
     }
 
     // enable debugging info?
-    CBusDox.setMetroDebugSystemProperties (false);
+    CBusDox.setMetroDebugSystemProperties (METRO_DEBUG);
     if (false) {
       // Debug logging
       SystemProperties.setPropertyValue ("com.sun.xml.ws.transport.http.client.HttpTransportPipe.dump",
