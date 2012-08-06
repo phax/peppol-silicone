@@ -54,7 +54,7 @@ import at.peppol.commons.utils.ConfigFile;
 public final class ConfiguredDNSMapperTest {
   /**
    * Test method for
-   * {@link at.peppol.commons.ipmapper.ConfiguredDNSMapper#mapInternal(java.net.InetAddress)}
+   * {@link at.peppol.commons.ipmapper.ConfiguredDNSMapper#getMappedDNSHost(java.net.InetAddress)}
    * .
    * 
    * @throws UnknownHostException
@@ -64,9 +64,9 @@ public final class ConfiguredDNSMapperTest {
     final ConfiguredDNSMapper dnsMapper = new ConfiguredDNSMapper (ConfigFile.getInstance ());
     final InetAddress _2222 = InetAddress.getByName ("2.2.2.2");
     final InetAddress _4444 = InetAddress.getByName ("4.4.4.4");
-    ISocketType res = dnsMapper.mapInternal (_2222);
-    assertEquals (res, SocketType.createSocketType ("3.3.3.3"));
-    res = dnsMapper.mapInternal (_4444);
-    assertEquals (res, SocketType.createSocketType ("5.5.5.5:8080"));
+    MappedDNSHost res = dnsMapper.getMappedDNSHost (_2222);
+    assertEquals (res, MappedDNSHost.create ("3.3.3.3"));
+    res = dnsMapper.getMappedDNSHost (_4444);
+    assertEquals (res, MappedDNSHost.create ("5.5.5.5:8080"));
   }
 }
