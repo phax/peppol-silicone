@@ -37,7 +37,9 @@
  */
 package at.peppol.smp.client;
 
+import java.net.InetAddress;
 import java.net.URI;
+import java.net.UnknownHostException;
 import java.security.cert.X509Certificate;
 import java.util.Iterator;
 import java.util.List;
@@ -67,8 +69,11 @@ import at.peppol.busdox.identifier.IReadonlyParticipantIdentifier;
 import at.peppol.busdox.identifier.IReadonlyProcessIdentifier;
 import at.peppol.commons.identifier.IdentifierUtils;
 import at.peppol.commons.identifier.participant.SimpleParticipantIdentifier;
+import at.peppol.commons.ipmapper.ConfiguredDNSMapper;
+import at.peppol.commons.ipmapper.ISocketType;
 import at.peppol.commons.sml.ISMLInfo;
 import at.peppol.commons.uri.BusdoxURLUtils;
+import at.peppol.commons.utils.ConfigFile;
 import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
 import at.peppol.commons.wsaddr.W3CEndpointReferenceUtils;
 import at.peppol.smp.client.exception.BadRequestException;
@@ -105,6 +110,7 @@ public final class SMPServiceCaller {
 
   // Members - free to change from here on
   private static final ObjectFactory s_aObjFactory = new ObjectFactory ();
+  private static final ConfiguredDNSMapper s_aDNSMapper = new ConfiguredDNSMapper (ConfigFile.getInstance ());
 
   private final URI m_aSMPHost;
   private final WebResource m_aWebResource;
@@ -182,7 +188,28 @@ public final class SMPServiceCaller {
     // getPort () returns -1 if none was explicitly specified
     if (aSMPHost.getPort () != 80 && aSMPHost.getPort () != -1)
       s_aLogger.warn ("SMP URI " + aSMPHost + " is not running on port 80!");
-    m_aSMPHost = aSMPHost;
+
+    try {
+      final String sOriginalHost = aSMPHost.getHost ();
+      final InetAddress aInetAddr = InetAddress.getByName (sOriginalHost);
+      final ISocketType aRealHostToUse = s_aDNSMapper.mapInternal (aInetAddr);
+      if (!sOriginalHost.equals (aRealHostToUse.getHost ())) {
+        final int nPortToUse = aRealHostToUse.getPort () != null ? aRealHostToUse.getPort ().intValue ()
+                                                                : aSMPHost.getPort ();
+        m_aSMPHost = URI.create (aSMPHost.getScheme () +
+                                 "://" +
+                                 aRealHostToUse.getHost () +
+                                 (nPortToUse <= 0 ? "" : ":" + nPortToUse));
+        s_aLogger.info ("Changed the SMP host from " + aSMPHost + " to " + m_aSMPHost);
+      }
+      else
+        m_aSMPHost = aSMPHost;
+    }
+    catch (final UnknownHostException ex) {
+      // Should never occur, as the SML hosts
+      throw new IllegalStateException ("Failed to resolve host from " + aSMPHost, ex);
+    }
+
     m_aWebResource = _getResource (aSMPHost);
     m_aWebResourceWithSignatureCheck = _getResourceWithSignatureCheck (aSMPHost);
   }
@@ -230,6 +257,9 @@ public final class SMPServiceCaller {
       throw new NullPointerException ("fullResource");
     if (aCredentials == null)
       throw new NullPointerException ("credentials");
+
+    if (s_aLogger.isDebugEnabled ())
+      s_aLogger.debug ("_getServiceGroupReferenceList from " + aFullResource.getURI ());
 
     try {
       final Builder aBuilderWithAuth = aFullResource.header (HttpHeaders.AUTHORIZATION,
@@ -309,6 +339,9 @@ public final class SMPServiceCaller {
   private static CompleteServiceGroupType _getCompleteServiceGroup (@Nonnull final WebResource aFullResource) throws Exception {
     if (aFullResource == null)
       throw new NullPointerException ("fullResource");
+
+    if (s_aLogger.isDebugEnabled ())
+      s_aLogger.debug ("_getCompleteServiceGroup from " + aFullResource.getURI ());
 
     try {
       return aFullResource.get (TYPE_COMPLETESERVICEGROUP).getValue ();
@@ -410,6 +443,9 @@ public final class SMPServiceCaller {
     if (aFullResource == null)
       throw new NullPointerException ("fullResource");
 
+    if (s_aLogger.isDebugEnabled ())
+      s_aLogger.debug ("_getServiceGroup from " + aFullResource.getURI ());
+
     try {
       return aFullResource.get (TYPE_SERVICEGROUP).getValue ();
     }
@@ -509,6 +545,9 @@ public final class SMPServiceCaller {
       throw new NullPointerException ("serviceGroup");
     if (aCredentials == null)
       throw new NullPointerException ("credentials");
+
+    if (s_aLogger.isDebugEnabled ())
+      s_aLogger.debug ("_saveServiceGroup from " + aFullResource.getURI ());
 
     try {
       final Builder aBuilderWithAuth = aFullResource.header (HttpHeaders.AUTHORIZATION,
@@ -617,6 +656,9 @@ public final class SMPServiceCaller {
     if (aCredentials == null)
       throw new NullPointerException ("credentials");
 
+    if (s_aLogger.isDebugEnabled ())
+      s_aLogger.debug ("_deleteServiceGroup from " + aFullResource.getURI ());
+
     try {
       final Builder aBuilderWithAuth = aFullResource.header (HttpHeaders.AUTHORIZATION,
                                                              aCredentials.getAsHTTPHeaderValue ());
@@ -680,6 +722,9 @@ public final class SMPServiceCaller {
   private static SignedServiceMetadataType _getSignedServiceMetadata (@Nonnull final WebResource aFullResource) throws Exception {
     if (aFullResource == null)
       throw new NullPointerException ("fullResource");
+
+    if (s_aLogger.isDebugEnabled ())
+      s_aLogger.debug ("_getSignedServiceMetadata from " + aFullResource.getURI ());
 
     try {
       SignedServiceMetadataType aMetadata = aFullResource.get (TYPE_SIGNEDSERVICEMETADATA).getValue ();
@@ -897,6 +942,9 @@ public final class SMPServiceCaller {
     if (aCredentials == null)
       throw new NullPointerException ("credentials");
 
+    if (s_aLogger.isDebugEnabled ())
+      s_aLogger.debug ("_saveServiceRegistration from " + aFullResource.getURI ());
+
     try {
       final Builder aBuilderWithAuth = aFullResource.header (HttpHeaders.AUTHORIZATION,
                                                              aCredentials.getAsHTTPHeaderValue ());
@@ -985,6 +1033,9 @@ public final class SMPServiceCaller {
       throw new NullPointerException ("fullResource");
     if (aCredentials == null)
       throw new NullPointerException ("credentials");
+
+    if (s_aLogger.isDebugEnabled ())
+      s_aLogger.debug ("_deleteServiceRegistration from " + aFullResource.getURI ());
 
     try {
       final Builder aBuilderWithAuth = aFullResource.header (HttpHeaders.AUTHORIZATION,
