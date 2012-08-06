@@ -37,28 +37,34 @@
  */
 package at.peppol.smp.client;
 
-import at.peppol.commons.uri.BusdoxURLUtils;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
 
-import com.phloc.commons.string.ToStringGenerator;
+import javax.annotation.Nullable;
 
-/**
- * Represents a single user ID.
- * 
- * @author PEPPOL.AT, BRZ, Philip Helger
- */
-public final class UserId {
-  private final String m_sUserIdPercentEncoded;
+import com.phloc.commons.charset.CCharset;
+import com.phloc.commons.io.streams.StringInputStream;
 
-  public UserId (final String sUserIdUriEncoded) {
-    m_sUserIdPercentEncoded = BusdoxURLUtils.createPercentEncodedURL (sUserIdUriEncoded);
-  }
+public final class CertificateUtils {
+  public static final String BEGIN_CERTIFICATE = "-----BEGIN CERTIFICATE-----\n";
+  public static final String END_CERTIFICATE = "\n-----END CERTIFICATE-----";
 
-  public String getUserIdPercentEncoded () {
-    return m_sUserIdPercentEncoded;
-  }
+  private CertificateUtils () {}
 
-  @Override
-  public String toString () {
-    return new ToStringGenerator (this).append ("percentEncoded", m_sUserIdPercentEncoded).toString ();
+  @Nullable
+  public static X509Certificate convertStringToCertficate (@Nullable final String sCertString) throws CertificateException {
+    if (sCertString == null)
+      return null;
+
+    // Convert certificate string to an object
+    String sRealCertString = sCertString;
+    if (!sRealCertString.startsWith (BEGIN_CERTIFICATE))
+      sRealCertString = BEGIN_CERTIFICATE + sRealCertString;
+    if (!sRealCertString.endsWith (END_CERTIFICATE))
+      sRealCertString += END_CERTIFICATE;
+    final CertificateFactory aCertificateFactory = CertificateFactory.getInstance ("X.509");
+    return (X509Certificate) aCertificateFactory.generateCertificate (new StringInputStream (sRealCertString,
+                                                                                             CCharset.CHARSET_ISO_8859_1_OBJ));
   }
 }

@@ -46,7 +46,6 @@ import org.slf4j.LoggerFactory;
 
 import at.peppol.commons.utils.IReadonlyUsernamePWCredentials;
 import at.peppol.smp.client.SMPServiceCaller;
-import at.peppol.smp.client.UserId;
 
 /**
  * @author philip
@@ -57,19 +56,19 @@ public final class SMPServiceGroupReferenceList {
   public static void main (final String [] args) throws Exception {
     final URI SMP_URI = CFunctestConfig.getSMPURI ();
     final IReadonlyUsernamePWCredentials SMP_CREDENTIALS = CFunctestConfig.getSMPCredentials ();
-    final UserId SMP_USERID = CFunctestConfig.getSMPUserId ();
+    final String SMP_USERNAME = CFunctestConfig.getSMPUserName ();
 
     // The main SMP client
     final SMPServiceCaller aClient = new SMPServiceCaller (SMP_URI);
 
     // Get the service group reference list
-    final ServiceGroupReferenceListType aServiceGroupReferenceList = aClient.getServiceGroupReferenceListOrNull (SMP_USERID,
+    final ServiceGroupReferenceListType aServiceGroupReferenceList = aClient.getServiceGroupReferenceListOrNull (SMP_USERNAME,
                                                                                                                  SMP_CREDENTIALS);
 
     if (aServiceGroupReferenceList == null)
-      s_aLogger.error ("Failed to get complete service group for " + SMP_USERID.getUserIdPercentEncoded ());
+      s_aLogger.error ("Failed to get complete service group for " + SMP_USERNAME);
     else {
-      s_aLogger.info ("All service groups owned by " + SMP_USERID.getUserIdPercentEncoded () + ":");
+      s_aLogger.info ("All service groups owned by " + SMP_USERNAME + ":");
       for (final ServiceGroupReferenceType aServiceGroupReference : aServiceGroupReferenceList.getServiceGroupReference ())
         s_aLogger.info ("  " + aServiceGroupReference.getHref ());
     }

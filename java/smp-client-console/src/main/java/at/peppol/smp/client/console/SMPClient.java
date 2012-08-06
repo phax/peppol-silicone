@@ -75,7 +75,6 @@ import at.peppol.commons.utils.ReadonlyUsernamePWCredentials;
 import at.peppol.commons.wsaddr.W3CEndpointReferenceUtils;
 import at.peppol.smp.client.CSMPIdentifier;
 import at.peppol.smp.client.SMPServiceCaller;
-import at.peppol.smp.client.UserId;
 
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.charset.CCharset;
@@ -318,8 +317,7 @@ public final class SMPClient {
   private void _listDocuments () {
     final SMPServiceCaller client = new SMPServiceCaller (m_aSMPAddress);
     try {
-      final ServiceGroupReferenceListType list = client.getServiceGroupReferenceList (new UserId (m_sSMPUsername),
-                                                                                      m_aSMPCredentials);
+      final ServiceGroupReferenceListType list = client.getServiceGroupReferenceList (m_sSMPUsername, m_aSMPCredentials);
       for (final ServiceGroupReferenceType gr : list.getServiceGroupReference ())
         System.out.println (gr.getValue () + ":" + gr.getHref ());
     }

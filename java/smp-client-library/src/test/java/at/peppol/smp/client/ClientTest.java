@@ -131,7 +131,7 @@ public final class ClientTest {
   @Test
   public void testGetServiceGroupReferenceList () throws Exception {
     final SMPServiceCaller aClient = new SMPServiceCaller (SMP_URI);
-    final ServiceGroupReferenceListType aServiceGroupReferenceList = aClient.getServiceGroupReferenceList (new UserId (SMP_USERNAME),
+    final ServiceGroupReferenceListType aServiceGroupReferenceList = aClient.getServiceGroupReferenceList (SMP_USERNAME,
                                                                                                            SMP_CREDENTIALS);
     assertNotNull (aServiceGroupReferenceList);
     for (final ServiceGroupReferenceType aServiceGroupReference : aServiceGroupReferenceList.getServiceGroupReference ()) {
