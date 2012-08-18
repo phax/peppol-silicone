@@ -45,7 +45,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import javax.annotation.Nonnull;
 
-import com.phloc.appbasics.app.WebFileIO;
+import com.phloc.appbasics.app.io.WebFileIO;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.UsedViaReflection;
 import com.phloc.scopes.web.singleton.GlobalWebSingleton;

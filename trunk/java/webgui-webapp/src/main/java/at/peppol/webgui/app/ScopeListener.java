@@ -37,6 +37,8 @@
  */
 package at.peppol.webgui.app;
 
+import java.io.File;
+
 import javax.annotation.Nonnull;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -48,7 +50,7 @@ import javax.servlet.http.HttpSessionListener;
 
 import at.peppol.webgui.security.CSecurity;
 
-import com.phloc.appbasics.app.WebFileIO;
+import com.phloc.appbasics.app.io.WebFileIO;
 import com.phloc.appbasics.security.AccessManager;
 import com.phloc.appbasics.security.role.RoleManager;
 import com.phloc.appbasics.security.user.UserManager;
@@ -145,7 +147,7 @@ public final class ScopeListener implements ServletContextListener, HttpSessionL
     GlobalDebug.setProductionModeDirect (bProductionMode);
 
     // Set the storage base
-    WebFileIO.initBasePath (aSC.getInitParameter (INIT_PARAMETER_STORAGE_BASE));
+    WebFileIO.initBasePath (new File (aSC.getInitParameter (INIT_PARAMETER_STORAGE_BASE)));
 
     // Init the unique ID provider
     GlobalIDFactory.setPersistentIntIDFactory (new FileIntIDFactory (WebFileIO.getFile ("id.txt")));
