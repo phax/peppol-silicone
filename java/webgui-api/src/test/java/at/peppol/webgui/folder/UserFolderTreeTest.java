@@ -39,10 +39,11 @@ package at.peppol.webgui.folder;
 
 import static org.junit.Assert.assertNotNull;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
-import at.peppol.webgui.AbstractStorageAwareTestCase;
-
+import com.phloc.appbasics.mock.AppBasicTestRule;
 import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.mock.PhlocTestUtils;
 
@@ -51,7 +52,10 @@ import com.phloc.commons.mock.PhlocTestUtils;
  * 
  * @author philip
  */
-public final class UserFolderTreeTest extends AbstractStorageAwareTestCase {
+public final class UserFolderTreeTest {
+  @Rule
+  public final TestRule m_aTestRule = new AppBasicTestRule ();
+
   @Test
   public void testAsXML () {
     final UserFolderTree aTree = new UserFolderTree ();

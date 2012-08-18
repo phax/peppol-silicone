@@ -42,10 +42,11 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 
-import at.peppol.webgui.AbstractStorageAwareTestCase;
-
+import com.phloc.appbasics.mock.AppBasicTestRule;
 import com.phloc.commons.microdom.IMicroElement;
 import com.phloc.commons.microdom.convert.MicroTypeConverter;
 import com.phloc.commons.mock.PhlocTestUtils;
@@ -56,7 +57,10 @@ import com.phloc.commons.string.StringHelper;
  * 
  * @author philip
  */
-public final class UserFolderTest extends AbstractStorageAwareTestCase {
+public final class UserFolderTest {
+  @Rule
+  public final TestRule m_aTestRule = new AppBasicTestRule ();
+
   @Test
   public void testBasic () {
     final UserFolder aUF = new UserFolder ("any");
