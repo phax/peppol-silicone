@@ -135,6 +135,6 @@ public final class MainSendDocument {
       SystemProperties.setPropertyValue ("com.sun.xml.wss.provider.wsit.SecurityTubeFactory.dump.endpoint.before",
                                          "true");
     }
-    _sendDocument (new ClassPathResource ("test.xml"));
+    _sendDocument (new ClassPathResource ("ehf-test-invoice.xml"));
   }
 }
