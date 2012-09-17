@@ -92,11 +92,11 @@ import com.phloc.html.hc.html.HCH2;
 import com.phloc.html.hc.html.HCHead;
 import com.phloc.html.hc.html.HCHiddenField;
 import com.phloc.html.hc.html.HCHtml;
+import com.phloc.html.hc.html.HCLink;
 import com.phloc.html.hc.html.HCSpan;
 import com.phloc.html.hc.html.HCTable;
 import com.phloc.html.hc.html.HCTextArea;
 import com.phloc.html.hc.html.HCUL;
-import com.phloc.html.resource.css.CSSExternal;
 
 public final class ValidationServlet extends HttpServlet {
   private static final String FIELD_SYNTAX_BINDING = "syntaxbinding";
@@ -122,7 +122,7 @@ public final class ValidationServlet extends HttpServlet {
 
   @Nonnull
   private static HCDiv _createError (final String s) {
-    return new HCDiv (s).addClass (CSS_CLASS_ERROR);
+    return HCDiv.create (s).addClass (CSS_CLASS_ERROR);
   }
 
   private static boolean _containsTransaction (@Nullable final EValidationDocumentType eDocType,
@@ -168,8 +168,8 @@ public final class ValidationServlet extends HttpServlet {
     final HCHtml aHtml = new HCHtml (EHTMLVersion.HTML5);
     final HCHead aHead = aHtml.getHead ();
     aHead.setPageTitle ("PEPPOL document validation");
-    aHead.addCSS (new CSSExternal (_makeContextAwareURL (aHttpRequest, "/css/normalize.min.css")));
-    aHead.addCSS (new CSSExternal (_makeContextAwareURL (aHttpRequest, "/css/main.css")));
+    aHead.addCSS (HCLink.createCSSLink (_makeContextAwareURL (aHttpRequest, "/css/normalize.min.css")));
+    aHead.addCSS (HCLink.createCSSLink (_makeContextAwareURL (aHttpRequest, "/css/main.css")));
     final HCBody aBody = aHtml.getBody ();
 
     boolean bShowForm = true;
@@ -212,14 +212,14 @@ public final class ValidationServlet extends HttpServlet {
         // Do validation
         final ValidationPyramidResult aVPR = aVP.applyValidation (aXMLSource);
         final IResourceErrorGroup aREG = aVPR.getAggregatedResults ();
-        aBody.addChild (new HCH1 ("PEPPOL document validation result"));
+        aBody.addChild (HCH1.create ("PEPPOL document validation result"));
         if (aREG.containsAtLeastOneError ())
-          aBody.addChild (new HCH2 ("The document is invalid!").addClass (CSS_CLASS_ERROR));
+          aBody.addChild (HCH2.create ("The document is invalid!").addClass (CSS_CLASS_ERROR));
         else
           if (aREG.containsAtLeastOneFailure ())
-            aBody.addChild (new HCH2 ("The document is valid but contains warnings!").addClass (CSS_CLASS_WARN));
+            aBody.addChild (HCH2.create ("The document is valid but contains warnings!").addClass (CSS_CLASS_WARN));
           else
-            aBody.addChild (new HCH2 ("The document is valid without warnings!").addClass (CSS_CLASS_SUCCESS));
+            aBody.addChild (HCH2.create ("The document is valid without warnings!").addClass (CSS_CLASS_SUCCESS));
 
         // List all failures
         final IResourceErrorGroup aFailures = aREG.getAllFailures ();
@@ -252,43 +252,43 @@ public final class ValidationServlet extends HttpServlet {
     }
 
     if (bShowForm) {
-      aBody.addChild (new HCH1 ("PEPPOL document validation"));
+      aBody.addChild (HCH1.create ("PEPPOL document validation"));
       final HCForm aForm = aBody.addAndReturnChild (new HCForm (_makeContextAwareURL (aHttpRequest, "/validation/")));
 
       final HCTable aTable = aForm.addAndReturnChild (new HCTable (new HCCol (150), HCCol.star ()));
 
       // Syntax binding
       aTable.addBodyRow ()
-            .addCells (new HCSpan ("Syntax:").addClass (CSS_CLASS_FIELDNAME),
+            .addCells (HCSpan.create ("Syntax:").addClass (CSS_CLASS_FIELDNAME),
                        new SyntaxBindingSelect (FIELD_SYNTAX_BINDING, eSelectedSyntax != null
                                                                                              ? eSelectedSyntax.getID ()
                                                                                              : null).addClass (CSS_CLASS_FIELDCTRL));
 
       // Document type
       aTable.addBodyRow ()
-            .addCells (new HCSpan ("Document type:").addClass (CSS_CLASS_FIELDNAME),
+            .addCells (HCSpan.create ("Document type:").addClass (CSS_CLASS_FIELDNAME),
                        new DocumentTypeSelect (FIELD_DOCTYPE, eSelectedDocType != null ? eSelectedDocType.getID ()
                                                                                       : null).addClass (CSS_CLASS_FIELDCTRL));
 
       // Transaction
       aTable.addBodyRow ()
-            .addCells (new HCSpan ("Transaction:").addClass (CSS_CLASS_FIELDNAME),
+            .addCells (HCSpan.create ("Transaction:").addClass (CSS_CLASS_FIELDNAME),
                        new TransactionSelect (FIELD_TRANSACTION,
                                               null,
                                               eSelectedTransaction != null ? eSelectedTransaction.getID () : null).addClass (CSS_CLASS_FIELDCTRL));
 
       // Country
       aTable.addBodyRow ()
-            .addCells (new HCSpan ("Country:").addClass (CSS_CLASS_FIELDNAME),
+            .addCells (HCSpan.create ("Country:").addClass (CSS_CLASS_FIELDNAME),
                        new CountrySelect (FIELD_COUNTRY, sSelectedCountry).addClass (CSS_CLASS_FIELDCTRL));
 
       // Industry specific?
-      aTable.addBodyRow ()
-            .addCells (new HCSpan ("Industry level:").addClass (CSS_CLASS_FIELDNAME),
-                       new HCDiv (new HCCheckBox (FIELD_INDUSTRY_SPECIFIC, bSelectedIndustryLevel)).addClass (CSS_CLASS_FIELDCTRL));
+      aTable.addBodyRow ().addCells (HCSpan.create ("Industry level:").addClass (CSS_CLASS_FIELDNAME),
+                                     HCDiv.create (new HCCheckBox (FIELD_INDUSTRY_SPECIFIC, bSelectedIndustryLevel))
+                                          .addClass (CSS_CLASS_FIELDCTRL));
 
       // XML row
-      aTable.addBodyRow ().addCells (new HCSpan ("XML content:").addClass (CSS_CLASS_FIELDNAME),
+      aTable.addBodyRow ().addCells (HCSpan.create ("XML content:").addClass (CSS_CLASS_FIELDNAME),
                                      new HCTextArea (FIELD_XML, sSelectedXML).setRows (20)
                                                                              .setCols (50)
                                                                              .addClass (CSS_CLASS_FIELDCTRL));
