@@ -127,7 +127,7 @@ public final class MainCreateCodelistsFilesFromExcel {
     if (aDoc == null)
       throw new IllegalStateException ("Failed to serialize code list");
     final OutputStream aFOS = FileUtils.getOutputStream (sFilename);
-    if (XMLWriter.writeToStream (aDoc, aFOS, XMLWriterSettings.SUGGESTED_XML_SETTINGS).isFailure ())
+    if (XMLWriter.writeToStream (aDoc, aFOS, XMLWriterSettings.DEFAULT_XML_SETTINGS).isFailure ())
       throw new IllegalStateException ("Failed to write file " + sFilename);
     s_aLogger.info ("Wrote Genericode file " + sFilename);
   }
