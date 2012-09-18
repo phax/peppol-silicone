@@ -43,7 +43,11 @@ import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import javax.annotation.Nonnull;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,6 +56,7 @@ import org.w3c.dom.Document;
 import at.peppol.transport.IMessageMetadata;
 
 import com.phloc.commons.io.file.FileUtils;
+import com.phloc.commons.io.file.FilenameHelper;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.xml.serialize.XMLWriter;
 
@@ -182,17 +187,17 @@ public class SimpleMessageRepository implements MessageRepository {
    * @param peppolMessageHeader
    * @return Never null
    */
-  File computeDirectoryNameForInboundMessage (final String inboundMessageStore,
-                                              final IMessageMetadata peppolMessageHeader) {
-    if (peppolMessageHeader == null) {
+  @Nonnull
+  File computeDirectoryNameForInboundMessage (@Nonnull final String inboundMessageStore,
+                                              @Nonnull final IMessageMetadata peppolMessageHeader) {
+    if (peppolMessageHeader == null)
       throw new IllegalArgumentException ("peppolMessageHeader required");
-    }
 
-    final String path = String.format ("%s/%s/%s",
-                                       peppolMessageHeader.getRecipientID ().getValue ().replace (":", "_"),
-                                       StringHelper.getNotNull (peppolMessageHeader.getChannelID ()),
-                                       peppolMessageHeader.getSenderID ().getValue ().replace (":", "_"));
-    return new File (inboundMessageStore, path);
+    final List <String> aFolderParts = new ArrayList <String> (3);
+    aFolderParts.add (FilenameHelper.getAsSecureValidFilename (peppolMessageHeader.getRecipientID ().getValue ()));
+    aFolderParts.add (FilenameHelper.getAsSecureValidFilename (peppolMessageHeader.getChannelID ()));
+    aFolderParts.add (FilenameHelper.getAsSecureValidFilename (peppolMessageHeader.getSenderID ().getValue ()));
+    return new File (inboundMessageStore, StringHelper.getImplodedNonEmpty ("/", aFolderParts));
   }
 
   /**
@@ -202,16 +207,16 @@ public class SimpleMessageRepository implements MessageRepository {
    * @param peppolMessageHeader
    * @return never null
    */
-  File computeDirectoryNameForOutboundMessages (final String outboundMessageStore,
-                                                final IMessageMetadata peppolMessageHeader) {
-    if (peppolMessageHeader == null) {
+  @Nonnull
+  File computeDirectoryNameForOutboundMessages (@Nonnull final String outboundMessageStore,
+                                                @Nonnull final IMessageMetadata peppolMessageHeader) {
+    if (peppolMessageHeader == null)
       throw new IllegalArgumentException ("peppolMessageHeader required");
-    }
 
-    final String path = String.format ("%s/%s/%s",
-                                       peppolMessageHeader.getSenderID ().getValue ().replace (":", "_"),
-                                       StringHelper.getNotNull (peppolMessageHeader.getChannelID ()),
-                                       peppolMessageHeader.getRecipientID ().getValue ().replace (":", "_"));
-    return new File (outboundMessageStore, path);
+    final List <String> aFolderParts = new ArrayList <String> (3);
+    aFolderParts.add (FilenameHelper.getAsSecureValidFilename (peppolMessageHeader.getSenderID ().getValue ()));
+    aFolderParts.add (FilenameHelper.getAsSecureValidFilename (peppolMessageHeader.getChannelID ()));
+    aFolderParts.add (FilenameHelper.getAsSecureValidFilename (peppolMessageHeader.getRecipientID ().getValue ()));
+    return new File (outboundMessageStore, StringHelper.getImplodedNonEmpty ("/", aFolderParts));
   }
 }

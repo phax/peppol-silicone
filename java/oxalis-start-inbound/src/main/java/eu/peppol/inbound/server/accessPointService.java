@@ -161,7 +161,7 @@ public class accessPointService {
     return peppolMessageHeader;
   }
 
-  static void setUpSlf4JMDC (final IMessageMetadata messageHeader) {
+  static void setUpSlf4JMDC (@Nonnull final IMessageMetadata messageHeader) {
     MDC.put ("msgId", messageHeader.getMessageID ());
     MDC.put ("senderId", messageHeader.getSenderID ().getValue ());
     MDC.put ("channelId", messageHeader.getChannelID ());
