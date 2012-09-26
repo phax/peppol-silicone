@@ -143,9 +143,10 @@ public final class SMPServiceCaller {
    * 
    * @param aParticipantIdentifier
    *        The participant identifier to be used. Required to build the SMP
-   *        access URI.
+   *        access URI. May not be <code>null</code>.
    * @param aSMLInfo
-   *        The SML to be used. Required to build the SMP access URI.
+   *        The SML to be used. Required to build the SMP access URI. May not be
+   *        <code>null</code>.
    * @see BusdoxURLUtils#getSMPURIOfParticipant(IReadonlyParticipantIdentifier,
    *      ISMLInfo)
    */
@@ -159,7 +160,7 @@ public final class SMPServiceCaller {
    * 
    * @param aParticipantIdentifier
    *        The participant identifier to be used. Required to build the SMP
-   *        access URI.
+   *        access URI. May not be <code>null</code>.
    * @param sSMLZoneName
    *        The SML DNS zone name to be used. Required to build the SMP access
    *        URI. Must end with a trailing dot (".") and may neither be
@@ -179,7 +180,8 @@ public final class SMPServiceCaller {
    * 
    * @param aSMPHost
    *        The address of the SMP service. Must be port 80 and basic http only
-   *        (no https!). Example: http://smpcompany.company.org
+   *        (no https!). Example: <code>http://smpcompany.company.org</code>.
+   *        May not be <code>null</code>.
    */
   public SMPServiceCaller (@Nonnull final URI aSMPHost) {
     if (aSMPHost == null)
@@ -277,9 +279,11 @@ public final class SMPServiceCaller {
    * specified userId.
    * 
    * @param sUserID
-   *        The username for which to retrieve service groups.
+   *        The username for which to retrieve service groups. May not be
+   *        <code>null</code>.
    * @param aCredentials
-   *        The username and password to use as aCredentials.
+   *        The username and password to use as credentials. May not be
+   *        <code>null</code>.
    * @return A list of references to complete service groups.
    * @throws UnauthorizedException
    *         The username or password was not correct.
@@ -318,9 +322,10 @@ public final class SMPServiceCaller {
    * specified userId.
    * 
    * @param aURI
-   *        The URI containing the reference list.
+   *        The URI containing the reference list. May not be <code>null</code>.
    * @param aCredentials
-   *        The username and password to use as aCredentials.
+   *        The username and password to use as credentials. May not be
+   *        <code>null</code>.
    * @return A list of references to complete service groups.
    * @throws UnauthorizedException
    *         The username or password was not correct.
@@ -358,7 +363,7 @@ public final class SMPServiceCaller {
    * 
    * @param aServiceGroupID
    *        The service group id corresponding to the service group which one
-   *        wants to get.
+   *        wants to get. May not be <code>null</code>.
    * @return The complete service group containing service group and service
    *         metadata
    * @throws UnauthorizedException
@@ -380,6 +385,23 @@ public final class SMPServiceCaller {
     return _getCompleteServiceGroup (aFullResource);
   }
 
+  /**
+   * Returns a complete service group or <code>null</code> if it is not
+   * existing. A complete service group contains both the service group and the
+   * service metadata.
+   * 
+   * @param aServiceGroupID
+   *        The service group id corresponding to the service group which one
+   *        wants to get. May not be <code>null</code>.
+   * @return The complete service group containing service group and service
+   *         metadata
+   * @throws UnauthorizedException
+   *         A HTTP Forbidden was received, should not happen.
+   * @throws UnknownException
+   *         An unknown HTTP exception was received.
+   * @throws BadRequestException
+   *         The request was not well formed.
+   */
   @Nullable
   public CompleteServiceGroupType getCompleteServiceGroupOrNull (@Nonnull final IReadonlyParticipantIdentifier aServiceGroupID) throws Exception {
     try {
@@ -418,10 +440,10 @@ public final class SMPServiceCaller {
    * the service group and the service metadata.
    * 
    * @param aSMLInfo
-   *        The SML object to be used
+   *        The SML object to be used. May not be <code>null</code>.
    * @param aServiceGroupID
    *        The service group id corresponding to the service group which one
-   *        wants to get.
+   *        wants to get. May not be <code>null</code>.
    * @return The complete service group containing service group and service
    *         metadata
    * @throws UnauthorizedException
@@ -461,7 +483,7 @@ public final class SMPServiceCaller {
    * 
    * @param aServiceGroupID
    *        The service group id corresponding to the service group which one
-   *        wants to get.
+   *        wants to get. May not be <code>null</code>.
    * @return The service group
    * @throws UnauthorizedException
    *         A HTTP Forbidden was received, should not happen.
@@ -496,7 +518,7 @@ public final class SMPServiceCaller {
    * metadata.
    * 
    * @param aURI
-   *        The URI to the service group resource.
+   *        The URI to the service group resource. May not be <code>null</code>.
    * @return The service group
    * @throws UnauthorizedException
    *         A HTTP Forbidden was received, should not happen.
@@ -517,10 +539,10 @@ public final class SMPServiceCaller {
    * metadata.
    * 
    * @param aSMLInfo
-   *        The SML object to be used
+   *        The SML object to be used. May not be <code>null</code>.
    * @param aServiceGroupID
    *        The service group id corresponding to the service group which one
-   *        wants to get.
+   *        wants to get. May not be <code>null</code>.
    * @return The service group
    * @throws UnauthorizedException
    *         A HTTP Forbidden was received, should not happen.
@@ -567,9 +589,10 @@ public final class SMPServiceCaller {
    * not used.
    * 
    * @param aServiceGroup
-   *        The service group to save.
+   *        The service group to save. May not be <code>null</code>.
    * @param aCredentials
-   *        The username and password to use as aCredentials.
+   *        The username and password to use as credentials. May not be
+   *        <code>null</code>.
    * @throws UnauthorizedException
    *         The username or password was not correct.
    * @throws NotFoundException
@@ -597,8 +620,10 @@ public final class SMPServiceCaller {
    * 
    * @param aParticipantID
    *        The participant identifier for which the service group is to save.
+   *        May not be <code>null</code>.
    * @param aCredentials
-   *        The username and password to use as aCredentials.
+   *        The username and password to use as credentials. May not be
+   *        <code>null</code>.
    * @throws UnauthorizedException
    *         The username or password was not correct.
    * @throws NotFoundException
@@ -626,11 +651,12 @@ public final class SMPServiceCaller {
    * not used.
    * 
    * @param aURI
-   *        The URI to the service group resource.
+   *        The URI to the service group resource. May not be <code>null</code>.
    * @param aServiceGroup
-   *        The service group to save.
+   *        The service group to save. May not be <code>null</code>.
    * @param aCredentials
-   *        The username and password to use as aCredentials.
+   *        The username and password to use as credentials. May not be
+   *        <code>null</code>.
    * @throws UnauthorizedException
    *         The username or password was not correct.
    * @throws NotFoundException
@@ -674,9 +700,11 @@ public final class SMPServiceCaller {
    * Deletes a service group given by its service group id.
    * 
    * @param aServiceGroupID
-   *        The service group id of the service group to delete.
+   *        The service group id of the service group to delete. May not be
+   *        <code>null</code>.
    * @param aCredentials
-   *        The username and password to use as aCredentials.
+   *        The username and password to use as credentials. May not be
+   *        <code>null</code>.
    * @throws NotFoundException
    *         The service group id did not exist.
    * @throws UnauthorizedException
@@ -702,9 +730,10 @@ public final class SMPServiceCaller {
    * document type.
    * 
    * @param aURI
-   *        The URI to the service group resource.
+   *        The URI to the service group resource. May not be <code>null</code>.
    * @param aCredentials
-   *        The username and password to use as aCredentials.
+   *        The username and password to use as credentials. May not be
+   *        <code>null</code>.
    * @throws UnauthorizedException
    *         The username or password was not correct.
    * @throws NotFoundException
@@ -782,9 +811,11 @@ public final class SMPServiceCaller {
    * document type.
    * 
    * @param aServiceGroupID
-   *        The service group id of the service metadata to get.
+   *        The service group id of the service metadata to get. May not be
+   *        <code>null</code>.
    * @param aDocumentTypeID
-   *        The document type of the service metadata to get.
+   *        The document type of the service metadata to get. May not be
+   *        <code>null</code>.
    * @return A signed service metadata object.
    * @throws UnauthorizedException
    *         A HTTP Forbidden was received, should not happen.
@@ -825,7 +856,8 @@ public final class SMPServiceCaller {
    * Gets a signed service metadata object given by its URI.
    * 
    * @param aURI
-   *        The URI to the service metadata resource.
+   *        The URI to the service metadata resource. May not be
+   *        <code>null</code>.
    * @return A signed service metadata object.
    * @throws UnauthorizedException
    *         A HTTP Forbidden was received, should not happen.
@@ -846,11 +878,13 @@ public final class SMPServiceCaller {
    * document type.
    * 
    * @param aSMLInfo
-   *        The SML object to be used
+   *        The SML object to be used. May not be <code>null</code>.
    * @param aServiceGroupID
-   *        The service group id of the service metadata to get.
+   *        The service group id of the service metadata to get. May not be
+   *        <code>null</code>.
    * @param aDocumentTypeID
-   *        The document type of the service metadata to get.
+   *        The document type of the service metadata to get. May not be
+   *        <code>null</code>.
    * @return A signed service metadata object.
    * @throws UnauthorizedException
    *         A HTTP Forbidden was received, should not happen.
@@ -988,9 +1022,10 @@ public final class SMPServiceCaller {
    * ignored.
    * 
    * @param aServiceMetadata
-   *        The service metadata object to save.
+   *        The service metadata object to save. May not be <code>null</code>.
    * @param aCredentials
-   *        The username and password to use as aCredentials.
+   *        The username and password to use as credentials. May not be
+   *        <code>null</code>.
    * @throws UnauthorizedException
    *         The username or password was not correct.
    * @throws NotFoundException
@@ -1029,11 +1064,13 @@ public final class SMPServiceCaller {
    * ignored.
    * 
    * @param aURI
-   *        The URI to the service metadata resource.
+   *        The URI to the service metadata resource. May not be
+   *        <code>null</code>.
    * @param aServiceMetadata
-   *        The service metadata object to save.
+   *        The service metadata object to save. May not be <code>null</code>.
    * @param aCredentials
-   *        The username and password to use as aCredentials.
+   *        The username and password to use as credentials. May not be
+   *        <code>null</code>.
    * @throws UnauthorizedException
    *         The username or password was not correct.
    * @throws NotFoundException
@@ -1078,11 +1115,14 @@ public final class SMPServiceCaller {
    * document type.
    * 
    * @param aServiceGroupID
-   *        The service group id of the service metadata to delete.
+   *        The service group id of the service metadata to delete. May not be
+   *        <code>null</code>.
    * @param aDocumentTypeID
-   *        The document type of the service metadata to delete.
+   *        The document type of the service metadata to delete. May not be
+   *        <code>null</code>.
    * @param aCredentials
-   *        The username and password to use as aCredentials.
+   *        The username and password to use as credentials. May not be
+   *        <code>null</code>.
    * @throws UnauthorizedException
    *         The username or password was not correct.
    * @throws NotFoundException
@@ -1112,9 +1152,11 @@ public final class SMPServiceCaller {
    * Deletes a service metadata object given by the URI.
    * 
    * @param aURI
-   *        The URI to the service metadata resource.
+   *        The URI to the service metadata resource. May not be
+   *        <code>null</code>.
    * @param aCredentials
-   *        The username and password to use as aCredentials.
+   *        The username and password to use as credentials. May not be
+   *        <code>null</code>.
    * @throws UnauthorizedException
    *         The username or password was not correct.
    * @throws NotFoundException
