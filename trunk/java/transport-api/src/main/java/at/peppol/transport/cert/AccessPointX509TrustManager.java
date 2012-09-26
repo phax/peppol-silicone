@@ -157,7 +157,7 @@ public final class AccessPointX509TrustManager implements X509TrustManager {
       final String sPrincipal = aChain[0].getSubjectX500Principal ().toString ();
       final String [] aArray = RegExHelper.getSplitToArray (sPrincipal, ",");
       for (final String sToken : aArray) {
-        final String sCurCN = StringHelper.getFromExcl (sToken, "CN=");
+        final String sCurCN = StringHelper.getFromFirstExcl (sToken, "CN=");
         if (m_aCommonNames.contains (sCurCN)) {
           bCommonNameOK = true;
           s_aLogger.info ("Accepted issuer: " + sCurCN);
