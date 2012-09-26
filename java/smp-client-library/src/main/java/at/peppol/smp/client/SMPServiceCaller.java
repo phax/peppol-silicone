@@ -71,7 +71,7 @@ import at.peppol.busdox.identifier.IReadonlyProcessIdentifier;
 import at.peppol.commons.identifier.IdentifierUtils;
 import at.peppol.commons.identifier.participant.SimpleParticipantIdentifier;
 import at.peppol.commons.ipmapper.ConfiguredDNSMapper;
-import at.peppol.commons.ipmapper.ISocketType;
+import at.peppol.commons.ipmapper.MappedDNSHost;
 import at.peppol.commons.sml.ISMLInfo;
 import at.peppol.commons.uri.BusdoxURLUtils;
 import at.peppol.commons.utils.ConfigFile;
@@ -193,7 +193,7 @@ public final class SMPServiceCaller {
     try {
       final String sOriginalHost = aSMPHost.getHost ();
       final InetAddress aInetAddr = InetAddress.getByName (sOriginalHost);
-      final ISocketType aRealHostToUse = s_aDNSMapper.mapInternal (aInetAddr);
+      final MappedDNSHost aRealHostToUse = s_aDNSMapper.getMappedDNSHost (aInetAddr);
       if (!sOriginalHost.equals (aRealHostToUse.getHost ())) {
         final int nPortToUse = aRealHostToUse.getPort () != null ? aRealHostToUse.getPort ().intValue ()
                                                                 : aSMPHost.getPort ();

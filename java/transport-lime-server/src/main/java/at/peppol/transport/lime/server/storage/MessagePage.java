@@ -218,6 +218,6 @@ public final class MessagePage {
 
   @Nullable
   private static String _xmlToString (@Nonnull final Node aNode) {
-    return XMLWriter.getNodeAsString (aNode, XMLWriterSettings.SUGGESTED_XML_SETTINGS);
+    return XMLWriter.getNodeAsString (aNode, XMLWriterSettings.DEFAULT_XML_SETTINGS);
   }
 }
