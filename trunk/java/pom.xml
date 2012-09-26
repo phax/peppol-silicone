@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>at.peppol</groupId>
   <artifactId>peppol-parent-pom</artifactId>
-  <version>15-SNAPSHOT</version>
+  <version>15</version>
   <packaging>pom</packaging>
   <name>parent-pom</name>
 
