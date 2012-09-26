@@ -7,12 +7,12 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>peppol-commons-peppol</artifactId>
-  <version>2.3.0_3</version>
+  <version>2.3.1-SNAPSHOT</version>
   <name>peppol-commons-peppol</name>
 
   <scm>
-    <connection>scm:svn:http://peppol-silicone.googlecode.com/svn/tags/peppol-commons-peppol/peppol-commons-peppol-2.3.0_3</connection>
-    <developerConnection>scm:svn:https://peppol-silicone.googlecode.com/svn/tags/peppol-commons-peppol/peppol-commons-peppol-2.3.0_3</developerConnection>
+    <connection>scm:svn:http://peppol-silicone.googlecode.com/svn/trunk/java/commons-peppol</connection>
+    <developerConnection>scm:svn:https://peppol-silicone.googlecode.com/svn/trunk/java/commons-peppol</developerConnection>
   </scm>
 
   <repositories>
