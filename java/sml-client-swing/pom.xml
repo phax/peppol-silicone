@@ -3,8 +3,8 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>at.peppol</groupId>
-    <artifactId>parent-pom</artifactId>
-    <version>14</version>
+    <artifactId>peppol-parent-pom</artifactId>
+    <version>15</version>
   </parent>
   <artifactId>peppol-sml-client-swing</artifactId>
   <version>2.3.1-SNAPSHOT</version>
