@@ -5,7 +5,7 @@
   <artifactId>peppol-parent-pom</artifactId>
   <version>16-SNAPSHOT</version>
   <packaging>pom</packaging>
-  <name>parent-pom</name>
+  <name>peppol-parent-pom</name>
 
   <!-- Minimum Maven version -->
   <prerequisites>
