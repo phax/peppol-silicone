@@ -49,5 +49,7 @@ public final class CSMPIdentifier {
   /** The START transport profile to be used in EndPointType objects */
   public static final String TRANSPORT_PROFILE_START = "busdox-transport-start";
 
+  // TODO add AS2 identifier
+
   private CSMPIdentifier () {}
 }
