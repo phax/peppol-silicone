@@ -3,7 +3,7 @@
 = v2.3.0 - in progress =
 
 ==All components==
-  * Updated [http://code.google.com/p/phloc-commons phloc-commons] to 3.7.0
+  * Updated [http://code.google.com/p/phloc-commons phloc-commons] to 3.8.4
   * Extracted new project "test-files" that contains all the available test files of several file types. This project can be easily reused from somewhere else
 ==Base libraries==
   * Removed all deprecated methods using "Document" instead of "DocumentType" in their names
@@ -24,13 +24,15 @@
   * Split the project "sml-client-apps" into "sml-client-console" and "sml-client-swing"
   * Using the maven-shade-plugin to build standalone runnable projects "sml-client-console" and "sml-client-swing"
   * Made the JPA configuration via the config file instead of the persistence.xml
+  * Added an autoReconnect=true parameter to the default MySQL JDBC String
 ==SMP==
   * Removed the deprecated REST method CompleteServiceGroupInterface.deleteServiceGroup because it has the exact same semantics as ServiceGroupInterface.deleteServiceGroup
   * Changed the internal API concerning the database domain objects of the SMP server for consistency reasons
   * Adopted the field lengths for identifier values according to the defined maximum length constraints
   * Using the maven-shade-plugin to build standalone runnable "smp-client-console"
   * Some improvements to the SMP client API
-  * Updated Jersey (REST libs) to 1.13
+  * Updated Jersey (REST libs) to 1.14
+  * Added an autoReconnect=true parameter to the default MySQL JDBC String
 ==Validation==
   * Added a new project "validation-webapp" that provides a minimum web application for validating your PEPPOL documents in the web
   * IValidationDocumentType interface is now more generic by only requiring to offer a Schema object (and not to force UBL usage)
