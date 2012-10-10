@@ -282,7 +282,7 @@ public final class SMPServiceCaller {
    *        The username for which to retrieve service groups. May not be
    *        <code>null</code>.
    * @param aCredentials
-   *        The username and password to use as credentials. May not be
+   *        The username and password to use as aCredentials. May not be
    *        <code>null</code>.
    * @return A list of references to complete service groups.
    * @throws UnauthorizedException
@@ -324,7 +324,7 @@ public final class SMPServiceCaller {
    * @param aURI
    *        The URI containing the reference list. May not be <code>null</code>.
    * @param aCredentials
-   *        The username and password to use as credentials. May not be
+   *        The username and password to use as aCredentials. May not be
    *        <code>null</code>.
    * @return A list of references to complete service groups.
    * @throws UnauthorizedException
@@ -591,7 +591,7 @@ public final class SMPServiceCaller {
    * @param aServiceGroup
    *        The service group to save. May not be <code>null</code>.
    * @param aCredentials
-   *        The username and password to use as credentials. May not be
+   *        The username and password to use as aCredentials. May not be
    *        <code>null</code>.
    * @throws UnauthorizedException
    *         The username or password was not correct.
@@ -622,7 +622,7 @@ public final class SMPServiceCaller {
    *        The participant identifier for which the service group is to save.
    *        May not be <code>null</code>.
    * @param aCredentials
-   *        The username and password to use as credentials. May not be
+   *        The username and password to use as aCredentials. May not be
    *        <code>null</code>.
    * @throws UnauthorizedException
    *         The username or password was not correct.
@@ -703,7 +703,7 @@ public final class SMPServiceCaller {
    *        The service group id of the service group to delete. May not be
    *        <code>null</code>.
    * @param aCredentials
-   *        The username and password to use as credentials. May not be
+   *        The username and password to use as aCredentials. May not be
    *        <code>null</code>.
    * @throws NotFoundException
    *         The service group id did not exist.
@@ -1152,11 +1152,9 @@ public final class SMPServiceCaller {
    * Deletes a service metadata object given by the URI.
    * 
    * @param aURI
-   *        The URI to the service metadata resource. May not be
-   *        <code>null</code>.
+   *        The URI to the service metadata resource. May not be <code>null</code>.
    * @param aCredentials
-   *        The username and password to use as credentials. May not be
-   *        <code>null</code>.
+   *        The username and password to use as credentials. May not be <code>null</code>.
    * @throws UnauthorizedException
    *         The username or password was not correct.
    * @throws NotFoundException
