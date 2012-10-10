@@ -35,40 +35,23 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.validation.web.servlet;
+package at.peppol.smp.client;
 
-import java.io.IOException;
+import java.security.Key;
+import java.security.PublicKey;
 
 import javax.annotation.Nonnull;
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.xml.crypto.KeySelectorResult;
 
-import com.phloc.commons.charset.CCharset;
+public final class ConstantKeySelectorResult implements KeySelectorResult {
+  private final PublicKey m_aPublicKey;
 
-/**
- * Special servlet filter that applies a certain encoding to a request and a
- * response.
- * 
- * @author philip
- */
-public class CharacterEncodingFilter implements Filter {
-  private static final String s_sEncoding = CCharset.CHARSET_UTF_8;
-
-  public void init (final FilterConfig aFilterConfig) throws ServletException {}
-
-  public void doFilter (@Nonnull final ServletRequest aRequest,
-                        @Nonnull final ServletResponse aResponse,
-                        @Nonnull final FilterChain aChain) throws IOException, ServletException {
-    // We need this for all form data etc.
-    if (aRequest.getCharacterEncoding () == null)
-      aRequest.setCharacterEncoding (s_sEncoding);
-    aResponse.setCharacterEncoding (s_sEncoding);
-    aChain.doFilter (aRequest, aResponse);
+  public ConstantKeySelectorResult (@Nonnull final PublicKey aPublicKey) {
+    m_aPublicKey = aPublicKey;
   }
 
-  public void destroy () {}
+  @Nonnull
+  public Key getKey () {
+    return m_aPublicKey;
+  }
 }

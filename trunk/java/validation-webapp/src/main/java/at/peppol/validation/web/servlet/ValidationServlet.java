@@ -37,18 +37,12 @@
  */
 package at.peppol.validation.web.servlet;
 
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.Source;
 import javax.xml.transform.dom.DOMSource;
 
@@ -67,15 +61,14 @@ import at.peppol.validation.web.ctrl.DocumentTypeSelect;
 import at.peppol.validation.web.ctrl.SyntaxBindingSelect;
 import at.peppol.validation.web.ctrl.TransactionSelect;
 
-import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.error.IResourceError;
 import com.phloc.commons.error.IResourceErrorGroup;
 import com.phloc.commons.locale.LocaleCache;
+import com.phloc.commons.mime.CMimeType;
 import com.phloc.commons.string.StringHelper;
 import com.phloc.commons.url.ISimpleURL;
 import com.phloc.commons.url.SimpleURL;
 import com.phloc.commons.xml.serialize.XMLReader;
-import com.phloc.html.EHTMLVersion;
 import com.phloc.html.css.DefaultCSSClassProvider;
 import com.phloc.html.css.ICSSClassProvider;
 import com.phloc.html.hc.CHCParam;
@@ -97,8 +90,11 @@ import com.phloc.html.hc.html.HCSpan;
 import com.phloc.html.hc.html.HCTable;
 import com.phloc.html.hc.html.HCTextArea;
 import com.phloc.html.hc.html.HCUL;
+import com.phloc.scopes.web.domain.IRequestWebScopeWithoutResponse;
+import com.phloc.webbasics.servlet.AbstractUnifiedResponseServlet;
+import com.phloc.webbasics.web.UnifiedResponse;
 
-public final class ValidationServlet extends HttpServlet {
+public final class ValidationServlet extends AbstractUnifiedResponseServlet {
   private static final String FIELD_SYNTAX_BINDING = "syntaxbinding";
   private static final String FIELD_DOCTYPE = "doctype";
   private static final String FIELD_TRANSACTION = "transaction";
@@ -115,9 +111,9 @@ public final class ValidationServlet extends HttpServlet {
   private static final ICSSClassProvider CSS_CLASS_BUTTONBAR = DefaultCSSClassProvider.create ("buttonbar");
 
   @Nonnull
-  private static ISimpleURL _makeContextAwareURL (@Nonnull final HttpServletRequest aHttpRequest,
+  private static ISimpleURL _makeContextAwareURL (@Nonnull final IRequestWebScopeWithoutResponse aHttpRequest,
                                                   @Nonnull final String sPath) {
-    return new SimpleURL (aHttpRequest.getContextPath () + sPath);
+    return new SimpleURL (aHttpRequest.getFullContextPath () + sPath);
   }
 
   @Nonnull
@@ -136,44 +132,44 @@ public final class ValidationServlet extends HttpServlet {
   /**
    * GET and POST handler
    * 
-   * @param aHttpRequest
-   *        request
-   * @param aHttpResponse
-   *        response
-   * @throws ServletException
-   * @throws IOException
+   * @param aRequestScope
+   *        request scope
+   * @param aUnifiedResponse
+   *        response object
+   * @throws Exception
    */
-  private void _handle (@Nonnull final HttpServletRequest aHttpRequest, @Nonnull final HttpServletResponse aHttpResponse) throws ServletException,
-                                                                                                                         IOException {
+  @Override
+  protected void handleRequest (@Nonnull final IRequestWebScopeWithoutResponse aRequestScope,
+                                @Nonnull final UnifiedResponse aUnifiedResponse) throws Exception {
     final Locale aDisplayLocale = Locale.US;
 
     // Request parameter values
-    final String sSelectedSyntax = aHttpRequest.getParameter (FIELD_SYNTAX_BINDING);
+    final String sSelectedSyntax = aRequestScope.getAttributeAsString (FIELD_SYNTAX_BINDING);
     final EValidationSyntaxBinding eSelectedSyntax = EValidationSyntaxBinding.getFromIDOrNull (sSelectedSyntax);
-    final String sSelectedDocType = aHttpRequest.getParameter (FIELD_DOCTYPE);
+    final String sSelectedDocType = aRequestScope.getAttributeAsString (FIELD_DOCTYPE);
     final EValidationDocumentType eSelectedDocType = EValidationDocumentType.getFromIDOrNull (sSelectedDocType);
-    final String sSelectedTransaction = aHttpRequest.getParameter (FIELD_TRANSACTION);
+    final String sSelectedTransaction = aRequestScope.getAttributeAsString (FIELD_TRANSACTION);
     final ETransaction eSelectedTransaction = ETransaction.getFromIDOrNull (sSelectedTransaction);
-    final String sSelectedCountry = aHttpRequest.getParameter (FIELD_COUNTRY);
+    final String sSelectedCountry = aRequestScope.getAttributeAsString (FIELD_COUNTRY);
     final Locale aSelectedCountry = LocaleCache.getLocale (sSelectedCountry);
-    final String sSelectedIndustryLevel = aHttpRequest.getParameter (FIELD_INDUSTRY_SPECIFIC);
+    final String sSelectedIndustryLevel = aRequestScope.getAttributeAsString (FIELD_INDUSTRY_SPECIFIC);
     final boolean bSelectedIndustryLevel = sSelectedIndustryLevel != null
                                                                          ? Boolean.parseBoolean (sSelectedIndustryLevel)
-                                                                         : aHttpRequest.getParameter (HCCheckBox.getHiddenFieldName (FIELD_INDUSTRY_SPECIFIC)) != null
-                                                                                                                                                                      ? false
-                                                                                                                                                                      : DEFAULT_INDUSTRY_SPECIFIC;
-    final String sSelectedXML = aHttpRequest.getParameter (FIELD_XML);
+                                                                         : aRequestScope.getAttributeAsString (HCCheckBox.getHiddenFieldName (FIELD_INDUSTRY_SPECIFIC)) != null
+                                                                                                                                                                               ? false
+                                                                                                                                                                               : DEFAULT_INDUSTRY_SPECIFIC;
+    final String sSelectedXML = aRequestScope.getAttributeAsString (FIELD_XML);
 
     // Base layout
-    final HCHtml aHtml = new HCHtml (EHTMLVersion.HTML5);
+    final HCHtml aHtml = new HCHtml ();
     final HCHead aHead = aHtml.getHead ();
     aHead.setPageTitle ("PEPPOL document validation");
-    aHead.addCSS (HCLink.createCSSLink (_makeContextAwareURL (aHttpRequest, "/css/normalize.min.css")));
-    aHead.addCSS (HCLink.createCSSLink (_makeContextAwareURL (aHttpRequest, "/css/main.css")));
+    aHead.addCSS (HCLink.createCSSLink (_makeContextAwareURL (aRequestScope, "/css/normalize.min.css")));
+    aHead.addCSS (HCLink.createCSSLink (_makeContextAwareURL (aRequestScope, "/css/main.css")));
     final HCBody aBody = aHtml.getBody ();
 
     boolean bShowForm = true;
-    if (CHCParam.STATE_SUBMITTED.equals (aHttpRequest.getParameter (CHCParam.PARAM_STATE))) {
+    if (CHCParam.STATE_SUBMITTED.equals (aRequestScope.getAttributeAsString (CHCParam.PARAM_STATE))) {
       // User pressed submit
       final List <String> aErrors = new ArrayList <String> ();
       if (eSelectedSyntax == null)
@@ -230,7 +226,7 @@ public final class ValidationServlet extends HttpServlet {
         }
 
         // Add link to main page
-        final HCForm aForm = aBody.addAndReturnChild (new HCForm (_makeContextAwareURL (aHttpRequest, "/validation/")));
+        final HCForm aForm = aBody.addAndReturnChild (new HCForm (_makeContextAwareURL (aRequestScope, "/validation/")));
         final HCDiv aToolbar = aForm.addAndReturnChild (new HCDiv ());
         aToolbar.addChild (new HCHiddenField (FIELD_SYNTAX_BINDING, sSelectedSyntax));
         aToolbar.addChild (new HCHiddenField (FIELD_DOCTYPE, sSelectedDocType));
@@ -253,7 +249,7 @@ public final class ValidationServlet extends HttpServlet {
 
     if (bShowForm) {
       aBody.addChild (HCH1.create ("PEPPOL document validation"));
-      final HCForm aForm = aBody.addAndReturnChild (new HCForm (_makeContextAwareURL (aHttpRequest, "/validation/")));
+      final HCForm aForm = aBody.addAndReturnChild (new HCForm (_makeContextAwareURL (aRequestScope, "/validation/")));
 
       final HCTable aTable = aForm.addAndReturnChild (new HCTable (new HCCol (150), HCCol.star ()));
 
@@ -301,22 +297,9 @@ public final class ValidationServlet extends HttpServlet {
       aToolbar.addChild (new HCButton_Submit ("Validate"));
     }
     // Write HTML
-    final String sHTML = aHtml.getAsHTMLString (HCSettings.getConversionSettings (false));
-    final OutputStream aOS = aHttpResponse.getOutputStream ();
-    aOS.write (sHTML.getBytes (CCharset.CHARSET_UTF_8));
-    aOS.flush ();
-    aOS.close ();
-  }
-
-  @Override
-  protected void doGet (@Nonnull final HttpServletRequest aHttpRequest, @Nonnull final HttpServletResponse aHttpResponse) throws ServletException,
-                                                                                                                         IOException {
-    _handle (aHttpRequest, aHttpResponse);
-  }
-
-  @Override
-  protected void doPost (@Nonnull final HttpServletRequest aHttpRequest,
-                         @Nonnull final HttpServletResponse aHttpResponse) throws ServletException, IOException {
-    _handle (aHttpRequest, aHttpResponse);
+    final String sHTML = HCSettings.getAsHTMLString (aHtml, false);
+    aUnifiedResponse.disableCaching ()
+                    .setContentAndCharset (sHTML, HCSettings.getHTMLCharset (false))
+                    .setMimeType (CMimeType.TEXT_HTML);
   }
 }

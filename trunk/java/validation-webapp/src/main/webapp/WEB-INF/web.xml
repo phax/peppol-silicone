@@ -46,9 +46,13 @@
          version="2.5">
   <display-name>PEPPOL Validation service</display-name>
 
+  <listener>
+    <listener-class>com.phloc.webbasics.servlet.WebAppListener</listener-class>
+  </listener>
+
   <filter>
     <filter-name>CharacterEncodingFilter</filter-name>
-    <filter-class>at.peppol.validation.web.servlet.CharacterEncodingFilter</filter-class>
+    <filter-class>com.phloc.webbasics.servlet.CharacterEncodingFilter</filter-class>
   </filter>
   <filter-mapping>
     <filter-name>CharacterEncodingFilter</filter-name>
