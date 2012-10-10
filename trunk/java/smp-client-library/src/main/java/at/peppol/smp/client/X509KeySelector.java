@@ -37,7 +37,6 @@
  */
 package at.peppol.smp.client;
 
-import java.security.Key;
 import java.security.KeyStore;
 import java.security.PublicKey;
 import java.security.cert.CertPath;
@@ -45,9 +44,10 @@ import java.security.cert.CertPathValidator;
 import java.security.cert.CertificateFactory;
 import java.security.cert.PKIXParameters;
 import java.security.cert.X509Certificate;
-import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.xml.crypto.AlgorithmMethod;
 import javax.xml.crypto.KeySelector;
 import javax.xml.crypto.KeySelectorException;
@@ -60,6 +60,8 @@ import javax.xml.crypto.dsig.keyinfo.X509Data;
 
 import at.peppol.commons.security.KeyStoreUtils;
 import at.peppol.commons.utils.ConfigFile;
+
+import com.phloc.commons.collections.ContainerHelper;
 
 /**
  * Finds and returns a key using the data contained in a {@link KeyInfo} object
@@ -78,57 +80,53 @@ public final class X509KeySelector extends KeySelector {
 
   public X509KeySelector () {}
 
-  private static boolean _algEquals (final String algURI, final String algName) {
-    return (algName.equalsIgnoreCase ("DSA") && algURI.equalsIgnoreCase (SignatureMethod.DSA_SHA1)) ||
-           (algName.equalsIgnoreCase ("RSA") && algURI.equalsIgnoreCase (SignatureMethod.RSA_SHA1));
+  private static boolean _algorithmEquals (@Nonnull final String sAlgURI, @Nonnull final String sAlgName) {
+    return (sAlgName.equalsIgnoreCase ("DSA") && sAlgURI.equalsIgnoreCase (SignatureMethod.DSA_SHA1)) ||
+           (sAlgName.equalsIgnoreCase ("RSA") && sAlgURI.equalsIgnoreCase (SignatureMethod.RSA_SHA1));
   }
 
   @Override
-  public KeySelectorResult select (final KeyInfo aKeyInfo,
+  public KeySelectorResult select (@Nonnull final KeyInfo aKeyInfo,
                                    final KeySelector.Purpose aPurpose,
                                    final AlgorithmMethod aMethod,
                                    final XMLCryptoContext aCryptoContext) throws KeySelectorException {
 
-    final Iterator <?> ki = aKeyInfo.getContent ().iterator ();
-    while (ki.hasNext ()) {
-      final XMLStructure info = (XMLStructure) ki.next ();
-      if (!(info instanceof X509Data))
+    final Iterator <?> aKeyInfoIter = aKeyInfo.getContent ().iterator ();
+    while (aKeyInfoIter.hasNext ()) {
+      final XMLStructure aInfo = (XMLStructure) aKeyInfoIter.next ();
+      if (!(aInfo instanceof X509Data))
         continue;
 
-      final X509Data x509Data = (X509Data) info;
-      final Iterator <?> xi = x509Data.getContent ().iterator ();
-      while (xi.hasNext ()) {
-        final Object o = xi.next ();
+      final X509Data x509Data = (X509Data) aInfo;
+      final Iterator <?> aX509Iter = x509Data.getContent ().iterator ();
+      while (aX509Iter.hasNext ()) {
+        final Object o = aX509Iter.next ();
         if (!(o instanceof X509Certificate))
           continue;
 
-        final X509Certificate certificate = (X509Certificate) o;
+        final X509Certificate aCertificate = (X509Certificate) o;
         try {
           // Check if the certificate is expired or active.
-          certificate.checkValidity ();
+          aCertificate.checkValidity ();
 
           // Checks whether the certificate is in the trusted store.
-          final X509Certificate [] certArray = new X509Certificate [] { certificate };
+          final List <X509Certificate> aCertList = ContainerHelper.newList (aCertificate);
 
           final KeyStore ks = KeyStoreUtils.loadKeyStore (TRUSTSTORE_LOCATION, TRUSTSTORE_PASSWORD);
           // The PKIXParameters constructor may fail because:
           // - the trustAnchorsParameter is empty
-          final PKIXParameters params = new PKIXParameters (ks);
-          params.setRevocationEnabled (false);
+          final PKIXParameters aPKIXParams = new PKIXParameters (ks);
+          aPKIXParams.setRevocationEnabled (false);
           final CertificateFactory aCertificateFactory = CertificateFactory.getInstance ("X509");
-          final CertPath aCertPath = aCertificateFactory.generateCertPath (Arrays.asList (certArray));
+          final CertPath aCertPath = aCertificateFactory.generateCertPath (aCertList);
           final CertPathValidator aPathValidator = CertPathValidator.getInstance ("PKIX");
-          aPathValidator.validate (aCertPath, params);
+          aPathValidator.validate (aCertPath, aPKIXParams);
 
-          final PublicKey aPublicKey = certificate.getPublicKey ();
+          final PublicKey aPublicKey = aCertificate.getPublicKey ();
 
           // Make sure the algorithm is compatible with the method.
-          if (_algEquals (aMethod.getAlgorithm (), aPublicKey.getAlgorithm ())) {
-            return new KeySelectorResult () {
-              public Key getKey () {
-                return aPublicKey;
-              }
-            };
+          if (_algorithmEquals (aMethod.getAlgorithm (), aPublicKey.getAlgorithm ())) {
+            return new ConstantKeySelectorResult (aPublicKey);
           }
         }
         catch (final Exception e) {
