@@ -48,9 +48,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import at.peppol.webgui.security.CSecurity;
 
 import com.phloc.appbasics.app.io.WebFileIO;
+import com.phloc.appbasics.app.io.WebIO;
+import com.phloc.appbasics.app.io.WebIOResourceProviderChain;
 import com.phloc.appbasics.security.AccessManager;
 import com.phloc.appbasics.security.role.RoleManager;
 import com.phloc.appbasics.security.user.UserManager;
@@ -58,6 +63,7 @@ import com.phloc.appbasics.security.usergroup.UserGroupManager;
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.idfactory.FileIntIDFactory;
 import com.phloc.commons.idfactory.GlobalIDFactory;
+import com.phloc.commons.string.StringHelper;
 import com.phloc.scopes.MetaScopeFactory;
 import com.phloc.scopes.web.domain.IRequestWebScope;
 import com.phloc.scopes.web.factory.DefaultWebScopeFactory;
@@ -76,6 +82,8 @@ public final class ScopeListener implements ServletContextListener, HttpSessionL
   // like Vaadin:
   public static final String INIT_PARAMETER_PRODUCTION = "productionMode";
   public static final String INIT_PARAMETER_STORAGE_BASE = "storage-base";
+
+  private static final Logger s_aLogger = LoggerFactory.getLogger (ScopeListener.class);
 
   private static void _initAccessManager () {
     // Call before accessing AccessManager!
@@ -147,7 +155,19 @@ public final class ScopeListener implements ServletContextListener, HttpSessionL
     GlobalDebug.setProductionModeDirect (bProductionMode);
 
     // Set the storage base
-    WebFileIO.initBasePath (new File (aSC.getInitParameter (INIT_PARAMETER_STORAGE_BASE)));
+    final String sServletContextPath = aSC.getRealPath (".");
+    String sBasePath = aSC.getInitParameter (INIT_PARAMETER_STORAGE_BASE);
+    if (StringHelper.hasNoText (sBasePath)) {
+      if (GlobalDebug.isDebugMode () && s_aLogger.isInfoEnabled ())
+        s_aLogger.info ("No servlet context init-parameter '" +
+                        INIT_PARAMETER_STORAGE_BASE +
+                        "' found! Defaulting to " +
+                        sServletContextPath);
+      sBasePath = sServletContextPath;
+    }
+    final File aBasePath = new File (sBasePath);
+    WebFileIO.initPaths (aBasePath, new File (sServletContextPath), true);
+    WebIO.init (new WebIOResourceProviderChain (aBasePath));
 
     // Init the unique ID provider
     GlobalIDFactory.setPersistentIntIDFactory (new FileIntIDFactory (WebFileIO.getFile ("id.txt")));
