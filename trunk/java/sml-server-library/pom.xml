@@ -27,6 +27,16 @@
         <enabled>true</enabled>
       </snapshots>
     </repository>
+    <repository>
+      <id>h2</id>
+      <url>http://h2database.com/m2-repo/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
   </repositories>
 
   <dependencies>
