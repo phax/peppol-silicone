@@ -82,8 +82,8 @@ public class SoapResponseHeaderHandler implements SOAPHandler <SOAPMessageContex
           if (aChildNode != null && aChildNode.getChildNodes () != null && aChildNode.getChildNodes ().getLength () > 0) {
             // Child has children present
             final Node aChildChildeNode = aChildNode.getChildNodes ().item (0);
-            // FIXME use constant from CTransportIdentifiers
-            if (aChildChildeNode != null && aChildChildeNode.getNodeName ().indexOf ("Headers") >= 0) {
+            if (aChildChildeNode != null &&
+                aChildChildeNode.getNodeName ().indexOf (CTransportIdentifiers.ELEMENT_HEADERS) >= 0) {
               final SOAPHeader aHeader = _attachIncomingHeaders (aEnvelope);
               _moveHeaderFromBodyToSoapHeader (aEnvelope, aHeader);
             }
