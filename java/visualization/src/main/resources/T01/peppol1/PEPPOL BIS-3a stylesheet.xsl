@@ -41,14 +41,14 @@
 <!-- �tg�fa 1.00, 6. okt�ber 2011 -->
 <!-- �orkell P�tursson, thorkell.petursson@fjs.is -->
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:ccts="urn:un:unece:uncefact:documentation:2" xmlns:clm54217="urn:un:unece:uncefact:codelist:specification:54217:2001" xmlns:clm5639="urn:un:unece:uncefact:codelist:specification:5639:1988" xmlns:clm66411="urn:un:unece:uncefact:codelist:specification:66411:2001" xmlns:clmIANAMIMEMediaType="urn:un:unece:uncefact:codelist:specification:IANAMIMEMediaType:2003" xmlns:ext="urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2" xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:n1="urn:oasis:names:specification:ubl:schema:xsd:Order-2" xmlns:qdt="urn:oasis:names:specification:ubl:schema:xsd:QualifiedDatatypes-2" xmlns:udt="urn:un:unece:uncefact:data:specification:UnqualifiedDataTypesSchemaModule:2" xmlns:xdt="http://www.w3.org/2005/xpath-datatypes" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-	<xsl:output version="4.0" method="html" indent="no" encoding="ISO-8859-1" media-type="text/html" doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN" doctype-system="http://www.w3.org/TR/html4/loose.dtd"/>
+	<xsl:output version="4.0" method="html" indent="no" encoding="UTF-8" media-type="text/html" doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN" doctype-system="http://www.w3.org/TR/html4/loose.dtd"/>
 	<xsl:decimal-format name="IcelandicNumber" decimal-separator="," grouping-separator="."/>
 	<xsl:template match="n1:Order">
 		<html>
 			<head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 				<link href="style.css" title="default" type="text/css" media="screen,projection,print" rel="stylesheet"/>
-				<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
-				<title>Order</title>
+				<title>ORDER</title>
 			</head>
 			<body>
 				<xsl:call-template name="Sida"/>

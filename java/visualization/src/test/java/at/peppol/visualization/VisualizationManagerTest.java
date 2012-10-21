@@ -39,6 +39,8 @@ package at.peppol.visualization;
 
 import static org.junit.Assert.assertNotNull;
 
+import java.io.File;
+
 import org.junit.Test;
 import org.w3c.dom.Document;
 
@@ -47,6 +49,7 @@ import at.peppol.test.ETestFileType;
 import at.peppol.test.TestFiles;
 
 import com.phloc.commons.io.IReadableResource;
+import com.phloc.commons.io.file.FilenameHelper;
 
 /**
  * Test class for class {@link VisualizationManager}.
@@ -62,6 +65,14 @@ public final class VisualizationManagerTest {
       for (final EVisualizationArtefact eArtefact : EVisualizationArtefact.getAllArtefactsOfTransaction (ETransaction.T14)) {
         final Document aDoc = VisualizationManager.visualizeToDOMDocument (eArtefact, aTestFile);
         assertNotNull (aDoc);
+
+        // Visualize to file
+        final File aDestinationFile = new File ("target/" +
+                                                eArtefact.getID () +
+                                                "/" +
+                                                FilenameHelper.getBaseName (aTestFile.getPath ()) +
+                                                ".html");
+        VisualizationManager.visualizeToFile (eArtefact, aTestFile, aDestinationFile, true);
       }
     }
   }
@@ -74,6 +85,14 @@ public final class VisualizationManagerTest {
       for (final EVisualizationArtefact eArtefact : EVisualizationArtefact.getAllArtefactsOfTransaction (ETransaction.T01)) {
         final Document aDoc = VisualizationManager.visualizeToDOMDocument (eArtefact, aTestFile);
         assertNotNull (aDoc);
+
+        // Visualize to file
+        final File aDestinationFile = new File ("target/" +
+                                                eArtefact.getID () +
+                                                "/" +
+                                                FilenameHelper.getBaseName (aTestFile.getPath ()) +
+                                                ".html");
+        VisualizationManager.visualizeToFile (eArtefact, aTestFile, aDestinationFile, true);
       }
     }
   }
@@ -86,6 +105,14 @@ public final class VisualizationManagerTest {
       for (final EVisualizationArtefact eArtefact : EVisualizationArtefact.getAllArtefactsOfTransaction (ETransaction.T10)) {
         final Document aDoc = VisualizationManager.visualizeToDOMDocument (eArtefact, aTestFile);
         assertNotNull (aDoc);
+
+        // Visualize to file
+        final File aDestinationFile = new File ("target/" +
+                                                eArtefact.getID () +
+                                                "/" +
+                                                FilenameHelper.getBaseName (aTestFile.getPath ()) +
+                                                ".html");
+        VisualizationManager.visualizeToFile (eArtefact, aTestFile, aDestinationFile, true);
       }
     }
   }
