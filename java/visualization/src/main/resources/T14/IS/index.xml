@@ -38,7 +38,7 @@
     under either the MPL or the EUPL License.
 
 -->
-<index xsl="PEPPOL BIS-5a CreditNote stylesheet.xsl" languages="en">
+<index xsl="TRDM-014a-CreditNote-IS.xsl" languages="en">
   <resource type="css">style.css</resource>
   <resource type="js">toggleContainer.js</resource>
 </index>

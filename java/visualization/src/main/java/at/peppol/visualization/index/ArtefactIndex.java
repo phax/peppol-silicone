@@ -48,6 +48,7 @@ import javax.annotation.concurrent.Immutable;
 import com.phloc.commons.CGlobal;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsImmutableObject;
+import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.resource.ClassPathResource;
@@ -59,7 +60,8 @@ import com.phloc.commons.regex.RegExHelper;
 import com.phloc.commons.string.StringHelper;
 
 /**
- * Represents the content of the index file for a single visualization artefact.
+ * Represents the content of the index.xml file for a single visualization
+ * artefact.
  * 
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
@@ -130,11 +132,20 @@ public final class ArtefactIndex {
    * @return An unmodifiable set with all resources for this artefact.
    */
   @Nonnull
-  @ReturnsImmutableObject
+  @ReturnsMutableCopy
   public Set <ArtefactResource> getAllResources () {
-    return ContainerHelper.makeUnmodifiable (m_aResources);
+    return ContainerHelper.newSet (m_aResources);
   }
 
+  /**
+   * Read the passed index.xml file and create an appropriate
+   * {@link ArtefactIndex} object.
+   * 
+   * @param aRes
+   *        The index resource to be read. May not be <code>null</code>.
+   * @return <code>null</code> if the passed resource could not be interpreted
+   *         as XML.
+   */
   @Nullable
   public static ArtefactIndex createFromXML (@Nonnull final IReadableResource aRes) {
     if (aRes == null)
