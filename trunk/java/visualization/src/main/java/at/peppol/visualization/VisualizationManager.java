@@ -54,6 +54,8 @@ import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.dom.DOMResult;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,6 +68,7 @@ import com.phloc.commons.io.file.LoggingFileOperationCallback;
 import com.phloc.commons.io.streams.StreamUtils;
 import com.phloc.commons.state.ESuccess;
 import com.phloc.commons.xml.XMLFactory;
+import com.phloc.commons.xml.serialize.EXMLSerializeFormat;
 import com.phloc.commons.xml.serialize.XMLWriter;
 import com.phloc.commons.xml.serialize.XMLWriterSettings;
 import com.phloc.commons.xml.transform.ResourceStreamSource;
@@ -93,13 +96,14 @@ public final class VisualizationManager {
     if (eArtefact == null)
       throw new NullPointerException ("artefact");
 
-    // Get cache XSL templates
+    // Get cached XSL templates
     Templates aTemplates;
     s_aLock.lock ();
     try {
       final String sArtefactID = eArtefact.getID ();
       aTemplates = s_aTemplatesCache.get (sArtefactID);
       if (aTemplates == null) {
+        // Not in the cache - create a new one and put in the cache
         aTemplates = XMLTransformerFactory.newTemplates (eArtefact.getStylesheetResource ());
         if (aTemplates == null) {
           s_aLogger.error ("Failed to parse XSLT file for artefact " + eArtefact);
@@ -151,10 +155,16 @@ public final class VisualizationManager {
     if (aDestinationFile.isDirectory ())
       throw new IllegalArgumentException ("Passed destination is a directory!");
 
+    // Ensure the parent directory is present
+    s_aFOM.createDirRecursiveIfNotExisting (aDestinationFile.getParentFile ());
+
     // Main conversion
     final Document aDoc = visualizeToDOMDocument (eArtefact, aSource);
     if (aDoc == null)
       return ESuccess.FAILURE;
+
+    if (aDoc.getDocumentElement () == null)
+      s_aLogger.warn ("Visualized document with artefact " + eArtefact + " is empty!");
 
     // If destination file exists, manually delete it
     if (aDestinationFile.exists ())
@@ -162,12 +172,18 @@ public final class VisualizationManager {
 
     // Write the resulting HTML document to the file system
     try {
-      if (XMLWriter.writeToStream (aDoc,
-                                   new FileOutputStream (aDestinationFile),
-                                   XMLWriterSettings.DEFAULT_XML_SETTINGS).isFailure ())
-        return ESuccess.FAILURE;
+      if (true)
+        XMLTransformerFactory.newTransformer ().transform (new DOMSource (aDoc), new StreamResult (aDestinationFile));
+      else {
+        final XMLWriterSettings aXWS = new XMLWriterSettings ().setFormat (EXMLSerializeFormat.HTML);
+        if (XMLWriter.writeToStream (aDoc, new FileOutputStream (aDestinationFile), aXWS).isFailure ())
+          return ESuccess.FAILURE;
+      }
     }
     catch (final FileNotFoundException ex) {
+      throw new IllegalStateException ("Failed to write result document " + aDestinationFile, ex);
+    }
+    catch (final TransformerException ex) {
       throw new IllegalStateException ("Failed to write result document " + aDestinationFile, ex);
     }
 
@@ -191,5 +207,13 @@ public final class VisualizationManager {
     }
 
     return ESuccess.SUCCESS;
+  }
+
+  @Nullable
+  public static ESuccess visualizeToFile (@Nonnull final EVisualizationArtefact eArtefact,
+                                          @Nonnull final IReadableResource aResource,
+                                          @Nonnull final File aDestinationFile,
+                                          final boolean bCopyResources) {
+    return visualizeToFile (eArtefact, new ResourceStreamSource (aResource), aDestinationFile, bCopyResources);
   }
 }
