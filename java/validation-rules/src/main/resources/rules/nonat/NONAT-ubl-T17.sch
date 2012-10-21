@@ -40,18 +40,18 @@
 -->
 <!--This file is generated automatically! Do NOT edit!-->
 <!--Schematron assembly for binding ubl and transaction T17-->
-<ns0:schema xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:ubl="urn:oasis:names:specification:ubl:schema:xsd:Reminder-2" queryBinding="xslt2" xmlns:ns0="http://purl.oclc.org/dsdl/schematron">
-  <ns0:title>NONAT T17 bound to ubl</ns0:title>
-  <ns0:ns prefix="cbc" uri="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" />
-  <ns0:ns prefix="cac" uri="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" />
-  <ns0:ns prefix="ubl" uri="urn:oasis:names:specification:ubl:schema:xsd:Reminder-2" />
-  <ns0:phase id="NONAT_T17_phase">
-    <ns0:active pattern="UBL-T17" />
-  </ns0:phase>
-  <ns0:phase id="codelist_phase">
-    <ns0:active pattern="Codes-T17" />
-  </ns0:phase>
-  <ns0:include href="include/NONAT-T17-abstract.sch" />
-  <ns0:include href="include/NONAT-T17-codes.sch" />
-  <ns0:include href="include/NONAT-ubl-T17-test.sch" />
-</ns0:schema>
+<schema xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:ubl="urn:oasis:names:specification:ubl:schema:xsd:Reminder-2" queryBinding="xslt2" xmlns="http://purl.oclc.org/dsdl/schematron">
+  <title>NONAT T17 bound to ubl</title>
+  <ns prefix="cbc" uri="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" />
+  <ns prefix="cac" uri="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" />
+  <ns prefix="ubl" uri="urn:oasis:names:specification:ubl:schema:xsd:Reminder-2" />
+  <phase id="NONAT_T17_phase">
+    <active pattern="UBL-T17" />
+  </phase>
+  <phase id="codelist_phase">
+    <active pattern="Codes-T17" />
+  </phase>
+  <include href="include/NONAT-T17-abstract.sch" />
+  <include href="include/NONAT-T17-codes.sch" />
+  <include href="include/NONAT-ubl-T17-test.sch" />
+</schema>

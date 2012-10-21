@@ -40,14 +40,14 @@
 -->
 <!--This file is generated automatically! Do NOT edit!-->
 <!--Schematron assembly for binding UBL and transaction T01-->
-<ns0:schema xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:ubl="urn:oasis:names:specification:ubl:schema:xsd:Order-2" queryBinding="xslt2" xmlns:ns0="http://purl.oclc.org/dsdl/schematron">
-  <ns0:title>EUGEN T01 bound to UBL</ns0:title>
-  <ns0:ns prefix="cbc" uri="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" />
-  <ns0:ns prefix="cac" uri="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" />
-  <ns0:ns prefix="ubl" uri="urn:oasis:names:specification:ubl:schema:xsd:Order-2" />
-  <ns0:phase id="EUGEN_T01_phase">
-    <ns0:active pattern="UBL-T01" />
-  </ns0:phase>
-  <ns0:include href="include/EUGEN-T01-abstract.sch" />
-  <ns0:include href="include/EUGEN-UBL-T01-test.sch" />
-</ns0:schema>
+<schema xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:ubl="urn:oasis:names:specification:ubl:schema:xsd:Order-2" queryBinding="xslt2" xmlns="http://purl.oclc.org/dsdl/schematron">
+  <title>EUGEN T01 bound to UBL</title>
+  <ns prefix="cbc" uri="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" />
+  <ns prefix="cac" uri="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" />
+  <ns prefix="ubl" uri="urn:oasis:names:specification:ubl:schema:xsd:Order-2" />
+  <phase id="EUGEN_T01_phase">
+    <active pattern="UBL-T01" />
+  </phase>
+  <include href="include/EUGEN-T01-abstract.sch" />
+  <include href="include/EUGEN-UBL-T01-test.sch" />
+</schema>

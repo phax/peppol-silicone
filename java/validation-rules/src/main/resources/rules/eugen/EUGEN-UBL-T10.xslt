@@ -233,9 +233,9 @@
 
 		<!--ASSERT -->
 <xsl:choose>
-      <xsl:when test="contains(&#39;BIC&#39;,concat(&#39;&#39;,.,&#39;&#39;))" />
+      <xsl:when test="contains(&#39;�BIC�&#39;,concat(&#39;�&#39;,.,&#39;�&#39;))" />
       <xsl:otherwise>
-        <svrl:failed-assert test="contains(&#39;BIC&#39;,concat(&#39;&#39;,.,&#39;&#39;))" xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
+        <svrl:failed-assert test="contains(&#39;�BIC�&#39;,concat(&#39;�&#39;,.,&#39;�&#39;))" xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
           <xsl:attribute name="flag">warning</xsl:attribute>
           <xsl:attribute name="location">
             <xsl:apply-templates mode="schematron-select-full-path" select="." />
@@ -253,9 +253,9 @@
 
 		<!--ASSERT -->
 <xsl:choose>
-      <xsl:when test="contains(&#39;GLN&#39;,concat(&#39;&#39;,.,&#39;&#39;))" />
+      <xsl:when test="contains(&#39;�GLN�&#39;,concat(&#39;�&#39;,.,&#39;�&#39;))" />
       <xsl:otherwise>
-        <svrl:failed-assert test="contains(&#39;GLN&#39;,concat(&#39;&#39;,.,&#39;&#39;))" xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
+        <svrl:failed-assert test="contains(&#39;�GLN�&#39;,concat(&#39;�&#39;,.,&#39;�&#39;))" xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
           <xsl:attribute name="flag">warning</xsl:attribute>
           <xsl:attribute name="location">
             <xsl:apply-templates mode="schematron-select-full-path" select="." />
@@ -273,9 +273,9 @@
 
 		<!--ASSERT -->
 <xsl:choose>
-      <xsl:when test="contains(&#39;GLN&#39;,concat(&#39;&#39;,.,&#39;&#39;))" />
+      <xsl:when test="contains(&#39;�GLN�&#39;,concat(&#39;�&#39;,.,&#39;�&#39;))" />
       <xsl:otherwise>
-        <svrl:failed-assert test="contains(&#39;GLN&#39;,concat(&#39;&#39;,.,&#39;&#39;))" xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
+        <svrl:failed-assert test="contains(&#39;�GLN�&#39;,concat(&#39;�&#39;,.,&#39;�&#39;))" xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
           <xsl:attribute name="flag">warning</xsl:attribute>
           <xsl:attribute name="location">
             <xsl:apply-templates mode="schematron-select-full-path" select="." />
@@ -293,9 +293,9 @@
 
 		<!--ASSERT -->
 <xsl:choose>
-      <xsl:when test="contains(&#39;GTIN&#39;,concat(&#39;&#39;,.,&#39;&#39;))" />
+      <xsl:when test="contains(&#39;�GTIN�&#39;,concat(&#39;�&#39;,.,&#39;�&#39;))" />
       <xsl:otherwise>
-        <svrl:failed-assert test="contains(&#39;GTIN&#39;,concat(&#39;&#39;,.,&#39;&#39;))" xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
+        <svrl:failed-assert test="contains(&#39;�GTIN�&#39;,concat(&#39;�&#39;,.,&#39;�&#39;))" xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
           <xsl:attribute name="flag">warning</xsl:attribute>
           <xsl:attribute name="location">
             <xsl:apply-templates mode="schematron-select-full-path" select="." />
@@ -313,9 +313,9 @@
 
 		<!--ASSERT -->
 <xsl:choose>
-      <xsl:when test="contains(&#39;CPVUNSPSCeCLASS&#39;,concat(&#39;&#39;,.,&#39;&#39;))" />
+      <xsl:when test="contains(&#39;�CPV�UNSPSC�eCLASS�&#39;,concat(&#39;�&#39;,.,&#39;�&#39;))" />
       <xsl:otherwise>
-        <svrl:failed-assert test="contains(&#39;CPVUNSPSCeCLASS&#39;,concat(&#39;&#39;,.,&#39;&#39;))" xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
+        <svrl:failed-assert test="contains(&#39;�CPV�UNSPSC�eCLASS�&#39;,concat(&#39;�&#39;,.,&#39;�&#39;))" xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
           <xsl:attribute name="flag">warning</xsl:attribute>
           <xsl:attribute name="location">
             <xsl:apply-templates mode="schematron-select-full-path" select="." />
@@ -333,9 +333,9 @@
 
 		<!--ASSERT -->
 <xsl:choose>
-      <xsl:when test="contains(&#39;AAA ExemptAAB ExemptAAC ExemptAAE Reverse ChargeAAF ExemptAAG ExemptAAH Margin SchemeAAI Margin SchemeAAJ Reverse ChargeAAK Reverse ChargeAAL Reverse Charge ExemptAAM Exempt New Means of TransportAAN Exempt TriangulationAAO Reverse Charge&#39;,concat(&#39;&#39;,.,&#39;&#39;))" />
+      <xsl:when test="contains(&#39;�AAA Exempt�AAB Exempt�AAC Exempt�AAE Reverse Charge�AAF Exempt�AAG Exempt�AAH Margin Scheme�AAI Margin Scheme�AAJ Reverse Charge�AAK Reverse Charge�AAL Reverse Charge Exempt�AAM Exempt New Means of Transport�AAN Exempt Triangulation�AAO Reverse Charge�&#39;,concat(&#39;�&#39;,.,&#39;�&#39;))" />
       <xsl:otherwise>
-        <svrl:failed-assert test="contains(&#39;AAA ExemptAAB ExemptAAC ExemptAAE Reverse ChargeAAF ExemptAAG ExemptAAH Margin SchemeAAI Margin SchemeAAJ Reverse ChargeAAK Reverse ChargeAAL Reverse Charge ExemptAAM Exempt New Means of TransportAAN Exempt TriangulationAAO Reverse Charge&#39;,concat(&#39;&#39;,.,&#39;&#39;))" xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
+        <svrl:failed-assert test="contains(&#39;�AAA Exempt�AAB Exempt�AAC Exempt�AAE Reverse Charge�AAF Exempt�AAG Exempt�AAH Margin Scheme�AAI Margin Scheme�AAJ Reverse Charge�AAK Reverse Charge�AAL Reverse Charge Exempt�AAM Exempt New Means of Transport�AAN Exempt Triangulation�AAO Reverse Charge�&#39;,concat(&#39;�&#39;,.,&#39;�&#39;))" xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
           <xsl:attribute name="flag">fatal</xsl:attribute>
           <xsl:attribute name="location">
             <xsl:apply-templates mode="schematron-select-full-path" select="." />
@@ -353,9 +353,9 @@
 
 		<!--ASSERT -->
 <xsl:choose>
-      <xsl:when test="contains(&#39;AD:VATAL:VATAT:CIDAT:GOVAT:KURAT:VATBA:VATBE:VATBG:VATCH:VATCY:VATCZ:VATDE:VATDK:CPRDK:CVRDK:PDK:SEDK:VANSDUNSEE:VATES:VATEU:REIDEU:VATFI:OVTFR:SIRENEFR:SIRETGB:VATGLNGR:VATHR:VATHU:VATIBANIE:VATIS:KTIT:CFIT:FTIIT:IPAIT:SECETIIT:SIAIT:VATLI:VATLT:VATLU:VATLV:VATMC:VATME:VATMK:VATMT:VATNL:VATNO:ORGNRNO:VATPL:VATPT:VATRO:VATRS:VATSE:ORGNRSI:VATSK:VATSM:VATTR:VATVA:VAT&#39;,concat(&#39;&#39;,.,&#39;&#39;))" />
+      <xsl:when test="contains(&#39;�AD:VAT�AL:VAT�AT:CID�AT:GOV�AT:KUR�AT:VAT�BA:VAT�BE:VAT�BG:VAT�CH:VAT�CY:VAT�CZ:VAT�DE:VAT�DK:CPR�DK:CVR�DK:P�DK:SE�DK:VANS�DUNS�EE:VAT�ES:VAT�EU:REID�EU:VAT�FI:OVT�FR:SIRENE�FR:SIRET�GB:VAT�GLN�GR:VAT�HR:VAT�HU:VAT�IBAN�IE:VAT�IS:KT�IT:CF�IT:FTI�IT:IPA�IT:SECETI�IT:SIA�IT:VAT�LI:VAT�LT:VAT�LU:VAT�LV:VAT�MC:VAT�ME:VAT�MK:VAT�MT:VAT�NL:VAT�NO:ORGNR�NO:VAT�PL:VAT�PT:VAT�RO:VAT�RS:VAT�SE:ORGNR�SI:VAT�SK:VAT�SM:VAT�TR:VAT�VA:VAT�&#39;,concat(&#39;�&#39;,.,&#39;�&#39;))" />
       <xsl:otherwise>
-        <svrl:failed-assert test="contains(&#39;AD:VATAL:VATAT:CIDAT:GOVAT:KURAT:VATBA:VATBE:VATBG:VATCH:VATCY:VATCZ:VATDE:VATDK:CPRDK:CVRDK:PDK:SEDK:VANSDUNSEE:VATES:VATEU:REIDEU:VATFI:OVTFR:SIRENEFR:SIRETGB:VATGLNGR:VATHR:VATHU:VATIBANIE:VATIS:KTIT:CFIT:FTIIT:IPAIT:SECETIIT:SIAIT:VATLI:VATLT:VATLU:VATLV:VATMC:VATME:VATMK:VATMT:VATNL:VATNO:ORGNRNO:VATPL:VATPT:VATRO:VATRS:VATSE:ORGNRSI:VATSK:VATSM:VATTR:VATVA:VAT&#39;,concat(&#39;&#39;,.,&#39;&#39;))" xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
+        <svrl:failed-assert test="contains(&#39;�AD:VAT�AL:VAT�AT:CID�AT:GOV�AT:KUR�AT:VAT�BA:VAT�BE:VAT�BG:VAT�CH:VAT�CY:VAT�CZ:VAT�DE:VAT�DK:CPR�DK:CVR�DK:P�DK:SE�DK:VANS�DUNS�EE:VAT�ES:VAT�EU:REID�EU:VAT�FI:OVT�FR:SIRENE�FR:SIRET�GB:VAT�GLN�GR:VAT�HR:VAT�HU:VAT�IBAN�IE:VAT�IS:KT�IT:CF�IT:FTI�IT:IPA�IT:SECETI�IT:SIA�IT:VAT�LI:VAT�LT:VAT�LU:VAT�LV:VAT�MC:VAT�ME:VAT�MK:VAT�MT:VAT�NL:VAT�NO:ORGNR�NO:VAT�PL:VAT�PT:VAT�RO:VAT�RS:VAT�SE:ORGNR�SI:VAT�SK:VAT�SM:VAT�TR:VAT�VA:VAT�&#39;,concat(&#39;�&#39;,.,&#39;�&#39;))" xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
           <xsl:attribute name="flag">fatal</xsl:attribute>
           <xsl:attribute name="location">
             <xsl:apply-templates mode="schematron-select-full-path" select="." />
@@ -373,9 +373,9 @@
 
 		<!--ASSERT -->
 <xsl:choose>
-      <xsl:when test="contains(&#39;AD:VATAL:VATAT:CIDAT:GOVAT:KURAT:VATBA:VATBE:VATBG:VATCH:VATCY:VATCZ:VATDE:VATDK:CPRDK:CVRDK:PDK:SEDK:VANSDUNSEE:VATES:VATEU:REIDEU:VATFI:OVTFR:SIRENEFR:SIRETGB:VATGLNGR:VATHR:VATHU:VATIBANIE:VATIS:KTIT:CFIT:FTIIT:IPAIT:SECETIIT:SIAIT:VATLI:VATLT:VATLU:VATLV:VATMC:VATME:VATMK:VATMT:VATNL:VATNO:ORGNRNO:VATPL:VATPT:VATRO:VATRS:VATSE:ORGNRSI:VATSK:VATSM:VATTR:VATVA:VAT&#39;,concat(&#39;&#39;,.,&#39;&#39;))" />
+      <xsl:when test="contains(&#39;�AD:VAT�AL:VAT�AT:CID�AT:GOV�AT:KUR�AT:VAT�BA:VAT�BE:VAT�BG:VAT�CH:VAT�CY:VAT�CZ:VAT�DE:VAT�DK:CPR�DK:CVR�DK:P�DK:SE�DK:VANS�DUNS�EE:VAT�ES:VAT�EU:REID�EU:VAT�FI:OVT�FR:SIRENE�FR:SIRET�GB:VAT�GLN�GR:VAT�HR:VAT�HU:VAT�IBAN�IE:VAT�IS:KT�IT:CF�IT:FTI�IT:IPA�IT:SECETI�IT:SIA�IT:VAT�LI:VAT�LT:VAT�LU:VAT�LV:VAT�MC:VAT�ME:VAT�MK:VAT�MT:VAT�NL:VAT�NO:ORGNR�NO:VAT�PL:VAT�PT:VAT�RO:VAT�RS:VAT�SE:ORGNR�SI:VAT�SK:VAT�SM:VAT�TR:VAT�VA:VAT�&#39;,concat(&#39;�&#39;,.,&#39;�&#39;))" />
       <xsl:otherwise>
-        <svrl:failed-assert test="contains(&#39;AD:VATAL:VATAT:CIDAT:GOVAT:KURAT:VATBA:VATBE:VATBG:VATCH:VATCY:VATCZ:VATDE:VATDK:CPRDK:CVRDK:PDK:SEDK:VANSDUNSEE:VATES:VATEU:REIDEU:VATFI:OVTFR:SIRENEFR:SIRETGB:VATGLNGR:VATHR:VATHU:VATIBANIE:VATIS:KTIT:CFIT:FTIIT:IPAIT:SECETIIT:SIAIT:VATLI:VATLT:VATLU:VATLV:VATMC:VATME:VATMK:VATMT:VATNL:VATNO:ORGNRNO:VATPL:VATPT:VATRO:VATRS:VATSE:ORGNRSI:VATSK:VATSM:VATTR:VATVA:VAT&#39;,concat(&#39;&#39;,.,&#39;&#39;))" xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
+        <svrl:failed-assert test="contains(&#39;�AD:VAT�AL:VAT�AT:CID�AT:GOV�AT:KUR�AT:VAT�BA:VAT�BE:VAT�BG:VAT�CH:VAT�CY:VAT�CZ:VAT�DE:VAT�DK:CPR�DK:CVR�DK:P�DK:SE�DK:VANS�DUNS�EE:VAT�ES:VAT�EU:REID�EU:VAT�FI:OVT�FR:SIRENE�FR:SIRET�GB:VAT�GLN�GR:VAT�HR:VAT�HU:VAT�IBAN�IE:VAT�IS:KT�IT:CF�IT:FTI�IT:IPA�IT:SECETI�IT:SIA�IT:VAT�LI:VAT�LT:VAT�LU:VAT�LV:VAT�MC:VAT�ME:VAT�MK:VAT�MT:VAT�NL:VAT�NO:ORGNR�NO:VAT�PL:VAT�PT:VAT�RO:VAT�RS:VAT�SE:ORGNR�SI:VAT�SK:VAT�SM:VAT�TR:VAT�VA:VAT�&#39;,concat(&#39;�&#39;,.,&#39;�&#39;))" xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
           <xsl:attribute name="flag">fatal</xsl:attribute>
           <xsl:attribute name="location">
             <xsl:apply-templates mode="schematron-select-full-path" select="." />
