@@ -69,39 +69,39 @@ import com.phloc.commons.string.StringHelper;
  */
 public enum EValidationArtefact implements IValidationArtefact {
   // Technical
-  ORDER_BII_CORE (EValidationLevel.TECHNICAL_STRUCTURE, EValidationDocumentType.ORDER, "biicore", null, new IValidationTransaction [] { ValidationTransaction.createUBLTransaction (ETransaction.T01) }),
-  INVOICE_BII_CORE (EValidationLevel.TECHNICAL_STRUCTURE, EValidationDocumentType.INVOICE, "biicore", null, new IValidationTransaction [] { ValidationTransaction.createUBLTransaction (ETransaction.T10),
-                                                                                                                                           ValidationTransaction.createUBLTransaction (ETransaction.T15) }),
-  CREDITNOTE_BII_CORE (EValidationLevel.TECHNICAL_STRUCTURE, EValidationDocumentType.CREDIT_NOTE, "biicore", null, new IValidationTransaction [] { ValidationTransaction.createUBLTransaction (ETransaction.T14) }),
+  ORDER_BII_CORE (EValidationLevel.TECHNICAL_STRUCTURE, EValidationDocumentType.ORDER, "biicore", null, ArrayHelper.newArray (ValidationTransaction.createUBLTransaction (ETransaction.T01))),
+  INVOICE_BII_CORE (EValidationLevel.TECHNICAL_STRUCTURE, EValidationDocumentType.INVOICE, "biicore", null, ArrayHelper.newArray (ValidationTransaction.createUBLTransaction (ETransaction.T10),
+                                                                                                                                  ValidationTransaction.createUBLTransaction (ETransaction.T15))),
+  CREDITNOTE_BII_CORE (EValidationLevel.TECHNICAL_STRUCTURE, EValidationDocumentType.CREDIT_NOTE, "biicore", null, ArrayHelper.newArray (ValidationTransaction.createUBLTransaction (ETransaction.T14))),
   // Transaction
-  CATALOGUE_EU_GEN (EValidationLevel.TRANSACTION_REQUIREMENTS, EValidationDocumentType.CATALOGUE, "eugen", null, new IValidationTransaction [] { ValidationTransaction.createUBLTransaction (ETransaction.T19) }),
-  ORDER_EU_GEN (EValidationLevel.TRANSACTION_REQUIREMENTS, EValidationDocumentType.ORDER, "eugen", null, new IValidationTransaction [] { ValidationTransaction.createUBLTransaction (ETransaction.T01) }),
-  INVOICE_EU_GEN (EValidationLevel.TRANSACTION_REQUIREMENTS, EValidationDocumentType.INVOICE, "eugen", null, new IValidationTransaction [] { ValidationTransaction.createUBLTransaction (ETransaction.T10),
-                                                                                                                                            ValidationTransaction.createUBLTransaction (ETransaction.T15) }),
-  CREDITNOTE_EU_GEN (EValidationLevel.TRANSACTION_REQUIREMENTS, EValidationDocumentType.CREDIT_NOTE, "eugen", null, new IValidationTransaction [] { ValidationTransaction.createUBLTransaction (ETransaction.T14) }),
-  ORDER_BII_RULES (EValidationLevel.TRANSACTION_REQUIREMENTS, EValidationDocumentType.ORDER, "biirules", null, new IValidationTransaction [] { ValidationTransaction.createUBLTransaction (ETransaction.T01) }),
-  ORDERRESPONSE_BII_RULES (EValidationLevel.TRANSACTION_REQUIREMENTS, EValidationDocumentType.ORDERRESPONSE, "biirules", null, new IValidationTransaction [] { ValidationTransaction.createUBLTransaction (ETransaction.T02),
-                                                                                                                                                              ValidationTransaction.createUBLTransaction (ETransaction.T03) }),
-  INVOICE_BII_RULES (EValidationLevel.TRANSACTION_REQUIREMENTS, EValidationDocumentType.INVOICE, "biirules", null, new IValidationTransaction [] { ValidationTransaction.createUBLTransaction (ETransaction.T10),
-                                                                                                                                                  ValidationTransaction.createUBLTransaction (ETransaction.T15) }),
-  CREDITNOTE_BII_RULES (EValidationLevel.TRANSACTION_REQUIREMENTS, EValidationDocumentType.CREDIT_NOTE, "biirules", null, new IValidationTransaction [] { ValidationTransaction.createUBLTransaction (ETransaction.T14) }),
+  CATALOGUE_EU_GEN (EValidationLevel.TRANSACTION_REQUIREMENTS, EValidationDocumentType.CATALOGUE, "eugen", null, ArrayHelper.newArray (ValidationTransaction.createUBLTransaction (ETransaction.T19))),
+  ORDER_EU_GEN (EValidationLevel.TRANSACTION_REQUIREMENTS, EValidationDocumentType.ORDER, "eugen", null, ArrayHelper.newArray (ValidationTransaction.createUBLTransaction (ETransaction.T01))),
+  INVOICE_EU_GEN (EValidationLevel.TRANSACTION_REQUIREMENTS, EValidationDocumentType.INVOICE, "eugen", null, ArrayHelper.newArray (ValidationTransaction.createUBLTransaction (ETransaction.T10),
+                                                                                                                                   ValidationTransaction.createUBLTransaction (ETransaction.T15))),
+  CREDITNOTE_EU_GEN (EValidationLevel.TRANSACTION_REQUIREMENTS, EValidationDocumentType.CREDIT_NOTE, "eugen", null, ArrayHelper.newArray (ValidationTransaction.createUBLTransaction (ETransaction.T14))),
+  ORDER_BII_RULES (EValidationLevel.TRANSACTION_REQUIREMENTS, EValidationDocumentType.ORDER, "biirules", null, ArrayHelper.newArray (ValidationTransaction.createUBLTransaction (ETransaction.T01))),
+  ORDERRESPONSE_BII_RULES (EValidationLevel.TRANSACTION_REQUIREMENTS, EValidationDocumentType.ORDERRESPONSE, "biirules", null, ArrayHelper.newArray (ValidationTransaction.createUBLTransaction (ETransaction.T02),
+                                                                                                                                                     ValidationTransaction.createUBLTransaction (ETransaction.T03))),
+  INVOICE_BII_RULES (EValidationLevel.TRANSACTION_REQUIREMENTS, EValidationDocumentType.INVOICE, "biirules", null, ArrayHelper.newArray (ValidationTransaction.createUBLTransaction (ETransaction.T10),
+                                                                                                                                         ValidationTransaction.createUBLTransaction (ETransaction.T15))),
+  CREDITNOTE_BII_RULES (EValidationLevel.TRANSACTION_REQUIREMENTS, EValidationDocumentType.CREDIT_NOTE, "biirules", null, ArrayHelper.newArray (ValidationTransaction.createUBLTransaction (ETransaction.T14))),
   // Profile
-  INVOICE_BII_PROFILES (EValidationLevel.PROFILE_REQUIREMENTS, EValidationDocumentType.INVOICE, "biiprofiles", null, new IValidationTransaction [] { ValidationTransaction.createUBLTransaction (ETransaction.T10),
-                                                                                                                                                    ValidationTransaction.createUBLTransaction (ETransaction.T15) }),
-  CREDITNOTE_BII_PROFILES (EValidationLevel.PROFILE_REQUIREMENTS, EValidationDocumentType.CREDIT_NOTE, "biiprofiles", null, new IValidationTransaction [] { ValidationTransaction.createUBLTransaction (ETransaction.T14) }),
+  INVOICE_BII_PROFILES (EValidationLevel.PROFILE_REQUIREMENTS, EValidationDocumentType.INVOICE, "biiprofiles", null, ArrayHelper.newArray (ValidationTransaction.createUBLTransaction (ETransaction.T10),
+                                                                                                                                           ValidationTransaction.createUBLTransaction (ETransaction.T15))),
+  CREDITNOTE_BII_PROFILES (EValidationLevel.PROFILE_REQUIREMENTS, EValidationDocumentType.CREDIT_NOTE, "biiprofiles", null, ArrayHelper.newArray (ValidationTransaction.createUBLTransaction (ETransaction.T14))),
   // Legal
-  INVOICE_AUSTRIA_NATIONAL (EValidationLevel.LEGAL_REQUIREMENTS, EValidationDocumentType.INVOICE, "atnat", CountryCache.getCountry ("AT"), new IValidationTransaction [] { ValidationTransaction.createUBLTransaction (ETransaction.T10) }),
-  INVOICE_DENMARK_NATIONAL (EValidationLevel.LEGAL_REQUIREMENTS, EValidationDocumentType.INVOICE, "dknat", CountryCache.getCountry ("DK"), new IValidationTransaction [] { ValidationTransaction.createUBLTransaction (ETransaction.T10) }),
-  INVOICE_ITALY_NATIONAL (EValidationLevel.LEGAL_REQUIREMENTS, EValidationDocumentType.INVOICE, "itnat", CountryCache.getCountry ("IT"), new IValidationTransaction [] { ValidationTransaction.createUBLTransaction (ETransaction.T10) }),
-  INVOICE_NORWAY_NATIONAL (EValidationLevel.LEGAL_REQUIREMENTS, EValidationDocumentType.INVOICE, "nonat", CountryCache.getCountry ("NO"), new IValidationTransaction [] { ValidationTransaction.createUBLTransaction (ETransaction.T10),
-                                                                                                                                                                         ValidationTransaction.createUBLTransaction (ETransaction.T15),
-                                                                                                                                                                         ValidationTransaction.createUBLTransaction (ETransaction.T17) }),
-  CREDITNOTE_NORWAY_NATIONAL (EValidationLevel.LEGAL_REQUIREMENTS, EValidationDocumentType.CREDIT_NOTE, "nonat", CountryCache.getCountry ("NO"), new IValidationTransaction [] { ValidationTransaction.createUBLTransaction (ETransaction.T14) }),
+  INVOICE_AUSTRIA_NATIONAL (EValidationLevel.LEGAL_REQUIREMENTS, EValidationDocumentType.INVOICE, "atnat", CountryCache.getCountry ("AT"), ArrayHelper.newArray (ValidationTransaction.createUBLTransaction (ETransaction.T10))),
+  INVOICE_DENMARK_NATIONAL (EValidationLevel.LEGAL_REQUIREMENTS, EValidationDocumentType.INVOICE, "dknat", CountryCache.getCountry ("DK"), ArrayHelper.newArray (ValidationTransaction.createUBLTransaction (ETransaction.T10))),
+  INVOICE_ITALY_NATIONAL (EValidationLevel.LEGAL_REQUIREMENTS, EValidationDocumentType.INVOICE, "itnat", CountryCache.getCountry ("IT"), ArrayHelper.newArray (ValidationTransaction.createUBLTransaction (ETransaction.T10))),
+  INVOICE_NORWAY_NATIONAL (EValidationLevel.LEGAL_REQUIREMENTS, EValidationDocumentType.INVOICE, "nonat", CountryCache.getCountry ("NO"), ArrayHelper.newArray (ValidationTransaction.createUBLTransaction (ETransaction.T10),
+                                                                                                                                                                ValidationTransaction.createUBLTransaction (ETransaction.T15),
+                                                                                                                                                                ValidationTransaction.createUBLTransaction (ETransaction.T17))),
+  CREDITNOTE_NORWAY_NATIONAL (EValidationLevel.LEGAL_REQUIREMENTS, EValidationDocumentType.CREDIT_NOTE, "nonat", CountryCache.getCountry ("NO"), ArrayHelper.newArray (ValidationTransaction.createUBLTransaction (ETransaction.T14))),
   // Industry
-  INVOICE_AUSTRIA_GOVERNMENT (EValidationLevel.INDUSTRY_SPECIFIC, EValidationDocumentType.INVOICE, "atgov", CountryCache.getCountry ("AT"), new IValidationTransaction [] { ValidationTransaction.createUBLTransaction (ETransaction.T10) }),
-  INVOICE_NORWAY_GOVERNMENT (EValidationLevel.INDUSTRY_SPECIFIC, EValidationDocumentType.INVOICE, "nogov", CountryCache.getCountry ("NO"), new IValidationTransaction [] { ValidationTransaction.createUBLTransaction (ETransaction.T10),
-                                                                                                                                                                          ValidationTransaction.createUBLTransaction (ETransaction.T15) }),
-  CREDITNOTE_NORWAY_GOVERNMENT (EValidationLevel.INDUSTRY_SPECIFIC, EValidationDocumentType.CREDIT_NOTE, "nogov", CountryCache.getCountry ("NO"), new IValidationTransaction [] { ValidationTransaction.createUBLTransaction (ETransaction.T14) });
+  INVOICE_AUSTRIA_GOVERNMENT (EValidationLevel.INDUSTRY_SPECIFIC, EValidationDocumentType.INVOICE, "atgov", CountryCache.getCountry ("AT"), ArrayHelper.newArray (ValidationTransaction.createUBLTransaction (ETransaction.T10))),
+  INVOICE_NORWAY_GOVERNMENT (EValidationLevel.INDUSTRY_SPECIFIC, EValidationDocumentType.INVOICE, "nogov", CountryCache.getCountry ("NO"), ArrayHelper.newArray (ValidationTransaction.createUBLTransaction (ETransaction.T10),
+                                                                                                                                                                 ValidationTransaction.createUBLTransaction (ETransaction.T15))),
+  CREDITNOTE_NORWAY_GOVERNMENT (EValidationLevel.INDUSTRY_SPECIFIC, EValidationDocumentType.CREDIT_NOTE, "nogov", CountryCache.getCountry ("NO"), ArrayHelper.newArray (ValidationTransaction.createUBLTransaction (ETransaction.T14)));
 
   private static final Logger s_aLogger = LoggerFactory.getLogger (EValidationArtefact.class);
   private static final String BASE_DIRECTORY = "/rules/";
