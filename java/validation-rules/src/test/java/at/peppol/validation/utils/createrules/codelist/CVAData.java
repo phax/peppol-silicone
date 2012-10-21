@@ -38,7 +38,6 @@
 package at.peppol.validation.utils.createrules.codelist;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -49,6 +48,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
 import com.phloc.commons.collections.ContainerHelper;
+import com.phloc.commons.string.StringHelper;
 
 @NotThreadSafe
 final class CVAData {
@@ -56,6 +56,8 @@ final class CVAData {
   private final List <CVAContextData> m_aContexts = new ArrayList <CVAContextData> ();
 
   public CVAData (@Nonnull @Nonempty final String sTransaction) {
+    if (StringHelper.hasNoText (sTransaction))
+      throw new IllegalArgumentException ("transaction");
     m_sTransaction = sTransaction;
   }
 
@@ -67,6 +69,8 @@ final class CVAData {
     m_aContexts.add (new CVAContextData (sID, sItem, sCodeListName, sSeverity, sMessage));
   }
 
+  @Nonnull
+  @Nonempty
   public String getTransaction () {
     return m_sTransaction;
   }
@@ -79,7 +83,7 @@ final class CVAData {
 
   @Nonnull
   @ReturnsMutableCopy
-  public Collection <String> getAllUsedCodeListNames () {
+  public Set <String> getAllUsedCodeListNames () {
     final Set <String> ret = new TreeSet <String> ();
     for (final CVAContextData aContextData : m_aContexts)
       ret.add (aContextData.getCodeListName ());

@@ -61,8 +61,15 @@ public final class RuleSourceBusinessRule {
                                  @Nonnull final File aOutputDirectory,
                                  @Nonnull @Nonempty final String sID,
                                  @Nullable final String sCodeListTransaction) {
+    if (aSourceFilename == null)
+      throw new NullPointerException ("sourceFilename");
     if (!aSourceFilename.isFile ())
       throw new IllegalArgumentException ("Source file does not exist: " + aSourceFilename);
+    if (aOutputDirectory == null)
+      throw new NullPointerException ("outputDirectory");
+    if (StringHelper.hasNoText (sID))
+      throw new IllegalArgumentException ("ID");
+
     FileOperations.createDirIfNotExisting (aOutputDirectory);
     FileOperations.createDirIfNotExisting (new File (aOutputDirectory, "include"));
     m_aSourceFile = aSourceFilename;

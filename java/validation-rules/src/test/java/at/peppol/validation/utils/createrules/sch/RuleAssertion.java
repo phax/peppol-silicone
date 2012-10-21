@@ -43,6 +43,7 @@ import javax.annotation.concurrent.Immutable;
 import at.peppol.validation.utils.createrules.utils.Utils;
 
 import com.phloc.commons.annotations.Nonempty;
+import com.phloc.commons.string.StringHelper;
 
 @Immutable
 final class RuleAssertion {
@@ -53,6 +54,13 @@ final class RuleAssertion {
   public RuleAssertion (@Nonnull @Nonempty final String sRuleID,
                         @Nonnull @Nonempty final String sMessage,
                         @Nonnull @Nonempty final String sSeverity) {
+    if (StringHelper.hasNoText (sRuleID))
+      throw new IllegalArgumentException ("ruleID");
+    if (StringHelper.hasNoText (sMessage))
+      throw new IllegalArgumentException ("message");
+    if (StringHelper.hasNoText (sSeverity))
+      throw new IllegalArgumentException ("severity");
+
     m_sRuleID = Utils.makeID (sRuleID);
     m_sMessage = sMessage;
     m_sSeverity = sSeverity;
