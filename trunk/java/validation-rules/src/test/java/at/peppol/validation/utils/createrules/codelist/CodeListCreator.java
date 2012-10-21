@@ -314,9 +314,18 @@ public final class CodeListCreator {
         final IMicroElement eAssert = eRule.appendElement (NS_SCHEMATRON, "assert");
         eAssert.setAttribute ("flag", aCVAContextData.getSeverity ());
         final Set <String> aMatchingCodes = m_aAllCodes.get (aCVAContextData.getCodeListName ());
-        final String sTest = "contains('\u007f" +
-                             StringHelper.getImploded ("\u007f", aMatchingCodes) +
-                             "\u007f',concat('\u007f',.,'\u007f'))";
+        // Previously used 007f is an invalid XML character, so we cannot use it
+        // safely!
+        final char cSep = '\ufffd';
+        final String sTest = "contains('" +
+                             cSep +
+                             StringHelper.getImploded (cSep, aMatchingCodes) +
+                             cSep +
+                             "',concat('" +
+                             cSep +
+                             "',.,'" +
+                             cSep +
+                             "'))";
         eAssert.setAttribute ("test", sTest);
         eAssert.appendText ("[" + aCVAContextData.getID () + "]-" + aCVAContextData.getMessage ());
       }

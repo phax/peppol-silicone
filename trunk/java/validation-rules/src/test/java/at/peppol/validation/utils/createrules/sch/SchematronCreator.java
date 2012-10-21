@@ -44,6 +44,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import org.odftoolkit.simple.SpreadsheetDocument;
@@ -73,7 +74,8 @@ public final class SchematronCreator {
 
   private SchematronCreator () {}
 
-  private void _extractAbstractRules (final RuleSourceBusinessRule aBusinessRule, final SpreadsheetDocument aSpreadSheet) {
+  private void _extractAbstractRules (final RuleSourceBusinessRule aBusinessRule,
+                                      @Nonnull final SpreadsheetDocument aSpreadSheet) {
     final Table aFirstSheet = aSpreadSheet.getSheetByIndex (0);
     int nRow = 1;
     while (!ODFUtils.isEmpty (aFirstSheet, 0, nRow)) {
@@ -134,7 +136,7 @@ public final class SchematronCreator {
     }
   }
 
-  private static boolean _containsRuleID (@Nonnull final List <RuleParam> aRuleParams, final String sRuleID) {
+  private static boolean _containsRuleID (@Nonnull final List <RuleParam> aRuleParams, @Nullable final String sRuleID) {
     for (final RuleParam aRuleParam : aRuleParams)
       if (aRuleParam.getRuleID ().equals (sRuleID))
         return true;
