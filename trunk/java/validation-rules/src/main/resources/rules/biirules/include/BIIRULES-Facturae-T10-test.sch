@@ -42,9 +42,15 @@
 <!--Schematron tests for binding Facturae and transaction T10-->
 <pattern is-a="T10" id="FACTURAE-T10" xmlns="http://purl.oclc.org/dsdl/schematron">
   <param name="BIIRULE-T10-R001" value="(EndDate and  StartDate) and not(number(translate(StartDate,&#39;-&#39;,&#39;&#39;)) &gt; number(translate(EndDate,&#39;-&#39;,&#39;&#39;))) or number(translate(StartDate,&#39;-&#39;,&#39;&#39;)) = number(translate(EndDate,&#39;-&#39;,&#39;&#39;))" />
-  <param name="BIIRULE-T10-R002" value="((LegalEntity/AddressInSpain/Town and LegalEntity/AddressInSpain/PostCode) or(LegalEntity/OverseasAddress/PostCodeandTown) or(Individual/AddressInSpain/Town and Individual/AddressInSpain/PostCode) or(Individual/OverseasAddress/PostCodeandTown))" />
+  <param name="BIIRULE-T10-R002" value="((LegalEntity/AddressInSpain/Town and LegalEntity/AddressInSpain/PostCode) or
+(LegalEntity/OverseasAddress/PostCodeandTown) or
+(Individual/AddressInSpain/Town and Individual/AddressInSpain/PostCode) or
+(Individual/OverseasAddress/PostCodeandTown))" />
   <param name="BIIRULE-T10-R003" value="((//CountryCode) and (following::BuyerParty//CountryCode) and ((//CountryCode) = (following::BuyerParty//CountryCode) or ((//CountryCode) != (following::BuyerParty//CountryCode) and starts-with(TaxIdentification/TaxIdentificationNumber, //CountryCode)))) or not(//CountryCode) or not(following::BuyerParty//CountryCode)" />
-  <param name="BIIRULE-T10-R004" value="((LegalEntity/AddressInSpain/Town and LegalEntity/AddressInSpain/PostCode) or(LegalEntity/OverseasAddress/PostCodeandTown) or(Individual/AddressInSpain/Town and Individual/AddressInSpain/PostCode) or(Individual/OverseasAddress/PostCodeandTown))" />
+  <param name="BIIRULE-T10-R004" value="((LegalEntity/AddressInSpain/Town and LegalEntity/AddressInSpain/PostCode) or
+(LegalEntity/OverseasAddress/PostCodeandTown) or
+(Individual/AddressInSpain/Town and Individual/AddressInSpain/PostCode) or
+(Individual/OverseasAddress/PostCodeandTown))" />
   <param name="BIIRULE-T10-R005" value="((//CountryCode) and (preceding::SellerParty//CountryCode) and  ((//CountryCode) = (preceding::SellerParty//CountryCode) or ((//CountryCode) != (preceding::SellerParty//CountryCode) and starts-with(TaxIdentification/TaxIdentificationNumber, //CountryCode)))) or not((//CountryCode)) or not((preceding::SellerParty//CountryCode))" />
   <param name="BIIRULE-T10-R006" value="(InstallmentDueDate and preceding::InvoiceIssueData/IssueDate) and not(number(translate(InstallmentDueDate,&#39;-&#39;,&#39;&#39;)) &lt; number(translate(preceding::InvoiceIssueData/IssueDate,&#39;-&#39;,&#39;&#39;))) or number(translate(InstallmentDueDate,&#39;-&#39;,&#39;&#39;)) = number(translate(preceding::InvoiceIssueData/IssueDate,&#39;-&#39;,&#39;&#39;))" />
   <param name="BIIRULE-T10-R007" value="((PaymentMeans = &#39;31&#39;) and (//AccountToBeCredited/IBAN or //AccountToBeCredited/AccountNumber)) or (PaymentMeans != &#39;31&#39;)" />

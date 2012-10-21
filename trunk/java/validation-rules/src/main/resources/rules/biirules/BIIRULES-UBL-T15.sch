@@ -40,18 +40,18 @@
 -->
 <!--This file is generated automatically! Do NOT edit!-->
 <!--Schematron assembly for binding UBL and transaction T15-->
-<ns0:schema xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:ubl="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2" queryBinding="xslt2" xmlns:ns0="http://purl.oclc.org/dsdl/schematron">
-  <ns0:title>BIIRULES T15 bound to UBL</ns0:title>
-  <ns0:ns prefix="cbc" uri="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" />
-  <ns0:ns prefix="cac" uri="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" />
-  <ns0:ns prefix="ubl" uri="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2" />
-  <ns0:phase id="BIIRULES_T15_phase">
-    <ns0:active pattern="UBL-T15" />
-  </ns0:phase>
-  <ns0:phase id="codelist_phase">
-    <ns0:active pattern="Codes-T15" />
-  </ns0:phase>
-  <ns0:include href="include/BIIRULES-T15-abstract.sch" />
-  <ns0:include href="include/BIIRULES-T15-codes.sch" />
-  <ns0:include href="include/BIIRULES-UBL-T15-test.sch" />
-</ns0:schema>
+<schema xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:ubl="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2" queryBinding="xslt2" xmlns="http://purl.oclc.org/dsdl/schematron">
+  <title>BIIRULES T15 bound to UBL</title>
+  <ns prefix="cbc" uri="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" />
+  <ns prefix="cac" uri="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" />
+  <ns prefix="ubl" uri="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2" />
+  <phase id="BIIRULES_T15_phase">
+    <active pattern="UBL-T15" />
+  </phase>
+  <phase id="codelist_phase">
+    <active pattern="Codes-T15" />
+  </phase>
+  <include href="include/BIIRULES-T15-abstract.sch" />
+  <include href="include/BIIRULES-T15-codes.sch" />
+  <include href="include/BIIRULES-UBL-T15-test.sch" />
+</schema>
