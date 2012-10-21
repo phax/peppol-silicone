@@ -175,7 +175,8 @@ public final class VisualizationManager {
       if (true)
         XMLTransformerFactory.newTransformer ().transform (new DOMSource (aDoc), new StreamResult (aDestinationFile));
       else {
-        final XMLWriterSettings aXWS = new XMLWriterSettings ().setFormat (EXMLSerializeFormat.HTML);
+        final XMLWriterSettings aXWS = new XMLWriterSettings ().setFormat (EXMLSerializeFormat.HTML)
+                                                               .setCharset (eArtefact.getCharset ());
         if (XMLWriter.writeToStream (aDoc, new FileOutputStream (aDestinationFile), aXWS).isFailure ())
           return ESuccess.FAILURE;
       }

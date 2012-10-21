@@ -37,6 +37,7 @@
  */
 package at.peppol.visualization;
 
+import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -50,6 +51,7 @@ import at.peppol.visualization.index.ArtefactResource;
 import com.phloc.commons.GlobalDebug;
 import com.phloc.commons.annotations.Nonempty;
 import com.phloc.commons.annotations.ReturnsMutableCopy;
+import com.phloc.commons.charset.CCharset;
 import com.phloc.commons.id.IHasID;
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.resource.ClassPathResource;
@@ -60,14 +62,16 @@ import com.phloc.commons.io.resource.ClassPathResource;
  * @author PEPPOL.AT, BRZ, Philip Helger
  */
 public enum EVisualizationArtefact implements IHasID <String> {
-  ORDER_PEPPOL1 (ETransaction.T01, "peppol1"),
-  INVOICE_PEPPOL1 (ETransaction.T10, "peppol1"),
-  CREDITNOTE_PEPPOL1 (ETransaction.T14, "peppol1");
+  ORDER_IS (ETransaction.T01, "IS", CCharset.CHARSET_ISO_8859_1_OBJ),
+  INVOICE_IS (ETransaction.T10, "IS", CCharset.CHARSET_ISO_8859_1_OBJ),
+  INVOICE_NO (ETransaction.T10, "NO", CCharset.CHARSET_UTF_8_OBJ),
+  CREDITNOTE_IS (ETransaction.T14, "IS", CCharset.CHARSET_ISO_8859_1_OBJ);
 
-  private ETransaction m_eTransaction;
-  private String m_sBaseDir;
-  private String m_sID;
-  private ArtefactIndex m_aIndex;
+  private final ETransaction m_eTransaction;
+  private final String m_sBaseDir;
+  private final String m_sID;
+  private final ArtefactIndex m_aIndex;
+  private final Charset m_aCharset;
 
   private void _validateResources () {
     if (!m_aIndex.getStylesheetResource (m_sBaseDir).exists ())
@@ -77,11 +81,14 @@ public enum EVisualizationArtefact implements IHasID <String> {
         throw new IllegalStateException ("Resource file '" + aResource.getFilename () + "' does not exist!");
   }
 
-  private EVisualizationArtefact (@Nonnull final ETransaction eTransaction, @Nonnull @Nonempty final String sLocalID) {
+  private EVisualizationArtefact (@Nonnull final ETransaction eTransaction,
+                                  @Nonnull @Nonempty final String sLocalID,
+                                  @Nonnull final Charset aCharset) {
     m_eTransaction = eTransaction;
     m_sBaseDir = eTransaction.getID () + "/" + sLocalID + "/";
     m_sID = eTransaction.getID () + "-" + sLocalID;
     m_aIndex = ArtefactIndex.createFromXML (new ClassPathResource (m_sBaseDir + "index.xml"));
+    m_aCharset = aCharset;
     if (GlobalDebug.isDebugMode ())
       _validateResources ();
   }
@@ -92,6 +99,14 @@ public enum EVisualizationArtefact implements IHasID <String> {
   @Nonnull
   public ETransaction getTransaction () {
     return m_eTransaction;
+  }
+
+  /**
+   * @return The charset of the HTML files, this visualization artefact creates.
+   */
+  @Nonnull
+  public Charset getCharset () {
+    return m_aCharset;
   }
 
   @Nonnull

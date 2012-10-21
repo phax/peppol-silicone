@@ -38,7 +38,7 @@
     under either the MPL or the EUPL License.
 
 -->
-<index xsl="PEPPOL BIS-3a stylesheet.xsl" languages="en">
+<index xsl="TRDM-001a-Order-IS.xsl" languages="en">
   <resource type="image">ell.png</resource>
   <resource type="css">style.css</resource>
 </index>
