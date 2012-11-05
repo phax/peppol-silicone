@@ -63,6 +63,7 @@ import org.w3c.dom.Document;
 
 import com.phloc.commons.io.IReadableResource;
 import com.phloc.commons.io.file.FileOperationManager;
+import com.phloc.commons.io.file.FileUtils;
 import com.phloc.commons.io.file.FilenameHelper;
 import com.phloc.commons.io.file.LoggingFileOperationCallback;
 import com.phloc.commons.io.streams.StreamUtils;
@@ -177,12 +178,9 @@ public final class VisualizationManager {
       else {
         final XMLWriterSettings aXWS = new XMLWriterSettings ().setFormat (EXMLSerializeFormat.HTML)
                                                                .setCharset (eArtefact.getCharset ());
-        if (XMLWriter.writeToStream (aDoc, new FileOutputStream (aDestinationFile), aXWS).isFailure ())
+        if (XMLWriter.writeToStream (aDoc, FileUtils.getOutputStream (aDestinationFile), aXWS).isFailure ())
           return ESuccess.FAILURE;
       }
-    }
-    catch (final FileNotFoundException ex) {
-      throw new IllegalStateException ("Failed to write result document " + aDestinationFile, ex);
     }
     catch (final TransformerException ex) {
       throw new IllegalStateException ("Failed to write result document " + aDestinationFile, ex);
