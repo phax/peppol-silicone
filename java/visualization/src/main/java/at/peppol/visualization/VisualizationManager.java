@@ -54,8 +54,6 @@ import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.dom.DOMResult;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -172,19 +170,10 @@ public final class VisualizationManager {
       s_aFOM.deleteFile (aDestinationFile);
 
     // Write the resulting HTML document to the file system
-    try {
-      if (true)
-        XMLTransformerFactory.newTransformer ().transform (new DOMSource (aDoc), new StreamResult (aDestinationFile));
-      else {
-        final XMLWriterSettings aXWS = new XMLWriterSettings ().setFormat (EXMLSerializeFormat.HTML)
-                                                               .setCharset (eArtefact.getCharset ());
-        if (XMLWriter.writeToStream (aDoc, FileUtils.getOutputStream (aDestinationFile), aXWS).isFailure ())
-          return ESuccess.FAILURE;
-      }
-    }
-    catch (final TransformerException ex) {
-      throw new IllegalStateException ("Failed to write result document " + aDestinationFile, ex);
-    }
+    final XMLWriterSettings aXWS = new XMLWriterSettings ().setFormat (EXMLSerializeFormat.HTML)
+                                                           .setCharset (eArtefact.getCharset ());
+    if (XMLWriter.writeToStream (aDoc, FileUtils.getOutputStream (aDestinationFile), aXWS).isFailure ())
+      return ESuccess.FAILURE;
 
     if (bCopyResources) {
       // Copy all referenced resources of this visualization artefact to the
