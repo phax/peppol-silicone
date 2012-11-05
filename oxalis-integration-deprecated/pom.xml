@@ -70,46 +70,12 @@
   </developers>
 
   <modules>
-    <!-- Commons -->
-    <module>test-files</module>
-    <module>commons-cenbii</module>
-    <module>commons-jpa</module>
-    <module>commons-busdox</module>
-    <module>commons-peppol</module>
-
-    <!-- Validation -->
-    <module>validation-schematron</module>
-    <module>schematron2xslt-maven-plugin</module>
-    <module>validation-rules</module>
-    <module>validation-webapp</module>
-
-    <!-- Visualization -->
-    <module>visualization</module>
-
-    <!-- SML -->
-    <module>sml-client-library</module>
-    <module>sml-client-console</module>
-    <module>sml-client-swing</module>
-    <module>sml-server-library</module>
-    <module>sml-webapp</module>
-    <module>sml-webapp-standalone</module>
-
-    <!-- SMP -->
-    <module>smp-client-library</module>
-    <module>smp-client-console</module>
-    <module>smp-webapp</module>
-
-    <!-- Transport -->
-    <module>transport-api</module>
-    <module>transport-start-client</module>
-    <module>transport-start-filereceiver</module>
-    <module>transport-start-server</module>
-    <module>transport-lime-client</module>
-    <module>transport-lime-server</module>
-
-    <!-- Web GUI -->
-    <module>webgui-api</module>
-    <module>webgui-webapp</module>
+    <!-- Oxalis -->
+    <module>oxalis-commons</module>
+    <module>oxalis-start-outbound</module>
+    <module>oxalis-start-inbound</module>
+    <module>oxalis-standalone</module>
+    <module>oxalis-distribution</module>
   </modules>
 
   <!-- Specific build configurations (=profiles) -->
