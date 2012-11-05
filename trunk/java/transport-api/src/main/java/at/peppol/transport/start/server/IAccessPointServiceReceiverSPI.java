@@ -69,7 +69,7 @@ public interface IAccessPointServiceReceiverSPI {
    * @param aBody
    *        The message body that was received. Never <code>null</code>.
    * @return A success indicator with an attached value. If the processing was
-   *         successful, the contained {@link AccessPointReceiveError}. may be
+   *         successful, the contained {@link AccessPointReceiveError} may be
    *         <code>null</code>.
    */
   @Nonnull
