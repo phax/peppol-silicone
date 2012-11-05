@@ -45,7 +45,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <metro.new.version>2.2.1-1</metro.new.version>
     <slf4j.version>1.6.2</slf4j.version>
-    <jersey.version>1.14</jersey.version>
+    <jersey.version>1.15</jersey.version>
     <jetty.version>7.6.7.v20120910</jetty.version>
   </properties>
 
