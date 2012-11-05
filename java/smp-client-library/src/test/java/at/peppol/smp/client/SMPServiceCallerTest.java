@@ -68,6 +68,7 @@ public final class SMPServiceCallerTest {
   private static IReadonlyParticipantIdentifier PI_alfa1lab = SimpleParticipantIdentifier.createWithDefaultScheme ("9902:DK28158815");
   private static IReadonlyParticipantIdentifier PI_helseVest = SimpleParticipantIdentifier.createWithDefaultScheme ("9908:983974724");
   private static IReadonlyParticipantIdentifier PI_sendRegning = SimpleParticipantIdentifier.createWithDefaultScheme ("9908:976098897");
+  private static IReadonlyParticipantIdentifier PI_brz = SimpleParticipantIdentifier.createWithDefaultScheme ("9915:b");
 
   @Test
   public void testGetEndpointAddress () throws Throwable {
@@ -88,6 +89,11 @@ public final class SMPServiceCallerTest {
                                                                                                     DOCUMENT_INVOICE,
                                                                                                     PROCESS_BII04);
       assertEquals ("https://aksesspunkt.sendregning.no/oxalis/accessPointService", sEndpointAddress);
+
+      sEndpointAddress = new SMPServiceCaller (PI_brz, ESML.PRODUCTION).getEndpointAddress (PI_brz,
+                                                                                            DOCUMENT_INVOICE,
+                                                                                            PROCESS_BII04);
+      assertEquals ("https://infra.peppol.at/transport-start-server-1.0.1/accessPointService", sEndpointAddress);
     }
     catch (final ClientHandlerException ex) {
       // Happens when being offline!
@@ -104,13 +110,25 @@ public final class SMPServiceCallerTest {
                                                                                                          DOCUMENT_INVOICE,
                                                                                                          PROCESS_BII04);
       assertNotNull (aEndpointCertificate);
-      assertEquals ("97394193891150626641360283873417712042", aEndpointCertificate.getSerialNumber ().toString ());
+      assertEquals ("26596158403896804150415214044400823812", aEndpointCertificate.getSerialNumber ().toString ());
 
       aEndpointCertificate = new SMPServiceCaller (PI_helseVest, ESML.PRODUCTION).getEndpointCertificate (PI_helseVest,
                                                                                                           DOCUMENT_INVOICE,
                                                                                                           PROCESS_BII04);
       assertNotNull (aEndpointCertificate);
       assertEquals ("37276025795984990954710880598937203007", aEndpointCertificate.getSerialNumber ().toString ());
+
+      aEndpointCertificate = new SMPServiceCaller (PI_sendRegning, ESML.PRODUCTION).getEndpointCertificate (PI_sendRegning,
+                                                                                                            DOCUMENT_INVOICE,
+                                                                                                            PROCESS_BII04);
+      assertNotNull (aEndpointCertificate);
+      assertEquals ("46220618234638180468204514540302485388", aEndpointCertificate.getSerialNumber ().toString ());
+
+      aEndpointCertificate = new SMPServiceCaller (PI_brz, ESML.PRODUCTION).getEndpointCertificate (PI_brz,
+                                                                                                    DOCUMENT_INVOICE,
+                                                                                                    PROCESS_BII04);
+      assertNotNull (aEndpointCertificate);
+      assertEquals ("163850265138437159412937537122619755081", aEndpointCertificate.getSerialNumber ().toString ());
     }
     catch (final ClientHandlerException ex) {
       // Happens when being offline!
