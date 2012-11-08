@@ -7,12 +7,12 @@
     <version>15</version>
   </parent>
   <artifactId>peppol-sml-client-swing</artifactId>
-  <version>2.3.1-SNAPSHOT</version>
+  <version>2.3.1</version>
   <name>peppol-sml-client-swing</name>
 
   <scm>
-    <connection>scm:svn:http://peppol-silicone.googlecode.com/svn/trunk/java/sml-client-swing</connection>
-    <developerConnection>scm:svn:https://peppol-silicone.googlecode.com/svn/trunk/java/sml-client-swing</developerConnection>
+    <connection>scm:svn:http://peppol-silicone.googlecode.com/svn/tags/peppol-sml-client-swing/peppol-sml-client-swing-2.3.1</connection>
+    <developerConnection>scm:svn:https://peppol-silicone.googlecode.com/svn/tags/peppol-sml-client-swing/peppol-sml-client-swing-2.3.1</developerConnection>
   </scm>
 
   <repositories>
