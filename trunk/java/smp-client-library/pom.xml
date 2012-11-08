@@ -7,12 +7,12 @@
     <version>15</version>
   </parent>
   <artifactId>peppol-smp-client-library</artifactId>
-  <version>2.3.1-SNAPSHOT</version>
+  <version>2.3.1</version>
   <name>peppol-smp-client-library</name>
 
   <scm>
-    <connection>scm:svn:http://peppol-silicone.googlecode.com/svn/trunk/java/smp-client-library</connection>
-    <developerConnection>scm:svn:https://peppol-silicone.googlecode.com/svn/trunk/java/smp-client-library</developerConnection>
+    <connection>scm:svn:http://peppol-silicone.googlecode.com/svn/tags/peppol-smp-client-library/peppol-smp-client-library-2.3.1</connection>
+    <developerConnection>scm:svn:https://peppol-silicone.googlecode.com/svn/tags/peppol-smp-client-library/peppol-smp-client-library-2.3.1</developerConnection>
   </scm>
 
   <repositories>
