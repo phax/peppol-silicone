@@ -32,7 +32,7 @@
     <dependency>
       <groupId>at.peppol</groupId>
       <artifactId>peppol-transport-start-client</artifactId>
-      <version>2.3.1-SNAPSHOT</version>
+      <version>2.3.1</version>
     </dependency>
     <dependency>
       <groupId>at.peppol</groupId>
@@ -43,7 +43,7 @@
     <dependency>
       <groupId>at.peppol</groupId>
       <artifactId>peppol-transport-start-filereceiver</artifactId>
-      <version>2.3.1-SNAPSHOT</version>
+      <version>2.3.1</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
