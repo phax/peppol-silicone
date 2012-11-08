@@ -7,13 +7,13 @@
     <version>15</version>
   </parent>
   <artifactId>peppol-smp-webapp</artifactId>
-  <version>2.3.1</version>
+  <version>2.3.2-SNAPSHOT</version>
   <packaging>war</packaging>
   <name>peppol-smp-webapp</name>
   
   <scm>
-    <connection>scm:svn:http://peppol-silicone.googlecode.com/svn/tags/peppol-smp-webapp/peppol-smp-webapp-2.3.1</connection>
-    <developerConnection>scm:svn:https://peppol-silicone.googlecode.com/svn/tags/peppol-smp-webapp/peppol-smp-webapp-2.3.1</developerConnection>
+    <connection>scm:svn:http://peppol-silicone.googlecode.com/svn/trunk/java/smp-webapp</connection>
+    <developerConnection>scm:svn:https://peppol-silicone.googlecode.com/svn/trunk/java/smp-webapp</developerConnection>
   </scm>
 
   <repositories>
