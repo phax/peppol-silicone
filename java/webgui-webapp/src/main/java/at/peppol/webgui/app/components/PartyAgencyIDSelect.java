@@ -54,18 +54,25 @@ public class PartyAgencyIDSelect extends ComboBox {
     }
     
     private void initData() {
-      
-        for (EPredefinedIdentifierIssuingAgency a : EPredefinedIdentifierIssuingAgency.values()) {
+    	for (EPredefinedIdentifierIssuingAgency a : EPredefinedIdentifierIssuingAgency.values()) {
             if (!a.isDeprecated()) 
             {
                 addItem(a.getSchemeID());
-                setItemCaption(a.getSchemeID(),a.getSchemeAgency());
+                setItemCaption(a.getSchemeID(),a.getSchemeID()+" ("+a.getSchemeAgency()+")");
             }
        }
     }
     
     public String getSelectedAgencyName() 
     {
+        String id = getSelectedAgencyID();
+        for (EPredefinedIdentifierIssuingAgency a : EPredefinedIdentifierIssuingAgency.values()) {
+            if (!a.isDeprecated()) {
+                if (a.getSchemeID().equals(id))
+                	return a.getSchemeAgency();
+            }
+        }
+        
         return getItemCaption(getValue());
     
     }

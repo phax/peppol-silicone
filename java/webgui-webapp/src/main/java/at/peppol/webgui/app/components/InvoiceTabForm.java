@@ -60,15 +60,23 @@ import org.slf4j.LoggerFactory;
 
 import un.unece.uncefact.codelist.specification._54217._2001.CurrencyCodeContentType;
 import at.peppol.commons.identifier.doctype.EPredefinedDocumentTypeIdentifier;
+import at.peppol.webgui.app.validator.ValidatorHandler;
+import at.peppol.webgui.app.validator.ValidatorsList;
+import at.peppol.webgui.app.validator.global.GlobalValidationsRegistry;
+import at.peppol.commons.identifier.process.EPredefinedProcessIdentifier;
 
+import com.phloc.commons.state.ESuccess;
 import com.phloc.ubl.AbstractUBLDocumentMarshaller;
+import com.phloc.ubl.EUBL20DocumentType;
 import com.phloc.ubl.UBL20DocumentMarshaller;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Form;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.Window;
+import com.vaadin.ui.Window.Notification;
 
 @SuppressWarnings ("serial")
 public class InvoiceTabForm extends Form {
@@ -105,6 +113,10 @@ public class InvoiceTabForm extends Form {
     initElements ();
     buildMainLayout ();
   }
+  
+  public TabInvoiceLine getInvoiceLineTab() {
+	  return tTabInvoiceLine;
+  }
 
   private void initInvoiceData () {
     invoice = invObjFactory.createInvoiceType ();
@@ -139,16 +151,19 @@ public class InvoiceTabForm extends Form {
     invoice.setUBLVersionID (version);
     invoice.setCustomizationID (custID);
     invoice.setID (new IDType ());
-
+    
     invoice.setAccountingCustomerParty (customer);
     invoice.setAccountingSupplierParty (supplier);
     // invoice.setLegalMonetaryTotal(new MonetaryTotalType());
 
+    GlobalValidationsRegistry.setMainComponent(this);
   }
 
   private void initElements () {
     supplierForm = new PartyDetailForm ("Supplier", supplier.getParty ());
+    supplierForm.setImmediate(true);
     customerForm = new PartyDetailForm ("Customer", customer.getParty ());
+    customerForm.setImmediate(true);
     supplierForm.setSizeFull ();
     customerForm.setSizeFull ();
 
@@ -159,22 +174,46 @@ public class InvoiceTabForm extends Form {
 
       @Override
       public void buttonClick (final Button.ClickEvent event) {
-        try {
-          SetCommonCurrency ();
-          AbstractUBLDocumentMarshaller.setGlobalValidationEventHandler (null);
-          UBL20DocumentMarshaller.writeInvoice (invoice, new StreamResult (new OutputStreamWriter (System.out)));
+    	  SetCommonCurrency ();
+          //AbstractUBLDocumentMarshaller.setGlobalValidationEventHandler (null);
+          ValidatorHandler vh = new ValidatorHandler(footerLayout);
+          AbstractUBLDocumentMarshaller.setGlobalValidationEventHandler (vh);
+          //UBL20DocumentMarshaller.writeInvoice (invoice, new StreamResult (new OutputStreamWriter (System.out)));
+          System.out.println(invoice);
+          vh.clearErrors();
+         
+          List<String> errors = GlobalValidationsRegistry.runAll();
+          if (errors.size() > 0) {
+        	  Window errorWindow = new Window("Errors");
+        	  //position and size of the window
+        	  errorWindow.setPositionX(200);
+        	  errorWindow.setPositionY(200);
+        	  errorWindow.setWidth("600px");
+        	  errorWindow.setHeight("300px");
+        	  
+        	  //add the error messages
+        	  errorWindow.addComponent(new Label("<ol>", Label.CONTENT_XHTML));
+        	  for (int i=0;i<errors.size();i++) {
+        		  errorWindow.addComponent(new Label("<li>"+errors.get(i)+"</li>", Label.CONTENT_XHTML));
+        	  }
+        	  errorWindow.addComponent(new Label("</ol>", Label.CONTENT_XHTML));
+        	  
+        	  //show the error window
+        	  getParent().getWindow().addWindow(errorWindow);
+          }
+          
+          //InvoiceTabForm.this.invTabSheet.getTab(supplierForm).setCaption(caption)
+          ValidatorsList.validateListenersNotify();
+          if (ValidatorsList.validateListeners() == false) {
+        	  getParent().getWindow().showNotification("Validation error... ",Notification.TYPE_TRAY_NOTIFICATION);
+          }
+          else
+        	  getParent().getWindow().showNotification("Validation passed! ",Notification.TYPE_TRAY_NOTIFICATION);
           // ByteArrayOutputStream baos = new ByteArrayOutputStream ();
           // UBL20DocumentMarshaller.writeInvoice(invoice, new StreamResult(new
           // OutputStreamWriter(baos)));
           // getParent().getWindow ().showNotification("Info", baos.toString (),
           // Window.Notification.TYPE_HUMANIZED_MESSAGE);
-        }
-        catch (final Exception ex) {
-          getParent ().getWindow ().showNotification ("Error",
-                                                      ex.getMessage (),
-                                                      Window.Notification.TYPE_HUMANIZED_MESSAGE);
-          LOGGER.error ("Error creating files. ", ex);
-        }
       }
     }));
 
@@ -197,7 +236,7 @@ public class InvoiceTabForm extends Form {
   private GridLayout buildMainLayout () {
     // common part: create layout
     mainLayout = new GridLayout ();
-    mainLayout.setImmediate (false);
+    mainLayout.setImmediate (true);
     mainLayout.setWidth ("100%");
     mainLayout.setHeight ("100%");
     mainLayout.setMargin (false);
@@ -211,7 +250,7 @@ public class InvoiceTabForm extends Form {
 
     // invTabSheet
     invTabSheet = new TabSheet ();
-    invTabSheet.setImmediate (false);
+    invTabSheet.setImmediate (true);
     invTabSheet.setWidth ("100.0%");
     invTabSheet.setHeight ("100.0%");
 

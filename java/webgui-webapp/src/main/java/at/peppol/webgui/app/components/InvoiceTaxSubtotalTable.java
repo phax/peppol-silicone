@@ -66,7 +66,7 @@ public class InvoiceTaxSubtotalTable extends Table {
     addPropertyWithHeader("TaxSubTotalCategoryPercent", "Tax Category Percent");
 
     setDefinedPropertiesAsVisible();
-    setPageLength(4);
+    setPageLength(10);
   }
 
   private void addPropertyWithHeader(String property, String headerName) {

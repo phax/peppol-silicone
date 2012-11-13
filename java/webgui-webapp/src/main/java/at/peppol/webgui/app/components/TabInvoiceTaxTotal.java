@@ -38,6 +38,7 @@
 package at.peppol.webgui.app.components;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -45,8 +46,14 @@ import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.TaxS
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.TaxTotalType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TaxAmountType;
 
+import at.peppol.webgui.app.validator.PositiveValueListener;
+import at.peppol.webgui.app.validator.RequiredNumericalFieldListener;
+import at.peppol.webgui.app.validator.ValidatorsList;
+
 import com.vaadin.data.Item;
 import com.vaadin.data.util.NestedMethodProperty;
+import com.vaadin.event.FieldEvents.BlurEvent;
+import com.vaadin.event.FieldEvents.BlurListener;
 import com.vaadin.ui.AbstractTextField;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -376,10 +383,40 @@ public class TabInvoiceTaxTotal extends Form {
     public Field createField (final Item item, final Object propertyId, final Component uiContext) {
       // Identify the fields by their Property ID.
       final String pid = (String) propertyId;
+      
+      if ("Tax Scheme ID".equals(pid)) {
+          final TaxSchemeSelect taxSchemeSelect = new TaxSchemeSelect(pid);
+          taxSchemeSelect.setRequired(true);
+          return taxSchemeSelect;
+      }
+      if ("Tax Category ID".equals(pid)) {
+          final TaxCategoryIDSelect taxCategoryIDSelect = new TaxCategoryIDSelect(pid);
+          taxCategoryIDSelect.setRequired(true);
+          return taxCategoryIDSelect;
+      }
 
       final Field field = DefaultFieldFactory.get ().createField (item, propertyId, uiContext);
       if (field instanceof AbstractTextField) {
         ((AbstractTextField) field).setNullRepresentation ("");
+        final AbstractTextField tf = (AbstractTextField) field;
+        if ("Tax Total Amount".equals(pid)) {
+        	tf.setRequired(true);
+        	tf.addListener(new RequiredNumericalFieldListener(tf,pid));
+        	tf.addListener(new PositiveValueListener(tf,pid));
+        	ValidatorsList.addListeners((Collection<BlurListener>) tf.getListeners(BlurEvent.class));
+        }
+        if ("Taxable Amount".equals(pid)) {
+        	tf.setRequired(true);
+        	tf.addListener(new RequiredNumericalFieldListener(tf,pid));
+        	tf.addListener(new PositiveValueListener(tf,pid));
+        	ValidatorsList.addListeners((Collection<BlurListener>) tf.getListeners(BlurEvent.class));
+        }
+        if ("Tax Amount".equals(pid)) {
+        	tf.setRequired(true);
+        	tf.addListener(new RequiredNumericalFieldListener(tf,pid));
+        	tf.addListener(new PositiveValueListener(tf,pid));
+        	ValidatorsList.addListeners((Collection<BlurListener>) tf.getListeners(BlurEvent.class));
+        }
       }
       return field;
     }
