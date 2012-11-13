@@ -1,9 +1,11 @@
 #summary The change log of the software components
 
-= v2.3.0 - in progress =
+= currently on hold because of merge with CIPA e-Delivery =
+
+= v2.3.1 - (2012-11-08, update release) =
 
 ==All components==
-  * Updated [http://code.google.com/p/phloc-commons phloc-commons] to 3.8.4
+  * Updated [http://code.google.com/p/phloc-commons phloc-commons] to 3.9.1
   * Extracted new project "test-files" that contains all the available test files of several file types. This project can be easily reused from somewhere else
 ==Base libraries==
   * Removed all deprecated methods using "Document" instead of "DocumentType" in their names
