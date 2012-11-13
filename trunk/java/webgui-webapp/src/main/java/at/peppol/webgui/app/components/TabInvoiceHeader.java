@@ -38,8 +38,10 @@
 package at.peppol.webgui.app.components;
 
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -48,10 +50,12 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ContractType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.DocumentReferenceType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.OrderReferenceType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.PeriodType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AccountingCostType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ContractTypeType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DocumentCurrencyCodeType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DocumentTypeType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.EndDateType;
@@ -60,9 +64,17 @@ import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IssueDat
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.NoteType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.StartDateType;
 
+import at.peppol.webgui.app.components.PartyDetailForm.PartyFieldFactory;
+import at.peppol.webgui.app.validator.RequiredFieldListener;
+import at.peppol.webgui.app.validator.ValidatorsList;
+
 import com.vaadin.data.Item;
 import com.vaadin.data.util.NestedMethodProperty;
 import com.vaadin.data.util.ObjectProperty;
+import com.vaadin.data.util.PropertysetItem;
+import com.vaadin.event.FieldEvents.BlurEvent;
+import com.vaadin.event.FieldEvents.BlurListener;
+import com.vaadin.terminal.UserError;
 import com.vaadin.ui.AbstractTextField;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -163,10 +175,18 @@ public class TabInvoiceHeader extends Form {
           @Override
           public void buttonClick (ClickEvent event) {
             //update table (and consequently add new item to allowanceChargeList list)
-            table.addAdditionalDocRefLine (additionalDocRefItem);
-            //hide form
-            hiddenContent.setVisible(false);
-            addMode = false;
+        	  if (additionalDocRefItem.getAdditionalDocRefID() != null) {
+        		  if (!additionalDocRefItem.getAdditionalDocRefID().equals("")) {
+        			  table.addAdditionalDocRefLine (additionalDocRefItem);
+        			  //hide form
+        			  hiddenContent.setVisible(false);
+        			  addMode = false;
+        		  }
+        		  else
+        			  getParent().getWindow().showNotification("Doc Ref Type ID is needed");
+        	  }
+        	  else
+        		  getParent().getWindow().showNotification("Doc Ref Type ID is needed");
           }
         }));
         buttonLayout.addComponent(new Button("Cancel",new Button.ClickListener(){
@@ -267,7 +287,36 @@ public class TabInvoiceHeader extends Form {
           
         }
       }
-    });    
+    });
+    
+    final Button addContractReferenceBtn = new Button("Add Contract Reference");
+    final Button removeContractReferenceBtn = new Button("Remove Contract Reference");
+    removeContractReferenceBtn.setVisible(false);
+    
+    addContractReferenceBtn.addListener(new Button.ClickListener() {
+		@Override
+		public void buttonClick(ClickEvent event) {
+			Panel panel = createInvoiceContractReference(removeContractReferenceBtn);
+			grid.removeComponent(1, 0);
+			grid.addComponent(panel,1,0);
+			removeContractReferenceBtn.setVisible(true);
+		}
+	});
+    addContractReferenceBtn.setSizeFull();
+    
+    removeContractReferenceBtn.addListener(new Button.ClickListener() {
+		@Override
+		public void buttonClick(ClickEvent event) {
+			//remove the legal entity component panel
+			Component c = removeContractReferenceBtn.getParent().getParent();
+			grid.removeComponent(c);
+			if (parent.getInvoice().getContractDocumentReference().size() > 0) {
+				parent.getInvoice().getContractDocumentReference().remove(0);
+			}
+			
+			grid.addComponent(addContractReferenceBtn, 1, 0);
+		}
+	});
     
     VerticalLayout buttonsContainer = new VerticalLayout();
     buttonsContainer.setSpacing (true);
@@ -276,10 +325,11 @@ public class TabInvoiceHeader extends Form {
     buttonsContainer.addComponent (deleteBtn);    
     
     grid.addComponent(invoiceDetailsPanel, 0, 0);
+    grid.addComponent(addContractReferenceBtn, 1, 0);
     grid.addComponent(orderReferencePanel, 0, 1);
     grid.addComponent(tableContainer, 0, 2);
     grid.addComponent(buttonsContainer, 1, 2);
-    grid.setSizeUndefined();
+    //grid.setSizeUndefined();
     grid.setSpacing (true);
     
     // ---- HIDDEN FORM BEGINS -----
@@ -296,6 +346,7 @@ public class TabInvoiceHeader extends Form {
   public Form createInvoiceTopForm() {
     final Form invoiceTopForm = new Form(new FormLayout(), new InvoiceFieldFactory());
     invoiceTopForm.setImmediate(true);
+    invoiceTopForm.setSizeFull();
       
     parent.getInvoice().setID (new IDType ());
     invoiceTopForm.addItemProperty ("Invoice ID", new NestedMethodProperty (parent.getInvoice().getID (), "value"));
@@ -327,33 +378,55 @@ public class TabInvoiceHeader extends Form {
     return invoiceTopForm;
   }
 
+  public Panel createInvoiceContractReference(Button removeButton) {
+	  Panel contractReferencePanel = new Panel("Contract Reference");
+	  contractReferencePanel.setStyleName("light");
+	  //contractReferencePanel.setSizeFull();
+	  
+	  PropertysetItem contractReferenceItemSet = new PropertysetItem();
+      
+	  DocumentReferenceType dr = new DocumentReferenceType ();
+	  dr.setID (new IDType ());
+	  dr.setDocumentType (new DocumentTypeType ());
+	  
+	  //add the contract document reference
+	  parent.getInvoice().getContractDocumentReference().add(dr);
+	  
+	  contractReferenceItemSet.addItemProperty ("Contract document reference ID", new NestedMethodProperty(parent.getInvoice().getContractDocumentReference().get(0).getID(), "value"));
+	  contractReferenceItemSet.addItemProperty ("Contract document reference type", new NestedMethodProperty(parent.getInvoice().getContractDocumentReference().get(0).getDocumentType(), "value"));
+	  
+	  Form contractReferenceForm = new Form();
+	  contractReferenceForm.setFormFieldFactory(new InvoiceFieldFactory());
+	  contractReferenceForm.setItemDataSource(contractReferenceItemSet);
+	  contractReferenceForm.setImmediate(true);
+	  
+	  contractReferencePanel.addComponent(contractReferenceForm);
+	  contractReferencePanel.addComponent(removeButton);
+	  
+	  
+	  return contractReferencePanel;
+  }
+  
   public Form createInvoiceOrderReferenceForm() {
     final Form invoiceOrderRefForm = new Form(new FormLayout(), new InvoiceFieldFactory());
     invoiceOrderRefForm.setImmediate(true);
-      
-    
+        
     OrderReferenceType rt = new OrderReferenceType ();
     rt.setID (new IDType ());
     parent.getInvoice().setOrderReference (rt);
 
-    DocumentReferenceType dr = new DocumentReferenceType ();
-    dr.setID (new IDType ());
-    dr.setDocumentType (new DocumentTypeType ());
+    //DocumentReferenceType dr = new DocumentReferenceType ();
+    //dr.setID (new IDType ());
+    //dr.setDocumentType (new DocumentTypeType ());
     
-    parent.getInvoice().getContractDocumentReference ().add (dr);
+    //parent.getInvoice().getContractDocumentReference ().add (dr);
     
     invoiceOrderRefForm.addItemProperty ("Order Reference ID", new NestedMethodProperty (parent.getInvoice().getOrderReference ().getID (), "value"));
-    invoiceOrderRefForm.addItemProperty ("Document Reference ID", new NestedMethodProperty (parent.getInvoice().getContractDocumentReference ().get(0).getID (), "value"));
-    invoiceOrderRefForm.addItemProperty ("Document Reference Type", new NestedMethodProperty (parent.getInvoice().getContractDocumentReference ().get(0).getDocumentType (), "value"));
+    //invoiceOrderRefForm.addItemProperty ("Document Reference ID", new NestedMethodProperty (parent.getInvoice().getContractDocumentReference ().get(0).getID (), "value"));
+    //invoiceOrderRefForm.addItemProperty ("Document Reference Type", new NestedMethodProperty (parent.getInvoice().getContractDocumentReference ().get(0).getDocumentType (), "value"));
 
     return invoiceOrderRefForm;
   }
-  
-
-  
-  
-  
-  
   
   public Form createInvoiceAdditionalDocRefForm() {
     final Form invoiceAdditionalDocRefForm = new Form(new FormLayout(), new InvoiceFieldFactory());
@@ -400,12 +473,20 @@ public class TabInvoiceHeader extends Form {
  
   @SuppressWarnings ("serial")
   class InvoiceFieldFactory implements FormFieldFactory {
-    
+	  final PopupDateField startDateField = new PopupDateField("Invoice Period Start Date");
+	  
     @Override
     public Field createField(final Item item, final Object propertyId, final Component uiContext) {
       // Identify the fields by their Property ID.
-      final String pid = (String) propertyId;
-
+    	final String pid;
+    	
+      if (propertyId instanceof String) {
+    	  pid = (String) propertyId;
+      }
+      else {
+    	  pid = ((Label)propertyId).toString();
+      }
+      
       if ("Currency".equals(pid)) {
         final CurrencySelect curSelect = new CurrencySelect("Currency");
         return curSelect;
@@ -473,8 +554,8 @@ public class TabInvoiceHeader extends Form {
       
       
       if ("Invoice Period Start Date".equals(pid)) {
-        final PopupDateField startDateField = new PopupDateField("Invoice Period Start Date");
-        startDateField.setValue(new Date());
+        //final PopupDateField startDateField = new PopupDateField("Invoice Period Start Date");
+    	startDateField.setValue(new Date());
         startDateField.setResolution(DateField.RESOLUTION_DAY);
         startDateField.addListener(new ValueChangeListener() {
           
@@ -506,6 +587,7 @@ public class TabInvoiceHeader extends Form {
       if ("Invoice Period End Date".equals(pid)) {
         final PopupDateField endDateField = new PopupDateField("Invoice Period End Date");
         endDateField.setValue(new Date());
+        //endDateField.setValue(startDateField.getValue());
         endDateField.setResolution(DateField.RESOLUTION_DAY);
         endDateField.addListener(new ValueChangeListener() {
           
@@ -522,10 +604,18 @@ public class TabInvoiceHeader extends Form {
               XMLDate.setMonth(greg.get(Calendar.MONTH) + 1);
               XMLDate.setDay(greg.get(Calendar.DATE));
               
-              //parent.getInvoice().getInvoicePeriod ().add (new PeriodType());
-              EndDateType edt = new EndDateType ();
-              edt.setValue (XMLDate);
-              parent.getInvoice().getInvoicePeriod ().get (0).setEndDate (edt);
+              if (((Date)endDateField.getValue()).before((Date)startDateField.getValue())) {
+            	  //endDateField.setValue(startDateField.getValue());
+            	  endDateField.setComponentError(new UserError("End date must be later than start date"));
+              }
+              else {
+            	  //parent.getInvoice().getInvoicePeriod ().add (new PeriodType());
+            	  EndDateType edt = new EndDateType ();
+            	  edt.setValue (XMLDate);
+            	  if (parent.getInvoice().getInvoicePeriod().size() > 0)
+            		  parent.getInvoice().getInvoicePeriod().get(0).setEndDate(edt);
+            	  endDateField.setComponentError(null);
+              }
               
             } catch (final DatatypeConfigurationException ex) {
               Logger.getLogger(TabInvoiceHeader.class.getName()).log(Level.SEVERE, null, ex);
@@ -538,6 +628,23 @@ public class TabInvoiceHeader extends Form {
       final Field field = DefaultFieldFactory.get().createField(item, propertyId, uiContext);
       if (field instanceof AbstractTextField) {
           ((AbstractTextField) field).setNullRepresentation("");
+          
+          final AbstractTextField tf = (AbstractTextField) field;
+          if ("Invoice ID".equals(pid)) {
+          	tf.setRequired(true);
+          	tf.addListener(new RequiredFieldListener(tf,pid));
+          	ValidatorsList.addListeners((Collection<BlurListener>) tf.getListeners(BlurEvent.class));
+          }
+          /*else if ("Order Reference ID".equals(pid)) {
+        	tf.setRequired(true);
+          	tf.addListener(new RequiredFieldListener(tf,pid));
+          	ValidatorsList.addListeners((Collection<BlurListener>) tf.getListeners(BlurEvent.class));
+          }*/
+          else if ("Contract document reference ID".equals(pid)) {
+          	tf.setRequired(true);
+            tf.addListener(new RequiredFieldListener(tf,pid));
+            ValidatorsList.addListeners((Collection<BlurListener>) tf.getListeners(BlurEvent.class));
+          }
       }
       return field;
     }

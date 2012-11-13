@@ -41,29 +41,27 @@
  */
 package at.peppol.webgui.app.components;
 
-import un.unece.uncefact.codelist.specification._54217._2001.CurrencyCodeContentType;
-
-
 import com.vaadin.ui.Select;
+import com.phloc.ubl.codelist.ECountryIdentificationCode20;
 
 /**
  * @author Jerouris
  */
-public class CurrencySelect extends Select {
+public class CountrySelect extends Select {
 
-  public CurrencySelect (final String caption) {
+  public CountrySelect (final String caption) {
     setCaption (caption);
     initData ();
   }
 
   private void initData () {
-    for (final CurrencyCodeContentType cc : CurrencyCodeContentType.values ()) {
-      addItem (cc.value ());
+    for (final ECountryIdentificationCode20 cc : ECountryIdentificationCode20.values ()) {
+      addItem (cc.getID());
     }
   }
   @Override
     public void attach() {
-        setValue(CurrencyCodeContentType.EUR.value());
+        setValue(ECountryIdentificationCode20.GR.getID());
     }
 }
 

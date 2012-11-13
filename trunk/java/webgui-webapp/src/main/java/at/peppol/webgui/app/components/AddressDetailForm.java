@@ -37,6 +37,8 @@
  */
 package at.peppol.webgui.app.components;
 
+import java.util.Collection;
+
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AddressType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.CountryType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AdditionalStreetNameType;
@@ -48,9 +50,14 @@ import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.Identifi
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PostalZoneType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.StreetNameType;
 
+import at.peppol.webgui.app.validator.RequiredFieldListener;
+import at.peppol.webgui.app.validator.ValidatorsList;
+
 import com.vaadin.data.Item;
 import com.vaadin.data.util.NestedMethodProperty;
 import com.vaadin.data.util.PropertysetItem;
+import com.vaadin.event.FieldEvents.BlurEvent;
+import com.vaadin.event.FieldEvents.BlurListener;
 import com.vaadin.ui.AbstractTextField;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.DefaultFieldFactory;
@@ -116,9 +123,21 @@ public class AddressDetailForm extends Panel {
        // Identify the fields by their Property ID.
        String pid = (String) propertyId;
 
+       if ("Country ID".equals(pid)) {
+           final CountrySelect countrySelect = new CountrySelect("Country ID");
+           countrySelect.setRequired(true);
+           return countrySelect;
+       }
+       
        Field field = DefaultFieldFactory.get().createField(item,propertyId, uiContext);
        if (field instanceof AbstractTextField){
            ((AbstractTextField) field).setNullRepresentation("");
+           final AbstractTextField tf = (AbstractTextField) field;
+           if ("Street Name".equals(pid) || "City Name".equals(pid) || "Postal Zone".equals(pid) || "Country ID".equals(pid)) {
+        	   tf.setRequired(true);
+        	   tf.addListener(new RequiredFieldListener(tf,pid));
+        	   ValidatorsList.addListeners((Collection<BlurListener>) tf.getListeners(BlurEvent.class));
+           }
        }
        
        return field;

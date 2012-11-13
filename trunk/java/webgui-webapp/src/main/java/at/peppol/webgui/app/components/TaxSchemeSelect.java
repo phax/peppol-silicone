@@ -35,35 +35,40 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package at.peppol.webgui.app.components;
 
-import un.unece.uncefact.codelist.specification._54217._2001.CurrencyCodeContentType;
-
-
-import com.vaadin.ui.Select;
+import com.vaadin.ui.ComboBox;
+import at.peppol.commons.codelist.ETaxSchemeID;
 
 /**
+ *
  * @author Jerouris
  */
-public class CurrencySelect extends Select {
-
-  public CurrencySelect (final String caption) {
-    setCaption (caption);
-    initData ();
-  }
-
-  private void initData () {
-    for (final CurrencyCodeContentType cc : CurrencyCodeContentType.values ()) {
-      addItem (cc.value ());
+public class TaxSchemeSelect extends ComboBox {
+    
+    public TaxSchemeSelect(String caption){
+        super(caption);
+        setWidth(13,UNITS_EM);
+        initData();
     }
-  }
-  @Override
-    public void attach() {
-        setValue(CurrencyCodeContentType.EUR.value());
+    
+    private void initData() {
+      
+        for (ETaxSchemeID taxSchemeID : ETaxSchemeID.values()) {
+            addItem(taxSchemeID.getID());
+            setItemCaption(taxSchemeID.getID(), taxSchemeID.getID()+" ("+taxSchemeID.getDisplayName()+")");
+       }
     }
+    
+    public String getSelectedTaxSchemeIDName() 
+    {
+        return getItemCaption(getValue());
+    
+    }
+    
+    public String getSelectedTaxSchemeID() 
+    {
+        return (String) getValue();
+    }
+    
 }
-

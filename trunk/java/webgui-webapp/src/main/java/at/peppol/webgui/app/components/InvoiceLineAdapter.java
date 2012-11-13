@@ -110,18 +110,25 @@ public class InvoiceLineAdapter extends InvoiceLineType {
 
     // --- +Invoice Line/Item begins
     final ItemType item = new ItemType ();
+    
     item.getDescription ().add (new DescriptionType ());
+    
     item.setName (new NameType ());
+    
     item.setSellersItemIdentification (new ItemIdentificationType ());
     item.getSellersItemIdentification ().setID (new IDType ());
+    
     item.setStandardItemIdentification (new ItemIdentificationType ());
     item.getStandardItemIdentification ().setID (new IDType ());
+    
     final TaxCategoryType ct = new TaxCategoryType ();
     ct.setID (new IDType ());
     ct.setPercent (new PercentType ());
+    
     final TaxSchemeType tst = new TaxSchemeType ();
     tst.setID (new IDType ());
     ct.setTaxScheme (tst);
+    
     item.getClassifiedTaxCategory ().add (ct);
 
     // --- +Item/Commodity Classification begins (0..N)
@@ -357,9 +364,9 @@ public class InvoiceLineAdapter extends InvoiceLineType {
    */
 
   public List <ItemPropertyType> getInvLineAdditionalItemPropertyList () {
-    if (getItem ().getAdditionalItemProperty ().isEmpty ()) {
-      getItem ().getAdditionalItemProperty ().add (new ItemPropertyType ());
-    }
+    //if (getItem ().getAdditionalItemProperty ().isEmpty ()) {
+    //  getItem ().getAdditionalItemProperty ().add (new ItemPropertyType ());
+    //}
     return getItem ().getAdditionalItemProperty ();
   }
 

@@ -60,6 +60,7 @@ import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PaymentD
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PaymentMeansCodeType;
 
 import com.vaadin.data.Item;
+import com.vaadin.data.Property;
 import com.vaadin.data.util.NestedMethodProperty;
 import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.ui.AbstractTextField;
@@ -225,6 +226,11 @@ public class TabInvoicePayment extends Form {
          
 
           return dueDateField;
+        }
+        
+        if ("Payment Means Code".equals(pid)) {
+            PaymentMeansSelect select = new PaymentMeansSelect(pid);
+            return select;
         }
         
         final Field field = DefaultFieldFactory.get().createField(item, propertyId, uiContext);

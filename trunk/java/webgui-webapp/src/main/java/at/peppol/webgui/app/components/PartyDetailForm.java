@@ -41,27 +41,55 @@
  */
 package at.peppol.webgui.app.components;
 
+import java.util.Collection;
+
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AddressType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.CountryType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.PartyIdentificationType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.PartyNameType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.PartyTaxSchemeType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.PartyType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.TaxSchemeType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AdditionalStreetNameType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.BuildingNumberType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CityNameType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CompanyIDType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CountrySubentityType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.DepartmentType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.EndpointIDType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IDType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IdentificationCodeType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.NameType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PostalZoneType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.RegistrationNameType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.StreetNameType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.PartyLegalEntityType;
+
+import at.peppol.webgui.app.validator.RequiredFieldListener;
+import at.peppol.webgui.app.validator.RequiredFieldValidator;
+import at.peppol.webgui.app.validator.ValidatorsList;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
+import com.vaadin.data.Property.ValueChangeEvent;
+import com.vaadin.data.Validator;
 import com.vaadin.data.util.NestedMethodProperty;
 import com.vaadin.data.util.PropertysetItem;
+import com.vaadin.data.validator.RegexpValidator;
+import com.vaadin.data.validator.StringLengthValidator;
+import com.vaadin.event.FieldEvents.BlurEvent;
+import com.vaadin.event.FieldEvents.BlurListener;
+import com.vaadin.terminal.UserError;
 import com.vaadin.ui.AbstractTextField;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.DefaultFieldFactory;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.Form;
 import com.vaadin.ui.FormFieldFactory;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Button.ClickEvent;
 
 /**
  *
@@ -73,6 +101,8 @@ public class PartyDetailForm extends Panel{
     private final PartyType partyBean;
     private final String party;
     
+    private VerticalLayout hiddenContent;
+    
     public PartyDetailForm(String partyType, PartyType partyBean) {
         this.party = partyType;
         this.partyBean = partyBean;
@@ -80,10 +110,19 @@ public class PartyDetailForm extends Panel{
         initElements();
     
     }
-        private void initElements() {
+    
+    private void initElements() {
 
         setCaption(party + " Party");
         //setStyleName("light");
+        
+        final VerticalLayout outerLayout = new VerticalLayout();
+        outerLayout.setSpacing (true);
+        outerLayout.setMargin (true);
+        
+        hiddenContent = new VerticalLayout();
+        hiddenContent.setSpacing (true);
+        hiddenContent.setMargin (true);
         
         PropertysetItem partyItemSet = new PropertysetItem();
         
@@ -91,18 +130,23 @@ public class PartyDetailForm extends Panel{
         supplierPartyID.setID(new IDType());
         partyBean.getPartyIdentification().add(supplierPartyID);
        
-        partyItemSet.addItemProperty("Party Id",
+        partyItemSet.addItemProperty("Party ID",
                             new NestedMethodProperty(supplierPartyID, "ID.value"));
+        
+        EndpointIDType endPointID = new EndpointIDType();
+        partyBean.setEndpointID(endPointID);
+        partyItemSet.addItemProperty("Endpoint ID",
+                new NestedMethodProperty(endPointID, "SchemeAgencyID"));
         
         final PartyNameType partyName = new PartyNameType();
         partyName.setName(new NameType());
         partyBean.getPartyName().add(partyName);
         
-        partyItemSet.addItemProperty("Agency Name", 
+/*        partyItemSet.addItemProperty("Agency Name", 
                 new NestedMethodProperty(supplierPartyID, "ID.SchemeAgencyID") );
         partyItemSet.addItemProperty("Party Name",
                             new NestedMethodProperty(partyName, "name.value"));
-        
+*/        
         /*
         final AddressType partyrAddress = new AddressType();
         
@@ -131,25 +175,111 @@ public class PartyDetailForm extends Panel{
         PartyTaxSchemeType taxScheme = new PartyTaxSchemeType();
         taxScheme.setCompanyID(new CompanyIDType());
         
+        partyItemSet.addItemProperty("Tax Scheme Company ID",
+                new NestedMethodProperty(taxScheme.getCompanyID(),"value"));
+        
         // TODO: Hardcoded ShemeID etc for TaxScheme. Should be from a codelist?
         taxScheme.setTaxScheme(new TaxSchemeType());
         taxScheme.getTaxScheme().setID(new IDType());
         taxScheme.getTaxScheme().getID().setValue("VAT");
         taxScheme.getTaxScheme().getID().setSchemeID("UN/ECE 5153");
         taxScheme.getTaxScheme().getID().setSchemeAgencyID("6");
-        partyBean.getPartyTaxScheme().add(taxScheme);
         
-        partyItemSet.addItemProperty("Tax ID",
-                            new NestedMethodProperty(taxScheme.getCompanyID(),"value"));
+        partyBean.getPartyTaxScheme().add(taxScheme);
+
+        partyItemSet.addItemProperty("Tax Scheme ID",
+                            new NestedMethodProperty(taxScheme.getTaxScheme().getID(),"value"));
 
         final Form partyForm = new Form();
         partyForm.setFormFieldFactory(new PartyFieldFactory());
         partyForm.setItemDataSource(partyItemSet);
         partyForm.setImmediate(true);
         
-        addComponent(partyForm);
-        addComponent(partyAddressForm);
+        final Button addLegalEntityBtn = new Button("Add Legal Entity");
+        final Button removeLegalEntityBtn = new Button("Remove Legal Entity");
+        //removeLegalEntityBtn.setVisible(false);
+        
+        addLegalEntityBtn.addListener(new Button.ClickListener() {
+			
+			@Override
+			public void buttonClick(ClickEvent event) {
+				//add the legal entity component
+				Panel panel = createLegalEntityPanel(removeLegalEntityBtn);
+				outerLayout.addComponent(panel);
+            	
+            	addLegalEntityBtn.setVisible(false);
+            	//removeLegalEntityBtn.setVisible(true);
+            	//outerLayout.replaceComponent(removeLegalEntityBtn, panel);
+			}
+		});
+        
+        removeLegalEntityBtn.addListener(new Button.ClickListener() {
+			
+			@Override
+			public void buttonClick(ClickEvent event) {
+				//remove the legal entity component
+				for (int i=0;i<outerLayout.getComponentCount();i++) {
+					Component c = outerLayout.getComponent(i);
+					if (c instanceof Panel) {
+						if (c.getCaption().equals("Legal Entity")) {
+							outerLayout.removeComponent(c);
+							if (partyBean.getPartyLegalEntity().size() > 0) {
+								partyBean.getPartyLegalEntity().remove(0);
+							}
+						}
+					}
+				}
+				//removeLegalEntityBtn.setVisible(false);
+				addLegalEntityBtn.setVisible(true);
+			}
+		});
+        
+        outerLayout.addComponent(partyForm);
+        outerLayout.addComponent(partyAddressForm);
+        outerLayout.addComponent(addLegalEntityBtn);
+        //outerLayout.addComponent(removeLegalEntityBtn);
+        //outerLayout.addComponent(createLegalEntityPanel());
+        
+        setContent(outerLayout);
     }
+    
+    private Panel createLegalEntityPanel(Button removeButton) {
+    	Panel legalEntityPanel = new Panel("Legal Entity");
+        legalEntityPanel.setStyleName("light");
+        legalEntityPanel.setSizeFull();
+        
+        PropertysetItem legalEntityItemSet = new PropertysetItem();
+        
+        PartyLegalEntityType legalEntity = new PartyLegalEntityType();
+        legalEntity.setRegistrationName(new RegistrationNameType());
+        legalEntity.setCompanyID(new CompanyIDType());
+        legalEntity.setRegistrationAddress(new AddressType());
+        legalEntity.getRegistrationAddress().setCityName(new CityNameType());
+        legalEntity.getRegistrationAddress().setCountrySubentity(new CountrySubentityType());
+        legalEntity.getRegistrationAddress().setCountry(new CountryType());
+        legalEntity.getRegistrationAddress().getCountry().setIdentificationCode(new IdentificationCodeType());
+                
+        //make fields
+        legalEntityItemSet.addItemProperty("Registration Name", new NestedMethodProperty(legalEntity, "registrationName.value"));
+        legalEntityItemSet.addItemProperty ("Company ID", new NestedMethodProperty(legalEntity, "companyID.value") );
+        legalEntityItemSet.addItemProperty("City Name", new NestedMethodProperty(legalEntity.getRegistrationAddress(), "cityName.value"));
+        legalEntityItemSet.addItemProperty ("Country Subentity", new NestedMethodProperty(legalEntity.getRegistrationAddress(), "countrySubentity.value") );
+        legalEntityItemSet.addItemProperty("Country ID", new NestedMethodProperty(legalEntity.getRegistrationAddress(), "country.identificationCode.value"));
+        
+        Form legalEntityForm = new Form();
+        legalEntityForm.setFormFieldFactory(new PartyFieldFactory());
+        legalEntityForm.setItemDataSource(legalEntityItemSet);
+        legalEntityForm.setImmediate(true);
+        legalEntityPanel.addComponent(legalEntityForm);
+        legalEntityPanel.addComponent(removeButton);
+        
+        //add the legal entity
+        partyBean.getPartyLegalEntity().add(legalEntity);
+        
+        return  legalEntityPanel;
+    }
+        
+    
     
      @SuppressWarnings ("serial")
     class PartyFieldFactory implements FormFieldFactory {
@@ -158,9 +288,10 @@ public class PartyDetailForm extends Panel{
         public Field createField(Item item, Object propertyId,
                 Component uiContext) {
             // Identify the fields by their Property ID.
-            String pid = (String) propertyId;
-            if ("Agency Name".equals(pid)) {
-                final PartyAgencyIDSelect select = new PartyAgencyIDSelect("Agency Name");
+            final String pid = (String) propertyId;
+            
+            if ("Party ID".equals(pid)) {
+                final PartyAgencyIDSelect select = new PartyAgencyIDSelect(pid);
                 select.addListener(new Property.ValueChangeListener() {
 
                     @Override
@@ -172,12 +303,56 @@ public class PartyDetailForm extends Panel{
                 });
                 return select;
             }
+            
+            if ("Endpoint ID".equals(pid)) {
+                final PartyAgencyIDSelect select = new PartyAgencyIDSelect(pid);
+                select.addListener(new Property.ValueChangeListener() {
 
+                    @Override
+                    public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
+                        partyBean.getEndpointID().setSchemeAgencyName(select.getSelectedAgencyName());
+                    }
+                });
+                return select;
+            }
+
+            
+            
+            if ("Tax Scheme ID".equals(pid)) {
+                final TaxSchemeSelect taxSchemeSelect = new TaxSchemeSelect(pid);
+                taxSchemeSelect.setRequired(true);
+                return taxSchemeSelect;
+            }
+            
             Field field = DefaultFieldFactory.get().createField(item,propertyId, uiContext);
             if (field instanceof AbstractTextField){
                 ((AbstractTextField) field).setNullRepresentation("");
+                final AbstractTextField tf = (AbstractTextField) field;
+                if ("Party Name".equals(pid)) {
+                	tf.setRequired(true);
+                	//Validator v = new RequiredFieldValidator();
+                	//tf.addValidator(v);
+                	tf.addListener(new RequiredFieldListener(tf,pid));
+                	ValidatorsList.addListeners((Collection<BlurListener>) tf.getListeners(BlurEvent.class));
+                }
+                else if ("Company ID".equals(pid)) {
+                	tf.setRequired(true);
+                	tf.addListener(new RequiredFieldListener(tf,pid));
+                	ValidatorsList.addListeners((Collection<BlurListener>) tf.getListeners(BlurEvent.class));
+                }
+                else if ("Country ID".equals(pid)) {
+                	tf.setRequired(true);
+                	tf.addListener(new RequiredFieldListener(tf,pid));
+                	ValidatorsList.addListeners((Collection<BlurListener>) tf.getListeners(BlurEvent.class));
+                }
+                else if ("Tax ID".equals(pid)) {
+                	tf.setRequired(true);
+                	tf.addListener(new RequiredFieldListener(tf,pid));
+                	ValidatorsList.addListeners((Collection<BlurListener>) tf.getListeners(BlurEvent.class));
+                }
             }
             
+                        
             return field;
         }
      }
