@@ -217,6 +217,14 @@ td.v-datefield-calendarpanel-month,
 .v-datefield-calendarpanel-header button,
 td.v-datefield-calendarpanel-month,
 .v-tabsheet-tabitem-selected .v-caption,
+.v-tabsheet-tabitemcell .v-caption {
+	
+}
+.v-tabsheet-tabitemcell-test111 .v-caption {
+	color: #FF3333;
+}
+
+
 .v-window-header,
 .v-table-caption-container,
 .v-accordion-item-caption,
