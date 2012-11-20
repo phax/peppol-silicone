@@ -211,6 +211,10 @@ td.v-datefield-calendarpanel-month,
 	border-color: rgb(161,161,161);
 	}
 
+.v-button-marginLeft {
+	margin-left: 100px;
+}
+
 .v-button,
 .v-disabled.v-button:focus,
 .v-disabled.v-button:active,
