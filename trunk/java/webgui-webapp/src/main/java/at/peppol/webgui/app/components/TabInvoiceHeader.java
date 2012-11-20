@@ -63,8 +63,11 @@ import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IDType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IssueDateType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.NoteType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.StartDateType;
+import un.unece.uncefact.codelist.specification.ianamimemediatype._2003.BinaryObjectMimeCodeContentType;
 
 import at.peppol.webgui.app.components.PartyDetailForm.PartyFieldFactory;
+import at.peppol.webgui.app.utils.DocUpload;
+import at.peppol.webgui.app.utils.ReceiverClass;
 import at.peppol.webgui.app.validator.RequiredFieldListener;
 import at.peppol.webgui.app.validator.ValidatorsList;
 
@@ -90,12 +93,18 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.PopupDateField;
+import com.vaadin.ui.Upload;
+import com.vaadin.ui.Upload.FailedEvent;
+import com.vaadin.ui.Upload.FinishedEvent;
+import com.vaadin.ui.Upload.StartedEvent;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+import com.vaadin.ui.Window.Notification;
 
 /**
  * @author Jerouris
  */
+@SuppressWarnings("serial")
 public class TabInvoiceHeader extends Form {
   private InvoiceTabForm parent;
 
@@ -121,39 +130,77 @@ public class TabInvoiceHeader extends Form {
 
   private void initElements() {
     additionalDocRefList = parent.getInvoice().getAdditionalDocumentReference ();
-    final GridLayout grid = new GridLayout(4, 4);
+    setWidth("100%");
+    setHeight("100%");
+    //final GridLayout grid = new GridLayout(4, 4);
     final VerticalLayout outerLayout = new VerticalLayout();
-    
+    //outerLayout.setMargin(true);
+    //outerLayout.setSpacing(true);
+        
+    //grid that contains "Details", "Contract", "Order"
+    final GridLayout topGridLayout = new GridLayout(2, 2);
+    //topGridLayout.setSizeFull();
+    topGridLayout.setMargin(true);
+    topGridLayout.setSpacing(true);
+        
     hiddenContent = new VerticalLayout();
     hiddenContent.setSpacing (true);
     hiddenContent.setMargin (true);    
     
     final Panel outerPanel = new Panel("Invoice Header");
-    outerPanel.addComponent(grid);
+    //outerPanel.addComponent(grid);
     outerPanel.setScrollable(true);
-    outerLayout.addComponent(outerPanel);
+    outerPanel.setContent(outerLayout);
+    //outerLayout.addComponent(outerPanel);
+    
+    VerticalLayout tabLayout = new VerticalLayout();
+    tabLayout.addComponent(outerPanel);
+    
+    outerLayout.addComponent(topGridLayout);
     
     final Panel invoiceDetailsPanel = new Panel("Invoice Header Details");
     invoiceDetailsPanel.setStyleName("light");
-    invoiceDetailsPanel.setSizeFull();
+    invoiceDetailsPanel.setWidth("50%");
+    //invoiceDetailsPanel.setSizeFull();
     invoiceDetailsPanel.addComponent(createInvoiceTopForm());
-
-    final Panel orderReferencePanel = new Panel("Invoice Order Reference");
+    topGridLayout.addComponent(invoiceDetailsPanel, 0, 0);
+   
+    final Panel orderReferencePanel = new Panel("Referencing Order");
     orderReferencePanel.setStyleName("light");
-    orderReferencePanel.setSizeFull();
+    orderReferencePanel.setWidth("50%");
+    //orderReferencePanel.setSizeFull();
     orderReferencePanel.addComponent(createInvoiceOrderReferenceForm());
+    topGridLayout.addComponent(orderReferencePanel, 0, 1);
+    
+    final VerticalLayout tableVerticalLayout = new VerticalLayout();
+    //tableVerticalLayout.setSpacing (true);
+    tableVerticalLayout.setMargin (true);
+    outerLayout.addComponent(tableVerticalLayout);
     
     table = new InvoiceAdditionalDocRefTable(parent.getInvoice().getAdditionalDocumentReference ());
     table.setSelectable(true);
     table.setImmediate(true);
     table.setNullSelectionAllowed(false);
     table.setHeight (150, UNITS_PIXELS);
-    table.setFooterVisible (true);
-    table.addStyleName ("striped strong");    
-    VerticalLayout tableContainer = new VerticalLayout();
-    tableContainer.addComponent (table);
-    tableContainer.setMargin (false, true, false, false);    
+    table.setSizeFull();
+    //table.setWidth("300px");
+    table.setFooterVisible (false);
+    table.addStyleName ("striped strong");
     
+    Panel tablePanel = new Panel("Relevant Documents");
+    tablePanel.setStyleName("light");
+    tablePanel.setWidth("60%");
+    tableVerticalLayout.addComponent(tablePanel);
+    
+    GridLayout h = new GridLayout(2,2);
+    h.setMargin(true);
+    h.setSpacing(true);
+    tablePanel.setContent(h);
+    h.addComponent(table,0,0);
+    h.setColumnExpandRatio(0, 3);
+    h.setColumnExpandRatio(1, 1);
+    h.setSizeFull();
+        
     //buttons Add, Edit, Delete
     Button addBtn = new Button("Add New", new Button.ClickListener() {
       @Override
@@ -166,34 +213,75 @@ public class TabInvoiceHeader extends Form {
         Label formLabel = new Label("<h3>Adding new additional document reference line</h3>", Label.CONTENT_XHTML);
         
         hiddenContent.addComponent (formLabel);
-        hiddenContent.addComponent(createInvoiceAdditionalDocRefForm());
+        final Form docRefForm = createInvoiceAdditionalDocRefForm();
+        hiddenContent.addComponent(docRefForm);
         
+        final Button saveNewLine = new Button("Save additional doc ref line");
+                        
+  	  	final DocUpload upload = new DocUpload("uploads/");
+  	  	upload.addListener(new Upload.StartedListener() {
+			@Override
+			public void uploadStarted(StartedEvent event) {
+				saveNewLine.setEnabled(false);
+				saveNewLine.requestRepaint();
+			}
+  	  		
+  	  	});
+  	  	upload.addListener(new Upload.FinishedListener() {
+			@Override
+			public void uploadFinished(FinishedEvent event) {
+				saveNewLine.setEnabled(true);	
+				saveNewLine.requestRepaint();
+			}
+		});
+  	  	
+  	  	saveNewLine.addListener(new Button.ClickListener() {
+			@Override
+			public void buttonClick(ClickEvent event) {
+				if (additionalDocRefItem.getAdditionalDocRefID() != null) {
+	        		  if (!additionalDocRefItem.getAdditionalDocRefID().equals("")) {
+	        			  //upload.submitUpload(); //this doesn't work. VAADIN problem?
+	        			  if (upload.getFilename() != null) {
+	        				  BinaryObjectMimeCodeContentType mimeType = additionalDocRefItem.getBinaryObjectMimeCodeContentType(upload.getMimeType());
+	        				  if ( mimeType!= null) {
+	        					  additionalDocRefItem.setAdditionalDocRefFile(upload.getFilename());
+	        					  additionalDocRefItem.setBinaryObjectMIMEType(mimeType);
+	        					  additionalDocRefItem.setBinaryObjectByteArray(upload.getByteArray());
+	        				  }
+	        				  else {
+	        					  getWindow().showNotification("Attachment not MediaType", Notification.TYPE_TRAY_NOTIFICATION);
+	        				  }
+	        			  }
+	        			  
+	        			  table.addAdditionalDocRefLine (additionalDocRefItem);
+	        			  //hide form
+	        			  hiddenContent.setVisible(false);
+	        			  addMode = false;
+	        		  }
+	        		  else
+	        			  getParent().getWindow().showNotification("Doc Ref Type ID is needed", Notification.TYPE_TRAY_NOTIFICATION);
+	        	  }
+	        	  else
+	        		  getParent().getWindow().showNotification("Doc Ref Type ID is needed", Notification.TYPE_TRAY_NOTIFICATION);
+			}
+		});
+
+  	  	
+  	  	hiddenContent.addComponent(upload);
+  	  	
         //Save new line button
         HorizontalLayout buttonLayout = new HorizontalLayout();
         buttonLayout.setSpacing (true);
-        buttonLayout.addComponent(new Button("Save additional doc ref line",new Button.ClickListener(){
-          @Override
-          public void buttonClick (ClickEvent event) {
-            //update table (and consequently add new item to allowanceChargeList list)
-        	  if (additionalDocRefItem.getAdditionalDocRefID() != null) {
-        		  if (!additionalDocRefItem.getAdditionalDocRefID().equals("")) {
-        			  table.addAdditionalDocRefLine (additionalDocRefItem);
-        			  //hide form
-        			  hiddenContent.setVisible(false);
-        			  addMode = false;
-        		  }
-        		  else
-        			  getParent().getWindow().showNotification("Doc Ref Type ID is needed");
-        	  }
-        	  else
-        		  getParent().getWindow().showNotification("Doc Ref Type ID is needed");
-          }
-        }));
+        buttonLayout.setMargin (true);
+        buttonLayout.addComponent(saveNewLine);
+
         buttonLayout.addComponent(new Button("Cancel",new Button.ClickListener(){
           @Override
           public void buttonClick (ClickEvent event) {
+        	upload.interruptUpload();
             hiddenContent.removeAllComponents ();
             //hide form
+            docRefForm.discard();
             hiddenContent.setVisible(false);
             addMode = false;
           }
@@ -229,7 +317,8 @@ public class TabInvoiceHeader extends Form {
           Label formLabel = new Label("<h3>Editing additional document reference line</h3>", Label.CONTENT_XHTML);
           
           hiddenContent.addComponent (formLabel);
-          hiddenContent.addComponent(createInvoiceAdditionalDocRefForm());
+          final Form docRefForm = createInvoiceAdditionalDocRefForm();
+          hiddenContent.addComponent(docRefForm);
           
           //Save new line button
           HorizontalLayout buttonLayout = new HorizontalLayout();
@@ -240,6 +329,7 @@ public class TabInvoiceHeader extends Form {
               //update table (and consequently edit item to allowanceChargeList list)
               table.setAdditionalDocRefLine (sid, additionalDocRefItem);
               //hide form
+              docRefForm.commit();
               hiddenContent.setVisible(false);
               editMode = false;
             }
@@ -251,6 +341,7 @@ public class TabInvoiceHeader extends Form {
               
               table.setAdditionalDocRefLine (sid, originalItem);
               //hide form
+              docRefForm.discard();
               hiddenContent.setVisible(false);
               editMode = false;
             }
@@ -292,29 +383,30 @@ public class TabInvoiceHeader extends Form {
     final Button addContractReferenceBtn = new Button("Add Contract Reference");
     final Button removeContractReferenceBtn = new Button("Remove Contract Reference");
     removeContractReferenceBtn.setVisible(false);
+    addContractReferenceBtn.setStyleName("marginLeft");
+    removeContractReferenceBtn.setStyleName("marginLeft");
     
     addContractReferenceBtn.addListener(new Button.ClickListener() {
 		@Override
 		public void buttonClick(ClickEvent event) {
 			Panel panel = createInvoiceContractReference(removeContractReferenceBtn);
-			grid.removeComponent(1, 0);
-			grid.addComponent(panel,1,0);
+			topGridLayout.removeComponent(1, 0);
+			topGridLayout.addComponent(panel,1,0);
 			removeContractReferenceBtn.setVisible(true);
 		}
 	});
-    addContractReferenceBtn.setSizeFull();
     
     removeContractReferenceBtn.addListener(new Button.ClickListener() {
 		@Override
 		public void buttonClick(ClickEvent event) {
 			//remove the legal entity component panel
 			Component c = removeContractReferenceBtn.getParent().getParent();
-			grid.removeComponent(c);
+			topGridLayout.removeComponent(c);
 			if (parent.getInvoice().getContractDocumentReference().size() > 0) {
 				parent.getInvoice().getContractDocumentReference().remove(0);
 			}
 			
-			grid.addComponent(addContractReferenceBtn, 1, 0);
+			topGridLayout.addComponent(addContractReferenceBtn, 1, 0);
 		}
 	});
     
@@ -322,25 +414,21 @@ public class TabInvoiceHeader extends Form {
     buttonsContainer.setSpacing (true);
     buttonsContainer.addComponent (addBtn);
     buttonsContainer.addComponent (editBtn);
-    buttonsContainer.addComponent (deleteBtn);    
+    buttonsContainer.addComponent (deleteBtn);
     
-    grid.addComponent(invoiceDetailsPanel, 0, 0);
-    grid.addComponent(addContractReferenceBtn, 1, 0);
-    grid.addComponent(orderReferencePanel, 0, 1);
-    grid.addComponent(tableContainer, 0, 2);
-    grid.addComponent(buttonsContainer, 1, 2);
-    //grid.setSizeUndefined();
-    grid.setSpacing (true);
+    h.addComponent(buttonsContainer,1,0);
     
+    topGridLayout.addComponent(addContractReferenceBtn, 1, 0);
+        
     // ---- HIDDEN FORM BEGINS -----
     VerticalLayout formLayout = new VerticalLayout();
     formLayout.addComponent(hiddenContent);
     hiddenContent.setVisible(false);    
-    outerLayout.addComponent(formLayout);
+
+    h.addComponent(formLayout,0,1);
     // ---- HIDDEN FORM ENDS -----
     
-    setLayout(outerLayout);
-    outerPanel.requestRepaintAll();
+    setLayout(tabLayout);
   }
 
   public Form createInvoiceTopForm() {
@@ -431,7 +519,7 @@ public class TabInvoiceHeader extends Form {
   public Form createInvoiceAdditionalDocRefForm() {
     final Form invoiceAdditionalDocRefForm = new Form(new FormLayout(), new InvoiceFieldFactory());
     invoiceAdditionalDocRefForm.setImmediate(true);
-
+    
     NestedMethodProperty mp = new NestedMethodProperty(additionalDocRefItem, "AdditionalDocRefID");
     if(!editMode){
       IDType num = new IDType();
@@ -442,10 +530,10 @@ public class TabInvoiceHeader extends Form {
       mp.setReadOnly (true);
     }
     
-    invoiceAdditionalDocRefForm.addItemProperty ("Additional Doc Ref Type ID", mp );
-    invoiceAdditionalDocRefForm.addItemProperty ("Additional Doc Ref Type", new NestedMethodProperty(additionalDocRefItem, "AdditionalDocRefDocumentType") );
-    //invoiceAdditionalDocRefForm.addItemProperty ("Embedded Doc", new NestedMethodProperty(additionalDocRefItem, "AdditionalDocRefEmbeddedDocumentBinaryObject") );
-    invoiceAdditionalDocRefForm.addItemProperty ("External Ref URI", new NestedMethodProperty(additionalDocRefItem, "AdditionalDocRefExternalReference") );
+    //invoiceAdditionalDocRefForm.addItemProperty ("Additional Doc Ref Type ID", mp );
+    invoiceAdditionalDocRefForm.addItemProperty ("Type of document", new NestedMethodProperty(additionalDocRefItem, "AdditionalDocRefDocumentType") );
+    //invoiceAdditionalDocRefForm.addItemProperty ("Filename", new NestedMethodProperty(additionalDocRefItem, "AdditionalDocRefEmbeddedDocumentBinaryObject") );
+    invoiceAdditionalDocRefForm.addItemProperty ("URI location", new NestedMethodProperty(additionalDocRefItem, "AdditionalDocRefExternalReference") );
 
     return invoiceAdditionalDocRefForm;
   }  
@@ -491,7 +579,7 @@ public class TabInvoiceHeader extends Form {
         final CurrencySelect curSelect = new CurrencySelect("Currency");
         return curSelect;
       }
-
+      
       if ("Issue Date".equals(pid)) {
         final PopupDateField issueDateField = new PopupDateField("Issue Date");
         issueDateField.setValue(new Date());

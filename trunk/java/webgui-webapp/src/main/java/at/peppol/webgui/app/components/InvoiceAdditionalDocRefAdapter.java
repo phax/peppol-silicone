@@ -44,16 +44,40 @@ import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.Document
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.EmbeddedDocumentBinaryObjectType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IDType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.URIType;
+import un.unece.uncefact.codelist.specification.ianamimemediatype._2003.BinaryObjectMimeCodeContentType;
 
 public class InvoiceAdditionalDocRefAdapter extends DocumentReferenceType {
+  
+  String additionalDocRefFile;
   
   public InvoiceAdditionalDocRefAdapter() {
     setID (new IDType ());
     setDocumentType (new DocumentTypeType ());
     setAttachment (new AttachmentType ());
     getAttachment().setEmbeddedDocumentBinaryObject (new EmbeddedDocumentBinaryObjectType ());
+    //getAttachment().getEmbeddedDocumentBinaryObject().setMimeCode(BinaryObjectMimeCodeContentType.);
     getAttachment().setExternalReference (new ExternalReferenceType ());
     getAttachment().getExternalReference ().setURI (new URIType ());
+  }
+  
+  public void setBinaryObjectByteArray(byte[] value) {
+	  getAttachment().getEmbeddedDocumentBinaryObject().setValue(value);
+  }
+  
+  public BinaryObjectMimeCodeContentType getBinaryObjectMimeCodeContentType(String mime) {
+	  BinaryObjectMimeCodeContentType[] types = BinaryObjectMimeCodeContentType.values();
+	  for (int i=0;i<types.length;i++) {
+		  if (mime.equals(types[i].value())) {
+			  return types[i];
+		  }
+	  }
+	  
+	  return null;
+  }
+  
+  public void setBinaryObjectMIMEType(BinaryObjectMimeCodeContentType mimeType) {
+	  if (mimeType != null)
+		  getAttachment().getEmbeddedDocumentBinaryObject().setMimeCode(mimeType);
   }
   
   public void setAdditionalDocRefID(String v) {
@@ -86,5 +110,13 @@ public class InvoiceAdditionalDocRefAdapter extends DocumentReferenceType {
   
   public String getAdditionalDocRefExternalReference() {
     return getAttachment().getExternalReference ().getURI ().getValue ();
-  }  
+  }
+  
+  public void setAdditionalDocRefFile(String f) {
+	  additionalDocRefFile = f;
+  }
+  public String getAdditionalDocRefFile() {
+	  return additionalDocRefFile;
+  }
+  
 }
