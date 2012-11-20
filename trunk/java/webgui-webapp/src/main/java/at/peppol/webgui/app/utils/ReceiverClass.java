@@ -9,12 +9,8 @@ import at.peppol.webgui.app.components.InvoiceAdditionalDocRefAdapter;
 
 import com.vaadin.ui.Upload.Receiver;
 
+@SuppressWarnings("serial")
 public class ReceiverClass implements Receiver {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5464317783127681079L;
 	
 	private String uploadDir;
 	
