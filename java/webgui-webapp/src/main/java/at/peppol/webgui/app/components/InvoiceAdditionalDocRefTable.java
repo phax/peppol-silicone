@@ -57,13 +57,17 @@ public class InvoiceAdditionalDocRefTable extends Table {
     this.additionalDocRefLines = list;
     setContainerDataSource(tableLines);
 
-    addPropertyWithHeader("AdditionalDocRefID", "Additional Doc Ref Type ID");
-    addPropertyWithHeader("AdditionalDocRefDocumentType", "Additional Doc Ref Type");
-    //addPropertyWithHeader("AdditionalDocRefEmbeddedDocumentBinaryObject", "Embedded Doc");
-    addPropertyWithHeader("AdditionalDocRefExternalReference", "External Ref URI");
+    addPropertyWithHeader("AdditionalDocRefID", "#ID");
+    addPropertyWithHeader("AdditionalDocRefDocumentType", "Type of document");
+    //addPropertyWithHeader("AdditionalDocRefEmbeddedDocumentBinaryObject", "Filename");
+    addPropertyWithHeader("AdditionalDocRefExternalReference", "URI location");
+    addPropertyWithHeader("AdditionalDocRefFile", "Filename");
 
     setDefinedPropertiesAsVisible();
-    setPageLength(4);
+    setPageLength(6);
+    
+    setColumnWidth("AdditionalDocRefExternalReference", 200);
+    //setColumnExpandRatio("AdditionalDocRefExternalReference", 2);
   }  
   
   private void addPropertyWithHeader(String property, String headerName) {
