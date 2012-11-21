@@ -120,6 +120,8 @@ public class TabInvoicePayment extends Form {
   private VerticalLayout hiddenContent;
   private PaymentMeansTable table;
   
+  private boolean editMode;
+  
   public TabInvoicePayment(InvoiceTabForm parent) {
     this.parent = parent;
     initElements();
@@ -127,6 +129,7 @@ public class TabInvoicePayment extends Form {
 
   @SuppressWarnings("serial")
   private void initElements() {
+	editMode = false;
     paymentMeansList = parent.getInvoice().getPaymentMeans();
     //paymentMeansItem = createPaymentMeansItem();
     //paymentMeansList.add (paymentMeansItem);
@@ -289,11 +292,13 @@ public class TabInvoicePayment extends Form {
 			Object rowId = table.getValue(); // get the selected rows id
 	        if(rowId != null){
 	        	hiddenContent.removeAllComponents ();
-	        	getWindow().showNotification(rowId.toString(), Notification.TYPE_TRAY_NOTIFICATION);
+	        	editMode = true;
+	        	addButton.setEnabled(false);
+				deleteButton.setEnabled(false);
+	        	
 	        	final String sid = (String)table.getContainerProperty(rowId,"IDAdapter").getValue();
 	        		          
 	        	//get selected item
-	        	//getWindow().showNotification("sid="+sid+", ID="+table.getIndexFromID(sid), Notification.TYPE_TRAY_NOTIFICATION);
 	        	paymentMeansAdapterItem = (PaymentMeansAdapter)paymentMeansList.get(table.getIndexFromID(sid));
 	        	//paymentMeansAdapterItem = table.getEntryFromID(sid);
 	        	
@@ -318,6 +323,9 @@ public class TabInvoicePayment extends Form {
 		            	table.setPaymentMeans(sid, paymentMeansAdapterItem);
 		            	//hide form
 		            	hiddenContent.setVisible(false);
+		            	editMode = false;
+		            	addButton.setEnabled(true);
+						deleteButton.setEnabled(true);
 		            }
 	        	}));
 	        	buttonLayout.addComponent(new Button("Cancel editing",new Button.ClickListener(){
@@ -328,6 +336,9 @@ public class TabInvoicePayment extends Form {
 		            	//hide form
 		            	hiddenContent.removeAllComponents ();
 		            	hiddenContent.setVisible(false);
+		            	editMode = false;
+		            	addButton.setEnabled(true);
+						deleteButton.setEnabled(true);
 		            }
 	        	}));
 	          
@@ -438,9 +449,11 @@ public class TabInvoicePayment extends Form {
 	  form.setImmediate(true);
 	  
 	  //automatically set the id
-	  IDType num = new IDType();
-      num.setValue (String.valueOf (paymentMeansList.size ()+1));
-      paymentMeansAdapterItem.setID(num);
+	  if (!editMode) {
+		  IDType num = new IDType();
+	      num.setValue (String.valueOf (paymentMeansList.size ()+1));
+	      paymentMeansAdapterItem.setID(num);
+	  }
 	  
       form.addItemProperty("Payment Means Code", new NestedMethodProperty(paymentMeansAdapterItem, "PaymentMeansCodeAdapter"));
       form.addItemProperty("Payment Due Date", new NestedMethodProperty(paymentMeansAdapterItem, "PaymentDueDateAdapter"));
