@@ -60,8 +60,8 @@ public class PaymentMeansTable extends Table {
 
     addPropertyWithHeader("IDAdapter", "#ID");
     addPropertyWithHeader("PaymentMeansCodeAdapter", "Payment Means Code");
-    addPropertyWithHeader("PaymentDueDateAdapterAsString", "Payment Due Date");
-    addPropertyWithHeader("PaymentChannelCodeAdapter", "Payment Channel Code");
+    addPropertyWithHeader("PaymentDueDateAdapterAsString", "Due Date");
+    addPropertyWithHeader("PaymentChannelCodeAdapter", "Channel Code");
     addPropertyWithHeader("FinancialAccountIDAdapter", "Account Number");
     addPropertyWithHeader("BranchIDAdapter", "Branch ID");
     addPropertyWithHeader("InstitutionIDAdapter", "Financial Institution ID");
