@@ -291,62 +291,88 @@ public class TabInvoicePayment extends Form {
 		public void buttonClick(ClickEvent event) {
 			Object rowId = table.getValue(); // get the selected rows id
 	        if(rowId != null){
-	        	hiddenContent.removeAllComponents ();
-	        	editMode = true;
-	        	addButton.setEnabled(false);
-				deleteButton.setEnabled(false);
-	        	
-	        	final String sid = (String)table.getContainerProperty(rowId,"IDAdapter").getValue();
-	        		          
-	        	//get selected item
-	        	paymentMeansAdapterItem = (PaymentMeansAdapter)paymentMeansList.get(table.getIndexFromID(sid));
-	        	//paymentMeansAdapterItem = table.getEntryFromID(sid);
-	        	
-	        	//clone it to original item
-	        	originalItem = new PaymentMeansAdapter ();
-	        	clonePaymentMeansItem(paymentMeansAdapterItem, originalItem);
-	          
-	        	Label formLabel = new Label("<h3>Edit payment means line</h3>", Label.CONTENT_XHTML);
-	          
-	        	hiddenContent.addComponent(formLabel);
-	        	final Form paymentMeansForm = createInvoicePaymentMeansForm();
-	        	paymentMeansForm.setImmediate(false);
-	        	hiddenContent.addComponent(paymentMeansForm);
-	          
-	        	//Save new line button
-	        	HorizontalLayout buttonLayout = new HorizontalLayout();
-	        	buttonLayout.setSpacing (true);
-	        	buttonLayout.addComponent(new Button("Save changes",new Button.ClickListener(){
-		            @Override
-		            public void buttonClick (ClickEvent event) {
-		            	paymentMeansForm.commit();
-		            	table.setPaymentMeans(sid, paymentMeansAdapterItem);
-		            	//hide form
-		            	hiddenContent.setVisible(false);
-		            	editMode = false;
-		            	addButton.setEnabled(true);
-						deleteButton.setEnabled(true);
-		            }
-	        	}));
-	        	buttonLayout.addComponent(new Button("Cancel editing",new Button.ClickListener(){
-		            @Override
-		            public void buttonClick (ClickEvent event) {
-		            	paymentMeansForm.discard();
-		            	table.setPaymentMeans(sid, originalItem);
-		            	//hide form
-		            	hiddenContent.removeAllComponents ();
-		            	hiddenContent.setVisible(false);
-		            	editMode = false;
-		            	addButton.setEnabled(true);
-						deleteButton.setEnabled(true);
-		            }
-	        	}));
-	          
-	        	hiddenContent.addComponent(buttonLayout);
-	        	hiddenContent.setVisible(true);          
+	        	if (table.getContainerProperty(rowId,"IDAdapter") != null) {
+		        	hiddenContent.removeAllComponents ();
+		        	editMode = true;
+		        	addButton.setEnabled(false);
+					deleteButton.setEnabled(false);
+		        	
+		        	final String sid = (String)table.getContainerProperty(rowId,"IDAdapter").getValue();
+		        		          
+		        	//get selected item
+		        	paymentMeansAdapterItem = (PaymentMeansAdapter)paymentMeansList.get(table.getIndexFromID(sid));
+		        	//paymentMeansAdapterItem = table.getEntryFromID(sid);
+		        	
+		        	//clone it to original item
+		        	originalItem = new PaymentMeansAdapter ();
+		        	clonePaymentMeansItem(paymentMeansAdapterItem, originalItem);
+		          
+		        	Label formLabel = new Label("<h3>Edit payment means line</h3>", Label.CONTENT_XHTML);
+		          
+		        	hiddenContent.addComponent(formLabel);
+		        	final Form paymentMeansForm = createInvoicePaymentMeansForm();
+		        	paymentMeansForm.setImmediate(false);
+		        	hiddenContent.addComponent(paymentMeansForm);
+		          
+		        	//Save new line button
+		        	HorizontalLayout buttonLayout = new HorizontalLayout();
+		        	buttonLayout.setSpacing (true);
+		        	buttonLayout.addComponent(new Button("Save changes",new Button.ClickListener(){
+			            @Override
+			            public void buttonClick (ClickEvent event) {
+			            	paymentMeansForm.commit();
+			            	table.setPaymentMeans(sid, paymentMeansAdapterItem);
+			            	//hide form
+			            	hiddenContent.setVisible(false);
+			            	editMode = false;
+			            	addButton.setEnabled(true);
+							deleteButton.setEnabled(true);
+			            }
+		        	}));
+		        	buttonLayout.addComponent(new Button("Cancel editing",new Button.ClickListener(){
+			            @Override
+			            public void buttonClick (ClickEvent event) {
+			            	paymentMeansForm.discard();
+			            	table.setPaymentMeans(sid, originalItem);
+			            	//hide form
+			            	hiddenContent.removeAllComponents ();
+			            	hiddenContent.setVisible(false);
+			            	editMode = false;
+			            	addButton.setEnabled(true);
+							deleteButton.setEnabled(true);
+			            }
+		        	}));
+		          
+		        	hiddenContent.addComponent(buttonLayout);
+		        	hiddenContent.setVisible(true);
+	        	}
+	        	else {
+	        		parent.getWindow ().showNotification("No table line is selected", Window.Notification.TYPE_TRAY_NOTIFICATION);
+	        	}
 	        }
 	        else {
-	          parent.getWindow ().showNotification("Info", "No table line is selected", Window.Notification.TYPE_HUMANIZED_MESSAGE);
+	          parent.getWindow ().showNotification("No table line is selected", Window.Notification.TYPE_TRAY_NOTIFICATION);
+	        }
+		}
+	});
+    
+    deleteButton.addListener(new Button.ClickListener() {
+		@Override
+		public void buttonClick(ClickEvent event) {
+			Object rowId = table.getValue(); // get the selected rows id
+	        if(rowId != null){
+	        	if (table.getContainerProperty(rowId,"IDAdapter") != null) {
+		        	if(table.getContainerProperty(rowId,"IDAdapter").getValue() != null){
+		        		String sid = (String)table.getContainerProperty(rowId,"IDAdapter").getValue();
+		        		table.removePaymentMeans(sid);
+		        	}
+	        	}
+	        	else {
+	        		parent.getWindow ().showNotification("No table line is selected", Window.Notification.TYPE_TRAY_NOTIFICATION);
+	        	}
+	        }
+	        else {
+	        	parent.getWindow ().showNotification("No table line is selected", Window.Notification.TYPE_TRAY_NOTIFICATION);
 	        }
 		}
 	});

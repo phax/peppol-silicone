@@ -298,63 +298,65 @@ public class TabInvoiceHeader extends Form {
       public void buttonClick(final Button.ClickEvent event) {
         Object rowId = table.getValue(); // get the selected rows id
         if(rowId != null){
-          if(addMode || editMode){
-            parent.getWindow ().showNotification("Info", "You cannot edit while in add/edit mode", Window.Notification.TYPE_HUMANIZED_MESSAGE);
-            return;
-          }
-          final String sid = (String)table.getContainerProperty(rowId,"AdditionalDocRefID").getValue();
+        	if (table.getContainerProperty(rowId,"AdditionalDocRefID") != null) {
+        		if(addMode || editMode){
+        			parent.getWindow ().showNotification("Info", "You cannot edit while in add/edit mode", Window.Notification.TYPE_HUMANIZED_MESSAGE);
+        			return;
+        		}
+        		final String sid = (String)table.getContainerProperty(rowId,"AdditionalDocRefID").getValue();
           
-          // TODO: PUT THIS IN FUNCTION BEGINS
-          editMode = true;
-          hiddenContent.removeAllComponents ();
-          
-          //get selected item
-          additionalDocRefItem = (InvoiceAdditionalDocRefAdapter) additionalDocRefList.get (table.getIndexFromID (sid));
-          //clone it to original item
-          originalItem = new InvoiceAdditionalDocRefAdapter ();
-          cloneInvoiceAdditionalDocRefItem(additionalDocRefItem, originalItem);
-          
-          Label formLabel = new Label("<h3>Editing additional document reference line</h3>", Label.CONTENT_XHTML);
-          
-          hiddenContent.addComponent (formLabel);
-          final Form docRefForm = createInvoiceAdditionalDocRefForm();
-          hiddenContent.addComponent(docRefForm);
-          
-          //Save new line button
-          HorizontalLayout buttonLayout = new HorizontalLayout();
-          buttonLayout.setSpacing (true);
-          buttonLayout.addComponent(new Button("Save changes",new Button.ClickListener(){
-            @Override
-            public void buttonClick (ClickEvent event) {
-              //update table (and consequently edit item to allowanceChargeList list)
-              table.setAdditionalDocRefLine (sid, additionalDocRefItem);
-              //hide form
-              docRefForm.commit();
-              hiddenContent.setVisible(false);
-              editMode = false;
-            }
-          }));
-          buttonLayout.addComponent(new Button("Cancel editing",new Button.ClickListener(){
-            @Override
-            public void buttonClick (ClickEvent event) {
-              hiddenContent.removeAllComponents ();
-              
-              table.setAdditionalDocRefLine (sid, originalItem);
-              //hide form
-              docRefForm.discard();
-              hiddenContent.setVisible(false);
-              editMode = false;
-            }
-          }));
-          
-          hiddenContent.addComponent(buttonLayout);
-          
-          //hiddenContent.setVisible(!hiddenContent.isVisible());
-          hiddenContent.setVisible(true);          
-          // TODO: PUT THIS IN FUNCTION ENDS
+        		// TODO: PUT THIS IN FUNCTION BEGINS
+        		editMode = true;
+        		hiddenContent.removeAllComponents ();
+	          
+        		//get selected item
+        		additionalDocRefItem = (InvoiceAdditionalDocRefAdapter) additionalDocRefList.get (table.getIndexFromID (sid));
+        		//clone it to original item
+        		originalItem = new InvoiceAdditionalDocRefAdapter ();
+        		cloneInvoiceAdditionalDocRefItem(additionalDocRefItem, originalItem);
+	          
+        		Label formLabel = new Label("<h3>Editing additional document reference line</h3>", Label.CONTENT_XHTML);
+	          
+        		hiddenContent.addComponent (formLabel);
+        		final Form docRefForm = createInvoiceAdditionalDocRefForm();
+        		hiddenContent.addComponent(docRefForm);
+	          
+        		//Save new line button
+        		HorizontalLayout buttonLayout = new HorizontalLayout();
+        		buttonLayout.setSpacing (true);
+        		buttonLayout.addComponent(new Button("Save changes",new Button.ClickListener(){
+        			@Override
+        			public void buttonClick (ClickEvent event) {
+        				//update table (and consequently edit item to allowanceChargeList list)
+        				table.setAdditionalDocRefLine (sid, additionalDocRefItem);
+        				//hide form
+        				docRefForm.commit();
+        				hiddenContent.setVisible(false);
+        				editMode = false;
+        			}
+        		}));
+        		buttonLayout.addComponent(new Button("Cancel editing",new Button.ClickListener(){
+	            @Override
+	            public void buttonClick (ClickEvent event) {
+	            	hiddenContent.removeAllComponents ();
+	              
+	            	table.setAdditionalDocRefLine (sid, originalItem);
+	            	//hide form
+	            	docRefForm.discard();
+	            	hiddenContent.setVisible(false);
+	            	editMode = false;
+	            }
+	          }));
+	          
+	          hiddenContent.addComponent(buttonLayout);
+	          hiddenContent.setVisible(true);          
+	          // TODO: PUT THIS IN FUNCTION ENDS
+        	}
+        	else
+        		getWindow().showNotification("No table line is selected", Window.Notification.TYPE_TRAY_NOTIFICATION);
         }
         else {
-          parent.getWindow ().showNotification("Info", "No table line is selected", Window.Notification.TYPE_HUMANIZED_MESSAGE);
+          getWindow().showNotification("No table line is selected", Window.Notification.TYPE_TRAY_NOTIFICATION);
         }
 
       }
@@ -364,17 +366,21 @@ public class TabInvoiceHeader extends Form {
       public void buttonClick(final Button.ClickEvent event) {
         Object rowId = table.getValue(); // get the selected rows id
         if(rowId != null){
-          if(addMode || editMode){
-            parent.getWindow ().showNotification("Info", "You cannot delete while in add/edit mode", Window.Notification.TYPE_HUMANIZED_MESSAGE);
-            return;
-          }
-          if(table.getContainerProperty(rowId,"AdditionalDocRefID").getValue() != null){
-            String sid = (String)table.getContainerProperty(rowId,"AdditionalDocRefID").getValue();
-            table.removeAdditionalDocRefLine (sid);
-          }
+        	if (table.getContainerProperty(rowId,"AdditionalDocRefID") != null) {
+        		if(addMode || editMode){
+        			parent.getWindow ().showNotification("Info", "You cannot delete while in add/edit mode", Window.Notification.TYPE_HUMANIZED_MESSAGE);
+        			return;
+        		}
+        		if(table.getContainerProperty(rowId,"AdditionalDocRefID").getValue() != null){
+        			String sid = (String)table.getContainerProperty(rowId,"AdditionalDocRefID").getValue();
+        			table.removeAdditionalDocRefLine (sid);
+        		}
+        	}
+        	else
+        		getWindow().showNotification("No table line is selected", Window.Notification.TYPE_TRAY_NOTIFICATION);
         }
         else {
-          parent.getWindow ().showNotification("Info", "No table line is selected", Window.Notification.TYPE_HUMANIZED_MESSAGE);
+          getWindow().showNotification("No table line is selected", Window.Notification.TYPE_TRAY_NOTIFICATION);
           
         }
       }
