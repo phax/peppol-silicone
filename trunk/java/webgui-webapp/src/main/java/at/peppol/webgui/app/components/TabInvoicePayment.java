@@ -166,7 +166,7 @@ public class TabInvoicePayment extends Form {
     invoiceDetailsPanel.setStyleName("light");
     invoiceDetailsPanel.setSizeFull();
     //invoiceDetailsPanel.addComponent(createInvoicePaymentTopForm());
-    grid.addComponent(invoiceDetailsPanel, 0, 0);
+    //grid.addComponent(invoiceDetailsPanel, 0, 0);
     
     final Panel payeePartyPanel = new Panel("Payee Details");
     payeePartyPanel.setStyleName("light");
@@ -174,13 +174,13 @@ public class TabInvoicePayment extends Form {
     payeePartyPanel.addComponent(createInvoicePayeePartyForm());
     //payeeForm = new PartyDetailForm("Payee", payeeParty);
     //payeePartyPanel.addComponent(payeeForm);
-    grid.addComponent(payeePartyPanel, 1, 0);
+    grid.addComponent(payeePartyPanel, 0, 0);
     
     final Panel paymentTermsPanel = new Panel("Payment Terms");
     paymentTermsPanel.setStyleName("light");
     paymentTermsPanel.setSizeFull();
     paymentTermsPanel.addComponent(createInvoicePaymentTermsForm());
-    grid.addComponent(paymentTermsPanel, 0, 1);
+    grid.addComponent(paymentTermsPanel, 1, 0);
     
     final Panel paymentMeansPanel = new Panel("Payment Means");
     VerticalLayout paymentMeansLayout = new VerticalLayout();
