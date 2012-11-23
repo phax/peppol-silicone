@@ -51,6 +51,15 @@ public class InvoiceItemPropertyAdapter extends ItemPropertyType {
     setValue (new ValueType ());
   }
   
+  public InvoiceItemPropertyAdapter(ItemPropertyType item) {
+	  tableLineID = "";
+	  setName (new NameType ());
+	  setValue (new ValueType ());
+	  
+	  setItemPropertyName(item.getName().getValue());
+	  setItemPropertyValue(item.getValue().getValue());
+  }
+  
   public void setTableLineID(String v) {
     tableLineID = v;
   }
