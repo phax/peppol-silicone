@@ -56,6 +56,11 @@ public class InvoiceItemPropertyTable extends Table {
   
   public InvoiceItemPropertyTable(List <ItemPropertyType> list) {
     this.itemPropertyLines = list;
+    
+    for (int i=0;i<list.size();i++) {
+    	InvoiceItemPropertyAdapter bean = new InvoiceItemPropertyAdapter(list.get(i));
+    	tableLines.addBean(bean);
+    }
     setContainerDataSource(tableLines);
 
     addPropertyWithHeader("TableLineID", "# ID");
