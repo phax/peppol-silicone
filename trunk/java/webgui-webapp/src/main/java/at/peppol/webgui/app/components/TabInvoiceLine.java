@@ -41,6 +41,7 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AllowanceChargeType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.InvoiceLineType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ItemPropertyType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IDType;
@@ -71,6 +72,7 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.Select;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+import com.vaadin.ui.Window.Notification;
 
 @SuppressWarnings ("serial")
 public class TabInvoiceLine extends Form {
@@ -131,6 +133,7 @@ public class TabInvoiceLine extends Form {
 
         hiddenContent.addComponent (formLabel);
         final Form form = createInvoiceLineMainForm ();
+        form.setWriteThrough(false);
         hiddenContent.addComponent (form);
 
         // Set invoiceLine 0..N cardinalily panels
@@ -145,14 +148,18 @@ public class TabInvoiceLine extends Form {
           @Override
           public void buttonClick (final ClickEvent event) {
         	  AbstractTextField itemName = (AbstractTextField)form.getField("Item Name");
+        	  itemName.setMaxLength(50);
         	  AbstractTextField lineExtensionAmount = (AbstractTextField)form.getField("Line Extension Amount");
         	  AbstractTextField baseQuantity = (AbstractTextField)form.getField("Base Quantity");
         	  
+        	  if (itemName.getValue().toString().length() > 50) {
+        		  //itemName.setComponentError(new UserError("Item Name should not be more than 50 characters"));
+        		  itemName.setValue(itemName.getValue().toString().substring(0, 49));
+        		  getWindow().showNotification("Item Name truncated to 50 chars", Notification.TYPE_TRAY_NOTIFICATION);
+        	  }
+        	  
         	  if (itemName.getValue().toString().equals("")) {
         		  itemName.setComponentError(new UserError("Item Name cannot be empty"));
-        	  }
-        	  if (itemName.getValue().toString().length() > 50) {
-        		  itemName.setComponentError(new UserError("Item Name should not be more than 50 characters"));
         	  }
         	  else if (lineExtensionAmount.getValue().toString().equals("")) {
         		  lineExtensionAmount.setComponentError(new UserError("Line Extension Amount cannot be empty"));
@@ -161,15 +168,16 @@ public class TabInvoiceLine extends Form {
         		  baseQuantity.setComponentError(new UserError("Base Quantity cannot be empty"));
         	  }
         	  else {
+        		  form.commit();
         		  System.out.println(invoiceLineItem.getInvLineInvoicedQuantity().toString());
         		  // update table (and consequently add new item to invoiceList list)
-	            table.addInvoiceLine (invoiceLineItem);
-	            // hide form
-	            hiddenContent.setVisible (false);
-	            addMode = false;
-	            itemName.setComponentError(null);
-	            lineExtensionAmount.setComponentError(null);
-	            baseQuantity.setComponentError(null);
+        		  table.addInvoiceLine (invoiceLineItem);
+	            // 	hide form
+        		  hiddenContent.setVisible (false);
+        		  addMode = false;
+        		  itemName.setComponentError(null);
+        		  lineExtensionAmount.setComponentError(null);
+        		  baseQuantity.setComponentError(null);
         	  }
           }
         }));
@@ -317,23 +325,34 @@ public class TabInvoiceLine extends Form {
   public Form createInvoiceLineMainForm () {
     final Form invoiceLineForm = new Form (new FormLayout (), new InvoiceLineFieldFactory ());
     invoiceLineForm.setImmediate (false);
-
+    //GridLayout gl = new GridLayout(2,1);
+    //gl.setSpacing(true);
+    //invoiceLineForm.setLayout(gl);
+    
     final NestedMethodProperty mp = new NestedMethodProperty (invoiceLineItem, "ID.value");
     if (!editMode) {
       final IDType num = new IDType ();
-      num.setValue (String.valueOf (invoiceLineList.size () + 1));
-      invoiceLineItem.setID (num);
+      //num.setValue (String.valueOf (invoiceLineList.size () + 1));
+      //invoiceLineItem.setID (num);
+      
+      int max = 0;
+      for (InvoiceLineType line : invoiceLineList) {
+    	  if (Integer.parseInt(line.getID().getValue()) > max)
+    		  max = Integer.parseInt(line.getID().getValue());
+      }
+      num.setValue(String.valueOf(max+1));
+      invoiceLineItem.setID(num);
     }
     else {
       mp.setReadOnly (true);
     }
-
+    
     // TODO: Redesign (break this function to multiple others...) the form with
     // show/hide panels etc
 
     // invoiceAllowanceChargeForm.addItemProperty ("Line ID #", new
     // NestedMethodProperty(allowanceChargeItem, "ID.value") );
-    invoiceLineForm.addItemProperty ("Line ID #", mp);
+    //invoiceLineForm.addItemProperty ("Line ID #", mp);
     invoiceLineForm.addItemProperty ("Line Note", new NestedMethodProperty (invoiceLineItem, "invLineNote"));
     invoiceLineForm.addItemProperty ("Invoiced Quantity", new NestedMethodProperty (invoiceLineItem,
                                                                                     "invLineInvoicedQuantity"));

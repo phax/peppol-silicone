@@ -477,7 +477,14 @@ public class TabInvoicePayment extends Form {
 	  //automatically set the id
 	  if (!editMode) {
 		  IDType num = new IDType();
-	      num.setValue (String.valueOf (paymentMeansList.size ()+1));
+	      //num.setValue (String.valueOf (paymentMeansList.size ()+1));
+	      //paymentMeansAdapterItem.setID(num);
+	      int max = 0;
+	      for (PaymentMeansType payment : paymentMeansList) {
+	    	  if (Integer.parseInt(payment.getID().getValue()) > max)
+	    		  max = Integer.parseInt(payment.getID().getValue());
+	      }
+	      num.setValue(String.valueOf(max+1));
 	      paymentMeansAdapterItem.setID(num);
 	  }
 	  

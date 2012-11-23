@@ -53,6 +53,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ContractType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.DocumentReferenceType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.OrderReferenceType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.PaymentMeansType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.PeriodType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.AccountingCostType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ContractTypeType;
@@ -529,7 +530,15 @@ public class TabInvoiceHeader extends Form {
     NestedMethodProperty mp = new NestedMethodProperty(additionalDocRefItem, "AdditionalDocRefID");
     if(!editMode){
       IDType num = new IDType();
-      num.setValue (String.valueOf (additionalDocRefList.size ()+1));
+      //num.setValue (String.valueOf (additionalDocRefList.size ()+1));
+      //additionalDocRefItem.setID(num);
+      
+      int max = 0;
+      for (DocumentReferenceType doc : additionalDocRefList) {
+    	  if (Integer.parseInt(doc.getID().getValue()) > max)
+    		  max = Integer.parseInt(doc.getID().getValue());
+      }
+      num.setValue(String.valueOf(max+1));
       additionalDocRefItem.setID(num);
     }
     else {
