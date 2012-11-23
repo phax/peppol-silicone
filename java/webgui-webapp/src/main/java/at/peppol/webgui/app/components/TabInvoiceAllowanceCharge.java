@@ -41,6 +41,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AllowanceChargeType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.DocumentReferenceType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IDType;
 import un.unece.uncefact.codelist.specification._54217._2001.CurrencyCodeContentType;
 
@@ -275,8 +276,16 @@ public class TabInvoiceAllowanceCharge extends Form {
     final NestedMethodProperty mp = new NestedMethodProperty (allowanceChargeItem, "ID.value");
     if (!editMode) {
       final IDType num = new IDType ();
-      num.setValue (String.valueOf (allowanceChargeList.size () + 1));
-      allowanceChargeItem.setID (num);
+      //num.setValue (String.valueOf (allowanceChargeList.size () + 1));
+      //allowanceChargeItem.setID (num);
+      
+      int max = 0;
+      for (AllowanceChargeType doc : allowanceChargeList) {
+    	  if (Integer.parseInt(doc.getID().getValue()) > max)
+    		  max = Integer.parseInt(doc.getID().getValue());
+      }
+      num.setValue(String.valueOf(max+1));
+      allowanceChargeItem.setID(num);
     }
     else {
       mp.setReadOnly (true);
@@ -284,7 +293,7 @@ public class TabInvoiceAllowanceCharge extends Form {
 
     // invoiceAllowanceChargeForm.addItemProperty ("Line ID #", new
     // NestedMethodProperty(allowanceChargeItem, "ID.value") );
-    invoiceAllowanceChargeForm.addItemProperty ("Line ID #", mp);
+    //invoiceAllowanceChargeForm.addItemProperty ("Line ID #", mp);
     invoiceAllowanceChargeForm.addItemProperty ("Charge Indicator", new NestedMethodProperty (allowanceChargeItem,
                                                                                               "indicator"));
     invoiceAllowanceChargeForm.addItemProperty ("Allowance Charge Reason",
