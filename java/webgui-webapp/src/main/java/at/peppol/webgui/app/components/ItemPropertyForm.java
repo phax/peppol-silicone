@@ -100,7 +100,7 @@ public class ItemPropertyForm extends Panel {
     table.setHeight (150, UNITS_PIXELS);
     table.setFooterVisible (true);
     table.addStyleName ("striped strong");
-    
+        
     VerticalLayout tableContainer = new VerticalLayout();
     tableContainer.addComponent (table);
     tableContainer.setMargin (false, true, false, false);
@@ -220,9 +220,11 @@ public class ItemPropertyForm extends Panel {
             getParent ().getWindow ().showNotification("Info", "You cannot delete while in add/edit mode", Window.Notification.TYPE_HUMANIZED_MESSAGE);
             return;
           }
-          if(table.getContainerProperty(rowId,"tableLineID").getValue() != null){
-            String sid = (String)table.getContainerProperty(rowId,"tableLineID").getValue();
-            table.removeItemPropertyLine (sid);
+          if (table.getContainerProperty(rowId,"tableLineID") != null) {
+	          if(table.getContainerProperty(rowId,"tableLineID").getValue() != null){
+	            String sid = (String)table.getContainerProperty(rowId,"tableLineID").getValue();
+	            table.removeItemPropertyLine (sid);
+	          }
           }
         }
         else {
@@ -274,9 +276,9 @@ public class ItemPropertyForm extends Panel {
     showHideButtonLayout.addComponent(btn);
     showHideButtonLayout.setComponentAlignment (btn, Alignment.MIDDLE_RIGHT);
     
-    mainLayout.addComponent(showHideButtonLayout);
+    //mainLayout.addComponent(showHideButtonLayout);
     mainLayout.addComponent(showHideContentLayout);
-    showHideContentLayout.setVisible(false);    
+    //showHideContentLayout.setVisible(false);    
     
     addComponent(mainLayout);
 
@@ -295,7 +297,7 @@ public class ItemPropertyForm extends Panel {
     }
     
     //invoiceItemPropertyForm.addItemProperty ("Line ID #", new NestedMethodProperty(itemPropertyBean, "ID.value") );
-    invoiceItemPropertyForm.addItemProperty ("Line ID #", mp );
+    //invoiceItemPropertyForm.addItemProperty ("Line ID #", mp );
     invoiceItemPropertyForm.addItemProperty ("Additional Item Property Name", new NestedMethodProperty(itemPropertyBean, "ItemPropertyName") );
     invoiceItemPropertyForm.addItemProperty ("Additional Item Property Value", new NestedMethodProperty(itemPropertyBean, "ItemPropertyValue") );
 
