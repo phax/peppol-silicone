@@ -45,6 +45,7 @@ import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.Item
 
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.Table;
+import com.vaadin.ui.Window.Notification;
 
 @SuppressWarnings ("serial")
 public class InvoiceItemPropertyTable extends Table {
@@ -59,6 +60,7 @@ public class InvoiceItemPropertyTable extends Table {
     
     for (int i=0;i<list.size();i++) {
     	InvoiceItemPropertyAdapter bean = new InvoiceItemPropertyAdapter(list.get(i));
+    	bean.setTableLineID(String.valueOf(i+1));
     	tableLines.addBean(bean);
     }
     setContainerDataSource(tableLines);
@@ -69,7 +71,7 @@ public class InvoiceItemPropertyTable extends Table {
 
     setDefinedPropertiesAsVisible();
     setPageLength(4);
-    
+    setFooterVisible(false);
   }
   
   private void addPropertyWithHeader(String property, String headerName) {
@@ -96,24 +98,50 @@ public class InvoiceItemPropertyTable extends Table {
       //tableLines.addBean(ln);
       tableLines.removeAllItems ();
       Iterator <ItemPropertyType> iterator = itemPropertyLines.iterator ();
+      int count=1;
       while (iterator.hasNext()) {
-        ItemPropertyType ac = iterator.next();
-        tableLines.addBean ((InvoiceItemPropertyAdapter) ac);
+    	  InvoiceItemPropertyAdapter ac = (InvoiceItemPropertyAdapter)iterator.next();
+    	  ac.setTableLineID(String.valueOf(count++));
+    	  tableLines.addBean(ac);
       }
     }
   }  
   
   public void removeItemPropertyLine(String lineID) {
-    Iterator <ItemPropertyType> iterator = itemPropertyLines.iterator ();
-    while (iterator.hasNext()) {
-      InvoiceItemPropertyAdapter ac = (InvoiceItemPropertyAdapter) iterator.next();
-      if (ac.getTableLineID ().equals (lineID)) {
-        tableLines.removeItem (ac);
-        itemPropertyLines.remove (ac);
-        break;
-        
-      }
+    String id="";
+    int index=0;
+    String message = "";
+    message += "lineID="+lineID+"\n";
+    
+    for (int i=0;i<itemPropertyLines.size();i++) {
+    	InvoiceItemPropertyAdapter ac = (InvoiceItemPropertyAdapter)itemPropertyLines.get(i);
+    	message += "rowID="+ac.getTableLineID()+"\n";
     }
+    getWindow().showNotification(message,Notification.TYPE_TRAY_NOTIFICATION);
+    
+    for (int i=0;i<itemPropertyLines.size();i++) {
+    	InvoiceItemPropertyAdapter ac = (InvoiceItemPropertyAdapter)itemPropertyLines.get(i);	
+    	if (ac.getTableLineID ().equals (lineID)) {
+    		tableLines.removeItem (ac);
+    		itemPropertyLines.remove (ac);
+    		index = i;
+    		id = ac.getTableLineID();
+    		break;
+    	}
+    }
+    if (!id.equals(""))
+	    for (int i=index;i<itemPropertyLines.size();i++) {
+	    	InvoiceItemPropertyAdapter ac = (InvoiceItemPropertyAdapter)itemPropertyLines.get(i); 
+			tableLines.removeItem(ac);
+			itemPropertyLines.remove(ac);
+			ac = new InvoiceItemPropertyAdapter(ac);
+			ac.setTableLineID(id);
+			tableLines.addBean(ac);
+			itemPropertyLines.add(i,ac);
+			id = String.valueOf((Integer.valueOf(id).intValue() + 1));
+			//tableLines.getItem(ac).getBean().setTableLineID(String.valueOf(count));
+	    }
+    
   }
   
   public int getIndexFromID(String lineID) {

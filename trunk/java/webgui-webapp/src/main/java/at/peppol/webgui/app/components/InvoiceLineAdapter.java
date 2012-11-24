@@ -135,10 +135,10 @@ public class InvoiceLineAdapter extends InvoiceLineType {
     // --- +Item/Commodity Classification ends
 
     // --- +Item/Additional Item Property begins (0..N)
-    final ItemPropertyType pt = new ItemPropertyType ();
-    pt.setName (new NameType ());
-    pt.setValue (new ValueType ());
-    item.getAdditionalItemProperty ().add (pt);
+    //final ItemPropertyType pt = new ItemPropertyType ();
+    //pt.setName (new NameType ());
+    //pt.setValue (new ValueType ());
+    //item.getAdditionalItemProperty ().add (pt);
     // --- +Item/Additional Item Property ends
 
     setItem (item);
