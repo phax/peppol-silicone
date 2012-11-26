@@ -39,12 +39,21 @@ package at.peppol.webgui.app.components;
 
 import java.util.List;
 
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AllowanceChargeType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ItemPropertyType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.OrderLineReferenceType;
+import oasis.names.specification.ubl.schema.xsd.invoice_2.InvoiceType;
 
+import at.peppol.webgui.app.components.adapters.InvoiceAllowanceChargeAdapter;
 import at.peppol.webgui.app.components.adapters.InvoiceItemPropertyAdapter;
+import at.peppol.webgui.app.components.adapters.InvoiceLineOrderReferenceAdapter;
 import at.peppol.webgui.app.components.tables.InvoiceAdditionalDocRefTableEditor;
 import at.peppol.webgui.app.components.tables.InvoiceItemPropertyTable;
 import at.peppol.webgui.app.components.tables.InvoiceItemPropertyTableEditor;
+import at.peppol.webgui.app.components.tables.InvoiceLineAllowanceChargeTable;
+import at.peppol.webgui.app.components.tables.InvoiceLineAllowanceChargeTableEditor;
+import at.peppol.webgui.app.components.tables.InvoiceLineOrderReferenceTable;
+import at.peppol.webgui.app.components.tables.InvoiceLineOrderReferenceTableEditor;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.util.NestedMethodProperty;
@@ -66,28 +75,37 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
 @SuppressWarnings ("serial")
-public class ItemPropertyForm extends Panel {
-  private final String itemPropertyPrefix;
+public class InvoiceLineOrderForm extends Panel {
+  private final String prefix;
   
-  private List<ItemPropertyType> itemPropertyBeanList;
-  private InvoiceItemPropertyAdapter itemPropertyBean;
+  private InvoiceType inv;
+  private List<OrderLineReferenceType> lineOrderList;
+  private InvoiceLineOrderReferenceAdapter lineOrderBean;
   
-  private InvoiceItemPropertyAdapter originalItem;
+  private InvoiceLineOrderReferenceAdapter originalItem;
 
   private boolean editMode;
   
-  public InvoiceItemPropertyTable table;
+  public InvoiceLineOrderReferenceTable table;
   private VerticalLayout hiddenContent;
 
   
-  public ItemPropertyForm(String itemPropertyPrefix, List<ItemPropertyType> itemPropertyBeanList) {
-      this.itemPropertyPrefix = itemPropertyPrefix;
-      this.itemPropertyBeanList = itemPropertyBeanList;
+  public InvoiceLineOrderForm(String prefix, List<OrderLineReferenceType> lineOrderList) {
+      this.prefix = prefix;
+      this.lineOrderList = lineOrderList;
       editMode = false;
       
       initElements();
   }
   
+  public InvoiceLineOrderForm(String prefix, List<OrderLineReferenceType> lineOrderList, InvoiceType inv) {
+	  this.prefix = prefix;
+      this.lineOrderList = lineOrderList;
+      editMode = false;
+      this.inv = inv;
+      
+      initElements();
+  }
   private void initElements() {
 
     final GridLayout grid = new GridLayout(4, 4);
@@ -96,7 +114,7 @@ public class ItemPropertyForm extends Panel {
     hiddenContent.setSpacing (true);
     hiddenContent.setMargin (true);
     
-    table = new InvoiceItemPropertyTable(itemPropertyBeanList);
+    table = new InvoiceLineOrderReferenceTable(lineOrderList);
     table.setSelectable(true);
     table.setImmediate(true);
     table.setNullSelectionAllowed(false);
@@ -118,14 +136,14 @@ public class ItemPropertyForm extends Panel {
     buttonsContainer.addComponent (editButton);
     buttonsContainer.addComponent (deleteButton);
     
-    InvoiceItemPropertyTableEditor editor = new InvoiceItemPropertyTableEditor(editMode);
-    Label label = new Label("<h3>Adding new item property</h3>", Label.CONTENT_XHTML);
-    addButton.addListener(editor.addButtonListener(editButton, deleteButton, hiddenContent, table, itemPropertyBeanList, label));
-    label = new Label("<h3>Edit item property</h3>", Label.CONTENT_XHTML);
-    editButton.addListener(editor.editButtonListener(addButton, deleteButton, hiddenContent, table, itemPropertyBeanList, label));
+    InvoiceLineOrderReferenceTableEditor editor = new InvoiceLineOrderReferenceTableEditor(editMode);
+    Label label = new Label("<h3>Adding order line</h3>", Label.CONTENT_XHTML);
+    addButton.addListener(editor.addButtonListener(editButton, deleteButton, hiddenContent, table, lineOrderList, label));
+    label = new Label("<h3>Edit order line</h3>", Label.CONTENT_XHTML);
+    editButton.addListener(editor.editButtonListener(addButton, deleteButton, hiddenContent, table, lineOrderList, label));
     deleteButton.addListener(editor.deleteButtonListener(table));
 
-    Panel outerPanel = new Panel(itemPropertyPrefix + " Item Properties"); 
+    Panel outerPanel = new Panel(prefix + " Referencing Orders"); 
     //outerPanel.setStyleName("light");     
    
     // ---- HIDDEN FORM BEGINS -----
@@ -147,7 +165,7 @@ public class ItemPropertyForm extends Panel {
     final VerticalLayout showHideContentLayout = new VerticalLayout();
     showHideContentLayout.addComponent(outerPanel);
     HorizontalLayout showHideButtonLayout = new HorizontalLayout();
-    Button btn = new Button("Show/Hide Additional Item Property",new Button.ClickListener(){
+    Button btn = new Button("Show/Hide Allowances/Charges",new Button.ClickListener(){
       @Override
       public void buttonClick (ClickEvent event) {
         // TODO Auto-generated method stub
@@ -165,23 +183,6 @@ public class ItemPropertyForm extends Panel {
     addComponent(mainLayout);
 
   }  
-  
-  class ItemPropertyFieldFactory implements FormFieldFactory {
-
-    @Override
-    public Field createField(Item item, Object propertyId, Component uiContext) {
-      // Identify the fields by their Property ID.
-      String pid = (String) propertyId;
-
-      Field field = DefaultFieldFactory.get().createField(item,propertyId, uiContext);
-      if (field instanceof AbstractTextField){
-          ((AbstractTextField) field).setNullRepresentation("");
-      }
-      
-      return field;
-    }
- }    
-  
 }
 
 

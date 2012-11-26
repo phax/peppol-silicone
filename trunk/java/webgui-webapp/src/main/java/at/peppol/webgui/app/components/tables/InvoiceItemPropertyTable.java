@@ -35,7 +35,7 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.webgui.app.components;
+package at.peppol.webgui.app.components.tables;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -43,20 +43,19 @@ import java.util.List;
 
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ItemPropertyType;
 
+import at.peppol.webgui.app.components.adapters.InvoiceItemPropertyAdapter;
+
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.Window.Notification;
 
 @SuppressWarnings ("serial")
-public class InvoiceItemPropertyTable extends Table {
+public class InvoiceItemPropertyTable extends GenericTable<ItemPropertyType, InvoiceItemPropertyAdapter> {
 
-  private final List <ItemPropertyType> itemPropertyLines;
-  private final BeanItemContainer<InvoiceItemPropertyAdapter> tableLines =
-          new BeanItemContainer<InvoiceItemPropertyAdapter>(InvoiceItemPropertyAdapter.class);
-  private final List<String> visibleHeaderNames = new ArrayList<String>();
-  
-  public InvoiceItemPropertyTable(List <ItemPropertyType> list) {
-    this.itemPropertyLines = list;
+  public InvoiceItemPropertyTable(List<ItemPropertyType> list) {
+    linesFromInvoice = list;
+    
+    tableLines = new BeanItemContainer<InvoiceItemPropertyAdapter>(InvoiceItemPropertyAdapter.class);
     
     for (int i=0;i<list.size();i++) {
     	InvoiceItemPropertyAdapter bean = new InvoiceItemPropertyAdapter(list.get(i));
@@ -73,7 +72,7 @@ public class InvoiceItemPropertyTable extends Table {
     setPageLength(4);
     setFooterVisible(false);
   }
-  
+/*  
   private void addPropertyWithHeader(String property, String headerName) {
     tableLines.addNestedContainerProperty(property);
     setColumnHeader(property, headerName);
@@ -155,7 +154,7 @@ public class InvoiceItemPropertyTable extends Table {
     }    
     return -1;
   }    
-  
+*/  
   
 }
 

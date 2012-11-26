@@ -35,7 +35,7 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.webgui.app.components;
+package at.peppol.webgui.app.components.tables;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -43,20 +43,19 @@ import java.util.List;
 
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.TaxSubtotalType;
 
+import at.peppol.webgui.app.components.adapters.InvoiceTaxSubtotalAdapter;
+
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.Table;
 
 @SuppressWarnings ("serial")
-public class InvoiceTaxSubtotalTable extends Table {
+public class InvoiceTaxSubtotalTable extends GenericTable<TaxSubtotalType, InvoiceTaxSubtotalAdapter> {
 
-  private final List <TaxSubtotalType> taxSubtotalLines;
-  private final BeanItemContainer<InvoiceTaxSubtotalAdapter> tableLines =
-          new BeanItemContainer<InvoiceTaxSubtotalAdapter>(InvoiceTaxSubtotalAdapter.class);
-  private final List<String> visibleHeaderNames = new ArrayList<String>();
-  
-
-  public InvoiceTaxSubtotalTable(List <TaxSubtotalType> list) {
-    this.taxSubtotalLines = list;
+    public InvoiceTaxSubtotalTable(List <TaxSubtotalType> list) {
+    linesFromInvoice = list;
+    
+    tableLines = new BeanItemContainer<InvoiceTaxSubtotalAdapter>(InvoiceTaxSubtotalAdapter.class);
+    
     setContainerDataSource(tableLines);
 
     addPropertyWithHeader("TableLineID", "# ID");
@@ -68,62 +67,4 @@ public class InvoiceTaxSubtotalTable extends Table {
     setDefinedPropertiesAsVisible();
     setPageLength(10);
   }
-
-  private void addPropertyWithHeader(String property, String headerName) {
-    tableLines.addNestedContainerProperty(property);
-    setColumnHeader(property, headerName);
-    visibleHeaderNames.add(property);
-  }
-
-  private void setDefinedPropertiesAsVisible() {
-    setVisibleColumns(visibleHeaderNames.toArray());
-  }
-
-  public void addTaxSubtotalLine(InvoiceTaxSubtotalAdapter invln) {
-    taxSubtotalLines.add(invln);
-    tableLines.addBean(invln);   
-  }
-
-  
-  public void setTaxSubtotalLine(String lineID, InvoiceTaxSubtotalAdapter ln) {
-    //use for editing....
-    if(getIndexFromID(lineID) > -1){
-      taxSubtotalLines.set (getIndexFromID(lineID), ln);
-      
-      //TODO: Better way to "refresh" the table?
-      //tableLines.addBean(ln);
-      tableLines.removeAllItems ();
-      Iterator <TaxSubtotalType> iterator = taxSubtotalLines.iterator ();
-      while (iterator.hasNext()) {
-        TaxSubtotalType ac = iterator.next();
-        tableLines.addBean ((InvoiceTaxSubtotalAdapter) ac);
-      }
-    }
-  }  
-  
-  public void removeTaxSubtotalLine(String lineID) {
-    Iterator <TaxSubtotalType> iterator = taxSubtotalLines.iterator ();
-    while (iterator.hasNext()) {
-      InvoiceTaxSubtotalAdapter ac = (InvoiceTaxSubtotalAdapter) iterator.next();
-      if (ac.getTableLineID ().equals (lineID)) {
-        tableLines.removeItem (ac);
-        taxSubtotalLines.remove (ac);
-        break;
-        
-      }
-    }
-  }
-  
-  public int getIndexFromID(String lineID) {
-    Iterator <TaxSubtotalType> iterator = taxSubtotalLines.iterator ();
-    while (iterator.hasNext()) {
-      InvoiceTaxSubtotalAdapter ac = (InvoiceTaxSubtotalAdapter) iterator.next();
-      if (ac.getTableLineID ().equals (lineID)) {
-        int index = taxSubtotalLines.indexOf (ac);
-        return index;
-      }
-    }    
-    return -1;
-  }  
-  
 }

@@ -69,6 +69,11 @@ import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PaymentM
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.RegistrationNameType;
 import un.unece.uncefact.codelist.specification.ianamimemediatype._2003.BinaryObjectMimeCodeContentType;
 
+import at.peppol.webgui.app.components.adapters.Adapter;
+import at.peppol.webgui.app.components.adapters.PaymentMeansAdapter;
+import at.peppol.webgui.app.components.tables.GenericTable;
+import at.peppol.webgui.app.components.tables.PaymentMeansTable;
+import at.peppol.webgui.app.components.tables.PaymentMeansTableEditor;
 import at.peppol.webgui.app.utils.DocUpload;
 import at.peppol.webgui.app.validator.RequiredFieldListener;
 import at.peppol.webgui.app.validator.ValidatorsList;
@@ -82,6 +87,8 @@ import com.vaadin.event.FieldEvents.BlurListener;
 import com.vaadin.ui.AbstractTextField;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Table;
+import com.vaadin.ui.Table.ColumnGenerator;
 import com.vaadin.ui.Upload.FinishedEvent;
 import com.vaadin.ui.Upload.StartedEvent;
 import com.vaadin.ui.Window.Notification;
@@ -102,6 +109,7 @@ import com.vaadin.ui.Upload;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
+@SuppressWarnings("serial")
 public class TabInvoicePayment extends Form {
   private InvoiceTabForm parent;
   
@@ -194,7 +202,7 @@ public class TabInvoicePayment extends Form {
     table.setSelectable(true);
     table.setImmediate(true);
     table.setNullSelectionAllowed(false);
-    table.setHeight (150, UNITS_PIXELS);
+    table.setHeight (200, UNITS_PIXELS);
     table.setSizeFull();
     table.setWidth("80%");
     table.setFooterVisible (false);
@@ -208,9 +216,9 @@ public class TabInvoicePayment extends Form {
     VerticalLayout tableButtonsLayout = new VerticalLayout();
     tableButtonsLayout.setSpacing(true);
     tableButtonsLayout.setMargin(true);
-    final Button addButton = new Button("Add");
-    final Button editButton = new Button("Edit");
-    final Button deleteButton = new Button("Delete");
+    final Button addButton = new Button("Add new");
+    final Button editButton = new Button("Edit selected");
+    final Button deleteButton = new Button("Delete selected");
     tableButtonsLayout.addComponent(addButton);
     tableButtonsLayout.addComponent(editButton);
     tableButtonsLayout.addComponent(deleteButton);
@@ -221,188 +229,17 @@ public class TabInvoicePayment extends Form {
     outerPanel.addComponent(paymentMeansPanel);
     
     grid.setSizeUndefined();
-     
-    addButton.addListener(new Button.ClickListener() {
-		@Override
-		public void buttonClick(ClickEvent event) {
-			//addMode = true;
-			editButton.setEnabled(false);
-			deleteButton.setEnabled(false);
-	        hiddenContent.removeAllComponents();
-	        paymentMeansAdapterItem = new PaymentMeansAdapter(); 
-	        //additionalDocRefItem = createAdditionalDocRefItem();
-	        
-	        Label formLabel = new Label("<h3>Adding new payments means</h3>", Label.CONTENT_XHTML);
-	        
-	        hiddenContent.addComponent(formLabel);
-	        final Form paymentMeansForm = createInvoicePaymentMeansForm();
-	        hiddenContent.addComponent(paymentMeansForm);
-	        
-	        final Button saveNewLine = new Button("Save");
-	                        
-	  	  	saveNewLine.addListener(new Button.ClickListener() {
-				@Override
-				public void buttonClick(ClickEvent event) {
-					if (paymentMeansAdapterItem.getIDAdapter() != null) {
-						if (!paymentMeansAdapterItem.getIDAdapter().equals("")) {
-							table.addPaymentMeans(paymentMeansAdapterItem);
-		        			//hide form
-		        			hiddenContent.setVisible(false);
-		        		}
-		        		else
-		        			getParent().getWindow().showNotification("ID is needed", Notification.TYPE_TRAY_NOTIFICATION);
-		        	}
-		        	else
-		        		getParent().getWindow().showNotification("ID is needed", Notification.TYPE_TRAY_NOTIFICATION);
-		        	
-					editButton.setEnabled(true);
-		  			deleteButton.setEnabled(true);
-				}
-			});
-
-	        //Save new line button
-	        HorizontalLayout buttonLayout = new HorizontalLayout();
-	        buttonLayout.setSpacing (true);
-	        buttonLayout.setMargin (true);
-	        buttonLayout.addComponent(saveNewLine);
-
-	        buttonLayout.addComponent(new Button("Cancel",new Button.ClickListener(){
-	          @Override
-	          public void buttonClick (ClickEvent event) {
-	        	editButton.setEnabled(true);
-	  			deleteButton.setEnabled(true);
-	            hiddenContent.removeAllComponents ();
-	            //hide form
-	            paymentMeansForm.discard();
-	            hiddenContent.setVisible(false);
-	            //addMode = false;
-	          }
-	        }));
-	        
-	        hiddenContent.addComponent(buttonLayout);
-	        
-	        //hiddenContent.setVisible(!hiddenContent.isVisible());
-	        hiddenContent.setVisible(true);
-	      }
-    });
     
-    editButton.addListener(new Button.ClickListener() {
-		@Override
-		public void buttonClick(ClickEvent event) {
-			Object rowId = table.getValue(); // get the selected rows id
-	        if(rowId != null){
-	        	if (table.getContainerProperty(rowId,"IDAdapter") != null) {
-		        	hiddenContent.removeAllComponents ();
-		        	editMode = true;
-		        	addButton.setEnabled(false);
-					deleteButton.setEnabled(false);
-		        	
-		        	final String sid = (String)table.getContainerProperty(rowId,"IDAdapter").getValue();
-		        		          
-		        	//get selected item
-		        	paymentMeansAdapterItem = (PaymentMeansAdapter)paymentMeansList.get(table.getIndexFromID(sid));
-		        	//paymentMeansAdapterItem = table.getEntryFromID(sid);
-		        	
-		        	//clone it to original item
-		        	originalItem = new PaymentMeansAdapter ();
-		        	clonePaymentMeansItem(paymentMeansAdapterItem, originalItem);
-		          
-		        	Label formLabel = new Label("<h3>Edit payment means line</h3>", Label.CONTENT_XHTML);
-		          
-		        	hiddenContent.addComponent(formLabel);
-		        	final Form paymentMeansForm = createInvoicePaymentMeansForm();
-		        	paymentMeansForm.setImmediate(false);
-		        	hiddenContent.addComponent(paymentMeansForm);
-		          
-		        	//Save new line button
-		        	HorizontalLayout buttonLayout = new HorizontalLayout();
-		        	buttonLayout.setSpacing (true);
-		        	buttonLayout.addComponent(new Button("Save changes",new Button.ClickListener(){
-			            @Override
-			            public void buttonClick (ClickEvent event) {
-			            	paymentMeansForm.commit();
-			            	table.setPaymentMeans(sid, paymentMeansAdapterItem);
-			            	//hide form
-			            	hiddenContent.setVisible(false);
-			            	editMode = false;
-			            	addButton.setEnabled(true);
-							deleteButton.setEnabled(true);
-			            }
-		        	}));
-		        	buttonLayout.addComponent(new Button("Cancel editing",new Button.ClickListener(){
-			            @Override
-			            public void buttonClick (ClickEvent event) {
-			            	paymentMeansForm.discard();
-			            	table.setPaymentMeans(sid, originalItem);
-			            	//hide form
-			            	hiddenContent.removeAllComponents ();
-			            	hiddenContent.setVisible(false);
-			            	editMode = false;
-			            	addButton.setEnabled(true);
-							deleteButton.setEnabled(true);
-			            }
-		        	}));
-		          
-		        	hiddenContent.addComponent(buttonLayout);
-		        	hiddenContent.setVisible(true);
-	        	}
-	        	else {
-	        		parent.getWindow ().showNotification("No table line is selected", Window.Notification.TYPE_TRAY_NOTIFICATION);
-	        	}
-	        }
-	        else {
-	          parent.getWindow ().showNotification("No table line is selected", Window.Notification.TYPE_TRAY_NOTIFICATION);
-	        }
-		}
-	});
-    
-    deleteButton.addListener(new Button.ClickListener() {
-		@Override
-		public void buttonClick(ClickEvent event) {
-			Object rowId = table.getValue(); // get the selected rows id
-	        if(rowId != null){
-	        	if (table.getContainerProperty(rowId,"IDAdapter") != null) {
-		        	if(table.getContainerProperty(rowId,"IDAdapter").getValue() != null){
-		        		String sid = (String)table.getContainerProperty(rowId,"IDAdapter").getValue();
-		        		table.removePaymentMeans(sid);
-		        	}
-	        	}
-	        	else {
-	        		parent.getWindow ().showNotification("No table line is selected", Window.Notification.TYPE_TRAY_NOTIFICATION);
-	        	}
-	        }
-	        else {
-	        	parent.getWindow ().showNotification("No table line is selected", Window.Notification.TYPE_TRAY_NOTIFICATION);
-	        }
-		}
-	});
-    
+    PaymentMeansTableEditor editor = new PaymentMeansTableEditor(editMode);
+    Label label = new Label("<h3>Adding new payments means</h3>", Label.CONTENT_XHTML);
+    addButton.addListener(editor.addButtonListener(editButton, deleteButton, hiddenContent, table, paymentMeansList, label));
+    label = new Label("<h3>Edit payment means line</h3>", Label.CONTENT_XHTML);
+    editButton.addListener(editor.editButtonListener(addButton, deleteButton, hiddenContent, table, paymentMeansList, label));
+    deleteButton.addListener(editor.deleteButtonListener(table));
     
     setLayout(outerLayout);
     outerPanel.requestRepaintAll();
   }
-  
-  private PaymentMeansType createPaymentMeansItem() {
-    final PaymentMeansType pm = new PaymentMeansType();
-   
-    pm.setPaymentMeansCode (new PaymentMeansCodeType ());
-    pm.setPaymentChannelCode (new PaymentChannelCodeType ());
-    pm.setID (new IDType ());
-    
-    FinancialAccountType fa = new FinancialAccountType ();
-    fa.setID (new IDType ());
-    BranchType bt = new BranchType();
-    bt.setID (new IDType ());
-    FinancialInstitutionType fi = new FinancialInstitutionType ();
-    fi.setID (new IDType ());
-    bt.setFinancialInstitution (fi);
-    fa.setFinancialInstitutionBranch (bt);
-    
-    pm.setPayeeFinancialAccount (fa);
-   
-    return pm;
-  }
- 
   
   private PartyType createPayeePartyItem() {
     PartyType pt = new PartyType();
@@ -420,16 +257,6 @@ public class TabInvoicePayment extends Form {
     pt.getPartyLegalEntity().add(legalEntity);
     
     return pt;
-  }
-  
-  private void clonePaymentMeansItem(PaymentMeansAdapter srcItem, PaymentMeansAdapter dstItem) {
-	  dstItem.setIDAdapter(srcItem.getIDAdapter());
-	  dstItem.setBranchIDAdapter(srcItem.getBranchIDAdapter());
-	  dstItem.setFinancialAccountIDAdapter(srcItem.getFinancialAccountIDAdapter());
-	  dstItem.setInstitutionIDAdapter(srcItem.getInstitutionIDAdapter());
-	  dstItem.setPaymentDueDateAdapter(srcItem.getPaymentDueDateAdapter());
-	  dstItem.setPaymentChannelCodeAdapter(srcItem.getPaymentChannelCodeAdapter());
-	  dstItem.setPaymentMeansCodeAdapter(srcItem.getPaymentMeansCodeAdapter());
   }
   
 /*  public Form createInvoicePaymentTopForm() {
@@ -470,7 +297,7 @@ public class TabInvoicePayment extends Form {
 
   }
   
-  public Form createInvoicePaymentMeansForm() {
+/*  public Form createInvoicePaymentMeansForm() {
 	  Form form = new Form(new FormLayout(), new InvoicePaymentFieldFactory());
 	  form.setImmediate(true);
 	  
@@ -497,7 +324,7 @@ public class TabInvoicePayment extends Form {
       
 	  return form;
   }
-
+*/
   
   @SuppressWarnings ("serial")
   class InvoicePaymentFieldFactory implements FormFieldFactory {
@@ -505,43 +332,6 @@ public class TabInvoicePayment extends Form {
     public Field createField(final Item item, final Object propertyId, final Component uiContext) {
         // Identify the fields by their Property ID.
         final String pid = (String) propertyId;
-        if ("Payment Due Date".equals(pid)) {
-          final PopupDateField dueDateField = new PopupDateField("Payment Due Date");
-          dueDateField.setValue(new Date());
-          dueDateField.setResolution(DateField.RESOLUTION_DAY);
-          /*dueDateField.addListener(new ValueChangeListener() {
-
-            @Override
-            public void valueChange(final com.vaadin.data.Property.ValueChangeEvent event) {
-              try {
-                final Date dueDate = (Date) dueDateField.getValue();
-                final GregorianCalendar greg = new GregorianCalendar();
-                greg.setTime(dueDate);
-
-                // Workaround to print only the date and not the time.
-                final XMLGregorianCalendar XMLDate = DatatypeFactory.newInstance().newXMLGregorianCalendar();
-                XMLDate.setYear(greg.get(Calendar.YEAR));
-                XMLDate.setMonth(greg.get(Calendar.MONTH) + 1);
-                XMLDate.setDay(greg.get(Calendar.DATE));
-
-                parent.getInvoice().getPaymentMeans ().add (new PaymentMeansType ());
-                PaymentDueDateType sdt = new PaymentDueDateType ();
-                sdt.setValue (XMLDate);
-                parent.getInvoice().getPaymentMeans ().get (0).setPaymentDueDate (sdt);
-              } catch (final DatatypeConfigurationException ex) {
-                Logger.getLogger(TabInvoiceHeader.class.getName()).log(Level.SEVERE, null, ex);
-              }
-            }
-          });*/
-         
-
-          return dueDateField;
-        }
-        
-        if ("Payment Means Code".equals(pid)) {
-            PaymentMeansSelect select = new PaymentMeansSelect(pid);
-            return select;
-        }
         
         if ("Payee ID".equals(pid)) {
             final PartyAgencyIDSelect select = new PartyAgencyIDSelect(pid);
@@ -564,7 +354,6 @@ public class TabInvoicePayment extends Form {
         	area.setNullRepresentation("");
         	return area;
         }
-
         
         final Field field = DefaultFieldFactory.get().createField(item, propertyId, uiContext);
         if (field instanceof AbstractTextField) {

@@ -45,6 +45,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AllowanceChargeType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.CommodityClassificationType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.InvoiceLineType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ItemIdentificationType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ItemPropertyType;
@@ -95,7 +96,7 @@ public class InvoiceLineAdapter extends InvoiceLineType {
     // --- +Invoice Line/Order Line Reference begins (0..N)
     final OrderLineReferenceType lr = new OrderLineReferenceType ();
     lr.setLineID (new LineIDType ());
-    getOrderLineReference ().add (lr);
+    //getOrderLineReference ().add (lr);
     // --- +Invoice Line/Order Line Reference ends
 
     // --- +Invoice Line/Allowance Charge begins (0..N)
@@ -368,6 +369,18 @@ public class InvoiceLineAdapter extends InvoiceLineType {
     //  getItem ().getAdditionalItemProperty ().add (new ItemPropertyType ());
     //}
     return getItem ().getAdditionalItemProperty ();
+  }
+  
+  public List<AllowanceChargeType> getInvLineAllowanceChargeList() {
+	  return getAllowanceCharge();
+  }
+  
+  public List<OrderLineReferenceType> getInvLineOrderList() {
+	  return getOrderLineReference();
+  }
+  
+  public List<CommodityClassificationType> getInvLineCommodityClassificationList() {
+	  return getItem().getCommodityClassification();
   }
 
   /*

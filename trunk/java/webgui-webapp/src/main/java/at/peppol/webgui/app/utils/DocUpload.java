@@ -1,14 +1,8 @@
 package at.peppol.webgui.app.utils;
 
-import at.peppol.webgui.app.components.InvoiceAdditionalDocRefAdapter;
-
-import com.vaadin.ui.CustomComponent;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
-import com.vaadin.terminal.FileResource;
 import com.vaadin.ui.*;
 
 @SuppressWarnings("serial")
@@ -38,7 +32,8 @@ public class DocUpload extends Upload implements Upload.SucceededListener,
 	public void uploadSucceeded(Upload.SucceededEvent event) {
 		File file = new File(uploadDir+event.getFilename());
 		this.filename = event.getFilename();
-		this.mimeType = event.getMIMEType();
+		//this.mimeType = event.getMIMEType();
+		this.mimeType = ((ReceiverClass)this.getReceiver()).getMimeType();
 		getByteArrayFromFile(file);
 		
 	}

@@ -35,53 +35,43 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.webgui.app.components;
+package at.peppol.webgui.app.components.tables;
 
-import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ItemPropertyType;
-import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.NameType;
-import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ValueType;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
-@SuppressWarnings ("serial")
-public class InvoiceItemPropertyAdapter extends ItemPropertyType {
-  private String tableLineID;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AllowanceChargeType;
+
+import at.peppol.webgui.app.components.adapters.InvoiceAllowanceChargeAdapter;
+
+import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.ui.Table;
+
+public class InvoiceAllowanceChargeTable extends GenericTable<AllowanceChargeType, InvoiceAllowanceChargeAdapter> {
   
-  public InvoiceItemPropertyAdapter() {
-    tableLineID = "";
-    setName (new NameType ());
-    setValue (new ValueType ());
-  }
-  
-  public InvoiceItemPropertyAdapter(ItemPropertyType item) {
-	  tableLineID = "";
-	  setName (new NameType ());
-	  setValue (new ValueType ());
+  public InvoiceAllowanceChargeTable(List<AllowanceChargeType> items) {
+    
+	  linesFromInvoice = items;
 	  
-	  setItemPropertyName(item.getName().getValue());
-	  setItemPropertyValue(item.getValue().getValue());
-  }
-  
-  public void setTableLineID(String v) {
-    tableLineID = v;
-  }
-  
-  public String getTableLineID () {
-    return tableLineID;
-  }
-  
-  public void setItemPropertyName(String v) {
-    getName().setValue (v);
-  }
-  
-  public String getItemPropertyName() {
-    return getName().getValue ();
-  }  
-  
-  public void setItemPropertyValue(String v) {
-    getValue().setValue (v);
-  }
-  
-  public String getItemPropertyValue() {
-    return getValue().getValue ();
-  }  
+	  tableLines = new BeanItemContainer<InvoiceAllowanceChargeAdapter>(InvoiceAllowanceChargeAdapter.class);
+	  
+	  setContainerDataSource(tableLines);
 
-} 
+	  addPropertyWithHeader("ID.value", "# ID");
+    
+	  //addPropertyWithHeader("chargeIndicator", "Charge Indicator");
+	  //addPropertyWithHeader("indicator", "Charge Indicator");
+	  addPropertyWithHeader("indicatorAsString", "Allowance/Charge");
+	  //addPropertyWithHeader("allowanceChargeReason","Charge Reason");
+	  addPropertyWithHeader("reason","Charge Reason");
+	  //addPropertyWithHeader("amount", "Amount");
+	  addPropertyWithHeader("chargeAmount", "Amount");
+	  addPropertyWithHeader("taxCategoryID","Tax Category ID");
+	  addPropertyWithHeader("taxCategoryPercent","Tax Category Percent");
+	  addPropertyWithHeader("taxCategorySchemeID","Tax Scheme ID");
+    
+	  setDefinedPropertiesAsVisible();
+	  setPageLength(4);
+  }  
+}

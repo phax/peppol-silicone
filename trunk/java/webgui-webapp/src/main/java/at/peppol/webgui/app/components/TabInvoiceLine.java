@@ -46,6 +46,7 @@ import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.Invo
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ItemPropertyType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IDType;
 
+import at.peppol.webgui.app.utils.Utils;
 import at.peppol.webgui.app.validator.PositiveValueListener;
 import at.peppol.webgui.app.validator.RequiredFieldListener;
 import at.peppol.webgui.app.validator.RequiredNumericalFieldListener;
@@ -57,6 +58,7 @@ import com.vaadin.event.FieldEvents.BlurEvent;
 import com.vaadin.event.FieldEvents.BlurListener;
 import com.vaadin.terminal.UserError;
 import com.vaadin.ui.AbstractTextField;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
@@ -113,7 +115,7 @@ public class TabInvoiceLine extends Form {
     table.setImmediate (true);
     table.setNullSelectionAllowed (false);
     table.setHeight (150, UNITS_PIXELS);
-    table.setFooterVisible (true);
+    table.setFooterVisible (false);
     table.addStyleName ("striped strong");
 
     final VerticalLayout tableContainer = new VerticalLayout ();
@@ -136,11 +138,38 @@ public class TabInvoiceLine extends Form {
         form.setWriteThrough(false);
         hiddenContent.addComponent (form);
 
-        // Set invoiceLine 0..N cardinalily panels
+        HorizontalLayout h1 = new HorizontalLayout();
+        h1.setSpacing(true);
+        h1.setMargin(true);
+        
+        // Set invoiceLine 0..N cardinality panels
         final Panel itemPropertyPanel = new ItemPropertyForm ("Additional",
                                                               invoiceLineItem.getInvLineAdditionalItemPropertyList ());
-        hiddenContent.addComponent (itemPropertyPanel);
-
+        h1.addComponent (itemPropertyPanel);
+        
+        //add the allowance/charge indicator 0..N cardinality
+        final Panel lineAllowanceChargePanel = new InvoiceLineAllowanceChargeForm("", 
+        														invoiceLineItem.getAllowanceCharge(),
+        														parent.getInvoice());
+        h1.addComponent (lineAllowanceChargePanel);
+        
+        HorizontalLayout h2 = new HorizontalLayout();
+        h2.setSpacing(true);
+        h2.setMargin(true);
+        
+        final Panel lineOrderPanel = new InvoiceLineOrderForm("", 
+				invoiceLineItem.getInvLineOrderList());
+        
+        h2.addComponent (lineOrderPanel);
+        
+        final Panel lineCommodityPanel = new InvoiceLineCommodityClassificationForm("", 
+        		invoiceLineItem.getInvLineCommodityClassificationList());
+        
+        h2.addComponent (lineCommodityPanel);
+        
+        hiddenContent.addComponent(h1);
+        hiddenContent.addComponent(h2);
+        
         // Save new line button
         final HorizontalLayout buttonLayout = new HorizontalLayout ();
         buttonLayout.setSpacing (true);
@@ -226,10 +255,37 @@ public class TabInvoiceLine extends Form {
           hiddenContent.addComponent (formLabel);
           hiddenContent.addComponent (createInvoiceLineMainForm ());
 
-          // Set invoiceLine 0..N cardinalily panels
+          HorizontalLayout h1 = new HorizontalLayout();
+          h1.setSpacing(true);
+          h1.setMargin(true);
+          // Set invoiceLine 0..N cardinality panels
           final Panel itemPropertyPanel = new ItemPropertyForm ("Additional",
                                                                 invoiceLineItem.getInvLineAdditionalItemPropertyList ());
-          hiddenContent.addComponent (itemPropertyPanel);
+          h1.addComponent (itemPropertyPanel);
+          
+          //add the allowance/charge indicator 0..N cardinality
+          final Panel lineAllowanceChargePanel = new InvoiceLineAllowanceChargeForm("Additional", 
+          														invoiceLineItem.getAllowanceCharge(),
+          														parent.getInvoice());
+          h1.addComponent (lineAllowanceChargePanel);
+          
+          HorizontalLayout h2 = new HorizontalLayout();
+          h2.setSpacing(true);
+          h2.setMargin(true);
+          
+          final Panel lineOrderPanel = new InvoiceLineOrderForm("", invoiceLineItem.getInvLineOrderList());
+          h2.addComponent (lineOrderPanel);
+          
+          final Panel lineCommodityPanel = new InvoiceLineCommodityClassificationForm("", invoiceLineItem.getInvLineCommodityClassificationList());
+          h2.addComponent (lineCommodityPanel);
+                    
+          hiddenContent.addComponent(h1);
+          hiddenContent.addComponent(h2);
+          
+          /*// Set invoiceLine 0..N cardinalily panels
+          final Panel itemPropertyPanel = new ItemPropertyForm ("Additional",
+                                                                invoiceLineItem.getInvLineAdditionalItemPropertyList ());
+          hiddenContent.addComponent (itemPropertyPanel);*/
 
           // Save new line button
           final HorizontalLayout buttonLayout = new HorizontalLayout ();
@@ -321,9 +377,60 @@ public class TabInvoiceLine extends Form {
     grid.setSizeUndefined ();
     outerPanel.requestRepaintAll ();
   }
+  
+  public Form createGridLayoutInvoiceLineForm() {
+	  Form form = new Form() {
+		  GridLayout layout = new GridLayout(5,10);
+		  int counter1 = 0;
+		  int counter2 = 0;
+		  {
+			  layout.setSpacing(true);
+			  setLayout(layout);
+			  HorizontalLayout h = new HorizontalLayout();
+			  h.setWidth("50px");
+			  layout.addComponent(h,2,0);
+		  }
+		  
+		  @Override
+		  protected void attachField(Object propertyId, Field field) {
+			  //field.setCaption(null);
+			  if ("Line Note".equals(propertyId) ||
+				  "Invoiced Quantity".equals(propertyId) ||
+				  "Line Extension Amount".equals(propertyId) ||
+				  "Accounting Cost".equals(propertyId) ||
+				  "Tax Total Amount".equals(propertyId) ||
+				  "Item Description".equals(propertyId) ||
+				  "Item Name".equals(propertyId) ||
+				  "Sellers Item ID".equals(propertyId) ||
+				  "Tax Category ID".equals(propertyId) ||
+				  "Tax Category Percent".equals(propertyId) ) {
+
+				  Label fieldLabel = new Label(field.getCaption());
+				  //Label fieldLabel = Utils.requiredLabel(field.getCaption());
+				  field.setCaption(null);
+				  layout.addComponent(fieldLabel, 0, counter1);
+				  layout.addComponent(field, 1, counter1);
+				  layout.setComponentAlignment(fieldLabel, Alignment.MIDDLE_RIGHT);
+				  counter1++;
+		      }
+			  else {// Single-column fields
+				  Label fieldLabel = new Label(field.getCaption());
+				  field.setCaption(null);
+				  layout.addComponent(fieldLabel, 3, counter2);
+				  layout.addComponent(field, 4, counter2);
+				  layout.setComponentAlignment(fieldLabel, Alignment.MIDDLE_RIGHT);
+				  counter2++;
+		      }
+		    }  
+	  };
+	  
+	  return form;
+  }
 
   public Form createInvoiceLineMainForm () {
-    final Form invoiceLineForm = new Form (new FormLayout (), new InvoiceLineFieldFactory ());
+    //final Form invoiceLineForm = new Form (new FormLayout (), new InvoiceLineFieldFactory ());
+    final Form invoiceLineForm = createGridLayoutInvoiceLineForm();
+    invoiceLineForm.setFormFieldFactory(new InvoiceLineFieldFactory ());
     invoiceLineForm.setImmediate (false);
     //GridLayout gl = new GridLayout(2,1);
     //gl.setSpacing(true);

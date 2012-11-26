@@ -10,6 +10,8 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import com.vaadin.ui.Label;
+
 public class Utils {
 	
 	public static XMLGregorianCalendar DateToGregorian(Date date) {
@@ -27,5 +29,9 @@ public class Utils {
 		}
         
 		return XMLDate;
+	}
+	
+	public static Label requiredLabel(String text) {
+		return new Label("<span>"+text+" <span style=\"color: red;\">*</span></span>", Label.CONTENT_XHTML);
 	}
 }

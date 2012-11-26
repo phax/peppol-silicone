@@ -35,7 +35,7 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.webgui.app.components;
+package at.peppol.webgui.app.components.adapters;
 
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AttachmentType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.DocumentReferenceType;
@@ -46,7 +46,8 @@ import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IDType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.URIType;
 import un.unece.uncefact.codelist.specification.ianamimemediatype._2003.BinaryObjectMimeCodeContentType;
 
-public class InvoiceAdditionalDocRefAdapter extends DocumentReferenceType {
+@SuppressWarnings("serial")
+public class InvoiceAdditionalDocRefAdapter extends DocumentReferenceType implements Adapter{
   
   String additionalDocRefFile;
   
@@ -78,6 +79,16 @@ public class InvoiceAdditionalDocRefAdapter extends DocumentReferenceType {
   public void setBinaryObjectMIMEType(BinaryObjectMimeCodeContentType mimeType) {
 	  if (mimeType != null)
 		  getAttachment().getEmbeddedDocumentBinaryObject().setMimeCode(mimeType);
+  }
+  
+  @Override
+  public void setIDAdapter(String id) {
+	  setAdditionalDocRefID(id);
+  }
+  
+  @Override
+  public String  getIDAdapter() {
+	  return getAdditionalDocRefID();
   }
   
   public void setAdditionalDocRefID(String v) {

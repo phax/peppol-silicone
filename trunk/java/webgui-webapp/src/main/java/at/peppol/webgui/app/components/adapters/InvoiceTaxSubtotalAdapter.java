@@ -35,7 +35,7 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.webgui.app.components;
+package at.peppol.webgui.app.components.adapters;
 
 import java.math.BigDecimal;
 
@@ -50,7 +50,7 @@ import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TaxExemp
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TaxableAmountType;
 
 @SuppressWarnings ("serial")
-public class InvoiceTaxSubtotalAdapter extends TaxSubtotalType {
+public class InvoiceTaxSubtotalAdapter extends TaxSubtotalType implements Adapter {
   private String tableLineID;
   
   public InvoiceTaxSubtotalAdapter() {
@@ -66,6 +66,18 @@ public class InvoiceTaxSubtotalAdapter extends TaxSubtotalType {
     ts.setID (new IDType ());
     tc.setTaxScheme (ts);
     setTaxCategory (tc);
+  }
+  
+  public void setID(IDType id) {/*dummy method*/}
+  
+  @Override
+  public void setIDAdapter(String id) {
+	  setTableLineID(id);
+  }
+  
+  @Override
+  public String getIDAdapter() {
+	  return getTableLineID();
   }
   
   public void setTableLineID(String v) {
@@ -131,5 +143,4 @@ public class InvoiceTaxSubtotalAdapter extends TaxSubtotalType {
   public String getTaxSubTotalCategoryTaxSchemeID() {
     return getTaxCategory ().getTaxScheme ().getID ().getValue ();
   }
-  
 }
