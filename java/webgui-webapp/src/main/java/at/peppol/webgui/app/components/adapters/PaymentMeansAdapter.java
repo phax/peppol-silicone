@@ -1,4 +1,4 @@
-package at.peppol.webgui.app.components;
+package at.peppol.webgui.app.components.adapters;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -17,7 +17,7 @@ import at.peppol.webgui.app.utils.Utils;
 //import com.phloc.ubl.codelist.EPaymentMeansCode20;
 
 @SuppressWarnings("serial")
-public class PaymentMeansAdapter extends PaymentMeansType {
+public class PaymentMeansAdapter extends PaymentMeansType implements Adapter {
 	
 	public PaymentMeansAdapter() {
 		this.setPaymentMeansCode(new PaymentMeansCodeType());
@@ -80,10 +80,12 @@ public class PaymentMeansAdapter extends PaymentMeansType {
 		return this.getPaymentChannelCode().getValue();
 	}
 	
+	@Override
 	public void setIDAdapter(String id) {
 		this.getID().setValue(id);
 	}
 	
+	@Override
 	public String getIDAdapter() {
 		return this.getID().getValue();
 	}

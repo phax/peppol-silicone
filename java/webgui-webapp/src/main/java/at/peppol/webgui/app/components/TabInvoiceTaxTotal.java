@@ -46,6 +46,9 @@ import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.TaxS
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.TaxTotalType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TaxAmountType;
 
+import at.peppol.webgui.app.components.adapters.InvoiceTaxSubtotalAdapter;
+import at.peppol.webgui.app.components.tables.InvoiceTaxSubtotalTable;
+import at.peppol.webgui.app.components.tables.InvoiceTaxSubtotalTableEditor;
 import at.peppol.webgui.app.validator.PositiveValueListener;
 import at.peppol.webgui.app.validator.RequiredNumericalFieldListener;
 import at.peppol.webgui.app.validator.ValidatorsList;
@@ -124,8 +127,26 @@ public class TabInvoiceTaxTotal extends Form {
     final VerticalLayout tableContainer = new VerticalLayout ();
     tableContainer.addComponent (table);
     tableContainer.setMargin (false, true, false, false);
+    
+    Button addButton = new Button("Add new");
+    Button editButton = new Button("Edit selected");
+    Button deleteButton = new Button("Delete selected");
+    
+    final VerticalLayout buttonsContainer = new VerticalLayout ();
+    buttonsContainer.setSpacing (true);
+    buttonsContainer.addComponent(addButton);
+    buttonsContainer.addComponent(editButton);
+    buttonsContainer.addComponent(deleteButton);
+    
+    InvoiceTaxSubtotalTableEditor editor = new InvoiceTaxSubtotalTableEditor(editMode);
+    Label label = new Label("<h3>Adding new tax subtotal</h3>", Label.CONTENT_XHTML);
+    addButton.addListener(editor.addButtonListener(editButton, deleteButton, hiddenContent, table, taxSubtotalList, label));
+    label = new Label("<h3>Edit tax subtotal</h3>", Label.CONTENT_XHTML);
+    editButton.addListener(editor.editButtonListener(addButton, deleteButton, hiddenContent, table, taxSubtotalList, label));
+    deleteButton.addListener(editor.deleteButtonListener(table));
 
-    // buttons Add, Edit, Delete
+
+/*    // buttons Add, Edit, Delete
     final Button addBtn = new Button ("Add New", new Button.ClickListener () {
       @Override
       public void buttonClick (final Button.ClickEvent event) {
@@ -216,7 +237,7 @@ public class TabInvoiceTaxTotal extends Form {
          * "No table line is selected",
          * Window.Notification.TYPE_HUMANIZED_MESSAGE); }
          */
-      }
+/*      }
     });
     editBtn.setEnabled (false);
     final Button deleteBtn = new Button ("Delete Selected", new Button.ClickListener () {
@@ -250,13 +271,8 @@ public class TabInvoiceTaxTotal extends Form {
         }
 
       }
-    });
+    });*/
 
-    final VerticalLayout buttonsContainer = new VerticalLayout ();
-    buttonsContainer.setSpacing (true);
-    buttonsContainer.addComponent (addBtn);
-    buttonsContainer.addComponent (editBtn);
-    buttonsContainer.addComponent (deleteBtn);
 
     final Panel invoiceDetailsPanel = new Panel ("Tax Total Details");
     invoiceDetailsPanel.setStyleName ("light");

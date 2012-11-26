@@ -35,7 +35,7 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.webgui.app.components;
+package at.peppol.webgui.app.components.adapters;
 
 import java.math.BigDecimal;
 
@@ -48,7 +48,7 @@ import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ChargeIn
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IDType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PercentType;
 
-public class InvoiceAllowanceChargeAdapter extends AllowanceChargeType {
+public class InvoiceAllowanceChargeAdapter extends AllowanceChargeType implements Adapter{
 
   public InvoiceAllowanceChargeAdapter () {
 
@@ -68,7 +68,36 @@ public class InvoiceAllowanceChargeAdapter extends AllowanceChargeType {
     getTaxCategory ().add (taxCategory);
 
   }
+  
+  public InvoiceAllowanceChargeAdapter (AllowanceChargeType ac) {
+	  setID(ac.getID());
+	  setChargeIndicator(ac.getChargeIndicator());
+	  setAllowanceChargeReason(ac.getAllowanceChargeReason());
+	  setAmount(ac.getAmount());
+	  
+	  final TaxCategoryType taxCategory = new TaxCategoryType ();
+      taxCategory.setID (ac.getTaxCategory().get(0).getID());
+      taxCategory.setPercent (ac.getTaxCategory().get(0).getPercent());
 
+	  final TaxSchemeType taxScheme = new TaxSchemeType ();
+	  taxScheme.setID (ac.getTaxCategory().get(0).getTaxScheme().getID());
+	  
+	  taxCategory.setTaxScheme (taxScheme);
+	  
+	  getTaxCategory ().add (taxCategory);
+
+  }
+
+  @Override
+  public void setIDAdapter(String id) {
+	  setAllowanceChargeID(id);
+  }
+  
+  @Override
+  public String getIDAdapter() {
+	  return getAllowanceChargeID();
+  }
+  
   public void setAllowanceChargeID (final String v) {
     getID ().setValue (v);
   }
@@ -85,6 +114,17 @@ public class InvoiceAllowanceChargeAdapter extends AllowanceChargeType {
     if (getChargeIndicator ().isValue ())
       return Boolean.TRUE;
     return Boolean.FALSE;
+  }
+  
+  public void setIndicatorAsString (final Boolean v) {
+	  setIndicator(v);
+  }
+  
+  public String getIndicatorAsString() {
+	  if (getChargeIndicator().isValue())
+		  return "Charge";
+	  else
+		  return "Allowance";
   }
 
   public void setReason (final String v) {
@@ -126,5 +166,4 @@ public class InvoiceAllowanceChargeAdapter extends AllowanceChargeType {
   public String getTaxCategorySchemeID () {
     return getTaxCategory ().get (0).getTaxScheme ().getID ().getValue ();
   }
-
 }

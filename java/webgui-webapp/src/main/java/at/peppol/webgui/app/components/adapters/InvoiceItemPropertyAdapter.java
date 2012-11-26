@@ -35,37 +35,64 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.webgui.app.components;
-
-import java.util.ArrayList;
-import java.util.List;
+package at.peppol.webgui.app.components.adapters;
 
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ItemPropertyType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.NameType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ValueType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IDType;
 
-import at.peppol.webgui.app.components.adapters.InvoiceTaxSubtotalAdapter;
-
-import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.ui.Table;
-
-public class ItemPropertyTable extends Table {
-
-  private final List <ItemPropertyType> taxSubtotalLines;
-  private final BeanItemContainer<InvoiceTaxSubtotalAdapter> tableLines =
-          new BeanItemContainer<InvoiceTaxSubtotalAdapter>(InvoiceTaxSubtotalAdapter.class);
-  private final List<String> visibleHeaderNames = new ArrayList<String>();
+@SuppressWarnings ("serial")
+public class InvoiceItemPropertyAdapter extends ItemPropertyType implements Adapter {
+  private String tableLineID;
   
-  public ItemPropertyTable(List <ItemPropertyType> list) {
-    this.taxSubtotalLines = list;
-    setContainerDataSource(tableLines);
-/*
-    addPropertyWithHeader("TableLineID", "# ID");
-    addPropertyWithHeader("TaxSubTotalTaxableAmount", "Taxable Amount");
-    addPropertyWithHeader("TaxSubTotalTaxAmount", "Tax Amount");
-    addPropertyWithHeader("TaxSubTotalCategoryID", "Tax Category ID");
-    addPropertyWithHeader("TaxSubTotalCategoryPercent", "Tax Category Percent");
-
-    setDefinedPropertiesAsVisible();
-    setPageLength(4);
-*/    
+  public InvoiceItemPropertyAdapter() {
+    tableLineID = "";
+    setName (new NameType ());
+    setValue (new ValueType ());
+  }
+  
+  public InvoiceItemPropertyAdapter(ItemPropertyType item) {
+	  tableLineID = "";
+	  setName (new NameType ());
+	  setValue (new ValueType ());
+	  
+	  setItemPropertyName(item.getName().getValue());
+	  setItemPropertyValue(item.getValue().getValue());
+  }
+  
+  public void setID(IDType id){}
+  
+  public void setIDAdapter(String id) {
+	  setTableLineID(id);
+  }
+  
+  public String getIDAdapter() {
+	  return getTableLineID();
+  }
+  
+  public void setTableLineID(String v) {
+    tableLineID = v;
+  }
+  
+  public String getTableLineID () {
+    return tableLineID;
+  }
+  
+  public void setItemPropertyName(String v) {
+    getName().setValue (v);
+  }
+  
+  public String getItemPropertyName() {
+    return getName().getValue ();
   }  
-}
+  
+  public void setItemPropertyValue(String v) {
+    getValue().setValue (v);
+  }
+  
+  public String getItemPropertyValue() {
+    return getValue().getValue ();
+  }  
+
+} 

@@ -39,12 +39,17 @@ package at.peppol.webgui.app.components;
 
 import java.util.List;
 
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AllowanceChargeType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ItemPropertyType;
+import oasis.names.specification.ubl.schema.xsd.invoice_2.InvoiceType;
 
+import at.peppol.webgui.app.components.adapters.InvoiceAllowanceChargeAdapter;
 import at.peppol.webgui.app.components.adapters.InvoiceItemPropertyAdapter;
 import at.peppol.webgui.app.components.tables.InvoiceAdditionalDocRefTableEditor;
 import at.peppol.webgui.app.components.tables.InvoiceItemPropertyTable;
 import at.peppol.webgui.app.components.tables.InvoiceItemPropertyTableEditor;
+import at.peppol.webgui.app.components.tables.InvoiceLineAllowanceChargeTable;
+import at.peppol.webgui.app.components.tables.InvoiceLineAllowanceChargeTableEditor;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.util.NestedMethodProperty;
@@ -66,28 +71,37 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
 @SuppressWarnings ("serial")
-public class ItemPropertyForm extends Panel {
-  private final String itemPropertyPrefix;
+public class InvoiceLineAllowanceChargeForm extends Panel {
+  private final String prefix;
   
-  private List<ItemPropertyType> itemPropertyBeanList;
-  private InvoiceItemPropertyAdapter itemPropertyBean;
+  private InvoiceType inv;
+  private List<AllowanceChargeType> lineAllowanceChargeList;
+  private InvoiceAllowanceChargeAdapter allowanceChargeBean;
   
-  private InvoiceItemPropertyAdapter originalItem;
+  private InvoiceAllowanceChargeAdapter originalItem;
 
   private boolean editMode;
   
-  public InvoiceItemPropertyTable table;
+  public InvoiceLineAllowanceChargeTable table;
   private VerticalLayout hiddenContent;
 
   
-  public ItemPropertyForm(String itemPropertyPrefix, List<ItemPropertyType> itemPropertyBeanList) {
-      this.itemPropertyPrefix = itemPropertyPrefix;
-      this.itemPropertyBeanList = itemPropertyBeanList;
+  public InvoiceLineAllowanceChargeForm(String prefix, List<AllowanceChargeType> lineAllowanceChargeList) {
+      this.prefix = prefix;
+      this.lineAllowanceChargeList = lineAllowanceChargeList;
       editMode = false;
       
       initElements();
   }
   
+  public InvoiceLineAllowanceChargeForm(String prefix, List<AllowanceChargeType> lineAllowanceChargeList, InvoiceType inv) {
+	  this.prefix = prefix;
+      this.lineAllowanceChargeList = lineAllowanceChargeList;
+      editMode = false;
+      this.inv = inv;
+      
+      initElements();
+  }
   private void initElements() {
 
     final GridLayout grid = new GridLayout(4, 4);
@@ -96,7 +110,7 @@ public class ItemPropertyForm extends Panel {
     hiddenContent.setSpacing (true);
     hiddenContent.setMargin (true);
     
-    table = new InvoiceItemPropertyTable(itemPropertyBeanList);
+    table = new InvoiceLineAllowanceChargeTable(lineAllowanceChargeList);
     table.setSelectable(true);
     table.setImmediate(true);
     table.setNullSelectionAllowed(false);
@@ -118,14 +132,14 @@ public class ItemPropertyForm extends Panel {
     buttonsContainer.addComponent (editButton);
     buttonsContainer.addComponent (deleteButton);
     
-    InvoiceItemPropertyTableEditor editor = new InvoiceItemPropertyTableEditor(editMode);
-    Label label = new Label("<h3>Adding new item property</h3>", Label.CONTENT_XHTML);
-    addButton.addListener(editor.addButtonListener(editButton, deleteButton, hiddenContent, table, itemPropertyBeanList, label));
-    label = new Label("<h3>Edit item property</h3>", Label.CONTENT_XHTML);
-    editButton.addListener(editor.editButtonListener(addButton, deleteButton, hiddenContent, table, itemPropertyBeanList, label));
+    InvoiceLineAllowanceChargeTableEditor editor = new InvoiceLineAllowanceChargeTableEditor(editMode ,inv);
+    Label label = new Label("<h3>Adding allowance/charge line</h3>", Label.CONTENT_XHTML);
+    addButton.addListener(editor.addButtonListener(editButton, deleteButton, hiddenContent, table, lineAllowanceChargeList, label));
+    label = new Label("<h3>Edit allowance/charge line</h3>", Label.CONTENT_XHTML);
+    editButton.addListener(editor.editButtonListener(addButton, deleteButton, hiddenContent, table, lineAllowanceChargeList, label));
     deleteButton.addListener(editor.deleteButtonListener(table));
 
-    Panel outerPanel = new Panel(itemPropertyPrefix + " Item Properties"); 
+    Panel outerPanel = new Panel(prefix + " Allowances/Charges"); 
     //outerPanel.setStyleName("light");     
    
     // ---- HIDDEN FORM BEGINS -----
@@ -147,7 +161,7 @@ public class ItemPropertyForm extends Panel {
     final VerticalLayout showHideContentLayout = new VerticalLayout();
     showHideContentLayout.addComponent(outerPanel);
     HorizontalLayout showHideButtonLayout = new HorizontalLayout();
-    Button btn = new Button("Show/Hide Additional Item Property",new Button.ClickListener(){
+    Button btn = new Button("Show/Hide Allowances/Charges",new Button.ClickListener(){
       @Override
       public void buttonClick (ClickEvent event) {
         // TODO Auto-generated method stub
@@ -166,7 +180,7 @@ public class ItemPropertyForm extends Panel {
 
   }  
   
-  class ItemPropertyFieldFactory implements FormFieldFactory {
+  class AllowanceChargeFieldFactory implements FormFieldFactory {
 
     @Override
     public Field createField(Item item, Object propertyId, Component uiContext) {

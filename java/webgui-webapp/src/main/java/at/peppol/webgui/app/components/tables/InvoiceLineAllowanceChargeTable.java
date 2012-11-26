@@ -35,37 +35,47 @@
  * the provisions above, a recipient may use your version of this file
  * under either the MPL or the EUPL License.
  */
-package at.peppol.webgui.app.components;
+package at.peppol.webgui.app.components.tables;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ItemPropertyType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AllowanceChargeType;
 
-import at.peppol.webgui.app.components.adapters.InvoiceTaxSubtotalAdapter;
+import at.peppol.webgui.app.components.adapters.InvoiceAllowanceChargeAdapter;
 
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.Table;
 
-public class ItemPropertyTable extends Table {
-
-  private final List <ItemPropertyType> taxSubtotalLines;
-  private final BeanItemContainer<InvoiceTaxSubtotalAdapter> tableLines =
-          new BeanItemContainer<InvoiceTaxSubtotalAdapter>(InvoiceTaxSubtotalAdapter.class);
-  private final List<String> visibleHeaderNames = new ArrayList<String>();
+public class InvoiceLineAllowanceChargeTable extends GenericTable<AllowanceChargeType, InvoiceAllowanceChargeAdapter> {
   
-  public ItemPropertyTable(List <ItemPropertyType> list) {
-    this.taxSubtotalLines = list;
-    setContainerDataSource(tableLines);
-/*
-    addPropertyWithHeader("TableLineID", "# ID");
-    addPropertyWithHeader("TaxSubTotalTaxableAmount", "Taxable Amount");
-    addPropertyWithHeader("TaxSubTotalTaxAmount", "Tax Amount");
-    addPropertyWithHeader("TaxSubTotalCategoryID", "Tax Category ID");
-    addPropertyWithHeader("TaxSubTotalCategoryPercent", "Tax Category Percent");
+  public InvoiceLineAllowanceChargeTable(List<AllowanceChargeType> items) {
+    
+	  linesFromInvoice = items;
+	  
+	  tableLines = new BeanItemContainer<InvoiceAllowanceChargeAdapter>(InvoiceAllowanceChargeAdapter.class);
+	  
+	  for (int i=0;i<items.size();i++) {
+		  InvoiceAllowanceChargeAdapter bean = new InvoiceAllowanceChargeAdapter(items.get(i));
+		  bean.setIDAdapter(String.valueOf(i+1));
+		  tableLines.addBean(bean);
+	  }
+	  
+	  setContainerDataSource(tableLines);
 
-    setDefinedPropertiesAsVisible();
-    setPageLength(4);
-*/    
+	  addPropertyWithHeader("ID.value", "# ID");
+    
+	  //addPropertyWithHeader("chargeIndicator", "Charge Indicator");
+	  //addPropertyWithHeader("indicator", "Charge Indicator");
+	  addPropertyWithHeader("indicatorAsString", "Allowance/Charge");
+	  
+	  //addPropertyWithHeader("allowanceChargeReason","Charge Reason");
+	  addPropertyWithHeader("reason","Charge Reason");
+	  //addPropertyWithHeader("amount", "Amount");
+	  addPropertyWithHeader("chargeAmount", "Amount");
+    
+	  setDefinedPropertiesAsVisible();
+	  setPageLength(4);
   }  
 }

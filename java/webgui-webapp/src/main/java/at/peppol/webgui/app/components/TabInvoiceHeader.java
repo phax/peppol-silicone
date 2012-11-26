@@ -67,6 +67,9 @@ import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.StartDat
 import un.unece.uncefact.codelist.specification.ianamimemediatype._2003.BinaryObjectMimeCodeContentType;
 
 import at.peppol.webgui.app.components.PartyDetailForm.PartyFieldFactory;
+import at.peppol.webgui.app.components.adapters.InvoiceAdditionalDocRefAdapter;
+import at.peppol.webgui.app.components.tables.InvoiceAdditionalDocRefTable;
+import at.peppol.webgui.app.components.tables.InvoiceAdditionalDocRefTableEditor;
 import at.peppol.webgui.app.utils.DocUpload;
 import at.peppol.webgui.app.utils.ReceiverClass;
 import at.peppol.webgui.app.validator.RequiredFieldListener;
@@ -201,191 +204,23 @@ public class TabInvoiceHeader extends Form {
     h.setColumnExpandRatio(0, 3);
     h.setColumnExpandRatio(1, 1);
     h.setSizeFull();
-        
-    //buttons Add, Edit, Delete
-    Button addBtn = new Button("Add New", new Button.ClickListener() {
-      @Override
-      public void buttonClick(final Button.ClickEvent event) {
-        
-        addMode = true;
-        hiddenContent.removeAllComponents ();
-        additionalDocRefItem = createAdditionalDocRefItem();
-        
-        Label formLabel = new Label("<h3>Adding new additional document reference line</h3>", Label.CONTENT_XHTML);
-        
-        hiddenContent.addComponent (formLabel);
-        final Form docRefForm = createInvoiceAdditionalDocRefForm();
-        hiddenContent.addComponent(docRefForm);
-        
-        final Button saveNewLine = new Button("Save additional doc ref line");
-                        
-  	  	final DocUpload upload = new DocUpload("uploads/");
-  	  	upload.addListener(new Upload.StartedListener() {
-			@Override
-			public void uploadStarted(StartedEvent event) {
-				saveNewLine.setEnabled(false);
-				saveNewLine.requestRepaint();
-			}
-  	  		
-  	  	});
-  	  	upload.addListener(new Upload.FinishedListener() {
-			@Override
-			public void uploadFinished(FinishedEvent event) {
-				saveNewLine.setEnabled(true);	
-				saveNewLine.requestRepaint();
-			}
-		});
-  	  	
-  	  	saveNewLine.addListener(new Button.ClickListener() {
-			@Override
-			public void buttonClick(ClickEvent event) {
-				if (additionalDocRefItem.getAdditionalDocRefID() != null) {
-	        		  if (!additionalDocRefItem.getAdditionalDocRefID().equals("")) {
-	        			  //upload.submitUpload(); //this doesn't work. VAADIN problem?
-	        			  if (upload.getFilename() != null) {
-	        				  BinaryObjectMimeCodeContentType mimeType = additionalDocRefItem.getBinaryObjectMimeCodeContentType(upload.getMimeType());
-	        				  if ( mimeType!= null) {
-	        					  additionalDocRefItem.setAdditionalDocRefFile(upload.getFilename());
-	        					  additionalDocRefItem.setBinaryObjectMIMEType(mimeType);
-	        					  additionalDocRefItem.setBinaryObjectByteArray(upload.getByteArray());
-	        				  }
-	        				  else {
-	        					  getWindow().showNotification("Attachment not MediaType", Notification.TYPE_TRAY_NOTIFICATION);
-	        				  }
-	        			  }
-	        			  
-	        			  table.addAdditionalDocRefLine (additionalDocRefItem);
-	        			  //hide form
-	        			  hiddenContent.setVisible(false);
-	        			  addMode = false;
-	        		  }
-	        		  else
-	        			  getParent().getWindow().showNotification("Doc Ref Type ID is needed", Notification.TYPE_TRAY_NOTIFICATION);
-	        	  }
-	        	  else
-	        		  getParent().getWindow().showNotification("Doc Ref Type ID is needed", Notification.TYPE_TRAY_NOTIFICATION);
-			}
-		});
-
-  	  	
-  	  	hiddenContent.addComponent(upload);
-  	  	
-        //Save new line button
-        HorizontalLayout buttonLayout = new HorizontalLayout();
-        buttonLayout.setSpacing (true);
-        buttonLayout.setMargin (true);
-        buttonLayout.addComponent(saveNewLine);
-
-        buttonLayout.addComponent(new Button("Cancel",new Button.ClickListener(){
-          @Override
-          public void buttonClick (ClickEvent event) {
-        	upload.interruptUpload();
-            hiddenContent.removeAllComponents ();
-            //hide form
-            docRefForm.discard();
-            hiddenContent.setVisible(false);
-            addMode = false;
-          }
-        }));
-        
-        hiddenContent.addComponent(buttonLayout);
-        
-        //hiddenContent.setVisible(!hiddenContent.isVisible());
-        hiddenContent.setVisible(true);
-      }
-    });    
-    Button editBtn = new Button("Edit Selected", new Button.ClickListener() {
-      @Override
-      public void buttonClick(final Button.ClickEvent event) {
-        Object rowId = table.getValue(); // get the selected rows id
-        if(rowId != null){
-        	if (table.getContainerProperty(rowId,"AdditionalDocRefID") != null) {
-        		if(addMode || editMode){
-        			parent.getWindow ().showNotification("Info", "You cannot edit while in add/edit mode", Window.Notification.TYPE_HUMANIZED_MESSAGE);
-        			return;
-        		}
-        		final String sid = (String)table.getContainerProperty(rowId,"AdditionalDocRefID").getValue();
-          
-        		// TODO: PUT THIS IN FUNCTION BEGINS
-        		editMode = true;
-        		hiddenContent.removeAllComponents ();
-	          
-        		//get selected item
-        		additionalDocRefItem = (InvoiceAdditionalDocRefAdapter) additionalDocRefList.get (table.getIndexFromID (sid));
-        		//clone it to original item
-        		originalItem = new InvoiceAdditionalDocRefAdapter ();
-        		cloneInvoiceAdditionalDocRefItem(additionalDocRefItem, originalItem);
-	          
-        		Label formLabel = new Label("<h3>Editing additional document reference line</h3>", Label.CONTENT_XHTML);
-	          
-        		hiddenContent.addComponent (formLabel);
-        		final Form docRefForm = createInvoiceAdditionalDocRefForm();
-        		hiddenContent.addComponent(docRefForm);
-	          
-        		//Save new line button
-        		HorizontalLayout buttonLayout = new HorizontalLayout();
-        		buttonLayout.setSpacing (true);
-        		buttonLayout.addComponent(new Button("Save changes",new Button.ClickListener(){
-        			@Override
-        			public void buttonClick (ClickEvent event) {
-        				//update table (and consequently edit item to allowanceChargeList list)
-        				table.setAdditionalDocRefLine (sid, additionalDocRefItem);
-        				//hide form
-        				docRefForm.commit();
-        				hiddenContent.setVisible(false);
-        				editMode = false;
-        			}
-        		}));
-        		buttonLayout.addComponent(new Button("Cancel editing",new Button.ClickListener(){
-	            @Override
-	            public void buttonClick (ClickEvent event) {
-	            	hiddenContent.removeAllComponents ();
-	              
-	            	table.setAdditionalDocRefLine (sid, originalItem);
-	            	//hide form
-	            	docRefForm.discard();
-	            	hiddenContent.setVisible(false);
-	            	editMode = false;
-	            }
-	          }));
-	          
-	          hiddenContent.addComponent(buttonLayout);
-	          hiddenContent.setVisible(true);          
-	          // TODO: PUT THIS IN FUNCTION ENDS
-        	}
-        	else
-        		getWindow().showNotification("No table line is selected", Window.Notification.TYPE_TRAY_NOTIFICATION);
-        }
-        else {
-          getWindow().showNotification("No table line is selected", Window.Notification.TYPE_TRAY_NOTIFICATION);
-        }
-
-      }
-    });    
-    Button deleteBtn = new Button("Delete Selected", new Button.ClickListener() {
-      @Override
-      public void buttonClick(final Button.ClickEvent event) {
-        Object rowId = table.getValue(); // get the selected rows id
-        if(rowId != null){
-        	if (table.getContainerProperty(rowId,"AdditionalDocRefID") != null) {
-        		if(addMode || editMode){
-        			parent.getWindow ().showNotification("Info", "You cannot delete while in add/edit mode", Window.Notification.TYPE_HUMANIZED_MESSAGE);
-        			return;
-        		}
-        		if(table.getContainerProperty(rowId,"AdditionalDocRefID").getValue() != null){
-        			String sid = (String)table.getContainerProperty(rowId,"AdditionalDocRefID").getValue();
-        			table.removeAdditionalDocRefLine (sid);
-        		}
-        	}
-        	else
-        		getWindow().showNotification("No table line is selected", Window.Notification.TYPE_TRAY_NOTIFICATION);
-        }
-        else {
-          getWindow().showNotification("No table line is selected", Window.Notification.TYPE_TRAY_NOTIFICATION);
-          
-        }
-      }
-    });
+    
+    Button addButton = new Button("Add new");
+    Button editButton = new Button("Edit selected");
+    Button deleteButton = new Button("Delete selected");
+    
+    VerticalLayout buttonsContainer = new VerticalLayout();
+    buttonsContainer.setSpacing (true);
+    buttonsContainer.addComponent (addButton);
+    buttonsContainer.addComponent (editButton);
+    buttonsContainer.addComponent (deleteButton);
+    
+    InvoiceAdditionalDocRefTableEditor editor = new InvoiceAdditionalDocRefTableEditor(editMode);
+    Label label = new Label("<h3>Adding new relevant document</h3>", Label.CONTENT_XHTML);
+    addButton.addListener(editor.addButtonListener(editButton, deleteButton, hiddenContent, table, additionalDocRefList, label));
+    label = new Label("<h3>Edit relevant document</h3>", Label.CONTENT_XHTML);
+    editButton.addListener(editor.editButtonListener(addButton, deleteButton, hiddenContent, table, additionalDocRefList, label));
+    deleteButton.addListener(editor.deleteButtonListener(table));
     
     final Button addContractReferenceBtn = new Button("Add Contract Reference");
     final Button removeContractReferenceBtn = new Button("Remove Contract Reference");
@@ -416,12 +251,6 @@ public class TabInvoiceHeader extends Form {
 			topGridLayout.addComponent(addContractReferenceBtn, 1, 0);
 		}
 	});
-    
-    VerticalLayout buttonsContainer = new VerticalLayout();
-    buttonsContainer.setSpacing (true);
-    buttonsContainer.addComponent (addBtn);
-    buttonsContainer.addComponent (editBtn);
-    buttonsContainer.addComponent (deleteBtn);
     
     h.addComponent(buttonsContainer,1,0);
     
@@ -523,57 +352,6 @@ public class TabInvoiceHeader extends Form {
     return invoiceOrderRefForm;
   }
   
-  public Form createInvoiceAdditionalDocRefForm() {
-    final Form invoiceAdditionalDocRefForm = new Form(new FormLayout(), new InvoiceFieldFactory());
-    invoiceAdditionalDocRefForm.setImmediate(true);
-    
-    NestedMethodProperty mp = new NestedMethodProperty(additionalDocRefItem, "AdditionalDocRefID");
-    if(!editMode){
-      IDType num = new IDType();
-      //num.setValue (String.valueOf (additionalDocRefList.size ()+1));
-      //additionalDocRefItem.setID(num);
-      
-      int max = 0;
-      for (DocumentReferenceType doc : additionalDocRefList) {
-    	  if (Integer.parseInt(doc.getID().getValue()) > max)
-    		  max = Integer.parseInt(doc.getID().getValue());
-      }
-      num.setValue(String.valueOf(max+1));
-      additionalDocRefItem.setID(num);
-    }
-    else {
-      mp.setReadOnly (true);
-    }
-    
-    //invoiceAdditionalDocRefForm.addItemProperty ("Additional Doc Ref Type ID", mp );
-    invoiceAdditionalDocRefForm.addItemProperty ("Type of document", new NestedMethodProperty(additionalDocRefItem, "AdditionalDocRefDocumentType") );
-    //invoiceAdditionalDocRefForm.addItemProperty ("Filename", new NestedMethodProperty(additionalDocRefItem, "AdditionalDocRefEmbeddedDocumentBinaryObject") );
-    invoiceAdditionalDocRefForm.addItemProperty ("URI location", new NestedMethodProperty(additionalDocRefItem, "AdditionalDocRefExternalReference") );
-
-    return invoiceAdditionalDocRefForm;
-  }  
-  
-  private InvoiceAdditionalDocRefAdapter createAdditionalDocRefItem() {
-    InvoiceAdditionalDocRefAdapter ac = new InvoiceAdditionalDocRefAdapter();
-   
-    ac.setAdditionalDocRefID ("");
-    ac.setAdditionalDocRefDocumentType ("");
-    //ac.setAdditionalDocRefEmbeddedDocumentBinaryObject (null);
-    ac.setAdditionalDocRefExternalReference("");
-    
-    return ac;
-  }  
-  
-  private void cloneInvoiceAdditionalDocRefItem(InvoiceAdditionalDocRefAdapter srcItem, InvoiceAdditionalDocRefAdapter dstItem)
-  {
-    dstItem.setAdditionalDocRefID (srcItem.getAdditionalDocRefID ());
-    dstItem.setAdditionalDocRefDocumentType (srcItem.getAdditionalDocRefDocumentType ());
-    //dstItem.setAdditionalDocRefEmbeddedDocumentBinaryObject (srcItem.getAdditionalDocRefEmbeddedDocumentBinaryObject ());
-    dstItem.setAdditionalDocRefExternalReference (srcItem.getAdditionalDocRefExternalReference ());
- 
-  }
-  
- 
   @SuppressWarnings ("serial")
   class InvoiceFieldFactory implements FormFieldFactory {
 	  final PopupDateField startDateField = new PopupDateField("Invoice Period Start Date");
