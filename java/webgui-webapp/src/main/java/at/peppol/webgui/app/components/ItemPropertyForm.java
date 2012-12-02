@@ -88,6 +88,10 @@ public class ItemPropertyForm extends Panel {
       initElements();
   }
   
+  public InvoiceItemPropertyTable getTable() {
+	  return table;
+  }
+  
   private void initElements() {
 
     final GridLayout grid = new GridLayout(4, 4);

@@ -46,13 +46,19 @@ import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.Invo
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ItemPropertyType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IDType;
 
+import at.peppol.webgui.app.components.adapters.InvoiceLineAdapter;
+import at.peppol.webgui.app.components.tables.InvoiceLineTable;
 import at.peppol.webgui.app.utils.Utils;
 import at.peppol.webgui.app.validator.PositiveValueListener;
 import at.peppol.webgui.app.validator.RequiredFieldListener;
 import at.peppol.webgui.app.validator.RequiredNumericalFieldListener;
 import at.peppol.webgui.app.validator.ValidatorsList;
 
+import com.vaadin.data.Container;
 import com.vaadin.data.Item;
+import com.vaadin.data.Container.ItemSetChangeEvent;
+import com.vaadin.data.Container.ItemSetChangeListener;
+import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.util.NestedMethodProperty;
 import com.vaadin.event.FieldEvents.BlurEvent;
 import com.vaadin.event.FieldEvents.BlurListener;
@@ -72,6 +78,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.Select;
+import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.Window.Notification;
@@ -101,6 +108,11 @@ public class TabInvoiceLine extends Form {
 	  return invoiceLineList;
   }
   
+  public InvoiceLineTable getTable() {
+	  return table;
+  }
+  
+  
   private void initElements () {
     invoiceLineList = parent.getInvoice ().getInvoiceLine ();
 
@@ -110,7 +122,7 @@ public class TabInvoiceLine extends Form {
     hiddenContent.setSpacing (true);
     hiddenContent.setMargin (true);
 
-    table = new InvoiceLineTable (parent.getInvoice ().getInvoiceLine ());
+    table = new InvoiceLineTable(parent.getInvoice ().getInvoiceLine ());
     table.setSelectable (true);
     table.setImmediate (true);
     table.setNullSelectionAllowed (false);
@@ -118,6 +130,9 @@ public class TabInvoiceLine extends Form {
     table.setFooterVisible (false);
     table.addStyleName ("striped strong");
 
+    //table.addListener(parent.new LinesTotalAmountListener());
+    //table.addListener(parent.new TaxExclusiveAmountListener());
+    
     final VerticalLayout tableContainer = new VerticalLayout ();
     tableContainer.addComponent (table);
     tableContainer.setMargin (false, true, false, false);
@@ -135,7 +150,7 @@ public class TabInvoiceLine extends Form {
 
         hiddenContent.addComponent (formLabel);
         final Form form = createInvoiceLineMainForm ();
-        form.setWriteThrough(false);
+        form.setWriteThrough(true);
         hiddenContent.addComponent (form);
 
         HorizontalLayout h1 = new HorizontalLayout();
@@ -143,14 +158,23 @@ public class TabInvoiceLine extends Form {
         h1.setMargin(true);
         
         // Set invoiceLine 0..N cardinality panels
-        final Panel itemPropertyPanel = new ItemPropertyForm ("Additional",
+        //final Panel itemPropertyPanel = new ItemPropertyForm ("Additional",
+        //                                                      invoiceLineItem.getInvLineAdditionalItemPropertyList ());
+        final ItemPropertyForm itemPropertyPanel = new ItemPropertyForm ("Additional",
                                                               invoiceLineItem.getInvLineAdditionalItemPropertyList ());
         h1.addComponent (itemPropertyPanel);
         
         //add the allowance/charge indicator 0..N cardinality
-        final Panel lineAllowanceChargePanel = new InvoiceLineAllowanceChargeForm("", 
+        final InvoiceLineAllowanceChargeForm lineAllowanceChargePanel = new InvoiceLineAllowanceChargeForm("", 
         														invoiceLineItem.getAllowanceCharge(),
         														parent.getInvoice());
+        
+        //add the listeners for line extension amount calculation
+        BIIRULE_T10_R018 biirule_t10_r018 = new BIIRULE_T10_R018(invoiceLineItem, form);
+        form.getField("Price Amount").addListener(biirule_t10_r018);
+        form.getField("Base Quantity").addListener(biirule_t10_r018);
+        lineAllowanceChargePanel.getTable().addListener((ItemSetChangeListener)biirule_t10_r018);
+        
         h1.addComponent (lineAllowanceChargePanel);
         
         HorizontalLayout h2 = new HorizontalLayout();
@@ -200,8 +224,11 @@ public class TabInvoiceLine extends Form {
         		  form.commit();
         		  System.out.println(invoiceLineItem.getInvLineInvoicedQuantity().toString());
         		  // update table (and consequently add new item to invoiceList list)
-        		  table.addInvoiceLine (invoiceLineItem);
-	            // 	hide form
+        		  
+        		  //table.addInvoiceLine (invoiceLineItem);
+        		  table.addLine(invoiceLineItem);
+	              
+        		  //hide form
         		  hiddenContent.setVisible (false);
         		  addMode = false;
         		  itemName.setComponentError(null);
@@ -253,20 +280,28 @@ public class TabInvoiceLine extends Form {
           final Label formLabel = new Label ("<h3>Editing invoice line</h3>", Label.CONTENT_XHTML);
 
           hiddenContent.addComponent (formLabel);
-          hiddenContent.addComponent (createInvoiceLineMainForm ());
+          Form form = createInvoiceLineMainForm ();
+          hiddenContent.addComponent(form);
 
           HorizontalLayout h1 = new HorizontalLayout();
           h1.setSpacing(true);
           h1.setMargin(true);
           // Set invoiceLine 0..N cardinality panels
-          final Panel itemPropertyPanel = new ItemPropertyForm ("Additional",
+          final ItemPropertyForm itemPropertyPanel = new ItemPropertyForm ("Additional",
                                                                 invoiceLineItem.getInvLineAdditionalItemPropertyList ());
           h1.addComponent (itemPropertyPanel);
           
           //add the allowance/charge indicator 0..N cardinality
-          final Panel lineAllowanceChargePanel = new InvoiceLineAllowanceChargeForm("Additional", 
+          final InvoiceLineAllowanceChargeForm lineAllowanceChargePanel = new InvoiceLineAllowanceChargeForm("", 
           														invoiceLineItem.getAllowanceCharge(),
           														parent.getInvoice());
+          
+          //add the listeners for line extension amount calculation
+          BIIRULE_T10_R018 biirule_t10_r018 = new BIIRULE_T10_R018(invoiceLineItem, form);
+          form.getField("Price Amount").addListener(biirule_t10_r018);
+          form.getField("Base Quantity").addListener(biirule_t10_r018);
+          lineAllowanceChargePanel.getTable().addListener((ItemSetChangeListener)biirule_t10_r018);
+          
           h1.addComponent (lineAllowanceChargePanel);
           
           HorizontalLayout h2 = new HorizontalLayout();
@@ -295,7 +330,10 @@ public class TabInvoiceLine extends Form {
             public void buttonClick (final ClickEvent event) {
               // update table (and consequently edit item to allowanceChargeList
               // list)
-              table.setInvoiceLine (sid, invoiceLineItem);
+            	
+              //table.setInvoiceLine (sid, invoiceLineItem);
+            	table.setLine(sid, invoiceLineItem);
+              
               // hide form
               hiddenContent.setVisible (false);
               editMode = false;
@@ -306,7 +344,8 @@ public class TabInvoiceLine extends Form {
             public void buttonClick (final ClickEvent event) {
               hiddenContent.removeAllComponents ();
 
-              table.setInvoiceLine (sid, originalItem);
+              //table.setInvoiceLine (sid, originalItem);
+              table.setLine(sid, originalItem);
               // hide form
               hiddenContent.setVisible (false);
               editMode = false;
@@ -340,7 +379,8 @@ public class TabInvoiceLine extends Form {
           }
           if (table.getContainerProperty (rowId, "ID.value").getValue () != null) {
             final String sid = (String) table.getContainerProperty (rowId, "ID.value").getValue ();
-            table.removeInvoiceLine (sid);
+            //table.removeInvoiceLine (sid);
+            table.removeLine(sid);
           }
         }
         else {
@@ -381,6 +421,7 @@ public class TabInvoiceLine extends Form {
   public Form createGridLayoutInvoiceLineForm() {
 	  Form form = new Form() {
 		  GridLayout layout = new GridLayout(5,10);
+		  Panel pricePanel = new Panel();
 		  int counter1 = 0;
 		  int counter2 = 0;
 		  {
@@ -601,4 +642,48 @@ public class TabInvoiceLine extends Form {
       return field;
     }
   }
+  
+  public class BIIRULE_T10_R018 implements ValueChangeListener, ItemSetChangeListener {
+
+	  InvoiceLineAdapter line;
+	  Form form;
+	  
+	  public BIIRULE_T10_R018(InvoiceLineAdapter line, Form form) {
+		  this.line = line;
+		  this.form = form;
+	  }
+	  
+	  public void calc() {
+		Field lineExtensionAmount = form.getField("Line Extension Amount");
+			
+		BigDecimal price = line.getInvLinePriceAmount();
+		BigDecimal quantity = line.getInvLinePriceBaseQuantity();
+		List<AllowanceChargeType> list = line.getAllowanceCharge();
+			
+		BigDecimal amount = price.multiply(quantity);
+			
+		for (AllowanceChargeType ac : list) {
+			if (ac.getChargeIndicator().isValue())
+				amount = amount.add(ac.getAmount().getValue());
+			else
+				amount = amount.subtract(ac.getAmount().getValue());
+		}
+			
+		if (amount.doubleValue() < 0)
+			lineExtensionAmount.setValue(new BigDecimal(0.00));
+		else
+			lineExtensionAmount.setValue(amount);
+	  }
+	  
+	@Override
+	public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
+		calc();
+	}
+	@Override
+	public void containerItemSetChange(ItemSetChangeEvent event) {
+		calc();
+	}
+		  
+  }
+
 }

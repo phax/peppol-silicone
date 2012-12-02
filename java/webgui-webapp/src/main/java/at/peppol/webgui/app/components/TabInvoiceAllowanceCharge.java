@@ -45,6 +45,7 @@ import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.Docu
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IDType;
 import un.unece.uncefact.codelist.specification._54217._2001.CurrencyCodeContentType;
 
+import at.peppol.webgui.app.components.InvoiceTabForm.TaxExclusiveAmountListener;
 import at.peppol.webgui.app.components.adapters.InvoiceAllowanceChargeAdapter;
 import at.peppol.webgui.app.components.tables.InvoiceAllowanceChargeTable;
 import at.peppol.webgui.app.components.tables.InvoiceAllowanceChargeTableEditor;
@@ -81,6 +82,10 @@ public class TabInvoiceAllowanceCharge extends Form {
   public InvoiceAllowanceChargeTable table;
   private VerticalLayout hiddenContent;
 
+  public InvoiceAllowanceChargeTable getTable() {
+	  return table;
+  }
+  
   public TabInvoiceAllowanceCharge (final InvoiceTabForm parent) {
     this.parent = parent;
     editMode = false;
@@ -103,6 +108,8 @@ public class TabInvoiceAllowanceCharge extends Form {
     table.setHeight (150, UNITS_PIXELS);
     table.setFooterVisible (true);
     table.addStyleName ("striped strong");
+    
+    //table.addListener(parent.new TaxExclusiveAmountListener());
 
     final VerticalLayout tableContainer = new VerticalLayout ();
     tableContainer.addComponent (table);

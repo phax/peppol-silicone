@@ -38,17 +38,20 @@
 package at.peppol.webgui.app.components;
 
 import java.io.OutputStreamWriter;
+import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.transform.stream.StreamResult;
 
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AllowanceChargeType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.CustomerPartyType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.InvoiceLineType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.PartyType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.SupplierPartyType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.TaxSubtotalType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.TaxTotalType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CustomizationIDType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IDType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.InvoiceTypeCodeType;
@@ -69,7 +72,11 @@ import com.phloc.commons.state.ESuccess;
 import com.phloc.ubl.AbstractUBLDocumentMarshaller;
 import com.phloc.ubl.EUBL20DocumentType;
 import com.phloc.ubl.UBL20DocumentMarshaller;
+import com.vaadin.data.Container;
+import com.vaadin.data.Container.ItemSetChangeEvent;
+import com.vaadin.data.Container.ItemSetChangeListener;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Field;
 import com.vaadin.ui.Form;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
@@ -231,6 +238,7 @@ public class InvoiceTabForm extends Form {
       }
     }));
     getFooter ().addComponent (footerLayout);
+     
   }
 
   private GridLayout buildMainLayout () {
@@ -269,6 +277,33 @@ public class InvoiceTabForm extends Form {
 
     mainLayout.addComponent (invTabSheet, 0, 0);
 
+    //BIIRULE-T10-R011
+    tTabInvoiceLine.getTable().addListener(new LinesTotalAmountListener());
+     
+    //BIIRULE-T10-R012
+    TaxExclusiveAmountListener taxExclusiveAmountListener = new TaxExclusiveAmountListener();
+    tTabInvoiceLine.getTable().addListener(taxExclusiveAmountListener);
+    tTabInvoiceAllowanceCharge.getTable().addListener(taxExclusiveAmountListener);
+    
+    //BIIRULE-T10-R013
+    TaxInclusiveAmountListener taxInclusiveAmountListener = new TaxInclusiveAmountListener();
+    tTabInvoiceTaxTotal.getInvoiceTaxTotalTopForm().getField(TabInvoiceTaxTotal.taxTotalAmount).addListener(
+    		taxInclusiveAmountListener);
+    tTabInvoiceMonetaryTotal.getMonetaryTotalForm().getField(TabInvoiceMonetaryTotal.taxExclusiveAmount).addListener(
+    		taxInclusiveAmountListener);
+    
+    //BIIRULE-T10-R015 & BIIRULE-T10-R016 
+    BIIRULE_T10_R015_R016 biirule_t10_r015_r016 = new BIIRULE_T10_R015_R016();
+    tTabInvoiceLine.getTable().addListener(biirule_t10_r015_r016);
+    tTabInvoiceAllowanceCharge.getTable().addListener(biirule_t10_r015_r016);
+    
+    //BIIRULE-T10-R017
+    BIIRULE_T10_R017 biirule_t10_r017 = new BIIRULE_T10_R017();
+    tTabInvoiceMonetaryTotal.getMonetaryTotalForm().getField(TabInvoiceMonetaryTotal.taxInclusiveAmount).addListener(
+    		biirule_t10_r017);
+    tTabInvoiceMonetaryTotal.getMonetaryTotalForm().getField(TabInvoiceMonetaryTotal.prepaidAmount).addListener(
+    		biirule_t10_r017);
+    
     return mainLayout;
   }
 
@@ -317,5 +352,143 @@ public class InvoiceTabForm extends Form {
       il.getPrice ().getAllowanceCharge ().get (0).getBaseAmount ().setCurrencyID (cur);
     }
 
+  }
+  
+/*  public void linesTotalAmountListener(ItemSetChangeEvent event) {
+	  Field lineTotalField = tTabInvoiceMonetaryTotal.getMonetaryTotalForm().getField("Line Extension Amount");
+	   
+	  BigDecimal total = new BigDecimal(0.0);
+	  List<InvoiceLineType> list = tTabInvoiceLine.getInvoiceLineList();
+	  for (InvoiceLineType line : list) {
+		  total = total.add(line.getLineExtensionAmount().getValue());
+	  }
+	  System.out.println("Total is "+total.floatValue());
+	  
+	  lineTotalField.setValue(total);
+  }*/
+  
+  public class LinesTotalAmountListener implements ItemSetChangeListener {
+	@Override
+	public void containerItemSetChange(ItemSetChangeEvent event) {
+		Field lineTotalField = tTabInvoiceMonetaryTotal.getMonetaryTotalForm().getField(
+											 TabInvoiceMonetaryTotal.lineExtensionAmount);
+		
+		BigDecimal total = new BigDecimal(0.0);
+		//List<InvoiceLineType> list = tTabInvoiceLine.getInvoiceLineList();
+		List<InvoiceLineType> list = invoice.getInvoiceLine();
+		for (InvoiceLineType line : list) {
+			total = total.add(line.getLineExtensionAmount().getValue());
+		}
+		lineTotalField.setValue(total);
+	}
+  }
+  
+  public class TaxExclusiveAmountListener implements ItemSetChangeListener {
+	@Override
+	public void containerItemSetChange(ItemSetChangeEvent event) {
+		Field taxExclusiveField = tTabInvoiceMonetaryTotal.getMonetaryTotalForm().getField(
+											  TabInvoiceMonetaryTotal.taxExclusiveAmount);
+		   
+		BigDecimal lineTotal = new BigDecimal(0.0);
+		List<InvoiceLineType> list = invoice.getInvoiceLine();
+		for (InvoiceLineType line : list) {
+			lineTotal = lineTotal.add(line.getLineExtensionAmount().getValue());
+		}
+		
+		BigDecimal chargesTotal = new BigDecimal(0.0);
+		BigDecimal allowancesTotal = new BigDecimal(0.0);
+		List<AllowanceChargeType> list2 = invoice.getAllowanceCharge();
+		for (AllowanceChargeType ac : list2) {
+			if (ac.getChargeIndicator().isValue()) {
+				chargesTotal = chargesTotal.add(ac.getAmount().getValue());
+			}
+			else {
+				allowancesTotal = allowancesTotal.add(ac.getAmount().getValue());
+			}
+		}
+		
+		BigDecimal result = lineTotal.add(chargesTotal).subtract(allowancesTotal);
+		if (result.doubleValue() < 0)
+			taxExclusiveField.setValue(new BigDecimal(0.0));
+		else
+			taxExclusiveField.setValue(result);
+	}
+  }
+  
+  public class TaxInclusiveAmountListener implements ValueChangeListener {
+	@Override
+	public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
+		// TODO Auto-generated method stub
+		Field taxInclusiveAmountField = tTabInvoiceMonetaryTotal.getMonetaryTotalForm().getField(
+				  									   TabInvoiceMonetaryTotal.taxInclusiveAmount);
+	
+		BigDecimal taxEx = invoice.getLegalMonetaryTotal().getTaxExclusiveAmount().getValue();
+		BigDecimal taxTot = invoice.getTaxTotal().get(0).getTaxAmount().getValue();
+		
+		taxInclusiveAmountField.setValue(taxEx.add(taxTot));
+		
+		System.out.println("inside value change listener");
+	}
+	  
+  }
+  
+  public class BIIRULE_T10_R015_R016 implements ItemSetChangeListener {
+
+	@Override
+	public void containerItemSetChange(ItemSetChangeEvent event) {
+		Field totalAllowanceField = tTabInvoiceMonetaryTotal.getMonetaryTotalForm().getField(
+				   TabInvoiceMonetaryTotal.allowanceTotalAmount);
+		Field totalChargeField = tTabInvoiceMonetaryTotal.getMonetaryTotalForm().getField(
+				   TabInvoiceMonetaryTotal.chargeTotalAmount);
+		
+		List<AllowanceChargeType> invoiceAllowanceCharge = invoice.getAllowanceCharge();
+		BigDecimal allowancesTotal = new BigDecimal(0.0);
+		BigDecimal chargesTotal = new BigDecimal(0.0);
+		for (AllowanceChargeType ac : invoiceAllowanceCharge) {
+			if (!ac.getChargeIndicator().isValue()) {
+				allowancesTotal = allowancesTotal.add(ac.getAmount().getValue());
+			}
+			else {
+				chargesTotal = chargesTotal.add(ac.getAmount().getValue());
+			}
+		}
+		
+		List<InvoiceLineType> lines = invoice.getInvoiceLine();
+		for (InvoiceLineType line : lines) {
+			List<AllowanceChargeType> lineAllowanceCharge = line.getAllowanceCharge();
+			for (AllowanceChargeType ac : lineAllowanceCharge) {
+				if (!ac.getChargeIndicator().isValue()) {
+					allowancesTotal = allowancesTotal.add(ac.getAmount().getValue());
+				}
+				else {
+					chargesTotal = chargesTotal.add(ac.getAmount().getValue());
+				}
+			}
+		}
+		
+		totalAllowanceField.setValue(allowancesTotal);
+		totalChargeField.setValue(chargesTotal);
+	}
+	  
+  }
+  
+  public class BIIRULE_T10_R017 implements ValueChangeListener {
+
+	@Override
+	public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
+		Field payableAmountField = tTabInvoiceMonetaryTotal.getMonetaryTotalForm().getField(
+				   TabInvoiceMonetaryTotal.payableAmount);
+		
+		BigDecimal payable = new BigDecimal(0.0);
+		payable = payable.add(invoice.getLegalMonetaryTotal().getTaxInclusiveAmount().getValue())
+						 .subtract(invoice.getLegalMonetaryTotal().getPrepaidAmount().getValue());
+		
+		if (payable.doubleValue() < 0)
+			payableAmountField.setValue(new BigDecimal(0.00));
+		else
+			payableAmountField.setValue(payable);
+		
+	}
+	  
   }
 }

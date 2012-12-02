@@ -39,13 +39,16 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package at.peppol.webgui.app.components;
+package at.peppol.webgui.app.components.tables;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.InvoiceLineType;
+
+import at.peppol.webgui.app.components.adapters.InvoiceAdditionalDocRefAdapter;
+import at.peppol.webgui.app.components.adapters.InvoiceLineAdapter;
 
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.Table;
@@ -56,28 +59,32 @@ import com.vaadin.ui.Table;
  */
 
 @SuppressWarnings ("serial")
-public class InvoiceLineTable extends Table {
+public class InvoiceLineTable extends GenericTable<InvoiceLineType, InvoiceLineAdapter> {
 
-  private final List<InvoiceLineType> invoiceLines;
+/*  private final List<InvoiceLineType> invoiceLines;
   private final BeanItemContainer<InvoiceLineAdapter> tableLines =
           new BeanItemContainer<InvoiceLineAdapter>(InvoiceLineAdapter.class);
-  private final List<String> visibleHeaderNames = new ArrayList<String>();
+  private final List<String> visibleHeaderNames = new ArrayList<String>();*/
   
 
   public InvoiceLineTable(List<InvoiceLineType> items) {
-    this.invoiceLines = items;
-    setContainerDataSource(tableLines);
+	  linesFromInvoice = items;
+	  
+	  tableLines = new BeanItemContainer<InvoiceLineAdapter>(InvoiceLineAdapter.class);
+	  
+	  //this.invoiceLines = items;
+	  setContainerDataSource(tableLines);
 
-    addPropertyWithHeader("ID.value", "# ID");
-    addPropertyWithHeader("invLineItemName", "Item Name");
-    addPropertyWithHeader("invLineInvoicedQuantity", "Invoiced Quantity");
-    addPropertyWithHeader("invLineLineExtensionAmount", "Line Extension Amount");
-    addPropertyWithHeader("InvLineTaxAmount", "Tax Total Amount");
+	  addPropertyWithHeader("ID.value", "# ID");
+	  addPropertyWithHeader("invLineItemName", "Item Name");
+	  addPropertyWithHeader("invLineInvoicedQuantity", "Invoiced Quantity");
+	  addPropertyWithHeader("invLineLineExtensionAmount", "Line Extension Amount");
+	  addPropertyWithHeader("InvLineTaxAmount", "Tax Total Amount");
 
-    setDefinedPropertiesAsVisible();
-    setPageLength(4);
+	  setDefinedPropertiesAsVisible();
+	  setPageLength(4);
   }
-
+/*
   private void addPropertyWithHeader(String property, String headerName) {
     tableLines.addNestedContainerProperty(property);
     setColumnHeader(property, headerName);
@@ -115,8 +122,8 @@ public class InvoiceLineTable extends Table {
     while (iterator.hasNext()) {
       InvoiceLineType ac = iterator.next();
       if (ac.getID ().getValue ().equals (lineID)) {
-        tableLines.removeItem (ac);
-        invoiceLines.remove (ac);
+    	invoiceLines.remove (ac);
+    	tableLines.removeItem (ac);
         break;
         
       }
@@ -134,4 +141,5 @@ public class InvoiceLineTable extends Table {
     }    
     return -1;
   }  
+  */
 }

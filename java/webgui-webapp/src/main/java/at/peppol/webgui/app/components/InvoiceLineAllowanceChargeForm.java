@@ -102,6 +102,11 @@ public class InvoiceLineAllowanceChargeForm extends Panel {
       
       initElements();
   }
+  
+  public InvoiceLineAllowanceChargeTable getTable() {
+	  return table;
+  }
+  
   private void initElements() {
 
     final GridLayout grid = new GridLayout(4, 4);

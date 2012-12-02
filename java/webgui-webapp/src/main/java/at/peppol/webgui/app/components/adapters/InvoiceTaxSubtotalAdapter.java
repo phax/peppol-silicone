@@ -38,6 +38,7 @@
 package at.peppol.webgui.app.components.adapters;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.TaxCategoryType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.TaxSchemeType;
@@ -89,7 +90,9 @@ public class InvoiceTaxSubtotalAdapter extends TaxSubtotalType implements Adapte
   }
 
   public void setTaxSubTotalTaxableAmount(BigDecimal v) {
-    getTaxableAmount ().setValue (v);
+	  v = v.setScale(2,RoundingMode.HALF_UP);
+	  getTaxableAmount ().setValue (v);
+    
   }
   
   public BigDecimal getTaxSubTotalTaxableAmount() {
@@ -97,6 +100,7 @@ public class InvoiceTaxSubtotalAdapter extends TaxSubtotalType implements Adapte
   } 
   
   public void setTaxSubTotalTaxAmount(BigDecimal v) {
+	  v = v.setScale(2,RoundingMode.HALF_UP);
     getTaxAmount ().setValue (v);
   }
   

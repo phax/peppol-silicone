@@ -37,18 +37,16 @@
  */
 package at.peppol.webgui.app.components;
 
-import un.unece.uncefact.codelist.specification._54217._2001.CurrencyCodeContentType;
-
 import com.vaadin.ui.ComboBox;
-import at.peppol.commons.codelist.ETaxSchemeID;
+import at.peppol.commons.codelist.ETaxExemptionReasonCode;
 
 /**
  *
  * @author Jerouris
  */
-public class TaxSchemeSelect extends ComboBox {
+public class TaxExemptionReasonCodeSelect extends ComboBox {
     
-    public TaxSchemeSelect(String caption){
+    public TaxExemptionReasonCodeSelect(String caption){
         super(caption);
         setWidth(13,UNITS_EM);
         initData();
@@ -56,25 +54,21 @@ public class TaxSchemeSelect extends ComboBox {
     
     private void initData() {
       
-        for (ETaxSchemeID taxSchemeID : ETaxSchemeID.values()) {
-            addItem(taxSchemeID.getID());
-            setItemCaption(taxSchemeID.getID(), taxSchemeID.getID()+" ("+taxSchemeID.getDisplayName()+")");
+        for (ETaxExemptionReasonCode taxExemptionID : ETaxExemptionReasonCode.values()) {
+            addItem(taxExemptionID.getID());
+            setItemCaption(taxExemptionID.getID(), taxExemptionID.getID()+" ("+taxExemptionID.getDisplayName()+")");
        }
     }
     
-    public String getSelectedTaxSchemeIDName() 
+    public String getSelectedTaxCategoryIDName() 
     {
         return getItemCaption(getValue());
     
     }
     
-    public String getSelectedTaxSchemeID() 
+    public String getSelectedTaxCategoryID() 
     {
         return (String) getValue();
     }
     
-    @Override
-    public void attach() {
-        setValue(ETaxSchemeID.VALUE_ADDED_TAX.getID());
-    }
 }

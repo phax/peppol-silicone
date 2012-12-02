@@ -39,7 +39,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package at.peppol.webgui.app.components;
+package at.peppol.webgui.app.components.adapters;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -83,7 +83,7 @@ import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ValueTyp
  * @author Jerouris
  */
 @SuppressWarnings ("serial")
-public class InvoiceLineAdapter extends InvoiceLineType {
+public class InvoiceLineAdapter extends InvoiceLineType implements Adapter{
   // private final TaxSubtotalType VATTax;
 
   public InvoiceLineAdapter () {
@@ -184,6 +184,17 @@ public class InvoiceLineAdapter extends InvoiceLineType {
      */
   }
 
+  @Override
+  public void setIDAdapter(String id) {
+	  setInvLineID(id);
+  }
+  
+  @Override
+  public String getIDAdapter() {
+  	return getInvLineID();
+  }
+
+  
   // Pattern is: <set/get>InvLine<invoiceLineType-method name>(v)
   public void setInvLineID (final String v) {
     getID ().setValue (v);

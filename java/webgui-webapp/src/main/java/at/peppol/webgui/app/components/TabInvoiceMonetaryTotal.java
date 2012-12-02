@@ -75,10 +75,24 @@ public class TabInvoiceMonetaryTotal extends Form {
   private final InvoiceTabForm parent;
 
   private MonetaryTotalType monetaryTotal;
+  private Form invoiceMonetaryTotalTopForm;
+  
+  public static String taxExclusiveAmount = "Tax Exclusive Amount";
+  public static String lineExtensionAmount = "Line Extension Amount";
+  public static String taxInclusiveAmount = "Tax Inclusive Amount";
+  public static String allowanceTotalAmount= "Allowance Total Amount";
+  public static String chargeTotalAmount = "Charge Total Amount";
+  public static String prepaidAmount = "Prepaid Amount";
+  public static String payableRoundingAmount = "Payable Rounding Amount";
+  public static String payableAmount = "Payable Amount";
 
   public TabInvoiceMonetaryTotal (final InvoiceTabForm parent) {
     this.parent = parent;
     initElements ();
+  }
+  
+  public Form getMonetaryTotalForm() {
+	  return invoiceMonetaryTotalTopForm;
   }
 
   private void initElements () {
@@ -97,10 +111,15 @@ public class TabInvoiceMonetaryTotal extends Form {
     final Panel invoiceDetailsPanel = new Panel ("Monetary Total Details");
     invoiceDetailsPanel.setStyleName ("light");
     invoiceDetailsPanel.setSizeFull ();
-    invoiceDetailsPanel.addComponent (createInvoiceMonetaryTotalTopForm ());
+    invoiceMonetaryTotalTopForm = createInvoiceMonetaryTotalTopForm ();
+    invoiceDetailsPanel.addComponent(invoiceMonetaryTotalTopForm);
+    //invoiceDetailsPanel.addComponent (createInvoiceMonetaryTotalTopForm ());
     grid.addComponent (invoiceDetailsPanel, 0, 0, 3, 0);
     grid.setSizeUndefined ();
 
+    //Add the Total Line Extension Amount Listener
+     
+    
     setLayout (outerLayout);
     outerPanel.requestRepaintAll ();
   }
@@ -139,29 +158,33 @@ public class TabInvoiceMonetaryTotal extends Form {
     invoiceMonetaryTotalTopForm.setImmediate (true);
 
     // TODO: Update fields automatically. Make them read only !
-    invoiceMonetaryTotalTopForm.addItemProperty ("Line Extension Amount",
+    invoiceMonetaryTotalTopForm.addItemProperty (lineExtensionAmount,
                                                  new NestedMethodProperty (monetaryTotal.getLineExtensionAmount (),
                                                                            "value"));
-    invoiceMonetaryTotalTopForm.addItemProperty ("Tax Exclusive Amount",
+    invoiceMonetaryTotalTopForm.addItemProperty (taxExclusiveAmount,
                                                  new NestedMethodProperty (monetaryTotal.getTaxExclusiveAmount (),
                                                                            "value"));
-    invoiceMonetaryTotalTopForm.addItemProperty ("Tax Inclusive Amount",
+    invoiceMonetaryTotalTopForm.addItemProperty (taxInclusiveAmount,
                                                  new NestedMethodProperty (monetaryTotal.getTaxInclusiveAmount (),
                                                                            "value"));
-    invoiceMonetaryTotalTopForm.addItemProperty ("Allowance Total Amount",
+    invoiceMonetaryTotalTopForm.addItemProperty (allowanceTotalAmount,
                                                  new NestedMethodProperty (monetaryTotal.getAllowanceTotalAmount (),
                                                                            "value"));
-    invoiceMonetaryTotalTopForm.addItemProperty ("Charge Total Amount",
+    invoiceMonetaryTotalTopForm.addItemProperty (chargeTotalAmount,
                                                  new NestedMethodProperty (monetaryTotal.getChargeTotalAmount (),
                                                                            "value"));
-    invoiceMonetaryTotalTopForm.addItemProperty ("Prepaid Amount",
+    invoiceMonetaryTotalTopForm.addItemProperty (prepaidAmount,
                                                  new NestedMethodProperty (monetaryTotal.getPrepaidAmount (), "value"));
-    invoiceMonetaryTotalTopForm.addItemProperty ("Payable Rounding Amount",
+    invoiceMonetaryTotalTopForm.addItemProperty (payableRoundingAmount,
                                                  new NestedMethodProperty (monetaryTotal.getPayableRoundingAmount (),
                                                                            "value"));
-    invoiceMonetaryTotalTopForm.addItemProperty ("Payable Amount",
+    invoiceMonetaryTotalTopForm.addItemProperty (payableAmount,
                                                  new NestedMethodProperty (monetaryTotal.getPayableAmount (), "value"));
-
+    
+    
+    
+    
+    
     return invoiceMonetaryTotalTopForm;
   }
 
@@ -177,28 +200,33 @@ public class TabInvoiceMonetaryTotal extends Form {
         ((AbstractTextField) field).setNullRepresentation ("");
         final AbstractTextField tf = (AbstractTextField) field;
         if ("Line Extension Amount".equals(pid)) {
-        	tf.setRequired(true);
-        	tf.addListener(new RequiredNumericalFieldListener(tf,pid));
-        	ValidatorsList.addListeners((Collection<BlurListener>) tf.getListeners(BlurEvent.class));
+        	tf.setEnabled(false);
+            //tf.setCaption("Tax Total Amount");
+            tf.setStyleName("disabled_opacity_1");
+            
+        	//tf.setRequired(true);
+        	//tf.addListener(new RequiredNumericalFieldListener(tf,pid));
+        	//ValidatorsList.addListeners((Collection<BlurListener>) tf.getListeners(BlurEvent.class));
         }
         else if ("Tax Exclusive Amount".equals(pid)) {
-        	tf.setRequired(true);
-        	tf.addListener(new RequiredNumericalFieldListener(tf,pid));
-        	ValidatorsList.addListeners((Collection<BlurListener>) tf.getListeners(BlurEvent.class));
+        	tf.setEnabled(false);
+            tf.setStyleName("disabled_opacity_1");
         }
         else if ("Tax Inclusive Amount".equals(pid)) {
-        	tf.setRequired(true);
-        	tf.addListener(new RequiredNumericalFieldListener(tf,pid));
-        	tf.addListener(new PositiveValueListener(tf,pid));
-        	ValidatorsList.addListeners((Collection<BlurListener>) tf.getListeners(BlurEvent.class));
+        	tf.setEnabled(false);
+            tf.setStyleName("disabled_opacity_1");
+        }
+        else if ("Allowance Total Amount".equals(pid)) {
+        	tf.setEnabled(false);
+            tf.setStyleName("disabled_opacity_1");
+        }
+        else if ("Charge Total Amount".equals(pid)) {
+        	tf.setEnabled(false);
+            tf.setStyleName("disabled_opacity_1");
         }
         else if ("Payable Amount".equals(pid)) {
-        	tf.setRequired(true);
-        	tf.setRequiredError("required field");
-        	//tf.addValidator(new PositiveValueValidator());
-        	tf.addListener(new RequiredNumericalFieldListener(tf,pid));
-        	tf.addListener(new PositiveValueListener(tf,pid));
-        	ValidatorsList.addListeners((Collection<BlurListener>) tf.getListeners(BlurEvent.class));
+        	tf.setEnabled(false);
+            tf.setStyleName("disabled_opacity_1");
         }
       }
       return field;
