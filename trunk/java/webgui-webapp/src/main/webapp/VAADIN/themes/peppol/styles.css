@@ -12,6 +12,12 @@
 	background: rgb(249,249,249);
 	}
 
+.disabled_opacity_1 {
+	opacity: 1;
+}
+.v-caption-disabled_opacity_1 {
+	opacity: 1;
+}
 .v-window,
 .v-popupview-popup,
 .v-filterselect-suggestpopup,
