@@ -71,8 +71,8 @@ public class GenericTable<Ttype,Tadapter extends Adapter> extends Table {
 		    for (int i=0;i<linesFromInvoice.size();i++) {
 		    	Tadapter ac = (Tadapter)linesFromInvoice.get(i);	
 		    	if (ac.getIDAdapter().equals (lineID)) {
-		    		tableLines.removeItem (ac);
 		    		linesFromInvoice.remove (ac);
+		    		tableLines.removeItem (ac);
 		    		index = i;
 		    		id = ac.getIDAdapter();
 		    		break;
@@ -81,11 +81,11 @@ public class GenericTable<Ttype,Tadapter extends Adapter> extends Table {
 		    if (!id.equals(""))
 			    for (int i=index;i<linesFromInvoice.size();i++) {
 			    	Tadapter ac = (Tadapter)linesFromInvoice.get(i); 
-					tableLines.removeItem(ac);
 					linesFromInvoice.remove(ac);
+					tableLines.removeItem(ac);
 					ac.setIDAdapter(id);
-					tableLines.addBean(ac);
 					linesFromInvoice.add(i,(Ttype)ac);
+					tableLines.addBean(ac);
 					id = String.valueOf((Integer.valueOf(id).intValue() + 1));
 					//tableLines.getItem(ac).getBean().setTableLineID(String.valueOf(count));
 			    }

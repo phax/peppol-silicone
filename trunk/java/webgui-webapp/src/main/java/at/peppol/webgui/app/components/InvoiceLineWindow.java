@@ -39,6 +39,8 @@ package at.peppol.webgui.app.components;
 
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IDType;
 
+import at.peppol.webgui.app.components.adapters.InvoiceLineAdapter;
+
 import com.vaadin.data.Item;
 import com.vaadin.data.util.NestedMethodProperty;
 import com.vaadin.ui.AbstractTextField;

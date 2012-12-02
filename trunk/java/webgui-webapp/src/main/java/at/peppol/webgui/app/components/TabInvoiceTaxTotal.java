@@ -53,7 +53,10 @@ import at.peppol.webgui.app.validator.PositiveValueListener;
 import at.peppol.webgui.app.validator.RequiredNumericalFieldListener;
 import at.peppol.webgui.app.validator.ValidatorsList;
 
+import com.vaadin.data.Container.ItemSetChangeEvent;
 import com.vaadin.data.Item;
+import com.vaadin.data.Container.ItemSetChangeListener;
+import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.util.NestedMethodProperty;
 import com.vaadin.event.FieldEvents.BlurEvent;
 import com.vaadin.event.FieldEvents.BlurListener;
@@ -75,7 +78,9 @@ import com.vaadin.ui.Window;
 
 public class TabInvoiceTaxTotal extends Form {
   private final InvoiceTabForm parent;
-
+  
+  public static String taxTotalAmount = "Tax Total Amount";
+  
   private List <TaxSubtotalType> taxSubtotalList;
   private InvoiceTaxSubtotalAdapter taxSubtotalItem;
 
@@ -98,8 +103,13 @@ public class TabInvoiceTaxTotal extends Form {
     editMode = false;
     initElements ();
   }
+  
+  public Form getInvoiceTaxTotalTopForm() {
+	  return invoiceTaxTotalTopForm;
+  }
 
-  private void initElements () {
+  @SuppressWarnings("serial")
+private void initElements () {
     taxTotalList = parent.getInvoice ().getTaxTotal ();
     taxTotalItem = createTaxTotalItem ();
     taxTotalList.add (taxTotalItem);
@@ -127,7 +137,7 @@ public class TabInvoiceTaxTotal extends Form {
     final VerticalLayout tableContainer = new VerticalLayout ();
     tableContainer.addComponent (table);
     tableContainer.setMargin (false, true, false, false);
-    
+        
     Button addButton = new Button("Add new");
     Button editButton = new Button("Edit selected");
     Button deleteButton = new Button("Delete selected");
@@ -278,6 +288,17 @@ public class TabInvoiceTaxTotal extends Form {
     invoiceDetailsPanel.setStyleName ("light");
     invoiceDetailsPanel.setSizeFull ();
     invoiceDetailsPanel.addComponent (createInvoiceTaxTotalTopForm ());
+    
+    table.addListener(new ItemSetChangeListener() {
+
+		@Override
+		public void containerItemSetChange(ItemSetChangeEvent event) {
+			Field f = invoiceTaxTotalTopForm.getField(taxTotalAmount);
+			f.setValue(addTaxSubTotals());
+		}
+    	
+    });
+
 
     grid.setSpacing (true);
     grid.addComponent (invoiceDetailsPanel, 0, 0);
@@ -307,11 +328,26 @@ public class TabInvoiceTaxTotal extends Form {
   public Form createInvoiceTaxTotalTopForm () {
     invoiceTaxTotalTopForm = new Form (new FormLayout (), new InvoiceTaxTotalFieldFactory ());
     invoiceTaxTotalTopForm.setImmediate (true);
-
-    invoiceTaxTotalTopForm.addItemProperty ("Tax Total Amount", new NestedMethodProperty (taxTotalItem.getTaxAmount (),
-                                                                                          "value"));
-
+    
+    
+    NestedMethodProperty nmp = new NestedMethodProperty (taxTotalItem.getTaxAmount (), "value");
+    nmp.setValue(addTaxSubTotals());
+    invoiceTaxTotalTopForm.addItemProperty ("Tax Total Amount", nmp);
+    
     return invoiceTaxTotalTopForm;
+  }
+  
+  public BigDecimal addTaxSubTotals() {
+	  List<TaxSubtotalType> subs = parent.getInvoice().getTaxTotal().get(0).getTaxSubtotal();
+	  //float taxTotal = 0;
+	  BigDecimal taxTotal = new BigDecimal(0.0);
+	  for (TaxSubtotalType sub : subs) {
+		  //taxTotal += sub.getTaxAmount().getValue().floatValue();
+		  taxTotal = taxTotal.add(sub.getTaxAmount().getValue());
+	  }
+	  
+	  return taxTotal;
+	  //return String.valueOf(taxTotal);
   }
 
   public Form createInvoiceTaxSubtotalForm () {
@@ -416,10 +452,14 @@ public class TabInvoiceTaxTotal extends Form {
         ((AbstractTextField) field).setNullRepresentation ("");
         final AbstractTextField tf = (AbstractTextField) field;
         if ("Tax Total Amount".equals(pid)) {
-        	tf.setRequired(true);
-        	tf.addListener(new RequiredNumericalFieldListener(tf,pid));
-        	tf.addListener(new PositiveValueListener(tf,pid));
-        	ValidatorsList.addListeners((Collection<BlurListener>) tf.getListeners(BlurEvent.class));
+            tf.setEnabled(false);
+            //tf.setCaption("Tax Total Amount");
+            tf.setStyleName("disabled_opacity_1");
+
+        	//tf.setRequired(true);
+        	//tf.addListener(new RequiredNumericalFieldListener(tf,pid));
+        	//tf.addListener(new PositiveValueListener(tf,pid));
+        	//ValidatorsList.addListeners((Collection<BlurListener>) tf.getListeners(BlurEvent.class));
         }
         if ("Taxable Amount".equals(pid)) {
         	tf.setRequired(true);

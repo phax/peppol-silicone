@@ -17,6 +17,7 @@ import com.vaadin.ui.FormFieldFactory;
 import com.vaadin.ui.FormLayout;
 
 import at.peppol.webgui.app.components.TaxCategoryIDSelect;
+import at.peppol.webgui.app.components.TaxExemptionReasonCodeSelect;
 import at.peppol.webgui.app.components.TaxSchemeSelect;
 import at.peppol.webgui.app.components.adapters.InvoiceTaxSubtotalAdapter;
 import at.peppol.webgui.app.validator.PositiveValueListener;
@@ -58,6 +59,8 @@ public class InvoiceTaxSubtotalTableEditor extends TableEditor<TaxSubtotalType, 
 	    invoiceTaxSubtotalForm.addItemProperty ("Tax Scheme ID",
 	                                            new NestedMethodProperty (taxSubtotalItem, "TaxSubTotalCategoryTaxSchemeID"));
 
+	    invoiceTaxSubtotalForm.getItemProperty("Tax Category Percent").setValue("23");
+	    
 	    return invoiceTaxSubtotalForm;
 
 	}
@@ -78,6 +81,10 @@ public class InvoiceTaxSubtotalTableEditor extends TableEditor<TaxSubtotalType, 
 	          final TaxCategoryIDSelect taxCategoryIDSelect = new TaxCategoryIDSelect(pid);
 	          taxCategoryIDSelect.setRequired(true);
 	          return taxCategoryIDSelect;
+	      }
+	      if ("Tax Exemption Reason Code".equals(pid)) {
+	          final TaxExemptionReasonCodeSelect taxExemptionSelect = new TaxExemptionReasonCodeSelect(pid);
+	          return taxExemptionSelect;
 	      }
 
 	      final Field field = DefaultFieldFactory.get ().createField (item, propertyId, uiContext);
@@ -102,6 +109,13 @@ public class InvoiceTaxSubtotalTableEditor extends TableEditor<TaxSubtotalType, 
 	        	tf.addListener(new PositiveValueListener(tf,pid));
 	        	ValidatorsList.addListeners((Collection<BlurListener>) tf.getListeners(BlurEvent.class));
 	        }
+	        if ("Tax Category Percent".equals(pid)) {
+	        	tf.setRequired(true);
+	        	tf.addListener(new RequiredNumericalFieldListener(tf,pid));
+	        	tf.addListener(new PositiveValueListener(tf,pid));
+	        	ValidatorsList.addListeners((Collection<BlurListener>) tf.getListeners(BlurEvent.class));
+	        }
+	        return tf;
 	      }
 	      return field;
 	    }
