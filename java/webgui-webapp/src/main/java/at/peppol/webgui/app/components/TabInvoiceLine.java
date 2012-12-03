@@ -150,7 +150,6 @@ public class TabInvoiceLine extends Form {
 
         hiddenContent.addComponent (formLabel);
         final Form form = createInvoiceLineMainForm ();
-        form.setWriteThrough(true);
         hiddenContent.addComponent (form);
 
         HorizontalLayout h1 = new HorizontalLayout();
@@ -418,7 +417,7 @@ public class TabInvoiceLine extends Form {
     outerPanel.requestRepaintAll ();
   }
   
-  public Form createGridLayoutInvoiceLineForm() {
+  /*public Form createGridLayoutInvoiceLineForm() {
 	  Form form = new Form() {
 		  GridLayout layout = new GridLayout(5,10);
 		  Panel pricePanel = new Panel();
@@ -435,16 +434,11 @@ public class TabInvoiceLine extends Form {
 		  @Override
 		  protected void attachField(Object propertyId, Field field) {
 			  //field.setCaption(null);
-			  if ("Line Note".equals(propertyId) ||
-				  "Invoiced Quantity".equals(propertyId) ||
-				  "Line Extension Amount".equals(propertyId) ||
-				  "Accounting Cost".equals(propertyId) ||
-				  "Tax Total Amount".equals(propertyId) ||
-				  "Item Description".equals(propertyId) ||
-				  "Item Name".equals(propertyId) ||
-				  "Sellers Item ID".equals(propertyId) ||
-				  "Tax Category ID".equals(propertyId) ||
-				  "Tax Category Percent".equals(propertyId) ) {
+			  if ("Line Note".equals(propertyId) || "Invoiced Quantity".equals(propertyId) ||
+				  "Line Extension Amount".equals(propertyId) || "Accounting Cost".equals(propertyId) ||
+				  "Tax Total Amount".equals(propertyId) || "Item Description".equals(propertyId) ||
+				  "Item Name".equals(propertyId) || "Sellers Item ID".equals(propertyId) ||
+				  "Tax Category ID".equals(propertyId) || "Tax Category Percent".equals(propertyId) ) {
 
 				  Label fieldLabel = new Label(field.getCaption());
 				  //Label fieldLabel = Utils.requiredLabel(field.getCaption());
@@ -466,16 +460,75 @@ public class TabInvoiceLine extends Form {
 	  };
 	  
 	  return form;
+  }*/
+  
+  public Form createGridLayoutInvoiceLineForm() {
+	  Form form = new Form() {
+		  HorizontalLayout layout = new HorizontalLayout();
+		  Panel pricePanel = new Panel("Price");
+		  FormLayout f1 = new FormLayout();
+		  FormLayout f2 = new FormLayout();
+		  Label label = new Label("<h4>Allowances/Charges</h4>", Label.CONTENT_XHTML);
+		  {
+			  layout.setSpacing(true);
+			  layout.setMargin(true);
+			  setLayout(layout);
+			  HorizontalLayout h = new HorizontalLayout();
+			  h.setWidth("50px");
+			  pricePanel.setStyleName("light");
+			  layout.addComponent(f1);
+			  layout.addComponent(h);
+			  layout.addComponent(pricePanel);
+			  pricePanel.addComponent(f2);
+		  }
+		  
+		  @Override
+		  protected void attachField(Object propertyId, Field field) {
+			  //field.setCaption(null);
+			  if ("Line Note".equals(propertyId) || "Invoiced Quantity".equals(propertyId) ||
+				  "Line Extension Amount".equals(propertyId) || "Accounting Cost".equals(propertyId) ||
+				  "Tax Total Amount".equals(propertyId) || "Item Description".equals(propertyId) ||
+				  "Item Name".equals(propertyId) || "Sellers Item ID".equals(propertyId) ||
+				  "Tax Category ID".equals(propertyId) || "Tax Category Percent".equals(propertyId) || 
+				  "Standard Item ID".equals(propertyId) || "Tax Category Scheme ID".equals(propertyId)) {
+				  
+				  f1.addComponent(field);
+		      }
+			  else if ("Price Allowance/Charge Indicator".equals(propertyId) ||
+					  "Price Allowance/Charge Reason".equals(propertyId) ||
+					  "Price Allowance/Charge Multiplier Factor".equals(propertyId) ||
+					  "Price Allowance/Charge Amount".equals(propertyId) ||
+					  "Price Allowance/Charge Base Amount".equals(propertyId)) {
+				  
+				  if (f2.getComponentIndex(label) == -1)
+					  f2.addComponent(label);
+				  
+				  if ("Price Allowance/Charge Reason".equals(propertyId))
+					  field.setCaption("Reason");
+				  else if ("Price Allowance/Charge Multiplier Factor".equals(propertyId))
+					  field.setCaption("Multiplier Factor");
+				  else if ("Price Allowance/Charge Amount".equals(propertyId))
+					  field.setCaption("Amount");
+				  else if ("Price Allowance/Charge Base Amount".equals(propertyId))
+					  field.setCaption("Base Amount");
+				  
+				  f2.addComponent(field);
+			  }
+			  else {
+				  f2.addComponent(field);
+			  }
+		    }  
+	  };
+	  
+	  return form;
   }
+
 
   public Form createInvoiceLineMainForm () {
     //final Form invoiceLineForm = new Form (new FormLayout (), new InvoiceLineFieldFactory ());
     final Form invoiceLineForm = createGridLayoutInvoiceLineForm();
     invoiceLineForm.setFormFieldFactory(new InvoiceLineFieldFactory ());
-    invoiceLineForm.setImmediate (false);
-    //GridLayout gl = new GridLayout(2,1);
-    //gl.setSpacing(true);
-    //invoiceLineForm.setLayout(gl);
+    invoiceLineForm.setImmediate(true);
     
     final NestedMethodProperty mp = new NestedMethodProperty (invoiceLineItem, "ID.value");
     if (!editMode) {
@@ -559,6 +612,7 @@ public class TabInvoiceLine extends Form {
     ac.setInvLineItemTaxCategoryPercent (BigDecimal.ZERO);
     ac.setInvLineItemTaxCategoryTaxSchemeID ("");
     ac.setInvLinePriceAmount (BigDecimal.ZERO);
+    //ac.setInvLinePriceAmount ("0");
     ac.setInvLinePriceBaseQuantity (BigDecimal.ZERO);
     ac.setInvLinePriceAllowanceChargeID ("");
     ac.setInvLinePriceAllowanceChargeIndicator (Boolean.FALSE);
@@ -586,7 +640,7 @@ public class TabInvoiceLine extends Form {
     dstItem.setInvLineItemTaxCategoryID (srcItem.getInvLineItemTaxCategoryID ());
     dstItem.setInvLineItemTaxCategoryPercent (srcItem.getInvLineItemTaxCategoryPercent ());
     dstItem.setInvLineItemTaxCategoryTaxSchemeID (srcItem.getInvLineItemTaxCategoryTaxSchemeID ());
-    dstItem.setInvLinePriceAmount (srcItem.getInvLinePriceAmount ());
+    dstItem.setInvLinePriceAmount (srcItem.getInvLinePriceAmount());
     dstItem.setInvLinePriceBaseQuantity (srcItem.getInvLinePriceBaseQuantity ());
     dstItem.setInvLinePriceAllowanceChargeID (srcItem.getInvLinePriceAllowanceChargeID ());
     dstItem.setInvLinePriceAllowanceChargeIndicator (srcItem.getInvLinePriceAllowanceChargeIndicator ());
