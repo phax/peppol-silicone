@@ -20,6 +20,7 @@ import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout;
+import com.vaadin.ui.Select;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Window.Notification;
@@ -155,23 +156,40 @@ public class InvoiceTaxSubtotalTableEditor extends TableEditor<TaxSubtotalType, 
 			        final Form paymentMeansForm = createTableForm(adapterItem, invoiceList);
 			        hiddenContent.addComponent(paymentMeansForm);
 			        
-			        Field f = paymentMeansForm.getField("Tax Category ID");
+			        final Select f = (Select)paymentMeansForm.getField("Tax Category ID");
 			        final AbstractTextField f2 = (AbstractTextField)paymentMeansForm.getField("Tax Exemption Reason");
 			        final EUGEN_T10_R009 listener = new EUGEN_T10_R009(adapterItem);
 			        f.addListener(listener);
 			        f2.addListener(listener);
+			        
+			        final AbstractTextField percent = (AbstractTextField)paymentMeansForm.getField("Tax Category Percent");
 			        
 			        final Button saveNewLine = new Button("Save");
 			                
 			  	  	saveNewLine.addListener(new Button.ClickListener() {
 						@Override
 						public void buttonClick(ClickEvent event) {
+							boolean error = false;
 							if (adapterItem.getIDAdapter() != null) {
 								if (!adapterItem.getIDAdapter().equals("")) {
 									if (listener.isError()) {
 										f2.setComponentError(new UserError("You should provide an exemption reason"));
+										error = true;
+									}
+									else if (percent.getValue().equals("")) {
+										percent.setComponentError(new UserError("You should provide a percentage"));
+										error = true;
+									}
+									else if (f.getValue() == null) {
+										f.setComponentError(new UserError("You should provide a Tax ID"));
+										error = true;
+									}
+									else if (f.getValue().equals("")) {
+										f.setComponentError(new UserError("You should provide a Tax ID"));
+										error = true;
 									}
 									else {
+										error = false;
 										f2.setComponentError(null);
 										table.addLine(adapterItem);
 										//hide form
@@ -185,7 +203,7 @@ public class InvoiceTaxSubtotalTableEditor extends TableEditor<TaxSubtotalType, 
 				        	else {
 				        		hiddenContent.getWindow().showNotification("ID is needed", Notification.TYPE_TRAY_NOTIFICATION);
 				        	}
-							if (!listener.isError()) {
+							if (!error) {
 								editButton.setEnabled(true);
 								deleteButton.setEnabled(true);
 							}
@@ -255,11 +273,13 @@ public class InvoiceTaxSubtotalTableEditor extends TableEditor<TaxSubtotalType, 
 			        	paymentMeansForm.setImmediate(false);
 			        	hiddenContent.addComponent(paymentMeansForm);
 			          
-			        	Field f = paymentMeansForm.getField("Tax Category ID");
+			        	final Select f = (Select)paymentMeansForm.getField("Tax Category ID");
 				        final AbstractTextField f2 = (AbstractTextField)paymentMeansForm.getField("Tax Exemption Reason");
 				        final EUGEN_T10_R009 listener = new EUGEN_T10_R009(adapterItem);
 				        f.addListener(listener);
 				        f2.addListener(listener);
+				        
+				        final AbstractTextField percent = (AbstractTextField)paymentMeansForm.getField("Tax Category Percent");
 			        	
 			        	//Save new line button
 			        	HorizontalLayout buttonLayout = new HorizontalLayout();
@@ -267,10 +287,25 @@ public class InvoiceTaxSubtotalTableEditor extends TableEditor<TaxSubtotalType, 
 			        	buttonLayout.addComponent(new Button("Save changes",new Button.ClickListener(){
 				            @Override
 				            public void buttonClick (ClickEvent event) {
+				            	boolean error = false;
 				            	if (listener.isError()) {
 									f2.setComponentError(new UserError("You should provide an exemption reason"));
+									error = true;
+				            	}
+				            	else if (percent.getValue().equals("")) {
+									percent.setComponentError(new UserError("You should provide a percentage"));
+									error = true;
+								}
+								else if (f.getValue() == null) {
+									f.setComponentError(new UserError("You should provide a Tax ID"));
+									error = true;
+								}
+								else if (f.getValue().equals("")) {
+									f.setComponentError(new UserError("You should provide a Tax ID"));
+									error = true;
 								}
 								else {
+									error = false;
 					            	paymentMeansForm.commit();
 					            	table.setLine(sid, adapterItem);
 					            	//hide form
