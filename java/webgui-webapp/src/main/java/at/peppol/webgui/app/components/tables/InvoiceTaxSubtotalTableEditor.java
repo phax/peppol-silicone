@@ -5,17 +5,27 @@ import java.util.Collection;
 import java.util.List;
 
 import com.vaadin.data.Item;
+import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.util.NestedMethodProperty;
 import com.vaadin.event.FieldEvents.BlurEvent;
 import com.vaadin.event.FieldEvents.BlurListener;
 import com.vaadin.ui.AbstractTextField;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.DefaultFieldFactory;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.Form;
 import com.vaadin.ui.FormFieldFactory;
 import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.Layout;
+import com.vaadin.ui.Window;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Window.Notification;
+import com.vaadin.terminal.UserError;
 
+import at.peppol.webgui.app.components.TabInvoiceMonetaryTotal;
 import at.peppol.webgui.app.components.TaxCategoryIDSelect;
 import at.peppol.webgui.app.components.TaxExemptionReasonCodeSelect;
 import at.peppol.webgui.app.components.TaxSchemeSelect;
@@ -120,6 +130,187 @@ public class InvoiceTaxSubtotalTableEditor extends TableEditor<TaxSubtotalType, 
 	      return field;
 	    }
 	  }
+	  
+	  @Override
+	  public Button.ClickListener addButtonListener(
+				final Button editButton, final Button deleteButton, 
+				final Layout hiddenContent, final GenericTable<TaxSubtotalType, InvoiceTaxSubtotalAdapter> table, 
+				final List<TaxSubtotalType> invoiceList, final Label label) {
+			
+			Button.ClickListener b = new Button.ClickListener() {
+				@Override
+				public void buttonClick(ClickEvent event) {
+					//addMode = true;
+					editButton.setEnabled(false);
+					deleteButton.setEnabled(false);
+			        hiddenContent.removeAllComponents();
+			        
+			        final InvoiceTaxSubtotalAdapter adapterItem = createItem();
+			        
+			        //additionalDocRefItem = createAdditionalDocRefItem();
+			        
+			        //Label formLabel = new Label("<h3>Adding new payments means</h3>", Label.CONTENT_XHTML);
+			        
+			        hiddenContent.addComponent(label);
+			        final Form paymentMeansForm = createTableForm(adapterItem, invoiceList);
+			        hiddenContent.addComponent(paymentMeansForm);
+			        
+			        Field f = paymentMeansForm.getField("Tax Category ID");
+			        final AbstractTextField f2 = (AbstractTextField)paymentMeansForm.getField("Tax Exemption Reason");
+			        final EUGEN_T10_R009 listener = new EUGEN_T10_R009(adapterItem);
+			        f.addListener(listener);
+			        f2.addListener(listener);
+			        
+			        final Button saveNewLine = new Button("Save");
+			                
+			  	  	saveNewLine.addListener(new Button.ClickListener() {
+						@Override
+						public void buttonClick(ClickEvent event) {
+							if (adapterItem.getIDAdapter() != null) {
+								if (!adapterItem.getIDAdapter().equals("")) {
+									if (listener.isError()) {
+										f2.setComponentError(new UserError("You should provide an exemption reason"));
+									}
+									else {
+										f2.setComponentError(null);
+										table.addLine(adapterItem);
+										//hide form
+										hiddenContent.setVisible(false);
+									}
+				        		}
+				        		else {
+				        			hiddenContent.getWindow().showNotification("ID is needed", Notification.TYPE_TRAY_NOTIFICATION);
+				        		}
+				        	}
+				        	else {
+				        		hiddenContent.getWindow().showNotification("ID is needed", Notification.TYPE_TRAY_NOTIFICATION);
+				        	}
+							if (!listener.isError()) {
+								editButton.setEnabled(true);
+								deleteButton.setEnabled(true);
+							}
+						}
+					});
+
+			        //Save new line button
+			        HorizontalLayout buttonLayout = new HorizontalLayout();
+			        buttonLayout.setSpacing (true);
+			        buttonLayout.setMargin (true);
+			        buttonLayout.addComponent(saveNewLine);
+
+			        buttonLayout.addComponent(new Button("Cancel",new Button.ClickListener(){
+			          @Override
+			          public void buttonClick (ClickEvent event) {
+			        	editButton.setEnabled(true);
+			  			deleteButton.setEnabled(true);
+			            hiddenContent.removeAllComponents ();
+			            //hide form
+			            paymentMeansForm.discard();
+			            hiddenContent.setVisible(false);
+			            //addMode = false;
+			          }
+			        }));
+			        
+			        hiddenContent.addComponent(buttonLayout);
+			        
+			        //hiddenContent.setVisible(!hiddenContent.isVisible());
+			        hiddenContent.setVisible(true);
+			      }
+		    };
+		    
+		    return b;
+		}
+
+	  @Override
+	  public Button.ClickListener editButtonListener(
+			final Button addButton, final Button deleteButton,
+			final Layout hiddenContent, final GenericTable<TaxSubtotalType, InvoiceTaxSubtotalAdapter> table, 
+			final List<TaxSubtotalType> invoiceList, final Label label) {
+		
+		Button.ClickListener b = new Button.ClickListener() {
+			@Override
+			public void buttonClick(ClickEvent event) {
+				Object rowId = table.getValue(); // get the selected rows id
+		        if(rowId != null){
+		        	if (table.getContainerProperty(rowId,"IDAdapter") != null) {
+			        	hiddenContent.removeAllComponents ();
+			        	editMode = true;
+			        	addButton.setEnabled(false);
+						deleteButton.setEnabled(false);
+			        	
+			        	final String sid = (String)table.getContainerProperty(rowId,"IDAdapter").getValue();
+			        		          
+			        	//get selected item
+			        	final InvoiceTaxSubtotalAdapter adapterItem = (InvoiceTaxSubtotalAdapter)invoiceList.get(table.getIndexFromID(sid));
+			        	//paymentMeansAdapterItem = table.getEntryFromID(sid);
+			        	
+			        	//clone it to original item
+			        	final InvoiceTaxSubtotalAdapter originalItem = createItem();
+			        	cloneItem(adapterItem, originalItem);
+			          
+			        	//Label formLabel = new Label("<h3>Edit payment means line</h3>", Label.CONTENT_XHTML);
+			          
+			        	hiddenContent.addComponent(label);
+			        	final Form paymentMeansForm = createTableForm(adapterItem, invoiceList);
+			        	paymentMeansForm.setImmediate(false);
+			        	hiddenContent.addComponent(paymentMeansForm);
+			          
+			        	Field f = paymentMeansForm.getField("Tax Category ID");
+				        final AbstractTextField f2 = (AbstractTextField)paymentMeansForm.getField("Tax Exemption Reason");
+				        final EUGEN_T10_R009 listener = new EUGEN_T10_R009(adapterItem);
+				        f.addListener(listener);
+				        f2.addListener(listener);
+			        	
+			        	//Save new line button
+			        	HorizontalLayout buttonLayout = new HorizontalLayout();
+			        	buttonLayout.setSpacing (true);
+			        	buttonLayout.addComponent(new Button("Save changes",new Button.ClickListener(){
+				            @Override
+				            public void buttonClick (ClickEvent event) {
+				            	if (listener.isError()) {
+									f2.setComponentError(new UserError("You should provide an exemption reason"));
+								}
+								else {
+					            	paymentMeansForm.commit();
+					            	table.setLine(sid, adapterItem);
+					            	//hide form
+					            	hiddenContent.setVisible(false);
+					            	editMode = false;
+					            	addButton.setEnabled(true);
+									deleteButton.setEnabled(true);
+								}
+				            }
+			        	}));
+			        	buttonLayout.addComponent(new Button("Cancel editing",new Button.ClickListener(){
+				            @Override
+				            public void buttonClick (ClickEvent event) {
+				            	paymentMeansForm.discard();
+				            	table.setLine(sid, originalItem);
+				            	//hide form
+				            	hiddenContent.removeAllComponents ();
+				            	hiddenContent.setVisible(false);
+				            	editMode = false;
+				            	addButton.setEnabled(true);
+								deleteButton.setEnabled(true);
+				            }
+			        	}));
+			          
+			        	hiddenContent.addComponent(buttonLayout);
+			        	hiddenContent.setVisible(true);
+		        	}
+		        	else {
+		        		hiddenContent.getWindow ().showNotification("No table line is selected", Window.Notification.TYPE_TRAY_NOTIFICATION);
+		        	}
+		        }
+		        else {
+		        	hiddenContent.getWindow ().showNotification("No table line is selected", Window.Notification.TYPE_TRAY_NOTIFICATION);
+		        }
+			}
+			
+		};
+		
+		return b;
+	}
 
 
 	@Override
@@ -151,5 +342,39 @@ public class InvoiceTaxSubtotalTableEditor extends TableEditor<TaxSubtotalType, 
 	    dstItem.setTaxSubTotalCategoryExemptionReason (srcItem.getTaxSubTotalCategoryExemptionReason ());
 	    dstItem.setTaxSubTotalCategoryTaxSchemeID (srcItem.getTaxSubTotalCategoryTaxSchemeID ());
 	}
+	
+	public class EUGEN_T10_R009 implements ValueChangeListener {
 
+		InvoiceTaxSubtotalAdapter item;
+		boolean error;
+		
+		public EUGEN_T10_R009(InvoiceTaxSubtotalAdapter item) {
+			this.item = item;
+			error = false;
+		}
+		
+		@Override
+		public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
+			
+			String value = item.getTaxSubTotalCategoryID();
+			
+			error = false;
+			if (value.equals("E")) {
+				if (item.getTaxSubTotalCategoryTaxSchemeID().equals("VAT")) {
+					if (item.getTaxSubTotalCategoryExemptionReason().trim().equals("")) {
+						error = true;
+					}
+				}
+			}			
+		}
+
+		public boolean isError() {
+			return error;
+		}
+
+		public void setError(boolean error) {
+			this.error = error;
+		}
+		  
+	  }
 }
