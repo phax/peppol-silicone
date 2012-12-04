@@ -163,7 +163,7 @@ public class InvoiceTabForm extends Form {
     invoice.setAccountingSupplierParty (supplier);
     // invoice.setLegalMonetaryTotal(new MonetaryTotalType());
 
-    GlobalValidationsRegistry.setMainComponent(this);
+    GlobalValidationsRegistry.setMainComponent(this, invoice);
   }
 
   private void initElements () {
@@ -171,8 +171,8 @@ public class InvoiceTabForm extends Form {
     supplierForm.setImmediate(true);
     customerForm = new PartyDetailForm ("Customer", customer.getParty ());
     customerForm.setImmediate(true);
-    supplierForm.setSizeFull ();
-    customerForm.setSizeFull ();
+    //supplierForm.setSizeFull ();
+    //customerForm.setSizeFull ();
 
     final HorizontalLayout footerLayout = new HorizontalLayout ();
     footerLayout.setSpacing (true);

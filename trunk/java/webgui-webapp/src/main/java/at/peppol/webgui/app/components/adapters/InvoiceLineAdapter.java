@@ -307,6 +307,19 @@ public class InvoiceLineAdapter extends InvoiceLineType implements Adapter{
     getPrice ().getPriceAmount ().setValue (v);
   }
 
+/*  public void setInvLinePriceAmount (String v) {
+	  try {
+		  BigDecimal n = new BigDecimal(v);
+		  getPrice ().getPriceAmount ().setValue (n);
+	  }catch (NumberFormatException e) {
+		  getPrice ().getPriceAmount ().setValue (BigDecimal.ZERO);
+	  }
+  }
+  
+  public String getInvLinePriceAmount () {
+    return getPrice ().getPriceAmount ().getValue ().toPlainString();
+  }*/
+  
   public BigDecimal getInvLinePriceAmount () {
     return getPrice ().getPriceAmount ().getValue ();
   }

@@ -3,6 +3,8 @@ package at.peppol.webgui.app.validator.global;
 import java.util.ArrayList;
 import java.util.List;
 
+import oasis.names.specification.ubl.schema.xsd.invoice_2.InvoiceType;
+
 import com.vaadin.ui.Component;
 
 public abstract class BaseValidation {
@@ -10,6 +12,7 @@ public abstract class BaseValidation {
 	protected String errorMessage;
 	protected Component mainComponent;
 	protected String ruleID;
+	protected InvoiceType invoice;
 	
 	public String getRuleID() {
 		return ruleID;
@@ -29,6 +32,13 @@ public abstract class BaseValidation {
 		valid = false;
 		errorMessage = "";
 		mainComponent = c;
+	}
+	
+	public BaseValidation(InvoiceType inv) {
+		valid = false;
+		invoice = inv;
+		errorMessage = "";
+		mainComponent = null;
 	}
 	
 	public Component getMainComponent() {

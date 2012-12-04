@@ -1,10 +1,13 @@
 package at.peppol.webgui.app.components.tables;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.List;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.util.NestedMethodProperty;
+import com.vaadin.event.FieldEvents.BlurEvent;
+import com.vaadin.event.FieldEvents.BlurListener;
 import com.vaadin.ui.AbstractTextField;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.DefaultFieldFactory;
@@ -17,6 +20,8 @@ import com.vaadin.ui.Select;
 import at.peppol.webgui.app.components.TaxCategoryIDSelect;
 import at.peppol.webgui.app.components.TaxSchemeSelect;
 import at.peppol.webgui.app.components.adapters.InvoiceAllowanceChargeAdapter;
+import at.peppol.webgui.app.validator.RequiredFieldListener;
+import at.peppol.webgui.app.validator.ValidatorsList;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AllowanceChargeType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IDType;
 import oasis.names.specification.ubl.schema.xsd.invoice_2.InvoiceType;
@@ -107,6 +112,12 @@ public class InvoiceAllowanceChargeTableEditor extends
 	      final Field field = DefaultFieldFactory.get ().createField (item, propertyId, uiContext);
 	      if (field instanceof AbstractTextField) {
 	        ((AbstractTextField) field).setNullRepresentation ("");
+	        final AbstractTextField tf = (AbstractTextField) field;
+	        if ("Allowance Charge Reason".equals(pid)) {
+            	tf.setRequired(true);
+            	tf.addListener(new RequiredFieldListener(tf,pid));
+            	ValidatorsList.addListeners((Collection<BlurListener>) tf.getListeners(BlurEvent.class));
+            }
 	      }
 	      return field;
 	    }
