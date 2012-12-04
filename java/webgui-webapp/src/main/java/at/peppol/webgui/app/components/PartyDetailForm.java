@@ -187,7 +187,7 @@ public class PartyDetailForm extends Panel{
         
         partyBean.getPartyTaxScheme().add(taxScheme);
 
-        partyItemSet.addItemProperty("Tax Scheme ID",
+        partyItemSet.addItemProperty("Tax Scheme",
                             new NestedMethodProperty(taxScheme.getTaxScheme().getID(),"value"));
 
         final Form partyForm = new Form();
@@ -206,7 +206,7 @@ public class PartyDetailForm extends Panel{
 				//add the legal entity component
 				Panel panel = createLegalEntityPanel(removeLegalEntityBtn);
 				outerLayout.addComponent(panel);
-            	
+            	panel.setWidth("90%");
             	addLegalEntityBtn.setVisible(false);
             	//removeLegalEntityBtn.setVisible(true);
             	//outerLayout.replaceComponent(removeLegalEntityBtn, panel);
@@ -235,7 +235,9 @@ public class PartyDetailForm extends Panel{
 		});
         
         outerLayout.addComponent(partyForm);
+        partyForm.setWidth("90%");
         outerLayout.addComponent(partyAddressForm);
+        partyAddressForm.setWidth("90%");
         outerLayout.addComponent(addLegalEntityBtn);
         //outerLayout.addComponent(removeLegalEntityBtn);
         //outerLayout.addComponent(createLegalEntityPanel());
@@ -318,7 +320,7 @@ public class PartyDetailForm extends Panel{
 
             
             
-            if ("Tax Scheme ID".equals(pid)) {
+            if ("Tax Scheme".equals(pid)) {
                 final TaxSchemeSelect taxSchemeSelect = new TaxSchemeSelect(pid);
                 taxSchemeSelect.setRequired(true);
                 return taxSchemeSelect;

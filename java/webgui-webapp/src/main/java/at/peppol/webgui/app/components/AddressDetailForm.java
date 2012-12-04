@@ -69,12 +69,12 @@ import com.vaadin.ui.Panel;
 @SuppressWarnings ("serial")
 public class AddressDetailForm extends Panel {
   
-  private final AddressType addressBean;
+  private final AddressType address;
   private final String addressPrefix;
   
   public AddressDetailForm(String addressPrefix, AddressType addressBean) {
       this.addressPrefix = addressPrefix;
-      this.addressBean = addressBean;
+      this.address = addressBean;
       
       initElements();
   }  
@@ -86,7 +86,7 @@ public class AddressDetailForm extends Panel {
     PropertysetItem addressItemSet = new PropertysetItem();
     
     //initialize
-    AddressType address = new AddressType();
+    //AddressType address = new AddressType();
     address.setStreetName(new StreetNameType());
     address.setAdditionalStreetName (new AdditionalStreetNameType());
     address.setBuildingNumber (new BuildingNumberType ());
