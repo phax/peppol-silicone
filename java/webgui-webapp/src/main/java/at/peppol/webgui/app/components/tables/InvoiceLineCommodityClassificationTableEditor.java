@@ -20,7 +20,7 @@ import at.peppol.webgui.app.components.adapters.InvoiceLineOrderReferenceAdapter
 import at.peppol.webgui.app.components.tables.InvoiceItemPropertyTableEditor.ItemPropertyFieldFactory;
 
 public class InvoiceLineCommodityClassificationTableEditor extends
-		TableEditor<CommodityClassificationType, CommodityClassificationAdapter> {
+		GenericTableEditor<CommodityClassificationType, CommodityClassificationAdapter> {
 
 	public InvoiceLineCommodityClassificationTableEditor(boolean editMode) {
 		super(editMode);

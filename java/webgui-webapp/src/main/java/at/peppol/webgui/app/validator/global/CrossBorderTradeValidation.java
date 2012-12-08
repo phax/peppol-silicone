@@ -30,7 +30,7 @@ public class CrossBorderTradeValidation extends BaseValidation {
 			
 			if (!customerVAT.trim().startsWith(customerCountry) || 
 				!supplierVAT.trim().startsWith(supplierCountry)) {
-				return ruleID+": "+errorMessage; 
+				return error(); 
 			}
 		}
 		

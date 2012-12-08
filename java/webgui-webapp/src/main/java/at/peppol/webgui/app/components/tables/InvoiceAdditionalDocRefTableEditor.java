@@ -22,7 +22,7 @@ import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IDType;
 import un.unece.uncefact.codelist.specification.ianamimemediatype._2003.BinaryObjectMimeCodeContentType;
 
 public class InvoiceAdditionalDocRefTableEditor extends
-		TableEditor<DocumentReferenceType, InvoiceAdditionalDocRefAdapter> {
+		GenericTableEditor<DocumentReferenceType, InvoiceAdditionalDocRefAdapter> {
 
 	public InvoiceAdditionalDocRefTableEditor(boolean editMode) {
 		super(editMode);

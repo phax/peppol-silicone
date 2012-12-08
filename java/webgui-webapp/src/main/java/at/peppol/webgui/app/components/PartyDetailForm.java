@@ -103,6 +103,9 @@ public class PartyDetailForm extends Panel{
     
     private VerticalLayout hiddenContent;
     
+    public static String taxSchemeCompanyID = "Tax Scheme Company ID";
+    public static String taxSchemeID = "Tax Scheme";
+    
     public PartyDetailForm(String partyType, PartyType partyBean) {
         this.party = partyType;
         this.partyBean = partyBean;
@@ -175,7 +178,7 @@ public class PartyDetailForm extends Panel{
         PartyTaxSchemeType taxScheme = new PartyTaxSchemeType();
         taxScheme.setCompanyID(new CompanyIDType());
         
-        partyItemSet.addItemProperty("Tax Scheme Company ID",
+        partyItemSet.addItemProperty(taxSchemeCompanyID,
                 new NestedMethodProperty(taxScheme.getCompanyID(),"value"));
         
         // TODO: Hardcoded ShemeID etc for TaxScheme. Should be from a codelist?
@@ -187,7 +190,7 @@ public class PartyDetailForm extends Panel{
         
         partyBean.getPartyTaxScheme().add(taxScheme);
 
-        partyItemSet.addItemProperty("Tax Scheme",
+        partyItemSet.addItemProperty(taxSchemeID,
                             new NestedMethodProperty(taxScheme.getTaxScheme().getID(),"value"));
 
         final Form partyForm = new Form();
@@ -320,7 +323,7 @@ public class PartyDetailForm extends Panel{
 
             
             
-            if ("Tax Scheme".equals(pid)) {
+            if (taxSchemeID.equals(pid)) {
                 final TaxSchemeSelect taxSchemeSelect = new TaxSchemeSelect(pid);
                 taxSchemeSelect.setRequired(true);
                 return taxSchemeSelect;

@@ -25,7 +25,7 @@ public class VATTotalLines extends BaseValidation {
 			for (InvoiceLineType line : lines) {
 				if (line.getItem().getClassifiedTaxCategory().
 						get(0).getTaxScheme().getID().getValue().equals("")) {
-					return ruleID+": "+errorMessage;
+					return error();
 				}
 					 
 			}

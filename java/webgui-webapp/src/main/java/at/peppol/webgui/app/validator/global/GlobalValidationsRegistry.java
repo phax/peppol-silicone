@@ -16,6 +16,9 @@ public class GlobalValidationsRegistry {
 		list.add(new CrossBorderTradeValidation(inv));
 		list.add(new VATTotalTaxes(inv));
 		list.add(new VATTotalSupplier(inv));
+		list.add(new VATTotalAllowancesCharges(inv));
+		list.add(new VATAESupplierCustomer(inv));
+		list.add(new VATAEOtherVAT(inv));
 	}
 	
 	public static List<String> runAll() {

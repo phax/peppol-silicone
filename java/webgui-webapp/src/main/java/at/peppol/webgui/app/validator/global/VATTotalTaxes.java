@@ -28,7 +28,7 @@ public class VATTotalTaxes extends BaseValidation {
 		BigDecimal taxEx = invoice.getLegalMonetaryTotal().getTaxExclusiveAmount().getValue();
 		
 		if (total.compareTo(taxEx) != 0) {
-			return ruleID+": "+errorMessage;
+			return error();
 		}
 		else
 			return null;

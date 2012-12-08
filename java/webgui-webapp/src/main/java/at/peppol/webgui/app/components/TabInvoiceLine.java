@@ -490,7 +490,7 @@ public class TabInvoiceLine extends Form {
 				  "Tax Total Amount".equals(propertyId) || "Item Description".equals(propertyId) ||
 				  "Item Name".equals(propertyId) || "Sellers Item ID".equals(propertyId) ||
 				  "Tax Category ID".equals(propertyId) || "Tax Category Percent".equals(propertyId) || 
-				  "Standard Item ID".equals(propertyId) || "Tax Category Scheme ID".equals(propertyId)) {
+				  "Standard Item ID".equals(propertyId) || "Tax Scheme ID".equals(propertyId)) {
 				  
 				  f1.addComponent(field);
 		      }
@@ -498,7 +498,7 @@ public class TabInvoiceLine extends Form {
 					  "Price Allowance/Charge Reason".equals(propertyId) ||
 					  "Price Allowance/Charge Multiplier Factor".equals(propertyId) ||
 					  "Price Allowance/Charge Amount".equals(propertyId) ||
-					  "Price Allowance/Charge Base Amount".equals(propertyId)) {
+					  "Price Allowance/Charge Base Amount".equals(propertyId)){
 				  
 				  if (f2.getComponentIndex(label) == -1)
 					  f2.addComponent(label);
@@ -514,7 +514,7 @@ public class TabInvoiceLine extends Form {
 				  
 				  f2.addComponent(field);
 			  }
-			  else {
+			  else { //for price amount and base quantity
 				  f2.addComponent(field);
 			  }
 		    }  
@@ -573,13 +573,13 @@ public class TabInvoiceLine extends Form {
                                                                                   "InvLineItemTaxCategoryID"));
     invoiceLineForm.addItemProperty ("Tax Category Percent", new NestedMethodProperty (invoiceLineItem,
                                                                                        "InvLineItemTaxCategoryPercent"));
-    invoiceLineForm.addItemProperty ("Tax Category Scheme ID",
+    invoiceLineForm.addItemProperty ("Tax Scheme ID",
                                      new NestedMethodProperty (invoiceLineItem, "InvLineItemTaxCategoryTaxSchemeID"));
     invoiceLineForm.addItemProperty ("Price Amount", new NestedMethodProperty (invoiceLineItem, "InvLinePriceAmount"));
     invoiceLineForm.addItemProperty ("Base Quantity", new NestedMethodProperty (invoiceLineItem,
                                                                                 "InvLinePriceBaseQuantity"));
-    invoiceLineForm.addItemProperty ("Price Allowance/Charge ID",
-                                     new NestedMethodProperty (invoiceLineItem, "InvLinePriceAllowanceChargeID"));
+    //invoiceLineForm.addItemProperty ("Price Allowance/Charge ID",
+    //                                 new NestedMethodProperty (invoiceLineItem, "InvLinePriceAllowanceChargeID"));
     invoiceLineForm.addItemProperty ("Price Allowance/Charge Indicator",
                                      new NestedMethodProperty (invoiceLineItem, "InvLinePriceAllowanceChargeIndicator"));
     invoiceLineForm.addItemProperty ("Price Allowance/Charge Reason",
@@ -665,6 +665,17 @@ public class TabInvoiceLine extends Form {
 
         return indicatorSelect;
       }
+      if ("Tax Scheme ID".equals(pid)) {
+          final TaxSchemeSelect taxSchemeSelect = new TaxSchemeSelect(pid);
+          taxSchemeSelect.setRequired(true);
+          return taxSchemeSelect;
+      }
+      if ("Tax Category ID".equals(pid)) {
+          final TaxCategoryIDSelect taxCategoryIDSelect = new TaxCategoryIDSelect(pid);
+          taxCategoryIDSelect.setRequired(true);
+          return taxCategoryIDSelect;
+      }
+      
       final Field field = DefaultFieldFactory.get ().createField (item, propertyId, uiContext);
       if (field instanceof AbstractTextField) {
         ((AbstractTextField) field).setNullRepresentation ("");

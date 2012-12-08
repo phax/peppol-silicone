@@ -31,10 +31,20 @@ public class VATTotalSupplier extends BaseValidation {
 			String taxID = invoice.getAccountingSupplierParty().getParty().
 					 getPartyTaxScheme().get(0).getCompanyID().getValue();
 			
-			if (!taxScheme.equals("VAT"))
-				return ruleID+": "+errorMessage;
-			if (taxID.equals(""))
-				return ruleID+": "+errorMessage;
+			if (taxScheme != null) {
+				if (!taxScheme.equals("VAT"))
+					return error();
+			}
+			else
+				return error();
+				
+			
+			if (taxID != null) {
+				if (taxID.equals(""))
+					return error();
+			}
+			else
+				return error();
 		}
 				
 		return null;

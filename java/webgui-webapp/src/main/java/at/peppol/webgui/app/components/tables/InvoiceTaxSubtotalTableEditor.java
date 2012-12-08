@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.util.NestedMethodProperty;
 import com.vaadin.event.FieldEvents.BlurEvent;
 import com.vaadin.event.FieldEvents.BlurListener;
@@ -32,12 +33,15 @@ import at.peppol.webgui.app.components.TaxExemptionReasonCodeSelect;
 import at.peppol.webgui.app.components.TaxSchemeSelect;
 import at.peppol.webgui.app.components.adapters.InvoiceTaxSubtotalAdapter;
 import at.peppol.webgui.app.validator.PositiveValueListener;
+import at.peppol.webgui.app.validator.PositiveValueValidator;
 import at.peppol.webgui.app.validator.RequiredNumericalFieldListener;
 import at.peppol.webgui.app.validator.ValidatorsList;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.TaxSubtotalType;
 
-public class InvoiceTaxSubtotalTableEditor extends TableEditor<TaxSubtotalType, InvoiceTaxSubtotalAdapter> {
+public class InvoiceTaxSubtotalTableEditor extends GenericTableEditor<TaxSubtotalType, InvoiceTaxSubtotalAdapter> {
 
+	GenericTable<TaxSubtotalType, InvoiceTaxSubtotalAdapter> table;
+	
 	public InvoiceTaxSubtotalTableEditor(boolean editMode) {
 		super(editMode);
 	}
@@ -47,10 +51,10 @@ public class InvoiceTaxSubtotalTableEditor extends TableEditor<TaxSubtotalType, 
 			List<TaxSubtotalType> invoiceList) {
 		
 		final Form invoiceTaxSubtotalForm = new Form (new FormLayout (), new InvoiceTaxTotalFieldFactory ());
-	    invoiceTaxSubtotalForm.setImmediate (true);
+		invoiceTaxSubtotalForm.setImmediate (true);
 
 	    if (!editMode) {
-	    	taxSubtotalItem.setIDAdapter(String.valueOf(invoiceList.size ()+1));
+	    	taxSubtotalItem.setIDAdapter(String.valueOf(invoiceList.size()+1));
 	    }
 
 	    invoiceTaxSubtotalForm.addItemProperty ("Taxable Amount", new NestedMethodProperty (taxSubtotalItem,
@@ -110,12 +114,14 @@ public class InvoiceTaxSubtotalTableEditor extends TableEditor<TaxSubtotalType, 
 	        }
 	        if ("Taxable Amount".equals(pid)) {
 	        	tf.setRequired(true);
+	        	tf.addValidator(new PositiveValueValidator());
 	        	tf.addListener(new RequiredNumericalFieldListener(tf,pid));
 	        	tf.addListener(new PositiveValueListener(tf,pid));
 	        	ValidatorsList.addListeners((Collection<BlurListener>) tf.getListeners(BlurEvent.class));
 	        }
 	        if ("Tax Amount".equals(pid)) {
 	        	tf.setRequired(true);
+	        	tf.addValidator(new PositiveValueValidator());
 	        	tf.addListener(new RequiredNumericalFieldListener(tf,pid));
 	        	tf.addListener(new PositiveValueListener(tf,pid));
 	        	ValidatorsList.addListeners((Collection<BlurListener>) tf.getListeners(BlurEvent.class));
@@ -138,7 +144,9 @@ public class InvoiceTaxSubtotalTableEditor extends TableEditor<TaxSubtotalType, 
 				final Layout hiddenContent, final GenericTable<TaxSubtotalType, InvoiceTaxSubtotalAdapter> table, 
 				final List<TaxSubtotalType> invoiceList, final Label label) {
 			
-			Button.ClickListener b = new Button.ClickListener() {
+		  this.table = table;
+			
+		  Button.ClickListener b = new Button.ClickListener() {
 				@Override
 				public void buttonClick(ClickEvent event) {
 					//addMode = true;
@@ -147,10 +155,6 @@ public class InvoiceTaxSubtotalTableEditor extends TableEditor<TaxSubtotalType, 
 			        hiddenContent.removeAllComponents();
 			        
 			        final InvoiceTaxSubtotalAdapter adapterItem = createItem();
-			        
-			        //additionalDocRefItem = createAdditionalDocRefItem();
-			        
-			        //Label formLabel = new Label("<h3>Adding new payments means</h3>", Label.CONTENT_XHTML);
 			        
 			        hiddenContent.addComponent(label);
 			        final Form paymentMeansForm = createTableForm(adapterItem, invoiceList);
@@ -165,7 +169,7 @@ public class InvoiceTaxSubtotalTableEditor extends TableEditor<TaxSubtotalType, 
 			        final AbstractTextField percent = (AbstractTextField)paymentMeansForm.getField("Tax Category Percent");
 			        
 			        final Button saveNewLine = new Button("Save");
-			                
+			        
 			  	  	saveNewLine.addListener(new Button.ClickListener() {
 						@Override
 						public void buttonClick(ClickEvent event) {
@@ -189,11 +193,14 @@ public class InvoiceTaxSubtotalTableEditor extends TableEditor<TaxSubtotalType, 
 										error = true;
 									}
 									else {
-										error = false;
-										f2.setComponentError(null);
-										table.addLine(adapterItem);
-										//hide form
-										hiddenContent.setVisible(false);
+										try {
+											paymentMeansForm.validate();
+											error = false;
+											f2.setComponentError(null);
+											table.addLine(adapterItem);
+											//hide form
+											hiddenContent.setVisible(false);
+										}catch (InvalidValueException e) {}
 									}
 				        		}
 				        		else {
@@ -270,7 +277,6 @@ public class InvoiceTaxSubtotalTableEditor extends TableEditor<TaxSubtotalType, 
 			          
 			        	hiddenContent.addComponent(label);
 			        	final Form paymentMeansForm = createTableForm(adapterItem, invoiceList);
-			        	paymentMeansForm.setImmediate(false);
 			        	hiddenContent.addComponent(paymentMeansForm);
 			          
 			        	final Select f = (Select)paymentMeansForm.getField("Tax Category ID");
@@ -305,21 +311,24 @@ public class InvoiceTaxSubtotalTableEditor extends TableEditor<TaxSubtotalType, 
 									error = true;
 								}
 								else {
-									error = false;
-					            	paymentMeansForm.commit();
-					            	table.setLine(sid, adapterItem);
-					            	//hide form
-					            	hiddenContent.setVisible(false);
-					            	editMode = false;
-					            	addButton.setEnabled(true);
-									deleteButton.setEnabled(true);
+									try {
+										paymentMeansForm.validate();
+										error = false;
+						            	//paymentMeansForm.commit();
+						            	table.setLine(sid, adapterItem);
+						            	//hide form
+						            	hiddenContent.setVisible(false);
+						            	editMode = false;
+						            	addButton.setEnabled(true);
+										deleteButton.setEnabled(true);
+									}catch (InvalidValueException e){}
 								}
 				            }
 			        	}));
 			        	buttonLayout.addComponent(new Button("Cancel editing",new Button.ClickListener(){
 				            @Override
 				            public void buttonClick (ClickEvent event) {
-				            	paymentMeansForm.discard();
+				            	//paymentMeansForm.discard();
 				            	table.setLine(sid, originalItem);
 				            	//hide form
 				            	hiddenContent.removeAllComponents ();
@@ -350,9 +359,10 @@ public class InvoiceTaxSubtotalTableEditor extends TableEditor<TaxSubtotalType, 
 
 	@Override
 	public InvoiceTaxSubtotalAdapter createItem() {
-		final InvoiceTaxSubtotalAdapter ac = new InvoiceTaxSubtotalAdapter ();
+		InvoiceTaxSubtotalAdapter ac = new InvoiceTaxSubtotalAdapter ();
 
-	    ac.setTableLineID ("");
+	    //ac.setTableLineID ("");
+		//ac.setIDAdapter ("");
 	    ac.setTaxSubTotalTaxAmount (BigDecimal.ZERO);
 	    ac.setTaxSubTotalTaxableAmount (BigDecimal.ZERO);
 	    ac.setTaxSubTotalCategoryID ("");
@@ -368,7 +378,8 @@ public class InvoiceTaxSubtotalTableEditor extends TableEditor<TaxSubtotalType, 
 	public void cloneItem(InvoiceTaxSubtotalAdapter srcItem,
 			InvoiceTaxSubtotalAdapter dstItem) {
 	
-		dstItem.setTableLineID (srcItem.getTableLineID ());
+		//dstItem.setTableLineID (srcItem.getTableLineID ());
+		dstItem.setIDAdapter (srcItem.getIDAdapter ());
 	    dstItem.setTaxSubTotalTaxAmount (srcItem.getTaxSubTotalTaxAmount ());
 	    dstItem.setTaxSubTotalTaxableAmount (srcItem.getTaxSubTotalTaxableAmount ());
 	    dstItem.setTaxSubTotalCategoryID (srcItem.getTaxSubTotalCategoryID ());

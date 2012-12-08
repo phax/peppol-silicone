@@ -31,6 +31,6 @@ public class InvoiceLinesNumberValidation extends BaseValidation {
 		if (linesNum > 0)
 			return null;
 		else
-			return ruleID+": "+errorMessage;
+			return error();
 	}
 }

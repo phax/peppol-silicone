@@ -16,7 +16,7 @@ import at.peppol.webgui.app.components.adapters.InvoiceItemPropertyAdapter;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.ItemPropertyType;
 
 public class InvoiceItemPropertyTableEditor extends
-		TableEditor<ItemPropertyType, InvoiceItemPropertyAdapter> {
+		GenericTableEditor<ItemPropertyType, InvoiceItemPropertyAdapter> {
 
 	public InvoiceItemPropertyTableEditor(boolean editMode) {
 		super(editMode);
