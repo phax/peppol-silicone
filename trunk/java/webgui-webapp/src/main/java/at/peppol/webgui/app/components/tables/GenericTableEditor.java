@@ -20,16 +20,16 @@ import com.vaadin.ui.Window;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Window.Notification;
 
-public abstract class TableEditor<Ttype, Tadapter extends Adapter> {
+public abstract class GenericTableEditor<Ttype, Tadapter extends Adapter> {
 	
 	protected boolean editMode;
 	protected InvoiceType invoice;
 	
-	public TableEditor(boolean editMode){
+	public GenericTableEditor(boolean editMode){
 		this.editMode = editMode;
 	}
 	
-	public TableEditor(boolean editMode, InvoiceType inv){
+	public GenericTableEditor(boolean editMode, InvoiceType inv){
 		this.editMode = editMode;
 		invoice = inv;
 	}
@@ -49,10 +49,6 @@ public abstract class TableEditor<Ttype, Tadapter extends Adapter> {
 		        
 		        final Tadapter adapterItem = createItem();
 		        
-		        //additionalDocRefItem = createAdditionalDocRefItem();
-		        
-		        //Label formLabel = new Label("<h3>Adding new payments means</h3>", Label.CONTENT_XHTML);
-		        
 		        hiddenContent.addComponent(label);
 		        final Form paymentMeansForm = createTableForm(adapterItem, invoiceList);
 		        hiddenContent.addComponent(paymentMeansForm);
@@ -65,6 +61,7 @@ public abstract class TableEditor<Ttype, Tadapter extends Adapter> {
 						if (adapterItem.getIDAdapter() != null) {
 							if (!adapterItem.getIDAdapter().equals("")) {
 								table.addLine(adapterItem);
+								table.requestRepaint();
 			        			//hide form
 			        			hiddenContent.setVisible(false);
 			        		}
@@ -140,7 +137,7 @@ public abstract class TableEditor<Ttype, Tadapter extends Adapter> {
 			          
 			        	hiddenContent.addComponent(label);
 			        	final Form paymentMeansForm = createTableForm(adapterItem, invoiceList);
-			        	paymentMeansForm.setImmediate(false);
+			        	paymentMeansForm.setImmediate(true);
 			        	hiddenContent.addComponent(paymentMeansForm);
 			          
 			        	//Save new line button
@@ -149,7 +146,7 @@ public abstract class TableEditor<Ttype, Tadapter extends Adapter> {
 			        	buttonLayout.addComponent(new Button("Save changes",new Button.ClickListener(){
 				            @Override
 				            public void buttonClick (ClickEvent event) {
-				            	paymentMeansForm.commit();
+				            	//paymentMeansForm.commit();
 				            	table.setLine(sid, adapterItem);
 				            	//hide form
 				            	hiddenContent.setVisible(false);
@@ -161,7 +158,7 @@ public abstract class TableEditor<Ttype, Tadapter extends Adapter> {
 			        	buttonLayout.addComponent(new Button("Cancel editing",new Button.ClickListener(){
 				            @Override
 				            public void buttonClick (ClickEvent event) {
-				            	paymentMeansForm.discard();
+				            	//paymentMeansForm.discard();
 				            	table.setLine(sid, originalItem);
 				            	//hide form
 				            	hiddenContent.removeAllComponents ();
@@ -197,17 +194,18 @@ public abstract class TableEditor<Ttype, Tadapter extends Adapter> {
 				Object rowId = table.getValue(); // get the selected rows id
 		        if(rowId != null){
 		        	if (table.getContainerProperty(rowId,"IDAdapter") != null) {
-			        	if(table.getContainerProperty(rowId,"IDAdapter").getValue() != null){
+			        	//if(table.getContainerProperty(rowId,"IDAdapter").getValue() != null){
 			        		String sid = (String)table.getContainerProperty(rowId,"IDAdapter").getValue();
-			        		table.removeLine(sid);
-			        	}
+		        			if (sid != null)
+		        				table.removeLine(sid);
+			        	//}
 		        	}
 		        	else {
-		        		//parent.getWindow ().showNotification("No table line is selected", Window.Notification.TYPE_TRAY_NOTIFICATION);
+		        		table.getParent().getWindow ().showNotification("No table line is selected", Window.Notification.TYPE_TRAY_NOTIFICATION);
 		        	}
 		        }
 		        else {
-		        	//parent.getWindow ().showNotification("No table line is selected", Window.Notification.TYPE_TRAY_NOTIFICATION);
+		        	table.getParent().getWindow ().showNotification("No table line is selected", Window.Notification.TYPE_TRAY_NOTIFICATION);
 		        }
 				
 			}

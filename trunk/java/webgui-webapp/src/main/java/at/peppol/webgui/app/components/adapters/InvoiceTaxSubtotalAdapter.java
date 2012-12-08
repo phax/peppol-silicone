@@ -72,17 +72,44 @@ public class InvoiceTaxSubtotalAdapter extends TaxSubtotalType implements Adapte
   public void setID(IDType id) {/*dummy method*/}
   
   @Override
+  public int hashCode() {
+	  int ret = getTableLineID().hashCode();
+	  ret += getTaxSubTotalTaxableAmount().hashCode();
+	  ret += getTaxSubTotalTaxAmount().hashCode();
+	  ret += getTaxSubTotalCategoryID().hashCode();
+	  ret += getTaxSubTotalCategoryPercent().hashCode();
+	  ret += getTaxSubTotalCategoryExemptionReasonCode().hashCode();
+	  ret += getTaxSubTotalCategoryExemptionReason().hashCode();
+	  ret += getTaxSubTotalCategoryTaxSchemeID().hashCode();
+	  
+	  return ret;
+  }
+  
+  @Override
+  public boolean equals(Object obj) {
+	  if (obj == null)
+		  return false;
+	  
+	  if (this.hashCode() == obj.hashCode())
+		  return true;
+	  
+	  return false;
+  }
+  
+  @Override
   public void setIDAdapter(String id) {
-	  setTableLineID(id);
+	  //setTableLineID(id);
+	  tableLineID = id;
   }
   
   @Override
   public String getIDAdapter() {
-	  return getTableLineID();
+	  //return getTableLineID();
+	  return tableLineID;
   }
   
-  public void setTableLineID(String v) {
-    tableLineID = v;
+  public void setTableLineID(String id) {
+    tableLineID = id;
   }
   
   public String getTableLineID () {

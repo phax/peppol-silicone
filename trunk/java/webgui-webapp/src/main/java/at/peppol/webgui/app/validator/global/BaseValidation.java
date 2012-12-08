@@ -65,5 +65,9 @@ public abstract class BaseValidation {
 		return errorMessage;
 	}
 	
+	public String error() {
+		return ruleID+": "+errorMessage;
+	}
+	
 	public abstract String run();
 }

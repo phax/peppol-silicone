@@ -28,7 +28,7 @@ import oasis.names.specification.ubl.schema.xsd.invoice_2.InvoiceType;
 import un.unece.uncefact.codelist.specification._54217._2001.CurrencyCodeContentType;
 
 public class InvoiceAllowanceChargeTableEditor extends
-		TableEditor<AllowanceChargeType, InvoiceAllowanceChargeAdapter> {
+		GenericTableEditor<AllowanceChargeType, InvoiceAllowanceChargeAdapter> {
 
 	public InvoiceAllowanceChargeTableEditor(boolean editMode) {
 		super(editMode);

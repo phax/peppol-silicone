@@ -26,7 +26,7 @@ import at.peppol.webgui.app.components.PaymentMeansSelect;
 import at.peppol.webgui.app.components.adapters.Adapter;
 import at.peppol.webgui.app.components.adapters.PaymentMeansAdapter;
 
-public class PaymentMeansTableEditor extends TableEditor<PaymentMeansType, PaymentMeansAdapter> {
+public class PaymentMeansTableEditor extends GenericTableEditor<PaymentMeansType, PaymentMeansAdapter> {
 
 	public PaymentMeansTableEditor(boolean editMode) {
 		super(editMode);

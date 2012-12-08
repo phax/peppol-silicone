@@ -35,13 +35,18 @@ public class GenericTable<Ttype,Tadapter extends Adapter> extends Table {
 	  
 	  public void addLine(Tadapter pms) {
 		  linesFromInvoice.add((Ttype)pms);
-	      tableLines.addBean(pms);   
+	      tableLines.addBean(pms);
+		  //System.out.println(pms.hashCode());
 	  }
 	  
 	  public void setLine(String lineID, Tadapter pms) {
 		  //use for editing....
-		  if(getIndexFromID(lineID) > -1){
-			  linesFromInvoice.set(getIndexFromID(lineID), (Ttype)pms);
+		  int index = getIndexFromID(lineID);
+		  if(index > -1){
+			  linesFromInvoice.set(index, (Ttype)pms);
+			  //Tadapter tableItem = tableLines.getIdByIndex(index);
+			  //tableLines.get
+			  
 			  tableLines.removeAllItems ();
 			  Iterator<Ttype> iterator = linesFromInvoice.iterator();
 			  while (iterator.hasNext()) {

@@ -201,7 +201,7 @@ public class InvoiceTabForm extends Form {
         	  //add the error messages
         	  errorWindow.addComponent(new Label("<ol>", Label.CONTENT_XHTML));
         	  for (int i=0;i<errors.size();i++) {
-        		  errorWindow.addComponent(new Label("<li>"+errors.get(i)+"</li>", Label.CONTENT_XHTML));
+        		  errorWindow.addComponent(new Label("<li style=\"margin-top: 3px;\">"+errors.get(i)+"</li>", Label.CONTENT_XHTML));
         	  }
         	  errorWindow.addComponent(new Label("</ol>", Label.CONTENT_XHTML));
         	  
@@ -426,8 +426,6 @@ public class InvoiceTabForm extends Form {
 		BigDecimal taxTot = invoice.getTaxTotal().get(0).getTaxAmount().getValue();
 		
 		taxInclusiveAmountField.setValue(taxEx.add(taxTot));
-		
-		System.out.println("inside value change listener");
 	}
 	  
   }

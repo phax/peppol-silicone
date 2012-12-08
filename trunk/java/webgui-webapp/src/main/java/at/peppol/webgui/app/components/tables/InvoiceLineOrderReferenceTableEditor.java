@@ -17,7 +17,7 @@ import at.peppol.webgui.app.components.adapters.InvoiceLineOrderReferenceAdapter
 import at.peppol.webgui.app.components.tables.InvoiceItemPropertyTableEditor.ItemPropertyFieldFactory;
 
 public class InvoiceLineOrderReferenceTableEditor extends
-		TableEditor<OrderLineReferenceType, InvoiceLineOrderReferenceAdapter> {
+		GenericTableEditor<OrderLineReferenceType, InvoiceLineOrderReferenceAdapter> {
 
 	public InvoiceLineOrderReferenceTableEditor(boolean editMode) {
 		super(editMode);
