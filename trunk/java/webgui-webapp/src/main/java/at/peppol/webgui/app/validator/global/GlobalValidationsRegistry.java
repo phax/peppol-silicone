@@ -19,6 +19,7 @@ public class GlobalValidationsRegistry {
 		list.add(new VATTotalAllowancesCharges(inv));
 		list.add(new VATAESupplierCustomer(inv));
 		list.add(new VATAEOtherVAT(inv));
+		list.add(new PaymentMeansDueDate(inv));
 	}
 	
 	public static List<String> runAll() {
