@@ -174,6 +174,11 @@ public class TabInvoiceLine extends Form {
         form.getField("Base Quantity").addListener(biirule_t10_r018);
         lineAllowanceChargePanel.getTable().addListener((ItemSetChangeListener)biirule_t10_r018);
         
+        //add the listeners for VAT AE tax total amount
+        EUGEN_T10_R018 eugen_t10_r018 = new EUGEN_T10_R018(form, "Tax Scheme ID","Tax Category ID","Tax Total Amount");
+        form.getField("Tax Scheme ID").addListener(eugen_t10_r018);
+        form.getField("Tax Category ID").addListener(eugen_t10_r018);
+        
         h1.addComponent (lineAllowanceChargePanel);
         
         HorizontalLayout h2 = new HorizontalLayout();
@@ -252,6 +257,7 @@ public class TabInvoiceLine extends Form {
         hiddenContent.setVisible (true);
       }
     });
+    
     final Button editBtn = new Button ("Edit Selected", new Button.ClickListener () {
       @Override
       public void buttonClick (final Button.ClickEvent event) {
@@ -300,6 +306,11 @@ public class TabInvoiceLine extends Form {
           form.getField("Price Amount").addListener(biirule_t10_r018);
           form.getField("Base Quantity").addListener(biirule_t10_r018);
           lineAllowanceChargePanel.getTable().addListener((ItemSetChangeListener)biirule_t10_r018);
+          
+          //add the listeners for VAT AE tax total amount
+          EUGEN_T10_R018 eugen_t10_r018 = new EUGEN_T10_R018(form, "Tax Scheme ID","Tax Category ID","Tax Total Amount");
+          form.getField("Tax Scheme ID").addListener(eugen_t10_r018);
+          form.getField("Tax Category ID").addListener(eugen_t10_r018);
           
           h1.addComponent (lineAllowanceChargePanel);
           
@@ -749,6 +760,35 @@ public class TabInvoiceLine extends Form {
 		calc();
 	}
 		  
+  }
+  
+  public static class EUGEN_T10_R018 implements ValueChangeListener {
+	  
+	  Form form;
+	  String taxSchemeField, taxCategoryField, taxTotalField;
+	  
+	  public EUGEN_T10_R018(Form form, String taxSchemeField, String taxCategoryField, String taxTotalField) {
+		  this.form = form;
+		  this.taxCategoryField = taxCategoryField;
+		  this.taxSchemeField = taxSchemeField;
+		  this.taxTotalField = taxTotalField;
+	  }
+	  
+	  @Override
+	  public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
+		  String taxScheme = (String)form.getField(taxSchemeField).getValue();
+		  String taxCategory = (String)form.getField(taxCategoryField).getValue();
+		  Field taxAmount = form.getField(taxTotalField);
+		  
+		  if (taxScheme.equals("VAT") && taxCategory.equals("AE")) {
+			  taxAmount.setValue("0.00");
+			  taxAmount.setReadOnly(true);
+		  }
+		  else {
+			  taxAmount.setReadOnly(false);
+		  }
+	  }
+	  
   }
 
 }

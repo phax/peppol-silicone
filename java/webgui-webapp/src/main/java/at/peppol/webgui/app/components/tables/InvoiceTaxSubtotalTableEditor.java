@@ -31,6 +31,7 @@ import at.peppol.webgui.app.components.TabInvoiceMonetaryTotal;
 import at.peppol.webgui.app.components.TaxCategoryIDSelect;
 import at.peppol.webgui.app.components.TaxExemptionReasonCodeSelect;
 import at.peppol.webgui.app.components.TaxSchemeSelect;
+import at.peppol.webgui.app.components.TabInvoiceLine.EUGEN_T10_R018;
 import at.peppol.webgui.app.components.adapters.InvoiceTaxSubtotalAdapter;
 import at.peppol.webgui.app.validator.PositiveValueListener;
 import at.peppol.webgui.app.validator.PositiveValueValidator;
@@ -166,6 +167,11 @@ public class InvoiceTaxSubtotalTableEditor extends GenericTableEditor<TaxSubtota
 			        f.addListener(listener);
 			        f2.addListener(listener);
 			        
+			        //add the listeners for VAT AE tax total amount
+			        EUGEN_T10_R018 eugen_t10_r018 = new EUGEN_T10_R018(paymentMeansForm, "Tax Scheme ID","Tax Category ID","Tax Amount");
+			        paymentMeansForm.getField("Tax Scheme ID").addListener(eugen_t10_r018);
+			        paymentMeansForm.getField("Tax Category ID").addListener(eugen_t10_r018);
+			        
 			        final AbstractTextField percent = (AbstractTextField)paymentMeansForm.getField("Tax Category Percent");
 			        
 			        final Button saveNewLine = new Button("Save");
@@ -284,6 +290,11 @@ public class InvoiceTaxSubtotalTableEditor extends GenericTableEditor<TaxSubtota
 				        final EUGEN_T10_R009 listener = new EUGEN_T10_R009(adapterItem);
 				        f.addListener(listener);
 				        f2.addListener(listener);
+				        
+				        //add the listeners for VAT AE tax total amount
+				        EUGEN_T10_R018 eugen_t10_r018 = new EUGEN_T10_R018(paymentMeansForm, "Tax Scheme ID","Tax Category ID","Tax Amount");
+				        paymentMeansForm.getField("Tax Scheme ID").addListener(eugen_t10_r018);
+				        paymentMeansForm.getField("Tax Category ID").addListener(eugen_t10_r018);
 				        
 				        final AbstractTextField percent = (AbstractTextField)paymentMeansForm.getField("Tax Category Percent");
 			        	
