@@ -64,6 +64,7 @@ import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IDType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IssueDateType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.NoteType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.StartDateType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TaxPointDateType;
 import un.unece.uncefact.codelist.specification.ianamimemediatype._2003.BinaryObjectMimeCodeContentType;
 
 import at.peppol.webgui.app.components.PartyDetailForm.PartyFieldFactory;
@@ -287,15 +288,19 @@ public class TabInvoiceHeader extends Form {
     invoiceTopForm.addItemProperty ("Invoice Note", new NestedMethodProperty (parent.getInvoice().getNote ().get (0), "value"));
     
     Date taxPointDate = new Date ();
+    parent.getInvoice().setTaxPointDate(new TaxPointDateType());
     invoiceTopForm.addItemProperty ("Tax Point Date", new ObjectProperty <Date> (issueDate));
     
     parent.getInvoice().setAccountingCost (new AccountingCostType ());
     invoiceTopForm.addItemProperty ("Accounting Cost", new NestedMethodProperty (parent.getInvoice().getAccountingCost (), "value"));
     
     Date startDate = new Date ();
+    parent.getInvoice().getInvoicePeriod().add(new PeriodType());
+    parent.getInvoice().getInvoicePeriod().get(0).setStartDate(new StartDateType());
     invoiceTopForm.addItemProperty ("Invoice Period Start Date", new ObjectProperty <Date> (issueDate));
 
     Date endDate = new Date ();
+    parent.getInvoice().getInvoicePeriod().get(0).setEndDate(new EndDateType());
     invoiceTopForm.addItemProperty ("Invoice Period End Date", new ObjectProperty <Date> (issueDate));
     
     
@@ -375,10 +380,23 @@ public class TabInvoiceHeader extends Form {
       
       if ("Issue Date".equals(pid)) {
         final PopupDateField issueDateField = new PopupDateField("Issue Date");
-        issueDateField.setValue(new Date());
+        Date date = new Date();
+        issueDateField.setValue(date);
         issueDateField.setResolution(DateField.RESOLUTION_DAY);
+        
+        try {
+        	GregorianCalendar gc = new GregorianCalendar();
+            gc.setTime(date);
+        	XMLGregorianCalendar XMLDate = DatatypeFactory.newInstance().newXMLGregorianCalendar();
+            XMLDate.setYear(gc.get(Calendar.YEAR));
+            XMLDate.setMonth(gc.get(Calendar.MONTH) + 1);
+            XMLDate.setDay(gc.get(Calendar.DATE));
+            parent.getInvoice().getIssueDate().setValue(XMLDate);
+    	} catch (DatatypeConfigurationException e) {
+    		e.printStackTrace();
+    	}
+        
         issueDateField.addListener(new ValueChangeListener() {
-
           @Override
           public void valueChange(final com.vaadin.data.Property.ValueChangeEvent event) {
             try {
@@ -405,10 +423,23 @@ public class TabInvoiceHeader extends Form {
       
       if ("Tax Point Date".equals(pid)) {
         final PopupDateField taxPointDateField = new PopupDateField("Tax Point Date");
-        taxPointDateField.setValue(new Date());
+        Date date = new Date();
+        taxPointDateField.setValue(date);
         taxPointDateField.setResolution(DateField.RESOLUTION_DAY);
+        
+        try {
+        	GregorianCalendar gc = new GregorianCalendar();
+            gc.setTime(date);
+        	XMLGregorianCalendar XMLDate = DatatypeFactory.newInstance().newXMLGregorianCalendar();
+            XMLDate.setYear(gc.get(Calendar.YEAR));
+            XMLDate.setMonth(gc.get(Calendar.MONTH) + 1);
+            XMLDate.setDay(gc.get(Calendar.DATE));
+            parent.getInvoice().getTaxPointDate().setValue(XMLDate);
+    	} catch (DatatypeConfigurationException e) {
+    		e.printStackTrace();
+    	}
+        
         taxPointDateField.addListener(new ValueChangeListener() {
-          
           @Override
           public void valueChange(final com.vaadin.data.Property.ValueChangeEvent event) {
             try {
@@ -436,10 +467,23 @@ public class TabInvoiceHeader extends Form {
       
       if ("Invoice Period Start Date".equals(pid)) {
         //final PopupDateField startDateField = new PopupDateField("Invoice Period Start Date");
-    	startDateField.setValue(new Date());
-        startDateField.setResolution(DateField.RESOLUTION_DAY);
+    	Date date = new Date();
+    	startDateField.setValue(date);
+    	startDateField.setResolution(DateField.RESOLUTION_DAY);
+        
+		try {
+			GregorianCalendar gc = new GregorianCalendar();
+		    gc.setTime(date);
+			XMLGregorianCalendar XMLDate = DatatypeFactory.newInstance().newXMLGregorianCalendar();
+		    XMLDate.setYear(gc.get(Calendar.YEAR));
+		    XMLDate.setMonth(gc.get(Calendar.MONTH) + 1);
+		    XMLDate.setDay(gc.get(Calendar.DATE));
+		    parent.getInvoice().getInvoicePeriod().get(0).getStartDate().setValue(XMLDate);
+		} catch (DatatypeConfigurationException e) {
+			e.printStackTrace();
+		}
+        
         startDateField.addListener(new ValueChangeListener() {
-          
           @Override
           public void valueChange(final com.vaadin.data.Property.ValueChangeEvent event) {
             try {
@@ -453,7 +497,7 @@ public class TabInvoiceHeader extends Form {
               XMLDate.setMonth(greg.get(Calendar.MONTH) + 1);
               XMLDate.setDay(greg.get(Calendar.DATE));
               
-              parent.getInvoice().getInvoicePeriod ().add (new PeriodType());
+              //parent.getInvoice().getInvoicePeriod ().add (new PeriodType());
               StartDateType sdt = new StartDateType ();
               sdt.setValue (XMLDate);
               parent.getInvoice().getInvoicePeriod ().get (0).setStartDate (sdt);
@@ -467,9 +511,23 @@ public class TabInvoiceHeader extends Form {
       
       if ("Invoice Period End Date".equals(pid)) {
         final PopupDateField endDateField = new PopupDateField("Invoice Period End Date");
-        endDateField.setValue(new Date());
+        Date date = new Date();
+        endDateField.setValue(date);
         //endDateField.setValue(startDateField.getValue());
         endDateField.setResolution(DateField.RESOLUTION_DAY);
+        
+        try {
+			GregorianCalendar gc = new GregorianCalendar();
+		    gc.setTime(date);
+			XMLGregorianCalendar XMLDate = DatatypeFactory.newInstance().newXMLGregorianCalendar();
+		    XMLDate.setYear(gc.get(Calendar.YEAR));
+		    XMLDate.setMonth(gc.get(Calendar.MONTH) + 1);
+		    XMLDate.setDay(gc.get(Calendar.DATE));
+		    parent.getInvoice().getInvoicePeriod().get(0).getEndDate().setValue(XMLDate);
+		} catch (DatatypeConfigurationException e) {
+			e.printStackTrace();
+		}
+        
         endDateField.addListener(new ValueChangeListener() {
           
           @Override

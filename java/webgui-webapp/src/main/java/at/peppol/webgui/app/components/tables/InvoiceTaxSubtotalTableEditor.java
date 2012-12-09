@@ -158,21 +158,21 @@ public class InvoiceTaxSubtotalTableEditor extends GenericTableEditor<TaxSubtota
 			        final InvoiceTaxSubtotalAdapter adapterItem = createItem();
 			        
 			        hiddenContent.addComponent(label);
-			        final Form paymentMeansForm = createTableForm(adapterItem, invoiceList);
-			        hiddenContent.addComponent(paymentMeansForm);
+			        final Form taxSubTotalForm = createTableForm(adapterItem, invoiceList);
+			        hiddenContent.addComponent(taxSubTotalForm);
 			        
-			        final Select f = (Select)paymentMeansForm.getField("Tax Category ID");
-			        final AbstractTextField f2 = (AbstractTextField)paymentMeansForm.getField("Tax Exemption Reason");
+			        final Select f = (Select)taxSubTotalForm.getField("Tax Category ID");
+			        final AbstractTextField f2 = (AbstractTextField)taxSubTotalForm.getField("Tax Exemption Reason");
 			        final EUGEN_T10_R009 listener = new EUGEN_T10_R009(adapterItem);
 			        f.addListener(listener);
 			        f2.addListener(listener);
 			        
 			        //add the listeners for VAT AE tax total amount
-			        EUGEN_T10_R018 eugen_t10_r018 = new EUGEN_T10_R018(paymentMeansForm, "Tax Scheme ID","Tax Category ID","Tax Amount");
-			        paymentMeansForm.getField("Tax Scheme ID").addListener(eugen_t10_r018);
-			        paymentMeansForm.getField("Tax Category ID").addListener(eugen_t10_r018);
+			        EUGEN_T10_R018 eugen_t10_r018 = new EUGEN_T10_R018(taxSubTotalForm, "Tax Scheme ID","Tax Category ID","Tax Amount");
+			        taxSubTotalForm.getField("Tax Scheme ID").addListener(eugen_t10_r018);
+			        taxSubTotalForm.getField("Tax Category ID").addListener(eugen_t10_r018);
 			        
-			        final AbstractTextField percent = (AbstractTextField)paymentMeansForm.getField("Tax Category Percent");
+			        final AbstractTextField percent = (AbstractTextField)taxSubTotalForm.getField("Tax Category Percent");
 			        
 			        final Button saveNewLine = new Button("Save");
 			        
@@ -200,7 +200,7 @@ public class InvoiceTaxSubtotalTableEditor extends GenericTableEditor<TaxSubtota
 									}
 									else {
 										try {
-											paymentMeansForm.validate();
+											taxSubTotalForm.validate();
 											error = false;
 											f2.setComponentError(null);
 											table.addLine(adapterItem);
@@ -236,7 +236,7 @@ public class InvoiceTaxSubtotalTableEditor extends GenericTableEditor<TaxSubtota
 			  			deleteButton.setEnabled(true);
 			            hiddenContent.removeAllComponents ();
 			            //hide form
-			            paymentMeansForm.discard();
+			            taxSubTotalForm.discard();
 			            hiddenContent.setVisible(false);
 			            //addMode = false;
 			          }

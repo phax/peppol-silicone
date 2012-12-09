@@ -230,7 +230,7 @@ public class TabInvoicePayment extends Form {
     
     grid.setSizeUndefined();
     
-    PaymentMeansTableEditor editor = new PaymentMeansTableEditor(editMode);
+    PaymentMeansTableEditor editor = new PaymentMeansTableEditor(editMode, parent.getInvoice());
     Label label = new Label("<h3>Adding new payments means</h3>", Label.CONTENT_XHTML);
     addButton.addListener(editor.addButtonListener(editButton, deleteButton, hiddenContent, table, paymentMeansList, label));
     label = new Label("<h3>Edit payment means line</h3>", Label.CONTENT_XHTML);
@@ -358,6 +358,13 @@ public class TabInvoicePayment extends Form {
         final Field field = DefaultFieldFactory.get().createField(item, propertyId, uiContext);
         if (field instanceof AbstractTextField) {
             ((AbstractTextField) field).setNullRepresentation("");
+            
+            final AbstractTextField tf = (AbstractTextField) field;
+            if ("Payee Name".equals(pid)) {
+            	tf.setRequired(true);
+            	tf.addListener(new RequiredFieldListener(tf,pid));
+            	ValidatorsList.addListeners((Collection<BlurListener>) tf.getListeners(BlurEvent.class));
+            }
         }
         return field;
     }
