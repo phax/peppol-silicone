@@ -50,8 +50,8 @@ public abstract class GenericTableEditor<Ttype, Tadapter extends Adapter> {
 		        final Tadapter adapterItem = createItem();
 		        
 		        hiddenContent.addComponent(label);
-		        final Form paymentMeansForm = createTableForm(adapterItem, invoiceList);
-		        hiddenContent.addComponent(paymentMeansForm);
+		        final Form tableForm = createTableForm(adapterItem, invoiceList);
+		        hiddenContent.addComponent(tableForm);
 		        
 		        final Button saveNewLine = new Button("Save");
 		                
@@ -91,7 +91,7 @@ public abstract class GenericTableEditor<Ttype, Tadapter extends Adapter> {
 		  			deleteButton.setEnabled(true);
 		            hiddenContent.removeAllComponents ();
 		            //hide form
-		            paymentMeansForm.discard();
+		            tableForm.discard();
 		            hiddenContent.setVisible(false);
 		            //addMode = false;
 		          }

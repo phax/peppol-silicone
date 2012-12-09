@@ -22,9 +22,12 @@ public class PaymentMeansDueDate extends BaseValidation {
 		 List<PaymentMeansType> means = invoice.getPaymentMeans();
 		 for (PaymentMeansType mean : means) {
 			 XMLGregorianCalendar dueDate = mean.getPaymentDueDate().getValue();
-			 int res = dueDate.compare(issueDate);
-			 if (res == DatatypeConstants.LESSER) {
-				 return error();
+			 System.out.println(issueDate+" -- "+dueDate);
+			 if (dueDate != null && issueDate != null) {
+				 int res = dueDate.compare(issueDate);
+				 if (res == DatatypeConstants.LESSER) {
+					 return error();
+				 }
 			 }
 		 }
 		 
