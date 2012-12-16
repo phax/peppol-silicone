@@ -34,7 +34,13 @@ public class RequiredFieldListener implements BlurListener {
 	}
 	
 	public boolean isValid() {
-		return passValidation;
+		if (tf.getValue() == null)
+			return false;
+		else if (tf.getValue().equals(""))
+			return false;
+		else
+			return true;
+		//return passValidation;
 	}
 	
 	public String getErrorMessage() {
@@ -43,20 +49,22 @@ public class RequiredFieldListener implements BlurListener {
 	
 	@Override
 	public void blur(BlurEvent event) {
-	    String value = (String)tf.getValue();
-        if (value == null) {
-     	   tf.setComponentError(new UserError(errorMessage));
-     	   passValidation = false;
-        }
-        else if (value.equals("")) {
-     	   tf.setComponentError(new UserError(errorMessage));
-     	   passValidation = false;
-        }
-        else {
-        	//tf.validate();
-        	tf.setComponentError(null);
-        	passValidation = true;
-        }
+		if (tf.getValue() == null) {
+			tf.setComponentError(new UserError(errorMessage));
+	     	passValidation = false;
+	    }
+		else if (tf.getValue() instanceof String) {
+			String value = (String)tf.getValue();
+	        if (value.equals("")) {
+	     	   tf.setComponentError(new UserError(errorMessage));
+	     	   passValidation = false;
+	        }
+	        else {
+	        	//tf.validate();
+	        	tf.setComponentError(null);
+	        	passValidation = true;
+	        }
+	    }
 	}
 
 }

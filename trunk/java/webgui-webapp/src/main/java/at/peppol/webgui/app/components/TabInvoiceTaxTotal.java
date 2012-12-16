@@ -340,7 +340,7 @@ private void initElements () {
   public BigDecimal addTaxSubTotals() {
 	  List<TaxSubtotalType> subs = parent.getInvoice().getTaxTotal().get(0).getTaxSubtotal();
 	  //float taxTotal = 0;
-	  BigDecimal taxTotal = new BigDecimal(0.0);
+	  BigDecimal taxTotal = new BigDecimal(0.00);
 	  for (TaxSubtotalType sub : subs) {
 		  //taxTotal += sub.getTaxAmount().getValue().floatValue();
 		  taxTotal = taxTotal.add(sub.getTaxAmount().getValue());

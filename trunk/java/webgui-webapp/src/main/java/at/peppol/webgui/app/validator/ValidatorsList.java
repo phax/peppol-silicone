@@ -46,7 +46,24 @@ public class ValidatorsList {
 				else {
 					AbstractTextField tf = ((RequiredFieldListener)b).getTextField();
 					Tab tab = getParentTab(tf);
-					tab.setStyleName("");
+					if (tab != null)
+						tab.setStyleName("");
+				}
+			}
+		}
+	}
+	
+	public static void validateListenersNotify(List<BlurListener> listenerList) {
+		for (int i=0;i<listenerList.size();i++) {
+			BlurListener b = listenerList.get(i);
+			if (b instanceof RequiredFieldListener) {
+				if (((RequiredFieldListener)b).isValid() == false) {
+					AbstractTextField tf = ((RequiredFieldListener)b).getTextField();
+					tf.setComponentError(new UserError(((RequiredFieldListener)b).getErrorMessage()));
+				}
+				else {
+					AbstractTextField tf = ((RequiredFieldListener)b).getTextField();
+					tf.setComponentError(null);
 				}
 			}
 		}

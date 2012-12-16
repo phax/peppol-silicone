@@ -38,6 +38,8 @@
 package at.peppol.webgui.app.components;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -50,6 +52,7 @@ import at.peppol.webgui.app.components.adapters.InvoiceLineAdapter;
 import at.peppol.webgui.app.components.tables.InvoiceLineTable;
 import at.peppol.webgui.app.utils.Utils;
 import at.peppol.webgui.app.validator.PositiveValueListener;
+import at.peppol.webgui.app.validator.PositiveValueValidator;
 import at.peppol.webgui.app.validator.RequiredFieldListener;
 import at.peppol.webgui.app.validator.RequiredNumericalFieldListener;
 import at.peppol.webgui.app.validator.ValidatorsList;
@@ -59,6 +62,7 @@ import com.vaadin.data.Item;
 import com.vaadin.data.Container.ItemSetChangeEvent;
 import com.vaadin.data.Container.ItemSetChangeListener;
 import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.util.NestedMethodProperty;
 import com.vaadin.event.FieldEvents.BlurEvent;
 import com.vaadin.event.FieldEvents.BlurListener;
@@ -172,6 +176,7 @@ public class TabInvoiceLine extends Form {
         BIIRULE_T10_R018 biirule_t10_r018 = new BIIRULE_T10_R018(invoiceLineItem, form);
         form.getField("Price Amount").addListener(biirule_t10_r018);
         form.getField("Base Quantity").addListener(biirule_t10_r018);
+        form.getField("Invoiced Quantity").addListener(biirule_t10_r018);
         lineAllowanceChargePanel.getTable().addListener((ItemSetChangeListener)biirule_t10_r018);
         
         //add the listeners for VAT AE tax total amount
@@ -206,8 +211,6 @@ public class TabInvoiceLine extends Form {
           public void buttonClick (final ClickEvent event) {
         	  AbstractTextField itemName = (AbstractTextField)form.getField("Item Name");
         	  itemName.setMaxLength(50);
-        	  AbstractTextField lineExtensionAmount = (AbstractTextField)form.getField("Line Extension Amount");
-        	  AbstractTextField baseQuantity = (AbstractTextField)form.getField("Base Quantity");
         	  
         	  if (itemName.getValue().toString().length() > 50) {
         		  //itemName.setComponentError(new UserError("Item Name should not be more than 50 characters"));
@@ -215,30 +218,33 @@ public class TabInvoiceLine extends Form {
         		  getWindow().showNotification("Item Name truncated to 50 chars", Notification.TYPE_TRAY_NOTIFICATION);
         	  }
         	  
-        	  if (itemName.getValue().toString().equals("")) {
-        		  itemName.setComponentError(new UserError("Item Name cannot be empty"));
+        	  try {
+        		  Collection<String> props = (Collection<String>) form.getItemPropertyIds();
+        		  List<Field> fields = new ArrayList<Field>();
+        		  for (String property : props) {
+        			  fields.add(form.getField(property));
+        		  }
+        		  List<BlurListener> listeners = new ArrayList<BlurListener>();
+        		  for (Field f : fields) {
+        			  if (f instanceof AbstractTextField) {
+        				  AbstractTextField ff = (AbstractTextField)f;
+        				  listeners.addAll((Collection<BlurListener>) ff.getListeners(BlurEvent.class));
+        			  }
+        		  }
+        		  ValidatorsList.validateListenersNotify(listeners);
+        		  form.validate();
+        		  //form.commit();
+            	  System.out.println(invoiceLineItem.getInvLineInvoicedQuantity().toString());
+           		  // update table (and consequently add new item to invoiceList list)
+            	  table.addLine(invoiceLineItem);
+           		  //hide form
+            	  hiddenContent.setVisible (false);
+            	  addMode = false;
+            	  itemName.setComponentError(null);
+        	  }catch (InvalidValueException e) {
+        		  getWindow().showNotification("Invoice line has errors", Notification.TYPE_TRAY_NOTIFICATION);
         	  }
-        	  else if (lineExtensionAmount.getValue().toString().equals("")) {
-        		  lineExtensionAmount.setComponentError(new UserError("Line Extension Amount cannot be empty"));
-        	  }
-        	  else if (baseQuantity.getValue().toString().equals("")) {
-        		  baseQuantity.setComponentError(new UserError("Base Quantity cannot be empty"));
-        	  }
-        	  else {
-        		  form.commit();
-        		  System.out.println(invoiceLineItem.getInvLineInvoicedQuantity().toString());
-        		  // update table (and consequently add new item to invoiceList list)
-        		  
-        		  //table.addInvoiceLine (invoiceLineItem);
-        		  table.addLine(invoiceLineItem);
-	              
-        		  //hide form
-        		  hiddenContent.setVisible (false);
-        		  addMode = false;
-        		  itemName.setComponentError(null);
-        		  lineExtensionAmount.setComponentError(null);
-        		  baseQuantity.setComponentError(null);
-        	  }
+        	  
           }
         }));
         buttonLayout.addComponent (new Button ("Cancel", new Button.ClickListener () {
@@ -285,7 +291,7 @@ public class TabInvoiceLine extends Form {
           final Label formLabel = new Label ("<h3>Editing invoice line</h3>", Label.CONTENT_XHTML);
 
           hiddenContent.addComponent (formLabel);
-          Form form = createInvoiceLineMainForm ();
+          final Form form = createInvoiceLineMainForm ();
           hiddenContent.addComponent(form);
 
           HorizontalLayout h1 = new HorizontalLayout();
@@ -340,13 +346,39 @@ public class TabInvoiceLine extends Form {
             public void buttonClick (final ClickEvent event) {
               // update table (and consequently edit item to allowanceChargeList
               // list)
-            	
-              //table.setInvoiceLine (sid, invoiceLineItem);
-            	table.setLine(sid, invoiceLineItem);
-              
-              // hide form
-              hiddenContent.setVisible (false);
-              editMode = false;
+              AbstractTextField itemName = (AbstractTextField)form.getField("Item Name");
+          	  itemName.setMaxLength(50);
+          	  
+          	  if (itemName.getValue().toString().length() > 50) {
+          		  //itemName.setComponentError(new UserError("Item Name should not be more than 50 characters"));
+          		  itemName.setValue(itemName.getValue().toString().substring(0, 49));
+          		  getWindow().showNotification("Item Name truncated to 50 chars", Notification.TYPE_TRAY_NOTIFICATION);
+          	  }
+          	  
+          	  try {
+          		  Collection<String> props = (Collection<String>) form.getItemPropertyIds();
+          		  List<Field> fields = new ArrayList<Field>();
+          		  for (String property : props) {
+          			  fields.add(form.getField(property));
+          		  }
+          		  List<BlurListener> listeners = new ArrayList<BlurListener>();
+          		  for (Field f : fields) {
+          			  if (f instanceof AbstractTextField) {
+          				  AbstractTextField ff = (AbstractTextField)f;
+          				  listeners.addAll((Collection<BlurListener>) ff.getListeners(BlurEvent.class));
+          			  }
+          		  }
+          		  ValidatorsList.validateListenersNotify(listeners);
+          		  form.validate();
+          		  //table.setInvoiceLine (sid, invoiceLineItem);
+          		  table.setLine(sid, invoiceLineItem);
+                
+          		  // 	hide form
+          		  hiddenContent.setVisible (false);
+          		  editMode = false;
+          	  } catch  (InvalidValueException e) {
+        		  getWindow().showNotification("Invoice line has errors", Notification.TYPE_TRAY_NOTIFICATION);
+        	  }
             }
           }));
           buttonLayout.addComponent (new Button ("Cancel editing", new Button.ClickListener () {
@@ -501,7 +533,8 @@ public class TabInvoiceLine extends Form {
 				  "Tax Total Amount".equals(propertyId) || "Item Description".equals(propertyId) ||
 				  "Item Name".equals(propertyId) || "Sellers Item ID".equals(propertyId) ||
 				  "Tax Category ID".equals(propertyId) || "Tax Category Percent".equals(propertyId) || 
-				  "Standard Item ID".equals(propertyId) || "Tax Scheme ID".equals(propertyId)) {
+				  "Standard Item ID".equals(propertyId) || "Tax Scheme ID".equals(propertyId) ||
+				  "Measurement Unit".equals(propertyId)) {
 				  
 				  f1.addComponent(field);
 		      }
@@ -568,6 +601,8 @@ public class TabInvoiceLine extends Form {
     invoiceLineForm.addItemProperty ("Line Note", new NestedMethodProperty (invoiceLineItem, "invLineNote"));
     invoiceLineForm.addItemProperty ("Invoiced Quantity", new NestedMethodProperty (invoiceLineItem,
                                                                                     "invLineInvoicedQuantity"));
+    invoiceLineForm.addItemProperty ("Measurement Unit", new NestedMethodProperty (invoiceLineItem,
+            																		"invLineMeasureUnit"));
     invoiceLineForm.addItemProperty ("Line Extension Amount", new NestedMethodProperty (invoiceLineItem,
                                                                                         "invLineLineExtensionAmount"));
     invoiceLineForm.addItemProperty ("Accounting Cost", new NestedMethodProperty (invoiceLineItem,
@@ -612,6 +647,7 @@ public class TabInvoiceLine extends Form {
     ac.setID (new IDType ());
     ac.setInvLineNote ("");
     ac.setInvLineInvoicedQuantity (BigDecimal.ZERO);
+    ac.setInvLineMeasureUnit(null);
     ac.setInvLineLineExtensionAmount (BigDecimal.ZERO);
     ac.setInvLineAccountingCost ("");
     ac.setInvLineTaxAmount (BigDecimal.ZERO);
@@ -624,7 +660,8 @@ public class TabInvoiceLine extends Form {
     ac.setInvLineItemTaxCategoryTaxSchemeID ("");
     ac.setInvLinePriceAmount (BigDecimal.ZERO);
     //ac.setInvLinePriceAmount ("0");
-    ac.setInvLinePriceBaseQuantity (BigDecimal.ZERO);
+    //ac.setInvLinePriceBaseQuantity (BigDecimal.ZERO);
+    ac.setInvLinePriceBaseQuantity (new BigDecimal("1.00"));
     ac.setInvLinePriceAllowanceChargeID ("");
     ac.setInvLinePriceAllowanceChargeIndicator (Boolean.FALSE);
     ac.setInvLinePriceAllowanceChargeReason ("");
@@ -641,6 +678,7 @@ public class TabInvoiceLine extends Form {
     dstItem.setInvLineID (srcItem.getInvLineID ());
     dstItem.setInvLineNote (srcItem.getInvLineNote ());
     dstItem.setInvLineInvoicedQuantity (srcItem.getInvLineInvoicedQuantity ());
+    dstItem.setInvLineMeasureUnit(srcItem.getInvLineMeasureUnit());
     dstItem.setInvLineLineExtensionAmount (srcItem.getInvLineLineExtensionAmount ());
     dstItem.setInvLineAccountingCost (srcItem.getInvLineAccountingCost ());
     dstItem.setInvLineTaxAmount (srcItem.getInvLineTaxAmount ());
@@ -676,6 +714,12 @@ public class TabInvoiceLine extends Form {
 
         return indicatorSelect;
       }
+      if ("Measurement Unit".equals(pid)) {
+          UnitCodeSelect unitCodeSelect = new UnitCodeSelect(pid);
+          unitCodeSelect.setRequired(true);
+          unitCodeSelect.setNullSelectionAllowed(false);
+          return unitCodeSelect;
+      }
       if ("Tax Scheme ID".equals(pid)) {
           final TaxSchemeSelect taxSchemeSelect = new TaxSchemeSelect(pid);
           taxSchemeSelect.setRequired(true);
@@ -693,26 +737,44 @@ public class TabInvoiceLine extends Form {
         final AbstractTextField tf = (AbstractTextField) field;
         if ("Price Amount".equals(pid)) {
         	tf.setRequired(true);
-        	tf.addListener(new RequiredNumericalFieldListener(tf,pid));
-        	tf.addListener(new PositiveValueListener(tf,pid));
+        	tf.addValidator(new PositiveValueValidator());
+        	tf.addListener(new RequiredFieldListener(tf,pid));
         	ValidatorsList.addListeners((Collection<BlurListener>) tf.getListeners(BlurEvent.class));
         }
-        if ("Item Name".equals(pid)) {
+        else if ("Item Name".equals(pid)) {
         	tf.setRequired(true);
         	tf.addListener(new RequiredFieldListener(tf,pid));
         	ValidatorsList.addListeners((Collection<BlurListener>) tf.getListeners(BlurEvent.class));
         }
-        if ("Line Extension Amount".equals(pid)) {
+        else if ("Line Extension Amount".equals(pid)) {
         	tf.setRequired(true);
-        	tf.addListener(new RequiredNumericalFieldListener(tf,pid));
-        	tf.addListener(new PositiveValueListener(tf,pid));
+        	tf.addValidator(new PositiveValueValidator());
+        	tf.addListener(new RequiredFieldListener(tf,pid));
         	ValidatorsList.addListeners((Collection<BlurListener>) tf.getListeners(BlurEvent.class));
         }
-        if ("Base Quantity".equals(pid)) {
+        else if ("Base Quantity".equals(pid)) {
         	tf.setRequired(true);
-        	tf.addListener(new RequiredNumericalFieldListener(tf,pid));
-        	tf.addListener(new PositiveValueListener(tf,pid));
+        	tf.addValidator(new PositiveValueValidator());
+        	tf.addListener(new RequiredFieldListener(tf,pid));
         	ValidatorsList.addListeners((Collection<BlurListener>) tf.getListeners(BlurEvent.class));
+        }
+        else if ("Tax Total Amount".equals(pid)) {
+        	tf.addValidator(new PositiveValueValidator());
+        }
+        else if ("Invoiced Quantity".equals(pid)) {
+        	tf.addValidator(new PositiveValueValidator());
+        }
+        else if ("Tax Category Percent".equals(pid)) {
+        	tf.addValidator(new PositiveValueValidator());
+        }
+        else if ("Price Allowance/Charge Multiplier Factor".equals(pid)) {
+        	tf.addValidator(new PositiveValueValidator());
+        }
+        else if ("Price Allowance/Charge Amount".equals(pid)) {
+        	tf.addValidator(new PositiveValueValidator());
+        }
+        else if ("Price Allowance/Charge Base Amount".equals(pid)) {
+        	tf.addValidator(new PositiveValueValidator());
         }
       }
       return field;
@@ -733,10 +795,12 @@ public class TabInvoiceLine extends Form {
 		Field lineExtensionAmount = form.getField("Line Extension Amount");
 			
 		BigDecimal price = line.getInvLinePriceAmount();
-		BigDecimal quantity = line.getInvLinePriceBaseQuantity();
+		BigDecimal baseQuantity = line.getInvLinePriceBaseQuantity();
+		BigDecimal invoicedQuantity = line.getInvLineInvoicedQuantity();
 		List<AllowanceChargeType> list = line.getAllowanceCharge();
 			
-		BigDecimal amount = price.multiply(quantity);
+		BigDecimal amount = price.divide(baseQuantity).multiply(invoicedQuantity);
+		amount.setScale(2, BigDecimal.ROUND_HALF_UP);
 			
 		for (AllowanceChargeType ac : list) {
 			if (ac.getChargeIndicator().isValue())

@@ -14,7 +14,8 @@ public class VATTotalTaxes extends BaseValidation {
 		ruleID = "BIIRULE-T10-R028";
 		errorMessage = "If the VAT total amount in an invoice exists " +
 						"then the sum of taxable amount in sub categories " +
-						"MUST equal the sum of invoice tax exclusive amount.";
+						"MUST equal the sum of invoice tax exclusive amount.<br>" +
+						"Please review the 'Tax Total' tab";
 	}
 	
 	@Override

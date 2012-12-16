@@ -38,6 +38,7 @@
 package at.peppol.webgui.app.components.adapters;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AllowanceChargeType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.TaxCategoryType;
@@ -136,7 +137,8 @@ public class InvoiceAllowanceChargeAdapter extends AllowanceChargeType implement
   }
 
   public void setChargeAmount (final BigDecimal v) {
-    getAmount ().setValue (v);
+	  BigDecimal v1 = v.setScale(2,RoundingMode.HALF_UP);
+    getAmount ().setValue (v1);
   }
 
   public BigDecimal getChargeAmount () {
@@ -152,7 +154,8 @@ public class InvoiceAllowanceChargeAdapter extends AllowanceChargeType implement
   }
 
   public void setTaxCategoryPercent (final BigDecimal v) {
-    getTaxCategory ().get (0).getPercent ().setValue (v);
+	  BigDecimal v1 = v.setScale(2,RoundingMode.HALF_UP);
+    getTaxCategory ().get (0).getPercent ().setValue (v1);
   }
 
   public BigDecimal getTaxCategoryPercent () {

@@ -37,13 +37,19 @@
  */
 package at.peppol.webgui.app.components;
 
+import javax.xml.transform.Source;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AllowanceChargeType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.CustomerPartyType;
@@ -55,6 +61,7 @@ import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.TaxT
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.CustomizationIDType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.IDType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.InvoiceTypeCodeType;
+import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ProfileIDType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.UBLVersionIDType;
 import oasis.names.specification.ubl.schema.xsd.invoice_2.InvoiceType;
 import oasis.names.specification.ubl.schema.xsd.invoice_2.ObjectFactory;
@@ -62,12 +69,21 @@ import oasis.names.specification.ubl.schema.xsd.invoice_2.ObjectFactory;
 import org.slf4j.LoggerFactory;
 
 import un.unece.uncefact.codelist.specification._54217._2001.CurrencyCodeContentType;
+import at.peppol.commons.cenbii.profiles.EProfile;
+import at.peppol.commons.cenbii.profiles.ETransaction;
 import at.peppol.commons.identifier.doctype.EPredefinedDocumentTypeIdentifier;
+import at.peppol.validation.pyramid.ValidationPyramid;
+import at.peppol.validation.pyramid.ValidationPyramidResultLayer;
+import at.peppol.validation.rules.EValidationDocumentType;
+import at.peppol.validation.rules.ValidationTransaction;
 import at.peppol.webgui.app.validator.ValidatorHandler;
 import at.peppol.webgui.app.validator.ValidatorsList;
 import at.peppol.webgui.app.validator.global.GlobalValidationsRegistry;
 import at.peppol.commons.identifier.process.EPredefinedProcessIdentifier;
 
+import com.phloc.commons.error.IResourceError;
+import com.phloc.commons.io.resource.ClassPathResource;
+import com.phloc.commons.io.resource.FileSystemResource;
 import com.phloc.commons.state.ESuccess;
 import com.phloc.ubl.AbstractUBLDocumentMarshaller;
 import com.phloc.ubl.EUBL20DocumentType;
@@ -150,6 +166,10 @@ public class InvoiceTabForm extends Form {
     final CustomizationIDType custID = new CustomizationIDType ();
     custID.setValue (EPredefinedDocumentTypeIdentifier.INVOICE_T010_BIS4A.getTransactionID ());
     custID.setSchemeID ("PEPPOL");
+    
+    ProfileIDType profileID = new ProfileIDType();
+    profileID.setValue(EPredefinedProcessIdentifier.BIS4A.getValue());
+    invoice.setProfileID(profileID);
 
     // Setting invoice type code to 380: Commercial Invoice
     invoice.setInvoiceTypeCode (new InvoiceTypeCodeType ());
@@ -208,7 +228,20 @@ public class InvoiceTabForm extends Form {
         	  //show the error window
         	  getParent().getWindow().addWindow(errorWindow);
           }
+          UBL20DocumentMarshaller.writeInvoice(invoice, new StreamResult(new
+       			  File("invoice.xml")));
           
+          final ValidationPyramid vp = new ValidationPyramid (EValidationDocumentType.INVOICE,
+                  ValidationTransaction.createUBLTransaction (ETransaction.T10));
+         	final List <ValidationPyramidResultLayer> aResults = vp.applyValidation (new FileSystemResource ("invoice.xml"))
+                  .getAllValidationResultLayers ();
+         	if (aResults.isEmpty ())
+              System.out.println ("  The document is valid!");
+            else
+              for (final ValidationPyramidResultLayer aResultLayer : aResults)
+                for (final IResourceError aError : aResultLayer.getValidationErrors ())
+                  System.out.println ("  " + aResultLayer.getValidationLevel () + " " + aError.getAsString (Locale.US));
+         	
           //InvoiceTabForm.this.invTabSheet.getTab(supplierForm).setCaption(caption)
           ValidatorsList.validateListenersNotify();
           if (ValidatorsList.validateListeners() == false) {
@@ -216,9 +249,13 @@ public class InvoiceTabForm extends Form {
           }
           else
         	  getParent().getWindow().showNotification("Validation passed! ",Notification.TYPE_TRAY_NOTIFICATION);
-          // ByteArrayOutputStream baos = new ByteArrayOutputStream ();
-          // UBL20DocumentMarshaller.writeInvoice(invoice, new StreamResult(new
-          // OutputStreamWriter(baos)));
+           	  /*ByteArrayOutputStream baos = new ByteArrayOutputStream ();
+           	  UBL20DocumentMarshaller.writeInvoice(invoice, new StreamResult(new
+           			  File("invoice.xml")));
+           			  //OutputStreamWriter(baos)));*/
+           	
+           		
+           	
           // getParent().getWindow ().showNotification("Info", baos.toString (),
           // Window.Notification.TYPE_HUMANIZED_MESSAGE);
       }
@@ -229,7 +266,7 @@ public class InvoiceTabForm extends Form {
       @Override
       public void buttonClick (final Button.ClickEvent event) {
         try {
-          SetCommonCurrency ();
+          SetCommonCurrency ();          
           System.out.println (invoice.getDelivery ().get (0).getDeliveryAddress ().getStreetName ().getValue ());
         }
         catch (final Exception ex) {
@@ -237,6 +274,22 @@ public class InvoiceTabForm extends Form {
         }
       }
     }));
+    
+    footerLayout.addComponent (new Button ("Read Invoice from disk", new Button.ClickListener () {
+
+        @Override
+        public void buttonClick (final Button.ClickEvent event) {
+          try {
+            SetCommonCurrency ();
+            InvoiceType inv = UBL20DocumentMarshaller.readInvoice(new StreamSource(new FileInputStream(new File("invoice.xml"))));
+          }
+          catch (final Exception ex) {
+            LOGGER.error ("Error creating files. ", ex);
+          }
+        }
+      }));
+
+    
     getFooter ().addComponent (footerLayout);
      
   }

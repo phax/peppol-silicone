@@ -165,16 +165,18 @@ public class PaymentMeansTableEditor extends GenericTableEditor<PaymentMeansType
 								
 								if (tableForm.getIBAN().getValue() != null) {
 									if (((String)tableForm.getIBAN().getValue()).trim().equals("IBAN")) {
-										AbstractTextField bankID = (AbstractTextField)tableForm.getField("Financial Institution ID"); 
-										if (bankID.getValue() != null) {
-											if (((String)bankID.getValue()).trim().equals("")) {
+										if (accountField.getValue()!= null) {
+											AbstractTextField bankID = (AbstractTextField)tableForm.getField("Financial Institution ID"); 
+											if (bankID.getValue() != null) {
+												if (((String)bankID.getValue()).trim().equals("")) {
+													bankID.setComponentError(new UserError("You should provide an ID"));
+													errorIBAN = true;
+												}
+											}
+											else {
 												bankID.setComponentError(new UserError("You should provide an ID"));
 												errorIBAN = true;
 											}
-										}
-										else {
-											bankID.setComponentError(new UserError("You should provide an ID"));
-											errorIBAN = true;
 										}
 									}
 								}
@@ -382,6 +384,7 @@ public class PaymentMeansTableEditor extends GenericTableEditor<PaymentMeansType
 	        
 	        if ("Payment Means Code".equals(pid)) {
 	            PaymentMeansSelect select = new PaymentMeansSelect(pid);
+	            select.setRequired(true);
 	            return select;
 	        }
 	        

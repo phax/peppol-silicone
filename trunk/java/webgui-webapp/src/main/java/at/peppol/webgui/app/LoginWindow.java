@@ -44,6 +44,7 @@ package at.peppol.webgui.app;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -102,7 +103,8 @@ public class LoginWindow extends Window implements Button.ClickListener {
         loginButton.addStyleName("default");
         loginButton.addListener(this);
         fl.addComponent(loginButton);
-
+        loginButton.setClickShortcut(KeyCode.ENTER);
+        
         h1.addComponent(fl);
         h1.setComponentAlignment(fl, Alignment.MIDDLE_CENTER);
         addComponent(h1);

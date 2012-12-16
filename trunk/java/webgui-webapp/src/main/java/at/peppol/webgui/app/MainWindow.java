@@ -37,13 +37,18 @@
  */
 package at.peppol.webgui.app;
 
+import java.io.File;
+
 import org.vaadin.jouni.animator.AnimatorProxy;
 
 import at.peppol.webgui.app.components.InvoiceTabForm;
 import at.peppol.webgui.app.components.InvoiceUploadWindow;
 import at.peppol.webgui.app.components.OrderUploadWindow;
+import at.peppol.webgui.app.login.UserSpaceManager;
+import at.peppol.webgui.app.utils.CounterThread;
 
 import com.phloc.appbasics.security.user.IUser;
+import com.vaadin.terminal.ClassResource;
 import com.vaadin.terminal.ExternalResource;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -54,8 +59,10 @@ import com.vaadin.ui.Embedded;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.MenuBar;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.NativeButton;
+import com.vaadin.ui.ProgressIndicator;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
@@ -73,14 +80,18 @@ public class MainWindow extends Window {
   private HorizontalLayout topBarLayoutRight;
   private Component mainContentComponent;
   private final AnimatorProxy animProxy = new AnimatorProxy ();
+  
+  private UserSpaceManager um;
 
   public MainWindow () {
     super ("PAWG Main");
     addComponent (animProxy);
+    um = PawgApp.getInstance().getUserSpaceManager();
     initUI ();
   }
 
-  private void initUI () {
+  @SuppressWarnings("serial")
+private void initUI () {
 
     final VerticalLayout root = new VerticalLayout ();
     root.setMargin (false);
@@ -112,7 +123,9 @@ public class MainWindow extends Window {
     leftNavBar.addComponent (new Label ("DRAFTS"));
     leftNavBar.addComponent (new NativeButton ("Catalogue"));
     leftNavBar.addComponent (new NativeButton ("Orders"));
-    leftNavBar.addComponent (new NativeButton ("Invoices"));
+    int draftInvoices = um.countItemsInSpace(um.getDrafts());
+    final NativeButton invoices = new NativeButton ("Invoices ("+draftInvoices+")");
+    leftNavBar.addComponent (invoices);
 
     leftNavBar.addComponent (new Label ("OUTBOX"));
     leftNavBar.addComponent (new NativeButton ("Catalogue"));
@@ -125,13 +138,53 @@ public class MainWindow extends Window {
     leftNavBar.addComponent (new NativeButton ("Suppliers"));
 
     final Embedded peppolLogoImg = new Embedded (null, new ExternalResource ("img/peppol_logo.png"));
-
+    
     peppolLogoImg.setStyleName ("logo");
     leftNavBar.addComponent (peppolLogoImg);
 
     middleContentLayout.addComponent (leftNavBar);
+    
+    Button refreshButton = new Button("Refresh");
+    refreshButton.addListener(new Button.ClickListener() {
+		@Override
+		public void buttonClick(ClickEvent event) {
+			int draftInvoices = um.countItemsInSpace(um.getDrafts());
+			invoices.setCaption("Invoices ("+draftInvoices+")");
+		}
+	});
+    leftNavBar.addComponent(refreshButton);
+    
+    //workaround so that thread refreshes UI. It seems that when a ProgressIndicator is present,
+    //all components receive server side refreshes
+    ProgressIndicator p = new ProgressIndicator();
+    leftNavBar.addComponent(p);
+    p.setWidth("0px");
+    p.setHeight("0px");
+    
     showInitialMainContent ();
-
+    
+/*    final int polling = 20000;
+    Thread t = new Thread(new Runnable(){
+		@Override
+		public void run() {
+			try {
+				while (true) {
+					int count = um.countItemsInSpace(um.getDrafts());
+   				 	synchronized(invoices.getApplication()) {
+   				 		String label = invoices.getCaption();
+   						label = label.replaceFirst("[\\d]+", ""+count);
+   						invoices.setCaption(label);
+   						System.out.println(label);
+   				 	}
+   				 	Thread.sleep(polling);
+	    		 }
+   		 	}catch (InterruptedException e) {
+   		 		System.out.println("Thread interrupted!!!");
+   		 	}
+		}
+	});
+	t.start();*/
+    
   }
 
   public void showInitialMainContent () {
@@ -243,6 +296,13 @@ public class MainWindow extends Window {
     });
     final MenuBar.MenuItem docItem = lMenuBar.addItem ("Document", null);
     lMenuBar.addItem ("Preferences", null);
+    lMenuBar.addItem ("Logout", new MenuBar.Command() {
+		@Override
+		public void menuSelected(MenuItem selectedItem) {
+			PawgApp.getInstance().logout();
+			PawgApp.getInstance().showLoginWindow();
+		}
+    });
     lMenuBar.addItem ("About", null);
     lMenuBar.setSizeFull ();
 
