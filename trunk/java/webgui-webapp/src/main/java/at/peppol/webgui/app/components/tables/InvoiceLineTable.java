@@ -83,6 +83,8 @@ public class InvoiceLineTable extends GenericTable<InvoiceLineType, InvoiceLineA
 
 	  setDefinedPropertiesAsVisible();
 	  setPageLength(4);
+	  
+	  tableLines.addNestedContainerProperty("CommonCurrency");
   }
 /*
   private void addPropertyWithHeader(String property, String headerName) {

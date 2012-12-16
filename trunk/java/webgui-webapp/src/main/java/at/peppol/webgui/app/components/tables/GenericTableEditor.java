@@ -7,7 +7,9 @@ import oasis.names.specification.ubl.schema.xsd.invoice_2.InvoiceType;
 
 import at.peppol.webgui.app.components.adapters.Adapter;
 import at.peppol.webgui.app.components.adapters.PaymentMeansAdapter;
+import at.peppol.webgui.app.utils.Utils;
 
+import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Form;
@@ -60,10 +62,15 @@ public abstract class GenericTableEditor<Ttype, Tadapter extends Adapter> {
 					public void buttonClick(ClickEvent event) {
 						if (adapterItem.getIDAdapter() != null) {
 							if (!adapterItem.getIDAdapter().equals("")) {
-								table.addLine(adapterItem);
-								table.requestRepaint();
-			        			//hide form
-			        			hiddenContent.setVisible(false);
+								try {
+									Utils.validateFormFields(tableForm);
+									table.addLine(adapterItem);
+									table.requestRepaint();
+				        			//hide form
+				        			hiddenContent.setVisible(false);
+								}catch (InvalidValueException e) {
+									label.getWindow().showNotification("Form has errors", Notification.TYPE_TRAY_NOTIFICATION);
+								}
 			        		}
 			        		else {
 			        			hiddenContent.getWindow().showNotification("ID is needed", Notification.TYPE_TRAY_NOTIFICATION);
@@ -136,9 +143,9 @@ public abstract class GenericTableEditor<Ttype, Tadapter extends Adapter> {
 			        	//Label formLabel = new Label("<h3>Edit payment means line</h3>", Label.CONTENT_XHTML);
 			          
 			        	hiddenContent.addComponent(label);
-			        	final Form paymentMeansForm = createTableForm(adapterItem, invoiceList);
-			        	paymentMeansForm.setImmediate(true);
-			        	hiddenContent.addComponent(paymentMeansForm);
+			        	final Form tableForm = createTableForm(adapterItem, invoiceList);
+			        	tableForm.setImmediate(true);
+			        	hiddenContent.addComponent(tableForm);
 			          
 			        	//Save new line button
 			        	HorizontalLayout buttonLayout = new HorizontalLayout();
@@ -147,12 +154,17 @@ public abstract class GenericTableEditor<Ttype, Tadapter extends Adapter> {
 				            @Override
 				            public void buttonClick (ClickEvent event) {
 				            	//paymentMeansForm.commit();
-				            	table.setLine(sid, adapterItem);
-				            	//hide form
-				            	hiddenContent.setVisible(false);
-				            	editMode = false;
-				            	addButton.setEnabled(true);
-								deleteButton.setEnabled(true);
+				            	try {
+				            		Utils.validateFormFields(tableForm);
+					            	table.setLine(sid, adapterItem);
+					            	//hide form
+					            	hiddenContent.setVisible(false);
+					            	editMode = false;
+					            	addButton.setEnabled(true);
+									deleteButton.setEnabled(true);
+				            	}catch (InvalidValueException e) {
+				            		label.getWindow().showNotification("Form has errors", Notification.TYPE_TRAY_NOTIFICATION);
+				            	}
 				            }
 			        	}));
 			        	buttonLayout.addComponent(new Button("Cancel editing",new Button.ClickListener(){

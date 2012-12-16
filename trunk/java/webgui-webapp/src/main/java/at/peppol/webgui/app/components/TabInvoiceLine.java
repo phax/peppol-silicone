@@ -142,140 +142,149 @@ public class TabInvoiceLine extends Form {
     tableContainer.setMargin (false, true, false, false);
 
     // buttons Add, Edit, Delete
-    final Button addBtn = new Button ("Add New", new Button.ClickListener () {
-      @Override
-      public void buttonClick (final Button.ClickEvent event) {
-
-        addMode = true;
-        hiddenContent.removeAllComponents ();
-        invoiceLineItem = createInvoiceLineItem ();
-
-        final Label formLabel = new Label ("<h3>Adding new invoice line</h3>", Label.CONTENT_XHTML);
-
-        hiddenContent.addComponent (formLabel);
-        final Form form = createInvoiceLineMainForm ();
-        hiddenContent.addComponent (form);
-
-        HorizontalLayout h1 = new HorizontalLayout();
-        h1.setSpacing(true);
-        h1.setMargin(true);
-        
-        // Set invoiceLine 0..N cardinality panels
-        //final Panel itemPropertyPanel = new ItemPropertyForm ("Additional",
-        //                                                      invoiceLineItem.getInvLineAdditionalItemPropertyList ());
-        final ItemPropertyForm itemPropertyPanel = new ItemPropertyForm ("Additional",
-                                                              invoiceLineItem.getInvLineAdditionalItemPropertyList ());
-        h1.addComponent (itemPropertyPanel);
-        
-        //add the allowance/charge indicator 0..N cardinality
-        final InvoiceLineAllowanceChargeForm lineAllowanceChargePanel = new InvoiceLineAllowanceChargeForm("", 
-        														invoiceLineItem.getAllowanceCharge(),
-        														parent.getInvoice());
-        
-        //add the listeners for line extension amount calculation
-        BIIRULE_T10_R018 biirule_t10_r018 = new BIIRULE_T10_R018(invoiceLineItem, form);
-        form.getField("Price Amount").addListener(biirule_t10_r018);
-        form.getField("Base Quantity").addListener(biirule_t10_r018);
-        form.getField("Invoiced Quantity").addListener(biirule_t10_r018);
-        lineAllowanceChargePanel.getTable().addListener((ItemSetChangeListener)biirule_t10_r018);
-        
-        //add the listeners for VAT AE tax total amount
-        EUGEN_T10_R018 eugen_t10_r018 = new EUGEN_T10_R018(form, "Tax Scheme ID","Tax Category ID","Tax Total Amount");
-        form.getField("Tax Scheme ID").addListener(eugen_t10_r018);
-        form.getField("Tax Category ID").addListener(eugen_t10_r018);
-        
-        h1.addComponent (lineAllowanceChargePanel);
-        
-        HorizontalLayout h2 = new HorizontalLayout();
-        h2.setSpacing(true);
-        h2.setMargin(true);
-        
-        final Panel lineOrderPanel = new InvoiceLineOrderForm("", 
-				invoiceLineItem.getInvLineOrderList());
-        
-        h2.addComponent (lineOrderPanel);
-        
-        final Panel lineCommodityPanel = new InvoiceLineCommodityClassificationForm("", 
-        		invoiceLineItem.getInvLineCommodityClassificationList());
-        
-        h2.addComponent (lineCommodityPanel);
-        
-        hiddenContent.addComponent(h1);
-        hiddenContent.addComponent(h2);
-        
-        // Save new line button
-        final HorizontalLayout buttonLayout = new HorizontalLayout ();
-        buttonLayout.setSpacing (true);
-        buttonLayout.addComponent (new Button ("Save invoice line", new Button.ClickListener () {
-          @Override
-          public void buttonClick (final ClickEvent event) {
-        	  AbstractTextField itemName = (AbstractTextField)form.getField("Item Name");
-        	  itemName.setMaxLength(50);
-        	  
-        	  if (itemName.getValue().toString().length() > 50) {
-        		  //itemName.setComponentError(new UserError("Item Name should not be more than 50 characters"));
-        		  itemName.setValue(itemName.getValue().toString().substring(0, 49));
-        		  getWindow().showNotification("Item Name truncated to 50 chars", Notification.TYPE_TRAY_NOTIFICATION);
-        	  }
-        	  
-        	  try {
-        		  Collection<String> props = (Collection<String>) form.getItemPropertyIds();
-        		  List<Field> fields = new ArrayList<Field>();
-        		  for (String property : props) {
-        			  fields.add(form.getField(property));
-        		  }
-        		  List<BlurListener> listeners = new ArrayList<BlurListener>();
-        		  for (Field f : fields) {
-        			  if (f instanceof AbstractTextField) {
-        				  AbstractTextField ff = (AbstractTextField)f;
-        				  listeners.addAll((Collection<BlurListener>) ff.getListeners(BlurEvent.class));
-        			  }
-        		  }
-        		  ValidatorsList.validateListenersNotify(listeners);
-        		  form.validate();
-        		  //form.commit();
-            	  System.out.println(invoiceLineItem.getInvLineInvoicedQuantity().toString());
-           		  // update table (and consequently add new item to invoiceList list)
-            	  table.addLine(invoiceLineItem);
-           		  //hide form
-            	  hiddenContent.setVisible (false);
-            	  addMode = false;
-            	  itemName.setComponentError(null);
-        	  }catch (InvalidValueException e) {
-        		  getWindow().showNotification("Invoice line has errors", Notification.TYPE_TRAY_NOTIFICATION);
-        	  }
-        	  
-          }
-        }));
-        buttonLayout.addComponent (new Button ("Cancel", new Button.ClickListener () {
-          @Override
-          public void buttonClick (final ClickEvent event) {
-            hiddenContent.removeAllComponents ();
-            // hide form
-            hiddenContent.setVisible (false);
-            addMode = false;
-          }
-        }));
-
-        hiddenContent.addComponent (buttonLayout);
-
-        // hiddenContent.setVisible(!hiddenContent.isVisible());
-        hiddenContent.setVisible (true);
-      }
-    });
+    final Button addBtn = new Button("Add new");
+    final Button editBtn = new Button("Edit selected");
+    final Button deleteBtn = new Button ("Delete Selected");
     
-    final Button editBtn = new Button ("Edit Selected", new Button.ClickListener () {
+    addBtn.addListener(new Button.ClickListener () {
+        @Override
+        public void buttonClick (final Button.ClickEvent event) {
+          addBtn.setEnabled(false);
+          editBtn.setEnabled(false);
+          deleteBtn.setEnabled(false);
+          //addMode = true;
+          hiddenContent.removeAllComponents ();
+          invoiceLineItem = createInvoiceLineItem ();
+
+          final Label formLabel = new Label ("<h3>Adding new invoice line</h3>", Label.CONTENT_XHTML);
+
+          hiddenContent.addComponent (formLabel);
+          final Form form = createInvoiceLineMainForm ();
+          hiddenContent.addComponent (form);
+
+          HorizontalLayout h1 = new HorizontalLayout();
+          h1.setSpacing(true);
+          h1.setMargin(true);
+          
+          // Set invoiceLine 0..N cardinality panels
+          //final Panel itemPropertyPanel = new ItemPropertyForm ("Additional",
+          //                                                      invoiceLineItem.getInvLineAdditionalItemPropertyList ());
+          final ItemPropertyForm itemPropertyPanel = new ItemPropertyForm ("Additional",
+                                                                invoiceLineItem.getInvLineAdditionalItemPropertyList ());
+          h1.addComponent (itemPropertyPanel);
+          
+          //add the allowance/charge indicator 0..N cardinality
+          final InvoiceLineAllowanceChargeForm lineAllowanceChargePanel = new InvoiceLineAllowanceChargeForm("", 
+          														invoiceLineItem.getAllowanceCharge(),
+          														parent.getInvoice());
+          
+          //add the listeners for line extension amount calculation
+          BIIRULE_T10_R018 biirule_t10_r018 = new BIIRULE_T10_R018(invoiceLineItem, form);
+          form.getField("Price Amount").addListener(biirule_t10_r018);
+          form.getField("Base Quantity").addListener(biirule_t10_r018);
+          form.getField("Invoiced Quantity").addListener(biirule_t10_r018);
+          lineAllowanceChargePanel.getTable().addListener((ItemSetChangeListener)biirule_t10_r018);
+          
+          //add the listeners for VAT AE tax total amount
+          EUGEN_T10_R018 eugen_t10_r018 = new EUGEN_T10_R018(form, "Tax Scheme ID","Tax Category ID","Tax Total Amount");
+          form.getField("Tax Scheme ID").addListener(eugen_t10_r018);
+          form.getField("Tax Category ID").addListener(eugen_t10_r018);
+          
+          h1.addComponent (lineAllowanceChargePanel);
+          
+          HorizontalLayout h2 = new HorizontalLayout();
+          h2.setSpacing(true);
+          h2.setMargin(true);
+          
+          final Panel lineOrderPanel = new InvoiceLineOrderForm("", 
+  				invoiceLineItem.getInvLineOrderList());
+          
+          h2.addComponent (lineOrderPanel);
+          
+          final Panel lineCommodityPanel = new InvoiceLineCommodityClassificationForm("", 
+          		invoiceLineItem.getInvLineCommodityClassificationList());
+          
+          h2.addComponent (lineCommodityPanel);
+          
+          hiddenContent.addComponent(h1);
+          hiddenContent.addComponent(h2);
+          
+          // Save new line button
+          final HorizontalLayout buttonLayout = new HorizontalLayout ();
+          buttonLayout.setSpacing (true);
+          buttonLayout.addComponent (new Button ("Save invoice line", new Button.ClickListener () {
+            @Override
+            public void buttonClick (final ClickEvent event) {
+          	  AbstractTextField itemName = (AbstractTextField)form.getField("Item Name");
+          	  itemName.setMaxLength(50);
+          	  
+          	  if (itemName.getValue().toString().length() > 50) {
+          		  //itemName.setComponentError(new UserError("Item Name should not be more than 50 characters"));
+          		  itemName.setValue(itemName.getValue().toString().substring(0, 49));
+          		  getWindow().showNotification("Item Name truncated to 50 chars", Notification.TYPE_TRAY_NOTIFICATION);
+          	  }
+          	  
+          	  try {
+          		  /*Collection<String> props = (Collection<String>) form.getItemPropertyIds();
+          		  List<Field> fields = new ArrayList<Field>();
+          		  for (String property : props) {
+          			  fields.add(form.getField(property));
+          		  }
+          		  List<BlurListener> listeners = new ArrayList<BlurListener>();
+          		  for (Field f : fields) {
+          			  if (f instanceof AbstractTextField) {
+          				  AbstractTextField ff = (AbstractTextField)f;
+          				  listeners.addAll((Collection<BlurListener>) ff.getListeners(BlurEvent.class));
+          			  }
+          		  }
+          		  ValidatorsList.validateListenersNotify(listeners);
+          		  form.validate();*/
+          		  Utils.validateFormFields(form);
+          		  //form.commit();
+             	  // update table (and consequently add new item to invoiceList list)
+              	  table.addLine(invoiceLineItem);
+             		  //hide form
+              	  hiddenContent.setVisible (false);
+              	  //addMode = false;
+              	  addBtn.setEnabled(true);
+              	  editBtn.setEnabled(true);
+                  deleteBtn.setEnabled(true);
+              	  //itemName.setComponentError(null);
+          	  }catch (InvalidValueException e) {
+          		  getWindow().showNotification("Invoice line has errors", Notification.TYPE_TRAY_NOTIFICATION);
+          	  }
+          	  
+            }
+          }));
+          buttonLayout.addComponent (new Button ("Cancel", new Button.ClickListener () {
+            @Override
+            public void buttonClick (final ClickEvent event) {
+            	addBtn.setEnabled(true);
+            	editBtn.setEnabled(true);
+                deleteBtn.setEnabled(true);
+            	hiddenContent.removeAllComponents ();
+              // hide form
+              hiddenContent.setVisible (false);
+              addMode = false;
+            }
+          }));
+
+          hiddenContent.addComponent (buttonLayout);
+
+          // hiddenContent.setVisible(!hiddenContent.isVisible());
+          hiddenContent.setVisible (true);
+        }
+      });
+    
+    editBtn.addListener(new Button.ClickListener () {
       @Override
       public void buttonClick (final Button.ClickEvent event) {
         final Object rowId = table.getValue (); // get the selected rows id
         if (rowId != null) {
-          if (addMode || editMode) {
-            parent.getWindow ().showNotification ("Info",
-                                                  "You cannot edit while in add/edit mode",
-                                                  Window.Notification.TYPE_HUMANIZED_MESSAGE);
-            return;
-          }
-
+        	addBtn.setEnabled(true);
+        	editBtn.setEnabled(true);
+            deleteBtn.setEnabled(true);
+          System.out.println("row id is: "+rowId);
           final String sid = (String) table.getContainerProperty (rowId, "ID.value").getValue ();
 
           // TODO: PUT THIS IN FUNCTION BEGINS
@@ -356,7 +365,7 @@ public class TabInvoiceLine extends Form {
           	  }
           	  
           	  try {
-          		  Collection<String> props = (Collection<String>) form.getItemPropertyIds();
+          		  /*Collection<String> props = (Collection<String>) form.getItemPropertyIds();
           		  List<Field> fields = new ArrayList<Field>();
           		  for (String property : props) {
           			  fields.add(form.getField(property));
@@ -369,10 +378,13 @@ public class TabInvoiceLine extends Form {
           			  }
           		  }
           		  ValidatorsList.validateListenersNotify(listeners);
-          		  form.validate();
+          		  form.validate();*/
+          		  Utils.validateFormFields(form);
           		  //table.setInvoiceLine (sid, invoiceLineItem);
           		  table.setLine(sid, invoiceLineItem);
-                
+          		  addBtn.setEnabled(true);
+          		  editBtn.setEnabled(true);
+                  deleteBtn.setEnabled(true);
           		  // 	hide form
           		  hiddenContent.setVisible (false);
           		  editMode = false;
@@ -385,7 +397,9 @@ public class TabInvoiceLine extends Form {
             @Override
             public void buttonClick (final ClickEvent event) {
               hiddenContent.removeAllComponents ();
-
+              addBtn.setEnabled(true);
+      		  editBtn.setEnabled(true);
+              deleteBtn.setEnabled(true);
               //table.setInvoiceLine (sid, originalItem);
               table.setLine(sid, originalItem);
               // hide form
@@ -408,17 +422,12 @@ public class TabInvoiceLine extends Form {
 
       }
     });
-    final Button deleteBtn = new Button ("Delete Selected", new Button.ClickListener () {
+    
+    deleteBtn.addListener(new Button.ClickListener () {
       @Override
       public void buttonClick (final Button.ClickEvent event) {
         final Object rowId = table.getValue (); // get the selected rows id
         if (rowId != null) {
-          if (addMode || editMode) {
-            parent.getWindow ().showNotification ("Info",
-                                                  "You cannot delete while in add/edit mode",
-                                                  Window.Notification.TYPE_HUMANIZED_MESSAGE);
-            return;
-          }
           if (table.getContainerProperty (rowId, "ID.value").getValue () != null) {
             final String sid = (String) table.getContainerProperty (rowId, "ID.value").getValue ();
             //table.removeInvoiceLine (sid);
@@ -718,16 +727,22 @@ public class TabInvoiceLine extends Form {
           UnitCodeSelect unitCodeSelect = new UnitCodeSelect(pid);
           unitCodeSelect.setRequired(true);
           unitCodeSelect.setNullSelectionAllowed(false);
+          unitCodeSelect.addListener(new RequiredFieldListener(unitCodeSelect,pid));
+      	  ValidatorsList.addListeners((Collection<BlurListener>) unitCodeSelect.getListeners(BlurEvent.class));
           return unitCodeSelect;
       }
       if ("Tax Scheme ID".equals(pid)) {
           final TaxSchemeSelect taxSchemeSelect = new TaxSchemeSelect(pid);
           taxSchemeSelect.setRequired(true);
+          taxSchemeSelect.addListener(new RequiredFieldListener(taxSchemeSelect,pid));
+      	  ValidatorsList.addListeners((Collection<BlurListener>) taxSchemeSelect.getListeners(BlurEvent.class));
           return taxSchemeSelect;
       }
       if ("Tax Category ID".equals(pid)) {
           final TaxCategoryIDSelect taxCategoryIDSelect = new TaxCategoryIDSelect(pid);
           taxCategoryIDSelect.setRequired(true);
+          taxCategoryIDSelect.addListener(new RequiredFieldListener(taxCategoryIDSelect,pid));
+      	  ValidatorsList.addListeners((Collection<BlurListener>) taxCategoryIDSelect.getListeners(BlurEvent.class));
           return taxCategoryIDSelect;
       }
       

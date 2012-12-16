@@ -12,7 +12,8 @@ public class GlobalValidationsRegistry {
 	private static List<BaseValidation> list = new ArrayList<BaseValidation>();
 	
 	public static void setMainComponent(Component c, InvoiceType inv) {
-		list.add(new InvoiceLinesNumberValidation(c));
+		//list.add(new InvoiceLinesNumberValidation(c));
+		list.add(new InvoiceLinesNumberValidation(inv));
 		list.add(new CrossBorderTradeValidation(inv));
 		list.add(new VATTotalTaxes(inv));
 		list.add(new VATTotalSupplier(inv));

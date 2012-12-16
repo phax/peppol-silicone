@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.vaadin.event.FieldEvents.BlurListener;
 import com.vaadin.terminal.UserError;
+import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.AbstractTextField;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Field;
@@ -36,7 +37,8 @@ public class ValidatorsList {
 			BlurListener b = listenerList.get(i);
 			if (b instanceof RequiredFieldListener) {
 				if (((RequiredFieldListener)b).isValid() == false) {
-					AbstractTextField tf = ((RequiredFieldListener)b).getTextField();
+					//AbstractTextField tf = ((RequiredFieldListener)b).getTextField();
+					AbstractField tf = ((RequiredFieldListener)b).getField();
 					tf.setComponentError(new UserError(((RequiredFieldListener)b).getErrorMessage()));
 					
 					Tab tab = getParentTab(tf);
@@ -44,7 +46,7 @@ public class ValidatorsList {
 						tab.setStyleName("test111");
 				}
 				else {
-					AbstractTextField tf = ((RequiredFieldListener)b).getTextField();
+					AbstractField tf = ((RequiredFieldListener)b).getField();
 					Tab tab = getParentTab(tf);
 					if (tab != null)
 						tab.setStyleName("");
@@ -58,11 +60,11 @@ public class ValidatorsList {
 			BlurListener b = listenerList.get(i);
 			if (b instanceof RequiredFieldListener) {
 				if (((RequiredFieldListener)b).isValid() == false) {
-					AbstractTextField tf = ((RequiredFieldListener)b).getTextField();
+					AbstractField tf = ((RequiredFieldListener)b).getField();
 					tf.setComponentError(new UserError(((RequiredFieldListener)b).getErrorMessage()));
 				}
 				else {
-					AbstractTextField tf = ((RequiredFieldListener)b).getTextField();
+					AbstractField tf = ((RequiredFieldListener)b).getField();
 					tf.setComponentError(null);
 				}
 			}

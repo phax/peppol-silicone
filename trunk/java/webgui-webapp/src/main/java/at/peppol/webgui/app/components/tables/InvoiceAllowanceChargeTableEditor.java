@@ -101,11 +101,15 @@ public class InvoiceAllowanceChargeTableEditor extends
 	      if ("Tax Scheme ID".equals(pid)) {
 	          final TaxSchemeSelect taxSchemeSelect = new TaxSchemeSelect(pid);
 	          taxSchemeSelect.setRequired(true);
+	          taxSchemeSelect.addListener(new RequiredFieldListener(taxSchemeSelect,pid));
+          	  ValidatorsList.addListeners((Collection<BlurListener>) taxSchemeSelect.getListeners(BlurEvent.class));
 	          return taxSchemeSelect;
 	      }
 	      if ("Tax Category ID".equals(pid)) {
 	          final TaxCategoryIDSelect taxCategoryIDSelect = new TaxCategoryIDSelect(pid);
 	          taxCategoryIDSelect.setRequired(true);
+	          taxCategoryIDSelect.addListener(new RequiredFieldListener(taxCategoryIDSelect,pid));
+          	  ValidatorsList.addListeners((Collection<BlurListener>) taxCategoryIDSelect.getListeners(BlurEvent.class));
 	          return taxCategoryIDSelect;
 	      }
 

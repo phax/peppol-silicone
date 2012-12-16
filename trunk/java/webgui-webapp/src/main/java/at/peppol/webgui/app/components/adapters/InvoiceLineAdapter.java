@@ -74,6 +74,7 @@ import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PercentT
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PriceAmountType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TaxAmountType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ValueType;
+import un.unece.uncefact.codelist.specification._54217._2001.CurrencyCodeContentType;
 import un.unece.uncefact.codelist.specification._66411._2001.UnitCodeContentType;
 
 /**
@@ -237,7 +238,6 @@ public class InvoiceLineAdapter extends InvoiceLineType implements Adapter{
 
   public UnitCodeContentType getInvLineMeasureUnit() {
 	  if (getInvoicedQuantity().getUnitCode() != null) {
-		  System.out.println("from invoice: "+getInvoicedQuantity().getUnitCode().toString());
 		  return getInvoicedQuantity().getUnitCode();
 	  }
 	  return null;
@@ -437,6 +437,18 @@ public class InvoiceLineAdapter extends InvoiceLineType implements Adapter{
   public List<CommodityClassificationType> getInvLineCommodityClassificationList() {
 	  return getItem().getCommodityClassification();
   }
+  
+  public void setCommonCurrency(CurrencyCodeContentType currency) {
+	  getLineExtensionAmount ().setCurrencyID (currency);
+      getTaxTotal ().get (0).getTaxAmount ().setCurrencyID (currency);
+      getPrice ().getPriceAmount ().setCurrencyID (currency);
+      getPrice ().getAllowanceCharge ().get (0).getAmount ().setCurrencyID (currency);
+      getPrice ().getAllowanceCharge ().get (0).getBaseAmount ().setCurrencyID (currency);
+  }
+  public CurrencyCodeContentType getCommonCurrency() {
+	  return getLineExtensionAmount ().getCurrencyID ();
+  }
+  
 
   /*
    * jerry's old public String getItemDescription() { if
