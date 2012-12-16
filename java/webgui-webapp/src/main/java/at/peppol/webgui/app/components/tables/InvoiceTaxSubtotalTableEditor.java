@@ -208,7 +208,8 @@ public class InvoiceTaxSubtotalTableEditor extends GenericTableEditor<TaxSubtota
 									else {
 										try {
 											taxSubTotalForm.validate();
-											deleteNullFields(taxSubTotalForm, invoiceList, adapterItem);
+											//deleteNullFields(taxSubTotalForm, invoiceList, adapterItem);
+											adapterItem.setEmptyAsNull();
 											error = false;
 											f2.setComponentError(null);
 											table.addLine(adapterItem);

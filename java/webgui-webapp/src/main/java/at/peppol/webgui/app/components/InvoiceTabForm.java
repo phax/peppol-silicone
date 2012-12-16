@@ -43,6 +43,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -76,6 +77,7 @@ import at.peppol.validation.pyramid.ValidationPyramid;
 import at.peppol.validation.pyramid.ValidationPyramidResultLayer;
 import at.peppol.validation.rules.EValidationDocumentType;
 import at.peppol.validation.rules.ValidationTransaction;
+import at.peppol.webgui.app.components.adapters.InvoiceLineAdapter;
 import at.peppol.webgui.app.validator.ValidatorHandler;
 import at.peppol.webgui.app.validator.ValidatorsList;
 import at.peppol.webgui.app.validator.global.GlobalValidationsRegistry;
@@ -202,11 +204,8 @@ public class InvoiceTabForm extends Form {
       @Override
       public void buttonClick (final Button.ClickEvent event) {
     	  SetCommonCurrency ();
-          //AbstractUBLDocumentMarshaller.setGlobalValidationEventHandler (null);
           ValidatorHandler vh = new ValidatorHandler(footerLayout);
           AbstractUBLDocumentMarshaller.setGlobalValidationEventHandler (vh);
-          //UBL20DocumentMarshaller.writeInvoice (invoice, new StreamResult (new OutputStreamWriter (System.out)));
-          System.out.println(invoice);
           vh.clearErrors();
          
           List<String> errors = GlobalValidationsRegistry.runAll();
@@ -233,14 +232,14 @@ public class InvoiceTabForm extends Form {
           
           final ValidationPyramid vp = new ValidationPyramid (EValidationDocumentType.INVOICE,
                   ValidationTransaction.createUBLTransaction (ETransaction.T10));
-         	final List <ValidationPyramidResultLayer> aResults = vp.applyValidation (new FileSystemResource ("invoice.xml"))
-                  .getAllValidationResultLayers ();
-         	if (aResults.isEmpty ())
-              System.out.println ("  The document is valid!");
-            else
-              for (final ValidationPyramidResultLayer aResultLayer : aResults)
-                for (final IResourceError aError : aResultLayer.getValidationErrors ())
-                  System.out.println ("  " + aResultLayer.getValidationLevel () + " " + aError.getAsString (Locale.US));
+	     	final List <ValidationPyramidResultLayer> aResults = vp.applyValidation (new FileSystemResource ("invoice.xml"))
+	              .getAllValidationResultLayers ();
+	     	if (aResults.isEmpty ())
+	          System.out.println ("  The document is valid!");
+	        else
+	          for (final ValidationPyramidResultLayer aResultLayer : aResults)
+	            for (final IResourceError aError : aResultLayer.getValidationErrors ())
+	              System.out.println ("  " + aResultLayer.getValidationLevel () + " " + aError.getAsString (Locale.US));
          	
           //InvoiceTabForm.this.invTabSheet.getTab(supplierForm).setCaption(caption)
           ValidatorsList.validateListenersNotify();
@@ -249,15 +248,7 @@ public class InvoiceTabForm extends Form {
           }
           else
         	  getParent().getWindow().showNotification("Validation passed! ",Notification.TYPE_TRAY_NOTIFICATION);
-           	  /*ByteArrayOutputStream baos = new ByteArrayOutputStream ();
-           	  UBL20DocumentMarshaller.writeInvoice(invoice, new StreamResult(new
-           			  File("invoice.xml")));
-           			  //OutputStreamWriter(baos)));*/
-           	
-           		
-           	
-          // getParent().getWindow ().showNotification("Info", baos.toString (),
-          // Window.Notification.TYPE_HUMANIZED_MESSAGE);
+        	  
       }
     }));
 
@@ -392,7 +383,14 @@ public class InvoiceTabForm extends Form {
       ac.getTaxAmount ().setCurrencyID (cur);
       ac.getTaxableAmount ().setCurrencyID (cur);
     }
-
+    
+    Collection<?> col = tTabInvoiceLine.getTable().getContainerDataSource().getItemIds(); 
+    for (Object itemId : col) {
+    	System.out.println("Table item id: "+itemId);
+    	tTabInvoiceLine.getTable().getContainerDataSource().getItem(itemId).
+    		getItemProperty("CommonCurrency").setValue(cur);
+    }
+    
     // lines
     final List <InvoiceLineType> invoiceLineList = invoice.getInvoiceLine ();
     final Iterator <InvoiceLineType> iter = invoiceLineList.iterator ();
@@ -404,7 +402,6 @@ public class InvoiceTabForm extends Form {
       il.getPrice ().getAllowanceCharge ().get (0).getAmount ().setCurrencyID (cur);
       il.getPrice ().getAllowanceCharge ().get (0).getBaseAmount ().setCurrencyID (cur);
     }
-
   }
   
 /*  public void linesTotalAmountListener(ItemSetChangeEvent event) {

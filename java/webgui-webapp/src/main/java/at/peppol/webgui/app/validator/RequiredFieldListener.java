@@ -3,17 +3,20 @@ package at.peppol.webgui.app.validator;
 import com.vaadin.event.FieldEvents.BlurEvent;
 import com.vaadin.event.FieldEvents.BlurListener;
 import com.vaadin.terminal.UserError;
+import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.AbstractTextField;
+import com.vaadin.ui.Field;
 
 @SuppressWarnings("serial")
 public class RequiredFieldListener implements BlurListener {
 
 	boolean passValidation;
-	AbstractTextField tf;
+	//AbstractTextField tf;
 	String propertyName;
 	String errorMessage;
+	AbstractField tf;
 	
-	public RequiredFieldListener(AbstractTextField tf, String propertyName) {
+	public RequiredFieldListener(AbstractField tf, String propertyName) {
 		this.tf = tf;
 		this.propertyName = propertyName;
 		this.errorMessage = this.propertyName+" cannot be empty";
@@ -21,7 +24,7 @@ public class RequiredFieldListener implements BlurListener {
 		passValidation = false;
 	}
 	
-	public RequiredFieldListener(AbstractTextField tf, String propertyName, String errorMessage) {
+	public RequiredFieldListener(AbstractField tf, String propertyName, String errorMessage) {
 		this.tf = tf;
 		this.propertyName = propertyName;
 		this.errorMessage = errorMessage;
@@ -29,7 +32,7 @@ public class RequiredFieldListener implements BlurListener {
 		passValidation = false;
 	}
 	
-	public AbstractTextField getTextField() {
+	public AbstractField getField() {
 		return tf;
 	}
 	

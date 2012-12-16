@@ -1,5 +1,7 @@
 package at.peppol.webgui.app.validator.global;
 
+import oasis.names.specification.ubl.schema.xsd.invoice_2.InvoiceType;
+
 import com.vaadin.ui.Component;
 
 import at.peppol.webgui.app.components.InvoiceTabForm;
@@ -13,13 +15,18 @@ public class InvoiceLinesNumberValidation extends BaseValidation {
 		errorMessage = "An invoice must specify at least one line item";
 	}
 	
-	
+	public InvoiceLinesNumberValidation(InvoiceType inv) {
+		super(inv);
+		ruleID = "BIIRULE-T10-R033";
+		errorMessage = "An invoice must specify at least one line item";
+	}
 	
 	@Override
 	public String run() {
 		int linesNum = 0;
 		
-		if (mainComponent instanceof InvoiceTabForm) {
+		linesNum = invoice.getInvoiceLine().size();
+		/*if (mainComponent instanceof InvoiceTabForm) {
 			InvoiceTabForm tab = (InvoiceTabForm)mainComponent;
 		
 			linesNum = tab.getInvoiceLineTab().getInvoiceLineList().size();
@@ -27,7 +34,8 @@ public class InvoiceLinesNumberValidation extends BaseValidation {
 		else if (mainComponent instanceof TabInvoiceLine) {
 			TabInvoiceLine tab = (TabInvoiceLine)mainComponent;
 			linesNum = tab.getInvoiceLineList().size();
-		}
+		}*/
+		
 		if (linesNum > 0)
 			return null;
 		else
