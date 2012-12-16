@@ -39,16 +39,18 @@ public class VATAEOtherVAT extends BaseValidation {
 			}
 		}
 		for (InvoiceLineType line : list2) {
-			if (line.getTaxTotal().get(0).getTaxSubtotal().get(0).getTaxCategory().
-					getTaxScheme().getID().getValue().equals("VAT")) {
+			if (line.getTaxTotal().get(0).getTaxSubtotal().size() > 0) {
 				if (line.getTaxTotal().get(0).getTaxSubtotal().get(0).getTaxCategory().
-					getID().getValue().equals("AE")) {
-					
-					foundVATAE = true;
-				}
-				else {
-					foundVATnonAE = true;
-					tab = "Invoice lines";
+						getTaxScheme().getID().getValue().equals("VAT")) {
+					if (line.getTaxTotal().get(0).getTaxSubtotal().get(0).getTaxCategory().
+						getID().getValue().equals("AE")) {
+						
+						foundVATAE = true;
+					}
+					else {
+						foundVATnonAE = true;
+						tab = "Invoice lines";
+					}
 				}
 			}
 		}

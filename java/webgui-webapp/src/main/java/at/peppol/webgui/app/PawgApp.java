@@ -37,11 +37,16 @@
  */
 package at.peppol.webgui.app;
 
+import java.io.File;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import at.peppol.webgui.app.login.UserDirManager;
+import at.peppol.webgui.app.login.UserSpaceManager;
 
 import com.phloc.appbasics.security.AccessManager;
 import com.phloc.appbasics.security.login.ELoginResult;
@@ -56,6 +61,7 @@ public class PawgApp extends Application implements HttpServletRequestListener {
   private static final ThreadLocal <PawgApp> threadLocal = new ThreadLocal <PawgApp> ();
   private static final Logger LOGGER = LoggerFactory.getLogger (PawgApp.class);
   private IUser user;
+  private UserDirManager um;
   private final LoggedInUserManager lum = LoggedInUserManager.getInstance ();
 
   @Override
@@ -64,21 +70,32 @@ public class PawgApp extends Application implements HttpServletRequestListener {
     setInstance (this);
     setTheme ("peppol");
     try {
-      lum.logoutCurrentUser ();
-      if (false) {
-        showLoginWindow ();
-        startWithMainWindow ();
-      }
-      else {
-        authenticate ("user@peppol.eu", "user");
-      }
+    	if (false) {
+    		if (!lum.isUserLoggedInInCurrentSession()) {
+       			showLoginWindow ();
+        	}
+    		else {
+    			showMainAppWindow ();
+    		}
+    		/*logout();
+    		lum.logoutCurrentUser ();
+    		showLoginWindow ();
+    		startWithMainWindow ();*/
+    	}
+    	else {
+    		authenticate ("user@peppol.eu", "user");
+    	}
     }
     catch (final Exception ex) {
       LOGGER.error (null, ex);
     }
   }
+  
+  public UserSpaceManager<File> getUserSpaceManager() {
+	  return um;
+  }
 
-  private void showLoginWindow () {
+  public void showLoginWindow () {
     final LoginWindow win = new LoginWindow ();
     setMainWindow (win);
   }
@@ -122,6 +139,8 @@ public class PawgApp extends Application implements HttpServletRequestListener {
     if (res.isSuccess ()) {
       user = AccessManager.getInstance ().getUserOfID (lum.getCurrentUserID ());
       setUser (user);
+      um = new UserDirManager(user, "invoice");
+      um.createUserSpaces();
       showMainAppWindow ();
 
     }
@@ -135,7 +154,7 @@ public class PawgApp extends Application implements HttpServletRequestListener {
     lum.logoutCurrentUser ();
     close ();
   }
-
+  
   private void startWithMainWindow () throws Exception {
     user = AccessManager.getInstance ().getUserOfLoginName ("user@peppol.eu");
     setUser (user);

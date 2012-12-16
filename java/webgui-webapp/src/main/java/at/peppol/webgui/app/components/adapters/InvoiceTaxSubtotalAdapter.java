@@ -73,14 +73,23 @@ public class InvoiceTaxSubtotalAdapter extends TaxSubtotalType implements Adapte
   
   @Override
   public int hashCode() {
-	  int ret = getTableLineID().hashCode();
-	  ret += getTaxSubTotalTaxableAmount().hashCode();
-	  ret += getTaxSubTotalTaxAmount().hashCode();
-	  ret += getTaxSubTotalCategoryID().hashCode();
-	  ret += getTaxSubTotalCategoryPercent().hashCode();
-	  ret += getTaxSubTotalCategoryExemptionReasonCode().hashCode();
-	  ret += getTaxSubTotalCategoryExemptionReason().hashCode();
-	  ret += getTaxSubTotalCategoryTaxSchemeID().hashCode();
+	  int ret = 0;
+	  if (getTableLineID() != null)
+		  ret += getTableLineID().hashCode();
+	  if (getTaxSubTotalTaxableAmount() != null)
+		  ret += getTaxSubTotalTaxableAmount().hashCode();
+	  if (getTaxSubTotalTaxAmount() != null)
+		  ret += getTaxSubTotalTaxAmount().hashCode();
+	  if (getTaxSubTotalCategoryID() != null)
+		  ret += getTaxSubTotalCategoryID().hashCode();
+	  if (getTaxSubTotalCategoryPercent() != null)
+		  ret += getTaxSubTotalCategoryPercent().hashCode();
+	  if (getTaxSubTotalCategoryExemptionReasonCode() != null)
+		  ret += getTaxSubTotalCategoryExemptionReasonCode().hashCode();
+	  if (getTaxSubTotalCategoryExemptionReason() != null)
+		  ret += getTaxSubTotalCategoryExemptionReason().hashCode();
+	  if (getTaxSubTotalCategoryTaxSchemeID() != null)
+		  ret += getTaxSubTotalCategoryTaxSchemeID().hashCode();
 	  
 	  return ret;
   }
@@ -144,6 +153,7 @@ public class InvoiceTaxSubtotalAdapter extends TaxSubtotalType implements Adapte
   }
   
   public void setTaxSubTotalCategoryPercent(BigDecimal v) {
+	  v = v.setScale(2,RoundingMode.HALF_UP);
     getTaxCategory ().getPercent ().setValue (v);
   }
   

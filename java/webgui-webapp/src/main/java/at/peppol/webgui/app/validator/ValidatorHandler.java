@@ -36,8 +36,8 @@ public class ValidatorHandler implements ValidationEventHandler {
         System.out.println("    URL:  " + event.getLocator().getURL());
 		
         if (error) {
-        	c.getParent().getWindow().showNotification("Error in document", event.getMessage(),
-                Window.Notification.TYPE_ERROR_MESSAGE);
+        	//c.getParent().getWindow().showNotification("Error in document", event.getMessage(),
+            //    Window.Notification.TYPE_ERROR_MESSAGE);
         	error = false;
         }
 		

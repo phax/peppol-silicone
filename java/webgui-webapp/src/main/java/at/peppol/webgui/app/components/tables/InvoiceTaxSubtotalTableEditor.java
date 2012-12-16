@@ -35,6 +35,7 @@ import at.peppol.webgui.app.components.TabInvoiceLine.EUGEN_T10_R018;
 import at.peppol.webgui.app.components.adapters.InvoiceTaxSubtotalAdapter;
 import at.peppol.webgui.app.validator.PositiveValueListener;
 import at.peppol.webgui.app.validator.PositiveValueValidator;
+import at.peppol.webgui.app.validator.RequiredFieldListener;
 import at.peppol.webgui.app.validator.RequiredNumericalFieldListener;
 import at.peppol.webgui.app.validator.ValidatorsList;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.TaxSubtotalType;
@@ -109,28 +110,34 @@ public class InvoiceTaxSubtotalTableEditor extends GenericTableEditor<TaxSubtota
 	        final AbstractTextField tf = (AbstractTextField) field;
 	        if ("Tax Total Amount".equals(pid)) {
 	        	tf.setRequired(true);
-	        	tf.addListener(new RequiredNumericalFieldListener(tf,pid));
-	        	tf.addListener(new PositiveValueListener(tf,pid));
+	        	tf.addValidator(new PositiveValueValidator());
+	        	tf.addListener(new RequiredFieldListener(tf,pid));
+	        	//tf.addListener(new RequiredNumericalFieldListener(tf,pid));
+	        	//tf.addListener(new PositiveValueListener(tf,pid));
 	        	ValidatorsList.addListeners((Collection<BlurListener>) tf.getListeners(BlurEvent.class));
 	        }
 	        if ("Taxable Amount".equals(pid)) {
 	        	tf.setRequired(true);
 	        	tf.addValidator(new PositiveValueValidator());
-	        	tf.addListener(new RequiredNumericalFieldListener(tf,pid));
-	        	tf.addListener(new PositiveValueListener(tf,pid));
+	        	tf.addListener(new RequiredFieldListener(tf,pid));
+	        	//tf.addListener(new RequiredNumericalFieldListener(tf,pid));
+	        	//tf.addListener(new PositiveValueListener(tf,pid));
 	        	ValidatorsList.addListeners((Collection<BlurListener>) tf.getListeners(BlurEvent.class));
 	        }
 	        if ("Tax Amount".equals(pid)) {
 	        	tf.setRequired(true);
 	        	tf.addValidator(new PositiveValueValidator());
-	        	tf.addListener(new RequiredNumericalFieldListener(tf,pid));
-	        	tf.addListener(new PositiveValueListener(tf,pid));
+	        	tf.addListener(new RequiredFieldListener(tf,pid));
+	        	//tf.addListener(new RequiredNumericalFieldListener(tf,pid));
+	        	//tf.addListener(new PositiveValueListener(tf,pid));
 	        	ValidatorsList.addListeners((Collection<BlurListener>) tf.getListeners(BlurEvent.class));
 	        }
 	        if ("Tax Category Percent".equals(pid)) {
 	        	tf.setRequired(true);
-	        	tf.addListener(new RequiredNumericalFieldListener(tf,pid));
-	        	tf.addListener(new PositiveValueListener(tf,pid));
+	        	tf.addListener(new RequiredFieldListener(tf,pid));
+	        	tf.addValidator(new PositiveValueValidator());
+	        	//tf.addListener(new RequiredNumericalFieldListener(tf,pid));
+	        	//tf.addListener(new PositiveValueListener(tf,pid));
 	        	ValidatorsList.addListeners((Collection<BlurListener>) tf.getListeners(BlurEvent.class));
 	        }
 	        return tf;
@@ -201,6 +208,7 @@ public class InvoiceTaxSubtotalTableEditor extends GenericTableEditor<TaxSubtota
 									else {
 										try {
 											taxSubTotalForm.validate();
+											deleteNullFields(taxSubTotalForm, invoiceList, adapterItem);
 											error = false;
 											f2.setComponentError(null);
 											table.addLine(adapterItem);
@@ -219,6 +227,9 @@ public class InvoiceTaxSubtotalTableEditor extends GenericTableEditor<TaxSubtota
 							if (!error) {
 								editButton.setEnabled(true);
 								deleteButton.setEnabled(true);
+								
+								//delete invoicetype fields that have no value
+								
 							}
 						}
 					});
@@ -398,6 +409,25 @@ public class InvoiceTaxSubtotalTableEditor extends GenericTableEditor<TaxSubtota
 	    dstItem.setTaxSubTotalCategoryExemptionReasonCode (srcItem.getTaxSubTotalCategoryExemptionReasonCode ());
 	    dstItem.setTaxSubTotalCategoryExemptionReason (srcItem.getTaxSubTotalCategoryExemptionReason ());
 	    dstItem.setTaxSubTotalCategoryTaxSchemeID (srcItem.getTaxSubTotalCategoryTaxSchemeID ());
+	}
+	
+	public void deleteNullFields(Form form, List<TaxSubtotalType> list, InvoiceTaxSubtotalAdapter item) {
+		if (form.getField("Tax Exemption Reason Code").getValue() == null) {
+			item.setTaxSubTotalCategoryExemptionReasonCode(null);
+			System.out.println("inside code null");
+		}
+		else if (form.getField("Tax Exemption Reason Code").getValue().equals("")) {
+			item.setTaxSubTotalCategoryExemptionReasonCode(null);
+			System.out.println("inside code empty");
+		} 
+		if (form.getField("Tax Exemption Reason").getValue() == null) {
+			item.setTaxSubTotalCategoryExemptionReason(null);
+			System.out.println("inside reason null");
+		}
+		else if (form.getField("Tax Exemption Reason").getValue().equals("")) {
+			item.setTaxSubTotalCategoryExemptionReason(null);
+			System.out.println("inside reason empty");
+		}
 	}
 	
 	public class EUGEN_T10_R009 implements ValueChangeListener {

@@ -42,6 +42,7 @@
 package at.peppol.webgui.app.components.adapters;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AllowanceChargeType;
@@ -73,6 +74,7 @@ import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PercentT
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.PriceAmountType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.TaxAmountType;
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.ValueType;
+import un.unece.uncefact.codelist.specification._66411._2001.UnitCodeContentType;
 
 /**
  * An adapter class that ignores the list types found in InvoiceLineType and
@@ -90,6 +92,7 @@ public class InvoiceLineAdapter extends InvoiceLineType implements Adapter{
     setID (new IDType ());
     setNote (new NoteType ());
     setInvoicedQuantity (new InvoicedQuantityType ());
+    
     setLineExtensionAmount (new LineExtensionAmountType ());
     setAccountingCost (new AccountingCostType ());
 
@@ -121,6 +124,8 @@ public class InvoiceLineAdapter extends InvoiceLineType implements Adapter{
     
     item.setStandardItemIdentification (new ItemIdentificationType ());
     item.getStandardItemIdentification ().setID (new IDType ());
+    
+    item.getStandardItemIdentification ().getID().setSchemeID("GTIN");
     
     final TaxCategoryType ct = new TaxCategoryType ();
     ct.setID (new IDType ());
@@ -213,15 +218,34 @@ public class InvoiceLineAdapter extends InvoiceLineType implements Adapter{
   }
 
   public void setInvLineInvoicedQuantity (final BigDecimal v) {
-    getInvoicedQuantity ().setValue (v);
+	  BigDecimal v1 = v.setScale(2,RoundingMode.HALF_UP);
+    getInvoicedQuantity ().setValue (v1);
   }
 
   public BigDecimal getInvLineInvoicedQuantity () {
     return getInvoicedQuantity ().getValue ();
   }
+  
+  public void setInvLineMeasureUnit(UnitCodeContentType unit) {
+	  if (unit == null) {
+		  getInvoicedQuantity().setUnitCode(null);
+	  }
+	  else {
+		  getInvoicedQuantity().setUnitCode(unit);
+	  }
+  }
 
+  public UnitCodeContentType getInvLineMeasureUnit() {
+	  if (getInvoicedQuantity().getUnitCode() != null) {
+		  System.out.println("from invoice: "+getInvoicedQuantity().getUnitCode().toString());
+		  return getInvoicedQuantity().getUnitCode();
+	  }
+	  return null;
+  }
+  
   public void setInvLineLineExtensionAmount (final BigDecimal v) {
-    getLineExtensionAmount ().setValue (v);
+	  BigDecimal v1 = v.setScale(2,RoundingMode.HALF_UP);
+    getLineExtensionAmount ().setValue (v1);
   }
 
   public BigDecimal getInvLineLineExtensionAmount () {
@@ -237,7 +261,8 @@ public class InvoiceLineAdapter extends InvoiceLineType implements Adapter{
   }
 
   public void setInvLineTaxAmount (final BigDecimal v) {
-    getTaxTotal ().get (0).getTaxAmount ().setValue (v);
+	  BigDecimal v1 = v.setScale(2,RoundingMode.HALF_UP);
+    getTaxTotal ().get (0).getTaxAmount ().setValue (v1);
   }
 
   public BigDecimal getInvLineTaxAmount () {
@@ -286,7 +311,8 @@ public class InvoiceLineAdapter extends InvoiceLineType implements Adapter{
   }
 
   public void setInvLineItemTaxCategoryPercent (final BigDecimal v) {
-    getItem ().getClassifiedTaxCategory ().get (0).getPercent ().setValue (v);
+	  BigDecimal v1 = v.setScale(2,RoundingMode.HALF_UP);
+    getItem ().getClassifiedTaxCategory ().get (0).getPercent ().setValue (v1);
   }
 
   public BigDecimal getInvLineItemTaxCategoryPercent () {
@@ -304,7 +330,8 @@ public class InvoiceLineAdapter extends InvoiceLineType implements Adapter{
   /* pattern: <set/get>InvLine<function-name> */
 
   public void setInvLinePriceAmount (final BigDecimal v) {
-    getPrice ().getPriceAmount ().setValue (v);
+	  BigDecimal v1 = v.setScale(2,RoundingMode.HALF_UP);
+    getPrice ().getPriceAmount ().setValue (v1);
   }
 
 /*  public void setInvLinePriceAmount (String v) {
@@ -325,7 +352,8 @@ public class InvoiceLineAdapter extends InvoiceLineType implements Adapter{
   }
 
   public void setInvLinePriceBaseQuantity (final BigDecimal v) {
-    getPrice ().getBaseQuantity ().setValue (v);
+	  BigDecimal v1 = v.setScale(2,RoundingMode.HALF_UP);
+    getPrice ().getBaseQuantity ().setValue (v1);
   }
 
   public BigDecimal getInvLinePriceBaseQuantity () {
@@ -360,7 +388,8 @@ public class InvoiceLineAdapter extends InvoiceLineType implements Adapter{
   }
 
   public void setInvLinePriceAllowanceChargeMultiplierFactorNumeric (final BigDecimal v) {
-    getPrice ().getAllowanceCharge ().get (0).getMultiplierFactorNumeric ().setValue (v);
+	  BigDecimal v1 = v.setScale(2,RoundingMode.HALF_UP);
+    getPrice ().getAllowanceCharge ().get (0).getMultiplierFactorNumeric ().setValue (v1);
   }
 
   public BigDecimal getInvLinePriceAllowanceChargeMultiplierFactorNumeric () {
@@ -368,7 +397,8 @@ public class InvoiceLineAdapter extends InvoiceLineType implements Adapter{
   }
 
   public void setInvLinePriceAllowanceChargeAmount (final BigDecimal v) {
-    getPrice ().getAllowanceCharge ().get (0).getAmount ().setValue (v);
+	  BigDecimal v1 = v.setScale(2,RoundingMode.HALF_UP);
+    getPrice ().getAllowanceCharge ().get (0).getAmount ().setValue (v1);
   }
 
   public BigDecimal getInvLinePriceAllowanceChargeAmount () {
@@ -376,7 +406,8 @@ public class InvoiceLineAdapter extends InvoiceLineType implements Adapter{
   }
 
   public void setInvLinePriceAllowanceChargeBaseAmount (final BigDecimal v) {
-    getPrice ().getAllowanceCharge ().get (0).getBaseAmount ().setValue (v);
+	  BigDecimal v1 = v.setScale(2,RoundingMode.HALF_UP);
+    getPrice ().getAllowanceCharge ().get (0).getBaseAmount ().setValue (v1);
   }
 
   public BigDecimal getInvLinePriceAllowanceChargeBaseAmount () {

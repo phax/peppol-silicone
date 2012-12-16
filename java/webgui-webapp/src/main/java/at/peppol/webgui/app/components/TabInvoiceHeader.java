@@ -127,10 +127,13 @@ public class TabInvoiceHeader extends Form {
   public TabInvoiceHeader(InvoiceTabForm parent) {
     this.parent = parent;
     addMode = false;
-    editMode = false;    
+    editMode = false;
+    
+    if (parent.getInvoice().getInvoicePeriod ().size() == 0)
+    	parent.getInvoice().getInvoicePeriod ().add (new PeriodType());
+    
     initElements();
     
-    parent.getInvoice().getInvoicePeriod ().add (new PeriodType());
   }
 
   private void initElements() {
@@ -295,7 +298,7 @@ public class TabInvoiceHeader extends Form {
     invoiceTopForm.addItemProperty ("Accounting Cost", new NestedMethodProperty (parent.getInvoice().getAccountingCost (), "value"));
     
     Date startDate = new Date ();
-    parent.getInvoice().getInvoicePeriod().add(new PeriodType());
+    
     parent.getInvoice().getInvoicePeriod().get(0).setStartDate(new StartDateType());
     invoiceTopForm.addItemProperty ("Invoice Period Start Date", new ObjectProperty <Date> (issueDate));
 
@@ -551,8 +554,7 @@ public class TabInvoiceHeader extends Form {
             	  //parent.getInvoice().getInvoicePeriod ().add (new PeriodType());
             	  EndDateType edt = new EndDateType ();
             	  edt.setValue (XMLDate);
-            	  if (parent.getInvoice().getInvoicePeriod().size() > 0)
-            		  parent.getInvoice().getInvoicePeriod().get(0).setEndDate(edt);
+           		  parent.getInvoice().getInvoicePeriod().get(0).setEndDate(edt);
             	  endDateField.setComponentError(null);
               }
               

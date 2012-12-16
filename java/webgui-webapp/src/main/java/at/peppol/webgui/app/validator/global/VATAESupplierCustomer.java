@@ -33,13 +33,15 @@ public class VATAESupplierCustomer extends BaseValidation {
 		}
 		if (!flag) {
 			for (InvoiceLineType line : list2) {
-				if (line.getTaxTotal().get(0).getTaxSubtotal().get(0).getTaxCategory().
-						getTaxScheme().getID().getValue().equals("VAT") &&
-					line.getTaxTotal().get(0).getTaxSubtotal().get(0).getTaxCategory().
-						getID().getValue().equals("AE")) {
-					
-					flag = true;
-					break;
+				if (line.getTaxTotal().get(0).getTaxSubtotal().size() > 0) {
+					if (line.getTaxTotal().get(0).getTaxSubtotal().get(0).getTaxCategory().
+							getTaxScheme().getID().getValue().equals("VAT") &&
+						line.getTaxTotal().get(0).getTaxSubtotal().get(0).getTaxCategory().
+							getID().getValue().equals("AE")) {
+						
+						flag = true;
+						break;
+					}
 				}
 			}
 		}
@@ -57,7 +59,11 @@ public class VATAESupplierCustomer extends BaseValidation {
 		
 		if (flag) {
 			if (invoice.getAccountingSupplierParty().getParty().getPartyTaxScheme().get(0).
+					getCompanyID() == null ||
+				invoice.getAccountingSupplierParty().getParty().getPartyTaxScheme().get(0).
 					getCompanyID().getValue().trim().equals("") ||
+				invoice.getAccountingCustomerParty().getParty().getPartyTaxScheme().get(0).
+					getCompanyID() == null ||
 				invoice.getAccountingCustomerParty().getParty().getPartyTaxScheme().get(0).
 					getCompanyID().getValue().trim().equals(""))
 				
