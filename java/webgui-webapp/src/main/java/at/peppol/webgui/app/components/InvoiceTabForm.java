@@ -70,13 +70,13 @@ import oasis.names.specification.ubl.schema.xsd.invoice_2.ObjectFactory;
 import org.slf4j.LoggerFactory;
 
 import un.unece.uncefact.codelist.specification._54217._2001.CurrencyCodeContentType;
-import at.peppol.commons.cenbii.profiles.EProfile;
-import at.peppol.commons.cenbii.profiles.ETransaction;
+//import at.peppol.commons.cenbii.profiles.EProfile;
+//import at.peppol.commons.cenbii.profiles.ETransaction;
 import at.peppol.commons.identifier.doctype.EPredefinedDocumentTypeIdentifier;
-import at.peppol.validation.pyramid.ValidationPyramid;
-import at.peppol.validation.pyramid.ValidationPyramidResultLayer;
-import at.peppol.validation.rules.EValidationDocumentType;
-import at.peppol.validation.rules.ValidationTransaction;
+//import at.peppol.validation.pyramid.ValidationPyramid;
+//import at.peppol.validation.pyramid.ValidationPyramidResultLayer;
+//import at.peppol.validation.rules.EValidationDocumentType;
+//import at.peppol.validation.rules.ValidationTransaction;
 import at.peppol.webgui.app.components.adapters.InvoiceLineAdapter;
 import at.peppol.webgui.app.validator.ValidatorHandler;
 import at.peppol.webgui.app.validator.ValidatorsList;
@@ -230,7 +230,8 @@ public class InvoiceTabForm extends Form {
           UBL20DocumentMarshaller.writeInvoice(invoice, new StreamResult(new
        			  File("invoice.xml")));
           
-          final ValidationPyramid vp = new ValidationPyramid (EValidationDocumentType.INVOICE,
+          /*PEPPOL validation
+           * final ValidationPyramid vp = new ValidationPyramid (EValidationDocumentType.INVOICE,
                   ValidationTransaction.createUBLTransaction (ETransaction.T10));
 	     	final List <ValidationPyramidResultLayer> aResults = vp.applyValidation (new FileSystemResource ("invoice.xml"))
 	              .getAllValidationResultLayers ();
@@ -240,7 +241,7 @@ public class InvoiceTabForm extends Form {
 	          for (final ValidationPyramidResultLayer aResultLayer : aResults)
 	            for (final IResourceError aError : aResultLayer.getValidationErrors ())
 	              System.out.println ("  " + aResultLayer.getValidationLevel () + " " + aError.getAsString (Locale.US));
-         	
+         */	
           //InvoiceTabForm.this.invTabSheet.getTab(supplierForm).setCaption(caption)
           ValidatorsList.validateListenersNotify();
           if (ValidatorsList.validateListeners() == false) {
