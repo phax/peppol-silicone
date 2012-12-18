@@ -1,5 +1,7 @@
 package at.peppol.webgui.app.validator.global;
 
+import com.vaadin.ui.Component;
+
 import oasis.names.specification.ubl.schema.xsd.invoice_2.InvoiceType;
 
 public class CrossBorderTradeValidation extends BaseValidation {
@@ -11,8 +13,15 @@ public class CrossBorderTradeValidation extends BaseValidation {
 				"for the Supplier and Customer should be prefixed with country code.";
 	}
 	
+	CrossBorderTradeValidation(InvoiceType inv, Component tab) {
+		super(inv,tab);
+		ruleID = "BIIRULE-T10-R003(4)";
+		errorMessage = "In cross border trade the VAT identifier " +
+				"for the Supplier and Customer should be prefixed with country code.";
+	}
+	
 	@Override
-	public String run() {
+	public ValidationError run() {
 		String customerCountry = invoice.getAccountingCustomerParty().
 									getParty().getPostalAddress().getCountry().
 									getIdentificationCode().getValue();

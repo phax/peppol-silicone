@@ -5,31 +5,38 @@ import java.util.List;
 
 import oasis.names.specification.ubl.schema.xsd.invoice_2.InvoiceType;
 
+import at.peppol.webgui.app.components.InvoiceTabForm;
+
 import com.vaadin.ui.Component;
 
 public class GlobalValidationsRegistry {
 	
 	private static List<BaseValidation> list = new ArrayList<BaseValidation>();
 	
-	public static void setMainComponent(Component c, InvoiceType inv) {
-		//list.add(new InvoiceLinesNumberValidation(c));
-		list.add(new InvoiceLinesNumberValidation(inv));
-		list.add(new CrossBorderTradeValidation(inv));
-		list.add(new VATTotalTaxes(inv));
-		list.add(new VATTotalSupplier(inv));
-		list.add(new VATTotalAllowancesCharges(inv));
-		list.add(new VATAESupplierCustomer(inv));
-		list.add(new VATAEOtherVAT(inv));
-		list.add(new PaymentMeansDueDate(inv));
+	public static void setMainComponents(InvoiceTabForm invoiceTabForm, InvoiceType inv) {
+		list.add(new InvoiceLinesNumberValidation(inv, invoiceTabForm.getInvoiceLineTab()));
+		/*list.add(new CrossBorderTradeValidation(inv, invoiceTabForm.getSupplierForm()));
+		list.add(new CrossBorderTradeValidation(inv, invoiceTabForm.getCustomerForm()));
+		list.add(new VATTotalTaxes(inv, invoiceTabForm.getTabInvoiceTaxTotal()));
+		list.add(new VATTotalSupplier(inv, invoiceTabForm.getSupplierForm()));
+		list.add(new VATTotalAllowancesCharges(inv, invoiceTabForm.getTabInvoiceAllowanceCharge()));
+		list.add(new VATTotalAllowancesCharges(inv, invoiceTabForm.getInvoiceLineTab()));
+		list.add(new VATAESupplierCustomer(inv, invoiceTabForm.getSupplierForm()));
+		list.add(new VATAESupplierCustomer(inv, invoiceTabForm.getCustomerForm()));
+		list.add(new VATAEOtherVAT(inv, invoiceTabForm.getInvoiceLineTab()));
+		list.add(new VATAEOtherVAT(inv, invoiceTabForm.getTabInvoiceAllowanceCharge()));
+		list.add(new VATAEOtherVAT(inv, invoiceTabForm.getTabInvoiceTaxTotal()));
+		list.add(new PaymentMeansDueDate(inv, invoiceTabForm.getTabInvoicePayment()));
+		list.add(new VATTotalLines(inv, invoiceTabForm.getInvoiceLineTab()));*/
 	}
 	
-	public static List<String> runAll() {
-		List<String> resList = new ArrayList<String>();
+	public static List<ValidationError> runAll() {
+		List<ValidationError> resList = new ArrayList<ValidationError>();
 		for (int i=0;i<list.size();i++) {
 			BaseValidation bv = list.get(i);
-			String res = bv.run();
-			if (res != null)
-				resList.add(res);
+			ValidationError error = bv.run();
+			if (error != null)
+				resList.add(error);
 		}
 		
 		return resList;

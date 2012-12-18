@@ -81,6 +81,7 @@ import at.peppol.webgui.app.components.adapters.InvoiceLineAdapter;
 import at.peppol.webgui.app.validator.ValidatorHandler;
 import at.peppol.webgui.app.validator.ValidatorsList;
 import at.peppol.webgui.app.validator.global.GlobalValidationsRegistry;
+import at.peppol.webgui.app.validator.global.ValidationError;
 import at.peppol.commons.identifier.process.EPredefinedProcessIdentifier;
 
 import com.phloc.commons.error.IResourceError;
@@ -100,6 +101,7 @@ import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TabSheet;
+import com.vaadin.ui.TabSheet.Tab;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.Window.Notification;
 
@@ -137,10 +139,32 @@ public class InvoiceTabForm extends Form {
     initInvoiceData ();
     initElements ();
     buildMainLayout ();
+    GlobalValidationsRegistry.setMainComponents(this, invoice);
   }
   
   public TabInvoiceLine getInvoiceLineTab() {
 	  return tTabInvoiceLine;
+  }
+  public TabInvoiceHeader getTabInvoiceHeader() {
+	  return tTabInvoiceHeader;
+  }
+  public TabInvoiceDelivery gettTabInvoiceDelivery() {
+	  return tTabInvoiceDelivery;
+  }
+  public TabInvoicePayment getTabInvoicePayment() {
+	  return tTabInvoicePayment;
+  }
+  public TabInvoiceAllowanceCharge getTabInvoiceAllowanceCharge() {
+	  return tTabInvoiceAllowanceCharge;
+  }
+  public TabInvoiceTaxTotal getTabInvoiceTaxTotal() {
+	  return tTabInvoiceTaxTotal;
+  }
+  public PartyDetailForm getSupplierForm() {
+	  return supplierForm;
+  }
+  public PartyDetailForm getCustomerForm() {
+	  return customerForm;
   }
 
   private void initInvoiceData () {
@@ -184,8 +208,6 @@ public class InvoiceTabForm extends Form {
     invoice.setAccountingCustomerParty (customer);
     invoice.setAccountingSupplierParty (supplier);
     // invoice.setLegalMonetaryTotal(new MonetaryTotalType());
-
-    GlobalValidationsRegistry.setMainComponent(this, invoice);
   }
 
   private void initElements () {
@@ -207,8 +229,9 @@ public class InvoiceTabForm extends Form {
           ValidatorHandler vh = new ValidatorHandler(footerLayout);
           AbstractUBLDocumentMarshaller.setGlobalValidationEventHandler (vh);
           vh.clearErrors();
+          clearTabErrorStyles();
          
-          List<String> errors = GlobalValidationsRegistry.runAll();
+          List<ValidationError> errors = GlobalValidationsRegistry.runAll();
           if (errors.size() > 0) {
         	  Window errorWindow = new Window("Errors");
         	  //position and size of the window
@@ -220,13 +243,21 @@ public class InvoiceTabForm extends Form {
         	  //add the error messages
         	  errorWindow.addComponent(new Label("<ol>", Label.CONTENT_XHTML));
         	  for (int i=0;i<errors.size();i++) {
-        		  errorWindow.addComponent(new Label("<li style=\"margin-top: 3px;\">"+errors.get(i)+"</li>", Label.CONTENT_XHTML));
+        		  String errorMessage = errors.get(i).getRuleID()+": "+errors.get(i).getErrorInfo();
+        		  errorWindow.addComponent(new Label("<li style=\"margin-top: 3px;\">"+errorMessage+"</li>", Label.CONTENT_XHTML));
+        		  
+        		  //mark the appropriate Tab as error
+        		  Tab tab = invTabSheet.getTab(errors.get(i).getMainComponent());
+        		  if (tab != null)
+        			  tab.setStyleName("test111");
         	  }
         	  errorWindow.addComponent(new Label("</ol>", Label.CONTENT_XHTML));
         	  
         	  //show the error window
         	  getParent().getWindow().addWindow(errorWindow);
+        	  errors.clear();
           }
+          
           UBL20DocumentMarshaller.writeInvoice(invoice, new StreamResult(new
        			  File("invoice.xml")));
           
@@ -358,6 +389,17 @@ public class InvoiceTabForm extends Form {
 
   public JAXBElement <InvoiceType> getInvoiceAsJAXB () {
     return invObjFactory.createInvoice (invoice);
+  }
+  
+  public void clearTabErrorStyles() {
+	  int position = 0;
+	  while (true) {
+		  Tab tab = invTabSheet.getTab(position++);
+		  if (tab == null)
+			  break;
+		  
+		  tab.setStyleName("");
+	  }
   }
 
   public void SetCommonCurrency () {

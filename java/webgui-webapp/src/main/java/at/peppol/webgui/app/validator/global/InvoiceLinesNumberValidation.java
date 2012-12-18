@@ -3,42 +3,34 @@ package at.peppol.webgui.app.validator.global;
 import oasis.names.specification.ubl.schema.xsd.invoice_2.InvoiceType;
 
 import com.vaadin.ui.Component;
+import com.vaadin.ui.TabSheet;
 
 import at.peppol.webgui.app.components.InvoiceTabForm;
 import at.peppol.webgui.app.components.TabInvoiceLine;
 
 public class InvoiceLinesNumberValidation extends BaseValidation {
 
-	public InvoiceLinesNumberValidation(Component c) {
-		super(c);
-		ruleID = "BIIRULE-T10-R033";
-		errorMessage = "An invoice must specify at least one line item";
-	}
-	
 	public InvoiceLinesNumberValidation(InvoiceType inv) {
 		super(inv);
 		ruleID = "BIIRULE-T10-R033";
-		errorMessage = "An invoice must specify at least one line item";
+		errorMessage = "An invoice must specify at least one line item.<br/>Check 'Invoice lines' tab";
+	}
+	
+	public InvoiceLinesNumberValidation(InvoiceType inv, Component c) {
+		super(inv,c);
+		ruleID = "BIIRULE-T10-R033";
+		errorMessage = "An invoice must specify at least one line item.<br/>Check 'Invoice lines' tab";
 	}
 	
 	@Override
-	public String run() {
-		int linesNum = 0;
+	public ValidationError run() {
+		int linesNum = invoice.getInvoiceLine().size();
 		
-		linesNum = invoice.getInvoiceLine().size();
-		/*if (mainComponent instanceof InvoiceTabForm) {
-			InvoiceTabForm tab = (InvoiceTabForm)mainComponent;
-		
-			linesNum = tab.getInvoiceLineTab().getInvoiceLineList().size();
-		}
-		else if (mainComponent instanceof TabInvoiceLine) {
-			TabInvoiceLine tab = (TabInvoiceLine)mainComponent;
-			linesNum = tab.getInvoiceLineList().size();
-		}*/
-		
-		if (linesNum > 0)
+		if (linesNum > 0) {
 			return null;
-		else
+		}
+		else {
 			return error();
+		}
 	}
 }
