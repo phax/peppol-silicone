@@ -2,6 +2,8 @@ package at.peppol.webgui.app.validator.global;
 
 import java.util.List;
 
+import com.vaadin.ui.Component;
+
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AllowanceChargeType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.InvoiceLineType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.TaxSubtotalType;
@@ -9,17 +11,20 @@ import oasis.names.specification.ubl.schema.xsd.invoice_2.InvoiceType;
 
 public class VATAEOtherVAT extends BaseValidation {
 
-	String tab;
-	
 	public VATAEOtherVAT(InvoiceType inv) {
 		super(inv);
-		invoice = inv;
+		ruleID = "EUGEN-T10-R016";
+		errorMessage = "IF VAT = \"AE\" (reverse charge) THEN VAT MAY NOT contain other VAT categories.<br/>" +
+				"Check 'Invoice lines', 'Tax Total', 'Allowances/Charges' tabs";
+	}
+	public VATAEOtherVAT(InvoiceType inv, Component c) {
+		super(inv,c);
 		ruleID = "EUGEN-T10-R016";
 		errorMessage = "IF VAT = \"AE\" (reverse charge) THEN VAT MAY NOT contain other VAT categories.";
 	}
 	
 	@Override
-	public String run() {
+	public ValidationError run() {
 		boolean foundVATAE = false;
 		boolean foundVATnonAE = false;
 		
@@ -34,7 +39,6 @@ public class VATAEOtherVAT extends BaseValidation {
 				}
 				else {
 					foundVATnonAE = true;
-					tab = "Tax Total";
 				}
 			}
 		}
@@ -49,7 +53,6 @@ public class VATAEOtherVAT extends BaseValidation {
 					}
 					else {
 						foundVATnonAE = true;
-						tab = "Invoice lines";
 					}
 				}
 			}
@@ -62,14 +65,13 @@ public class VATAEOtherVAT extends BaseValidation {
 				}
 				else {
 					foundVATnonAE = true;
-					tab = "Allowance/Charge";
 				}
 			}
 		}
 		
 		
 		if (foundVATAE && foundVATnonAE) {
-			return error()+" In tab '"+tab+"'";
+			return error();
 		}
 		
 		return null;

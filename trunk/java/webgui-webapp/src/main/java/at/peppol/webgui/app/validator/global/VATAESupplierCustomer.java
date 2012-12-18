@@ -2,6 +2,8 @@ package at.peppol.webgui.app.validator.global;
 
 import java.util.List;
 
+import com.vaadin.ui.Component;
+
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AllowanceChargeType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.InvoiceLineType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.TaxSubtotalType;
@@ -11,13 +13,19 @@ public class VATAESupplierCustomer extends BaseValidation {
 
 	public VATAESupplierCustomer(InvoiceType inv) {
 		super(inv);
-		invoice = inv;
 		ruleID = "EUGEN-T10-R015";
-		errorMessage = "IF VAT = \"AE\" (reverse charge) THEN it MUST contain Supplier VAT id and Customer VAT";
+		errorMessage = "IF VAT = \"AE\" (reverse charge) THEN it MUST contain Supplier VAT id and Customer VAT.<br/>" +
+				"Please review 'Customer' and 'Supplier' tabs";
+	}
+	public VATAESupplierCustomer(InvoiceType inv, Component c) {
+		super(inv,c);
+		ruleID = "EUGEN-T10-R015";
+		errorMessage = "IF VAT = \"AE\" (reverse charge) THEN it MUST contain Supplier VAT id and Customer VAT.<br/>" +
+				"Please review 'Customer' and 'Supplier' tabs";
 	}
 	
 	@Override
-	public String run() {
+	public ValidationError run() {
 		boolean flag = false;
 		List<TaxSubtotalType> list1 = invoice.getTaxTotal().get(0).getTaxSubtotal();
 		List<InvoiceLineType> list2 = invoice.getInvoiceLine();

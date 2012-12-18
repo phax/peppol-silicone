@@ -1,6 +1,6 @@
 package at.peppol.webgui.app.utils;
 
-import at.peppol.webgui.app.login.UserSpaceManager;
+import at.peppol.webgui.app.login.UserFolderManager;
 
 import com.vaadin.Application;
 import com.vaadin.ui.Button;
@@ -13,9 +13,9 @@ public class CounterThread extends Thread {
 
 	Component c;
 	Application app;
-	UserSpaceManager um;
+	UserFolderManager um;
 	
-	public CounterThread(Component c, Application app, UserSpaceManager um) {
+	public CounterThread(Component c, Application app, UserFolderManager um) {
 		this.c = c;
 		this.um = um;
 		this.app = app;
