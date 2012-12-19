@@ -18,6 +18,11 @@
 .v-caption-disabled_opacity_1 {
 	opacity: 1;
 }
+
+.v-bold-nativebuttoncaption .v-nativebutton-caption {
+	font-weight: bold;
+}
+
 .v-window,
 .v-popupview-popup,
 .v-filterselect-suggestpopup,
