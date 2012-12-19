@@ -8,8 +8,10 @@ import com.vaadin.data.Item;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.util.NestedMethodProperty;
+import com.vaadin.event.FieldEvents;
 import com.vaadin.event.FieldEvents.BlurEvent;
 import com.vaadin.event.FieldEvents.BlurListener;
+import com.vaadin.event.FieldEvents.FocusEvent;
 import com.vaadin.ui.AbstractTextField;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
@@ -60,22 +62,20 @@ public class InvoiceTaxSubtotalTableEditor extends GenericTableEditor<TaxSubtota
 	    }
 
 	    invoiceTaxSubtotalForm.addItemProperty ("Taxable Amount", new NestedMethodProperty (taxSubtotalItem,
-	                                                                                        "TaxSubTotalTaxableAmount"));
+	    																	"TaxSubTotalTaxableAmount"));
 	    invoiceTaxSubtotalForm.addItemProperty ("Tax Amount", new NestedMethodProperty (taxSubtotalItem,
-	                                                                                    "TaxSubTotalTaxAmount"));
+	                                                                        "TaxSubTotalTaxAmount"));
 	    invoiceTaxSubtotalForm.addItemProperty ("Tax Category ID", new NestedMethodProperty (taxSubtotalItem,
-	                                                                                         "TaxSubTotalCategoryID"));
-	    invoiceTaxSubtotalForm.addItemProperty ("Tax Category Percent",
-	                                            new NestedMethodProperty (taxSubtotalItem, "TaxSubTotalCategoryPercent"));
-	    invoiceTaxSubtotalForm.addItemProperty ("Tax Exemption Reason Code",
-	                                            new NestedMethodProperty (taxSubtotalItem,
-	                                                                      "TaxSubTotalCategoryExemptionReasonCode"));
-	    invoiceTaxSubtotalForm.addItemProperty ("Tax Exemption Reason",
-	                                            new NestedMethodProperty (taxSubtotalItem,
-	                                                                      "TaxSubTotalCategoryExemptionReason"));
-	    invoiceTaxSubtotalForm.addItemProperty ("Tax Scheme ID",
-	                                            new NestedMethodProperty (taxSubtotalItem, "TaxSubTotalCategoryTaxSchemeID"));
-
+	                                                                        "TaxSubTotalCategoryID"));
+	    invoiceTaxSubtotalForm.addItemProperty ("Tax Scheme ID", new NestedMethodProperty (taxSubtotalItem, 
+	    																	"TaxSubTotalCategoryTaxSchemeID"));
+	    invoiceTaxSubtotalForm.addItemProperty ("Tax Category Percent", new NestedMethodProperty (taxSubtotalItem, 
+	    																	"TaxSubTotalCategoryPercent"));
+	    invoiceTaxSubtotalForm.addItemProperty ("Tax Exemption Reason Code", new NestedMethodProperty (taxSubtotalItem,
+	                                                                        "TaxSubTotalCategoryExemptionReasonCode"));
+	    invoiceTaxSubtotalForm.addItemProperty ("Tax Exemption Reason", new NestedMethodProperty (taxSubtotalItem,
+	                                                                      	"TaxSubTotalCategoryExemptionReason"));
+	    
 	    invoiceTaxSubtotalForm.getItemProperty("Tax Category Percent").setValue("23");
 	    
 	    return invoiceTaxSubtotalForm;
@@ -140,6 +140,13 @@ public class InvoiceTaxSubtotalTableEditor extends GenericTableEditor<TaxSubtota
 	        	//tf.addListener(new PositiveValueListener(tf,pid));
 	        	ValidatorsList.addListeners((Collection<BlurListener>) tf.getListeners(BlurEvent.class));
 	        }
+	        
+	        tf.addListener(new FieldEvents.FocusListener() {
+				@Override
+				public void focus(FocusEvent event) {
+					tf.selectAll();
+				}
+	        });	        
 	        return tf;
 	      }
 	      return field;

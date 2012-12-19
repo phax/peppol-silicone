@@ -129,26 +129,44 @@ public class PartyDetailForm extends Panel{
         
         PropertysetItem partyItemSet = new PropertysetItem();
         
-        final PartyIdentificationType supplierPartyID = new PartyIdentificationType();
-        supplierPartyID.setID(new IDType());
-        partyBean.getPartyIdentification().add(supplierPartyID);
+        PartyIdentificationType supplierPartyID;
+        if (partyBean.getPartyIdentification().size() == 0) {
+	        supplierPartyID = new PartyIdentificationType();
+	        supplierPartyID.setID(new IDType());
+	        partyBean.getPartyIdentification().add(supplierPartyID);
+        }
+        else {
+        	supplierPartyID = partyBean.getPartyIdentification().get(0);
+        }
        
         partyItemSet.addItemProperty("Party ID",
                             new NestedMethodProperty(supplierPartyID, "ID.value"));
         
-        EndpointIDType endPointID = new EndpointIDType();
-        partyBean.setEndpointID(endPointID);
+        EndpointIDType endPointID;
+        if (partyBean.getEndpointID() == null) {
+	        endPointID = new EndpointIDType();
+	        partyBean.setEndpointID(endPointID);
+        }
+        else {
+        	endPointID = partyBean.getEndpointID();
+        }
         partyItemSet.addItemProperty("Endpoint ID",
                 new NestedMethodProperty(endPointID, "SchemeAgencyID"));
         
-        final PartyNameType partyName = new PartyNameType();
-        partyName.setName(new NameType());
-        partyBean.getPartyName().add(partyName);
+        PartyNameType partyName;
+        if (partyBean.getPartyName().size() == 0) {
+        	partyName = new PartyNameType();
+        	partyName.setName(new NameType());
+        	partyBean.getPartyName().add(partyName);
+        }
+        else {
+        	partyName = partyBean.getPartyName().get(0);
+        }
+        partyItemSet.addItemProperty("Party Name",
+                new NestedMethodProperty(partyName, "name.value"));
         
 /*        partyItemSet.addItemProperty("Agency Name", 
                 new NestedMethodProperty(supplierPartyID, "ID.SchemeAgencyID") );
-        partyItemSet.addItemProperty("Party Name",
-                            new NestedMethodProperty(partyName, "name.value"));
 */        
         /*
         final AddressType partyrAddress = new AddressType();
@@ -170,25 +188,40 @@ public class PartyDetailForm extends Panel{
         partyItemSet.addItemProperty("Country",
                             new NestedMethodProperty(partyrAddress, "country.identificationCode.value"));
         */
-        AddressType address = new AddressType ();
-        AddressDetailForm partyAddressForm = new AddressDetailForm (party, address);
-        partyBean.setPostalAddress (address);        
+        AddressDetailForm partyAddressForm;
+        AddressType address;
+        if (partyBean.getPostalAddress() == null) {
+        	address = new AddressType ();
+        }
+        else {
+        	address = partyBean.getPostalAddress();
+        }
+        partyAddressForm = new AddressDetailForm (party, address);
+    	partyBean.setPostalAddress (address);
         
-        
-        PartyTaxSchemeType taxScheme = new PartyTaxSchemeType();
-        taxScheme.setCompanyID(new CompanyIDType());
-        
-        partyItemSet.addItemProperty(taxSchemeCompanyID,
-                new NestedMethodProperty(taxScheme.getCompanyID(),"value"));
-        
-        // TODO: Hardcoded ShemeID etc for TaxScheme. Should be from a codelist?
-        taxScheme.setTaxScheme(new TaxSchemeType());
-        taxScheme.getTaxScheme().setID(new IDType());
-        taxScheme.getTaxScheme().getID().setValue("VAT");
-        taxScheme.getTaxScheme().getID().setSchemeID("UN/ECE 5153");
-        taxScheme.getTaxScheme().getID().setSchemeAgencyID("6");
-        
-        partyBean.getPartyTaxScheme().add(taxScheme);
+    	PartyTaxSchemeType taxScheme;
+    	if (partyBean.getPartyTaxScheme().size() == 0) {
+	        taxScheme = new PartyTaxSchemeType();
+	        taxScheme.setCompanyID(new CompanyIDType());
+	        
+	        //partyItemSet.addItemProperty(taxSchemeCompanyID,
+	        //        new NestedMethodProperty(taxScheme.getCompanyID(),"value"));
+	        
+	        // TODO: Hardcoded ShemeID etc for TaxScheme. Should be from a codelist?
+	        taxScheme.setTaxScheme(new TaxSchemeType());
+	        taxScheme.getTaxScheme().setID(new IDType());
+	        taxScheme.getTaxScheme().getID().setValue("VAT");
+	        taxScheme.getTaxScheme().getID().setSchemeID("UN/ECE 5153");
+	        taxScheme.getTaxScheme().getID().setSchemeAgencyID("6");
+	        
+	        partyBean.getPartyTaxScheme().add(taxScheme);
+    	}
+    	else {
+    		taxScheme = partyBean.getPartyTaxScheme().get(0);
+    	}
+    	
+    	partyItemSet.addItemProperty(taxSchemeCompanyID,
+    	        new NestedMethodProperty(taxScheme.getCompanyID(),"value"));
 
         partyItemSet.addItemProperty(taxSchemeID,
                             new NestedMethodProperty(taxScheme.getTaxScheme().getID(),"value"));
@@ -203,7 +236,6 @@ public class PartyDetailForm extends Panel{
         //removeLegalEntityBtn.setVisible(false);
         
         addLegalEntityBtn.addListener(new Button.ClickListener() {
-			
 			@Override
 			public void buttonClick(ClickEvent event) {
 				//add the legal entity component
@@ -217,7 +249,6 @@ public class PartyDetailForm extends Panel{
 		});
         
         removeLegalEntityBtn.addListener(new Button.ClickListener() {
-			
 			@Override
 			public void buttonClick(ClickEvent event) {
 				//remove the legal entity component
@@ -241,7 +272,10 @@ public class PartyDetailForm extends Panel{
         partyForm.setWidth("90%");
         outerLayout.addComponent(partyAddressForm);
         partyAddressForm.setWidth("90%");
-        outerLayout.addComponent(addLegalEntityBtn);
+        if (partyBean.getPartyLegalEntity().size() == 0)
+        	outerLayout.addComponent(addLegalEntityBtn);
+        else
+        	addLegalEntityBtn.click();
         //outerLayout.addComponent(removeLegalEntityBtn);
         //outerLayout.addComponent(createLegalEntityPanel());
         
@@ -255,15 +289,20 @@ public class PartyDetailForm extends Panel{
         
         PropertysetItem legalEntityItemSet = new PropertysetItem();
         
-        PartyLegalEntityType legalEntity = new PartyLegalEntityType();
-        legalEntity.setRegistrationName(new RegistrationNameType());
-        legalEntity.setCompanyID(new CompanyIDType());
-        legalEntity.setRegistrationAddress(new AddressType());
-        legalEntity.getRegistrationAddress().setCityName(new CityNameType());
-        legalEntity.getRegistrationAddress().setCountrySubentity(new CountrySubentityType());
-        legalEntity.getRegistrationAddress().setCountry(new CountryType());
-        legalEntity.getRegistrationAddress().getCountry().setIdentificationCode(new IdentificationCodeType());
-                
+        PartyLegalEntityType legalEntity;
+        if (partyBean.getPartyLegalEntity().size() == 0) {
+	        legalEntity = new PartyLegalEntityType();
+	        legalEntity.setRegistrationName(new RegistrationNameType());
+	        legalEntity.setCompanyID(new CompanyIDType());
+	        legalEntity.setRegistrationAddress(new AddressType());
+	        legalEntity.getRegistrationAddress().setCityName(new CityNameType());
+	        legalEntity.getRegistrationAddress().setCountrySubentity(new CountrySubentityType());
+	        legalEntity.getRegistrationAddress().setCountry(new CountryType());
+	        legalEntity.getRegistrationAddress().getCountry().setIdentificationCode(new IdentificationCodeType());
+        }
+        else {
+        	legalEntity = partyBean.getPartyLegalEntity().get(0);
+        }
         //make fields
         legalEntityItemSet.addItemProperty("Registration Name", new NestedMethodProperty(legalEntity, "registrationName.value"));
         legalEntityItemSet.addItemProperty ("Company ID", new NestedMethodProperty(legalEntity, "companyID.value") );

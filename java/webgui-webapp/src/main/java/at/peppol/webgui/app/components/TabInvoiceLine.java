@@ -64,8 +64,10 @@ import com.vaadin.data.Container.ItemSetChangeListener;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.util.NestedMethodProperty;
+import com.vaadin.event.FieldEvents;
 import com.vaadin.event.FieldEvents.BlurEvent;
 import com.vaadin.event.FieldEvents.BlurListener;
+import com.vaadin.event.FieldEvents.FocusEvent;
 import com.vaadin.terminal.UserError;
 import com.vaadin.ui.AbstractTextField;
 import com.vaadin.ui.Alignment;
@@ -791,6 +793,13 @@ public class TabInvoiceLine extends Form {
         else if ("Price Allowance/Charge Base Amount".equals(pid)) {
         	tf.addValidator(new PositiveValueValidator());
         }
+        
+        tf.addListener(new FieldEvents.FocusListener() {
+      	  @Override
+      	  public void focus(FocusEvent event) {
+      		  tf.selectAll();
+      	  }
+	    });
       }
       return field;
     }

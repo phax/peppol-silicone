@@ -15,7 +15,7 @@ public class GlobalValidationsRegistry {
 	
 	public static void setMainComponents(InvoiceTabForm invoiceTabForm, InvoiceType inv) {
 		list.add(new InvoiceLinesNumberValidation(inv, invoiceTabForm.getInvoiceLineTab()));
-		/*list.add(new CrossBorderTradeValidation(inv, invoiceTabForm.getSupplierForm()));
+		list.add(new CrossBorderTradeValidation(inv, invoiceTabForm.getSupplierForm()));
 		list.add(new CrossBorderTradeValidation(inv, invoiceTabForm.getCustomerForm()));
 		list.add(new VATTotalTaxes(inv, invoiceTabForm.getTabInvoiceTaxTotal()));
 		list.add(new VATTotalSupplier(inv, invoiceTabForm.getSupplierForm()));
@@ -27,7 +27,7 @@ public class GlobalValidationsRegistry {
 		list.add(new VATAEOtherVAT(inv, invoiceTabForm.getTabInvoiceAllowanceCharge()));
 		list.add(new VATAEOtherVAT(inv, invoiceTabForm.getTabInvoiceTaxTotal()));
 		list.add(new PaymentMeansDueDate(inv, invoiceTabForm.getTabInvoicePayment()));
-		list.add(new VATTotalLines(inv, invoiceTabForm.getInvoiceLineTab()));*/
+		list.add(new VATTotalLines(inv, invoiceTabForm.getInvoiceLineTab()));
 	}
 	
 	public static List<ValidationError> runAll() {
@@ -36,7 +36,8 @@ public class GlobalValidationsRegistry {
 			BaseValidation bv = list.get(i);
 			ValidationError error = bv.run();
 			if (error != null)
-				resList.add(error);
+				if (!resList.contains(error))
+					resList.add(error);
 		}
 		
 		return resList;

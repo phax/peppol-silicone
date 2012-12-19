@@ -12,6 +12,8 @@ import oasis.names.specification.ubl.schema.xsd.invoice_2.InvoiceType;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.NestedMethodProperty;
+import com.vaadin.event.FieldEvents;
+import com.vaadin.event.FieldEvents.FocusEvent;
 import com.vaadin.terminal.UserError;
 import com.vaadin.ui.AbstractTextField;
 import com.vaadin.ui.Alignment;
@@ -408,6 +410,13 @@ public class PaymentMeansTableEditor extends GenericTableEditor<PaymentMeansType
 	        final Field field = DefaultFieldFactory.get().createField(item, propertyId, uiContext);
 	        if (field instanceof AbstractTextField) {
 	            ((AbstractTextField) field).setNullRepresentation("");
+	            final AbstractTextField tf = (AbstractTextField)field;
+	            tf.addListener(new FieldEvents.FocusListener() {
+					@Override
+					public void focus(FocusEvent event) {
+						tf.selectAll();
+					}
+		        });
 	        }
 	        return field;
 	    }

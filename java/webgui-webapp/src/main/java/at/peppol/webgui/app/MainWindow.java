@@ -38,13 +38,17 @@
 package at.peppol.webgui.app;
 
 import java.io.File;
+import java.util.Iterator;
+
+import oasis.names.specification.ubl.schema.xsd.invoice_2.InvoiceType;
 
 import org.vaadin.jouni.animator.AnimatorProxy;
 
 import at.peppol.webgui.app.components.InvoiceTabForm;
 import at.peppol.webgui.app.components.InvoiceUploadWindow;
 import at.peppol.webgui.app.components.OrderUploadWindow;
-import at.peppol.webgui.app.login.UserSpaceManager;
+import at.peppol.webgui.app.login.UserFolder;
+import at.peppol.webgui.app.login.UserFolderManager;
 import at.peppol.webgui.app.utils.CounterThread;
 
 import com.phloc.appbasics.security.user.IUser;
@@ -52,17 +56,21 @@ import com.vaadin.terminal.ClassResource;
 import com.vaadin.terminal.ExternalResource;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.CustomLayout;
 import com.vaadin.ui.Embedded;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Layout;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.NativeButton;
+import com.vaadin.ui.Panel;
 import com.vaadin.ui.ProgressIndicator;
+import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
@@ -81,7 +89,7 @@ public class MainWindow extends Window {
   private Component mainContentComponent;
   private final AnimatorProxy animProxy = new AnimatorProxy ();
   
-  private UserSpaceManager um;
+  private UserFolderManager um;
 
   public MainWindow () {
     super ("PAWG Main");
@@ -103,6 +111,7 @@ private void initUI () {
     // Changed with custom layout using bootstrap -- under testing
     // createHeaderMenu();
 
+    final UserFolder userFolder = new UserFolder();;
     // ------ START: Left NavBar -------
     final CssLayout leftNavBar = new CssLayout ();
     leftNavBar.setStyleName ("sidebar-menu");
@@ -118,19 +127,50 @@ private void initUI () {
     final NativeButton catalogueBtn = new NativeButton ("Catalogue");
     leftNavBar.addComponent (catalogueBtn);
     leftNavBar.addComponent (new NativeButton ("Orders"));
-    leftNavBar.addComponent (new NativeButton ("Invoices"));
+    //leftNavBar.addComponent (new NativeButton ("Invoices"));
+    int inboxInvoicesNum = um.countItemsInSpace(um.getInbox());
+    final NativeButton inboxInvoices = new NativeButton ("Invoices ("+inboxInvoicesNum+")");
+    inboxInvoices.addListener(new ClickListener() {
+		@Override
+		public void buttonClick(ClickEvent event) {
+			userFolder.setFolder(um.getInbox().getFolder());
+			userFolder.setName(um.getInbox().getName());
+			showInitialMainContent (userFolder);
+		}
+    });
+    leftNavBar.addComponent (inboxInvoices);
 
     leftNavBar.addComponent (new Label ("DRAFTS"));
     leftNavBar.addComponent (new NativeButton ("Catalogue"));
     leftNavBar.addComponent (new NativeButton ("Orders"));
-    int draftInvoices = um.countItemsInSpace(um.getDrafts());
-    final NativeButton invoices = new NativeButton ("Invoices ("+draftInvoices+")");
-    leftNavBar.addComponent (invoices);
+    int draftInvoicesNum = um.countItemsInSpace(um.getDrafts());
+    final NativeButton draftInvoices = new NativeButton ("Invoices ("+draftInvoicesNum+")");
+    draftInvoices.addListener(new ClickListener() {
+		@Override
+		public void buttonClick(ClickEvent event) {
+			userFolder.setFolder(um.getDrafts().getFolder());
+			userFolder.setName(um.getDrafts().getName());
+			showInitialMainContent (userFolder);
+		}
+    });
+    //draftInvoices.click();
+    leftNavBar.addComponent (draftInvoices);
 
     leftNavBar.addComponent (new Label ("OUTBOX"));
     leftNavBar.addComponent (new NativeButton ("Catalogue"));
     leftNavBar.addComponent (new NativeButton ("Orders"));
-    leftNavBar.addComponent (new NativeButton ("Invoices"));
+    //leftNavBar.addComponent (new NativeButton ("Invoices"));
+    int outboxInvoicesNum = um.countItemsInSpace(um.getOutbox());
+    final NativeButton outboxInvoices = new NativeButton ("Invoices ("+outboxInvoicesNum+")");
+    outboxInvoices.addListener(new ClickListener() {
+		@Override
+		public void buttonClick(ClickEvent event) {
+			userFolder.setFolder(um.getOutbox().getFolder());
+			userFolder.setName(um.getOutbox().getName());
+			showInitialMainContent (userFolder);
+		}
+    });
+    leftNavBar.addComponent (outboxInvoices);
 
     leftNavBar.addComponent (new Label ("SETTINGS"));
     leftNavBar.addComponent (new NativeButton ("My Profile"));
@@ -144,7 +184,7 @@ private void initUI () {
 
     middleContentLayout.addComponent (leftNavBar);
     
-    Button refreshButton = new Button("Refresh");
+    /*Button refreshButton = new Button("Refresh");
     refreshButton.addListener(new Button.ClickListener() {
 		@Override
 		public void buttonClick(ClickEvent event) {
@@ -152,7 +192,7 @@ private void initUI () {
 			invoices.setCaption("Invoices ("+draftInvoices+")");
 		}
 	});
-    leftNavBar.addComponent(refreshButton);
+    leftNavBar.addComponent(refreshButton);*/
     
     //workaround so that thread refreshes UI. It seems that when a ProgressIndicator is present,
     //all components receive server side refreshes
@@ -161,9 +201,10 @@ private void initUI () {
     p.setWidth("0px");
     p.setHeight("0px");
     
-    showInitialMainContent ();
+    draftInvoices.addStyleName("v-bold-nativebuttoncaption");
+    showInitialMainContent (null);
     
-/*    final int polling = 20000;
+/*    final int polling = 10000;
     Thread t = new Thread(new Runnable(){
 		@Override
 		public void run() {
@@ -183,11 +224,11 @@ private void initUI () {
    		 	}
 		}
 	});
-	t.start();*/
-    
+	t.start();
+*/    
   }
 
-  public void showInitialMainContent () {
+  public void showInitialMainContent (UserFolder userFolder) {
     // ------ START: Main Content -------
     final VerticalLayout mainContentLayout = new VerticalLayout ();
 
@@ -203,10 +244,28 @@ private void initUI () {
                                          + " of the Demo Client");
     blahContent.setWidth ("80%");
     blahContent.addStyleName ("big");
-    topmain.addComponent (blahContent);
+    //topmain.addComponent (blahContent);
+    //HorizontalLayout itemsPanel = new ShowItemsPanel("Items", um, userFolder);
+    
+    final ShowItemsPanel itemsPanel = new ShowItemsPanel("Items", um, userFolder);
+    topmain.addComponent (itemsPanel);
+    Button loadButton = new Button("Load invoice");
+    topmain.addComponent(loadButton);
+	loadButton.addListener(new ClickListener() {
+		@Override
+		public void buttonClick(ClickEvent event) {
+			Table table = itemsPanel.getTable();
+			if (table.getValue() != null) { 
+				InvoiceType inv = (InvoiceType)table.getItem(table.getValue()).getItemProperty("invoice").getValue();
+				System.out.println("Invoice is: "+inv);
+				showInvoiceForm(inv);
+			}
+		}
+	});
+	
     final Button learnMoreBtn = new Button ("Learn More >>");
     learnMoreBtn.addStyleName ("tall default");
-    topmain.addComponent (learnMoreBtn);
+    //topmain.addComponent (learnMoreBtn);
 
     mainContentLayout.addComponent (topmain);
     // ------ END: Main Content ---------
@@ -291,7 +350,7 @@ private void initUI () {
       public void menuSelected (final MenuItem selectedItem) {
 
         removeComponent (mainContentComponent);
-        showInitialMainContent ();
+        showInitialMainContent (um.getDrafts());
       }
     });
     final MenuBar.MenuItem docItem = lMenuBar.addItem ("Document", null);
@@ -311,7 +370,8 @@ private void initUI () {
     invItem.addItem ("New ...", new MenuBar.Command () {
       @Override
       public void menuSelected (final MenuItem selectedItem) {
-        showInvoiceForm ();
+        //showInvoiceForm ();
+    	  showInvoiceForm (null);
       }
     });
     invItem.addItem ("View ... ", new MenuBar.Command () {
@@ -421,7 +481,15 @@ private void initUI () {
   public void showInvoiceForm () {
 
     // InvoiceForm invForm = new InvoiceForm();
-    final InvoiceTabForm invForm = new InvoiceTabForm ();
+    //final InvoiceTabForm invForm = new InvoiceTabForm ();
+	  final InvoiceTabForm invForm = new InvoiceTabForm (um);
+    middleContentLayout.replaceComponent (mainContentComponent, invForm);
+    middleContentLayout.setExpandRatio (invForm, 1);
+    mainContentComponent = invForm;
+  }
+  
+  public void showInvoiceForm (InvoiceType invoice) {
+    final InvoiceTabForm invForm = new InvoiceTabForm (um, invoice);
     middleContentLayout.replaceComponent (mainContentComponent, invForm);
     middleContentLayout.setExpandRatio (invForm, 1);
     mainContentComponent = invForm;
@@ -457,4 +525,5 @@ private void initUI () {
     popup.setWidth ("430px");
     getWindow ().addWindow (popup);
   }
+  
 }

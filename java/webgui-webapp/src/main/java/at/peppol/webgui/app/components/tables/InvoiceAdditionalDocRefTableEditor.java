@@ -2,9 +2,17 @@ package at.peppol.webgui.app.components.tables;
 
 import java.util.List;
 
+import com.vaadin.data.Item;
 import com.vaadin.data.util.NestedMethodProperty;
+import com.vaadin.event.FieldEvents;
+import com.vaadin.event.FieldEvents.FocusEvent;
+import com.vaadin.ui.AbstractTextField;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.DefaultFieldFactory;
+import com.vaadin.ui.Field;
 import com.vaadin.ui.Form;
+import com.vaadin.ui.FormFieldFactory;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
@@ -32,7 +40,7 @@ public class InvoiceAdditionalDocRefTableEditor extends
 	public Form createTableForm(InvoiceAdditionalDocRefAdapter additionalDocRefItem,
 			List<DocumentReferenceType> invoiceList) {
 
-	    final Form invoiceAdditionalDocRefForm = new Form(new FormLayout());
+	    final Form invoiceAdditionalDocRefForm = new Form(new FormLayout(), new AdditionalDocRefFieldFactory());
 	    invoiceAdditionalDocRefForm.setImmediate(true);
 	    
 	    NestedMethodProperty mp = new NestedMethodProperty(additionalDocRefItem, "AdditionalDocRefID");
@@ -61,6 +69,29 @@ public class InvoiceAdditionalDocRefTableEditor extends
 	    return invoiceAdditionalDocRefForm;
 
 	}
+	
+	class AdditionalDocRefFieldFactory implements FormFieldFactory {
+
+	    @Override
+	    public Field createField(Item item, Object propertyId, Component uiContext) {
+	      // Identify the fields by their Property ID.
+	      String pid = (String) propertyId;
+
+	      Field field = DefaultFieldFactory.get().createField(item,propertyId, uiContext);
+	      if (field instanceof AbstractTextField){
+	          ((AbstractTextField) field).setNullRepresentation("");
+	          final AbstractTextField tf = (AbstractTextField) field;
+	          tf.addListener(new FieldEvents.FocusListener() {
+	        	  @Override
+	        	  public void focus(FocusEvent event) {
+	        		  tf.selectAll();
+	        	  }
+		      });
+	      }
+	      
+	      return field;
+	    }
+	 }
 
 	@Override
 	public InvoiceAdditionalDocRefAdapter createItem() {

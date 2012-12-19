@@ -1,25 +1,41 @@
 package at.peppol.webgui.app.login;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FilenameFilter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.xml.transform.stream.StreamSource;
 
 import oasis.names.specification.ubl.schema.xsd.invoice_2.InvoiceType;
 
-import com.phloc.appbasics.security.user.IUser;
+import at.peppol.webgui.app.InvoiceBean;
 
-public class UserDirManager extends UserSpaceManager<File> {
-	File userDir;
+import com.phloc.appbasics.security.user.IUser;
+import com.phloc.ubl.UBL20DocumentMarshaller;
+
+public class UserDirManager extends UserFolderManager<File> {
+	UserFolder<File> userDir;
 	String fileSep = System.getProperty("file.separator");
 	String mainDirString = "users";
+	FilenameFilter filter = new FilenameFilter() {
+		public boolean accept(File directory, String fileName) {
+		    return fileName.endsWith(".xml");
+		}
+	};
 	
 	public UserDirManager(IUser user, String context) {
 		super(user, context);
 	}
 	
 	public void createUserDir() throws Exception {
-		userDir = new File(mainDirString + fileSep + user.getEmailAddress());
-		if (!userDir.exists()) {
-			if (!userDir.mkdirs()) {
+		//userDir.setFolder(new File(mainDirString + fileSep + user.getEmailAddress()));
+		userDir = new UserFolder<File>(new File(mainDirString + fileSep + user.getEmailAddress()), "Root");
+		if (!userDir.getFolder().exists()) {
+			if (!userDir.getFolder().mkdirs()) {
 				userDir = null;
 				throw new Exception("Could not create user directory. Check privildges.");
 			}
@@ -36,55 +52,39 @@ public class UserDirManager extends UserSpaceManager<File> {
 	}
 	
 	@Override
-	public void createUserSpaces() {
+	public void createUserFolders() {
 		try {
 			createUserDir();
-			String userDirPath = userDir.getPath();
-			inbox = new File(userDirPath+fileSep+context+fileSep+"inbox");
-			outbox = new File(userDirPath+fileSep+context+fileSep+"outbox");
-			drafts = new File(userDirPath+fileSep+context+fileSep+"drafts");
+			String userDirPath = userDir.getFolder().getPath();
+			//inbox.setFolder(new File(userDirPath+fileSep+context+fileSep+"inbox"));
+			inbox = new UserFolder<File>(new File(userDirPath+fileSep+context+fileSep+"inbox"), "INBOX");
+			outbox = new UserFolder<File>(new File(userDirPath+fileSep+context+fileSep+"outbox"), "OUTBOX");
+			drafts = new UserFolder<File>(new File(userDirPath+fileSep+context+fileSep+"drafts"), "DRAFTS");
 	
-			create(inbox);
-			create(outbox);
-			create(drafts);
+			create(inbox.getFolder());
+			create(outbox.getFolder());
+			create(drafts.getFolder());
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
 	@Override
-	public File getBaseUserSpace() {
+	public UserFolder<File> getUserRootFolder() {
 		return userDir;
 	}
 	
 	@Override
-	public void storeDocumentToUserSpace(InvoiceType doc, File space) {
+	public void storeDocumentToUserFolder(InvoiceType doc, UserFolder<File> space) {
 		
 	}
 	
 	@Override
-	public InvoiceType getDocumentFromUserSpace(String docID, File space) {
+	public InvoiceType getDocumentFromUserFolder(String docID, UserFolder<File> space) {
 		return null;
 	}
-
-	@Override
-	public File getInbox() {
-		return inbox;
-	}
-
-	@Override
-	public File getOutbox() {
-		return outbox;
-	}
-
-	@Override
-	public File getDrafts() {
-		return drafts;
-	}
 	
-	@Override
-	public int countItemsInSpace(File box) {
-		int ret = 0;
+	public List<String> getDocumentsListFromUserSpace(File box) {
 		FilenameFilter filter = new FilenameFilter() {
 			public boolean accept(File directory, String fileName) {
 			    return fileName.endsWith(".xml");
@@ -92,9 +92,58 @@ public class UserDirManager extends UserSpaceManager<File> {
 		};
 		
 		if (box != null)
-			ret = box.list(filter).length;
+			return new ArrayList<String>(Arrays.asList(box.list(filter))); 
+		
+		return null;
+	}
+
+	@Override
+	public UserFolder<File> getInbox() {
+		return inbox;
+	}
+
+	@Override
+	public UserFolder<File> getOutbox() {
+		return outbox;
+	}
+
+	@Override
+	public UserFolder<File> getDrafts() {
+		return drafts;
+	}
+	
+	@Override
+	public int countItemsInSpace(UserFolder<File> box) {
+		int ret = 0;
+		
+		if (box != null)
+			ret = box.getFolder().list(filter).length;
 		
 		return ret;
 	}
+
+	@Override
+	public List<InvoiceBean> getInvoicesFromUserFolder(UserFolder<File> folder) {
+		List<InvoiceBean> list = new ArrayList<InvoiceBean>();
+		if (folder != null) {
+			String[] filenames = folder.getFolder().list(filter);
+			for (int i=0;i<filenames.length;i++) {
+				try {
+					String fullPath = folder.getFolder().getAbsolutePath()+fileSep+filenames[i];
+					InvoiceType inv = UBL20DocumentMarshaller.readInvoice(new StreamSource(
+								new FileInputStream(new File(fullPath))));
+					InvoiceBean bean = new InvoiceBean(inv);
+					bean.setFolderEntryID(fullPath);
+					list.add(bean);
+				}catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			return list;
+		}
+		
+		return null;
+	}
+
 
 }

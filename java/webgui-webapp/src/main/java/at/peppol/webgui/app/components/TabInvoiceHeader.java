@@ -276,37 +276,52 @@ public class TabInvoiceHeader extends Form {
     invoiceTopForm.setImmediate(true);
     invoiceTopForm.setSizeFull();
       
-    parent.getInvoice().setID (new IDType ());
+    if (parent.getInvoice().getID() == null)
+    	parent.getInvoice().setID (new IDType ());
     invoiceTopForm.addItemProperty ("Invoice ID", new NestedMethodProperty (parent.getInvoice().getID (), "value"));
         
-    parent.getInvoice().setDocumentCurrencyCode (new DocumentCurrencyCodeType ());
+    if (parent.getInvoice().getDocumentCurrencyCode() == null)
+    	parent.getInvoice().setDocumentCurrencyCode (new DocumentCurrencyCodeType ());
     //parent.getInvoice().getDocumentCurrencyCode().setValue("EUR");
     invoiceTopForm.addItemProperty ("Currency", new NestedMethodProperty (parent.getInvoice().getDocumentCurrencyCode (), "value"));
 
     Date issueDate = new Date ();
-    parent.getInvoice().setIssueDate (new IssueDateType ());
-    invoiceTopForm.addItemProperty ("Issue Date", new ObjectProperty <Date> (issueDate));
+    if (parent.getInvoice().getIssueDate() == null) {
+    	parent.getInvoice().setIssueDate (new IssueDateType ());
+    	invoiceTopForm.addItemProperty ("Issue Date", new ObjectProperty <Date> (issueDate));
+    }
+    else {
+    	invoiceTopForm.addItemProperty ("Issue Date", new ObjectProperty <Date> (parent.getInvoice().getIssueDate().getValue().toGregorianCalendar().getTime()));
+    }
    
-    parent.getInvoice().getNote ().add (new NoteType ());
+    if (parent.getInvoice().getNote().size() == 0)
+    	parent.getInvoice().getNote ().add (new NoteType ());
     invoiceTopForm.addItemProperty ("Invoice Note", new NestedMethodProperty (parent.getInvoice().getNote ().get (0), "value"));
     
-    Date taxPointDate = new Date ();
-    parent.getInvoice().setTaxPointDate(new TaxPointDateType());
-    invoiceTopForm.addItemProperty ("Tax Point Date", new ObjectProperty <Date> (issueDate));
+    if (parent.getInvoice().getTaxPointDate() == null) {
+    	parent.getInvoice().setTaxPointDate(new TaxPointDateType());
+    	invoiceTopForm.addItemProperty ("Tax Point Date", new ObjectProperty <Date> (issueDate));
+    }
+    else {
+    	invoiceTopForm.addItemProperty ("Tax Point Date", new ObjectProperty <Date> (parent.getInvoice().getTaxPointDate().getValue().toGregorianCalendar().getTime()));
+    }
     
-    parent.getInvoice().setAccountingCost (new AccountingCostType ());
+    if (parent.getInvoice().getAccountingCost() == null)
+    	parent.getInvoice().setAccountingCost (new AccountingCostType ());
     invoiceTopForm.addItemProperty ("Accounting Cost", new NestedMethodProperty (parent.getInvoice().getAccountingCost (), "value"));
     
-    Date startDate = new Date ();
-    
-    parent.getInvoice().getInvoicePeriod().get(0).setStartDate(new StartDateType());
-    invoiceTopForm.addItemProperty ("Invoice Period Start Date", new ObjectProperty <Date> (issueDate));
+    if (parent.getInvoice().getInvoicePeriod().size() == 0) {
+    	parent.getInvoice().getInvoicePeriod ().add (new PeriodType());
+    	parent.getInvoice().getInvoicePeriod().get(0).setStartDate(new StartDateType());
+    	invoiceTopForm.addItemProperty ("Invoice Period Start Date", new ObjectProperty <Date> (issueDate));
+    	parent.getInvoice().getInvoicePeriod().get(0).setEndDate(new EndDateType());
+    	invoiceTopForm.addItemProperty ("Invoice Period End Date", new ObjectProperty <Date> (issueDate));
+    }
+    else {
+    	invoiceTopForm.addItemProperty ("Invoice Period Start Date", new ObjectProperty <Date> (parent.getInvoice().getInvoicePeriod().get(0).getStartDate().getValue().toGregorianCalendar().getTime()));
+    	invoiceTopForm.addItemProperty ("Invoice Period End Date", new ObjectProperty <Date> (parent.getInvoice().getInvoicePeriod().get(0).getEndDate().getValue().toGregorianCalendar().getTime()));
+    }
 
-    Date endDate = new Date ();
-    parent.getInvoice().getInvoicePeriod().get(0).setEndDate(new EndDateType());
-    invoiceTopForm.addItemProperty ("Invoice Period End Date", new ObjectProperty <Date> (issueDate));
-    
-    
     return invoiceTopForm;
   }
 
@@ -382,41 +397,47 @@ public class TabInvoiceHeader extends Form {
       }
       
       if ("Issue Date".equals(pid)) {
-        final PopupDateField issueDateField = new PopupDateField("Issue Date");
-        Date date = new Date();
-        issueDateField.setValue(date);
+    	final PopupDateField issueDateField = new PopupDateField("Issue Date");
         issueDateField.setResolution(DateField.RESOLUTION_DAY);
-        
-        try {
-        	GregorianCalendar gc = new GregorianCalendar();
-            gc.setTime(date);
-        	XMLGregorianCalendar XMLDate = DatatypeFactory.newInstance().newXMLGregorianCalendar();
-            XMLDate.setYear(gc.get(Calendar.YEAR));
-            XMLDate.setMonth(gc.get(Calendar.MONTH) + 1);
-            XMLDate.setDay(gc.get(Calendar.DATE));
-            parent.getInvoice().getIssueDate().setValue(XMLDate);
-    	} catch (DatatypeConfigurationException e) {
-    		e.printStackTrace();
-    	}
+        Date date = new Date();
+        if (parent.getInvoice().getIssueDate() == null) {
+        	issueDateField.setValue(date);
+        	System.out.println("Issue date set to today");
+        	try {
+            	GregorianCalendar gc = new GregorianCalendar();
+                gc.setTime(date);
+            	XMLGregorianCalendar XMLDate = DatatypeFactory.newInstance().newXMLGregorianCalendar();
+                XMLDate.setYear(gc.get(Calendar.YEAR));
+                XMLDate.setMonth(gc.get(Calendar.MONTH) + 1);
+                XMLDate.setDay(gc.get(Calendar.DATE));
+                if (parent.getInvoice().getIssueDate() == null)
+                	parent.getInvoice().getIssueDate().setValue(XMLDate);
+        	} catch (DatatypeConfigurationException e) {
+        		e.printStackTrace();
+        	}
+        }
+        else {
+        	issueDateField.setValue(parent.getInvoice().getIssueDate().getValue().toGregorianCalendar().getTime());
+        }
         
         issueDateField.addListener(new ValueChangeListener() {
           @Override
           public void valueChange(final com.vaadin.data.Property.ValueChangeEvent event) {
-            try {
-              final Date issueDate = (Date) issueDateField.getValue();
-              final GregorianCalendar greg = new GregorianCalendar();
-              greg.setTime(issueDate);
-
-              // Workaround to print only the date and not the time.
-              final XMLGregorianCalendar XMLDate = DatatypeFactory.newInstance().newXMLGregorianCalendar();
-              XMLDate.setYear(greg.get(Calendar.YEAR));
-              XMLDate.setMonth(greg.get(Calendar.MONTH) + 1);
-              XMLDate.setDay(greg.get(Calendar.DATE));
-
-              parent.getInvoice().getIssueDate().setValue(XMLDate);
-            } catch (final DatatypeConfigurationException ex) {
-              Logger.getLogger(TabInvoiceHeader.class.getName()).log(Level.SEVERE, null, ex);
-            }
+	          try {
+				  final Date issueDate = (Date) issueDateField.getValue();
+				  final GregorianCalendar greg = new GregorianCalendar();
+				  greg.setTime(issueDate);
+				  System.out.println("Listener date: "+issueDate);
+				  // Workaround to print only the date and not the time.
+				  final XMLGregorianCalendar XMLDate = DatatypeFactory.newInstance().newXMLGregorianCalendar();
+				  XMLDate.setYear(greg.get(Calendar.YEAR));
+				  XMLDate.setMonth(greg.get(Calendar.MONTH) + 1);
+				  XMLDate.setDay(greg.get(Calendar.DATE));
+				  parent.getInvoice().getIssueDate().setValue(XMLDate);
+				  
+	          } catch (final DatatypeConfigurationException ex) {
+	              Logger.getLogger(TabInvoiceHeader.class.getName()).log(Level.SEVERE, null, ex);
+	          }
           }
         });
        
