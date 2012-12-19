@@ -6,8 +6,10 @@ import java.util.List;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.util.NestedMethodProperty;
+import com.vaadin.event.FieldEvents;
 import com.vaadin.event.FieldEvents.BlurEvent;
 import com.vaadin.event.FieldEvents.BlurListener;
+import com.vaadin.event.FieldEvents.FocusEvent;
 import com.vaadin.ui.AbstractTextField;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.DefaultFieldFactory;
@@ -64,17 +66,17 @@ public class InvoiceAllowanceChargeTableEditor extends
 	    // NestedMethodProperty(allowanceChargeItem, "ID.value") );
 	    //invoiceAllowanceChargeForm.addItemProperty ("Line ID #", mp);
 	    invoiceAllowanceChargeForm.addItemProperty ("Charge Indicator", new NestedMethodProperty (allowanceChargeItem,
-	                                                                                              "indicator"));
-	    invoiceAllowanceChargeForm.addItemProperty ("Allowance Charge Reason",
-	                                                new NestedMethodProperty (allowanceChargeItem, "reason"));
-	    invoiceAllowanceChargeForm.addItemProperty ("Allowance Charge Amount",
-	                                                new NestedMethodProperty (allowanceChargeItem, "chargeAmount"));
+	                                                                                "indicator"));
+	    invoiceAllowanceChargeForm.addItemProperty ("Allowance Charge Reason", new NestedMethodProperty (allowanceChargeItem, 
+	    																			"reason"));
+	    invoiceAllowanceChargeForm.addItemProperty ("Allowance Charge Amount", new NestedMethodProperty (allowanceChargeItem, 
+	    																			"chargeAmount"));
 	    invoiceAllowanceChargeForm.addItemProperty ("Tax Category ID", new NestedMethodProperty (allowanceChargeItem,
-	                                                                                             "taxCategoryID"));
+	                                                                                "taxCategoryID"));
+	    invoiceAllowanceChargeForm.addItemProperty ("Tax Scheme ID", new NestedMethodProperty (allowanceChargeItem, 
+	    																			"taxCategorySchemeID"));
 	    invoiceAllowanceChargeForm.addItemProperty ("Tax Category Percent", new NestedMethodProperty (allowanceChargeItem,
-	                                                                                                  "taxCategoryPercent"));
-	    invoiceAllowanceChargeForm.addItemProperty ("Tax Scheme ID",
-	                                                new NestedMethodProperty (allowanceChargeItem, "taxCategorySchemeID"));
+                																	"taxCategoryPercent"));
 
 	    return invoiceAllowanceChargeForm;
 
@@ -122,6 +124,13 @@ public class InvoiceAllowanceChargeTableEditor extends
             	tf.addListener(new RequiredFieldListener(tf,pid));
             	ValidatorsList.addListeners((Collection<BlurListener>) tf.getListeners(BlurEvent.class));
             }
+	        
+	        tf.addListener(new FieldEvents.FocusListener() {
+	          @Override
+	          public void focus(FocusEvent event) {
+	        	  tf.selectAll();
+	          }
+		    });
 	      }
 	      return field;
 	    }

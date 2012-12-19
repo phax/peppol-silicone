@@ -87,16 +87,26 @@ public class AddressDetailForm extends Panel {
     
     //initialize
     //AddressType address = new AddressType();
-    address.setStreetName(new StreetNameType());
-    address.setAdditionalStreetName (new AdditionalStreetNameType());
-    address.setBuildingNumber (new BuildingNumberType ());
-    address.setDepartment (new DepartmentType ());
-    address.setCityName(new CityNameType());
-    address.setPostalZone(new PostalZoneType());
-    address.setCountrySubentity (new CountrySubentityType ());
+    if (address.getStreetName() == null)
+    	address.setStreetName(new StreetNameType());
+    if (address.getAdditionalStreetName() == null)
+    	address.setAdditionalStreetName (new AdditionalStreetNameType());
+    if (address.getBuildingNumber() == null)
+    	address.setBuildingNumber (new BuildingNumberType ());
+    if (address.getDepartment() == null)
+    	address.setDepartment (new DepartmentType ());
+    if (address.getCityName() == null)
+    	address.setCityName(new CityNameType());
+    if (address.getPostalZone() == null)
+    	address.setPostalZone(new PostalZoneType());
+    if (address.getCountrySubentity() == null)
+    	address.setCountrySubentity (new CountrySubentityType ());
     
-    address.setCountry(new CountryType());
-    address.getCountry().setIdentificationCode(new IdentificationCodeType());
+    if (address.getCountry() == null) {
+    	address.setCountry(new CountryType());
+    	if (address.getCountry().getIdentificationCode() == null)
+    		address.getCountry().setIdentificationCode(new IdentificationCodeType());
+    }
     
     //make fields
     addressItemSet.addItemProperty("Street Name", new NestedMethodProperty(address, "streetName.value"));

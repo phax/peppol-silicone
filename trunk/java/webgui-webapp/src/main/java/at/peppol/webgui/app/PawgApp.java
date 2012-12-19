@@ -46,7 +46,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.peppol.webgui.app.login.UserDirManager;
-import at.peppol.webgui.app.login.UserSpaceManager;
+import at.peppol.webgui.app.login.UserFolderManager;
 
 import com.phloc.appbasics.security.AccessManager;
 import com.phloc.appbasics.security.login.ELoginResult;
@@ -91,7 +91,7 @@ public class PawgApp extends Application implements HttpServletRequestListener {
     }
   }
   
-  public UserSpaceManager<File> getUserSpaceManager() {
+  public UserFolderManager<File> getUserSpaceManager() {
 	  return um;
   }
 
@@ -140,7 +140,7 @@ public class PawgApp extends Application implements HttpServletRequestListener {
       user = AccessManager.getInstance ().getUserOfID (lum.getCurrentUserID ());
       setUser (user);
       um = new UserDirManager(user, "invoice");
-      um.createUserSpaces();
+      um.createUserFolders();
       showMainAppWindow ();
 
     }

@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.util.NestedMethodProperty;
+import com.vaadin.event.FieldEvents;
+import com.vaadin.event.FieldEvents.FocusEvent;
 import com.vaadin.ui.AbstractTextField;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.DefaultFieldFactory;
@@ -88,6 +90,13 @@ public class InvoiceLineAllowanceChargeTableEditor extends
 	      final Field field = DefaultFieldFactory.get ().createField (item, propertyId, uiContext);
 	      if (field instanceof AbstractTextField) {
 	        ((AbstractTextField) field).setNullRepresentation ("");
+	        final AbstractTextField tf = (AbstractTextField) field;
+	          tf.addListener(new FieldEvents.FocusListener() {
+	        	  @Override
+	        	  public void focus(FocusEvent event) {
+	        		  tf.selectAll();
+	        	  }
+		      });
 	      }
 	      return field;
 	    }
