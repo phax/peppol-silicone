@@ -13,8 +13,10 @@ import javax.xml.transform.stream.StreamSource;
 import oasis.names.specification.ubl.schema.xsd.invoice_2.InvoiceType;
 
 import at.peppol.webgui.app.InvoiceBean;
+import at.peppol.webgui.app.validator.ValidatorHandler;
 
 import com.phloc.appbasics.security.user.IUser;
+import com.phloc.ubl.AbstractUBLDocumentMarshaller;
 import com.phloc.ubl.UBL20DocumentMarshaller;
 
 public class UserDirManager extends UserFolderManager<File> {
@@ -127,15 +129,22 @@ public class UserDirManager extends UserFolderManager<File> {
 		List<InvoiceBean> list = new ArrayList<InvoiceBean>();
 		if (folder != null) {
 			String[] filenames = folder.getFolder().list(filter);
-			for (int i=0;i<filenames.length;i++) {
+			ValidatorHandler vh = new ValidatorHandler();
+	        AbstractUBLDocumentMarshaller.setGlobalValidationEventHandler (vh);
+	        for (int i=0;i<filenames.length;i++) {
 				try {
+					vh.clearErrors();
 					String fullPath = folder.getFolder().getAbsolutePath()+fileSep+filenames[i];
 					InvoiceType inv = UBL20DocumentMarshaller.readInvoice(new StreamSource(
-								new FileInputStream(new File(fullPath))));
-					InvoiceBean bean = new InvoiceBean(inv);
-					bean.setFolderEntryID(fullPath);
-					list.add(bean);
+								new FileInputStream(new File(fullPath))), vh);
+					if (inv != null) {
+						InvoiceBean bean = new InvoiceBean(inv);
+						bean.setFolderEntryID(fullPath);
+						list.add(bean);
+					}
 				}catch (IOException e) {
+					e.printStackTrace();
+				}catch (Exception e) {
 					e.printStackTrace();
 				}
 			}

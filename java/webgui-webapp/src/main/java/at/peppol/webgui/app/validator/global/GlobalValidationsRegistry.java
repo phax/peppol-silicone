@@ -36,10 +36,20 @@ public class GlobalValidationsRegistry {
 			BaseValidation bv = list.get(i);
 			ValidationError error = bv.run();
 			if (error != null)
-				if (!resList.contains(error))
+				//if (!resList.contains(error))
+				if (!listContains(error, resList))
 					resList.add(error);
 		}
 		
 		return resList;
+	}
+	
+	public static boolean listContains(ValidationError error, List<ValidationError> list) {
+		for (int i=0;i<list.size();i++) {
+			if (error.getRuleID().equals(list.get(i).getRuleID()))
+				return true;
+		}
+		
+		return false;
 	}
 }

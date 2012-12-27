@@ -89,6 +89,138 @@ import un.unece.uncefact.codelist.specification._66411._2001.UnitCodeContentType
 public class InvoiceLineAdapter extends InvoiceLineType implements Adapter{
   // private final TaxSubtotalType VATTax;
 
+  public InvoiceLineAdapter(InvoiceLineType type) {
+	  super();
+	if (type.getID() != null) {
+		this.setID(type.getID());
+		this.setIDAdapter(type.getID().getValue());
+	}
+	else {
+		this.setID (new IDType ());
+		this.setIDAdapter("");
+	}
+	
+	if (type.getNote() != null)
+		this.setNote(type.getNote());
+	else
+		setNote (new NoteType ());
+	
+	if (type.getAccountingCost() != null)
+		this.setAccountingCost(type.getAccountingCost());
+	else
+		this.setAccountingCost(new AccountingCostType ());
+	
+	if (type.getLineExtensionAmount() != null)
+		this.setLineExtensionAmount(type.getLineExtensionAmount());
+	else
+		setLineExtensionAmount (new LineExtensionAmountType ());
+	
+	if (type.getInvoicedQuantity() != null)
+		this.setInvoicedQuantity(type.getInvoicedQuantity());
+	else
+		setInvoicedQuantity (new InvoicedQuantityType ());
+	
+	//if (type.getOrderLineReference().size() > 0)
+	//	this.getOrderLineReference().addAll(type.getOrderLineReference());
+	
+	//if (type.getAllowanceCharge().size() > 0)
+	//	this.getAllowanceCharge().addAll(type.getAllowanceCharge());
+	
+	if (type.getTaxTotal().size() > 0) {
+		this.getTaxTotal().add(type.getTaxTotal().get(0));
+		if (type.getTaxTotal().get(0).getTaxAmount() == null)
+			this.getTaxTotal().get(0).setTaxAmount(new TaxAmountType());
+	}
+	else {
+		TaxTotalType tt = new TaxTotalType ();
+	    tt.setTaxAmount (new TaxAmountType ());
+	    this.getTaxTotal ().add (tt);
+	}
+	
+	if (type.getItem() != null) {
+		ItemType item = type.getItem();
+		if (item.getDescription().size() == 0)
+			item.getDescription().add(new DescriptionType ());
+		if (item.getName() == null)
+			item.setName(new NameType());
+		if (item.getSellersItemIdentification() == null) {
+			item.setSellersItemIdentification(new ItemIdentificationType());
+			item.getSellersItemIdentification ().setID (new IDType ());
+		}
+		else {
+			if (item.getSellersItemIdentification().getID() == null)
+				item.getSellersItemIdentification ().setID (new IDType ());
+		}
+		if (item.getStandardItemIdentification() == null) {
+			item.setStandardItemIdentification (new ItemIdentificationType ());
+		    item.getStandardItemIdentification ().setID (new IDType ());
+		    item.getStandardItemIdentification ().getID().setSchemeID("GTIN");
+		}
+		else {
+			if (item.getStandardItemIdentification().getID() == null)
+				item.getStandardItemIdentification ().setID (new IDType ());
+			if (item.getStandardItemIdentification ().getID().getSchemeID() == null)
+				item.getStandardItemIdentification ().getID().setSchemeID("GTIN");
+		}
+		if (item.getClassifiedTaxCategory().size() == 0) {
+			final TaxCategoryType ct = new TaxCategoryType ();
+		    ct.setID (new IDType ());
+		    ct.setPercent (new PercentType ());
+		    final TaxSchemeType tst = new TaxSchemeType ();
+		    tst.setID (new IDType ());
+		    ct.setTaxScheme (tst);
+		    item.getClassifiedTaxCategory ().add (ct);
+		}
+		else {
+			if (item.getClassifiedTaxCategory().get(0).getID() == null)
+				item.getClassifiedTaxCategory().get(0).setID(new IDType());
+			if (item.getClassifiedTaxCategory().get(0).getPercent() == null)
+				item.getClassifiedTaxCategory().get(0).setPercent(new PercentType());
+			if (item.getClassifiedTaxCategory().get(0).getTaxScheme() == null)
+				item.getClassifiedTaxCategory().get(0).setTaxScheme(new TaxSchemeType());
+			if (item.getClassifiedTaxCategory().get(0).getTaxScheme().getID() == null)
+				item.getClassifiedTaxCategory().get(0).getTaxScheme().setID(new IDType());
+		}
+		
+		this.setItem(item);
+	}
+	else {
+		ItemType item = new ItemType ();
+	    item.getDescription ().add (new DescriptionType ());
+	    item.setName (new NameType ());
+	    item.setSellersItemIdentification (new ItemIdentificationType ());
+	    item.getSellersItemIdentification ().setID (new IDType ());
+	    item.setStandardItemIdentification (new ItemIdentificationType ());
+	    item.getStandardItemIdentification ().setID (new IDType ());
+	    item.getStandardItemIdentification ().getID().setSchemeID("GTIN");
+	    final TaxCategoryType ct = new TaxCategoryType ();
+	    ct.setID (new IDType ());
+	    ct.setPercent (new PercentType ());
+	    final TaxSchemeType tst = new TaxSchemeType ();
+	    tst.setID (new IDType ());
+	    ct.setTaxScheme (tst);
+	    item.getClassifiedTaxCategory ().add (ct);
+	    
+	    this.setItem (item);
+	}
+	
+	if (type.getPrice() != null) {
+		this.setPrice(type.getPrice());
+		if (this.getPrice().getPriceAmount() == null)
+			this.getPrice ().setPriceAmount (new PriceAmountType ());
+		if (this.getPrice ().getBaseQuantity() == null)
+			this.getPrice ().setBaseQuantity (new BaseQuantityType ());
+	}
+	else {
+		this.setPrice (new PriceType ());
+		this.getPrice ().setPriceAmount (new PriceAmountType ());
+		this.getPrice ().setBaseQuantity (new BaseQuantityType ());
+	}
+	
+	
+  }
+  
+	
   public InvoiceLineAdapter () {
     setID (new IDType ());
     setNote (new NoteType ());
@@ -189,6 +321,8 @@ public class InvoiceLineAdapter extends InvoiceLineType implements Adapter{
      * VATTax.getTaxCategory().setPercent(new PercentType());
      */
   }
+  
+  
 
   @Override
   public void setIDAdapter(String id) {

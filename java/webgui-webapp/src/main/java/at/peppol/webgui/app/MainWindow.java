@@ -197,9 +197,10 @@ private void initUI () {
     //workaround so that thread refreshes UI. It seems that when a ProgressIndicator is present,
     //all components receive server side refreshes
     ProgressIndicator p = new ProgressIndicator();
-    leftNavBar.addComponent(p);
+    p.setPollingInterval(20000);
     p.setWidth("0px");
     p.setHeight("0px");
+    leftNavBar.addComponent(p);
     
     draftInvoices.addStyleName("v-bold-nativebuttoncaption");
     showInitialMainContent (null);
@@ -256,9 +257,11 @@ private void initUI () {
 		public void buttonClick(ClickEvent event) {
 			Table table = itemsPanel.getTable();
 			if (table.getValue() != null) { 
-				InvoiceType inv = (InvoiceType)table.getItem(table.getValue()).getItemProperty("invoice").getValue();
-				System.out.println("Invoice is: "+inv);
-				showInvoiceForm(inv);
+				//InvoiceType inv = (InvoiceType)table.getItem(table.getValue()).getItemProperty("invoice").getValue();
+				//InvoiceBean invBean = (InvoiceBean)table.getItem(table.getValue());
+				InvoiceBean invBean = ((InvoiceBeanContainer)table.getContainerDataSource()).getItem(table.getValue()).getBean();
+				System.out.println("Invoice is: "+invBean);
+				showInvoiceForm(invBean);
 			}
 		}
 	});
@@ -370,8 +373,8 @@ private void initUI () {
     invItem.addItem ("New ...", new MenuBar.Command () {
       @Override
       public void menuSelected (final MenuItem selectedItem) {
-        //showInvoiceForm ();
-    	  showInvoiceForm (null);
+    	  showInvoiceForm ();
+    	  //showInvoiceForm (null);
       }
     });
     invItem.addItem ("View ... ", new MenuBar.Command () {
@@ -488,8 +491,8 @@ private void initUI () {
     mainContentComponent = invForm;
   }
   
-  public void showInvoiceForm (InvoiceType invoice) {
-    final InvoiceTabForm invForm = new InvoiceTabForm (um, invoice);
+  public void showInvoiceForm (InvoiceBean bean) {
+    final InvoiceTabForm invForm = new InvoiceTabForm (um, bean);
     middleContentLayout.replaceComponent (mainContentComponent, invForm);
     middleContentLayout.setExpandRatio (invForm, 1);
     mainContentComponent = invForm;

@@ -125,31 +125,55 @@ public class TabInvoiceMonetaryTotal extends Form {
   }
 
   private MonetaryTotalType createMonetaryTotal () {
-    final MonetaryTotalType mt = new MonetaryTotalType ();
-    mt.setLineExtensionAmount (new LineExtensionAmountType ());
-    mt.getLineExtensionAmount ().setValue (BigDecimal.ZERO);
-
-    mt.setTaxExclusiveAmount (new TaxExclusiveAmountType ());
-    mt.getTaxExclusiveAmount ().setValue (BigDecimal.ZERO);
-
-    mt.setTaxInclusiveAmount (new TaxInclusiveAmountType ());
-    mt.getTaxInclusiveAmount ().setValue (BigDecimal.ZERO);
-
-    mt.setAllowanceTotalAmount (new AllowanceTotalAmountType ());
-    mt.getAllowanceTotalAmount ().setValue (BigDecimal.ZERO);
-
-    mt.setChargeTotalAmount (new ChargeTotalAmountType ());
-    mt.getChargeTotalAmount ().setValue (BigDecimal.ZERO);
-
-    mt.setPrepaidAmount (new PrepaidAmountType ());
-    mt.getPrepaidAmount ().setValue (BigDecimal.ZERO);
-
-    mt.setPayableRoundingAmount (new PayableRoundingAmountType ());
-    mt.getPayableRoundingAmount ().setValue (BigDecimal.ZERO);
-
-    mt.setPayableAmount (new PayableAmountType ());
-    mt.getPayableAmount ().setValue (BigDecimal.ZERO);
-
+	  MonetaryTotalType mt;
+	  if (parent.getInvoice().getLegalMonetaryTotal() != null) {
+		  mt = parent.getInvoice().getLegalMonetaryTotal();
+	  }
+	  else {
+		  mt = new MonetaryTotalType ();
+	  }
+	  
+	  if (mt.getLineExtensionAmount () == null) {
+		  mt.setLineExtensionAmount (new LineExtensionAmountType ());
+		  mt.getLineExtensionAmount ().setValue (BigDecimal.ZERO);
+	  }
+	
+	  if (mt.getTaxExclusiveAmount() == null) {
+		  mt.setTaxExclusiveAmount (new TaxExclusiveAmountType ());
+		  mt.getTaxExclusiveAmount ().setValue (BigDecimal.ZERO);
+	  }
+	
+	  if (mt.getTaxInclusiveAmount() == null) {
+		  mt.setTaxInclusiveAmount (new TaxInclusiveAmountType ());
+		  mt.getTaxInclusiveAmount ().setValue (BigDecimal.ZERO);
+	  }
+	
+	  if (mt.getAllowanceTotalAmount() == null) {
+		  mt.setAllowanceTotalAmount (new AllowanceTotalAmountType ());
+		  mt.getAllowanceTotalAmount ().setValue (BigDecimal.ZERO);
+	  }
+	
+	  if (mt.getChargeTotalAmount() == null) {
+		  mt.setChargeTotalAmount (new ChargeTotalAmountType ());
+		  mt.getChargeTotalAmount ().setValue (BigDecimal.ZERO);
+	  }
+	
+	  if (mt.getPrepaidAmount() == null) {
+		  mt.setPrepaidAmount (new PrepaidAmountType ());
+		  mt.getPrepaidAmount ().setValue (BigDecimal.ZERO);
+	  }
+	  
+	  if (mt.getPayableRoundingAmount() == null) {
+		  mt.setPayableRoundingAmount (new PayableRoundingAmountType ());
+		  mt.getPayableRoundingAmount ().setValue (BigDecimal.ZERO);
+	  }
+	
+	  if (mt.getPayableAmount() == null) {
+		  mt.setPayableAmount (new PayableAmountType ());
+		  mt.getPayableAmount ().setValue (BigDecimal.ZERO);
+	  }
+	
+	
     return mt;
   }
 

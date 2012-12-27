@@ -146,13 +146,23 @@ public class TabInvoicePayment extends Form {
     //PaymentTermsType pt = new PaymentTermsType();
     //paymentTermsList.add (pt);
     
-    paymentTermsItem = new PaymentTermsType();
-    paymentTermsItem.getNote().add(new NoteType());
-    parent.getInvoice().getPaymentTerms().add(paymentTermsItem);
+    if (parent.getInvoice().getPaymentTerms().size() == 0) {
+    	paymentTermsItem = new PaymentTermsType();
+    	paymentTermsItem.getNote().add(new NoteType());
+    	parent.getInvoice().getPaymentTerms().add(paymentTermsItem);
+    }
+    else {
+    	paymentTermsItem = parent.getInvoice().getPaymentTerms().get(0);
+    }
         
     //payeeParty = parent.getInvoice().getPayeeParty ();
-    payeeParty = createPayeePartyItem ();
-    parent.getInvoice().setPayeeParty(payeeParty);
+    if (parent.getInvoice().getPayeeParty() == null) {
+    	payeeParty = createPayeePartyItem ();
+    	parent.getInvoice().setPayeeParty(payeeParty);
+    }
+    else {
+    	payeeParty = parent.getInvoice().getPayeeParty();
+    }
     //payeeParty = new PartyType();
     //payeeParty.setParty(new PartyType());
     

@@ -54,11 +54,16 @@ public class InvoiceItemPropertyAdapter extends ItemPropertyType implements Adap
   
   public InvoiceItemPropertyAdapter(ItemPropertyType item) {
 	  tableLineID = "";
-	  setName (new NameType ());
-	  setValue (new ValueType ());
 	  
-	  setItemPropertyName(item.getName().getValue());
-	  setItemPropertyValue(item.getValue().getValue());
+	  if (item.getName() != null)
+		  this.setName(item.getName());
+	  else
+		  this.setName(new NameType());
+	  
+	  if (item.getValue() != null)
+		  this.setValue(item.getValue());
+	  else
+		  this.setValue(new ValueType ());
   }
   
   public void setID(IDType id){}

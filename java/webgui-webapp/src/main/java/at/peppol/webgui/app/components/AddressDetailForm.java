@@ -122,6 +122,7 @@ public class AddressDetailForm extends Panel {
     addressForm.setFormFieldFactory(new AddressFieldFactory());
     addressForm.setItemDataSource(addressItemSet);
     addressForm.setImmediate(true);
+    addressForm.setWriteThrough(true);
     
     addComponent(addressForm);
   }  

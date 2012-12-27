@@ -23,8 +23,11 @@ public class CrossBorderTradeValidation extends BaseValidation {
 	@Override
 	public ValidationError run() {
 		String customerCountry = invoice.getAccountingCustomerParty().
-									getParty().getPostalAddress().getCountry().
-									getIdentificationCode().getValue();
+									getParty().
+									getPostalAddress().
+									getCountry().
+									getIdentificationCode().
+									getValue();
 		
 		String supplierCountry = invoice.getAccountingSupplierParty().
 				getParty().getPostalAddress().getCountry().

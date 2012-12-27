@@ -45,10 +45,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AllowanceChargeType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.InvoiceLineType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.PaymentMeansType;
 
 import at.peppol.webgui.app.components.adapters.InvoiceAdditionalDocRefAdapter;
+import at.peppol.webgui.app.components.adapters.InvoiceAllowanceChargeAdapter;
 import at.peppol.webgui.app.components.adapters.InvoiceLineAdapter;
+import at.peppol.webgui.app.components.adapters.PaymentMeansAdapter;
 
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.Table;
@@ -71,6 +75,15 @@ public class InvoiceLineTable extends GenericTable<InvoiceLineType, InvoiceLineA
 	  linesFromInvoice = items;
 	  
 	  tableLines = new BeanItemContainer<InvoiceLineAdapter>(InvoiceLineAdapter.class);
+	  
+	  if (linesFromInvoice.size() > 0) {
+		  for (int i=0;i<linesFromInvoice.size();i++) {
+			  InvoiceLineType type = linesFromInvoice.get(i); 
+			  InvoiceLineAdapter item = new InvoiceLineAdapter(type);
+			  tableLines.addBean(item);
+			  linesFromInvoice.set(i, item);
+		  }
+	  }
 	  
 	  //this.invoiceLines = items;
 	  setContainerDataSource(tableLines);

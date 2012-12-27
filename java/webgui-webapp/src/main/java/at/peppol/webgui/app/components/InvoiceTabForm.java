@@ -73,6 +73,7 @@ import un.unece.uncefact.codelist.specification._54217._2001.CurrencyCodeContent
 //import at.peppol.commons.cenbii.profiles.EProfile;
 //import at.peppol.commons.cenbii.profiles.ETransaction;
 import at.peppol.commons.identifier.doctype.EPredefinedDocumentTypeIdentifier;
+import at.peppol.webgui.app.InvoiceBean;
 //import at.peppol.validation.pyramid.ValidationPyramid;
 //import at.peppol.validation.pyramid.ValidationPyramidResultLayer;
 //import at.peppol.validation.rules.EValidationDocumentType;
@@ -112,6 +113,7 @@ public class InvoiceTabForm extends Form {
   private final ObjectFactory invObjFactory;
 
   private InvoiceType invoice = null;
+  private String invoiceFilePath = "";
 
   private TabInvoiceHeader tTabInvoiceHeader;
   private TabInvoiceLine tTabInvoiceLine;
@@ -153,15 +155,20 @@ public class InvoiceTabForm extends Form {
 	    GlobalValidationsRegistry.setMainComponents(this, invoice);
   }
   
-  public InvoiceTabForm (UserFolderManager um, InvoiceType invoice) {
+  public InvoiceTabForm (UserFolderManager um, InvoiceBean invoiceBean) {
 	    invObjFactory = new ObjectFactory ();
 	    this.um = um;
-	    this.invoice = invoice;
+	    this.invoice = invoiceBean.getInvoice();
+	    this.invoiceFilePath = invoiceBean.getFolderEntryID();
 	    initInvoiceData ();
 	    initElements ();
 	    buildMainLayout ();
 	    GlobalValidationsRegistry.setMainComponents(this, invoice);
 }
+ 
+  public String getInvoiceFilePath() {
+	  return invoiceFilePath;
+  }
   
   public TabInvoiceLine getInvoiceLineTab() {
 	  return tTabInvoiceLine;
@@ -215,15 +222,15 @@ public class InvoiceTabForm extends Form {
 	    invoice.setCustomizationID (custID);
 	    invoice.setID (new IDType ());
 	    
-	    invoice.setAccountingCustomerParty (customer);
-	    invoice.setAccountingSupplierParty (supplier);
-	    
 	    supplier = new SupplierPartyType ();
 	    supplier.setParty (new PartyType ());
 
 	    customer = new CustomerPartyType ();
 	    customer.setParty (new PartyType ());
 
+	    invoice.setAccountingCustomerParty (customer);
+	    invoice.setAccountingSupplierParty (supplier);
+	    
     }
 	else {
 		System.out.println("Invoice is NOT null: "+invoice);
@@ -299,11 +306,20 @@ public class InvoiceTabForm extends Form {
           }
           else {
         	  try {
-	        	  UBL20DocumentMarshaller.writeInvoice(invoice, new StreamResult(new
-		        		  File(um.getDrafts().getFolder().toString()+
-		        				  System.getProperty("file.separator")+
-		        				  "invoice"+System.currentTimeMillis()+".xml")));
-	        	  getWindow().showNotification("Validation passed. Invoice saved in DRAFTS folder",Notification.TYPE_TRAY_NOTIFICATION);
+        		  if (invoiceFilePath.equals("")) {
+		        	  UBL20DocumentMarshaller.writeInvoice(invoice, new StreamResult(new
+			        		  File(um.getDrafts().getFolder().toString()+
+			        				  System.getProperty("file.separator")+
+			        				  "invoice"+System.currentTimeMillis()+".xml")));
+		        	  invoiceFilePath = um.getDrafts().getFolder().toString()+
+	        				  			System.getProperty("file.separator")+
+	        				  			"invoice"+System.currentTimeMillis()+".xml";
+        		  }
+        		  else {
+        			  UBL20DocumentMarshaller.writeInvoice(invoice, new StreamResult(new
+			        		  File(invoiceFilePath)));
+        		  }
+	        	  getWindow().showNotification("Validation passed. Invoice saved in "+um.getDrafts().getName().toUpperCase()+" folder",Notification.TYPE_TRAY_NOTIFICATION);
         	  }catch (Exception e) {
         		  getWindow().showNotification("Disk access error. Could not save invoice",Notification.TYPE_ERROR_MESSAGE);
         	  }
@@ -474,6 +490,10 @@ public class InvoiceTabForm extends Form {
       ac.getTaxAmount ().setCurrencyID (cur);
       ac.getTaxableAmount ().setCurrencyID (cur);
     }
+    
+    //dummy method
+    if (invoice.getTaxTotal().size() > 1)
+    	invoice.getTaxTotal().remove(1);
     
     /*Collection<?> col = tTabInvoiceLine.getTable().getContainerDataSource().getItemIds(); 
     for (Object itemId : col) {

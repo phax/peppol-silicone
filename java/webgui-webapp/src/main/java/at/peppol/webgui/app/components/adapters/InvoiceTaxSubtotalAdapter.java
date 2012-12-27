@@ -55,7 +55,8 @@ public class InvoiceTaxSubtotalAdapter extends TaxSubtotalType implements Adapte
   private String tableLineID;
   
   public InvoiceTaxSubtotalAdapter() {
-    tableLineID = "";
+    super();
+	tableLineID = "";
     setTaxableAmount (new TaxableAmountType ());
     setTaxAmount (new TaxAmountType ());
     TaxCategoryType tc = new TaxCategoryType ();
@@ -67,6 +68,52 @@ public class InvoiceTaxSubtotalAdapter extends TaxSubtotalType implements Adapte
     ts.setID (new IDType ());
     tc.setTaxScheme (ts);
     setTaxCategory (tc);
+  }
+  
+  public InvoiceTaxSubtotalAdapter(TaxSubtotalType type) {
+	  super();
+	  tableLineID = "";
+	  
+	  if (type.getTaxableAmount() != null)
+		  this.setTaxableAmount(type.getTaxableAmount());
+	  else
+		  this.setTaxableAmount (new TaxableAmountType ());
+	  if (type.getTaxAmount() != null)
+		  this.setTaxAmount(type.getTaxAmount());
+	  else
+		  this.setTaxAmount(new TaxAmountType());
+	  if (type.getTaxCategory() != null) {
+		TaxCategoryType tc = type.getTaxCategory();
+		this.setTaxCategory(tc);
+		if (tc.getID() == null)
+			tc.setID(new IDType());
+		if (tc.getPercent() == null)
+			tc.setPercent(new PercentType());
+		if (tc.getTaxExemptionReasonCode() == null)
+			tc.setTaxExemptionReasonCode(new TaxExemptionReasonCodeType());
+		if (tc.getTaxExemptionReason() == null)
+			tc.setTaxExemptionReason(new TaxExemptionReasonType());
+		if (tc.getTaxScheme() == null) {
+			TaxSchemeType ts = new TaxSchemeType ();
+		    ts.setID (new IDType ());
+		    tc.setTaxScheme (ts);
+		}
+		else {
+			if (tc.getTaxScheme().getID() == null)
+				tc.getTaxScheme().setID(new IDType());
+		}
+	  }
+	  else {
+			TaxCategoryType tc = new TaxCategoryType ();
+		    tc.setID (new IDType ());
+		    tc.setPercent (new PercentType ());
+		    tc.setTaxExemptionReasonCode (new TaxExemptionReasonCodeType ());
+		    tc.setTaxExemptionReason (new TaxExemptionReasonType ());
+		    TaxSchemeType ts = new TaxSchemeType ();
+		    ts.setID (new IDType ());
+		    tc.setTaxScheme (ts);
+		    this.setTaxCategory (tc);
+	  }
   }
   
   public void setID(IDType id) {/*dummy method*/}

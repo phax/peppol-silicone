@@ -51,6 +51,7 @@ public class CountrySelect extends Select {
 
   public CountrySelect (final String caption) {
     setCaption (caption);
+    setWidth(5,UNITS_EM);
     initData ();
   }
 

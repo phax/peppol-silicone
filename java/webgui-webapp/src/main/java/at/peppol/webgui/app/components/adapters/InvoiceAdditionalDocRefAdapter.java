@@ -51,6 +51,35 @@ public class InvoiceAdditionalDocRefAdapter extends DocumentReferenceType implem
   
   String additionalDocRefFile;
   
+  public InvoiceAdditionalDocRefAdapter(DocumentReferenceType type) {
+	  if (type.getID() != null)
+		  this.setID(type.getID());
+	  else
+		  setID (new IDType ());
+	  
+	  if (type.getDocumentType() != null)
+		  this.setDocumentType(type.getDocumentType());
+	  else
+		  this.setDocumentType (new DocumentTypeType ());
+	  
+	  if (type.getAttachment() != null) {
+		  this.setAttachment(type.getAttachment());
+		  if (type.getAttachment().getEmbeddedDocumentBinaryObject() == null)
+			  this.getAttachment().setEmbeddedDocumentBinaryObject (new EmbeddedDocumentBinaryObjectType ());
+		  if (type.getAttachment().getExternalReference() == null)
+			  this.getAttachment().setExternalReference(new ExternalReferenceType());
+		  if (type.getAttachment().getExternalReference().getURI() == null)
+			  this.getAttachment().getExternalReference().setURI(new URIType());
+	  }
+	  else {
+		  setAttachment (new AttachmentType ());
+		  getAttachment().setEmbeddedDocumentBinaryObject (new EmbeddedDocumentBinaryObjectType ());
+		  //getAttachment().getEmbeddedDocumentBinaryObject().setMimeCode(BinaryObjectMimeCodeContentType.);
+		  getAttachment().setExternalReference (new ExternalReferenceType ());
+		  getAttachment().getExternalReference ().setURI (new URIType ());
+	  }
+  }
+  
   public InvoiceAdditionalDocRefAdapter() {
     setID (new IDType ());
     setDocumentType (new DocumentTypeType ());

@@ -14,7 +14,10 @@ public class InvoiceLineOrderReferenceAdapter extends OrderLineReferenceType imp
 	}
 	
 	public InvoiceLineOrderReferenceAdapter(OrderLineReferenceType ac) {
-		this.setLineID(ac.getLineID());
+		if (ac.getLineID() != null)
+			this.setLineID(ac.getLineID());
+		else
+			this.setLineID(new LineIDType());
 	}
 	
 	@Override

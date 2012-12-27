@@ -20,6 +20,7 @@ import at.peppol.webgui.app.utils.Utils;
 public class PaymentMeansAdapter extends PaymentMeansType implements Adapter {
 	
 	public PaymentMeansAdapter() {
+		super();
 		this.setPaymentMeansCode(new PaymentMeansCodeType());
 		this.setPaymentDueDate(new PaymentDueDateType());
 		this.setPaymentChannelCode(new PaymentChannelCodeType());
@@ -31,6 +32,50 @@ public class PaymentMeansAdapter extends PaymentMeansType implements Adapter {
 		this.getPayeeFinancialAccount().getFinancialInstitutionBranch().setID(new IDType());
 		this.getPayeeFinancialAccount().getFinancialInstitutionBranch().setFinancialInstitution(new FinancialInstitutionType());
 		this.getPayeeFinancialAccount().getFinancialInstitutionBranch().getFinancialInstitution().setID(new IDType());
+	}
+	
+	public PaymentMeansAdapter(PaymentMeansType type) {
+		super();
+		if (type.getPaymentMeansCode() != null)
+			this.setPaymentMeansCode(type.getPaymentMeansCode());
+		else
+			this.setPaymentMeansCode(new PaymentMeansCodeType());
+		if (type.getPaymentDueDate() != null)
+			this.setPaymentDueDate(type.getPaymentDueDate());
+		else
+			this.setPaymentDueDate(new PaymentDueDateType());
+		if (type.getPaymentChannelCode() != null)
+			this.setPaymentChannelCode(type.getPaymentChannelCode());
+		else
+			this.setPaymentChannelCode(new PaymentChannelCodeType());
+		if (type.getID() != null)
+			this.setID(type.getID());
+		else
+			this.setID(new IDType());
+		
+		if (type.getPayeeFinancialAccount() != null) {
+			//System.out.println("Account info fetched");
+			FinancialAccountType acc = type.getPayeeFinancialAccount();
+			this.setPayeeFinancialAccount(acc);
+			if (acc.getID() == null)
+				this.getPayeeFinancialAccount().setID(new IDType());
+			if (acc.getFinancialInstitutionBranch() == null)
+				this.getPayeeFinancialAccount().setFinancialInstitutionBranch(new BranchType());
+			if (acc.getFinancialInstitutionBranch().getID() == null)
+				this.getPayeeFinancialAccount().getFinancialInstitutionBranch().setID(new IDType());
+			if (acc.getFinancialInstitutionBranch().getFinancialInstitution() == null)
+				this.getPayeeFinancialAccount().getFinancialInstitutionBranch().setFinancialInstitution(new FinancialInstitutionType());
+			if (acc.getFinancialInstitutionBranch().getFinancialInstitution().getID() == null)
+				this.getPayeeFinancialAccount().getFinancialInstitutionBranch().getFinancialInstitution().setID(new IDType());
+		}
+		else {
+			this.setPayeeFinancialAccount(new FinancialAccountType());
+			this.getPayeeFinancialAccount().setID(new IDType());
+			this.getPayeeFinancialAccount().setFinancialInstitutionBranch(new BranchType());
+			this.getPayeeFinancialAccount().getFinancialInstitutionBranch().setID(new IDType());
+			this.getPayeeFinancialAccount().getFinancialInstitutionBranch().setFinancialInstitution(new FinancialInstitutionType());
+			this.getPayeeFinancialAccount().getFinancialInstitutionBranch().getFinancialInstitution().setID(new IDType());
+		}
 	}
 	
 	

@@ -18,6 +18,10 @@ public class ValidatorHandler implements ValidationEventHandler {
 		error = true;
 	}
 	
+	public ValidatorHandler() {
+		error = true;
+	}
+	
 	public void clearErrors() {
 		error = true;
 	}
