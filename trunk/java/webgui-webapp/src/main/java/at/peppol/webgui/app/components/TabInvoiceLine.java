@@ -286,9 +286,8 @@ public class TabInvoiceLine extends Form {
         	addBtn.setEnabled(true);
         	editBtn.setEnabled(true);
             deleteBtn.setEnabled(true);
-          System.out.println("row id is: "+rowId);
+          
           final String sid = (String) table.getContainerProperty (rowId, "ID.value").getValue ();
-
           // TODO: PUT THIS IN FUNCTION BEGINS
           editMode = true;
           hiddenContent.removeAllComponents ();

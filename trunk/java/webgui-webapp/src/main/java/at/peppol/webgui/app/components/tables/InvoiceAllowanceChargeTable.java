@@ -42,8 +42,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AllowanceChargeType;
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.PaymentMeansType;
 
 import at.peppol.webgui.app.components.adapters.InvoiceAllowanceChargeAdapter;
+import at.peppol.webgui.app.components.adapters.PaymentMeansAdapter;
 
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.Table;
@@ -55,6 +57,15 @@ public class InvoiceAllowanceChargeTable extends GenericTable<AllowanceChargeTyp
 	  linesFromInvoice = items;
 	  
 	  tableLines = new BeanItemContainer<InvoiceAllowanceChargeAdapter>(InvoiceAllowanceChargeAdapter.class);
+	  
+	  if (linesFromInvoice.size() > 0) {
+		  for (int i=0;i<linesFromInvoice.size();i++) {
+			  AllowanceChargeType type = linesFromInvoice.get(i); 
+			  InvoiceAllowanceChargeAdapter item = new InvoiceAllowanceChargeAdapter(type);
+			  tableLines.addBean(item);
+			  linesFromInvoice.set(i, item);
+		  }
+	  }
 	  
 	  setContainerDataSource(tableLines);
 
@@ -73,5 +84,26 @@ public class InvoiceAllowanceChargeTable extends GenericTable<AllowanceChargeTyp
     
 	  setDefinedPropertiesAsVisible();
 	  setPageLength(4);
-  }  
+  }
+  
+  	@Override
+	public void setLineItem(String lineID, InvoiceAllowanceChargeAdapter pms) {
+  		InvoiceAllowanceChargeAdapter originalItem = getItemWithID(lineID);
+		int index=-1;
+		if (originalItem != null) {
+			for (AllowanceChargeType type : linesFromInvoice) {
+				InvoiceAllowanceChargeAdapter opa = new InvoiceAllowanceChargeAdapter(type);
+				if (opa.getIDAdapter().equals(originalItem.getIDAdapter())) {
+					index = linesFromInvoice.indexOf(type);
+					break;
+				}
+			}
+			if (index > -1) {
+				linesFromInvoice.set(index, (AllowanceChargeType)pms);
+				int tableIndex = tableLines.indexOfId(originalItem);
+				tableLines.removeItem(originalItem);
+				tableLines.addItemAt(tableIndex, pms);
+			}
+		}
+	}
 }

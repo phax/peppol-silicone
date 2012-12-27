@@ -256,20 +256,22 @@ public class PaymentMeansTableEditor extends GenericTableEditor<PaymentMeansType
 						deleteButton.setEnabled(false);
 			        	
 			        	final String sid = (String)table.getContainerProperty(rowId,"IDAdapter").getValue();
-			        		          
+			        	
 			        	//get selected item
-			        	final PaymentMeansAdapter adapterItem = (PaymentMeansAdapter)invoiceList.get(table.getIndexFromID(sid));
+			        	//final PaymentMeansAdapter adapterItem = (PaymentMeansAdapter)invoiceList.get(table.getIndexFromID(sid));
+			        	final PaymentMeansAdapter originalItem = table.getItemWithID(sid);
 			        	//paymentMeansAdapterItem = table.getEntryFromID(sid);
 			        	
 			        	//clone it to original item
-			        	final PaymentMeansAdapter originalItem = createItem();
-			        	cloneItem(adapterItem, originalItem);
+			        	final PaymentMeansAdapter adapterItem = createItem();
+			        	cloneItem(originalItem, adapterItem);
 			          
 			        	//Label formLabel = new Label("<h3>Edit payment means line</h3>", Label.CONTENT_XHTML);
 			          
 			        	hiddenContent.addComponent(label);
 			        	final AccountForm tableForm = createTableForm(adapterItem, invoiceList);
 			        	tableForm.setImmediate(true);
+			        	tableForm.setWriteThrough(false);
 			        	hiddenContent.addComponent(tableForm);
 			          
 			        	//Save new line button
@@ -278,7 +280,6 @@ public class PaymentMeansTableEditor extends GenericTableEditor<PaymentMeansType
 			        	buttonLayout.addComponent(new Button("Save changes",new Button.ClickListener(){
 				            @Override
 				            public void buttonClick (ClickEvent event) {
-				            	//paymentMeansForm.commit();
 				            	boolean errorDate = false;
 				            	boolean errorCode = false;
 				            	boolean errorIBAN = false;
@@ -330,7 +331,9 @@ public class PaymentMeansTableEditor extends GenericTableEditor<PaymentMeansType
 								}
 								
 								if (!errorCode && !errorDate && !errorIBAN) {
-									table.setLine(sid, adapterItem);
+									tableForm.commit();
+									//table.setLine(sid, adapterItem);
+									table.setLineItem(sid, adapterItem);
 					            	//hide form
 					            	hiddenContent.setVisible(false);
 					            	editMode = false;
@@ -342,8 +345,8 @@ public class PaymentMeansTableEditor extends GenericTableEditor<PaymentMeansType
 			        	buttonLayout.addComponent(new Button("Cancel editing",new Button.ClickListener(){
 				            @Override
 				            public void buttonClick (ClickEvent event) {
-				            	//paymentMeansForm.discard();
-				            	table.setLine(sid, originalItem);
+				            	tableForm.discard();
+				            	//table.setLine(sid, originalItem);
 				            	//hide form
 				            	hiddenContent.removeAllComponents ();
 				            	hiddenContent.setVisible(false);

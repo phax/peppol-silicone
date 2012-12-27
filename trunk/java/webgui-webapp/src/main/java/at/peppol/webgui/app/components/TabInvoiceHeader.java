@@ -129,8 +129,8 @@ public class TabInvoiceHeader extends Form {
     addMode = false;
     editMode = false;
     
-    if (parent.getInvoice().getInvoicePeriod ().size() == 0)
-    	parent.getInvoice().getInvoicePeriod ().add (new PeriodType());
+//    if (parent.getInvoice().getInvoicePeriod ().size() == 0)
+//    	parent.getInvoice().getInvoicePeriod ().add (new PeriodType());
     
     initElements();
     
@@ -400,25 +400,25 @@ public class TabInvoiceHeader extends Form {
     	final PopupDateField issueDateField = new PopupDateField("Issue Date");
         issueDateField.setResolution(DateField.RESOLUTION_DAY);
         Date date = new Date();
-        if (parent.getInvoice().getIssueDate() == null) {
-        	issueDateField.setValue(date);
-        	System.out.println("Issue date set to today");
-        	try {
-            	GregorianCalendar gc = new GregorianCalendar();
-                gc.setTime(date);
-            	XMLGregorianCalendar XMLDate = DatatypeFactory.newInstance().newXMLGregorianCalendar();
-                XMLDate.setYear(gc.get(Calendar.YEAR));
-                XMLDate.setMonth(gc.get(Calendar.MONTH) + 1);
-                XMLDate.setDay(gc.get(Calendar.DATE));
-                if (parent.getInvoice().getIssueDate() == null)
-                	parent.getInvoice().getIssueDate().setValue(XMLDate);
-        	} catch (DatatypeConfigurationException e) {
-        		e.printStackTrace();
-        	}
+        if (parent.getInvoice().getIssueDate().getValue() != null) {
+        	date = parent.getInvoice().getIssueDate().getValue().toGregorianCalendar().getTime();
+        	//System.out.println("date changed to "+date);
         }
-        else {
-        	issueDateField.setValue(parent.getInvoice().getIssueDate().getValue().toGregorianCalendar().getTime());
-        }
+        //if (parent.getInvoice().getIssueDate().getValue() == null) {
+	       	issueDateField.setValue(date);
+	       	//System.out.println("date changed to "+date);
+	       	try {
+	           	GregorianCalendar gc = new GregorianCalendar();
+	            gc.setTime(date);
+	           	XMLGregorianCalendar XMLDate = DatatypeFactory.newInstance().newXMLGregorianCalendar();
+	            XMLDate.setYear(gc.get(Calendar.YEAR));
+	            XMLDate.setMonth(gc.get(Calendar.MONTH) + 1);
+	            XMLDate.setDay(gc.get(Calendar.DATE));
+	            parent.getInvoice().getIssueDate().setValue(XMLDate);
+	       	} catch (DatatypeConfigurationException e) {
+	       		e.printStackTrace();
+	       	}
+        //}
         
         issueDateField.addListener(new ValueChangeListener() {
           @Override
@@ -426,7 +426,10 @@ public class TabInvoiceHeader extends Form {
 	          try {
 				  final Date issueDate = (Date) issueDateField.getValue();
 				  final GregorianCalendar greg = new GregorianCalendar();
-				  greg.setTime(issueDate);
+				  if (issueDate != null)
+					  greg.setTime(issueDate);
+	              else
+	            	  greg.setTime(new Date());
 				  System.out.println("Listener date: "+issueDate);
 				  // Workaround to print only the date and not the time.
 				  final XMLGregorianCalendar XMLDate = DatatypeFactory.newInstance().newXMLGregorianCalendar();
@@ -434,7 +437,6 @@ public class TabInvoiceHeader extends Form {
 				  XMLDate.setMonth(greg.get(Calendar.MONTH) + 1);
 				  XMLDate.setDay(greg.get(Calendar.DATE));
 				  parent.getInvoice().getIssueDate().setValue(XMLDate);
-				  
 	          } catch (final DatatypeConfigurationException ex) {
 	              Logger.getLogger(TabInvoiceHeader.class.getName()).log(Level.SEVERE, null, ex);
 	          }
@@ -469,16 +471,17 @@ public class TabInvoiceHeader extends Form {
             try {
               final Date taxPointDate = (Date) taxPointDateField.getValue();
               final GregorianCalendar greg = new GregorianCalendar();
-              greg.setTime(taxPointDate);
-              
+              if (taxPointDate != null)
+            	  greg.setTime(taxPointDate);
+              else
+            	  greg.setTime(new Date());
               // Workaround to print only the date and not the time.
               final XMLGregorianCalendar XMLDate = DatatypeFactory.newInstance().newXMLGregorianCalendar();
               XMLDate.setYear(greg.get(Calendar.YEAR));
               XMLDate.setMonth(greg.get(Calendar.MONTH) + 1);
               XMLDate.setDay(greg.get(Calendar.DATE));
-              
-              parent.getInvoice().getIssueDate().setValue(XMLDate);
-            } catch (final DatatypeConfigurationException ex) {
+              parent.getInvoice().getTaxPointDate().setValue(XMLDate);
+            }catch (final DatatypeConfigurationException ex) {
               Logger.getLogger(TabInvoiceHeader.class.getName()).log(Level.SEVERE, null, ex);
             }
           }
@@ -559,7 +562,10 @@ public class TabInvoiceHeader extends Form {
             try {
               final Date endDate = (Date) endDateField.getValue();
               final GregorianCalendar greg = new GregorianCalendar();
-              greg.setTime(endDate);
+              if (endDate != null)
+            	  greg.setTime(endDate);
+              else
+            	  greg.setTime(new Date());
               
               // Workaround to print only the date and not the time.
               final XMLGregorianCalendar XMLDate = DatatypeFactory.newInstance().newXMLGregorianCalendar();

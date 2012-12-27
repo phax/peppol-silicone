@@ -79,6 +79,7 @@ public class TabInvoiceDelivery extends Form{
   
   private AddressType deliveryAddress;
   private AddressDetailForm deliveryAddressForm;   
+  private Form idForm;
   
   public TabInvoiceDelivery(InvoiceTabForm parent) {
     this.parent = parent;
@@ -88,8 +89,15 @@ public class TabInvoiceDelivery extends Form{
   
   private void initElements() {
     deliveryList = parent.getInvoice().getDelivery ();
-    deliveryItem = createDeliveryItem();
-    deliveryList.add (deliveryItem);
+    if (deliveryList.size() == 0) {
+    	deliveryItem = createDeliveryItem();
+    	deliveryList.add (deliveryItem);
+    }
+    else {
+    	deliveryItem = deliveryList.get(0);
+    	deliveryAddress = deliveryItem.getDeliveryLocation().getAddress();
+    	prepareForms();
+    }
    
     final GridLayout grid = new GridLayout(2, 2);
     final VerticalLayout outerLayout = new VerticalLayout();
@@ -112,17 +120,41 @@ public class TabInvoiceDelivery extends Form{
   }  
   
   private DeliveryType createDeliveryItem() {
-    final DeliveryType di = new DeliveryType();
+    final DeliveryType delivery = new DeliveryType();
     
     deliveryAddress = new AddressType ();
     deliveryAddressForm = new AddressDetailForm ("Delivery", deliveryAddress);
     
-    final  LocationType dl = new LocationType();
-    dl.setID (new IDType ());
-    dl.setAddress(deliveryAddress);
+    final  LocationType location = new LocationType();
+    IDType id = new IDType ();
+    id.setSchemeID("GLN");
+    location.setID (id);
+    idForm = new Form();
+    idForm.setSizeFull();
+    idForm.setFormFieldFactory(new InvoiceDeliveryFieldFactory());
+    idForm.setImmediate(true);
+    idForm.setWriteThrough(true);
+    idForm.addItemProperty("Location ID (GLN)", new NestedMethodProperty(id, "value"));
+    deliveryAddressForm.addComponent(idForm);
     
-    di.setDeliveryLocation (dl);
-    return di;
+    location.setAddress(deliveryAddress);
+    
+    delivery.setDeliveryLocation (location);
+    return delivery;
+  }
+  
+  private void prepareForms() {
+    deliveryAddressForm = new AddressDetailForm ("Delivery", deliveryAddress);
+    
+    IDType id = deliveryItem.getDeliveryLocation().getID();
+    idForm = new Form();
+    idForm.setSizeFull();
+    idForm.setFormFieldFactory(new InvoiceDeliveryFieldFactory());
+    idForm.setImmediate(true);
+    idForm.setWriteThrough(true);
+    idForm.addItemProperty("Location ID (GLN)", new NestedMethodProperty(id, "value"));
+    
+    deliveryAddressForm.addComponent(idForm);
   }
     
   

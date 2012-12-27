@@ -110,11 +110,17 @@ public class TabInvoiceTaxTotal extends Form {
 
   @SuppressWarnings("serial")
 private void initElements () {
-    taxTotalList = parent.getInvoice ().getTaxTotal ();
-    taxTotalItem = createTaxTotalItem ();
-    taxTotalList.add (taxTotalItem);
+	  taxTotalList = parent.getInvoice().getTaxTotal();
+	  if (taxTotalList.size() == 0) {
+	    taxTotalItem = createTaxTotalItem();
+	    taxTotalList.add (taxTotalItem);
+	  }
+	  else {
+		taxTotalItem = taxTotalList.get(0);
+	  }
 
-    taxSubtotalList = parent.getInvoice ().getTaxTotal ().get (0).getTaxSubtotal ();
+    //taxSubtotalList = parent.getInvoice ().getTaxTotal ().get (0).getTaxSubtotal ();
+	  taxSubtotalList = taxTotalItem.getTaxSubtotal ();
 
     final GridLayout grid = new GridLayout (4, 4);
     final VerticalLayout outerLayout = new VerticalLayout ();
@@ -400,7 +406,6 @@ private void initElements () {
     return ac;
   }
 
-  @SuppressWarnings ("unused")
   private void cloneInvoiceSubTaxtotalItem (final InvoiceTaxSubtotalAdapter srcItem,
                                             final InvoiceTaxSubtotalAdapter dstItem) {
     // TODO: // Enable buffering.

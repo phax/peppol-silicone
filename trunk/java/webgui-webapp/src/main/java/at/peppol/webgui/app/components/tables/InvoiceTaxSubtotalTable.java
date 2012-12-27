@@ -56,6 +56,13 @@ public class InvoiceTaxSubtotalTable extends GenericTable<TaxSubtotalType, Invoi
     
     tableLines = new BeanItemContainer<InvoiceTaxSubtotalAdapter>(InvoiceTaxSubtotalAdapter.class);
     
+    for (int i=0;i<linesFromInvoice.size();i++) {
+    	TaxSubtotalType type = linesFromInvoice.get(i);
+    	InvoiceTaxSubtotalAdapter item = new InvoiceTaxSubtotalAdapter(type);
+    	linesFromInvoice.set(i, item);
+    	tableLines.addBean(item);
+    }
+    
     setContainerDataSource(tableLines);
 
     addPropertyWithHeader("TableLineID", "# ID");

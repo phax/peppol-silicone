@@ -57,6 +57,13 @@ public class PaymentMeansTable extends GenericTable<PaymentMeansType,PaymentMean
 		
 		tableLines = new BeanItemContainer<PaymentMeansAdapter>(PaymentMeansAdapter.class);
 		
+		if (linesFromInvoice.size() > 0) {
+			for (PaymentMeansType type : linesFromInvoice) {
+				PaymentMeansAdapter item = new PaymentMeansAdapter(type);
+				tableLines.addBean(item);
+			}
+		}
+		
 		setContainerDataSource(getTableLines());
 
 		addPropertyWithHeader("IDAdapter", "#ID");
@@ -72,5 +79,26 @@ public class PaymentMeansTable extends GenericTable<PaymentMeansType,PaymentMean
     
 		//setColumnWidth("AdditionalDocRefExternalReference", 200);
 		//setColumnExpandRatio("AdditionalDocRefExternalReference", 2);
-	}    
+	}
+	
+	@Override
+	public void setLineItem(String lineID, PaymentMeansAdapter pms) {
+		PaymentMeansAdapter originalItem = getItemWithID(lineID);
+		int index=-1;
+		if (originalItem != null) {
+			for (PaymentMeansType type : linesFromInvoice) {
+				PaymentMeansAdapter opa = new PaymentMeansAdapter(type);
+				if (opa.getIDAdapter().equals(originalItem.getIDAdapter())) {
+					index = linesFromInvoice.indexOf(type);
+					break;
+				}
+			}
+			if (index > -1) {
+				linesFromInvoice.set(index, (PaymentMeansType)pms);
+				int tableIndex = tableLines.indexOfId(originalItem);
+				tableLines.removeItem(originalItem);
+				tableLines.addItemAt(tableIndex, pms);
+			}
+		}
+	}
 }

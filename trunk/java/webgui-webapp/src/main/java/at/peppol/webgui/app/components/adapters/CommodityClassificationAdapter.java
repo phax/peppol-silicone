@@ -17,7 +17,10 @@ public class CommodityClassificationAdapter extends CommodityClassificationType 
 	}
 	
 	public CommodityClassificationAdapter(CommodityClassificationType ac) {
-		this.setCommodityCode(ac.getCommodityCode());
+		if (ac.getCommodityCode() != null)
+			this.setCommodityCode(ac.getCommodityCode());
+		else
+			this.setCommodityCode(new CommodityCodeType());
 	}
 	
 	@Override
