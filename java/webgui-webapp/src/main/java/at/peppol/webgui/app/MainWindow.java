@@ -38,6 +38,7 @@
 package at.peppol.webgui.app;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.Iterator;
 
 import oasis.names.specification.ubl.schema.xsd.invoice_2.InvoiceType;
@@ -50,6 +51,7 @@ import at.peppol.webgui.app.components.OrderUploadWindow;
 import at.peppol.webgui.app.login.UserFolder;
 import at.peppol.webgui.app.login.UserFolderManager;
 import at.peppol.webgui.app.utils.CounterThread;
+import at.peppol.webgui.app.utils.Utils;
 
 import com.phloc.appbasics.security.user.IUser;
 import com.vaadin.terminal.ClassResource;
@@ -89,7 +91,7 @@ public class MainWindow extends Window {
   private Component mainContentComponent;
   private final AnimatorProxy animProxy = new AnimatorProxy ();
   
-  private UserFolderManager um;
+  private UserFolderManager<File> um;
 
   public MainWindow () {
     super ("PAWG Main");
@@ -111,7 +113,7 @@ private void initUI () {
     // Changed with custom layout using bootstrap -- under testing
     // createHeaderMenu();
 
-    final UserFolder userFolder = new UserFolder();;
+    final UserFolder<File> userFolder = new UserFolder<File>();;
     // ------ START: Left NavBar -------
     final CssLayout leftNavBar = new CssLayout ();
     leftNavBar.setStyleName ("sidebar-menu");
@@ -133,6 +135,7 @@ private void initUI () {
     inboxInvoices.addListener(new ClickListener() {
 		@Override
 		public void buttonClick(ClickEvent event) {
+			inboxInvoices.setCaption("Invoices ("+um.countItemsInSpace(um.getInbox())+")");
 			userFolder.setFolder(um.getInbox().getFolder());
 			userFolder.setName(um.getInbox().getName());
 			showInitialMainContent (userFolder);
@@ -148,6 +151,7 @@ private void initUI () {
     draftInvoices.addListener(new ClickListener() {
 		@Override
 		public void buttonClick(ClickEvent event) {
+			draftInvoices.setCaption("Invoices ("+um.countItemsInSpace(um.getDrafts())+")");
 			userFolder.setFolder(um.getDrafts().getFolder());
 			userFolder.setName(um.getDrafts().getName());
 			showInitialMainContent (userFolder);
@@ -165,6 +169,7 @@ private void initUI () {
     outboxInvoices.addListener(new ClickListener() {
 		@Override
 		public void buttonClick(ClickEvent event) {
+			outboxInvoices.setCaption("Invoices ("+um.countItemsInSpace(um.getOutbox())+")");
 			userFolder.setFolder(um.getOutbox().getFolder());
 			userFolder.setName(um.getOutbox().getName());
 			showInitialMainContent (userFolder);
@@ -196,26 +201,47 @@ private void initUI () {
     
     //workaround so that thread refreshes UI. It seems that when a ProgressIndicator is present,
     //all components receive server side refreshes
+    final int polling = 20000;
     ProgressIndicator p = new ProgressIndicator();
-    p.setPollingInterval(20000);
+    p.setPollingInterval(polling);
     p.setWidth("0px");
     p.setHeight("0px");
     leftNavBar.addComponent(p);
     
-    draftInvoices.addStyleName("v-bold-nativebuttoncaption");
+    //draftInvoices.addStyleName("v-bold-nativebuttoncaption");
     showInitialMainContent (null);
-    
-/*    final int polling = 10000;
-    Thread t = new Thread(new Runnable(){
+    //draftInvoices.click();
+    Thread t1 = new Thread(new Runnable(){
+		@Override
+		public void run() {
+			Utils.registerWatcher(Paths.get(um.getInbox().getFolder().getAbsolutePath()), inboxInvoices);
+		}
+	});
+	t1.start();
+	Thread t2 = new Thread(new Runnable(){
+		@Override
+		public void run() {
+			Utils.registerWatcher(Paths.get(um.getDrafts().getFolder().getAbsolutePath()), draftInvoices);
+		}
+	});
+	t2.start();
+	Thread t3 = new Thread(new Runnable(){
+		@Override
+		public void run() {
+			Utils.registerWatcher(Paths.get(um.getOutbox().getFolder().getAbsolutePath()), outboxInvoices);
+		}
+	});
+	t3.start();
+/*    Thread t = new Thread(new Runnable(){
 		@Override
 		public void run() {
 			try {
 				while (true) {
 					int count = um.countItemsInSpace(um.getDrafts());
-   				 	synchronized(invoices.getApplication()) {
-   				 		String label = invoices.getCaption();
+   				 	synchronized(MainWindow.this.getApplication()) {
+   				 		String label = draftInvoices.getCaption();
    						label = label.replaceFirst("[\\d]+", ""+count);
-   						invoices.setCaption(label);
+   						draftInvoices.setCaption(label);
    						System.out.println(label);
    				 	}
    				 	Thread.sleep(polling);

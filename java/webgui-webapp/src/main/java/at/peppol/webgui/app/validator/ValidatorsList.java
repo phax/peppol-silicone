@@ -28,6 +28,12 @@ public class ValidatorsList {
 			listenerList.add(iter.next());
 	}
 	
+	public static void removeListeners(Collection<BlurListener> col) {
+		Iterator<BlurListener> iter = col.iterator();
+		while (iter.hasNext())
+			listenerList.remove(iter.next());
+	}
+	
 	public static List<BlurListener> getListenersList() {
 		return listenerList;
 	}

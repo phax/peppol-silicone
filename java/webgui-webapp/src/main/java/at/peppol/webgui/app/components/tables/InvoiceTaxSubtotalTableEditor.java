@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import com.vaadin.data.Item;
+import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.util.NestedMethodProperty;
@@ -75,9 +76,15 @@ public class InvoiceTaxSubtotalTableEditor extends GenericTableEditor<TaxSubtota
 	                                                                        "TaxSubTotalCategoryExemptionReasonCode"));
 	    invoiceTaxSubtotalForm.addItemProperty ("Tax Exemption Reason", new NestedMethodProperty (taxSubtotalItem,
 	                                                                      	"TaxSubTotalCategoryExemptionReason"));
-	    
 	    invoiceTaxSubtotalForm.getItemProperty("Tax Category Percent").setValue("23");
 	    
+	    Field tax = invoiceTaxSubtotalForm.getField("Tax Amount");
+	    Field percent = invoiceTaxSubtotalForm.getField("Tax Category Percent");
+	    Field amount = invoiceTaxSubtotalForm.getField("Taxable Amount");
+	    ValueChangeListener l = new CalcTaxAmount(amount, percent, tax);
+	    percent.addListener(l);
+	    amount.addListener(l);
+	    	    
 	    return invoiceTaxSubtotalForm;
 
 	}
@@ -472,4 +479,26 @@ public class InvoiceTaxSubtotalTableEditor extends GenericTableEditor<TaxSubtota
 		}
 		  
 	  }
+	
+	public class CalcTaxAmount implements ValueChangeListener {
+
+		Field amountField,percentField,taxField;
+		
+		public CalcTaxAmount(Field amount, Field percent, Field tax) {
+			this.amountField = amount;
+			this.percentField = percent;
+			this.taxField = tax;
+		}
+		
+		@Override
+		public void valueChange(ValueChangeEvent event) {
+			// TODO Auto-generated method stub
+			BigDecimal hund = new BigDecimal("100.00");
+			BigDecimal a = new BigDecimal((String)amountField.getValue());
+			BigDecimal p = new BigDecimal((String)percentField.getValue());
+			
+			taxField.setValue(a.multiply(p.divide(hund)));
+		}
+		
+	}
 }

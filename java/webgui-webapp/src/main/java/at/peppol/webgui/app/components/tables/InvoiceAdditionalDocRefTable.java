@@ -41,9 +41,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.AllowanceChargeType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.DocumentReferenceType;
 
 import at.peppol.webgui.app.components.adapters.InvoiceAdditionalDocRefAdapter;
+import at.peppol.webgui.app.components.adapters.InvoiceAllowanceChargeAdapter;
 import at.peppol.webgui.app.components.adapters.PaymentMeansAdapter;
 
 import com.vaadin.data.util.BeanItemContainer;
@@ -55,6 +57,15 @@ public class InvoiceAdditionalDocRefTable extends GenericTable<DocumentReference
     linesFromInvoice = list;
     
     tableLines = new BeanItemContainer<InvoiceAdditionalDocRefAdapter>(InvoiceAdditionalDocRefAdapter.class);
+    
+    if (linesFromInvoice.size() > 0) {
+		  for (int i=0;i<linesFromInvoice.size();i++) {
+			  DocumentReferenceType type = linesFromInvoice.get(i); 
+			  InvoiceAdditionalDocRefAdapter item = new InvoiceAdditionalDocRefAdapter(type);
+			  tableLines.addBean(item);
+			  linesFromInvoice.set(i, item);
+		  }
+	  }
     
     setContainerDataSource(tableLines);
 

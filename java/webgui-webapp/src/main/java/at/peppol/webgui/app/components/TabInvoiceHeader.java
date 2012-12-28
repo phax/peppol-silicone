@@ -73,6 +73,7 @@ import at.peppol.webgui.app.components.tables.InvoiceAdditionalDocRefTable;
 import at.peppol.webgui.app.components.tables.InvoiceAdditionalDocRefTableEditor;
 import at.peppol.webgui.app.utils.DocUpload;
 import at.peppol.webgui.app.utils.ReceiverClass;
+import at.peppol.webgui.app.utils.Utils;
 import at.peppol.webgui.app.validator.RequiredFieldListener;
 import at.peppol.webgui.app.validator.ValidatorsList;
 
@@ -123,6 +124,7 @@ public class TabInvoiceHeader extends Form {
   
   public InvoiceAdditionalDocRefTable table;
   private VerticalLayout hiddenContent;
+  Form contractReferenceForm;
 
   public TabInvoiceHeader(InvoiceTabForm parent) {
     this.parent = parent;
@@ -249,7 +251,9 @@ public class TabInvoiceHeader extends Form {
 			Component c = removeContractReferenceBtn.getParent().getParent();
 			topGridLayout.removeComponent(c);
 			if (parent.getInvoice().getContractDocumentReference().size() > 0) {
-				parent.getInvoice().getContractDocumentReference().remove(0);
+				//parent.getInvoice().getContractDocumentReference().remove(0);
+				parent.getInvoice().getContractDocumentReference().clear();
+				ValidatorsList.removeListeners(Utils.getFieldListeners(contractReferenceForm));
 			}
 			
 			topGridLayout.addComponent(addContractReferenceBtn, 1, 0);
@@ -257,8 +261,9 @@ public class TabInvoiceHeader extends Form {
 	});
     
     h.addComponent(buttonsContainer,1,0);
-    
     topGridLayout.addComponent(addContractReferenceBtn, 1, 0);
+    if (parent.getInvoice().getContractDocumentReference().size() > 0)
+    	addContractReferenceBtn.click();
         
     // ---- HIDDEN FORM BEGINS -----
     VerticalLayout formLayout = new VerticalLayout();
@@ -342,7 +347,7 @@ public class TabInvoiceHeader extends Form {
 	  contractReferenceItemSet.addItemProperty ("Contract document reference ID", new NestedMethodProperty(parent.getInvoice().getContractDocumentReference().get(0).getID(), "value"));
 	  contractReferenceItemSet.addItemProperty ("Contract document reference type", new NestedMethodProperty(parent.getInvoice().getContractDocumentReference().get(0).getDocumentType(), "value"));
 	  
-	  Form contractReferenceForm = new Form();
+	  contractReferenceForm = new Form();
 	  contractReferenceForm.setFormFieldFactory(new InvoiceFieldFactory());
 	  contractReferenceForm.setItemDataSource(contractReferenceItemSet);
 	  contractReferenceForm.setImmediate(true);
