@@ -1,5 +1,14 @@
 package at.peppol.webgui.app.utils;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.WatchEvent;
+import java.nio.file.WatchKey;
+import java.nio.file.WatchService;
+import java.nio.file.StandardWatchEventKinds.*;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -20,6 +29,7 @@ import com.vaadin.event.FieldEvents.BlurEvent;
 import com.vaadin.event.FieldEvents.BlurListener;
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.AbstractTextField;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.Form;
 import com.vaadin.ui.Label;
@@ -62,5 +72,65 @@ public class Utils {
 		}
 		ValidatorsList.validateListenersNotify(listeners);
 		form.validate();
+	}
+	
+	public static Collection<BlurListener> getFieldListeners(Form form) {
+		Collection<?> propertyIds = form.getItemPropertyIds();
+		List<BlurListener> listeners = new ArrayList<BlurListener>(propertyIds.size());
+		for (Object itemPropertyId : propertyIds) {
+			Field f = form.getField(itemPropertyId);
+			if (f instanceof AbstractField) {
+				AbstractField field = (AbstractField )f;
+				Collection<?> c = field.getListeners(BlurEvent.class);
+				for (Object l : c) {
+					listeners.add((BlurListener)l);
+				}
+			}
+			
+		}
+		
+		return listeners;
+	}
+	
+	public static void registerWatcher(Path dir, Button button) {
+		try {
+			WatchService watcher = FileSystems.getDefault().newWatchService();
+			for (;;) {
+				// wait for key to be signaled
+			    WatchKey key = dir.register(watcher,
+			    		java.nio.file.StandardWatchEventKinds.ENTRY_CREATE,
+			    		java.nio.file.StandardWatchEventKinds.ENTRY_DELETE,
+			    		java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY);
+			    try {
+			        key = watcher.take();
+			    } catch (InterruptedException x) {
+			        return;
+			    }
+	
+			    for (WatchEvent<?> event: key.pollEvents()) {
+			        WatchEvent.Kind<?> kind = event.kind();
+	
+			        if (kind == java.nio.file.StandardWatchEventKinds.OVERFLOW) {
+			            continue;
+			        }
+	
+			        WatchEvent<Path> ev = (WatchEvent<Path>)event;
+			        Path filename = ev.context();
+	
+		            Path child = dir.resolve(filename);
+	
+			        System.out.println("Modified filename: "+filename);
+			        System.out.println("Child: "+child);
+			        button.click();
+			    }
+	
+			    boolean valid = key.reset();
+			    if (!valid) {
+			        break;
+			    }
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

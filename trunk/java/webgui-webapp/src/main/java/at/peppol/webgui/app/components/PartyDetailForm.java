@@ -65,6 +65,7 @@ import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.Registra
 import oasis.names.specification.ubl.schema.xsd.commonbasiccomponents_2.StreetNameType;
 import oasis.names.specification.ubl.schema.xsd.commonaggregatecomponents_2.PartyLegalEntityType;
 
+import at.peppol.webgui.app.utils.Utils;
 import at.peppol.webgui.app.validator.RequiredFieldListener;
 import at.peppol.webgui.app.validator.RequiredFieldValidator;
 import at.peppol.webgui.app.validator.ValidatorsList;
@@ -102,6 +103,7 @@ public class PartyDetailForm extends Panel{
     private final String party;
     
     private VerticalLayout hiddenContent;
+    Form legalEntityForm;
     
     public static String taxSchemeCompanyID = "Tax Scheme Company ID";
     public static String taxSchemeID = "Tax Scheme";
@@ -258,7 +260,8 @@ public class PartyDetailForm extends Panel{
 						if (c.getCaption().equals("Legal Entity")) {
 							outerLayout.removeComponent(c);
 							if (partyBean.getPartyLegalEntity().size() > 0) {
-								partyBean.getPartyLegalEntity().remove(0);
+								partyBean.getPartyLegalEntity().clear();
+								ValidatorsList.removeListeners(Utils.getFieldListeners(legalEntityForm));
 							}
 						}
 					}
@@ -272,9 +275,8 @@ public class PartyDetailForm extends Panel{
         partyForm.setWidth("90%");
         outerLayout.addComponent(partyAddressForm);
         partyAddressForm.setWidth("90%");
-        if (partyBean.getPartyLegalEntity().size() == 0)
-        	outerLayout.addComponent(addLegalEntityBtn);
-        else
+       	outerLayout.addComponent(addLegalEntityBtn);
+        if (partyBean.getPartyLegalEntity().size() > 0)
         	addLegalEntityBtn.click();
         //outerLayout.addComponent(removeLegalEntityBtn);
         //outerLayout.addComponent(createLegalEntityPanel());
@@ -310,7 +312,7 @@ public class PartyDetailForm extends Panel{
         legalEntityItemSet.addItemProperty ("Country Subentity", new NestedMethodProperty(legalEntity.getRegistrationAddress(), "countrySubentity.value") );
         legalEntityItemSet.addItemProperty("Country ID", new NestedMethodProperty(legalEntity.getRegistrationAddress(), "country.identificationCode.value"));
         
-        Form legalEntityForm = new Form();
+        legalEntityForm = new Form();
         legalEntityForm.setFormFieldFactory(new PartyFieldFactory());
         legalEntityForm.setItemDataSource(legalEntityItemSet);
         legalEntityForm.setImmediate(true);

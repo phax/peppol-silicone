@@ -74,7 +74,6 @@ public class InvoiceAdditionalDocRefAdapter extends DocumentReferenceType implem
 	  else {
 		  setAttachment (new AttachmentType ());
 		  getAttachment().setEmbeddedDocumentBinaryObject (new EmbeddedDocumentBinaryObjectType ());
-		  //getAttachment().getEmbeddedDocumentBinaryObject().setMimeCode(BinaryObjectMimeCodeContentType.);
 		  getAttachment().setExternalReference (new ExternalReferenceType ());
 		  getAttachment().getExternalReference ().setURI (new URIType ());
 	  }
