@@ -2,6 +2,8 @@ package at.peppol.webgui.app.login;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -154,5 +156,27 @@ public class UserDirManager extends UserFolderManager<File> {
 		return null;
 	}
 
-
+	@Override
+	public void moveInvoice(InvoiceBean inv, UserFolder<File> source, UserFolder<File> dest) {
+		File sourceFile = new File(source.getFolder().getAbsolutePath()+fileSep+inv.getFolderEntryID());
+		File destFile = new File(dest.getFolder().getAbsolutePath()+fileSep+inv.getFolderEntryID());
+		try {
+			FileInputStream inStream = new FileInputStream(sourceFile);
+			FileOutputStream  outStream = new FileOutputStream(destFile);
+	
+		    byte[] buffer = new byte[1024];
+		    int length;
+		    while ((length = inStream.read(buffer)) > 0){
+		    	outStream.write(buffer, 0, length);
+		    }
+		    inStream.close();
+		    outStream.close();
+		    sourceFile.delete();
+		}catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
 }

@@ -298,7 +298,7 @@ private void initUI () {
 				//InvoiceType inv = (InvoiceType)table.getItem(table.getValue()).getItemProperty("invoice").getValue();
 				//InvoiceBean invBean = (InvoiceBean)table.getItem(table.getValue());
 				InvoiceBean invBean = ((InvoiceBeanContainer)table.getContainerDataSource()).getItem(table.getValue()).getBean();
-				System.out.println("Invoice is: "+invBean);
+				//System.out.println("Invoice is: "+invBean);
 				showInvoiceForm(invBean);
 			}
 		}
@@ -316,12 +316,16 @@ private void initUI () {
 					String path = invBean.getFolderEntryID();
 					FileSystemResource s = new FileSystemResource(path);
 					SendInvoice.sendDocument(s);
+					
+					//file is sent. move invoice to outbox
+					um.moveInvoice(invBean, um.getDrafts(), um.getOutbox());
 				}
 			}catch (FileNotFoundException e) {
 				getWindow().showNotification("Could not find invoice file",Notification.TYPE_ERROR_MESSAGE);
 			}
 			catch (Exception e) {
 				getWindow().showNotification("Could not send invoice. AP connection error",Notification.TYPE_ERROR_MESSAGE);
+				e.printStackTrace();
 			}
 		}
 	});
