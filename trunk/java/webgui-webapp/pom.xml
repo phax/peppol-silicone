@@ -90,6 +90,11 @@
       <artifactId>jsp-2.1-glassfish</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+    	<groupId>at.peppol</groupId>
+    	<artifactId>peppol-transport-start-client</artifactId>
+    	<version>2.3.2-SNAPSHOT</version>
+    </dependency>
   </dependencies>
   
   <build>

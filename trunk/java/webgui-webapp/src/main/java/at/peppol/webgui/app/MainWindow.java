@@ -38,8 +38,12 @@
 package at.peppol.webgui.app;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.nio.file.Paths;
 import java.util.Iterator;
+
+import javax.xml.transform.stream.StreamSource;
 
 import oasis.names.specification.ubl.schema.xsd.invoice_2.InvoiceType;
 
@@ -51,9 +55,11 @@ import at.peppol.webgui.app.components.OrderUploadWindow;
 import at.peppol.webgui.app.login.UserFolder;
 import at.peppol.webgui.app.login.UserFolderManager;
 import at.peppol.webgui.app.utils.CounterThread;
+import at.peppol.webgui.app.utils.SendInvoice;
 import at.peppol.webgui.app.utils.Utils;
 
 import com.phloc.appbasics.security.user.IUser;
+import com.phloc.commons.io.resource.FileSystemResource;
 import com.vaadin.terminal.ClassResource;
 import com.vaadin.terminal.ExternalResource;
 import com.vaadin.ui.Alignment;
@@ -69,6 +75,7 @@ import com.vaadin.ui.Layout;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.MenuBar.MenuItem;
+import com.vaadin.ui.Window.Notification;
 import com.vaadin.ui.NativeButton;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.ProgressIndicator;
@@ -261,6 +268,7 @@ private void initUI () {
 
     mainContentLayout.addStyleName ("margin");
     final VerticalLayout topmain = new VerticalLayout ();
+    topmain.setSpacing(true);
     topmain.setWidth ("100%");
     final Label bigPAWGLabel = new Label ("PEPPOL Post Award Web GUI");
     bigPAWGLabel.setStyleName ("huge");
@@ -276,8 +284,12 @@ private void initUI () {
     
     final ShowItemsPanel itemsPanel = new ShowItemsPanel("Items", um, userFolder);
     topmain.addComponent (itemsPanel);
+    HorizontalLayout buttonsLayout = new HorizontalLayout();
+    buttonsLayout.setSpacing(true);
+    topmain.addComponent(buttonsLayout);
     Button loadButton = new Button("Load invoice");
-    topmain.addComponent(loadButton);
+    //topmain.addComponent(loadButton);
+    buttonsLayout.addComponent(loadButton);
 	loadButton.addListener(new ClickListener() {
 		@Override
 		public void buttonClick(ClickEvent event) {
@@ -288,6 +300,28 @@ private void initUI () {
 				InvoiceBean invBean = ((InvoiceBeanContainer)table.getContainerDataSource()).getItem(table.getValue()).getBean();
 				System.out.println("Invoice is: "+invBean);
 				showInvoiceForm(invBean);
+			}
+		}
+	});
+	
+	Button sendButton = new Button("Send invoice");
+	buttonsLayout.addComponent(sendButton);
+	sendButton.addListener(new ClickListener() {
+		@Override
+		public void buttonClick(ClickEvent event) {
+			try {
+				Table table = itemsPanel.getTable();
+				if (table.getValue() != null) { 
+					InvoiceBean invBean = ((InvoiceBeanContainer)table.getContainerDataSource()).getItem(table.getValue()).getBean();
+					String path = invBean.getFolderEntryID();
+					FileSystemResource s = new FileSystemResource(path);
+					SendInvoice.sendDocument(s);
+				}
+			}catch (FileNotFoundException e) {
+				getWindow().showNotification("Could not find invoice file",Notification.TYPE_ERROR_MESSAGE);
+			}
+			catch (Exception e) {
+				getWindow().showNotification("Could not send invoice. AP connection error",Notification.TYPE_ERROR_MESSAGE);
 			}
 		}
 	});
