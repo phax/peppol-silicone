@@ -40,4 +40,6 @@ public abstract class UserFolderManager<T> {
 	public abstract List<InvoiceBean> getInvoicesFromUserFolder(UserFolder<T> space);
 	
 	public abstract int countItemsInSpace(UserFolder<T> space);
+	
+	public abstract void moveInvoice(InvoiceBean inv, UserFolder<T> source, UserFolder<T> dest);
 }
