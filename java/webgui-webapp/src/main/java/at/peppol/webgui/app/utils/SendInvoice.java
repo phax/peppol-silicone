@@ -24,9 +24,12 @@ import at.peppol.transport.start.client.AccessPointClient;
 
 public class SendInvoice {
 	//public static final String RECEIVER = "9914:ATU53309209"; //OK
-	public static final String RECEIVER = "0088:el113766102";   //NOT OK AP2
+	public static final String RECEIVER = "0088:el113766102";   //OK AP2
 	//public static final String RECEIVER = "9912:el061828591";   //OK AP1
 	//public static final String RECEIVER = "9914:ATU53309209";   //FOUND OK
+	public static final boolean USE_PROXY = true;
+	public static final String PROXY_HOST = "172.30.9.12";
+	public static final String PROXY_PORT = "8080";
 	  
 
 	@Nonnull
@@ -53,9 +56,18 @@ public class SendInvoice {
 	}
 	
 	public static void sendDocument (final IReadableResource aXmlRes) throws Exception {
+		System.setProperty ("java.net.useSystemProxies", "true");
+	    if (USE_PROXY) {
+	      System.setProperty ("http.proxyHost", PROXY_HOST);
+	      System.setProperty ("http.proxyPort", PROXY_PORT);
+	      System.setProperty ("https.proxyHost", PROXY_HOST);
+	      System.setProperty ("https.proxyPort", PROXY_PORT);
+	    }
+	    
 		final IMessageMetadata aMetadata = _createMetadata ();
 	    //final String sAccessPointURL = false ? "http://localhost:8090/accessPointService" : _getAccessPointUrl (aMetadata);
-	    final String sAccessPointURL = false ? "https://ap2.peppol.gr/ap/accessPointService" : _getAccessPointUrl (aMetadata);
+	    //final String sAccessPointURL = false ? "https://ap2.peppol.gr/ap/accessPointService" : _getAccessPointUrl (aMetadata);
+		final String sAccessPointURL = true ? "https://ap2.peppol.gr/ap/accessPointService" : _getAccessPointUrl (aMetadata);
 	    //final String sAccessPointURL = true ? "https://localhost/peppol-transport-start-server-2.3.0-SNAPSHOT/accessPointService" : _getAccessPointUrl (aMetadata);
 	    final Document aXMLDoc = XMLReader.readXMLDOM (aXmlRes);
 	    AccessPointClient.send (sAccessPointURL, aMetadata, aXMLDoc);

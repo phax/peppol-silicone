@@ -40,8 +40,8 @@ public class UserDirManager extends UserFolderManager<File> {
 		userDir = new UserFolder<File>(new File(mainDirString + fileSep + user.getEmailAddress()), "Root");
 		if (!userDir.getFolder().exists()) {
 			if (!userDir.getFolder().mkdirs()) {
-				userDir = null;
-				throw new Exception("Could not create user directory. Check privildges.");
+				//userDir = null;
+				throw new Exception("Could not create user directory '"+userDir.getFolder().getAbsolutePath()+"'. Check privildges.");
 			}
 		}
 	}
@@ -49,8 +49,8 @@ public class UserDirManager extends UserFolderManager<File> {
 	private void create(File dir) throws Exception {
 		if (!dir.exists()) {
 			if (!dir.mkdirs()) {
-				dir = null;
-				throw new Exception("Could not create directory. Check privildges.");
+				//dir = null;
+				throw new Exception("Could not create directory '"+dir.getAbsolutePath()+"'. Check privildges.");
 			}
 		}
 	}
