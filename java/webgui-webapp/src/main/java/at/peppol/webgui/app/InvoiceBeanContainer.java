@@ -2,7 +2,6 @@ package at.peppol.webgui.app;
 
 import java.io.Serializable;
 import java.util.List;
-import java.nio.file.*;
 
 import oasis.names.specification.ubl.schema.xsd.invoice_2.InvoiceType;
 

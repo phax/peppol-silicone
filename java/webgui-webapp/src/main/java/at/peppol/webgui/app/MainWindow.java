@@ -40,7 +40,7 @@ package at.peppol.webgui.app;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.nio.file.Paths;
+//import java.nio.file.Paths; //jdk1.7
 import java.util.Iterator;
 
 import javax.xml.transform.stream.StreamSource;
@@ -218,7 +218,7 @@ private void initUI () {
     //draftInvoices.addStyleName("v-bold-nativebuttoncaption");
     showInitialMainContent (null);
     //draftInvoices.click();
-    Thread t1 = new Thread(new Runnable(){
+    /*Thread t1 = new Thread(new Runnable(){
 		@Override
 		public void run() {
 			Utils.registerWatcher(Paths.get(um.getInbox().getFolder().getAbsolutePath()), inboxInvoices);
@@ -238,7 +238,7 @@ private void initUI () {
 			Utils.registerWatcher(Paths.get(um.getOutbox().getFolder().getAbsolutePath()), outboxInvoices);
 		}
 	});
-	t3.start();
+	t3.start();*/
 /*    Thread t = new Thread(new Runnable(){
 		@Override
 		public void run() {

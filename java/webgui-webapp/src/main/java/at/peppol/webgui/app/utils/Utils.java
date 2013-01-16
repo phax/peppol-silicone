@@ -2,13 +2,13 @@ package at.peppol.webgui.app.utils;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.WatchEvent;
-import java.nio.file.WatchKey;
-import java.nio.file.WatchService;
-import java.nio.file.StandardWatchEventKinds.*;
+/*import java.nio.file.FileSystems; //jdk1.7
+import java.nio.file.Path; //jdk1.7
+import java.nio.file.Paths; //jdk1.7
+import java.nio.file.WatchEvent; //jdk1.7
+import java.nio.file.WatchKey; //jdk1.7
+import java.nio.file.WatchService; //jdk1.7
+import java.nio.file.StandardWatchEventKinds.*; //jdk1.7 */
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -92,7 +92,7 @@ public class Utils {
 		return listeners;
 	}
 	
-	public static void registerWatcher(Path dir, Button button) {
+	/*public static void registerWatcher(Path dir, Button button) {
 		try {
 			WatchService watcher = FileSystems.getDefault().newWatchService();
 			for (;;) {
@@ -132,5 +132,5 @@ public class Utils {
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 }
