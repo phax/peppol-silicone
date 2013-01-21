@@ -65,4 +65,22 @@ public class ShowItemsPanel extends HorizontalLayout {
 		mainLayout.addComponent(header);
 		mainLayout.addComponent(table);
 	}
+	
+	public void reloadTable(UserFolder folder) {
+		InvoiceBeanContainer bean;
+		if (folder == null) {
+			bean = InvoiceBeanContainer.readInvoicesFromFolder(m, m.getDrafts());
+		}
+		else {
+			bean = InvoiceBeanContainer.readInvoicesFromFolder(m, folder);
+		}
+		if (bean != null)
+			table.setContainerDataSource(bean);
+		table.setSelectable(true);
+		table.setVisibleColumns(new String[]{"invoiceID","invoiceDate","invoiceSupplier","invoiceCustomer"});
+		table.setColumnHeaders(new String[]{"Invoice ID","Date","Supplier","Customer"});
+		table.setPageLength(10);
+		table.setSizeFull();
+		table.addStyleName("striped strong");
+	}
 }
