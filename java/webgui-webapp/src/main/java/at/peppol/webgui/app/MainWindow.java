@@ -54,13 +54,10 @@ import at.peppol.webgui.app.components.InvoiceUploadWindow;
 import at.peppol.webgui.app.components.OrderUploadWindow;
 import at.peppol.webgui.app.login.UserFolder;
 import at.peppol.webgui.app.login.UserFolderManager;
-import at.peppol.webgui.app.utils.CounterThread;
 import at.peppol.webgui.app.utils.SendInvoice;
-import at.peppol.webgui.app.utils.Utils;
 
 import com.phloc.appbasics.security.user.IUser;
 import com.phloc.commons.io.resource.FileSystemResource;
-import com.vaadin.terminal.ClassResource;
 import com.vaadin.terminal.ExternalResource;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -71,7 +68,6 @@ import com.vaadin.ui.CustomLayout;
 import com.vaadin.ui.Embedded;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.Layout;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.MenuBar.MenuItem;
@@ -99,6 +95,7 @@ public class MainWindow extends Window {
   private final AnimatorProxy animProxy = new AnimatorProxy ();
   
   private UserFolderManager<File> um;
+  private ShowItemsPanel itemsPanel;
 
   public MainWindow () {
     super ("PAWG Main");
@@ -119,8 +116,49 @@ private void initUI () {
     createMenuBar ();
     // Changed with custom layout using bootstrap -- under testing
     // createHeaderMenu();
-
-    final UserFolder<File> userFolder = new UserFolder<File>();;
+    
+    final UserFolder<File> userFolder = new UserFolder<File>();
+    final long polling = 20000;
+    int draftInvoicesNum = um.countItemsInSpace(um.getDrafts());
+    int inboxInvoicesNum = um.countItemsInSpace(um.getInbox());
+    int outboxInvoicesNum = um.countItemsInSpace(um.getOutbox());
+    //Buttons
+    final NativeButton inboxInvoices = new NativeButton ("Invoices ("+inboxInvoicesNum+")");
+    final NativeButton outboxInvoices = new NativeButton ("Invoices ("+outboxInvoicesNum+")");
+    final NativeButton draftInvoices = new NativeButton ("Invoices ("+draftInvoicesNum+")");
+    
+    //thread
+	final Thread tFolderCount = new Thread(new Runnable(){
+		@Override
+		public void run() {
+			try {
+				while (true) {
+					int countDrafts = um.countItemsInSpace(um.getDrafts());
+					int countInbox = um.countItemsInSpace(um.getInbox());
+					int countOutbox = um.countItemsInSpace(um.getOutbox());
+   				 	synchronized(MainWindow.this.getApplication()) {
+   				 		String labelD = draftInvoices.getCaption();
+   						labelD = labelD.replaceFirst("[\\d]+", ""+countDrafts);
+   						draftInvoices.setCaption(labelD);
+   						
+   						String labelI = inboxInvoices.getCaption();
+   						labelI = labelI.replaceFirst("[\\d]+", ""+countInbox);
+   						inboxInvoices.setCaption(labelI);
+   						
+   						String labelO = outboxInvoices.getCaption();
+   						labelO = labelO.replaceFirst("[\\d]+", ""+countOutbox);
+   						outboxInvoices.setCaption(labelO);
+   						
+   						itemsPanel.reloadTable(userFolder);
+   				 	}
+   				 	Thread.sleep(polling);
+	    		 }
+   		 	}catch (InterruptedException e) {
+   		 		System.out.println("Thread folders interrupted!!!");
+   		 	}
+		}
+	});
+	
     // ------ START: Left NavBar -------
     final CssLayout leftNavBar = new CssLayout ();
     leftNavBar.setStyleName ("sidebar-menu");
@@ -137,8 +175,8 @@ private void initUI () {
     leftNavBar.addComponent (catalogueBtn);
     leftNavBar.addComponent (new NativeButton ("Orders"));
     //leftNavBar.addComponent (new NativeButton ("Invoices"));
-    int inboxInvoicesNum = um.countItemsInSpace(um.getInbox());
-    final NativeButton inboxInvoices = new NativeButton ("Invoices ("+inboxInvoicesNum+")");
+    //int inboxInvoicesNum = um.countItemsInSpace(um.getInbox());
+    //inboxInvoices = new NativeButton ("Invoices ("+inboxInvoicesNum+")");
     inboxInvoices.addListener(new ClickListener() {
 		@Override
 		public void buttonClick(ClickEvent event) {
@@ -146,6 +184,7 @@ private void initUI () {
 			userFolder.setFolder(um.getInbox().getFolder());
 			userFolder.setName(um.getInbox().getName());
 			showInitialMainContent (userFolder);
+			draftInvoices.removeStyleName("v-bold-nativebuttoncaption");
 		}
     });
     leftNavBar.addComponent (inboxInvoices);
@@ -153,8 +192,8 @@ private void initUI () {
     leftNavBar.addComponent (new Label ("DRAFTS"));
     leftNavBar.addComponent (new NativeButton ("Catalogue"));
     leftNavBar.addComponent (new NativeButton ("Orders"));
-    int draftInvoicesNum = um.countItemsInSpace(um.getDrafts());
-    final NativeButton draftInvoices = new NativeButton ("Invoices ("+draftInvoicesNum+")");
+    //int draftInvoicesNum = um.countItemsInSpace(um.getDrafts());
+    //draftInvoices = new NativeButton ("Invoices ("+draftInvoicesNum+")");
     draftInvoices.addListener(new ClickListener() {
 		@Override
 		public void buttonClick(ClickEvent event) {
@@ -162,17 +201,17 @@ private void initUI () {
 			userFolder.setFolder(um.getDrafts().getFolder());
 			userFolder.setName(um.getDrafts().getName());
 			showInitialMainContent (userFolder);
+			draftInvoices.removeStyleName("v-bold-nativebuttoncaption");
 		}
     });
-    //draftInvoices.click();
     leftNavBar.addComponent (draftInvoices);
-
+        
     leftNavBar.addComponent (new Label ("OUTBOX"));
     leftNavBar.addComponent (new NativeButton ("Catalogue"));
     leftNavBar.addComponent (new NativeButton ("Orders"));
     //leftNavBar.addComponent (new NativeButton ("Invoices"));
-    int outboxInvoicesNum = um.countItemsInSpace(um.getOutbox());
-    final NativeButton outboxInvoices = new NativeButton ("Invoices ("+outboxInvoicesNum+")");
+    //int outboxInvoicesNum = um.countItemsInSpace(um.getOutbox());
+    //outboxInvoices = new NativeButton ("Invoices ("+outboxInvoicesNum+")");
     outboxInvoices.addListener(new ClickListener() {
 		@Override
 		public void buttonClick(ClickEvent event) {
@@ -180,6 +219,7 @@ private void initUI () {
 			userFolder.setFolder(um.getOutbox().getFolder());
 			userFolder.setName(um.getOutbox().getName());
 			showInitialMainContent (userFolder);
+			draftInvoices.removeStyleName("v-bold-nativebuttoncaption");
 		}
     });
     leftNavBar.addComponent (outboxInvoices);
@@ -208,61 +248,19 @@ private void initUI () {
     
     //workaround so that thread refreshes UI. It seems that when a ProgressIndicator is present,
     //all components receive server side refreshes
-    final int polling = 20000;
     ProgressIndicator p = new ProgressIndicator();
-    p.setPollingInterval(polling);
+    p.setPollingInterval((int)polling);
     p.setWidth("0px");
     p.setHeight("0px");
     leftNavBar.addComponent(p);
     
-    //draftInvoices.addStyleName("v-bold-nativebuttoncaption");
     showInitialMainContent (null);
-    //draftInvoices.click();
-    /*Thread t1 = new Thread(new Runnable(){
-		@Override
-		public void run() {
-			Utils.registerWatcher(Paths.get(um.getInbox().getFolder().getAbsolutePath()), inboxInvoices);
-		}
-	});
-	t1.start();
-	Thread t2 = new Thread(new Runnable(){
-		@Override
-		public void run() {
-			Utils.registerWatcher(Paths.get(um.getDrafts().getFolder().getAbsolutePath()), draftInvoices);
-		}
-	});
-	t2.start();
-	Thread t3 = new Thread(new Runnable(){
-		@Override
-		public void run() {
-			Utils.registerWatcher(Paths.get(um.getOutbox().getFolder().getAbsolutePath()), outboxInvoices);
-		}
-	});
-	t3.start();*/
-/*    Thread t = new Thread(new Runnable(){
-		@Override
-		public void run() {
-			try {
-				while (true) {
-					int count = um.countItemsInSpace(um.getDrafts());
-   				 	synchronized(MainWindow.this.getApplication()) {
-   				 		String label = draftInvoices.getCaption();
-   						label = label.replaceFirst("[\\d]+", ""+count);
-   						draftInvoices.setCaption(label);
-   						System.out.println(label);
-   				 	}
-   				 	Thread.sleep(polling);
-	    		 }
-   		 	}catch (InterruptedException e) {
-   		 		System.out.println("Thread interrupted!!!");
-   		 	}
-		}
-	});
-	t.start();
-*/    
+    draftInvoices.click();
+    tFolderCount.start();
+    draftInvoices.addStyleName("v-bold-nativebuttoncaption");
   }
 
-  public void showInitialMainContent (UserFolder userFolder) {
+  public void showInitialMainContent (UserFolder<?> userFolder) {
     // ------ START: Main Content -------
     final VerticalLayout mainContentLayout = new VerticalLayout ();
 
@@ -283,6 +281,7 @@ private void initUI () {
     //HorizontalLayout itemsPanel = new ShowItemsPanel("Items", um, userFolder);
     
     final ShowItemsPanel itemsPanel = new ShowItemsPanel("Items", um, userFolder);
+    this.itemsPanel = itemsPanel;
     topmain.addComponent (itemsPanel);
     HorizontalLayout buttonsLayout = new HorizontalLayout();
     buttonsLayout.setSpacing(true);
@@ -319,6 +318,8 @@ private void initUI () {
 					
 					//file is sent. move invoice to outbox
 					um.moveInvoice(invBean, um.getDrafts(), um.getOutbox());
+					//itemsPanel.getTable().requestRepaint();
+					itemsPanel.init(um.getDrafts());
 				}
 			}catch (FileNotFoundException e) {
 				getWindow().showNotification("Could not find invoice file",Notification.TYPE_ERROR_MESSAGE);
