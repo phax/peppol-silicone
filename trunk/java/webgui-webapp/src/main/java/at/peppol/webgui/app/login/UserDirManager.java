@@ -9,11 +9,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 
 import javax.xml.transform.stream.StreamSource;
 
 import oasis.names.specification.ubl.schema.xsd.invoice_2.InvoiceType;
 
+import at.peppol.commons.utils.ConfigFile;
 import at.peppol.webgui.app.InvoiceBean;
 import at.peppol.webgui.app.validator.ValidatorHandler;
 
@@ -25,19 +27,36 @@ public class UserDirManager extends UserFolderManager<File> {
 	UserFolder<File> userDir;
 	String fileSep = System.getProperty("file.separator");
 	String mainDirString = "users";
+	String rootFolder = "";
 	FilenameFilter filter = new FilenameFilter() {
 		public boolean accept(File directory, String fileName) {
-		    return fileName.endsWith(".xml");
+		    return fileName.endsWith(".payload");
 		}
 	};
 	
 	public UserDirManager(IUser user, String context) {
 		super(user, context);
+		readPropertiesFile();
+	}
+	
+	public void readPropertiesFile() {
+		ConfigFile s_aConf = new ConfigFile ("private-guiconfig.properties", "guiconfig.properties");
+		rootFolder = s_aConf.getString ("rootFolder");
+		System.out.println("root folder is: "+rootFolder);
+		/*Properties prop = new Properties();
+		try {
+			//load a properties file
+			prop.load(new FileInputStream("config.prop"));
+			rootFolder = prop.getProperty("rootFolder");
+			System.out.println("root folder is: "+rootFolder);
+    	} catch (IOException e) {
+    		e.printStackTrace();
+        }*/
 	}
 	
 	public void createUserDir() throws Exception {
 		//userDir.setFolder(new File(mainDirString + fileSep + user.getEmailAddress()));
-		userDir = new UserFolder<File>(new File(mainDirString + fileSep + user.getEmailAddress()), "Root");
+		userDir = new UserFolder<File>(new File(rootFolder+fileSep+mainDirString + fileSep + user.getEmailAddress()), "Root");
 		if (!userDir.getFolder().exists()) {
 			if (!userDir.getFolder().mkdirs()) {
 				//userDir = null;
